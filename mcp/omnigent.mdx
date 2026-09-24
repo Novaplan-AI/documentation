@@ -63,7 +63,7 @@ headers:
 Then run it:
 
 ```bash
-export PIPESHUB_MCP_URL=https://your-pipeshub-instance.com/mcp
+export PIPESHUB_MCP_URL=https://your-workspace.example.com/mcp
 export PIPESHUB_MCP_TOKEN=phpat_…
 
 omnigent run path/to/your-agent/
@@ -83,7 +83,7 @@ An agent with search tools will still answer from its own training data unless t
 2. Cite what you used, so the reader can verify it at the source.
 3. Say when you can't find something. A confident answer with no real source
    is worse than "I couldn't find that."
-4. Notice tool failures. If a PipesHub call errors, say so rather than quietly
+4. Notice tool failures. If a Novaplan AI call errors, say so rather than quietly
    falling back to general knowledge.
 ```
 
@@ -114,7 +114,7 @@ That last distinction matters. "Summarize the Q3 review" needs the whole documen
 **Verify the endpoint independently of Omnigent:**
 
 ```bash
-curl -X POST https://your-pipeshub-instance.com/mcp \
+curl -X POST https://your-workspace.example.com/mcp \
   -H "Authorization: Bearer phpat_…" \
   -H "Content-Type: application/json" \
   -H "Accept: application/json, text/event-stream" \

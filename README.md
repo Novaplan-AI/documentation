@@ -1,32 +1,32 @@
-# Mintlify Starter Kit
+# Novaplan AI documentation
 
-Click on `Use this template` to copy the Mintlify starter kit. The starter kit contains examples including
+Mintlify documentation for Novaplan AI, adapted from the PipesHub documentation repository. The site configuration is in `docs.json`; guide content is in `.mdx` files.
 
-- Guide pages
-- Navigation
-- Customizations
-- API Reference pages
-- Use of popular components
+## Local review
 
-### Development
+With the Mintlify CLI installed, run these commands from this directory:
 
-Install the [Mintlify CLI](https://www.npmjs.com/package/mintlify) to preview the documentation changes locally. To install, use the following command
-
-```
-npm i -g mintlify
+```sh
+mint dev --port 3036
+mint validate
 ```
 
-Run the following command at the root of your documentation (where docs.json is)
+Use the preview URL printed by the CLI. It may select another port if the requested port is occupied.
 
-```
-mintlify dev
-```
+## Editing rules
 
-### Publishing Changes
+- Use **Novaplan AI**, the supplied Novaplan logo, and the existing brand styles.
+- Preserve the Mintlify layout and existing page paths. Keep redirects when retiring published guides.
+- Customer access is invitation-based. Do not add platform installation, self-registration, or open-source contribution instructions.
+- Existing-workspace support: `support@novaplan.ai`. The website contact form is for sales and demo enquiries.
+- Keep working API paths, package names, scopes, environment variables, and third-party product names intact.
+- Skip guides that are missing upstream until PipesHub supplies them. Review and rebrand them before adding them here.
+- Keep internal audit reports, Enterprise artifacts, credentials, and deferred review material outside this public repository.
 
-Install our Github App to auto propagate changes from your repo to your deployment. Changes will be deployed to production automatically after pushing to the default branch. Find the link to install on your dashboard. 
+## Upstream updates
 
-#### Troubleshooting
+Compare incoming changes with the upstream PipesHub documentation and apply selected updates. Review each update for product applicability, instructions, links, screenshots, and branding. Do not overwrite Novaplan configuration with upstream defaults. Preserve any upstream license or attribution notices supplied with imported material.
 
-- Mintlify dev isn't running - Run `mintlify install` it'll re-install dependencies.
-- Page loads as a 404 - Make sure you are running in a folder with `docs.json`
+## Publication
+
+Preview and validate the approved changes first. Confirm the repository, deployment branch, and custom domain in Mintlify before publishing. Work on a review branch does not imply approval to publish or merge.

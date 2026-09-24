@@ -1,25 +1,28 @@
 ---
-title: "Getting Started"
-description: "Find an issue, edit the docs, or set up a local environment."
+title: "Developer Access"
+description: "Find the integration reference for an existing Novaplan AI workspace."
 icon: "code"
 ---
 
-Welcome. To contribute to Novaplan AI, pick a labeled issue or open a pull request with your own change. Contact [Novaplan AI support](mailto:support@novaplan.ai) with questions.
+Novaplan AI is a closed-source product. Novaplan creates your workspace and invites users; customer access does not require a source-code checkout or a local platform installation.
 
-## Finding something to work on
+Before building an integration, confirm with Novaplan which developer features and permissions are available in your workspace.
 
-Labeled issues are a good place to start. Other useful changes are welcome too.
+## Integration reference
 
-1. [`first-timers-only`](https://github.com/pipeshub-ai/pipeshub-ai/labels/first-timers-only) — small and scoped; a good first open-source PR.
-2. [`good first issue`](https://github.com/pipeshub-ai/pipeshub-ai/labels/good%20first%20issue) — one evening, one area.
-3. [`help wanted`](https://github.com/pipeshub-ai/pipeshub-ai/labels/help%20wanted) — a few days of independent work.
+- [OAuth 2.0 applications](/developer/oauth2): application authorization and user sign-in.
+- [Personal access tokens](/developer/personal-access-tokens): authentication for tools acting on behalf of a user.
+- [API reference](/developer/api-reference): the available documentation for service APIs.
+- [MCP overview](/mcp/overview): connecting compatible clients to a workspace.
 
-Comment on the issue so others know you are on it. If you already have a fix, open a pull request.
+Use the workspace address supplied by Novaplan. Keep API paths, scopes, and configuration identifiers exactly as documented; some underlying identifiers retain the upstream product name.
 
-## Documentation
+## Help with an integration
 
-This site is the [`pipeshub-ai/documentation`](https://github.com/pipeshub-ai/documentation) repository. Fork it, edit the `.mdx` page, and open a pull request. Match versions, paths, and install commands to [CONTRIBUTING.md](https://github.com/pipeshub-ai/pipeshub-ai/blob/main/CONTRIBUTING.md) on `main`.
+Contact [Novaplan support](/contact-us) with the workflow you want to support and the applications involved. Do not include credentials or tokens in the request.
 
-## Code
+<div id="finding-something-to-work-on" />
+<div id="documentation" />
+<div id="code" />
 
-Clone [`pipeshub-ai/pipeshub-ai`](https://github.com/pipeshub-ai/pipeshub-ai) and follow [CONTRIBUTING.md](https://github.com/pipeshub-ai/pipeshub-ai/blob/main/CONTRIBUTING.md) for local setup, tests, and the git workflow. A new connector is a large piece of work; start with the [connector playbook](https://github.com/pipeshub-ai/pipeshub-ai/blob/main/CONNECTOR_INTEGRATION_PLAYBOOK.md), and discuss the scope with [Novaplan AI support](mailto:support@novaplan.ai) first.
+Previous versions of this page described contributing to the upstream software. For Novaplan workspace access, follow [Getting started](/quickstart).

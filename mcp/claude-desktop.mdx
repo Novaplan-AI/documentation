@@ -21,7 +21,7 @@ Claude Desktop can talk to the Novaplan AI MCP server, but there's one important
 
 | Your situation | Use this |
 |---|---|
-| Novaplan AI is hosted on a public domain with valid SSL (e.g. `https://app.pipeshub.com`) | [Custom connector](#option-1-custom-connector-hosted-pipeshub) |
+| Novaplan AI is hosted on a public domain with valid SSL (e.g. `https://your-workspace.example.com`) | [Custom connector](#option-1-custom-connector-hosted-pipeshub) |
 | Novaplan AI runs locally or on an internal host without a public HTTPS domain (e.g. `http://localhost:3000`) | [Local stdio bridge](#option-2-local-stdio-bridge) |
 
 ---
@@ -52,7 +52,7 @@ If your Novaplan AI instance is served over HTTPS on a valid domain, Claude Desk
     ```
     PIPESHUB_INSTANCE_URL/mcp
     ```
-    For example: `https://app.pipeshub.com/mcp`.
+    For example: `https://your-workspace.example.com/mcp`.
   </Step>
   <Step title="Enter OAuth credentials">
     Click **Advanced settings** and enter your OAuth credentials:

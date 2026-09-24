@@ -54,7 +54,7 @@ Click **New token** and fill in:
 Novaplan AI generates the token and shows it to you **exactly once**, along with a ready-to-paste block for connecting an MCP client:
 
 ```
-PIPESHUB_MCP_URL=https://your-pipeshub-instance.com/mcp
+PIPESHUB_MCP_URL=https://your-workspace.example.com/mcp
 PIPESHUB_MCP_TOKEN=phpat_eyJhbGciOiJIUzI1NiIs...
 ```
 
@@ -81,7 +81,7 @@ PIPESHUB_MCP_TOKEN=phpat_eyJhbGciOiJIUzI1NiIs...
 Send it as a standard bearer token on any authenticated Novaplan AI API request, including the [MCP endpoint](/mcp/overview):
 
 ```bash
-curl -X POST https://your-pipeshub-instance.com/mcp \
+curl -X POST https://your-workspace.example.com/mcp \
   -H "Authorization: Bearer phpat_YOUR_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
@@ -121,12 +121,12 @@ Because a PAT can live for months or years, an org admin needs a way to see and 
 
 <CodeGroup>
 ```bash List every active PAT in the org
-curl -X GET "https://your-pipeshub-instance.com/api/v1/personal-access-tokens/admin?page=1&limit=100" \
+curl -X GET "https://your-workspace.example.com/api/v1/personal-access-tokens/admin?page=1&limit=100" \
   -H "Authorization: Bearer YOUR_SESSION_TOKEN"
 ```
 
 ```bash Revoke any user's token by id
-curl -X DELETE https://your-pipeshub-instance.com/api/v1/personal-access-tokens/admin/TOKEN_ID \
+curl -X DELETE https://your-workspace.example.com/api/v1/personal-access-tokens/admin/TOKEN_ID \
   -H "Authorization: Bearer YOUR_SESSION_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{"reason": "departed employee"}'

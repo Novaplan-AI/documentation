@@ -288,7 +288,7 @@ The following diagram illustrates how the OAuth 2.0 Authorization Code flow oper
 sequenceDiagram
     participant App as Your Application
     participant Browser as User's Browser
-    participant PH as PipesHub
+    participant PH as Novaplan AI
 
     App->>Browser: Redirect to /api/v1/oauth2/authorize
     Browser->>PH: GET /api/v1/oauth2/authorize
@@ -359,7 +359,7 @@ https://your-app.com/callback?code=AUTHORIZATION_CODE&state=RANDOM_STATE_VALUE
 Your application exchanges the authorization code for tokens by making a server-side request:
 
 ```bash
-curl -X POST https://your-pipeshub-instance.com/api/v1/oauth2/token \
+curl -X POST https://your-workspace.example.com/api/v1/oauth2/token \
   -H "Content-Type: application/x-www-form-urlencoded" \
   -d "grant_type=authorization_code" \
   -d "code=AUTHORIZATION_CODE" \
@@ -392,7 +392,7 @@ curl -X POST https://your-pipeshub-instance.com/api/v1/oauth2/token \
 Use the access token to make API requests on behalf of the user:
 
 ```bash
-curl -X GET https://your-pipeshub-instance.com/api/v1/resource \
+curl -X GET https://your-workspace.example.com/api/v1/resource \
   -H "Authorization: Bearer ACCESS_TOKEN"
 ```
 
@@ -407,7 +407,7 @@ curl -X GET https://your-pipeshub-instance.com/api/v1/resource \
 For server-to-server integrations that do not require user context:
 
 ```bash
-curl -X POST https://your-pipeshub-instance.com/api/v1/oauth2/token \
+curl -X POST https://your-workspace.example.com/api/v1/oauth2/token \
   -H "Content-Type: application/x-www-form-urlencoded" \
   -d "grant_type=client_credentials" \
   -d "client_id=YOUR_CLIENT_ID" \
@@ -422,7 +422,7 @@ curl -X POST https://your-pipeshub-instance.com/api/v1/oauth2/token \
 When an access token expires, use the refresh token to obtain a new one without requiring user interaction:
 
 ```bash
-curl -X POST https://your-pipeshub-instance.com/api/v1/oauth2/token \
+curl -X POST https://your-workspace.example.com/api/v1/oauth2/token \
   -H "Content-Type: application/x-www-form-urlencoded" \
   -d "grant_type=refresh_token" \
   -d "refresh_token=YOUR_REFRESH_TOKEN" \
@@ -441,7 +441,7 @@ curl -X POST https://your-pipeshub-instance.com/api/v1/oauth2/token \
 To revoke an access token or refresh token when it is no longer needed:
 
 ```bash
-curl -X POST https://your-pipeshub-instance.com/api/v1/oauth2/revoke \
+curl -X POST https://your-workspace.example.com/api/v1/oauth2/revoke \
   -H "Content-Type: application/x-www-form-urlencoded" \
   -d "token=TOKEN_TO_REVOKE" \
   -d "token_type_hint=access_token" \

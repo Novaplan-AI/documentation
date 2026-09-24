@@ -1,15 +1,15 @@
 ---
 title: "Local Server (Stdio)"
-description: "Run the PipesHub MCP server locally as a stdio process"
+description: "Run the Novaplan AI MCP server locally as a stdio process"
 icon: "laptop-code"
 ---
 
-Instead of connecting to PipesHub's remote MCP endpoint, you can run the MCP server locally as a stdio process using the `@pipeshub-ai/mcp` npm package. This is useful when you prefer a local setup or need to work in environments where direct HTTP connections to the remote MCP endpoint aren't practical.
+Instead of connecting to Novaplan AI's remote MCP endpoint, you can run the MCP server locally as a stdio process using the `@pipeshub-ai/mcp` npm package. This is useful when you prefer a local setup or need to work in environments where direct HTTP connections to the remote MCP endpoint aren't practical.
 
 ## Prerequisites
 
 - Node.js 20+ installed
-- A PipesHub instance URL
+- A Novaplan AI instance URL
 - Authentication credentials: a **[Personal Access Token](/developer/personal-access-tokens)** (recommended — no OAuth app setup needed) or **OAuth Client ID + Secret**
 
 <Tip>
@@ -26,7 +26,7 @@ Replace these in all configurations below:
 
 | Placeholder | Description | Example |
 |---|---|---|
-| `PIPESHUB_INSTANCE_URL` | Your PipesHub instance URL | `https://app.pipeshub.com` |
+| `PIPESHUB_INSTANCE_URL` | Your Novaplan AI instance URL | `https://your-workspace.example.com` |
 | `YOUR_BEARER_TOKEN` | [Personal access token](/developer/personal-access-tokens) (or any other Bearer JWT) | `phpat_eyJhbGci...` |
 | `YOUR_CLIENT_ID` | OAuth app client ID | `clid_abc123...` |
 | `YOUR_CLIENT_SECRET` | OAuth app client secret | `clsec_xyz789...` |
