@@ -1,0 +1,66 @@
+---
+title: "Skills"
+description: "Create and manage reusable instructions for your Novaplan AI agents."
+icon: "wand-magic-sparkles"
+---
+
+Skills describe how an agent should carry out a particular task. A skill contains a description of when to use it and instructions written in Markdown. It can also include supporting resources.
+
+For example, a project-summary skill could tell an agent to extract decisions, open questions, and next steps from meeting notes.
+
+## Open the skill catalog
+
+Open **Skills** in your workspace. Search the catalog to find an existing skill, then select **Manage** to edit it or **View** to inspect a built-in skill.
+
+<Info>
+  Built-in skills are read-only. If you need different instructions, create a custom skill. If Skills is unavailable in your workspace, contact [Novaplan support](/contact-us).
+</Info>
+
+## Create a skill
+
+<Steps>
+  <Step title="Select Create Skill">
+    Enter a name that identifies the task, such as `project-meeting-summary`.
+  </Step>
+  <Step title="Describe when to use it">
+    In **Description**, explain what the skill does and when it is useful. Put the detailed procedure in the **Content** tab.
+  </Step>
+  <Step title="Write the instructions">
+    Describe the input, the steps to follow, and the expected output. The name, description, and instruction content are all required.
+
+    For a meeting summary, you could write:
+
+    ```text
+    Summarize the supplied project meeting notes in German.
+    Use the sections Decisions, Open questions, and Next steps.
+    For each next step, include the responsible person and deadline
+    only when the notes state them. Mark missing details as unspecified.
+    ```
+  </Step>
+  <Step title="Create and review">
+    Select **Create**. Reopen the skill to review its content, add supporting resources, or view its version history.
+  </Step>
+</Steps>
+
+Creating a skill adds it to the catalog. Configure the relevant agent to use it, then try a representative task and review the result. See the [Agent Setup Guide](/agent-guide/setup-guide) for the agent configuration workflow.
+
+## Import a skill
+
+Select **Import**, then choose **npm**, **URL**, or **Upload**. You can supply a package name, an archive URL, or a skill archive such as a `.zip` or `.tar.gz` file.
+
+Select **Preview** and review the name, description, resources, and any warnings. Select **Import Skill** to add it to the catalog. If the preview reports skipped binary files, those files will not be included.
+
+## Maintain a skill
+
+- **Content:** update the instructions and select **Save**.
+- **Metadata:** organize skills with categories and tags, or record related and required skills.
+- **Resources:** add supporting text resources to an existing skill.
+- **Versions:** inspect previous versions. **Roll back** creates a new version from the selected content and preserves the history.
+
+If **Review candidates** shows proposed skills, inspect each proposal before choosing **Approve**, **Edit & Approve**, or **Reject**.
+
+Before retiring a skill, review its dependencies. Deletion can remove assignments from agents; a skill required by another skill cannot be deleted. Use **Deprecate** to mark a skill as retired and record a reason or replacement.
+
+## Need help?
+
+Contact [Novaplan support](/contact-us) if a skill cannot be created, imported, or used by your agent. Include the skill name and the error message so we can investigate.
