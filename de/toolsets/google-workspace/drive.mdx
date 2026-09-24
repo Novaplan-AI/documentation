@@ -1,0 +1,64 @@
+---
+title: "Google Drive Toolset"
+description: "Dateien und Ordner in Google Drive mit Agenten verwalten."
+---
+
+## Überblick
+
+Mit dem Google Drive Toolset können Agenten Dateien suchen und auflisten, Metadaten und Freigaben prüfen, geteilte Ablagen anzeigen und Ordner erstellen. Im Unterschied zum [Google Drive Konnektor (Englisch)](/connectors/google-workspace/drive/drive), der Inhalte für die Suche importiert, führt das Toolset Aktionen über die Google Drive API aus.
+
+| Tool | Funktion |
+| --- | --- |
+| `get_files_list` | Dateien in Drive auflisten. |
+| `get_file_details` | Details zu einer Datei abrufen. |
+| `create_folder` | Einen Ordner erstellen. |
+| `search_files` | Dateien mit einer Suchanfrage finden. |
+| `get_drive_info` | Informationen zur Ablage der angemeldeten Person abrufen. |
+| `get_shared_drives` | Geteilte Ablagen auflisten. |
+| `get_file_permissions` | Berechtigungen einer Datei prüfen. |
+
+Novaplan übernimmt den Großteil der Einrichtung. Die folgenden Schritte bleiben als Referenz für Administratoren verfügbar.
+
+## Einrichtung
+
+1. Öffnen Sie die [Google Cloud Console](https://console.cloud.google.com/) und wählen Sie ein bestehendes Projekt oder legen Sie eines an.
+2. Aktivieren Sie unter **APIs & Services → Library** die **Google Drive API**.
+
+<img src="/images/connectors/googleWorkspace/enterprise/apis.png" alt="Google Drive API aktivieren" />
+
+3. Konfigurieren Sie unter **APIs & Services → OAuth consent screen** die Einwilligungsseite und die benötigten Berechtigungen.
+4. Öffnen Sie in Novaplan AI **Settings → Toolsets → Drive → Configure** und kopieren Sie die dort angezeigte **Redirect URI**.
+
+<img src="/images/toolsets/drive/novaplan-config.png" alt="Redirect URI für das Google Drive Toolset kopieren" />
+
+5. Erstellen Sie in Google Cloud unter **APIs & Services → Credentials** eine **OAuth client ID** vom Typ **Web application**. Hinterlegen Sie die kopierte URI als **Authorized redirect URI** und übernehmen Sie **Client ID** sowie **Client Secret**.
+
+<Warning>
+  Die Weiterleitungsadresse muss genau mit dem Wert aus Novaplan AI übereinstimmen. Übernehmen Sie sie aus dem eigenen Workspace und nicht aus einem Screenshot.
+</Warning>
+
+6. Fügen Sie unter **OAuth consent screen → Scopes** die vom Toolset benötigten Berechtigungen hinzu:
+
+| Scope | Zweck |
+| --- | --- |
+| `https://www.googleapis.com/auth/drive` | Vollständiger Drive-Zugriff. |
+| `https://www.googleapis.com/auth/drive.file` | Zugriff auf von der App erstellte Dateien. |
+| `https://www.googleapis.com/auth/drive.metadata.readonly` | Dateimetadaten lesen. |
+
+7. Tragen Sie **Client ID** und **Client Secret** in Novaplan AI ein und wählen Sie **Authenticate**.
+
+<img src="/images/toolsets/drive/enter-credentials.png" alt="OAuth-Zugangsdaten für Google Drive eintragen" />
+
+8. Melden Sie sich im Google-Fenster an, prüfen Sie die Berechtigungen und wählen Sie **Allow**. Danach sollte das Toolset in Novaplan AI als **Authenticated** erscheinen.
+
+<img src="/images/connectors/googleWorkspace/individual/gmail_consent_screen.png" alt="Google-Einwilligungsseite für den OAuth-Zugriff" />
+
+## Konnektor oder Toolset?
+
+| | Google Drive Konnektor | Google Drive Toolset |
+| --- | --- | --- |
+| **Zweck** | Dateien für die Suche importieren und indexieren. | Agentenaktionen in Drive ermöglichen. |
+| **Datenfluss** | Import in Novaplan AI. | Lesen und Schreiben über die API. |
+| **Beispiel** | Inhalte eines Dokuments in einer Antwort finden. | Einen neuen Ordner erstellen. |
+
+Bitten Sie einen entsprechend berechtigten Agenten beispielsweise, eine Datei nach Namen zu suchen oder einen Ordner in einem bestimmten übergeordneten Ordner anzulegen.

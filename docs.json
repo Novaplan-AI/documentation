@@ -81,6 +81,14 @@
             "pages": [
               "de/ai-models/overview"
             ]
+          },
+          {
+            "group": "Toolsets",
+            "pages": [
+              "de/toolsets/google-workspace/drive",
+              "de/toolsets/google-workspace/gmail",
+              "de/toolsets/google-workspace/calendar"
+            ]
           }
         ],
         "footer": {

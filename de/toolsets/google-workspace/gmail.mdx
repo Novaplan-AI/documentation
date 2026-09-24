@@ -1,0 +1,67 @@
+---
+title: "Gmail Toolset"
+description: "E-Mails mit Agenten lesen, suchen und bearbeiten."
+---
+
+## Überblick
+
+Das Gmail Toolset ermöglicht Agenten, Nachrichten zu suchen und zu lesen, Anhänge abzurufen, Entwürfe anzulegen sowie E-Mails zu senden oder zu beantworten. Der [Gmail Konnektor (Englisch)](/connectors/google-workspace/gmail/gmail) importiert dagegen Nachrichten für die Suche.
+
+| Tool | Funktion |
+| --- | --- |
+| `send_email` | E-Mail mit Betreff, Inhalt und Empfängern senden. |
+| `reply` | Auf eine Nachricht antworten. |
+| `draft_email` | Entwurf erstellen. |
+| `search_emails` | Nachrichten mit der Gmail-Suchsyntax finden. |
+| `get_email_details` | Details zu einer Nachricht abrufen. |
+| `get_email_attachments` | Anhänge einer Nachricht abrufen. |
+| `get_user_profile` | Profil des authentifizierten Gmail-Kontos anzeigen. |
+
+Novaplan übernimmt den Großteil der Einrichtung. Diese Schritte sind auch als Referenz für die zuständigen Administratoren gedacht.
+
+## Einrichtung
+
+1. Öffnen Sie die [Google Cloud Console](https://console.cloud.google.com/) und erstellen oder wählen Sie ein Projekt.
+
+<img src="/images/connectors/googleWorkspace/enterprise/create_project.png" alt="Google Cloud Projekt für Gmail auswählen" />
+
+2. Aktivieren Sie unter **APIs & Services → Library** die **Gmail API**.
+
+<img src="/images/connectors/googleWorkspace/enterprise/apis.png" alt="Gmail API aktivieren" />
+
+3. Richten Sie unter **APIs & Services → OAuth consent screen** die Einwilligungsseite ein. Wählen Sie den passenden Nutzertyp (**External** oder **Internal** für Google Workspace) und tragen Sie etwa **Novaplan AI Gmail Toolset** als App-Namen sowie die zuständigen Kontaktadressen ein.
+4. Fügen Sie die benötigten Berechtigungen hinzu:
+
+| Scope | Zweck |
+| --- | --- |
+| `https://www.googleapis.com/auth/gmail.send` | Nachrichten senden. |
+| `https://www.googleapis.com/auth/gmail.readonly` | Nachrichten lesen. |
+| `https://www.googleapis.com/auth/gmail.modify` | Nachrichten und Labels bearbeiten. |
+
+5. Öffnen Sie in Novaplan AI **Settings → Toolsets → Gmail → Configure** und kopieren Sie die **Redirect URI**.
+
+<img src="/images/toolsets/gmail/novaplan-config.png" alt="Redirect URI für das Gmail Toolset kopieren" />
+
+6. Erstellen Sie unter **APIs & Services → Credentials** eine **OAuth client ID** für eine **Web application** und fügen Sie die kopierte URI unter **Authorized redirect URIs** hinzu. Kopieren Sie anschließend **Client ID** und **Client Secret**.
+
+<Warning>
+  Die Redirect URI muss exakt mit dem Wert aus Ihrem Novaplan AI Workspace übereinstimmen. Verwenden Sie keine Beispieladresse aus einem Screenshot.
+</Warning>
+
+7. Tragen Sie die OAuth-Zugangsdaten in Novaplan AI ein und wählen Sie **Authenticate**.
+
+<img src="/images/toolsets/gmail/enter-credentials.png" alt="OAuth-Zugangsdaten für Gmail eintragen" />
+
+8. Melden Sie sich im Google-Fenster an, prüfen Sie die angeforderten Rechte und wählen Sie **Allow**. Danach sollte das Toolset in Novaplan AI den Status **Authenticated** anzeigen.
+
+<img src="/images/connectors/googleWorkspace/individual/gmail_consent_screen.png" alt="Google-Einwilligungsseite für Gmail" />
+
+## Konnektor oder Toolset?
+
+| | Gmail Konnektor | Gmail Toolset |
+| --- | --- | --- |
+| **Zweck** | Nachrichten für die Suche importieren. | Agentenaktionen im Postfach ermöglichen. |
+| **Datenfluss** | Import in Novaplan AI. | Lesen und Schreiben über die API. |
+| **Beispiel** | Frühere Gespräche finden. | Einen Antwortentwurf anlegen oder eine E-Mail senden. |
+
+Für eine Suche können Sie einen entsprechend berechtigten Agenten nach Absender, Betreff oder Stichwort fragen. Für eine neue Nachricht nennen Sie Empfänger, Betreff und Inhalt.
