@@ -1,148 +1,85 @@
 ---
-title: "Onboarding"
-description: "This guide walks through setting up the system when first time logging in, starting with AI model configuration, followed by optional configurations for storage, connectors, and SMTP."
+title: "Erste Einrichtung"
+description: "KI-Modelle, Speicher, Datenquellen und E-Mail-Versand in Novaplan einrichten."
 icon: "gear"
 ---
 
-## Step 1: Configure AI Model (Required)
+Diese Anleitung richtet sich an Administratoren, die einen neuen Novaplan-Arbeitsbereich einrichten. Wenn Ihr Arbeitsbereich bereits vorbereitet wurde, melden Sie sich mit Ihrer Einladung an. Einstellungen und verfügbare Anbieter können je nach Version abweichen.
 
-Before proceeding with the setup, configuring an AI model is mandatory.
+<Note>
+  Englische Bezeichnungen stehen ergänzend in Klammern, damit Sie die Felder auch in einer englischen Benutzeroberfläche wiederfinden.
+</Note>
 
-1. Select the AI Provider (OpenAI or Azure OpenAI).
-2. Enter the Client ID (if applicable).
-3. Provide the API Key to authenticate the AI model.
-4. Specify the Model Name (e.g., gpt-4-turbo).
-5. Click **Continue** to proceed.
+## 1. KI-Modell konfigurieren
 
-<img
-  src="/images/onboarding/aiModels.png"
-  alt="AI models onboarding"
-  width="100%"
-/>
+Ein Sprachmodell ist erforderlich, um die KI-Funktionen zu nutzen.
 
-### For more info, refer to [AI models Configuration Guide](/ai-models/overview).
+1. Wählen Sie den bereitgestellten KI-Anbieter aus.
+2. Tragen Sie die erforderlichen Zugangsdaten ein, beispielsweise den API-Schlüssel und gegebenenfalls einen Endpunkt oder eine Client-ID.
+3. Geben Sie den exakten Modellnamen des Anbieters ein.
+4. Klicken Sie auf **Weiter (Continue)**.
 
-<Info>AI model configuration is required to enable AI-powered features.</Info>
+Die [KI-Modellreferenz](/ai-models/overview) beschreibt die einzelnen Anbieter auf Englisch.
 
-## Step 2: Configure Embeddings Model (Optional)
+## 2. Embedding-Modell konfigurieren
 
-The Embeddings Configuration section is part of the System Setup workflow for
-enabling semantic search and document retrieval features in your application.
-This configuration step allows you to define the embedding provider and
-specify the model used for generating vector representations of textual
-content.
+Embedding-Modelle wandeln Dokumentinhalte in Vektoren um. Diese werden für die semantische Suche verwendet.
 
-1. Select the Embeddings Provider (OpenAI, Azure OpenAI or Sentence Tranformer).
-2. Enter the Endpoint (if applicable).
-3. Provide the API Key to authenticate the AI model (if applicable).
-4. Specify the Model Name (e.g., gpt-4-turbo).
-5. Click **Continue** to proceed.
+1. Wählen Sie einen verfügbaren Embedding-Anbieter aus.
+2. Geben Sie bei Bedarf den Endpunkt und den API-Schlüssel ein.
+3. Tragen Sie den Namen eines **Embedding-Modells** ein. Ein reines Chatmodell ist dafür nicht geeignet.
+4. Klicken Sie auf **Weiter (Continue)**.
 
-<img
-  src="/images/onboarding/embeddings.png"
-  alt="Embeddings onboarding"
-  width="100%"
-/>
+Wenn der Einrichtungsdialog das Überspringen anbietet, können Sie diesen Schritt später nachholen. Prüfen Sie vor dem Indexieren von Dokumenten, dass ein passendes Embedding-Modell eingerichtet ist.
 
-<Info>You can skip this step.</Info>
+## 3. Speicher konfigurieren
 
-## Step 3: Configure Storage (Optional)
+Standardmäßig werden Dateien im lokalen Speicher abgelegt. Je nach Bereitstellung können Sie stattdessen Amazon S3 oder Azure Blob Storage verwenden.
 
-Setting up storage allows the system to save and retrieve data efficiently.
-By default, local storage (local machine) will be used to store the files.
+| Speicher | Typische Angaben |
+| --- | --- |
+| Lokal | Mount-Name und Basis-URL |
+| Amazon S3 | Bucket, Zugriffsschlüssel und geheimer Schlüssel |
+| Azure Blob Storage | Konto, Container, Kontoschlüssel, Protokoll und Endpunktsuffix |
 
-1. Choose a Storage Provider (e.g., AWS S3, Local, Azure Blob Storage).
+Speichern Sie mit **Weiter (Continue)**. Details finden Sie in der englischen [Speicherreferenz](/system-overview/storage).
 
-2. Enter the corresponding configuration.
+## 4. Öffentliche URLs prüfen
 
-- Mount Name and Base Url for **Local Storage**.
-- Access Key and Secret Key for authentication and bucket Name or storage container details for **Amazon S3**.
-- Account name, container name,account key, protocol and endpoint suffix for **Azure Blob**.
+Die URLs Ihrer Novaplan-Anwendung und des Konnektordienstes werden für OAuth-Anmeldungen, Weiterleitungen und Webhooks benötigt.
 
-Click **Continue** to save the configuration.
-
-<img
-  src="/images/onboarding/storage.png"
-  alt="storage onboarding"
-  width="100%"
-/>
-
-### For more info, refer to [Storage Service documentation](/system-overview/storage).
-
-<Info>You can skip this step. By default Local storage will be chosen.</Info>
-
-## Step 4: Configure Public URLs (Optional)
-
-The Public URL Configuration step allows you to define the publicly accessible URLs for your frontend and connector services. These URLs are critical for operations like OAuth authentication, redirect flows, and webhook callbacks in your system.
-
-1. Enter the Frontend Endpoint (if applicable).
-2. Enter the Connector Endpoint (if applicable).
-3. Click **Continue** to save the configuration.
-
-<img
-  src="/images/onboarding/publicUrls.png"
-  alt="Public Urls onboarding"
-  width="100%"
-/>
-
-### For more info, refer to [Internal Services Configuration Guide](/system-overview/internal-services).
-
-<Info>You can skip this step.</Info>
-
-## Step 5: Configure Connectors (Optional)
-
-Connectors help integrate third-party services with the system.
-Enter the necessary API credentials to authenticate the connection.
-
-### - Enterprise
-
-Service credentials (json file) is required and Admin Email of your google admin account.
-
-For more information, refer to [the Google Drive connector guide](/connectors/google-workspace/drive/drive).
-
-### - Individual
-
-Google Client Id and Client Secret are required, set Redirect Uri in Google Cloud Console as given in the window.
-
-For more information, refer to [the Google Drive connector guide](/connectors/google-workspace/drive/drive).
-
-<img
-  src="/images/onboarding/connectors.png"
-  alt="connectors onboarding"
-  width="100%"
-/>
-
-Click **Continue** to save the configuration.
+1. Prüfen Sie den Frontend-Endpunkt Ihrer tatsächlichen Novaplan-Instanz.
+2. Prüfen Sie den Konnektor-Endpunkt Ihrer Bereitstellung.
+3. Speichern Sie mit **Weiter (Continue)**.
 
 <Info>
-  You can skip this step and later configure them in settings under profile tab.
+  docs.novaplan.ai ist die Dokumentationsadresse. Verwenden Sie diese Adresse nicht als Anwendungs-, API- oder OAuth-Endpunkt.
 </Info>
 
-## Step 6: Configure SMTP (Optional)
+Weitere Informationen stehen in der englischen [Referenz zu internen Diensten](/system-overview/internal-services).
 
-SMTP configuration allows the system to send emails (invite new users, forgot password etc).
+## 5. Datenquellen verbinden
 
-1. Enter the SMTP Server Address (e.g., smtp.example.com).
+Konnektoren synchronisieren Inhalte aus externen Anwendungen. Die benötigten Zugangsdaten und Berechtigungen unterscheiden sich je nach Dienst und Verbindungsart.
 
-2. Provide the Port Number (e.g., 587 for TLS).
+Für eine persönliche Google-Verbindung werden beispielsweise eine OAuth-Client-ID und ein Client-Secret benötigt. Die angezeigte Redirect-URI muss exakt in der Google Cloud Console eingetragen werden. Eine organisationsweite Verbindung kann stattdessen ein Dienstkonto und eine Administratoradresse erfordern.
 
-3. Enter the Username and Password for authentication.
+Beginnen Sie mit der [Konnektorenübersicht](/connectors/overview). Die [Google-Drive-Referenz](/connectors/google-workspace/drive/drive) beschreibt die technischen Schritte.
 
-4. Set up the From Email Address (e.g., noreply@example.com).
+Sie können Konnektoren später in den Einstellungen ergänzen.
 
-Click **Save** to finalize the setup and then proceed.
+## 6. E-Mail-Versand einrichten
 
-<img src="/images/onboarding/smtp.png" alt="smtp onboarding" width="100%" />
+SMTP wird für Einladungen, Einmalcodes und das Zurücksetzen vergessener Passwörter benötigt.
 
-### For Smtp Configuration, refer to [SMTP Configuration Guide](/smtp).
+1. Geben Sie die SMTP-Serveradresse Ihres E-Mail-Anbieters ein.
+2. Tragen Sie den vom Anbieter vorgegebenen Port und die passende Verschlüsselung ein.
+3. Ergänzen Sie Benutzername und Passwort.
+4. Legen Sie eine zulässige Absenderadresse fest.
+5. Speichern Sie die Einstellungen.
 
-<Info>
-  You can skip this step if email functionality is not needed and later add in
-  authentication tab in settings.
-</Info>
+Die englische [SMTP-Anleitung](/smtp) enthält die Konfigurationsdetails. Wenn Sie diesen Schritt überspringen, stehen Funktionen, die einen E-Mail-Versand benötigen, möglicherweise noch nicht zur Verfügung.
 
-Finalizing Setup Once you complete the AI model setup (required) and any optional
-configurations, the system will be ready for use.
+## Einrichtung abschließen
 
-✅ Required: AI Model Configuration
-⚡ Optional: Storage, Connectors, SMTP
+Prüfen Sie anschließend, ob eine Testfrage beantwortet wird, verbundene Dokumente nach der Indexierung gefunden werden und Einladungen zugestellt werden. Danach können Sie [Mitglieder einladen](/user-management/user) und Ihren [ersten Agenten erstellen](/agent-guide/setup-guide).

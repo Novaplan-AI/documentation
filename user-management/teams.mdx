@@ -1,115 +1,70 @@
 ---
 title: "Teams"
-description: "Create and manage teams so members can collaborate, share resources, and work together"
+description: "Teams erstellen, Mitglieder zuweisen und Rollen für gemeinsame Arbeit verwalten."
 ---
 
-## Overview
+Teams bündeln Mitglieder für gemeinsame Projekte oder Aufgaben. Benutzergruppen dienen der administrativen Zugriffsverwaltung; Teams unterstützen die Zusammenarbeit. Eine Person kann mehreren Teams mit jeweils unterschiedlichen Rollen angehören.
 
-Teams let workspace members group themselves around a shared purpose — a project, a product area, or any collaboration unit. Unlike user groups (which administrators use to manage access), teams are available to every workspace member. A user can belong to any number of teams, and within each team members are assigned a role that determines what they can do with team resources.
+## Rollen im Team
 
-## Team Member Roles
+| Rolle | Möglichkeiten |
+| --- | --- |
+| Eigentümer (Owner) | Team und Ressourcen verwalten, Mitglieder hinzufügen oder entfernen, Rollen ändern und das Team löschen. |
+| Bearbeiter (Writer) | Teamressourcen ansehen und bearbeiten. |
+| Leser (Reader) | Teamressourcen ansehen. |
 
-Every member of a team has one of three roles:
+## Teamübersicht öffnen
 
-| Role | Description |
-|------|-------------|
-| **Owner** | Full control over the team and its resources. Can add or remove members, change roles, and delete the team. |
-| **Writer** | Can view and edit team resources. |
-| **Reader** | Can view team resources. |
+1. Öffnen Sie im Benutzermenü **Arbeitsbereichseinstellungen (Workspace Settings)**.
+2. Wählen Sie unter **Personen (People)** den Eintrag **Teams**.
 
-## Navigating to Teams
+Die Tabelle enthält Name, Beschreibung, Mitgliederzahl, Ersteller und Erstellungsdatum. Suche und Filter helfen bei der Auswahl. Ein Klick auf eine Zeile öffnet die Teamdetails.
 
-1. Sign in to your PipesHub account
-2. Open the user menu and click **Workspace Settings**
-3. In the workspace sidebar, expand the **People** section and select **Teams**
+## Team erstellen
 
-The page shows a table of all teams you can see, with columns for **Name**, **Description**, **Members** (count), **Created By**, and **Created On**. Use the **search** field to look up teams by name and the **Created By** and **Created On** filters to narrow the list. Clicking any row opens that team's detail panel on the right.
+1. Klicken Sie auf **Team erstellen (Create Team)**.
+2. Tragen Sie einen Teamnamen ein.
+3. Ergänzen Sie bei Bedarf eine Beschreibung.
+4. Wählen Sie unter **Mitglieder hinzufügen (Add Members)** eine **Standardrolle (Default Role)**.
+5. Suchen Sie nach den gewünschten Mitgliedern und wählen Sie sie aus.
+6. Passen Sie einzelne Rollen bei Bedarf in der Mitgliederliste an. **Auf alle anwenden (Apply to all)** setzt alle ausgewählten Mitglieder auf die Standardrolle.
+7. Klicken Sie auf **Team erstellen (Create Team)**.
 
-<div style={{ textAlign: "center" }}>
-  <img
-    src="/images/account/team/teams_list.png"
-    alt="Teams list page with search and filters"
-    width="90%"
-  />
-</div>
+<Note>
+  Der Bereich **Zugriffsberechtigungen (Access Permissions)** ist in der Ausgangsversion als noch nicht verfügbar gekennzeichnet. Teammitgliedschaft und Rollen bilden dort das verfügbare Zugriffsmodell.
+</Note>
 
-## Creating a Team
+## Team ansehen und bearbeiten
 
-1. From the **Teams** page, click **Create Team** in the top-right corner
-2. The **Create Team** panel opens on the right
-3. Enter the **Team Name** (required) — for example, `Product Engineering`
-4. (Optional) Enter a **Team Description** describing the team's purpose
-5. (Optional) Under **Add Members**, choose a **Default Role** (`Reader`, `Writer`, or `Owner`) for the members you're about to select
-6. Search for and select the users to add to the team
-7. To change a specific member's role after adding them, use the role dropdown next to their name in the **Member Roles** list. Click **Apply to all** to reset every selected member to the default role
-8. Click **Create Team**
+Die Teamdetails zeigen Name, Beschreibung, Ersteller und Mitglieder mit ihren Rollen. Sie öffnen die Details über die Tabellenzeile oder **Team ansehen (View Team)** im Menü **⋯**.
 
-<div style={{ textAlign: "center" }}>
-  <img
-    src="/images/account/team/create_team.png"
-    alt="Create Team side panel with name, description, default role, and member selection"
-    width="90%"
-  />
-</div>
+Wählen Sie **Team bearbeiten (Edit Team)**, um:
 
-<Tip>
-  **Access Permissions** for teams are shown as *Coming Soon* in the current UI — team membership and role assignment cover the access model today.
-</Tip>
+- Name oder Beschreibung zu ändern,
+- weitere Mitglieder hinzuzufügen,
+- Rollen über die Auswahlliste neben einem Mitglied anzupassen,
+- Mitglieder mit **Entfernen (Remove)** zu entfernen.
 
-## Viewing a Team
+Mit **Rückgängig (Undo)** können Sie eine vorgemerkte Entfernung zurücknehmen. Änderungen werden gemeinsam übernommen, sobald Sie **Änderungen speichern (Save Edits)** wählen.
 
-Click a team's row on the **Teams** page — or choose **View Team** from the row actions menu (**⋯**) — to open the detail panel. The panel shows:
+## Team löschen
 
-- The team's **Name** and **Description**
-- **Created By** — the user who created the team
-- **Members** — a paginated list of members with their roles
+Diese Aktion ist nur für berechtigte Personen verfügbar, in der Regel für Teameigentümer.
 
-<div style={{ textAlign: "center" }}>
-  <img
-    src="/images/account/team/team_detail.png"
-    alt="Team detail panel showing team information and members"
-    width="90%"
-  />
-</div>
-
-## Editing a Team
-
-1. Open the team detail panel
-2. Click **Edit Team**
-3. Update any of the following, then click **Save Edits**:
-   - **Team Name** or **Team Description**
-   - **Add Members** — search and select additional users, with an optional default role and per-user role overrides
-   - Member roles — change a current member's role using the role dropdown next to their name
-   - Remove members — click **Remove** next to a member; click **Undo** before saving to cancel the removal
-
-Role changes, additions, and removals are applied together when you click **Save Edits**.
-
-<div style={{ textAlign: "center" }}>
-  <img
-    src="/images/account/team/team_edit.png"
-    alt="Team detail panel in edit mode with Add Members and per-member role controls"
-    width="90%"
-  />
-</div>
-
-## Deleting a Team
-
-Teams can be deleted only by users who have permission to do so (typically team owners). If the option is available:
-
-1. Open the team's detail panel, or open the row actions menu (**⋯**) on the Teams page
-2. Click **Delete Team** (or **Delete** from the row actions menu)
-3. Confirm the action
+1. Öffnen Sie die Teamdetails oder das Zeilenmenü **⋯**.
+2. Wählen Sie **Team löschen (Delete Team)** beziehungsweise **Löschen (Delete)**.
+3. Bestätigen Sie die Aktion.
 
 <Warning>
-  Deleting a team is irreversible. The team and its membership are removed, though individual users remain in the workspace.
+  Das Team und seine Mitgliedschaften werden dauerhaft entfernt. Die einzelnen Benutzerkonten bleiben im Arbeitsbereich bestehen.
 </Warning>
 
-## Teams vs. User Groups
+## Teams oder Benutzergruppen?
 
-| | **Teams** | **User Groups** |
-|---|---|---|
-| **Who can create** | Any workspace member | Administrators only |
-| **Purpose** | Collaboration and shared work among members | Permission and access management across the workspace |
-| **Member roles** | Owner, Writer, Reader | Inherited workspace permissions |
+| | Teams | Benutzergruppen |
+| --- | --- | --- |
+| Erstellung | Durch Arbeitsbereichsmitglieder | Durch Administratoren |
+| Zweck | Gemeinsame Arbeit und Ressourcen | Administrative Organisation und Zugriffe |
+| Rollen | Owner, Writer, Reader | Aus Gruppen abgeleitete Berechtigungen |
 
-Use **teams** to organize the people doing work together, and **user groups** to control what members of the workspace can access.
+Mehr zur administrativen Organisation finden Sie unter [Benutzergruppen](/user-management/user-group).

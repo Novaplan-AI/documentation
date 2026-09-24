@@ -1,91 +1,28 @@
 ---
-title: "Authentication Overview"
-description: "Configure how users authenticate and access the application"
+title: "Anmeldung und Zugang"
+description: "Anmeldemethoden für Ihren Novaplan-Arbeitsbereich auswählen und konfigurieren."
 ---
 
-Our application supports multiple authentication methods to provide secure and flexible access for your users. This guide explains each authentication option, how to configure them, and best practices for implementation.
+Novaplan unterstützt mehrere Anmeldemethoden. Als Administrator legen Sie in den Authentifizierungseinstellungen fest, welche Methoden für Ihren Arbeitsbereich verfügbar sind. Die genaue Position dieser Einstellungen kann je nach Version unter dem Unternehmensprofil oder den Arbeitsbereichseinstellungen liegen.
 
-## Overview
+## Verfügbare Anmeldemethoden
 
-Authentication is the process of verifying a user's identity before granting access to your application. Selecting the right authentication method(s) depends on your organization's security requirements, user experience preferences, and existing infrastructure.
+| Methode | Verwendung | Anleitung |
+| --- | --- | --- |
+| Passwort | Anmeldung mit E-Mail-Adresse und Passwort. | [Passwort](/auth/password) |
+| Einmalcode (OTP) | Anmeldung mit einem per E-Mail versendeten Code. | [Einmalcode](/auth/otp) |
+| Google | Anmeldung über ein Google-Konto. | [Google-Konfiguration (Englisch)](/auth/google) |
+| Microsoft | Anmeldung über Microsoft beziehungsweise Microsoft Entra ID. | [Microsoft-Konfiguration (Englisch)](/auth/microsoft-azureAd) |
+| SAML SSO | Unternehmensweite Anmeldung über einen Identitätsanbieter. | [SAML-Konfiguration (Englisch)](/auth/saml) |
 
-<CardGroup>
-  <Card title="Security" icon="shield">
-    Choose authentication methods that align with your security policies and
-    compliance requirements.
-  </Card>
-  <Card title="User Experience" icon="user">
-    Balance security with a smooth login experience to enhance user adoption.
-  </Card>
-</CardGroup>
+Wählen Sie die Methode passend zu den Zugriffsregeln Ihres Unternehmens. Für SAML und externe Identitätsanbieter stimmen Sie die Einrichtung mit den zuständigen Administratoren ab.
 
-You can edit the authentication method and configure the respective credentials under the authentication page of settings in Company profie as shown in below image.
+## Wenn die Anmeldung nicht funktioniert
 
-<img
-  src="/images/auth/authentication_settings.png"
-  alt="Auth methods"
-  width="100%"
-/>
+1. Prüfen Sie, ob die gewünschte Anmeldemethode aktiviert und vollständig konfiguriert ist.
+2. Kontrollieren Sie, ob Sie die zum Arbeitsbereich gehörende E-Mail-Adresse verwenden.
+3. Bei Einmalcodes und Passwort-Rücksetzungen prüfen Administratoren die [SMTP-Konfiguration](/smtp).
+4. Bei Google, Microsoft oder SAML prüfen Administratoren die Redirect-URLs, die Verbindung zum Identitätsanbieter und gegebenenfalls die Gültigkeit der Zertifikate.
+5. Testen Sie die Anmeldung mit einem dafür vorgesehenen Konto.
 
-## Available Authentication Methods
-
-<Tabs>
-  <Tab title="Password">
-    ## Password Authentication 
-    Traditional username and password authentication for your application.
-
-    ### For more info, refer to [Password Configuration Guide](/auth/password).
-
-
-    <Info>
-      Password authentication is the simplest to set up your app.
-    </Info>
-
-  </Tab>
-
-<Tab title="One-Time Password">
-
-## One-Time Password (OTP)
-
-Single-use codes sent via email for secure, passwordless authentication.
-
-### For more info, refer to [OTP Configuration Guide](/auth/otp).
-
-</Tab>
-
-<Tab title="Google">
-
-## Google Authentication Allow users to sign in with their Google accounts using OAuth 2.0.
-
-Get credentials from Google Cloud console.
-
-### For more info, refer to [Google Configuration Guide](/auth/google).
-
-</Tab>
-
-<Tab title="Microsoft/AzureAd">
-  ## Microsoft Authentication Allow users to sign in with their Microsoft
-  accounts using OAuth 2.0.
-
-</Tab>
-
-  <Tab title="SAML SSO">
-    ## Enterprise single sign-on using Security Assertion Markup Language (SAML) protocol.
-    <Warning>
-      SAML configuration requires technical coordination between your application admin and the Identity Provider admin.
-    </Warning>
-
-  </Tab>
-</Tabs>
-
-## Troubleshooting
-
-If users encounter authentication issues:
-
-1. Verify the authentication method configuration
-2. Check server logs for specific error messages
-3. Confirm network connectivity to identity providers
-4. Validate certificate expiration dates
-5. Test authentication flow with a test account
-
-## Next Steps
+Falls das Problem weiterhin besteht, wenden Sie sich an [Novaplan Support](/contact-us).

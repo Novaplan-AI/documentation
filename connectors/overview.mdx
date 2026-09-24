@@ -1,211 +1,63 @@
 ---
-title: "Overview"
-description: "Connectors are software components that enable different applications, systems, or platforms to communicate and share data with each other."
+title: "Datenquellen verbinden"
+description: "Mit Konnektoren Unternehmensdaten für die Novaplan-Suche und KI-Agenten erschließen."
 ---
 
-## What are Connectors?
+## Was sind Konnektoren?
 
-Connectors are software components that **sync and index data** from external applications into PipesHub. They enable your chatbot and agents to search through your organization's knowledge base.
+Konnektoren synchronisieren Inhalte aus externen Anwendungen und indexieren sie für die Suche. Dadurch können die Suche und Ihre Agenten auf das verbundene Unternehmenswissen zugreifen.
 
-**Use Connectors when you want to query or search data.** The indexed data becomes searchable knowledge for your AI assistants.
+Die erste Synchronisierung und Indexierung kann Zeit benötigen. Welche Inhalte eine Person findet, hängt auch von ihren Berechtigungen ab.
 
-**Key characteristics:**
-- **One-way data sync** - Import data into PipesHub for indexing
-- **Knowledge retrieval** - Make data searchable for AI assistants
-- **Periodic syncing** - Data is synced on a schedule, not in real-time
+## Konnektor oder Toolset?
 
-<Warning>
-  **Important:** When authenticating a connector, use the same email address as your PipesHub account. Using a different email will cause permission issues on the PipesHub platform.
-</Warning>
+| Aufgabe | Passender Baustein |
+| --- | --- |
+| Vorhandene Dokumente, Nachrichten oder Seiten durchsuchen | Konnektor |
+| Nachrichten versenden, Tickets erstellen oder Inhalte bearbeiten | Toolset |
 
-<Note>
-  **When you want to use both Connector and Toolset:** In the Agent Builder add nodes from **Knowledge** (Collections, API Apps) for document search and context retrieval, and add nodes from **Tools** for performing actions. Connect both to your Agent Core so the agent can search context and take action in the same conversation.
-</Note>
+Beispielsweise erschließt ein Gmail-Konnektor E-Mails für die Suche. Ein Gmail-Toolset ermöglicht einem Agenten Aktionen im E-Mail-Konto. Mehr dazu finden Sie unter [KI-Agenten verstehen](/agent-guide/overview).
 
----
+## Häufig verwendete Datenquellen
 
-## Available Connectors
+Die detaillierten Einrichtungsanleitungen stehen zunächst auf Englisch zur Verfügung.
 
-Our platform supports a wide range of connectors organized by ecosystem to help you integrate with your favorite tools and services.
+<CardGroup cols={2}>
+  <Card title="Google Drive" icon="folder" href="/connectors/google-workspace/drive/drive">Dateien und Dokumente aus Google Workspace.</Card>
+  <Card title="Gmail" icon="envelope" href="/connectors/google-workspace/gmail/gmail">E-Mails für die Suche erschließen.</Card>
+  <Card title="SharePoint" icon="folder" href="/connectors/microsoft-365/sharepoint">Unternehmensdokumente aus Microsoft 365.</Card>
+  <Card title="OneDrive" icon="folder" href="/connectors/microsoft-365/one-drive">Dateien aus OneDrive verbinden.</Card>
+  <Card title="Slack" icon="comments" href="/connectors/slack/slack">Inhalte aus Ihrem Slack-Arbeitsbereich.</Card>
+  <Card title="Confluence" icon="book" href="/connectors/confluence/confluence">Wissen aus Confluence erschließen.</Card>
+  <Card title="Jira" icon="list-check" href="/connectors/jira/jira">Projekt- und Ticketinformationen verbinden.</Card>
+  <Card title="Lokale Dateien" icon="hard-drive" href="/connectors/local-fs/local-fs">Ordner auf dem Rechner des Konnektordienstes indexieren.</Card>
+</CardGroup>
 
----
+Weitere Anleitungen finden Sie in der **Technischen Referenz (Englisch)**, beispielsweise für Box, Dropbox, Nextcloud, Notion, GitHub, GitLab, S3, Azure, PostgreSQL und MariaDB.
 
-### Google Workspace
+## Eine Verbindung einrichten
 
-| Connector        | Description |
-|------------------|-------------|
-| **Gmail**        | Access and manage email communications, create automated workflows |
-| **Google Calendar** | Sync events, create meetings, and manage scheduling |
-| **Google Drive** | File storage, sharing, and collaboration management |
-| **Google Docs**  | Document creation, editing, and collaboration |
-| **Google Sheets**| Spreadsheet data management and analysis |
-| **Google Slides**| Presentation creation and sharing |
-| **Google Forms** | Survey and form data collection |
-| **Google Meet**  | Video conferencing integration |
-| **Google Admin** | Workspace administration and user management |
-| **YouTube**      | Video content management and analytics |
+1. Öffnen Sie die Konnektoreinstellungen Ihres Arbeitsbereichs beziehungsweise Ihren persönlichen Konnektorbereich.
+2. Wählen Sie den gewünschten Dienst und **Konfigurieren (Configure)**.
+3. Folgen Sie der dienstspezifischen Anleitung für Zugangsdaten und Berechtigungen.
+4. Schließen Sie die Anmeldung ab und starten Sie die Synchronisierung.
+5. Warten Sie auf die Indexierung und prüfen Sie die Suche mit einem bekannten Dokument.
 
----
+## OAuth-Weiterleitung korrekt übernehmen
 
-### Microsoft Ecosystem
+Die **Redirect-URI** wird im Konfigurationsdialog angezeigt. Kopieren Sie diese exakt in die erlaubten Weiterleitungsadressen Ihrer OAuth-App beim jeweiligen Anbieter.
 
-| Connector        | Description |
-|------------------|-------------|
-| **Outlook**      | Email and calendar management |
-| **OneDrive**     | Cloud file storage and synchronization |
-| **OneNote**      | Note-taking and knowledge management |
-| **Teams**        | Team collaboration and communication |
-| **SharePoint**   | Document management and team sites |
-| **Planner**      | Task and project management |
+<Info>
+  Verwenden Sie die im Dialog Ihrer Novaplan-Instanz angezeigte Adresse. Die Dokumentationsdomain docs.novaplan.ai ist keine OAuth-Callback-Adresse.
+</Info>
 
----
+Vergeben Sie die Berechtigungen aus der jeweiligen Konnektoranleitung. Welche Berechtigungen erforderlich sind, hängt vom Anbieter und der Verbindungsart ab.
 
-### Atlassian
+## Wenn Inhalte nicht gefunden werden
 
-| Connector    | Description |
-|--------------|-------------|
-| **Jira Cloud** | Issue tracking, project management, and agile workflows |
-| **Jira Data Center** | Issue tracking and project management for self-hosted Jira |
-| **Confluence Cloud** | Team collaboration and knowledge base management |
-| **Confluence Data Center** | Team collaboration and knowledge base for self-hosted Confluence |
+- **Anmeldung prüfen:** Kontrollieren Sie, ob die für den Konnektor verwendete Identität zu Ihrem Arbeitsbereich und der gewünschten Berechtigung passt.
+- **Synchronisierung prüfen:** Sehen Sie nach, ob die erwarteten Datensätze eingelesen wurden oder Fehler angezeigt werden.
+- **Indexierung abwarten:** Neu verbundene Inhalte stehen erst nach abgeschlossener Verarbeitung für die Suche bereit.
+- **Filter und Berechtigungen prüfen:** Zu enge Filter oder fehlende Zugriffsrechte können Ergebnisse ausschließen.
 
----
-
-### Communication & Support
-
-| Connector | Description |
-|-----------|-------------|
-| **Slack** | Team messaging and collaboration |
-| **Zammad** | Open-source helpdesk and ticketing system |
-| **Zendesk** | Customer support and ticket management |
-
----
-
-### Web and feeds
-
-| Connector | Description |
-|-----------|-------------|
-| **Web** | Crawl and index publicly reachable pages and files from a website URL |
-| **RSS** | Subscribe to and sync items from public RSS and Atom feeds (optional full article text) |
-
----
-
-### Local storage
-
-| Connector | Description |
-|-----------|-------------|
-| **Local FS** | Index a folder on the connector host; set up under **Workspace Settings → Your Connectors**; optional desktop watcher in the Electron app |
-
----
-
-### Local storage
-
-| Connector | Description |
-|-----------|-------------|
-| **Local FS** | Index a folder on the connector host; set up under **Personal → Your Connectors**; optional desktop watcher in the Electron app |
-
----
-
-### Cloud Storage & Infrastructure
-
-| Connector        | Description |
-|------------------|-------------|
-| **Amazon S3**    | Scalable object storage and data management |
-| **Microsoft Azure** | Cloud computing platform and services |
-| **Google Cloud Platform (GCP)** | Google's cloud infrastructure services |
-| **Box**          | Enterprise content management and collaboration |
-| **Dropbox**      | File synchronization and cloud storage |
-| **Nextcloud**    | Self-hosted file sync and share platform |
-
----
-
-### Development & Project Management
-
-| Connector | Description |
-|-----------|-------------|
-| **GitHub** | Version control, code collaboration, and project management |
-| **GitLab** | Version control, code collaboration, and merge request tracking |
-| **Linear** | Modern issue tracking and project management |
-| **Notion** | All-in-one workspace for notes, docs, and projects |
-
----
-
-### Database & Analytics
-
-| Connector | Description |
-|-----------|-------------|
-| **Airtable** | Flexible database and project management |
-| **MariaDB** | Tables and rows sync from a MariaDB database |
-| **PostgreSQL** | Schemas, tables, and rows sync from a PostgreSQL database |
-
----
-
-## Security & Compliance
-
-All connectors are built with enterprise-grade security in mind, supporting OAuth 2.0 authentication, data encryption, and compliance with major industry standards including SOC 2, GDPR, and HIPAA where applicable.
-
----
-
-## Frequently Asked Questions
-
-<AccordionGroup>
-
-<Accordion title="What's the difference between Connectors and Toolsets?">
-
-| Aspect | Connectors | Toolsets |
-|--------|-----------|----------|
-| **Purpose** | Sync and index data for search | Enable agents to perform actions |
-| **Data Flow** | One-way (import data into PipesHub) | Two-way (read and write via API) |
-| **When to Use** | Query/search data | Perform actions on data |
-
-**Example:** Use a **Gmail Connector** to index and search your email history. Use a **Gmail Toolset** to send new emails through an agent.
-
-</Accordion>
-
-<Accordion title="When should I use a Connector vs a Toolset?">
-
-**Connector** — Use when you need document context search: connectors sync and index your documents, emails, and pages so your assistant can find and use that context, and they do not perform actions.
-
-**Toolset** — When you need **actions**: create or update content, send messages, or run analytical queries (e.g. JQL, CQL, reports).
-
-**Quick takeaway:** Search & context → **Connector**. Actions → **Toolset**.
-
-</Accordion>
-
-<Accordion title="Where do I find the callback URL for my OAuth app?">
-
-The callback URL is displayed in PipesHub when configuring a connector:
-
-1. Go to **Settings > Connectors**
-2. Click **"Configure"** on the connector you want to set up
-3. Copy the **Redirect URI** shown in the dialog
-4. Add it to your OAuth app's allowed redirect URIs in the service's developer console
-
-The callback URL must match exactly between PipesHub and the OAuth app for authentication to succeed.
-
-</Accordion>
-
-<Accordion title="What OAuth scopes do Connectors require?">
-
-Connectors need **read-only permissions** to sync and index data. When creating your OAuth app in the service's developer console, grant only the scopes listed in the specific connector's documentation page.
-
-Using read-only scopes ensures connectors can access your data for indexing but cannot modify or delete anything in your external applications.
-
-</Accordion>
-
-<Accordion title="Queries not returning results. What could be wrong?">
-
-There are three common causes:
-
-1. **Email mismatch** - The email used during connector authentication doesn't match your PipesHub account email. This causes permission issues preventing you from accessing synced data.
-   - **Fix:** Reconfigure the connector and authenticate using the same email as your PipesHub account.
-
-2. **Records not displaying in "All Records"** - Documents or data from the connector are not showing up at all in the All Records section.
-   - **Fix:** Check permissions in the connector configuration, verify email match, and go to **Settings > Connectors** to ensure all records have synced successfully.
-
-3. **Data not yet indexed** - The connector is still syncing or hasn't completed the initial indexing process.
-   - **Fix:** Go to **Settings > Connectors**, check the sync status, and wait for indexing to complete.
-
-</Accordion>
-
-</AccordionGroup>
+Wenn das Problem bestehen bleibt, kontaktieren Sie [Novaplan Support](/contact-us).

@@ -1,30 +1,24 @@
 ---
-title: "One-Time Password"
-description: "Configure how users authenticate and access the application thorugh OTP"
+title: "Einmalcode (OTP)"
+description: "Ohne Passwort mit einem per E-Mail versendeten Einmalcode anmelden."
 icon: "shield"
 ---
 
-## One-Time Password (OTP)
+## Mit einem Einmalcode anmelden
 
-Single-use codes sent via email for secure, passwordless authentication.
+1. Geben Sie Ihre E-Mail-Adresse auf der Anmeldeseite ein.
+2. Novaplan sendet einen Einmalcode an diese Adresse.
+3. Geben Sie den Code im Anmeldedialog ein.
+4. Nach erfolgreicher Prüfung erhalten Sie Zugang.
 
-### How It Works
+## Einmalcodes aktivieren
 
-1. User enters their email address
-2. System generates a one-time code and sends it to the user's email
-3. User inputs the code to verify their identity
-4. Upon validation, access is granted
-
-### Configuration To enable OTP authentication:
-
-1. Navigate to Authentication Settings
-2. Toggle on "One-Time Password"
-3. Ensure SMTP settings are properly configured
-
-### Requirements - Functional SMTP configuration - Valid email addresses for all users
+Als Administrator öffnen Sie die Authentifizierungseinstellungen und aktivieren **Einmalcode (One-Time Password)**. Alle Benutzer benötigen eine gültige E-Mail-Adresse.
 
 <Warning>
-  OTP authentication requires proper SMTP configuration to deliver verification
-  codes to users. For setting up Smtp, refer to [SMTP Configuration
-  Guide](/smtp)
+  Einmalcodes benötigen einen funktionierenden E-Mail-Versand. Richten Sie [SMTP](/smtp) ein und prüfen Sie die Zustellung, bevor Sie diese Anmeldemethode einsetzen.
 </Warning>
+
+## Es kommt kein Code an
+
+Prüfen Sie die eingegebene E-Mail-Adresse und Ihren Spam-Ordner. Lassen Sie Ihren Administrator anschließend die SMTP-Einstellungen und die Zustellung beim E-Mail-Anbieter prüfen.
