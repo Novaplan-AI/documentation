@@ -15,10 +15,7 @@
         "pages": [
           "introduction",
           "for-agents",
-          "for-agents-local-demo",
-          "for-agents-bootstrap",
           "quickstart",
-          "development",
           "onboarding",
           "contact-us"
         ]
@@ -321,21 +318,6 @@
         ]
       },
       {
-        "group": "Deployment",
-        "pages": [
-          "deployment/overview",
-          {
-            "group": "Vendor",
-            "pages": [
-              "deployment/vendor/aws",
-              "deployment/vendor/azure",
-              "deployment/vendor/gcp",
-              "deployment/vendor/private"
-            ]
-          }
-        ]
-      },
-      {
         "group": "Developer",
         "pages": [
           "developer/getting-started",
@@ -452,6 +434,46 @@
     {
       "source": "/system-overview/query-service",
       "destination": "/system-overview",
+      "permanent": true
+    },
+    {
+      "source": "/deployment/overview",
+      "destination": "/contact-us",
+      "permanent": true
+    },
+    {
+      "source": "/deployment/vendor/aws",
+      "destination": "/contact-us",
+      "permanent": true
+    },
+    {
+      "source": "/deployment/vendor/azure",
+      "destination": "/contact-us",
+      "permanent": true
+    },
+    {
+      "source": "/deployment/vendor/gcp",
+      "destination": "/contact-us",
+      "permanent": true
+    },
+    {
+      "source": "/deployment/vendor/private",
+      "destination": "/contact-us",
+      "permanent": true
+    },
+    {
+      "source": "/development",
+      "destination": "/contact-us",
+      "permanent": true
+    },
+    {
+      "source": "/for-agents-local-demo",
+      "destination": "/contact-us",
+      "permanent": true
+    },
+    {
+      "source": "/for-agents-bootstrap",
+      "destination": "/contact-us",
       "permanent": true
     }
   ],
