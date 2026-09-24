@@ -242,7 +242,7 @@ The **Action configuration** drawer does not show the redirect URL; you copy it 
 2. Open **Manage action configuration** (the settings control on the instance row).
 3. Under **Redirect URI**, copy the value (or use **Copy**). It matches your deployment host and this pattern:
 
-   `https://<your-pipeshub-host>/toolsets/oauth/callback/teams`
+   `https://your-workspace.example.com/toolsets/oauth/callback/teams`
 
    The path segment `teams` matches the Microsoft Teams action type. The value must match what you register in Entra **exactly** (scheme, host, path; no stray trailing slash unless your deployment includes one).
 

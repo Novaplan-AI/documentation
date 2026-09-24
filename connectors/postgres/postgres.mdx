@@ -87,17 +87,17 @@ Download the installer from the [pgAdmin Downloads page](https://www.pgadmin.org
 Create a dedicated read-only role for Novaplan AI. Run these as a superuser (e.g. `postgres`) against the target database:
 
 ```sql
-CREATE USER pipeshub_user WITH PASSWORD 'a_strong_password';
-GRANT CONNECT ON DATABASE bird_mini_dev TO pipeshub_user;
-GRANT USAGE ON SCHEMA public TO pipeshub_user;
-GRANT SELECT ON ALL TABLES IN SCHEMA public TO pipeshub_user;
-ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO pipeshub_user;
+CREATE USER novaplan_reader WITH PASSWORD 'a_strong_password';
+GRANT CONNECT ON DATABASE bird_mini_dev TO novaplan_reader;
+GRANT USAGE ON SCHEMA public TO novaplan_reader;
+GRANT SELECT ON ALL TABLES IN SCHEMA public TO novaplan_reader;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO novaplan_reader;
 ```
 
 The connector also reads schema metadata from `information_schema` and `pg_catalog`, which are available to any authenticated user by default.
 
 <Info>
-  Replace `pipeshub_user` and `a_strong_password` with your own values, and repeat the `USAGE`/`SELECT`/`ALTER DEFAULT PRIVILEGES` grants for each schema you plan to sync.
+  Replace `novaplan_reader` and `a_strong_password` with your own values, and repeat the `USAGE`/`SELECT`/`ALTER DEFAULT PRIVILEGES` grants for each schema you plan to sync.
 </Info>
 
 </Accordion>
@@ -268,9 +268,9 @@ The connector exposes both schema (so the assistant knows which tables and colum
 For read-only sync, grant `USAGE` on the schemas and `SELECT` on the tables you want to sync:
 
 ```sql
-GRANT USAGE ON SCHEMA public TO pipeshub_user;
-GRANT SELECT ON ALL TABLES IN SCHEMA public TO pipeshub_user;
-ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO pipeshub_user;
+GRANT USAGE ON SCHEMA public TO novaplan_reader;
+GRANT SELECT ON ALL TABLES IN SCHEMA public TO novaplan_reader;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO novaplan_reader;
 ```
 
 The connector also reads schema metadata from `information_schema` and `pg_catalog`, which are available to any authenticated user by default.

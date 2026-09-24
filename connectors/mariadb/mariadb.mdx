@@ -85,15 +85,15 @@ Enter your password when prompted. If you reach the `MariaDB [(none)]>` prompt, 
 Create a dedicated read-only user for Novaplan AI. Run these as `root` (or any user with `CREATE USER` and `GRANT` privileges) against the target database:
 
 ```sql
-CREATE USER 'pipeshub_user'@'%' IDENTIFIED BY 'a_strong_password';
-GRANT SELECT ON test_db.* TO 'pipeshub_user'@'%';
+CREATE USER 'novaplan_reader'@'%' IDENTIFIED BY 'a_strong_password';
+GRANT SELECT ON test_db.* TO 'novaplan_reader'@'%';
 FLUSH PRIVILEGES;
 ```
 
 The connector also reads schema metadata from `information_schema`, which is available to any authenticated user by default.
 
 <Info>
-  Replace `pipeshub_user`, `a_strong_password`, and `test_db` with your own values. Use `'pipeshub_user'@'localhost'` instead of `'%'` if Novaplan AI connects from the same host as the database.
+  Replace `novaplan_reader`, `a_strong_password`, and `test_db` with your own values. Use `'novaplan_reader'@'localhost'` instead of `'%'` if Novaplan AI connects from the same host as the database.
 </Info>
 
 </Accordion>
@@ -118,7 +118,7 @@ The connector also reads schema metadata from `information_schema`, which is ava
 | **Host** | `localhost` |
 | **Port** | `3306` |
 | **Database** | `test_db` |
-| **User** | `pipeshub_user` |
+| **User** | `novaplan_reader` |
 | **Password** | the password you set when creating the user |
 
 <div className="text-center">
@@ -194,7 +194,7 @@ The connector verifies the connection, then runs the initial sync. Watch the **I
 For read-only sync, `SELECT` on the target database is enough:
 
 ```sql
-GRANT SELECT ON test_db.* TO 'pipeshub_user'@'%';
+GRANT SELECT ON test_db.* TO 'novaplan_reader'@'%';
 ```
 
 The connector also reads schema metadata from `information_schema`, which is available to any authenticated user by default.
