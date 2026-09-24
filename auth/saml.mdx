@@ -14,7 +14,7 @@ SAML SSO lets your users log in to Novaplan AI using your organization's existin
 
 ## Configuring SAML SSO
 
-<div id="step-1--register-pipeshub-in-your-identity-provider" />
+<div id="step-1--register-novaplan-ai-in-your-identity-provider" />
 
 ### Step 1 — Register Novaplan AI in Your Identity Provider
 
@@ -83,7 +83,7 @@ Your IdP includes the user's email in the SAML response, but different providers
 | OneLogin          | `NameID` / `User.Email` |
 | Custom IdP        | Check your IdP settings |
 
-<div id="step-3--configure-saml-sso-in-pipeshub" />
+<div id="step-3--configure-saml-sso-in-novaplan-ai" />
 
 ### Step 3 — Configure SAML SSO in Novaplan AI
 
@@ -116,6 +116,8 @@ Your IdP includes the user's email in the SAML response, but different providers
 | Logout URL                | No       | Your IdP's logout URL (optional). |
 | Provider Name             | No       | A label like "Okta" or "Azure AD". If set, the login button shows "Continue with [Provider Name]". |
 | Just-in-Time Provisioning | No       | When enabled (default), users who exist in your IdP but not in Novaplan AI are automatically created on their first login. |
+
+Novaplan normally creates the workspace and invites users. For invitation-based access, turn **Just-in-Time Provisioning** off and verify that an invited user can sign in while an uninvited user cannot. Coordinate this setting with Novaplan.
 
 <Info>
   The **Save** button stays disabled until all three required fields are filled in.

@@ -1,0 +1,48 @@
+---
+title: "Anmeldung und Authentifizierung"
+description: "Verfügbare Anmeldemethoden und ihre Einrichtung in Novaplan AI."
+---
+
+Novaplan AI unterstützt mehrere Methoden zur Anmeldung. Welche Methode in Ihrem Workspace verfügbar ist, hängt von der Konfiguration Ihrer Organisation ab. Novaplan übernimmt den Großteil der Einrichtung; diese Anleitung bleibt als Referenz für Administratoren verfügbar.
+
+## Überblick
+
+Bei der Authentifizierung wird die Identität einer Person geprüft, bevor sie Zugriff auf den Workspace erhält. Die Auswahl der Anmeldemethoden richtet sich nach den Sicherheitsanforderungen, der gewünschten Benutzererfahrung und der bestehenden Identitätsinfrastruktur Ihrer Organisation.
+
+Administratoren können Anmeldemethoden und zugehörige Zugangsdaten in den **Authentication Settings** konfigurieren. Stimmen Sie Änderungen an der Anmeldung mit dem Novaplan-Team und gegebenenfalls mit der Administration Ihres Identitätsanbieters ab.
+
+<img src="/images/auth/authentication_settings.png" alt="Einstellungen für Anmeldemethoden" width="100%" />
+
+## Verfügbare Anmeldemethoden
+
+<Tabs>
+  <Tab title="Passwort">
+    Benutzer melden sich mit E-Mail-Adresse und Passwort an. Die [Passwort-Anleitung](/de/auth/password) beschreibt Anmeldung, Änderung und Zurücksetzen des Passworts.
+  </Tab>
+  <Tab title="Einmalcode">
+    Einmalig gültige Codes werden per E-Mail gesendet und erlauben die Anmeldung ohne Passwort. Einzelheiten stehen in der [OTP-Anleitung](/de/auth/otp).
+  </Tab>
+  <Tab title="Google">
+    Benutzer können sich mit ihrem Google-Konto über OAuth 2.0 anmelden. Die erforderlichen Zugangsdaten werden in der Google Cloud Console eingerichtet. Weitere Schritte finden Sie in der [Google-Anleitung](/de/auth/google).
+  </Tab>
+  <Tab title="Microsoft / Azure AD">
+    Benutzer können sich mit ihrem Microsoft-Konto über OAuth 2.0 anmelden. Weitere Schritte finden Sie in der [Microsoft-Anleitung](/de/auth/microsoft-azureAd).
+  </Tab>
+  <Tab title="SAML SSO">
+    Enterprise Single Sign-on über SAML erfordert die Abstimmung zwischen Ihrer Workspace-Administration und der Administration des Identitätsanbieters. Siehe [SAML-Anleitung](/de/auth/saml).
+  </Tab>
+</Tabs>
+
+Weitere Anmeldemöglichkeiten und technische Details finden Sie in der [englischen Authentifizierungsreferenz](/auth).
+
+## Probleme bei der Anmeldung prüfen
+
+Wenn sich Benutzer nicht anmelden können:
+
+1. Prüfen Sie die für den Workspace konfigurierte Anmeldemethode.
+2. Prüfen Sie als Administrator die verfügbaren Fehlermeldungen und Protokolle.
+3. Prüfen Sie die Verbindung zum Identitätsanbieter.
+4. Prüfen Sie, ob verwendete Zertifikate noch gültig sind.
+5. Testen Sie die Anmeldung mit einem geeigneten Testkonto.
+
+Wenn Sie Ihren Zugang nicht selbst wiederherstellen können, wenden Sie sich an Ihre Workspace-Administration oder an [Novaplan Support](/de/contact-us).

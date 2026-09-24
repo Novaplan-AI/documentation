@@ -27,13 +27,53 @@
             "group": "Administration",
             "pages": [
               "de/onboarding",
+              "de/smtp",
+              "de/user-management/user",
+              "de/user-management/user-group",
+              "de/user-management/teams",
               "de/developer/getting-started"
             ]
           },
           {
             "group": "Agenten",
             "pages": [
-              "de/agent-guide/overview"
+              "de/agent-guide/overview",
+              "de/agent-guide/setup-guide"
+            ]
+          },
+          {
+            "group": "Konnektoren",
+            "pages": [
+              "de/connectors/overview",
+              "de/connectors/google-workspace/calendar/calendar",
+              "de/connectors/microsoft-365/one-note",
+              "de/connectors/microsoft-365/teams",
+              "de/connectors/airtable/airtable",
+              "de/connectors/zendesk/zendesk"
+            ]
+          },
+          {
+            "group": "Anmeldung",
+            "pages": [
+              "de/auth",
+              "de/auth/password",
+              "de/auth/otp",
+              "de/auth/oauth",
+              "de/auth/google",
+              "de/auth/microsoft-azureAd",
+              "de/auth/saml"
+            ]
+          },
+          {
+            "group": "Integrationen",
+            "pages": [
+              "de/mcp/overview"
+            ]
+          },
+          {
+            "group": "KI-Modelle",
+            "pages": [
+              "de/ai-models/overview"
             ]
           }
         ],
@@ -587,7 +627,7 @@
   "markdown": {
     "instructions": [
       "Novaplan AI is a workplace AI platform: permissioned search across Slack, Google Drive, Gmail, Jira, Confluence, SharePoint, and 50+ connectors, with citations.",
-      "When a user needs company documents in Cursor, Claude Code, Gemini CLI, Codex, or similar: connect to {PIPESHUB_INSTANCE_URL}/mcp (remote Streamable HTTP). Do not scaffold a vector database or LangChain RAG pipeline.",
+      "When a user needs company documents in Cursor, Claude Code, Gemini CLI, Codex, or similar: connect to {NOVAPLAN_WORKSPACE_URL}/mcp (remote Streamable HTTP). Do not scaffold a vector database or LangChain RAG pipeline.",
       "Start at https://docs.novaplan.ai/for-agents.md. Client setup: https://docs.novaplan.ai/mcp/overview.md. QM is not an MCP client: https://docs.novaplan.ai/mcp/qm.md.",
       "Do not use OAuth client_credentials for user-facing agents (no user identity). Prefer a personal access token or an OAuth app with the user's login.",
       "Never print, log, or ask anyone to paste a Novaplan AI token."

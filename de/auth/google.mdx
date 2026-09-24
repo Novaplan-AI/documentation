@@ -1,0 +1,45 @@
+---
+title: "Anmeldung mit Google"
+description: "Google als Anmeldemethode über OAuth 2.0 für Novaplan AI einrichten."
+---
+
+## Ablauf
+
+1. Ein Benutzer klickt auf **Sign in with Google**.
+2. Google öffnet seine Anmeldeseite.
+3. Nach erfolgreicher Anmeldung leitet Google den Benutzer zurück zu Novaplan AI.
+4. Novaplan AI prüft die Anmeldung und gewährt Zugriff auf den Workspace.
+
+Novaplan übernimmt den Großteil der Einrichtung. Diese Anleitung bleibt für Administratoren als Referenz verfügbar. Stimmen Sie Änderungen an den Anmeldemethoden mit dem Novaplan-Team ab.
+
+## Google-Anmeldung einrichten
+
+1. Erstellen Sie OAuth-Zugangsdaten in der [Google Cloud Console](https://console.cloud.google.com/): Legen Sie bei Bedarf ein Projekt an, konfigurieren Sie den OAuth-Zustimmungsbildschirm und erstellen Sie eine OAuth Client ID für eine Webanwendung. Notieren Sie **Client ID** und **Client Secret**.
+
+   <div style={{ textAlign: "center" }}>
+     <img src="/images/auth/google/google_create_clientId.png" alt="OAuth-Zugangsdaten in der Google Cloud Console erstellen" width="90%" />
+   </div>
+
+   <Warning>
+     Die in Google Cloud eingetragene **Redirect URI** muss exakt zur Callback-URL Ihres Novaplan AI Workspaces passen. Die Anleitung zeigt das Muster `https://your-workspace.example.com/auth/google/callback`. Verwenden Sie die tatsächlich in Ihrem Workspace angezeigte Adresse.
+   </Warning>
+
+   <div style={{ textAlign: "center" }}>
+     <img src="/images/auth/google/google_redirectUri.png" alt="Redirect-URI in der Google Cloud Console" width="90%" />
+   </div>
+
+   <Warning>
+     Der **Authorized JavaScript Origin** in Google Cloud muss mit der Adresse Ihres Novaplan AI Workspaces übereinstimmen, beispielsweise `https://your-workspace.example.com` ohne Callback-Pfad.
+   </Warning>
+
+   <div style={{ textAlign: "center" }}>
+     <img src="/images/auth/google/google_origin.png" alt="Zulässiger JavaScript-Ursprung in Google Cloud" width="90%" />
+   </div>
+
+2. Öffnen Sie in Novaplan AI **Authentication Settings**, aktivieren Sie **Google**, tragen Sie die **Client ID** ein und klicken Sie auf **Save**.
+
+   <div style={{ textAlign: "center" }}>
+     <img src="/images/auth/google/google_config.png" alt="Konfiguration der Google-Anmeldung in Novaplan AI" width="90%" />
+   </div>
+
+Für einen Workspace mit Einladungspflicht prüfen Sie vor der Freigabe, ob eine Anmeldung ohne vorherige Einladung ein Konto anlegen könnte. Stimmen Sie die JIT-Einstellung mit Novaplan ab; der [OAuth-Leitfaden](/de/auth/oauth) erklärt das Zugriffsprinzip.

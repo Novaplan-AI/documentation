@@ -1,0 +1,87 @@
+---
+title: "Benutzer verwalten"
+description: "Benutzer in Ihren Novaplan AI Workspace einladen, verwalten und entfernen."
+---
+
+Die Seite **Users** zeigt alle Personen, die zu Ihrem Workspace gehören oder eingeladen wurden. Administratoren können neue Mitglieder einladen, bestehende Benutzer verwalten und ausstehende Einladungen bearbeiten.
+
+Novaplan übernimmt den Großteil der Einrichtung und Verwaltung. Die folgenden Schritte dienen als Referenz für Personen mit Administratorberechtigungen. Stimmen Sie Änderungen an der Benutzerverwaltung mit dem Novaplan-Team ab. Ohne die erforderlichen Berechtigungen wenden Sie sich an Ihre Workspace-Administration oder an [Novaplan Support](/de/contact-us).
+
+Die englischen Feld- und Schaltflächennamen entsprechen den Beschriftungen in den abgebildeten Oberflächen.
+
+## Benutzerverwaltung öffnen
+
+1. Melden Sie sich mit einem Administratorkonto bei Novaplan AI an.
+2. Öffnen Sie das Benutzermenü und wählen Sie **Workspace Settings**.
+3. Öffnen Sie in der Seitenleiste den Bereich **People** und wählen Sie **Users**.
+
+Die Tabelle enthält folgende Spalten:
+
+| Spalte | Bedeutung |
+| --- | --- |
+| **User** | Profilbild, Anzeigename und E-Mail-Adresse. |
+| **Role** | Rolle: `Admin` oder `Member`. |
+| **Groups** | Anzahl der Benutzergruppen, denen die Person angehört. |
+| **Status** | Status: `Active`, `Pending` oder `Blocked`. |
+| **Last Active** | Datum der letzten Aktivität. |
+| **Date Joined** | Datum, an dem die Person hinzugefügt oder eingeladen wurde. |
+
+Suchen Sie über das **Suchfeld** im Kopfbereich nach Namen oder E-Mail-Adressen. Mit den **Filtern** oberhalb der Tabelle grenzen Sie die Ergebnisse nach Gruppe, Status, letzter Aktivität oder Beitrittsdatum ein. Ein Klick auf eine Zeile öffnet rechts das **Benutzerprofil**.
+
+## Benutzer einladen
+
+1. Klicken Sie auf der Seite **Users** oben rechts auf **Invite**.
+2. Rechts öffnet sich der Bereich **Invite User(s)**.
+3. Geben Sie unter **Invite to** eine oder mehrere E-Mail-Adressen ein. Trennen Sie diese durch Komma, Leerzeichen oder die Eingabetaste. Ungültige Adressen werden direkt markiert.
+4. Optional: Suchen und wählen Sie unter **Add to a User Group** eine oder mehrere Gruppen. Neue Benutzer erhalten die Zugriffsrechte der Gruppen, denen sie hinzugefügt werden.
+5. Klicken Sie auf **Send Invite**.
+
+<div style={{ textAlign: "center" }}>
+  <img src="/images/account/users/bulk_invite.png" alt="Benutzer einladen: E-Mail-Adressen und Gruppen auswählen" width="90%" />
+</div>
+
+Jede eingeladene Person erhält eine E-Mail mit Anweisungen zum Beitritt. Bis zur Anmeldung lautet ihr Status auf der Seite **Users**: **Pending**.
+
+## Ausstehende Einladungen verwalten
+
+Öffnen Sie neben einem Benutzer mit dem Status **Pending** das Aktionsmenü der Zeile (**⋯**). Dort finden Sie:
+
+- **Resend Invite:** Sendet eine neue Einladungs-E-Mail an dieselbe Adresse.
+- **Cancel Invite:** Widerruft die ausstehende Einladung.
+
+<div style={{ textAlign: "center" }}>
+  <img src="/images/account/users/existing_invitation.png" alt="Aktionsmenü einer ausstehenden Einladung" width="90%" />
+</div>
+
+Auch bei einer abgelaufenen Einladung stehen **Resend Invite** und **Cancel Invite** zur Verfügung, um sie erneut zu versenden oder zu widerrufen.
+
+## Mehrere Benutzer gleichzeitig bearbeiten
+
+Wählen Sie über die Kontrollkästchen eine oder mehrere Zeilen aus. Am unteren Tabellenrand erscheint eine Aktionsleiste:
+
+- Sind alle ausgewählten Einladungen im Status **Pending**, können Sie **Resend Invite** oder **Cancel Invite** wählen.
+- Andernfalls wird **Remove from Workplace** angeboten. Die Aktion ist deaktiviert, sobald die Auswahl ein Administratorkonto enthält.
+
+## Aktive Benutzer verwalten
+
+Für aktive Benutzer ohne Administratorrolle bietet das Aktionsmenü folgende Optionen:
+
+- **View Profile:** Öffnet rechts das Benutzerprofil.
+- **Deactivate:** Soll das Konto vorübergehend deaktivieren; diese Funktion ist als „Coming Soon“ angekündigt.
+- **Remove from Workplace:** Entfernt den Benutzer dauerhaft aus dem Workspace. Ein Dialog fordert Sie zur Bestätigung auf.
+
+Bei Administratorkonten enthält das Aktionsmenü nur **View Profile**. Sie können über diese Seite nicht entfernt werden.
+
+## Benutzer entsperren
+
+Hat ein Benutzer den Status **Blocked**, öffnen Sie das Aktionsmenü und wählen Sie **Unblock**. Geben Sie im Bestätigungsdialog den Anzeigenamen des Benutzers ein, um die Aktion zu bestätigen.
+
+## Benutzer entfernen
+
+1. Öffnen Sie das Aktionsmenü (**⋯**) des Benutzers.
+2. Wählen Sie **Remove from Workplace**.
+3. Klicken Sie im Bestätigungsdialog auf **Remove**.
+
+<Warning>
+  Das Entfernen wirkt sofort: Die Person verliert den Zugriff auf den Workspace und ihre Gruppenmitgliedschaften werden gelöscht. Administratorkonten können nicht über die Seite **Users** entfernt werden.
+</Warning>

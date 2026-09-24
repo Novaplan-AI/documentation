@@ -1,0 +1,116 @@
+---
+title: "SAML Single Sign-on"
+description: "Die Anmeldung über den Identitätsanbieter Ihrer Organisation einrichten."
+---
+
+Mit SAML Single Sign-on (SSO) melden sich Benutzer über den Identitätsanbieter (IdP) ihrer Organisation bei Novaplan AI an, zum Beispiel über Okta, Microsoft Entra ID, OneLogin oder Google Workspace. Sie benötigen dafür kein separates Novaplan AI Passwort.
+
+Novaplan übernimmt den Großteil der Einrichtung. Diese Anleitung bleibt als technische Referenz für Administratoren verfügbar. Stimmen Sie die Konfiguration mit Novaplan und der Administration Ihres Identitätsanbieters ab.
+
+<Warning>
+  Für die SAML-Einrichtung benötigen Sie Administratorzugriff auf Novaplan AI und den Identitätsanbieter.
+</Warning>
+
+## SAML SSO konfigurieren
+
+### Schritt 1: Novaplan AI beim Identitätsanbieter registrieren
+
+Fügen Sie Novaplan AI als neue SAML-Anwendung in Ihrem IdP hinzu:
+
+1. Öffnen Sie die Administrationsoberfläche des IdP.
+2. Erstellen Sie eine SAML-Anwendung, häufig unter **Add Application** oder **Create App Integration**.
+3. Übernehmen Sie die **Single Sign-On URL (ACS URL)** aus dem SAML-Konfigurationsbereich von Novaplan AI.
+4. Übernehmen Sie dort auch die **Audience (Entity ID)**.
+5. Konfigurieren Sie die Attributzuordnung so, dass die E-Mail-Adresse des Benutzers in der SAML-Antwort enthalten ist.
+6. Speichern Sie die Anwendung. Für Schritt 3 benötigen Sie die **SSO Entry Point URL** des IdP und sein **X.509 Certificate**. Optional können Sie auch die **IdP Metadata XML** verwenden.
+
+**Beispiel für Okta:**
+
+<div style={{ textAlign: "center" }}>
+  <img src="/images/auth/saml/saml_okta_url.png" alt="SAML-ACS-URL in Okta konfigurieren" width="90%" />
+</div>
+
+**Beispiel für OneLogin:**
+
+<div style={{ textAlign: "center" }}>
+  <img src="/images/auth/saml/saml_onelogin_url.png" alt="SAML-ACS-URL in OneLogin konfigurieren" width="90%" />
+</div>
+
+<div style={{ textAlign: "center" }}>
+  <img src="/images/auth/saml/saml_credentials_onelogin.png" alt="SAML-Zugangsdaten in OneLogin" width="90%" />
+</div>
+
+### Schritt 2: E-Mail-Attribut bestimmen
+
+Der IdP übermittelt die E-Mail-Adresse in der SAML-Antwort. Der Name des Attributs kann je nach Anbieter unterschiedlich sein. Geben Sie den passenden Namen in Novaplan AI ein, damit Benutzer zugeordnet werden können.
+
+**Option A: Einstellungen des IdP prüfen**
+
+1. Öffnen Sie die Administrationsoberfläche des IdP.
+2. Öffnen Sie die erstellte SAML-Anwendung und dort **Attribute Mapping** oder **Claims**.
+3. Notieren Sie den Attributnamen für die E-Mail-Adresse.
+
+**Option B: Testantwort untersuchen**
+
+1. Verwenden Sie bei Bedarf ein Werkzeug zur Anzeige von SAML-Antworten, etwa [SAML Tracer](https://chromewebstore.google.com/detail/saml-tracer/mhfbofmcaagbfdolegkilpgimfhjpian).
+2. Führen Sie eine Testanmeldung durch und erfassen Sie die SAML-Antwort.
+3. Suchen Sie das Attribut mit der E-Mail-Adresse.
+
+| Identitätsanbieter | Häufiger Name des E-Mail-Attributs |
+| --- | --- |
+| Okta | `NameID` |
+| Google Workspace | `email` |
+| OneLogin | `NameID` oder `User.Email` |
+| Anderer IdP | In den IdP-Einstellungen prüfen. |
+
+### Schritt 3: SAML SSO in Novaplan AI konfigurieren
+
+1. Öffnen Sie **Workspace → Authentication**. Nur Workspace-Administratoren haben Zugriff auf diese Einstellungen.
+2. Klicken Sie in der Zeile **SAML SSO** auf das Zahnradsymbol, um den Konfigurationsbereich zu öffnen.
+
+<div style={{ textAlign: "center" }}>
+  <img src="/images/auth/saml/saml_config.png" alt="SAML-SSO-Konfiguration in Novaplan AI" width="90%" />
+</div>
+
+3. Füllen Sie die Felder aus:
+
+| Feld | Pflicht | Bedeutung |
+| --- | --- | --- |
+| **ACS URL** | Automatisch | Wird von Novaplan AI erzeugt. Kopieren Sie sie in die IdP-Anwendung. |
+| **IdP Metadata XML** | Nein | Metadatendatei des IdP zum automatischen Ausfüllen weiterer Felder. |
+| **SSO Entry Point** | Ja | Anmelde-URL des IdP aus Schritt 1. |
+| **X.509 Certificate** | Ja | Signaturzertifikat des IdP aus Schritt 1. |
+| **Email Attribute Key** | Ja | Attributname für die E-Mail-Adresse aus Schritt 2. |
+| **Entity ID** | Nein | Optionale Kennung des Service Providers. |
+| **Logout URL** | Nein | Optionale Abmelde-URL des IdP. |
+| **Provider Name** | Nein | Anzeigename, etwa „Okta“ oder „Azure AD“, für die Anmeldeschaltfläche. |
+| **Just-in-Time Provisioning** | Nein | Erstellt bei der ersten Anmeldung automatisch ein Konto; laut Einrichtungsreferenz standardmäßig aktiviert. |
+
+<Info>
+  **Save** bleibt deaktiviert, bis die drei Pflichtfelder **SSO Entry Point**, **X.509 Certificate** und **Email Attribute Key** ausgefüllt sind.
+</Info>
+
+4. Klicken Sie auf **Save**.
+5. Klicken Sie auf der Seite **Authentication Settings** auf **Edit**, aktivieren Sie **SAML SSO** und speichern Sie erneut.
+
+<Warning>
+  Laut dieser Einrichtungsreferenz kann nur eine Anmeldemethode gleichzeitig aktiv sein. Prüfen Sie vor der Umstellung einen Wiederherstellungsweg für Administratoren. Bei dem von Novaplan verwendeten Einladungsverfahren schalten Sie **Just-in-Time Provisioning** aus und testen, dass nicht eingeladene Personen keinen Zugriff erhalten.
+</Warning>
+
+## Mit SAML anmelden
+
+1. Öffnen Sie die Novaplan AI Anmeldeseite.
+2. Klicken Sie auf **Sign in with SSO** oder auf **Continue with [Provider Name]**, falls ein Anbietername festgelegt wurde.
+3. Melden Sie sich auf der Seite Ihres IdP mit Ihren Organisations-Zugangsdaten an.
+4. Anschließend werden Sie zu Novaplan AI zurückgeleitet.
+
+## Fehlerbehebung
+
+| Problem | Prüfung |
+| --- | --- |
+| SSO-Schaltfläche fehlt | Prüfen Sie, ob **SAML SSO** unter **Workspace → Authentication** aktiviert ist. |
+| Anmeldung schlägt nach Eingabe der IdP-Zugangsdaten fehl | Prüfen Sie **SSO Entry Point** und **X.509 Certificate**. |
+| „JIT Disabled“ bei der ersten Anmeldung | Laden Sie die Person zuerst ein oder prüfen Sie mit Novaplan, ob automatische Benutzeranlage vorgesehen ist. |
+| Rückleitung zur Anmeldeseite mit Fehler | Prüfen Sie, ob **Email Attribute Key** zum E-Mail-Attribut Ihres IdP passt. |
+
+Bei Fragen hilft [Novaplan Support](/de/contact-us).

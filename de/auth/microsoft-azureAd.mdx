@@ -1,0 +1,40 @@
+---
+title: "Anmeldung mit Microsoft"
+description: "Microsoft Entra ID als Anmeldemethode für Novaplan AI einrichten."
+---
+
+## Ablauf
+
+1. Ein Benutzer klickt auf **Sign in with Microsoft**.
+2. Microsoft öffnet seine Anmeldeseite.
+3. Nach erfolgreicher Anmeldung leitet Microsoft den Benutzer zurück zu Novaplan AI.
+4. Novaplan AI prüft das Token und gewährt Zugriff auf den Workspace.
+
+Novaplan übernimmt den Großteil der Einrichtung. Diese Anleitung bleibt für Administratoren als Referenz verfügbar. Stimmen Sie Änderungen an den Anmeldemethoden mit dem Novaplan-Team ab.
+
+## Microsoft-Anmeldung einrichten
+
+1. Registrieren Sie eine Anwendung im [Microsoft Azure Portal](https://portal.azure.com/):
+
+   - Öffnen Sie **Azure Active Directory → App registrations** und klicken Sie auf **New registration**.
+   - Geben Sie einen Namen ein, beispielsweise „Novaplan AI login“.
+   - Wählen Sie unter **Supported account types**, ob nur Konten Ihrer Organisation oder mehrere Organisationsverzeichnisse zugelassen sind.
+   - Wählen Sie für die **Redirect URI** den Typ **Single-page application (SPA)** und tragen Sie die Callback-URL Ihres Workspaces ein. Das dokumentierte Muster lautet `https://your-workspace.example.com/auth/microsoft/callback`.
+   - Klicken Sie auf **Register**.
+
+   <div style={{ textAlign: "center" }}>
+     <img src="/images/auth/microsoft/entra_app.png" alt="App-Registrierung im Microsoft Azure Portal" width="90%" />
+   </div>
+
+   <Warning>
+     Die Redirect-URI in der App-Registrierung muss exakt mit der Callback-URL Ihres Novaplan AI Workspaces übereinstimmen. Verwenden Sie die tatsächlich angezeigte Workspace-Adresse.
+   </Warning>
+
+2. Notieren Sie auf der Seite **Overview** die **Application (Client) ID** und die **Directory (Tenant) ID**.
+3. Öffnen Sie in Novaplan AI **Authentication Settings**, aktivieren Sie **Microsoft**, tragen Sie beide Kennungen ein und klicken Sie auf **Save**.
+
+   <div style={{ textAlign: "center" }}>
+     <img src="/images/auth/microsoft/novaplan-microsoft-setup.png" alt="Konfiguration der Microsoft-Anmeldung in Novaplan AI" width="90%" />
+   </div>
+
+Die Microsoft-Anmeldung ist für Organisationen mit Microsoft 365 oder einer bestehenden Microsoft-Identitätsverwaltung geeignet. Für einen Workspace mit Einladungspflicht stimmen Sie die automatische Benutzeranlage (JIT) mit Novaplan ab; der [OAuth-Leitfaden](/de/auth/oauth) erklärt das Zugriffsprinzip.

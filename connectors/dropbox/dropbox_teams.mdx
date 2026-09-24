@@ -126,9 +126,9 @@ This guide will walk you through the process of creating a Dropbox application a
 
 6. You also need to enable **additional Development users**.
 
-7. Find the **OAuth 2** section and add the following URL to the **Redirect URIs** field (where {your_pipeshub_base_url} is your Novaplan AI instance URL):
+7. Find the **OAuth 2** section and add the following URL to the **Redirect URIs** field (replace `{your_workspace_domain}` with your Novaplan AI workspace hostname, without `https://`):
 ```
-http://{your_pipeshub_base_url}/connectors/oauth/callback/Dropbox
+https://{your_workspace_domain}/connectors/oauth/callback/Dropbox
 ```
 8. Click **Add** to save the URI.
 

@@ -1,0 +1,247 @@
+---
+title: "Agenten einrichten"
+description: "Schritt für Schritt einen KI-Agenten im visuellen Editor erstellen und konfigurieren."
+---
+
+<div className="not-prose mt-10">
+  <div className="p-6 border border-gray-200 dark:border-gray-700 rounded-xl bg-blue-50 dark:bg-gray-800">
+    <div className="flex items-center gap-3 mb-4">
+      <div className="text-xl font-semibold text-gray-900 dark:text-white">Agenten einrichten</div>
+    </div>
+    <p className="text-base text-gray-700 dark:text-gray-300 my-0">Erstellen Sie Ihren ersten KI-Agenten mit dem visuellen Workflow-Editor.</p>
+  </div>
+</div>
+
+## Voraussetzungen
+
+Novaplan übernimmt den Großteil der Einrichtung. Diese Anleitung bleibt als Referenz verfügbar, wenn Sie einen Agenten selbst konfigurieren oder seine Einrichtung nachvollziehen möchten. Stimmen Sie Änderungen an gemeinsam genutzten Einstellungen mit dem Novaplan-Team ab.
+
+Bevor Sie einen Agenten erstellen, benötigen Sie:
+
+1. **Konfigurierte KI-Modelle:** Mindestens einen LLM-Anbieter mit aktivierter Reasoning-Funktion in Ihrer Organisation.
+2. **Konfigurierte Toolsets (optional):** Die externen Toolsets, die Ihr Agent verwenden soll.
+3. **Wissensquellen (optional):** Konnektoren oder Dokumentensammlungen für die Suche.
+
+<Warning>
+  Toolsets müssen authentifiziert sein, bevor Sie sie einem Agenten hinzufügen können. Wenn Sie Jira, Slack oder andere externe Toolsets verwenden möchten, richten Sie diese zuerst ein. Öffnen Sie dazu **Settings > Toolsets**. Weitere Einzelheiten finden Sie in der [Toolset-Referenz (Englisch)](/toolsets/overview).
+</Warning>
+
+Die englischen Bezeichnungen in dieser Anleitung entsprechen den Beschriftungen in den abgebildeten Oberflächen.
+
+---
+
+## Schritt 1: Agenten öffnen
+
+1. Klicken Sie in der Hauptnavigation auf **Agent (Beta)**.
+
+<div className="text-center">
+  <img src="/images/agents/navigate-to-agents.png" alt="Agenten in der Navigation öffnen" className="block mx-auto w-11/12" />
+</div>
+
+2. Die Seite **Agents Management** zeigt Ihre bereits vorhandenen Agenten an.
+
+<div className="text-center">
+  <img src="/images/agents/agents-management-page.png" alt="Verwaltungsseite für Agenten" className="block mx-auto w-11/12" />
+</div>
+
+---
+
+## Schritt 2: Neuen Agenten erstellen
+
+Klicken Sie oben rechts auf **+ New Agent**.
+
+<div className="text-center">
+  <img src="/images/agents/new-agent-button.png" alt="Schaltfläche zum Erstellen eines Agenten" className="block mx-auto w-11/12" />
+</div>
+
+---
+
+## Schritt 3: Agent Core konfigurieren
+
+Der **Agent Builder** öffnet eine visuelle Arbeitsfläche. Darauf ist bereits ein **Agent Core**-Knoten platziert.
+
+<div className="text-center">
+  <img src="/images/agents/agent-builder-canvas.png" alt="Arbeitsfläche im Agent Builder" className="block mx-auto w-11/12" />
+</div>
+
+### Grundkonfiguration festlegen
+
+1. Klicken Sie neben dem Bereich **System Prompt** auf das Stiftsymbol, um den Konfigurationsdialog zu öffnen.
+2. Füllen Sie die folgenden Felder aus:
+
+| Feld | Bedeutung | Beispiel |
+| --- | --- | --- |
+| **System Prompt** | Anweisungen, die das Verhalten des Agenten festlegen. | „Sie sind ein hilfreicher Assistent für das Projektmanagement …“ |
+| **Description** | Kurze Beschreibung der Aufgabe. | „Hilft bei Jira-Tickets und Confluence-Dokumenten.“ |
+| **Start Message** | Begrüßung zu Beginn eines Gesprächs. | „Hallo! Ich unterstütze Sie bei Ihren Projekten. Was möchten Sie erledigen?“ |
+| **Instruction** | Detaillierte Anweisungen zu Verhalten und Fähigkeiten. | „Sie können Jira-Tickets erstellen, Dokumentation durchsuchen und Fragen zu Projekten beantworten.“ |
+
+<div className="text-center">
+  <img src="/images/agents/agent-core-config.png" alt="Konfigurationsdialog für den Agent Core" className="block mx-auto w-11/12" />
+</div>
+
+3. Klicken Sie auf **Save Changes**, um die Einstellungen zu speichern.
+
+<Info>
+  Der **System Prompt** bestimmt das Verhalten Ihres Agenten. Beschreiben Sie konkret, was er tun soll, welche Grenzen gelten und welchen Ton er verwenden soll.
+</Info>
+
+---
+
+## Schritt 4: Reasoning-Modell hinzufügen
+
+Jeder Agent benötigt mindestens ein LLM-Modell mit aktivierter Reasoning-Funktion.
+
+1. Öffnen Sie in der linken Seitenleiste den Bereich **LLM Models**.
+2. Ziehen Sie einen Modellknoten auf die Arbeitsfläche.
+
+<div className="text-center">
+  <img src="/images/agents/drag-llm-model.png" alt="Reasoning-Modell auf die Arbeitsfläche ziehen" className="block mx-auto w-11/12" />
+</div>
+
+3. Verbinden Sie den Modellknoten mit dem Agent Core: Ziehen Sie eine Verbindung vom Ausgang des **Agent Core** zum Eingang des **MODEL PROVIDER**-Knotens.
+
+<div className="text-center">
+  <img src="/images/agents/connect-llm-model.png" alt="Reasoning-Modell mit dem Agent Core verbinden" className="block mx-auto w-11/12" />
+</div>
+
+<Info>
+  **Reasoning-Modelle** sind LLM-Modelle mit aktivierten Schlussfolgerungsfähigkeiten. Sie können komplexe Aufgaben vor der Antwort schrittweise bearbeiten.
+</Info>
+
+---
+
+## Schritt 5: Toolsets hinzufügen (optional)
+
+Toolsets ermöglichen Ihrem Agenten, mit externen Anwendungen zu interagieren.
+
+### Verfügbare Toolsets anzeigen
+
+1. Öffnen Sie in der linken Seitenleiste den Bereich **Tools**.
+2. Öffnen Sie **APPLICATIONS**, um authentifizierte Toolsets und die Anzahl ihrer Werkzeuge zu sehen.
+
+<div className="text-center">
+  <img src="/images/agents/sidebar-toolsets.png" alt="Toolsets in der Seitenleiste" className="block mx-auto w-11/12" />
+</div>
+
+### Toolsets mit dem Agenten verbinden
+
+Sie können Werkzeuge auf zwei Arten hinzufügen:
+
+**Option 1: Gesamtes Toolset hinzufügen**
+
+- Ziehen Sie das Toolset auf die Arbeitsfläche, um alle enthaltenen Werkzeuge hinzuzufügen.
+- Verbinden Sie den Toolset-Knoten mit Ihrem Agent Core.
+
+**Option 2: Einzelne Werkzeuge hinzufügen**
+
+- Öffnen Sie ein Toolset, um seine Werkzeuge anzuzeigen.
+- Ziehen Sie nur die benötigten Werkzeuge auf die Arbeitsfläche.
+- So bestimmen Sie genauer, welche Werkzeuge der Agent verwenden kann.
+
+<div className="text-center">
+  <img src="/images/agents/add-toolset-to-flow.png" alt="Toolset zum Agenten-Workflow hinzufügen" className="block mx-auto w-11/12" />
+</div>
+
+### Werkzeuge verwalten
+
+- **Einzelnes Werkzeug entfernen:** Klicken Sie rechts neben dem Werkzeug im Toolset-Knoten auf die Schaltfläche zum Entfernen.
+- **Gesamtes Toolset entfernen:** Klicken Sie oben rechts im Toolset-Knoten auf die Schaltfläche zum Löschen.
+
+<Info>
+  Die [Toolset-Dokumentation (Englisch)](/toolsets/overview) beschreibt die Werkzeuge und Fähigkeiten der einzelnen Toolsets.
+</Info>
+
+---
+
+## Schritt 6: Wissensquellen hinzufügen (optional)
+
+Geben Sie Ihrem Agenten Zugriff auf indexierte Dokumente und Sammlungen.
+
+1. Öffnen Sie in der linken Seitenleiste den Bereich **Knowledge**.
+2. Dort finden Sie **Apps** für indexierte Inhalte aus verbundenen Anwendungen und **Collections** für eigene Dokumentensammlungen.
+
+<div className="text-center">
+  <img src="/images/agents/sidebar-knowledge.png" alt="Wissensquellen in der Seitenleiste" className="block mx-auto w-11/12" />
+</div>
+
+3. Ziehen Sie die gewünschte Wissensquelle auf die Arbeitsfläche.
+4. Verbinden Sie sie mit dem Agenten-Workflow.
+
+Das integrierte Werkzeug **Internal Retrieval** durchsucht Ihre indexierten Inhalte. Es ist ohne zusätzliche Konfiguration verfügbar.
+
+## Schritt 7: Agenten speichern
+
+1. Geben Sie oben auf der Seite im **Namensfeld** einen Namen für Ihren Agenten ein.
+2. Klicken Sie auf **Save Agent**.
+
+<div className="text-center">
+  <img src="/images/agents/save-agent.png" alt="Agenten speichern" className="block mx-auto w-11/12" />
+</div>
+
+3. Ihr Agent ist gespeichert und kann verwendet werden.
+
+---
+
+## Schritt 8: Agenten testen
+
+1. Öffnen Sie nach dem Speichern die Chat-Oberfläche des Agenten.
+2. Wählen Sie dazu Ihren Agenten auf der Seite **Agents Management** aus.
+3. Beginnen Sie ein Gespräch, um seine Fähigkeiten zu testen.
+
+<div className="text-center">
+  <img src="/images/agents/agent-chat.png" alt="Chat-Oberfläche eines Agenten" className="block mx-auto w-11/12" />
+</div>
+
+---
+
+## Fehlerbehebung
+
+<AccordionGroup>
+  <Accordion title="Ein Toolset fehlt in der Seitenleiste">
+    **Mögliche Ursachen:** Das Toolset ist noch nicht eingerichtet oder die Authentifizierung wurde nicht abgeschlossen.
+
+    1. Öffnen Sie die Toolset-Einstellungen unter **Settings > Toolsets**.
+    2. Suchen Sie das Toolset und klicken Sie auf **Configure**.
+    3. Schließen Sie die Authentifizierung ab.
+    4. Kehren Sie zum Agent Builder zurück. Das Toolset sollte jetzt erscheinen.
+  </Accordion>
+  <Accordion title="Der Agent antwortet nicht oder die Anfrage läuft ab">
+    **Mögliche Ursachen:** Das Reasoning-Modell ist nicht korrekt konfiguriert, Reasoning ist deaktiviert, die Toolset-Authentifizierung ist abgelaufen oder der System-Prompt verursacht Probleme.
+
+    1. Prüfen Sie unter **Settings > AI Models**, ob Ihr LLM-Anbieter korrekt eingerichtet und Reasoning aktiviert ist.
+    2. Authentifizieren Sie Toolsets mit abgelaufenen Zugangstokens erneut.
+    3. Vereinfachen Sie den System-Prompt und testen Sie erneut.
+  </Accordion>
+  <Accordion title="Die Wissenssuche liefert keine Ergebnisse">
+    **Mögliche Ursachen:** Die verbundenen Quellen enthalten noch keine indexierten Inhalte, Filter sind zu eng gesetzt oder die Indexierung läuft noch.
+
+    1. Prüfen Sie unter **Connector Settings**, ob die Konnektoren synchronisiert sind.
+    2. Prüfen Sie, ob die Sammlungen Inhalte enthalten.
+    3. Warten Sie bei neu hinzugefügten Quellen, bis die Indexierung abgeschlossen ist.
+  </Accordion>
+  <Accordion title="Der Agent lässt sich nicht speichern">
+    **Mögliche Ursachen:** Pflichtangaben wie Name oder Reasoning-Modell fehlen oder Knoten sind ungültig verbunden.
+
+    1. Stellen Sie sicher, dass der Agent einen Namen hat.
+    2. Verbinden Sie mindestens ein Reasoning-Modell mit dem Agent Core.
+    3. Prüfen Sie alle Knotenverbindungen.
+  </Accordion>
+</AccordionGroup>
+
+Falls Sie Unterstützung benötigen, wenden Sie sich an [Novaplan Support](/de/contact-us).
+
+---
+
+## Nächste Schritte
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+  <a href="/toolsets/overview" className="block p-4 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+    <h3 className="text-lg font-semibold mb-2">Toolsets konfigurieren (Englisch)</h3>
+    <p className="text-gray-600 dark:text-gray-400">Integrationen mit externen Diensten einrichten.</p>
+  </a>
+  <a href="/de/agent-guide/overview" className="block p-4 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+    <h3 className="text-lg font-semibold mb-2">Agentenübersicht</h3>
+    <p className="text-gray-600 dark:text-gray-400">Mehr über die Fähigkeiten von Agenten erfahren.</p>
+  </a>
+</div>

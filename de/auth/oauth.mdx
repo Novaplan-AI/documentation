@@ -1,0 +1,97 @@
+---
+title: "Anmeldung über OAuth / OIDC"
+description: "Einen OAuth-2.0- oder OpenID-Connect-Identitätsanbieter für Novaplan AI einrichten."
+---
+
+# Anmeldung über OAuth / OIDC
+
+Novaplan AI unterstützt die Anmeldung über Identitätsanbieter mit OAuth 2.0 oder OpenID Connect, etwa Okta, Auth0, Keycloak, Authentik oder Ping. Für Google und Microsoft gibt es eigene Anleitungen: [Google](/de/auth/google) und [Microsoft](/de/auth/microsoft-azureAd).
+
+Novaplan erstellt normalerweise den Workspace und lädt seine Benutzer ein. Diese Anleitung bleibt als technische Referenz für Administratoren verfügbar. Stimmen Sie die Einrichtung mit Novaplan und der Administration Ihres Identitätsanbieters ab.
+
+## Ablauf
+
+1. Eine Person wählt auf der Novaplan AI Anmeldeseite ihren Identitätsanbieter aus.
+2. Novaplan AI leitet sie zur Anmeldeseite des Anbieters weiter.
+3. Sie meldet sich dort an und bestätigt die Anfrage.
+4. Der Anbieter leitet sie mit einem Code zu Novaplan AI zurück; Novaplan AI tauscht den Code serverseitig gegen ein Token aus.
+5. Novaplan AI liest die Identität über den User-Info-Endpunkt und meldet die Person an.
+
+## Voraussetzungen
+
+Sie benötigen Administratorzugriff auf Novaplan AI und den Identitätsanbieter.
+
+Entscheiden Sie vor der Aktivierung, ob Personen ohne bestehendes Novaplan AI Konto bei der ersten Anmeldung automatisch eines erhalten sollen. Diese Einstellung heißt **Enable JIT provisioning** und ist standardmäßig aktiviert. Für einen Workspace mit Einladungspflicht schalten Sie sie aus und prüfen, dass nur eingeladene Personen Zugang erhalten.
+
+## Schritt 1: Novaplan AI beim Anbieter registrieren
+
+Erstellen Sie beim Identitätsanbieter eine Anwendung oder einen Client. Hinterlegen Sie die Redirect-URI, die Novaplan AI im Konfigurationsdialog anzeigt. Sie folgt diesem Muster:
+
+```
+https://your-workspace.example.com/auth/oauth/callback
+```
+
+Ersetzen Sie die Beispieldomain durch die tatsächliche Adresse Ihres Workspaces. Die bei Ihrem Anbieter eingetragene URI muss exakt mit dem in Novaplan AI angezeigten Wert übereinstimmen.
+
+Notieren Sie folgende Werte:
+
+- Client ID und Client Secret
+- Authorization URL
+- Token Endpoint
+- User Info Endpoint
+
+Viele OpenID-Connect-Anbieter veröffentlichen die Endpunkte unter `https://your-provider/.well-known/openid-configuration`.
+
+## Schritt 2: Novaplan AI konfigurieren
+
+Öffnen Sie **Workspace settings → Authentication** und fügen Sie die OAuth-Methode hinzu.
+
+| Feld | Pflicht | Bedeutung |
+| --- | --- | --- |
+| **Provider Name** | Ja | Name auf der Anmeldeschaltfläche, etwa `Okta` oder `Company SSO`. |
+| **Client ID** | Ja | Client-Kennung des Identitätsanbieters. |
+| **Client Secret** | Ja | Geheimer Schlüssel des Clients; Novaplan AI speichert ihn verschlüsselt. |
+| **Authorization URL** | Ja | Ziel für die Anmeldung beim Anbieter. |
+| **Token Endpoint** | Ja | Endpunkt zum Austauschen des Autorisierungscodes gegen ein Token. |
+| **User Info Endpoint** | Ja | Endpunkt zum Abrufen der Identität. |
+| **Scope** | Nein | Anzufordernde, durch Leerzeichen getrennte Scopes. Standard: `openid email profile`. |
+| **Redirect URI** | Angezeigt | Novaplan AI zeigt diesen Wert schreibgeschützt an. Kopieren Sie ihn zum Anbieter. |
+| **Enable JIT provisioning** | Nein | Erstellt bei der ersten Anmeldung ein Novaplan AI Konto; standardmäßig aktiviert. |
+
+<Note>
+  Novaplan AI verwendet einen vertraulichen Client. Der Autorisierungscode wird serverseitig mit dem Client Secret gegen ein Token ausgetauscht. Ein öffentlicher Client, der nur PKCE und kein Secret nutzt, funktioniert hier nicht.
+</Note>
+
+<Warning>
+  Halten Sie das Client Secret vertraulich. Registrieren Sie beim Identitätsanbieter nur die exakt angezeigte Redirect-URI, keinen Platzhalter mit Wildcard. Die öffentliche Anmeldeseite benötigt die Client ID und die Authorization URL; der Tokenaustausch mit dem Secret erfolgt serverseitig.
+</Warning>
+
+## Automatische Benutzeranlage (JIT)
+
+**JIT ist für diese Methode standardmäßig aktiviert.** Damit erhält jede Person, die sich beim Identitätsanbieter anmelden kann, beim ersten Zugriff ein Novaplan AI Konto – auch ohne vorherige Einladung.
+
+Für das von Novaplan verwendete Einladungsverfahren deaktivieren Sie **Enable JIT provisioning**. Testen Sie anschließend eine eingeladene und eine nicht eingeladene Person. Aktivieren Sie JIT nur, wenn der Identitätsanbieter genau die Personen umfasst, die auch Zugriff auf Novaplan AI erhalten sollen.
+
+<Warning>
+  Wenn der Identitätsanbieter einem größeren Personenkreis offensteht, etwa einem gemeinsamen Unternehmenstenant oder einem Dienst mit Selbstregistrierung, kann aktiviertes JIT zusätzliche Konten anlegen. Bei deaktiviertem JIT erhalten Personen ohne bestehendes Novaplan AI Konto die Meldung „Account not found. Please contact your administrator.“ Laden Sie diese Personen zuerst ein.
+</Warning>
+
+## Schritt 3: Anmeldung testen
+
+1. Speichern Sie die Konfiguration.
+2. Öffnen Sie Novaplan AI in einem privaten Browserfenster.
+3. Wählen Sie die Schaltfläche Ihres Identitätsanbieters und schließen Sie die Anmeldung ab.
+4. Prüfen Sie, ob das Konto wie vorgesehen zugeordnet oder erstellt wurde. Bei Einladungspflicht prüfen Sie zusätzlich, dass nicht eingeladene Personen abgewiesen werden.
+
+Halten Sie eine Administrator-Anmeldemethode zur Wiederherstellung bereit, bis die OAuth-Anmeldung zuverlässig funktioniert.
+
+## Fehlerbehebung
+
+| Problem | Prüfung |
+| --- | --- |
+| `redirect_uri_mismatch` | Die beim Anbieter eingetragene URI muss mit der von Novaplan AI verwendeten URI in Schema, Host, Port und Pfad exakt übereinstimmen. Auch `http` statt `https` oder ein abschließender Schrägstrich können einen Fehler auslösen. |
+| „Account not found. Please contact your administrator.“ | Die Anmeldung beim Anbieter war erfolgreich, aber es gibt kein passendes Novaplan AI Konto und JIT ist deaktiviert. Laden Sie die Person ein oder prüfen Sie die gewünschte Zugriffsregel. |
+| Rückleitung zur Anmeldeseite mit Fehlermeldung | Prüfen Sie den User Info Endpoint und ob die Scopes eine E-Mail-Adresse liefern. |
+| Anmeldeschaltfläche fehlt | Prüfen Sie unter **Workspace settings → Authentication**, ob OAuth als erlaubte Methode aktiviert ist. |
+
+Weitere Anleitungen: [Google](/de/auth/google), [Microsoft](/de/auth/microsoft-azureAd) und [SAML](/de/auth/saml). Bei Fragen zur Einrichtung hilft [Novaplan Support](/de/contact-us).

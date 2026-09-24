@@ -50,7 +50,7 @@ If your Novaplan AI instance is served over HTTPS on a valid domain, Claude Desk
   <Step title="Enter the MCP server URL">
     Use your public HTTPS instance URL with the `/mcp` path:
     ```
-    PIPESHUB_INSTANCE_URL/mcp
+    NOVAPLAN_WORKSPACE_URL/mcp
     ```
     For example: `https://your-workspace.example.com/mcp`.
   </Step>
@@ -156,6 +156,6 @@ Save the file and **fully quit and reopen Claude Desktop** (a window reload isn'
     - After editing `claude_desktop_config.json`, fully quit and relaunch Claude Desktop.
   </Accordion>
   <Accordion title="Authentication fails on the stdio bridge">
-    Verify the OAuth app has the **Client Credentials** grant enabled, and that the `--token-url` points to your instance's token endpoint (`PIPESHUB_INSTANCE_URL/api/v1/oauth2/token`). Double-check the Client ID and Secret are correct and the app is active.
+    Verify the OAuth app has the **Client Credentials** grant enabled, and that the `--token-url` points to your instance's token endpoint (`NOVAPLAN_WORKSPACE_URL/api/v1/oauth2/token`). Double-check the Client ID and Secret are correct and the app is active.
   </Accordion>
 </AccordionGroup>

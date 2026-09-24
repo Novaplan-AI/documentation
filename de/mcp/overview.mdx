@@ -1,0 +1,156 @@
+---
+title: "MCP-Server im Überblick"
+description: "MCP-Clients über OAuth oder ein persönliches Zugriffstoken mit Novaplan AI verbinden."
+---
+
+## Was ist der Novaplan AI MCP-Server?
+
+Novaplan AI stellt unter `/mcp` einen **entfernten MCP-Endpunkt** über **Streamable HTTP** bereit. MCP-Clients verbinden sich direkt mit diesem Endpunkt; für diese Verbindung sind weder ein lokales npm-Paket noch ein stdio-Prozess erforderlich.
+
+Damit können Clients wie **Cursor**, **Claude Code**, **Gemini CLI**, **Claude.ai**, **LibreChat** und **Omnigent** indexierte Dokumente Ihrer Organisation durchsuchen, Fragen dazu stellen, Personen und Gruppen finden sowie Dateien herunterladen.
+
+<Note>
+  Die einzelnen verfügbaren Werkzeuge, Argumente und Einsatzfälle stehen in der [Werkzeugreferenz (Englisch)](/mcp/tools). Die [Anleitung für Coding-Agenten (Englisch)](/for-agents) bietet einen Einstieg für Entwicklungsumgebungen.
+</Note>
+
+<Note>
+  **[QM (Englisch)](/mcp/qm) ist kein MCP-Client.** Die Integration verwendet eine CLI im Agenten-Sandbox-Prozess. Die bestehende technische Anleitung enthält den dazugehörigen Befehl.
+</Note>
+
+## Voraussetzungen
+
+- Zugang zu einem bestehenden Novaplan AI Workspace und seiner Adresse. Falls der Zugang noch nicht eingerichtet ist, wenden Sie sich an [Novaplan Support](/de/contact-us).
+- Entweder eine OAuth-Anwendung oder ein [persönliches Zugriffstoken (Englisch)](/developer/personal-access-tokens), abhängig vom Client.
+
+Novaplan übernimmt den Großteil der Einrichtung. Die folgenden Schritte bleiben als Referenz für Administratoren und Integrationsverantwortliche verfügbar; stimmen Sie Änderungen an der Zugriffsverwaltung mit dem Novaplan-Team ab.
+
+<Note>
+  Die meisten unten genannten Client-Anleitungen verwenden **OAuth** und benötigen eine OAuth-Anwendung. **Omnigent** kann sich stattdessen mit einem persönlichen Zugriffstoken im `Authorization`-Header verbinden.
+
+  Für eigene Werkzeuge können Sie unter **Developer Settings > Personal Access Tokens** ein Token erstellen und es als `Bearer`-Token verwenden: direkt am `/mcp`-Endpunkt, mit `--bearer-auth` in der [lokalen Stdio-Brücke (Englisch)](/mcp/local-server) oder in einem Client mit konfigurierbarem `Authorization`-Header.
+</Note>
+
+## Schritt 1: OAuth-Anwendung erstellen
+
+<Steps>
+  <Step title="Developer Settings öffnen">
+    Melden Sie sich mit einem Administratorkonto an und öffnen Sie **Settings > Developer Settings > OAuth Apps**.
+  </Step>
+  <Step title="Anwendung erstellen">
+    Klicken Sie auf **Create OAuth App**. Geben Sie einen Namen ein, beispielsweise `MCP Integration`, und fügen Sie die Redirect-URIs der gewünschten Clients hinzu.
+  </Step>
+  <Step title="Zugangsdaten sichern">
+    Speichern Sie die Anwendung und kopieren Sie **Client ID** und **Client Secret** an einen sicheren Ort.
+  </Step>
+</Steps>
+
+### Redirect-URIs
+
+Tragen Sie die URIs der Clients ein, die Sie verwenden möchten:
+
+| Client | Redirect-URI |
+| --- | --- |
+| **Cursor** | `cursor://anysphere.cursor-mcp/oauth/callback` |
+| **Claude Code** | `http://localhost:<PORT>/callback`, beispielsweise `http://localhost:8080/callback` |
+| **Claude.ai (Web)** | `https://claude.ai/api/mcp/auth_callback` |
+| **Claude Desktop** (Custom Connector) | `https://claude.ai/api/mcp/auth_callback` |
+| **Gemini CLI** | `http://localhost:7777/oauth/callback` |
+| **LibreChat** | `http://localhost:3080/api/mcp/<server-identifier>/oauth/callback` |
+
+<Warning>
+  Die in `MCP_SCOPES` konfigurierten Berechtigungen müssen zu den Scopes der OAuth-Anwendung passen. Andernfalls schlägt die Autorisierung fehl. Novaplan kann die serverseitige Konfiguration mit Ihnen abstimmen.
+</Warning>
+
+### Standard-Scopes anpassen
+
+Novaplan AI gibt über `/.well-known/oauth-protected-resource/mcp` standardmäßig einige Scopes für die automatische Erkennung bekannt. Die Serverkonfiguration kann diese Auswahl mit `MCP_SCOPES` ändern. Das ist zum Beispiel für Clients relevant, die alle bekannt gegebenen Scopes anfordern.
+
+Der dokumentierte Beispielwert für Chat-, Such- und Verzeichnisabläufe lautet:
+
+```bash
+MCP_SCOPES=openid,profile,email,offline_access,semantic:write,conversation:write,conversation:chat,kb:read,team:read,user:read,config:read
+```
+
+## Platzhalter in den Beispielen
+
+Ersetzen Sie die Platzhalter in den Client-Konfigurationen:
+
+| Platzhalter | Bedeutung | Beispiel |
+| --- | --- | --- |
+| `NOVAPLAN_WORKSPACE_URL` | Adresse Ihres Novaplan AI Workspaces. | `https://your-workspace.example.com` |
+| `YOUR_CLIENT_ID` | Client ID der OAuth-Anwendung. | `clid_abc123...` |
+| `YOUR_CLIENT_SECRET` | Client Secret der OAuth-Anwendung. | `clsec_xyz789...` |
+| `YOUR_BEARER_TOKEN` | Persönliches Zugriffstoken für die lokale Stdio-Brücke oder Omnigent. | `phpat_eyJhbGci...` |
+
+Der entfernte MCP-Endpunkt lautet `NOVAPLAN_WORKSPACE_URL/mcp`.
+
+## Client-Anleitungen
+
+Wählen Sie die Anleitung für Ihren Client. Diese Einzelanleitungen sind derzeit auf Englisch verfügbar:
+
+| Client | Verbindung |
+| --- | --- |
+| [Cursor](/mcp/cursor) | Entferntes MCP mit dem `auth`-Objekt in `mcp.json`. |
+| [Claude Code](/mcp/claude-code) | Entferntes HTTP-MCP mit festen OAuth-Zugangsdaten. |
+| [Gemini CLI](/mcp/gemini-cli) | Entferntes MCP mit OAuth-Erkennung. |
+| [Claude.ai](/mcp/claude-ai) | Custom Connector in der Web-Oberfläche. |
+| [Claude Desktop](/mcp/claude-desktop) | Gehosteter Custom Connector oder lokale Stdio-Brücke. |
+| [LibreChat](/mcp/librechat) | Entferntes MCP über die Custom-Connectors-Oberfläche. |
+| [Omnigent](/mcp/omnigent) | Verbindung über persönliches Zugriffstoken. |
+| [Local Server (Stdio)](/mcp/local-server) | Lokale Stdio-Brücke. |
+| [QM](/mcp/qm) | CLI in der Agenten-Sandbox; keine MCP-Verbindung. |
+
+## Funktionsweise
+
+### Architektur
+
+```text
+KI-Client (Cursor, Claude Code, Gemini CLI, Claude.ai, LibreChat, Omnigent)
+       |
+       | HTTP POST (JSON-RPC)
+       | Authorization: Bearer <token>
+       v
+NOVAPLAN_WORKSPACE_URL/mcp
+       |
+       | Streamable HTTP, zustandslos pro Anfrage
+       v
+Novaplan AI API (freigegebene Werkzeuge)
+```
+
+### OAuth Protected Resource Discovery
+
+Novaplan AI stellt die OAuth-Erkennung unter folgender Adresse bereit:
+
+```text
+NOVAPLAN_WORKSPACE_URL/.well-known/oauth-protected-resource/mcp
+```
+
+Darüber erhält der Client die OAuth-Endpunkte:
+
+- Autorisierung: `NOVAPLAN_WORKSPACE_URL/api/v1/oauth2/authorize`
+- Token: `NOVAPLAN_WORKSPACE_URL/api/v1/oauth2/token`
+- Widerruf: `NOVAPLAN_WORKSPACE_URL/api/v1/oauth2/revoke`
+- JWKS: `NOVAPLAN_WORKSPACE_URL/.well-known/jwks.json`
+
+## Fehlerbehebung
+
+<AccordionGroup>
+  <Accordion title="Incompatible auth server: does not support dynamic client registration">
+    Der Client versucht eine dynamische Registrierung statt der vorbereiteten OAuth-Zugangsdaten. Prüfen Sie `--client-id` und `--client-secret` für Claude Code beziehungsweise das `auth`-Objekt für Cursor.
+  </Accordion>
+  <Accordion title="Authentifizierung oder Rückleitung schlägt fehl">
+    Die **Redirect URI** der OAuth-Anwendung muss exakt zur vom Client verwendeten URI passen. Prüfen Sie außerdem, ob die OAuth-Anwendung in Novaplan AI aktiv ist. Beispiele für die einzelnen Clients stehen in der Tabelle oben.
+  </Accordion>
+  <Accordion title="MCP-Endpunkt ist nicht erreichbar">
+    Prüfen Sie die Erreichbarkeit mit `curl -X POST NOVAPLAN_WORKSPACE_URL/mcp`. Ohne Token sollte der Server mit `401` antworten; ein Verbindungsfehler weist auf ein anderes Problem hin.
+  </Accordion>
+  <Accordion title="Mit MCP Inspector testen">
+    Starten Sie `npx @modelcontextprotocol/inspector` und verbinden Sie den Inspector mit `NOVAPLAN_WORKSPACE_URL/mcp` und einem Bearer-Token.
+  </Accordion>
+</AccordionGroup>
+
+## Häufige Frage: Wie ändere ich Scopes?
+
+1. Stimmen Sie eine Änderung des serverseitigen `MCP_SCOPES`-Werts mit Novaplan ab.
+2. Passen Sie die Scopes der OAuth-Anwendung unter **Settings > Developer Settings > OAuth Apps** an.
+3. Verbinden Sie den Client erneut, da bestehende Tokens die bisherigen Scopes enthalten. Cursor kann neu hinzugefügt, Claude Code über `/mcp` erneut angemeldet und Claude.ai unter **Settings > Connectors** neu verbunden werden. Für Gemini CLI finden Sie den aktuellen Wiederanmeldungsbefehl in der [Client-Anleitung (Englisch)](/mcp/gemini-cli).

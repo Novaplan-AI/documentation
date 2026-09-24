@@ -94,9 +94,9 @@ This guide will walk you through creating a Dropbox application to connect your 
 ### Step 3: Configure Redirect URI
 
 1. Go to the **Settings** tab and find the **OAuth 2** section.
-2. Add the following URL to the **Redirect URIs** field (replace `{your_pipeshub_base_url}` with your actual domain):
+2. Add the following URL to the **Redirect URIs** field (replace `{your_workspace_domain}` with your actual workspace hostname, without `https://`):
 ```
-http://{your_pipeshub_base_url}/connectors/oauth/callback/Dropbox%20Personal
+https://{your_workspace_domain}/connectors/oauth/callback/Dropbox%20Personal
 ```
 > **Important:** Ensure the URL matches exactly what is configured in your connector code (specifically the `Dropbox%20Personal` suffix).
 

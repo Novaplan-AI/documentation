@@ -90,7 +90,7 @@ Then connect MCP as below.
 
 The native shape is **remote MCP** over Streamable HTTP. No npm process is required.
 
-1. An accessible Novaplan AI workspace at `PIPESHUB_INSTANCE_URL` (origin only, no `/mcp`). Use the workspace address provided by Novaplan.
+1. An accessible Novaplan AI workspace at `NOVAPLAN_WORKSPACE_URL` (origin only, no `/mcp`). Use the workspace address provided by Novaplan.
 2. Auth as the **user**, not the app. Do **not** use `client_credentials` — that grant has no user identity, so permission filters collapse.
    - The **IDE guides below use OAuth.** Create an [OAuth app](/mcp/overview#step-1-create-an-oauth-app), then follow the client page.
    - A [personal access token](/developer/personal-access-tokens) is `Authorization: Bearer`. Use it only with a client that accepts a custom header, or with the [stdio bridge](/mcp/local-server). Cursor's `auth` object and Claude Code's `claude mcp add --client-id` are OAuth, not PAT.
@@ -114,7 +114,7 @@ The native shape is **remote MCP** over Streamable HTTP. No npm process is requi
 {
   "mcpServers": {
     "pipeshub": {
-      "url": "PIPESHUB_INSTANCE_URL/mcp",
+      "url": "NOVAPLAN_WORKSPACE_URL/mcp",
       "auth": {
         "CLIENT_ID": "YOUR_CLIENT_ID",
         "CLIENT_SECRET": "YOUR_CLIENT_SECRET"
@@ -131,7 +131,7 @@ claude mcp add --transport http \
   --client-id YOUR_CLIENT_ID \
   --client-secret \
   --callback-port 8080 \
-  pipeshub PIPESHUB_INSTANCE_URL/mcp
+  pipeshub NOVAPLAN_WORKSPACE_URL/mcp
 ```
 
 Project-scoped `.mcp.json` uses `type: "http"` and an `oauth` object. See [Connect Claude Code](/mcp/claude-code).

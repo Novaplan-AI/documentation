@@ -27,7 +27,7 @@ claude mcp add --transport http \
   --client-id YOUR_CLIENT_ID \
   --client-secret \
   --callback-port 8080 \
-  pipeshub PIPESHUB_INSTANCE_URL/mcp
+  pipeshub NOVAPLAN_WORKSPACE_URL/mcp
 ```
 
 <Note>
@@ -38,7 +38,7 @@ claude mcp add --transport http \
     --client-id YOUR_CLIENT_ID \
     --client-secret \
     --callback-port 8080 \
-    pipeshub PIPESHUB_INSTANCE_URL/mcp
+    pipeshub NOVAPLAN_WORKSPACE_URL/mcp
   ```
 </Note>
 
@@ -49,7 +49,7 @@ claude mcp add --transport http --scope user \
   --client-id YOUR_CLIENT_ID \
   --client-secret \
   --callback-port 8080 \
-  pipeshub PIPESHUB_INSTANCE_URL/mcp
+  pipeshub NOVAPLAN_WORKSPACE_URL/mcp
 ```
 
 ## Add with JSON
@@ -57,7 +57,7 @@ claude mcp add --transport http --scope user \
 ```bash
 claude mcp add-json pipeshub '{
   "type": "http",
-  "url": "PIPESHUB_INSTANCE_URL/mcp",
+  "url": "NOVAPLAN_WORKSPACE_URL/mcp",
   "oauth": {
     "clientId": "YOUR_CLIENT_ID",
     "callbackPort": 8080
@@ -74,7 +74,7 @@ Create a `.mcp.json` file in your project root. This can be committed to version
   "mcpServers": {
     "pipeshub": {
       "type": "http",
-      "url": "${PIPESHUB_INSTANCE_URL}/mcp",
+      "url": "${NOVAPLAN_WORKSPACE_URL}/mcp",
       "oauth": {
         "clientId": "${PIPESHUB_CLIENT_ID}",
         "callbackPort": 8080
@@ -87,7 +87,7 @@ Create a `.mcp.json` file in your project root. This can be committed to version
 Set environment variables before launching Claude Code:
 
 ```bash
-export PIPESHUB_INSTANCE_URL="https://your-workspace.example.com"
+export NOVAPLAN_WORKSPACE_URL="https://your-workspace.example.com"
 export PIPESHUB_CLIENT_ID="your-client-id"
 ```
 

@@ -22,7 +22,7 @@ Edit `~/.gemini/settings.json`:
 {
   "mcpServers": {
     "pipeshub": {
-      "url": "PIPESHUB_INSTANCE_URL/mcp",
+      "url": "NOVAPLAN_WORKSPACE_URL/mcp",
       "oauth": {
         "clientId": "YOUR_CLIENT_ID",
         "clientSecret": "YOUR_CLIENT_SECRET",
@@ -45,7 +45,7 @@ Edit `~/.gemini/settings.json`:
 ## Option B: CLI Command
 
 ```bash
-gemini mcp add --transport http pipeshub PIPESHUB_INSTANCE_URL/mcp
+gemini mcp add --transport http pipeshub NOVAPLAN_WORKSPACE_URL/mcp
 ```
 
 Then edit `~/.gemini/settings.json` to add the `oauth` block as shown above.

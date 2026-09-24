@@ -1,0 +1,92 @@
+---
+title: "Teams"
+description: "Teams für die Zusammenarbeit erstellen, verwalten und mit Mitgliedern teilen."
+---
+
+## Überblick
+
+Teams verbinden Workspace-Mitglieder für ein gemeinsames Projekt, Produktgebiet oder einen anderen Zweck. Benutzergruppen dienen Administratoren zur Zugriffsverwaltung; Teams stehen allen Workspace-Mitgliedern zur Verfügung. Ein Benutzer kann mehreren Teams angehören. Innerhalb eines Teams bestimmt die Rolle, was ein Mitglied mit den Team-Ressourcen tun darf.
+
+Novaplan übernimmt den Großteil der Einrichtung. Diese Anleitung bleibt für Mitglieder verfügbar, die Teams verwenden oder deren Verwaltung nachvollziehen möchten.
+
+## Rollen in einem Team
+
+Jedes Teammitglied hat eine der folgenden Rollen:
+
+| Rolle | Berechtigungen |
+| --- | --- |
+| **Owner** | Vollständige Kontrolle über Team und Ressourcen; kann Mitglieder hinzufügen oder entfernen, Rollen ändern und das Team löschen. |
+| **Writer** | Kann Team-Ressourcen ansehen und bearbeiten. |
+| **Reader** | Kann Team-Ressourcen ansehen. |
+
+## Teams öffnen
+
+1. Melden Sie sich bei Novaplan AI an.
+2. Öffnen Sie das Benutzermenü und wählen Sie **Workspace Settings**.
+3. Öffnen Sie unter **People** den Bereich **Teams**.
+
+Die Tabelle zeigt die für Sie sichtbaren Teams mit **Name**, **Description**, **Members**, **Created By** und **Created On**. Suchen Sie nach Namen oder filtern Sie nach Ersteller und Erstellungsdatum. Ein Klick auf eine Zeile öffnet rechts die Teamdetails.
+
+<div style={{ textAlign: "center" }}>
+  <img src="/images/account/team/teams_list.png" alt="Teamübersicht mit Suche und Filtern" width="90%" />
+</div>
+
+## Team erstellen
+
+1. Klicken Sie auf der Seite **Teams** oben rechts auf **Create Team**.
+2. Rechts öffnet sich der Bereich **Create Team**.
+3. Geben Sie einen **Team Name** ein, beispielsweise `Product Engineering`.
+4. Optional: Beschreiben Sie unter **Team Description** den Zweck.
+5. Optional: Wählen Sie unter **Add Members** die **Default Role** (`Reader`, `Writer` oder `Owner`) für die hinzuzufügenden Personen.
+6. Suchen und wählen Sie die Mitglieder.
+7. Über das Rollenmenü neben einem Namen ändern Sie die Rolle einzelner Personen. **Apply to all** setzt alle ausgewählten Personen auf die Standardrolle zurück.
+8. Klicken Sie auf **Create Team**.
+
+<div style={{ textAlign: "center" }}>
+  <img src="/images/account/team/create_team.png" alt="Team erstellen: Name, Beschreibung, Standardrolle und Mitglieder" width="90%" />
+</div>
+
+<Tip>
+  **Access Permissions** für Teams erscheint in der aktuellen Oberfläche als *Coming Soon*. Die Teammitgliedschaft und die Rollen legen derzeit den Zugriff fest.
+</Tip>
+
+## Team ansehen
+
+Klicken Sie auf der Seite **Teams** auf die Zeile eines Teams oder wählen Sie **View Team** im Aktionsmenü (**⋯**). Rechts erscheinen der **Name**, die **Description**, der Ersteller unter **Created By** sowie eine seitenweise Liste der **Members** und ihrer Rollen.
+
+<div style={{ textAlign: "center" }}>
+  <img src="/images/account/team/team_detail.png" alt="Teamdetails mit Informationen und Mitgliedern" width="90%" />
+</div>
+
+## Team bearbeiten
+
+1. Öffnen Sie die Teamdetails.
+2. Klicken Sie auf **Edit Team**.
+3. Ändern Sie bei Bedarf **Team Name** oder **Team Description**. Unter **Add Members** können Sie weitere Personen hinzufügen und Rollen zuweisen. Ändern Sie die Rolle bestehender Mitglieder über das Rollenmenü neben ihrem Namen. Mit **Remove** entfernen Sie Personen; **Undo** macht eine vorgemerkte Entfernung rückgängig.
+4. Klicken Sie auf **Save Edits**, um alle Änderungen gemeinsam zu übernehmen.
+
+<div style={{ textAlign: "center" }}>
+  <img src="/images/account/team/team_edit.png" alt="Teamdetails im Bearbeitungsmodus mit Mitgliedern und Rollen" width="90%" />
+</div>
+
+## Team löschen
+
+Nur Personen mit entsprechender Berechtigung, normalerweise Team-Owner, können ein Team löschen. Wenn die Option für Sie verfügbar ist:
+
+1. Öffnen Sie die Teamdetails oder das Aktionsmenü (**⋯**) der Zeile.
+2. Wählen Sie **Delete Team** beziehungsweise **Delete**.
+3. Bestätigen Sie die Aktion.
+
+<Warning>
+  Das Löschen eines Teams kann nicht rückgängig gemacht werden. Das Team und seine Mitgliedschaften werden entfernt; die Benutzer selbst bleiben im Workspace erhalten.
+</Warning>
+
+## Teams und Benutzergruppen vergleichen
+
+| | **Teams** | **Benutzergruppen** |
+| --- | --- | --- |
+| Wer kann sie erstellen? | Jedes Workspace-Mitglied. | Nur Administratoren. |
+| Zweck | Zusammenarbeit und gemeinsame Ressourcen. | Berechtigungen und Zugriff im Workspace verwalten. |
+| Mitgliedsrollen | Owner, Writer und Reader. | Übernommene Workspace-Berechtigungen. |
+
+Verwenden Sie **Teams** für die Zusammenarbeit und [Benutzergruppen](/de/user-management/user-group), um den Zugriff von Workspace-Mitgliedern zu steuern.

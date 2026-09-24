@@ -22,7 +22,7 @@ Open **Cursor Settings > Tools and Integrations > New MCP Server**, or edit your
 {
   "mcpServers": {
     "pipeshub": {
-      "url": "PIPESHUB_INSTANCE_URL/mcp",
+      "url": "NOVAPLAN_WORKSPACE_URL/mcp",
       "auth": {
         "CLIENT_ID": "YOUR_CLIENT_ID",
         "CLIENT_SECRET": "YOUR_CLIENT_SECRET",
@@ -52,7 +52,7 @@ Use Cursor's `${env:VAR}` interpolation to keep secrets out of config files:
 {
   "mcpServers": {
     "pipeshub": {
-      "url": "${env:PIPESHUB_INSTANCE_URL}/mcp",
+      "url": "${env:NOVAPLAN_WORKSPACE_URL}/mcp",
       "auth": {
         "CLIENT_ID": "${env:PIPESHUB_CLIENT_ID}",
         "CLIENT_SECRET": "${env:PIPESHUB_CLIENT_SECRET}",

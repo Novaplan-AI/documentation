@@ -1,0 +1,108 @@
+---
+title: "E-Mail-Versand (SMTP)"
+description: "SMTP für Einmalcodes, Passwortzurücksetzung und Workspace-Einladungen konfigurieren."
+---
+
+# SMTP konfigurieren
+
+Novaplan AI benötigt eine SMTP-Verbindung, damit E-Mails für **Einmalcodes (OTP)**, **Passwortzurücksetzungen** und **Einladungen** zugestellt werden können. Novaplan übernimmt den Großteil der Einrichtung. Diese Anleitung bleibt als Referenz für Administratoren verfügbar; stimmen Sie Änderungen am Mailversand mit dem Novaplan-Team ab.
+
+<Callout type="info">
+  SMTP steht für *Simple Mail Transfer Protocol*. Ohne funktionierenden Mailversand sind E-Mail-basierte Funktionen nicht verfügbar.
+</Callout>
+
+## Konfigurationswege
+
+<Tabs>
+  <Tab title="Bei der Workspace-Einrichtung">
+    Während der Ersteinrichtung erscheint ein Schritt für SMTP, nachdem die Einstellungen für LLM, Storage und Konnektoren durchlaufen wurden.
+
+    <Steps>
+      <Step title="SMTP-Schritt öffnen">
+        Öffnen Sie im Einrichtungsdialog den SMTP-Bereich.
+      </Step>
+      <Step title="Pflichtangaben eintragen">
+        Geben Sie **SMTP Host** (Serveradresse, beispielsweise `smtp.gmail.com`), **Port** (Standard: `587`) und **From Email Address** (Absenderadresse) ein.
+      </Step>
+      <Step title="Bei Bedarf authentifizieren">
+        Falls der Mailserver eine Anmeldung verlangt, tragen Sie **SMTP Username** und **SMTP Password** ein.
+      </Step>
+      <Step title="Speichern">
+        Klicken Sie auf **Save**, um die Konfiguration zu übernehmen.
+      </Step>
+    </Steps>
+
+    <Callout type="warning">
+      Der Schritt kann bei der Einrichtung übersprungen werden. E-Mail-basierte Funktionen arbeiten dann erst, wenn SMTP später eingerichtet wurde.
+    </Callout>
+
+    <p align="center">
+      <img src="/images/smtp/smtp_onboarding.png" alt="SMTP-Schritt bei der Workspace-Einrichtung" width="100%" />
+    </p>
+  </Tab>
+  <Tab title="Über die Einstellungen">
+    Wenn SMTP bei der Einrichtung übersprungen wurde oder sich Zugangsdaten ändern:
+
+    <Steps>
+      <Step title="SMTP-Einstellungen öffnen">
+        Öffnen Sie in der Seitenleiste **Settings → Authentication**. Scrollen Sie zu **Server Configuration** und suchen Sie die SMTP-Option.
+      </Step>
+      <Step title="Konfiguration bearbeiten">
+        Klicken Sie neben SMTP auf das Einstellungssymbol.
+      </Step>
+      <Step title="Werte aktualisieren">
+        Tragen Sie **SMTP Host**, **Port** und **From Email Address** ein. Ergänzen Sie bei Bedarf **Username** und **Password**. Klicken Sie auf **Save**. Wenn die SMTP-Kachel „Configured“ anzeigt, wurde die Konfiguration gespeichert.
+      </Step>
+    </Steps>
+
+    <p align="center">
+      <img src="/images/smtp/smtp_auth_settings.png" alt="SMTP in den Authentifizierungseinstellungen" width="100%" />
+      <img src="/images/smtp/smtp_auth_config_dialog.png" alt="Dialog für SMTP-Einstellungen" width="100%" />
+    </p>
+  </Tab>
+</Tabs>
+
+## Pflichtfelder und optionale Felder
+
+| Feld | Erforderlich | Bedeutung |
+| --- | --- | --- |
+| **SMTP Host** | Ja | Adresse des Mailservers. |
+| **Port** | Ja | Port des Mailservers; häufig `25`, `465` oder `587`. |
+| **From Email Address** | Ja | Absenderadresse der System-E-Mails. |
+| **SMTP Username** | Nur wenn der Server eine Anmeldung verlangt. | Benutzername für SMTP. |
+| **SMTP Password** | Nur wenn der Server eine Anmeldung verlangt. | Passwort für SMTP. |
+
+## Beispiele für SMTP-Anbieter
+
+Die folgende Tabelle zeigt häufig verwendete Einstellungen. Prüfen Sie die aktuellen Werte immer bei Ihrem Mailanbieter.
+
+| Anbieter | SMTP Host | Port | Verschlüsselung |
+| --- | --- | --- | --- |
+| Gmail | `smtp.gmail.com` | `587` | TLS |
+| Outlook / Office 365 | `smtp.office365.com` | `587` | TLS |
+| Amazon SES | `email-smtp.region.amazonaws.com` | `587` | TLS |
+| SendGrid | `smtp.sendgrid.net` | `587` | TLS |
+
+<Callout type="warning">
+  Bei Gmail und einigen anderen Anbietern benötigen Sie möglicherweise ein App-Passwort statt des gewöhnlichen Kontopassworts.
+</Callout>
+
+## Empfehlungen
+
+- Verwenden Sie für Systembenachrichtigungen eine eigene Absenderadresse, beispielsweise `noreply@yourcompany.com`.
+- Prüfen Sie die spezifischen Serverdaten und Anforderungen Ihres Mailanbieters.
+- Senden Sie nach der Einrichtung eine Test-E-Mail.
+- Verwenden Sie nach Möglichkeit eine verschlüsselte Verbindung, häufig über Port `465` für SSL oder `587` für TLS.
+- Prüfen Sie Spamfilter, falls Einladungen oder Einmalcodes nicht ankommen.
+
+## Fehlerbehebung
+
+Wenn Benutzer keine System-E-Mails erhalten:
+
+1. Prüfen Sie Serveradresse, Port und Zugangsdaten.
+2. Prüfen Sie die unter **From Email Address** eingetragene Adresse.
+3. Prüfen Sie, ob Ihr Anbieter automatisierten Versand einschränkt.
+4. Suchen Sie als Administrator nach passenden Fehlermeldungen in den verfügbaren Protokollen.
+5. Testen Sie die Verbindung zum SMTP-Server mit einem geeigneten Werkzeug.
+
+Bei Fragen hilft [Novaplan Support](/de/contact-us).

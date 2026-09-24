@@ -23,17 +23,17 @@ You need administrator access to both Novaplan AI and your identity provider.
 
 Decide first whether people without a Novaplan AI account should be able to create one by signing in. That is controlled by **Enable JIT provisioning**, described below, and it is the single most important choice on this page.
 
-<div id="step-1-register-pipeshub-with-your-provider" />
+<div id="step-1-register-novaplan-ai-with-your-provider" />
 
 ## Step 1: Register Novaplan AI with your provider
 
 Create an application (your provider may call it a client, an app integration, or a relying party) and set its redirect URI to:
 
 ```
-https://your-pipeshub-domain/auth/oauth/callback
+https://your-workspace.example.com/auth/oauth/callback
 ```
 
-Replace `your-pipeshub-domain` with the address people use to reach Novaplan AI — the same value as `FRONTEND_PUBLIC_URL` in your `.env`.
+Replace `your-workspace.example.com` with the actual address people use to reach Novaplan AI. Novaplan can provide the correct workspace address. Use the exact redirect URI displayed in the Novaplan AI configuration panel.
 
 Then note these values from your provider, which you will need in the next step:
 
@@ -48,7 +48,7 @@ Most OpenID Connect providers publish the three URLs at `https://your-provider/.
 curl -s https://your-provider/.well-known/openid-configuration | grep -E 'authorization_endpoint|token_endpoint|userinfo_endpoint'
 ```
 
-<div id="step-2-configure-pipeshub" />
+<div id="step-2-configure-novaplan-ai" />
 
 ## Step 2: Configure Novaplan AI
 
@@ -76,18 +76,17 @@ secret will not work here.
 </Note>
 
 <Warning>
-**Do not treat the values on this page as hidden from end users.** Configure this
-method as though the client secret could be read by anyone who can reach the
-sign-in page, and rely on the redirect URI allow-list at your identity provider —
-not on the secret staying private — as the control that stops it being reused.
-
-Register the exact redirect URI and nothing broader, so an authorisation code
-cannot be redirected anywhere else.
+Keep the client secret confidential. The sign-in page needs the client ID and
+authorisation URL; the token exchange uses the client secret server-side. Register
+the exact redirect URI with your identity provider so an authorisation code
+cannot be redirected elsewhere. Do not use a wildcard redirect URI.
 </Warning>
 
 ## Just-in-time provisioning
 
 **JIT provisioning is on by default for this method.** With it on, anyone who can authenticate at your identity provider gets a Novaplan AI account the first time they sign in, without an invitation.
+
+Novaplan normally creates the workspace and invites its users. To keep access invitation-based, **turn JIT provisioning off** when configuring this method, then test that an invited user can sign in and an uninvited user cannot. Coordinate this setting with Novaplan before enabling the method.
 
 <Warning>
 If your identity provider is open to a wider audience than Novaplan AI should be — a shared corporate tenant, a provider that permits self-registration, or a social login — turn JIT provisioning **off**. Otherwise anyone able to sign in at the provider can create their own Novaplan AI account.
@@ -104,7 +103,7 @@ Turn JIT on when your identity provider already contains exactly the people who 
 3. Select your provider's button and complete sign-in.
 4. Confirm you land in Novaplan AI, and check that the account was created or matched as you intended.
 
-Keep one administrator account on password or OTP sign-in until you have confirmed OAuth works. If the provider configuration is wrong, that account is how you get back in to fix it.
+Keep an administrator recovery method available until you have confirmed OAuth works. If the provider configuration is wrong, that method lets an administrator fix it.
 
 ## Troubleshooting
 
