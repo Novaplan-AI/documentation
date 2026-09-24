@@ -26,7 +26,7 @@ flowchart LR
   slackApi[SlackEventsAPI] -->|POST to /slack/events| nodeApi[NodeBackend]
   nodeApi -->|Proxy request| slackBotSvc[SlackBotService]
   slackBotSvc --> botHandlers[SlackEventHandlers]
-  botHandlers --> pipeshubCore[Novaplan AI Chat Processing]
+  botHandlers --> novaplanCore[Novaplan AI Chat Processing]
 ```
 
 - Slack sends events to `{node_backend_url}/slack/events`.
@@ -125,7 +125,7 @@ flowchart LR
 
 You will use these values in Novaplan AI Slack Bot settings.
 
-<div id="step-3-configure-slack-bot-in-pipeshub-frontend" />
+<div id="step-3-configure-slack-bot-in-novaplan-ai" />
 
 ## Step 3: Configure Slack Bot In Novaplan AI Frontend
 
@@ -215,7 +215,7 @@ After setup, verify all layers:
 - Confirm Signing Secret in Novaplan AI matches Slack app Signing Secret.
 - Confirm system clock skew is not larger than 5 minutes.
 
-<div id="bot-does-not-respond-in-pipeshub-flow" />
+<div id="bot-does-not-respond-in-novaplan-ai-flow" />
 
 ### Bot does not respond in Novaplan AI flow
 
@@ -224,7 +224,7 @@ After setup, verify all layers:
 - Confirm the expected bot events are enabled in Event Subscriptions.
 - Confirm bot configuration exists in Novaplan AI and is not deleted.
 
-<div id="pipeshub-save-form-errors" />
+<div id="novaplan-ai-save-form-errors" />
 
 ### Novaplan AI save form errors
 
@@ -238,4 +238,3 @@ After setup, verify all layers:
 - Treat Bot Token and Signing Secret as secrets.
 - Rotate credentials immediately if exposed.
 - Use production HTTPS backend URL in production.
-

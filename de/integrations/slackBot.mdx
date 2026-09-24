@@ -1,0 +1,128 @@
+---
+title: "Slack Bot einrichten"
+description: "Slack App mit einem Novaplan AI Agenten verbinden."
+---
+
+## Überblick
+
+Mit einem Slack Bot können Personen einen Novaplan AI Agenten direkt in Slack ansprechen. Die Integration besteht aus einer Slack App, einer öffentlich erreichbaren HTTPS-Adresse für Slack-Ereignisse und einer Bot-Konfiguration im Novaplan AI Workspace.
+
+Novaplan übernimmt den Großteil dieser Einrichtung. Die folgenden Schritte dienen als Referenz für die zuständigen Administratoren; Kunden müssen dafür keine Novaplan-Plattform bereitstellen.
+
+Voraussetzungen sind Administratorrechte im betreffenden Slack-Workspace, Administratorzugang zu den **Bots**-Einstellungen in Novaplan AI und eine von Novaplan bereitgestellte öffentliche HTTPS-Adresse für Slack-Ereignisse. Die in Beispielen verwendete Variable `{node_backend_url}` steht für diese Adresse und ist **kein** Wert, den Sie unverändert übernehmen können.
+
+## Ablauf
+
+Slack sendet Ereignisse an `{node_backend_url}/slack/events`. Der Novaplan AI Dienst prüft die Slack-Signatur, verarbeitet das Ereignis und übergibt die Anfrage an den konfigurierten Agenten. Die Adresse muss über das Internet per HTTPS erreichbar sein.
+
+## 1. Slack App anlegen
+
+1. Öffnen Sie [Slack API Apps](https://api.slack.com/apps) und wählen Sie **Create New App**.
+2. Wählen Sie **From an app manifest** und den passenden Slack-Workspace.
+3. Ersetzen Sie im folgenden Manifest `{node_backend_url}` durch die von Novaplan bestätigte Basisadresse. Passen Sie den angezeigten App-Namen bei Bedarf an.
+4. Prüfen Sie Berechtigungen und Ereignisse vor der Installation; übernehmen Sie sie nur für die Funktionen, die Sie einsetzen möchten.
+
+```json
+{
+  "display_information": {
+    "name": "Novaplan AI Agent"
+  },
+  "features": {
+    "bot_user": {
+      "display_name": "Novaplan AI Agent",
+      "always_online": false
+    }
+  },
+  "oauth_config": {
+    "scopes": {
+      "bot": [
+        "app_mentions:read",
+        "channels:history",
+        "files:read",
+        "groups:history",
+        "im:history",
+        "users:read",
+        "chat:write",
+        "chat:write.public",
+        "groups:read",
+        "im:write",
+        "users:read.email"
+      ]
+    }
+  },
+  "settings": {
+    "event_subscriptions": {
+      "request_url": "{node_backend_url}/slack/events",
+      "bot_events": [
+        "app_mention",
+        "file_shared",
+        "message.channels",
+        "message.groups",
+        "message.im"
+      ]
+    },
+    "org_deploy_enabled": false,
+    "socket_mode_enabled": false,
+    "token_rotation_enabled": false
+  }
+}
+```
+
+Die **Request URL** darf nicht durch eine zusätzliche Anmeldeseite oder kundeneigene Authentifizierung vor Slack geschützt sein. Slack validiert die Adresse beim Einrichten der Ereignisse.
+
+## 2. App installieren und Zugangsdaten kopieren
+
+Öffnen Sie in der Slack App **Install App → Install to Workspace**. Nach Änderungen an Berechtigungen oder Ereignissen müssen Sie die App gegebenenfalls erneut installieren. Kopieren Sie anschließend den **Bot User OAuth Token** (beginnt mit `xoxb-`) und das **Signing Secret**.
+
+<Warning>
+  Bot Token und Signing Secret sind vertraulich. Teilen Sie sie nur über den vereinbarten sicheren Weg mit den zuständigen Novaplan-Administratoren. Bei Offenlegung müssen die Zugangsdaten erneuert werden.
+</Warning>
+
+## 3. Bot in Novaplan AI konfigurieren
+
+Öffnen Sie **Workspace Settings → Bots** (`/workspace/bots`), wählen Sie **Add Bot → Slack Bot** und füllen Sie die Felder aus:
+
+| Feld | Inhalt |
+| --- | --- |
+| **Slack Bot Name** | Anzeigename im Workspace. |
+| **Bot Token** | **Bot User OAuth Token** aus Slack. |
+| **Signing Secret** | Signing Secret aus den Slack App Einstellungen. |
+| **Agent** | Optional ein bestimmter Agent; ohne Auswahl gilt die Standardverarbeitung des Workspaces. |
+
+Speichern Sie mit **Create**. Vorhandene Konfigurationen können über **Manage** geändert oder über **Delete** entfernt werden.
+
+<img src="/images/integrations/slack-bot.png" alt="Slack Bot Konfiguration in Novaplan AI" />
+
+## Berechtigungen und Ereignisse
+
+Die im Beispielmanifest enthaltenen Bot-Berechtigungen decken Erwähnungen, Nachrichten in öffentlichen und privaten Kanälen, Direktnachrichten, Dateiverweise, Benutzerdaten und Antworten ab:
+
+| Berechtigung | Zweck |
+| --- | --- |
+| `app_mentions:read` | Erwähnungen des Bots empfangen. |
+| `channels:history` | Nachrichten in öffentlichen Kanälen lesen. |
+| `files:read` | Referenzen auf geteilte Dateien lesen. |
+| `groups:history`, `groups:read` | Nachrichten und Metadaten privater Kanäle lesen. |
+| `im:history`, `im:write` | Direktnachrichten lesen und senden. |
+| `users:read`, `users:read.email` | Benutzerinformationen und E-Mail-Adressen für die Zuordnung lesen. |
+| `chat:write`, `chat:write.public` | Antworten in Slack veröffentlichen. |
+
+Die Ereignisse `app_mention`, `file_shared`, `message.channels`, `message.groups` und `message.im` lösen die entsprechenden Bot-Abläufe aus. Prüfen Sie vor der Freigabe, welche Kanal- und Nachrichtenarten Ihr Anwendungsfall tatsächlich benötigt.
+
+## Verbindung prüfen
+
+1. Prüfen Sie, ob Slack die **Request URL** für die Ereignisse erfolgreich bestätigt hat.
+2. Stellen Sie sicher, dass die App nach der letzten Änderung von Berechtigungen und Ereignissen installiert wurde.
+3. Prüfen Sie, ob Token und Signing Secret in Novaplan AI gespeichert sind.
+4. Erwähnen Sie den Bot testweise in einem Kanal, etwa `@IhrBot Hallo`, und senden Sie ihm eine Direktnachricht.
+
+## Probleme beheben
+
+| Problem | Prüfen Sie Folgendes |
+| --- | --- |
+| **Request URL wird nicht bestätigt** | Die Adresse endet auf `/slack/events`, ist öffentlich per HTTPS erreichbar und hat ein gültiges Zertifikat. Der Novaplan AI Dienst muss das Ereignis entgegennehmen können. |
+| **Slack meldet 401** | Das hinterlegte Signing Secret stimmt mit der Slack App überein; die Systemuhr weicht nicht erheblich ab. |
+| **Bot antwortet nicht** | App nach Berechtigungsänderungen erneut installieren, `xoxb-` Token und Ereignisse prüfen und die Bot-Konfiguration im Workspace kontrollieren. |
+| **Speichern schlägt fehl** | **Slack Bot Name**, **Bot Token** und **Signing Secret** sind Pflichtfelder. |
+
+Bei Problemen mit dem bereitgestellten Ereignis-Endpunkt hilft [Novaplan Support](/de/contact-us).

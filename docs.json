@@ -73,7 +73,8 @@
           {
             "group": "Integrationen",
             "pages": [
-              "de/mcp/overview"
+              "de/mcp/overview",
+              "de/integrations/slackBot"
             ]
           },
           {
@@ -88,6 +89,13 @@
               "de/toolsets/google-workspace/drive",
               "de/toolsets/google-workspace/gmail",
               "de/toolsets/google-workspace/calendar"
+            ]
+          },
+          {
+            "group": "Weitere Informationen",
+            "pages": [
+              "de/additional-resources/changelog",
+              "de/additional-resources/telemetry"
             ]
           }
         ],
