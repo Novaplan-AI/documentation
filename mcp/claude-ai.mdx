@@ -1,17 +1,17 @@
 ---
 title: "Claude.ai (Web)"
-description: "Connect Claude.ai to the PipesHub MCP server as a custom connector"
+description: "Connect Claude.ai to the Novaplan AI MCP server as a custom connector"
 icon: "/logo/claude.svg"
 ---
 
-Claude.ai supports custom connectors via remote MCP servers. This lets you use PipesHub tools directly in the Claude.ai web interface without any local setup.
+Claude.ai supports custom connectors via remote MCP servers. This lets you use Novaplan AI tools directly in the Claude.ai web interface without any local setup.
 
 <Note>
   This feature is currently in beta. Free plan users are limited to one custom connector.
 </Note>
 
 <Note>
-  Before you start, create an OAuth app in PipesHub and note your **Client ID** and **Client Secret**. See [MCP Server Overview](/mcp/overview#step-1-create-an-oauth-app).
+  Before you start, create an OAuth app in Novaplan AI and note your **Client ID** and **Client Secret**. See [MCP Server Overview](/mcp/overview#step-1-create-an-oauth-app).
 </Note>
 
 <Warning>
@@ -46,7 +46,7 @@ Claude.ai supports custom connectors via remote MCP servers. This lets you use P
     - **OAuth Client Secret**: `YOUR_CLIENT_SECRET`
   </Step>
   <Step title="Add and authenticate">
-    Click **Add**. You'll be redirected to PipesHub's login page to authenticate and grant permissions. After authenticating, the connector becomes active and PipesHub tools are available in your Claude.ai conversations.
+    Click **Add**. You'll be redirected to Novaplan AI's login page to authenticate and grant permissions. After authenticating, the connector becomes active and Novaplan AI tools are available in your Claude.ai conversations.
   </Step>
 </Steps>
 
@@ -72,11 +72,11 @@ Claude.ai supports custom connectors via remote MCP servers. This lets you use P
   <Step title="Open Connectors settings">
     Go to **Settings > Connectors**.
   </Step>
-  <Step title="Find the PipesHub connector">
-    Find the PipesHub connector (marked with a "Custom" label).
+  <Step title="Find the Novaplan AI connector">
+    Find the Novaplan AI connector (marked with a "Custom" label).
   </Step>
   <Step title="Connect">
-    Click **Connect** to authenticate via PipesHub's OAuth login.
+    Click **Connect** to authenticate via Novaplan AI's OAuth login.
   </Step>
 </Steps>
 
@@ -88,10 +88,10 @@ Claude.ai uses the following redirect URI for OAuth:
 https://claude.ai/api/mcp/auth_callback
 ```
 
-Register this as an allowed redirect URI in your PipesHub OAuth app.
+Register this as an allowed redirect URI in your Novaplan AI OAuth app.
 
 ## Security Notes
 
 - Only connect to trusted MCP servers.
 - Review the permissions requested during the OAuth authentication flow.
-- Claude.ai interacts with PipesHub on your behalf using the granted OAuth token — your password is never shared.
+- Claude.ai interacts with Novaplan AI on your behalf using the granted OAuth token — your password is never shared.

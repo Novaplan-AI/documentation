@@ -1,0 +1,25 @@
+/* Novaplan brand palette for the existing article cards and badges.
+   Layout, spacing, component structure, and code syntax colors stay with Mintlify. */
+#content :is(.bg-green-100, .bg-blue-100, .bg-purple-100, .bg-pink-100) {
+  background-color: #cbdff9;
+}
+#content :is(.text-green-800, .text-blue-800, .text-purple-800, .text-pink-800) {
+  color: #104068;
+}
+#content .bg-blue-50 { background-color: #cbdff930; }
+#content :is(.bg-gray-50, .hover\:bg-gray-50:hover) { background-color: #f7f8fa; }
+#content :is(.bg-gray-200, .border-gray-200) { border-color: #d7dee6; }
+#content .bg-gray-200 { background-color: #d7dee6; }
+#content :is(.text-gray-900, .text-gray-800) { color: #0b1014; }
+#content :is(.text-gray-700, .text-gray-600) { color: #4e545b; }
+.dark #content :is(.dark\:bg-green-900, .dark\:bg-blue-900, .dark\:bg-purple-900, .dark\:bg-pink-900) {
+  background-color: #104068;
+}
+.dark #content :is(.dark\:text-green-200, .dark\:text-blue-200, .dark\:text-purple-200, .dark\:text-pink-200, .dark\:text-gray-200) {
+  color: #cbdff9;
+}
+.dark #content :is(.dark\:bg-gray-800, .dark\:hover\:bg-gray-800:hover) { background-color: #0b1014; }
+.dark #content :is(.dark\:bg-gray-700, .dark\:border-gray-700) { border-color: #435d79; }
+.dark #content .dark\:bg-gray-700 { background-color: #435d79; }
+.dark #content :is(.dark\:text-gray-300, .dark\:text-gray-400) { color: #cbdff9; }
+.dark #content .dark\:text-white { color: #ffffff; }

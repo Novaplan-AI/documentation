@@ -1,15 +1,15 @@
 ---
 title: Gemini
-description: "Configure PipesHub to use Google Gemini image generation models"
+description: "Configure Novaplan AI to use Google Gemini image generation models"
 ---
 
 # Gemini Image Generation Configuration
 
 ![Gemini Image Generation Configuration Interface](/images/ai-models/image-generation/Gemini_ImageGenConfig.png)
 
-*The Gemini image generation configuration screen in PipesHub where you'll enter your API Key and Model Name*
+*The Gemini image generation configuration screen in Novaplan AI where you'll enter your API Key and Model Name*
 
-PipesHub allows you to integrate with Google's Gemini and Imagen models to enable AI-powered image creation in your workspace. Once configured, AI agents and workflows can generate images from text prompts using Google's latest image generation technology.
+Novaplan AI allows you to integrate with Google's Gemini and Imagen models to enable AI-powered image creation in your workspace. Once configured, AI agents and workflows can generate images from text prompts using Google's latest image generation technology.
 
 ## Required Fields
 
@@ -23,7 +23,7 @@ The API Key is required to authenticate your requests to Google's image generati
 3. Select or create a Google Cloud project
 4. Copy the generated API key
 
-**Security Note:** Your API key should be kept secure and never shared publicly. PipesHub securely stores your API key and uses it only for authenticating requests to Google.
+**Security Note:** Your API key should be kept secure and never shared publicly. Novaplan AI securely stores your API key and uses it only for authenticating requests to Google.
 
 <Note>
 Imagen models require your Google Cloud project to have the **Vertex AI API** enabled, or access granted via Google AI Studio. Not all API keys have Imagen access enabled by default — verify your key has image generation permissions before configuring.
@@ -31,7 +31,7 @@ Imagen models require your Google Cloud project to have the **Vertex AI API** en
 
 ### Model Name *
 
-The Model Name field defines which Google image generation model you want to use with PipesHub.
+The Model Name field defines which Google image generation model you want to use with Novaplan AI.
 
 **Available Gemini image generation models:**
 - `gemini-2.5-flash-image` - Fast image generation using Gemini 2.5 Flash, good for quick results
@@ -68,4 +68,4 @@ As shown in the image above:
 - If image generation is blocked, verify your API key has permission for the image generation API
 - If you are experiencing rate limits, check your quota in the Google AI Studio dashboard
 
-For additional support, refer to the [Google Gemini documentation](https://ai.google.dev/docs) or contact PipesHub support.
+For additional support, refer to the [Google Gemini documentation](https://ai.google.dev/docs) or contact Novaplan AI support.

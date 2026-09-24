@@ -1,6 +1,6 @@
 ---
 title: "MariaDB"
-description: "Sync schema and tabular data from a MariaDB database into PipesHub"
+description: "Sync schema and tabular data from a MariaDB database into Novaplan AI"
 icon: "/logo/mariadb.png"
 ---
 
@@ -82,7 +82,7 @@ Enter your password when prompted. If you reach the `MariaDB [(none)]>` prompt, 
 
 ### Create a user for the connector
 
-Create a dedicated read-only user for PipesHub. Run these as `root` (or any user with `CREATE USER` and `GRANT` privileges) against the target database:
+Create a dedicated read-only user for Novaplan AI. Run these as `root` (or any user with `CREATE USER` and `GRANT` privileges) against the target database:
 
 ```sql
 CREATE USER 'pipeshub_user'@'%' IDENTIFIED BY 'a_strong_password';
@@ -93,14 +93,14 @@ FLUSH PRIVILEGES;
 The connector also reads schema metadata from `information_schema`, which is available to any authenticated user by default.
 
 <Info>
-  Replace `pipeshub_user`, `a_strong_password`, and `test_db` with your own values. Use `'pipeshub_user'@'localhost'` instead of `'%'` if PipesHub connects from the same host as the database.
+  Replace `pipeshub_user`, `a_strong_password`, and `test_db` with your own values. Use `'pipeshub_user'@'localhost'` instead of `'%'` if Novaplan AI connects from the same host as the database.
 </Info>
 
 </Accordion>
 
-<Accordion title="Step 2: Configure the connector in PipesHub" icon="plug">
+<Accordion title="Step 2: Configure the connector in Novaplan AI" icon="plug">
 
-1. In PipesHub, open **Connector Settings**.
+1. In Novaplan AI, open **Connector Settings**.
 2. In the **Available** tab, find the **MariaDB** card and click **Configure**.
 
 <div className="text-center">
@@ -203,7 +203,7 @@ The connector also reads schema metadata from `information_schema`, which is ava
 
 <Accordion title="Can I connect to a remote MariaDB server?">
 
-Yes. Use the public host and port of your MariaDB server. Make sure the server allows connections from the PipesHub deployment and that the user has the required privileges.
+Yes. Use the public host and port of your MariaDB server. Make sure the server allows connections from the Novaplan AI deployment and that the user has the required privileges.
 
 </Accordion>
 

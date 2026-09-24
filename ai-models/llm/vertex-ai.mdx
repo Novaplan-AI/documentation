@@ -1,13 +1,13 @@
 ---
 title: Vertex AI
-description: "Configure PipesHub Workplace AI to use Gemini models on Google Cloud Vertex AI"
+description: "Configure Novaplan AI to use Gemini models on Google Cloud Vertex AI"
 ---
 
 # Vertex AI Configuration
 
 Vertex AI is Google Cloud's managed platform for running Gemini and other foundation models. Choose it over the direct [Gemini](/ai-models/llm/gemini) provider when you need requests billed to a Google Cloud project, kept inside a specific region, or governed by your existing IAM policies.
 
-Vertex AI authenticates with a service account JSON key that you upload in PipesHub. It does not use an API key, and it does not read credentials from environment variables.
+Vertex AI authenticates with a service account JSON key that you upload in Novaplan AI. It does not use an API key, and it does not read credentials from environment variables.
 
 ## Before you start
 
@@ -25,7 +25,7 @@ The Google Cloud project that hosts Vertex AI. This must match the `project_id` 
 
 ### Service Account JSON *
 
-Upload the JSON key file you created above. PipesHub validates the file before saving and will reject it if:
+Upload the JSON key file you created above. Novaplan AI validates the file before saving and will reject it if:
 
 - the file is not valid JSON,
 - it is missing `type`, `project_id`, or `private_key`, or
@@ -51,11 +51,11 @@ Pick a region close to your users for lower latency, or one that satisfies your 
 
 ### Model Friendly Name
 
-A label shown in the PipesHub interface so you can tell several configurations apart. If you leave it blank, the model name is used.
+A label shown in the Novaplan AI interface so you can tell several configurations apart. If you leave it blank, the model name is used.
 
 ### Context Length
 
-The size of the model's context window, in tokens. PipesHub uses this number to decide how much retrieved content it can safely include in a prompt. Set it to the value published for your model. If you leave it blank, PipesHub uses a conservative default.
+The size of the model's context window, in tokens. Novaplan AI uses this number to decide how much retrieved content it can safely include in a prompt. Set it to the value published for your model. If you leave it blank, Novaplan AI uses a conservative default.
 
 ### Is Multimodal
 

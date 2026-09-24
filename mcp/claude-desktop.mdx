@@ -1,15 +1,15 @@
 ---
 title: "Claude Desktop"
-description: "Connect Claude Desktop to the PipesHub MCP server via a custom connector or a local stdio bridge"
+description: "Connect Claude Desktop to the Novaplan AI MCP server via a custom connector or a local stdio bridge"
 icon: "/logo/claude.svg"
 ---
 
-Claude Desktop can talk to the PipesHub MCP server, but there's one important catch to understand before you start.
+Claude Desktop can talk to the Novaplan AI MCP server, but there's one important catch to understand before you start.
 
 <Warning>
-  **Claude Desktop does not support local HTTP MCP transport.** Unlike a server-side tool, it won't connect to a plain `http://localhost:.../mcp` endpoint. To connect PipesHub you have two options, and which one you pick depends on how PipesHub is hosted:
+  **Claude Desktop does not support local HTTP MCP transport.** Unlike a server-side tool, it won't connect to a plain `http://localhost:.../mcp` endpoint. To connect Novaplan AI you have two options, and which one you pick depends on how Novaplan AI is hosted:
 
-  1. **Add it as a custom connector** — works only when PipesHub is reachable over **public HTTPS** (a real domain with a valid SSL certificate), exactly like [Claude.ai (Web)](/mcp/claude-ai).
+  1. **Add it as a custom connector** — works only when Novaplan AI is reachable over **public HTTPS** (a real domain with a valid SSL certificate), exactly like [Claude.ai (Web)](/mcp/claude-ai).
   2. **Run a local stdio bridge** — works for **localhost / self-hosted** instances with no public domain, using the `@pipeshub-ai/mcp` npm package.
 </Warning>
 
@@ -21,17 +21,19 @@ Claude Desktop can talk to the PipesHub MCP server, but there's one important ca
 
 | Your situation | Use this |
 |---|---|
-| PipesHub is hosted on a public domain with valid SSL (e.g. `https://app.pipeshub.com`) | [Custom connector](#option-1-custom-connector-hosted-pipeshub) |
-| PipesHub runs locally or on an internal host without a public HTTPS domain (e.g. `http://localhost:3000`) | [Local stdio bridge](#option-2-local-stdio-bridge) |
+| Novaplan AI is hosted on a public domain with valid SSL (e.g. `https://app.pipeshub.com`) | [Custom connector](#option-1-custom-connector-hosted-pipeshub) |
+| Novaplan AI runs locally or on an internal host without a public HTTPS domain (e.g. `http://localhost:3000`) | [Local stdio bridge](#option-2-local-stdio-bridge) |
 
 ---
 
-## Option 1: Custom connector (hosted PipesHub)
+<div id="option-1-custom-connector-hosted-pipeshub" />
 
-If your PipesHub instance is served over HTTPS on a valid domain, Claude Desktop can connect to the remote MCP endpoint directly — no local setup, no npm packages. This is the same flow as [Claude.ai (Web)](/mcp/claude-ai).
+## Option 1: Custom connector (hosted Novaplan AI)
+
+If your Novaplan AI instance is served over HTTPS on a valid domain, Claude Desktop can connect to the remote MCP endpoint directly — no local setup, no npm packages. This is the same flow as [Claude.ai (Web)](/mcp/claude-ai).
 
 <Note>
-  Before you start, create an OAuth app in PipesHub and note your **Client ID** and **Client Secret**. See [MCP Server Overview](/mcp/overview#step-1-create-an-oauth-app).
+  Before you start, create an OAuth app in Novaplan AI and note your **Client ID** and **Client Secret**. See [MCP Server Overview](/mcp/overview#step-1-create-an-oauth-app).
 </Note>
 
 <Steps>
@@ -62,10 +64,10 @@ If your PipesHub instance is served over HTTPS on a valid domain, Claude Desktop
     </Frame>
   </Step>
   <Step title="Add and authenticate">
-    Click **Add**. Claude Desktop opens your browser to PipesHub's login page so you can authenticate and grant permissions. Once that's done, the connector goes active and PipesHub becomes visible in your list of connectors.
+    Click **Add**. Claude Desktop opens your browser to Novaplan AI's login page so you can authenticate and grant permissions. Once that's done, the connector goes active and Novaplan AI becomes visible in your list of connectors.
 
-    <Frame caption="PipesHub connector active in Claude Desktop">
-      <img src="/images/mcp-server/claude-desktop-3.png" alt="PipesHub connector active in Claude Desktop" />
+    <Frame caption="Novaplan AI connector active in Claude Desktop">
+      <img src="/images/mcp-server/claude-desktop-3.png" alt="Novaplan AI connector active in Claude Desktop" />
     </Frame>
   </Step>
 </Steps>
@@ -78,22 +80,22 @@ Claude Desktop uses the same OAuth callback as the Claude web app:
 https://claude.ai/api/mcp/auth_callback
 ```
 
-Register this as an allowed redirect URI in your PipesHub OAuth app.
+Register this as an allowed redirect URI in your Novaplan AI OAuth app.
 
 <Note>
-  A custom connector needs PipesHub to be reachable from the public internet over HTTPS. If you only have a `localhost` instance, the connector flow won't work — use [Option 2](#option-2-local-stdio-bridge) instead.
+  A custom connector needs Novaplan AI to be reachable from the public internet over HTTPS. If you only have a `localhost` instance, the connector flow won't work — use [Option 2](#option-2-local-stdio-bridge) instead.
 </Note>
 
 ---
 
 ## Option 2: Local stdio bridge
 
-When PipesHub runs on `localhost` or an internal host without a public HTTPS domain, run the MCP server locally as a **stdio process**. Claude Desktop launches the `@pipeshub-ai/mcp` bridge, which then talks to your PipesHub instance over HTTP on your behalf.
+When Novaplan AI runs on `localhost` or an internal host without a public HTTPS domain, run the MCP server locally as a **stdio process**. Claude Desktop launches the `@pipeshub-ai/mcp` bridge, which then talks to your Novaplan AI instance over HTTP on your behalf.
 
 ### Prerequisites
 
 - Node.js 20+ installed
-- Your PipesHub instance URL (e.g. `http://localhost:3000/api/v1`)
+- Your Novaplan AI instance URL (e.g. `http://localhost:3000/api/v1`)
 - An OAuth app configured for the **Client Credentials** grant (see below)
 
 <Warning>
@@ -102,7 +104,7 @@ When PipesHub runs on `localhost` or an internal host without a public HTTPS dom
 
 ### Configuration
 
-Open Claude Desktop's config file (`claude_desktop_config.json`) and add the PipesHub server. You can find it via **Settings > Developer > Edit Config**, or at:
+Open Claude Desktop's config file (`claude_desktop_config.json`) and add the Novaplan AI server. You can find it via **Settings > Developer > Edit Config**, or at:
 
 - **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
 - **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
@@ -134,10 +136,10 @@ Replace `http://localhost:3000` with your actual instance host, and `YOUR_CLIENT
 
 ### Apply the changes
 
-Save the file and **fully quit and reopen Claude Desktop** (a window reload isn't enough). Once it restarts, the PipesHub tools appear under the tools menu in your conversations.
+Save the file and **fully quit and reopen Claude Desktop** (a window reload isn't enough). Once it restarts, the Novaplan AI tools appear under the tools menu in your conversations.
 
-<Frame caption="PipesHub MCP server showing under Local MCP servers">
-  <img src="/images/mcp-server/claude-desktop-4.png" alt="PipesHub MCP server showing under Local MCP servers" />
+<Frame caption="Novaplan AI MCP server showing under Local MCP servers">
+  <img src="/images/mcp-server/claude-desktop-4.png" alt="Novaplan AI MCP server showing under Local MCP servers" />
 </Frame>
 
 ---
@@ -146,7 +148,7 @@ Save the file and **fully quit and reopen Claude Desktop** (a window reload isn'
 
 <AccordionGroup>
   <Accordion title="The custom connector won't connect / shows an error">
-    Custom connectors require a **public HTTPS** endpoint with a valid SSL certificate. Claude Desktop can't reach `http://localhost`, self-signed certificates, or private hostnames through the connector flow. Either put PipesHub behind a real domain with valid SSL, or switch to the [local stdio bridge](#option-2-local-stdio-bridge).
+    Custom connectors require a **public HTTPS** endpoint with a valid SSL certificate. Claude Desktop can't reach `http://localhost`, self-signed certificates, or private hostnames through the connector flow. Either put Novaplan AI behind a real domain with valid SSL, or switch to the [local stdio bridge](#option-2-local-stdio-bridge).
   </Accordion>
   <Accordion title="The stdio server doesn't start">
     - Make sure Node.js 20+ is installed and `npx` is on your `PATH`.

@@ -71,7 +71,7 @@ The following features are currently under development and will be available in 
 
 <Accordion title="Create Box App" icon="rocket">
 
-This guide will walk you through the process of creating a Box application and connecting it to PipesHub to sync your enterprise files, folders, users, and permissions.
+This guide will walk you through the process of creating a Box application and connecting it to Novaplan AI to sync your enterprise files, folders, users, and permissions.
 
 ### Box Enterprise Account
 
@@ -84,7 +84,7 @@ This guide will walk you through the process of creating a Box application and c
 3. Configure your new app with the following settings:
    - **Select App Type:** Choose **Custom App**.
    - **Authentication Method:** Select **OAuth 2.0 with Client Credentials Grant**.
-   - **Name your app:** Enter a unique name for your application, for example, "PipesHub Connector".
+   - **Name your app:** Enter a unique name for your application, for example, "Novaplan AI Connector".
 
 
 <img
@@ -107,7 +107,7 @@ This guide will walk you through the process of creating a Box application and c
 
 1. On your app's **Configuration** page, scroll to the **Application Scopes** section.
 
-2. Enable the following scopes that PipesHub needs:
+2. Enable the following scopes that Novaplan AI needs:
    - **Content Actions:**
      - Read all files and folders stored in Box
      - Write all files and folders stored in Box
@@ -164,7 +164,7 @@ This guide will walk you through the process of creating a Box application and c
 #### Step 4: Admin Authorization
 
 <Warning>
-  **Important:** The admin who authorizes the Box app should use the same email address as the PipesHub account configuring this connector. Using a different email will cause permission issues on the PipesHub platform.
+  **Important:** The admin who authorizes the Box app should use the same email address as the Novaplan AI account configuring this connector. Using a different email will cause permission issues on the Novaplan AI platform.
 </Warning>
 
 1. As an admin, approve the app:
@@ -195,13 +195,13 @@ This guide will walk you through the process of creating a Box application and c
 
 </Accordion>
 
-<Accordion title="Connect Box to PipesHub" icon="plug">
+<Accordion title="Connect Box to Novaplan AI" icon="plug">
 
 Box is a **team** connector — only an organization admin can configure it, and the resulting instance is shared across the workspace.
 
 ### Step 1: Open the Connector Catalog
 
-1. In PipesHub, navigate to **Workspace Settings** > **Connectors** > **Team**.
+1. In Novaplan AI, navigate to **Workspace Settings** > **Connectors** > **Team**.
 2. Find the **Box** card and click **Setup**.
 
 ### Step 2: Authenticate
@@ -221,10 +221,10 @@ On the **Authenticate** tab, enter:
 />
 
 <Warning>
-  **Email must match.** The Box admin who authorized the app should use the same email address as the PipesHub admin configuring this connector. A mismatch breaks permission resolution and users will not see their synced records in search.
+  **Email must match.** The Box admin who authorized the app should use the same email address as the Novaplan AI admin configuring this connector. A mismatch breaks permission resolution and users will not see their synced records in search.
 </Warning>
 
-Click **Save**. PipesHub fetches an access token using Client Credentials Grant to verify the credentials before persisting.
+Click **Save**. Novaplan AI fetches an access token using Client Credentials Grant to verify the credentials before persisting.
 
 </Accordion>
 
@@ -242,7 +242,7 @@ Sync settings control how the connector pulls data from Box.
 
 **Sync Interval:** For scheduled syncs, the cadence in minutes (default: 60).
 
-**Batch Size:** Number of items processed per batch when committing to PipesHub (default: 100).
+**Batch Size:** Number of items processed per batch when committing to Novaplan AI (default: 100).
 
 <img
   src="/images/connectors/box/t2.png"
@@ -280,7 +280,7 @@ Filters split into two categories:
   width="90%"
 />
 
-Once your settings are configured, click **Save Configuration**. PipesHub confirms the instance is ready with a final dialog — *"Instance is configured and ready to sync"* — offering two choices: **I'll do it later** or **Start syncing now**.
+Once your settings are configured, click **Save Configuration**. Novaplan AI confirms the instance is ready with a final dialog — *"Instance is configured and ready to sync"* — offering two choices: **I'll do it later** or **Start syncing now**.
 
 </Accordion>
 
@@ -344,7 +344,7 @@ Users are fetched from Box Enterprise API and converted to `AppUser` entities.
 
 ### Incremental Sync
 
-User sync currently operates as a full sync on each run. The connector fetches all active users from Box Enterprise and updates their status in PipesHub. Users marked as inactive in Box will be reflected accordingly in the system.
+User sync currently operates as a full sync on each run. The connector fetches all active users from Box Enterprise and updates their status in Novaplan AI. Users marked as inactive in Box will be reflected accordingly in the system.
 
 ---
 
@@ -358,7 +358,7 @@ A full sync executes when no cursor exists:
 
 2. **Fetch Group Memberships:** For each group, fetches all members and their roles.
 
-3. **Process Permissions:** Maps Box group roles to PipesHub permission types (Admin, Member).
+3. **Process Permissions:** Maps Box group roles to Novaplan AI permission types (Admin, Member).
 
 4. **Batch Processing:** Collects all groups and memberships into a single batch.
 
@@ -426,7 +426,7 @@ Record groups sync operates as a full sync, re-processing all active users to en
 3. **Item Processing:** For each item:
    - **Metadata Extraction:** Collects file/folder properties (name, size, timestamps, path, etag, sha1)
    - **Permission Fetching:** Retrieves collaborations and sharing settings via `client.folder(id).get_collaborations()`
-   - **Conversion:** Maps Box permissions to PipesHub permission types:
+   - **Conversion:** Maps Box permissions to Novaplan AI permission types:
      - `owner` → OWNER
      - `co-owner` → OWNER
      - `editor` → WRITE
@@ -642,8 +642,8 @@ The connector automatically determines the optimal sync approach:
 
 There are three common causes:
 
-1. **Email mismatch** - The email used during connector authentication doesn't match your PipesHub account email. This causes permission issues preventing you from accessing synced data.
-   - **Fix:** Reconfigure the connector and authenticate using the same email as your PipesHub account.
+1. **Email mismatch** - The email used during connector authentication doesn't match your Novaplan AI account email. This causes permission issues preventing you from accessing synced data.
+   - **Fix:** Reconfigure the connector and authenticate using the same email as your Novaplan AI account.
 
 2. **Records show in "All Records" but not in search** - Documents display in the All Records section but don't appear in search query results.
    - **Fix:** Verify sync filters in the connector settings and ensure indexing has completed. Check that the data matches your search query criteria.

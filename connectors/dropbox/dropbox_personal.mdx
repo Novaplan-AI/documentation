@@ -57,7 +57,7 @@ This makes syncing highly efficient as you only process the differences.
 
 <Accordion title="Create Dropbox App" icon="rocket">
 
-This guide will walk you through creating a Dropbox application to connect your personal account to PipesHub.
+This guide will walk you through creating a Dropbox application to connect your personal account to Novaplan AI.
 
 ### Step 1: Create a Dropbox App
 
@@ -69,7 +69,7 @@ This guide will walk you through creating a Dropbox application to connect your 
 3. Configure your new app with the following settings:
    - **Choose an API:** Select **Scoped access**.
    - **Type of access:** Select **Full Dropbox**. (This allows access to all files in your account, not just a specific app folder).
-   - **Name your app:** Enter a unique name, for example, "Pipeshub Personal Connector".
+   - **Name your app:** Enter a unique name, for example, "Novaplan AI Personal Connector".
 
 4. Click **Create app**. You will be redirected to your new app's settings page.
 
@@ -79,7 +79,7 @@ This guide will walk you through creating a Dropbox application to connect your 
 
 <img src="/images/connectors/dropbox/db2.png" alt="Dropbox Permissions" style={{ display: 'block', margin: '0 auto' }} width="90%" />
 
-2. You must enable the following **Individual Scopes** by checking their boxes to allow PipesHub to access your data:
+2. You must enable the following **Individual Scopes** by checking their boxes to allow Novaplan AI to access your data:
 
    - `account_info.read` (Required to identify your user ID and email)
    - `files.content.read` (Required to download file content)
@@ -112,7 +112,7 @@ http://{your_pipeshub_base_url}/connectors/oauth/callback/Dropbox%20Personal
 
 </Accordion>
 
-<Accordion title="Connect to PipesHub" icon="plug">
+<Accordion title="Connect to Novaplan AI" icon="plug">
 
 ### Step 1: Configure Connection
 
@@ -169,7 +169,7 @@ http://{your_pipeshub_base_url}/connectors/oauth/callback/Dropbox%20Personal
   </div>
 
 <Warning>
-  **Important:** Authorize using the same email address as your PipesHub account. Using a different email will cause permission issues on the PipesHub platform.
+  **Important:** Authorize using the same email address as your Novaplan AI account. Using a different email will cause permission issues on the Novaplan AI platform.
 </Warning>
 <Note>
   Configuring OAuth App can only be performed by Admins. If you are not an Admin, you must request an Admin to configure the OAuth App for you. You can then access configured OAuth Apps via a dropdown menu.
@@ -343,8 +343,8 @@ Unlike the Teams connector which maps complex organizational roles (e.g., Editor
 
 There are three common causes:
 
-1. **Email mismatch** - The email used during connector authentication doesn't match your PipesHub account email. This causes permission issues preventing you from accessing synced data.
-   - **Fix:** Reconfigure the connector and authenticate using the same email as your PipesHub account.
+1. **Email mismatch** - The email used during connector authentication doesn't match your Novaplan AI account email. This causes permission issues preventing you from accessing synced data.
+   - **Fix:** Reconfigure the connector and authenticate using the same email as your Novaplan AI account.
 
 2. **Records show in "All Records" but not in search** - Documents display in the All Records section but don't appear in search query results.
    - **Fix:** Verify sync filters in the connector settings and ensure indexing has completed. Check that the data matches your search query criteria.

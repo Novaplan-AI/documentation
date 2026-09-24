@@ -1,15 +1,15 @@
 ---
 title: "Omnigent"
-description: "Connect an Omnigent agent to the PipesHub MCP server — each person's answers stay scoped to what they can already see"
+description: "Connect an Omnigent agent to the Novaplan AI MCP server — each person's answers stay scoped to what they can already see"
 icon: "/logo/omnigent.svg"
 ---
 
-[Omnigent](https://omnigent.ai) is an open-source agent framework that runs Claude Code, Codex, Cursor, and other harnesses behind one interface. It speaks MCP natively, so PipesHub attaches as a standard remote MCP server — no plugin, no fork.
+[Omnigent](https://omnigent.ai) is an open-source agent framework that runs Claude Code, Codex, Cursor, and other harnesses behind one interface. It speaks MCP natively, so Novaplan AI attaches as a standard remote MCP server — no plugin, no fork.
 
-Each person uses **their own** PipesHub [personal access token](/developer/personal-access-tokens), so results respect their own permissions. Never share one token across a team.
+Each person uses **their own** Novaplan AI [personal access token](/developer/personal-access-tokens), so results respect their own permissions. Never share one token across a team.
 
 <Note>
-  **Attach with a bearer token, not an OAuth app.** Cursor and Claude Code use a registered OAuth app with a static client ID and secret. Omnigent's MCP attach takes an `Authorization` header, and its browser-OAuth path relies on dynamic client registration, which PipesHub does not support — so a PAT is the working credential here.
+  **Attach with a bearer token, not an OAuth app.** Cursor and Claude Code use a registered OAuth app with a static client ID and secret. Omnigent's MCP attach takes an `Authorization` header, and its browser-OAuth path relies on dynamic client registration, which Novaplan AI does not support — so a PAT is the working credential here.
 
   To be clear about identity: an OAuth app using the **authorization code** flow *does* run as the signed-in user, exactly like a PAT. It is only `client_credentials` that has no user identity — see [Unattended runs](#unattended-runs).
 </Note>
@@ -18,16 +18,16 @@ Each person uses **their own** PipesHub [personal access token](/developer/perso
 
 | You need | Why |
 | --- | --- |
-| A running PipesHub with indexed documents | That's what the agent searches |
+| A running Novaplan AI with indexed documents | That's what the agent searches |
 | A [personal access token](/developer/personal-access-tokens) | Authenticates as you, so answers stay within your access |
 | Omnigent installed (`omnigent` on your PATH) | See [Omnigent's install guide](https://omnigent.ai/quickstart/install) |
 | A model credential configured (`omnigent setup`) | Omnigent calls a model every turn |
 
-Your PipesHub instance must be reachable from wherever the agent runs. A laptop-local instance is fine for a local agent; a hosted or sandboxed runner needs a reachable URL.
+Your Novaplan AI instance must be reachable from wherever the agent runs. A laptop-local instance is fine for a local agent; a hosted or sandboxed runner needs a reachable URL.
 
 ## Create a token
 
-1. Sign in to PipesHub
+1. Sign in to Novaplan AI
 2. Go to **Workspace-settings**
 3. Select **Personal Access Tokens** under the **Developer Settings** section
 4. Click **New token**, pick an expiry and the default scope set
@@ -105,7 +105,7 @@ That last distinction matters. "Summarize the Q3 review" needs the whole documen
 
 **Every call returns `401`.** The token is expired or revoked. Tokens can be revoked from the same page they're created on, and revocation takes effect immediately.
 
-**A `phpat_`-prefixed token returns `401` on an older PipesHub.** Instances predating the prefix strip the token differently — upgrade PipesHub, or store the token without the `phpat_` prefix until you do.
+**A `phpat_`-prefixed token returns `401` on an older Novaplan AI.** Instances predating the prefix strip the token differently — upgrade Novaplan AI, or store the token without the `phpat_` prefix until you do.
 
 **The agent answers but never cites anything.** It probably isn't calling the tools — and on current Omnigent releases a failed MCP connection is not surfaced in the session, so the agent will answer from general knowledge in the same confident tone. Verify the endpoint with the `curl` below, and add instruction 4 above so the agent reports tool failures instead of silently continuing.
 

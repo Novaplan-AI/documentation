@@ -29,12 +29,12 @@ icon: "/logo/gitlab.png"
 ## Overview
 
 GitLab is a DevOps platform for hosting code, tracking work, and reviewing changes. The connector
-brings your projects, work items, merge requests, and source code into PipesHub so you can search
+brings your projects, work items, merge requests, and source code into Novaplan AI so you can search
 across all of them in one place.
 
 ### GitLab Data Structure
 
-PipesHub mirrors how GitLab organizes your content:
+Novaplan AI mirrors how GitLab organizes your content:
 
 ```
 Group
@@ -89,12 +89,12 @@ The GitLab connector uses **OAuth 2.0** for secure authentication.
 
 <Warning>
   <div className="text-lg font-semibold">
-    **Each user in your organization must set their email address to be publicly visible** in order for PipesHub to correctly assign permissions and make records accessible.
+    **Each user in your organization must set their email address to be publicly visible** in order for Novaplan AI to correctly assign permissions and make records accessible.
   </div>
 </Warning>
 
-**Why email visibility matters.** PipesHub uses email addresses to match GitLab users with their permissions. If a user's email is hidden:
-- PipesHub cannot identify the user when syncing permissions
+**Why email visibility matters.** Novaplan AI uses email addresses to match GitLab users with their permissions. If a user's email is hidden:
+- Novaplan AI cannot identify the user when syncing permissions
 - Records will appear invisible to that user even if they have proper access in GitLab
 - The user won't be able to see any content they should have access to
 
@@ -125,7 +125,7 @@ The GitLab connector uses **OAuth 2.0** for secure authentication.
 5. Click **Update profile settings** to save updated details
 <Warning>
   **Do not select "Do not show on profile"**, and make sure the address you pick **matches your
-  PipesHub account email**. Either mistake prevents PipesHub from matching you to permissions,
+  Novaplan AI account email**. Either mistake prevents Novaplan AI from matching you to permissions,
   making all records invisible to you.
 </Warning>
 
@@ -152,15 +152,15 @@ requirement to your team during the GitLab connector rollout.
 
 1. Click the **"Add new application"** button in the top right corner
 2. Fill in the application details:
-   - **Name**: Enter a meaningful name (e.g., "PipesHub GitLab Connector")
+   - **Name**: Enter a meaningful name (e.g., "Novaplan AI GitLab Connector")
    - **Redirect URI**: 
-    - You need to enter the redirect URI provided by PipesHub
-    - To get this URL, open PipesHub in another tab, navigate to **PipesHub (bottom left corner)** → **Workspace settings** → **Connectors**, find the **Gitlab** connector, and click **"Setup"**
+    - You need to enter the redirect URI provided by Novaplan AI
+    - To get this URL, open Novaplan AI in another tab, navigate to **Novaplan AI (bottom left corner)** → **Workspace settings** → **Connectors**, find the **Gitlab** connector, and click **"Setup"**
     - Copy the **Redirect URL** shown in the configuration dialog:
     <div className="text-center">
       <img
         src="/images/connectors/gitlab/copy_redirect_url.png"
-        alt="PipesHub GitLab Configuration - Copy Redirect URL"
+        alt="Novaplan AI GitLab Configuration - Copy Redirect URL"
         className="block mx-auto w-11/12"
       />
     </div>
@@ -186,12 +186,14 @@ requirement to your team during the GitLab connector rollout.
    - **Secret**: Your app's client secret
 
 <Warning>
-  Store the Application ID and Secret securely. The secret can be regenerated if needed, but you'll need to update your PipesHub configuration with the new value.
+  Store the Application ID and Secret securely. The secret can be regenerated if needed, but you'll need to update your Novaplan AI configuration with the new value.
 </Warning>
 
-### Step 4: Configure Connector in PipesHub
+<div id="step-4-configure-connector-in-pipeshub" />
 
-1. Return to the PipesHub GitLab configuration dialog (if you closed it, navigate to **PipesHub (bottom left corner)** → **Workspace settings** → **Connectors**, find the **Gitlab** connector, and click **"Setup"**)
+### Step 4: Configure Connector in Novaplan AI
+
+1. Return to the Novaplan AI GitLab configuration dialog (if you closed it, navigate to **Novaplan AI (bottom left corner)** → **Workspace settings** → **Connectors**, find the **Gitlab** connector, and click **"Setup"**)
 2. The configuration dialog has two steps:
    - **Step 1: Authentication** - Enter OAuth credentials
    - **Step 2: Sync Settings** - Configure synchronization
@@ -206,7 +208,7 @@ requirement to your team during the GitLab connector rollout.
 <div className="text-center">
   <img
     src="/images/connectors/gitlab/ph-gitlab-oauth-creds.png"
-    alt="Enter OAuth Credentials in PipesHub"
+    alt="Enter OAuth Credentials in Novaplan AI"
     className="block mx-auto w-11/12"
   />
 </div>
@@ -241,7 +243,7 @@ requirement to your team during the GitLab connector rollout.
   />
 </div>
 
-5. You'll be redirected back to PipesHub with a success message
+5. You'll be redirected back to Novaplan AI with a success message
 6. The connector status will update to show **"Connected — you can continue to Configure records"**
 
 <div className="text-center">
@@ -291,12 +293,12 @@ retrieved, so narrowing scope also shortens sync time.
 <div className="text-center">
   <img
     src="/images/connectors/gitlab/ph-gitlab-sync-filters.png"
-    alt="GitLab connector sync filters in PipesHub"
+    alt="GitLab connector sync filters in Novaplan AI"
     className="block mx-auto w-11/12"
   />
 </div>
 
-**Groups** and **Repositories** are live pickers — start typing and PipesHub queries your GitLab
+**Groups** and **Repositories** are live pickers — start typing and Novaplan AI queries your GitLab
 instance for matches. Each supports an **In** operator (sync only these) or **Not In** (sync
 everything except these).
 
@@ -317,7 +319,7 @@ Indexing filters control **what gets indexed for search** from the content that 
 <div className="text-center">
   <img
     src="/images/connectors/gitlab/ph-gitlab-indexing-filters.png"
-    alt="GitLab connector indexing filters in PipesHub"
+    alt="GitLab connector indexing filters in Novaplan AI"
     className="block mx-auto w-11/12"
   />
 </div>
@@ -371,10 +373,10 @@ The GitLab connector syncs the following data from your GitLab projects:
 - Verify Client ID and Client Secret are correct
 - Ensure you copied the full values without extra spaces
 - Check that the OAuth app is active in GitLab applications
-- Regenerate the secret if necessary and update PipesHub
+- Regenerate the secret if necessary and update Novaplan AI
 
 **Callback URL mismatch error:**
-- Ensure the Redirect URI in PipesHub exactly matches the callback URL in GitLab
+- Ensure the Redirect URI in Novaplan AI exactly matches the callback URL in GitLab
 - Check for trailing slashes or protocol differences (http vs https)
 - Update both configurations to use the same URL
 
@@ -400,13 +402,13 @@ The GitLab connector syncs the following data from your GitLab projects:
 **A user sees no records even though they have GitLab access:**
 - Their GitLab **public email** is probably not set. Ask them to set it (see the email visibility
   prerequisite above) — the next sync will grant their permissions automatically
-- Their GitLab email must match their PipesHub account email
+- Their GitLab email must match their Novaplan AI account email
 - Guests (access level 10) can reach work items only, by design — not merge requests or code
 
 **Nothing syncs on a self-managed instance:**
 - Verify the **GitLab Instance URL** is the base host with no trailing slash and no path
 - Confirm the OAuth application was created on that instance, not on gitlab.com
-- Check that the instance is reachable from the PipesHub deployment
+- Check that the instance is reachable from the Novaplan AI deployment
 
 **An admin or auditor account returns no projects:**
 - EE auditor accounts hit a documented GitLab limitation where listing endpoints return nothing.
@@ -414,7 +416,7 @@ The GitLab connector syncs the following data from your GitLab projects:
   administrator account for full coverage
 
 <Warning>
-  If you modify OAuth application settings in GitLab applications (Client ID, Secret, callback URL), you must update the configuration in PipesHub and re-authorize the connection.
+  If you modify OAuth application settings in GitLab applications (Client ID, Secret, callback URL), you must update the configuration in Novaplan AI and re-authorize the connection.
 </Warning>
 
 </Accordion>
@@ -435,7 +437,7 @@ Every sync run executes the same ordered cycle:
 
 | Step | Stage | What happens |
 |------|-------|--------------|
-| 1 | **User sync** | Resolve GitLab users of the in-scope groups and projects and match them to PipesHub accounts by email |
+| 1 | **User sync** | Resolve GitLab users of the in-scope groups and projects and match them to Novaplan AI accounts by email |
 | 2 | **Project sync** | Discover projects, create the group → project → container hierarchy, and apply per-member permissions |
 | 3 | **Content sync** | For each project, sync work items, merge requests, and the code repository |
 | 4 | **Timestamp backfill** | A background pass fills in authoritative commit timestamps for code files after the main sync completes |
@@ -460,7 +462,7 @@ The connector automatically determines whether to perform a full or incremental 
    would scan every group the account can see
 2. **Member fetch**: Retrieves group and project members with their access levels
 3. **Email enrichment**: Fetches each member's full profile to read their **public email**, then
-   matches it to a PipesHub account
+   matches it to a Novaplan AI account
 
 ### Project Synchronization
 
@@ -509,7 +511,7 @@ without adding meaning:
 | Editor and VCS metadata | `.git`, `.idea`, `.vscode`, `.gradle` |
 
 This keeps search results focused on code your team actually wrote. It also means the file count in
-PipesHub will be lower than the file count in the repository — that is expected.
+Novaplan AI will be lower than the file count in the repository — that is expected.
 
 <Warning>
   **Deletion safety valve.** If a single tree walk returns a truncated or incomplete file list,
@@ -568,7 +570,7 @@ they can reach:
 | **Maintainer** | 40 | ✅ | ✅ | ✅ |
 | **Owner** | 50 | ✅ | ✅ | ✅ |
 
-A GitLab user is matched to a PipesHub account **by email address**, which is why the email
+A GitLab user is matched to a Novaplan AI account **by email address**, which is why the email
 visibility prerequisite in the Configuration Guide matters. A member whose email cannot be resolved
 gets no permission edge; once they make their email visible, the next sync grants their access
 automatically.
@@ -614,8 +616,8 @@ stage is simply repeated on the next run.
 
 Common causes:
 
-1. **Email mismatch** - The email used during connector authentication doesn't match your PipesHub account email. This causes permission issues preventing you from accessing synced data.
-   - **Fix:** Reconfigure the connector and authenticate using the same email as your PipesHub account.
+1. **Email mismatch** - The email used during connector authentication doesn't match your Novaplan AI account email. This causes permission issues preventing you from accessing synced data.
+   - **Fix:** Reconfigure the connector and authenticate using the same email as your Novaplan AI account.
 
 2. **Data not yet indexed** - The connector is still syncing or hasn't completed the initial indexing process.
    - **Fix:** Go to **Settings > Connectors**, check the sync status, and wait for indexing to complete.
@@ -638,7 +640,7 @@ Common causes:
 </Accordion>
 
 <Accordion title="Why do I see no records after authenticating?">
-  The most common causes are missing scopes or selecting the wrong GitLab account. Re-run authentication, ensure the PipesHub email and GitLab account emails match.
+  The most common causes are missing scopes or selecting the wrong GitLab account. Re-run authentication, ensure the Novaplan AI email and GitLab account emails match.
 </Accordion>
 
 <Accordion title="Can I sync only specific groups or projects?">
@@ -677,6 +679,6 @@ on that instance rather than on gitlab.com. Leave the field blank for GitLab.com
 <div className="text-center mt-12 p-6 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl">
   <h3 className="text-lg font-semibold mb-2">Need Help Getting Started?</h3>
   <p className="text-gray-600 dark:text-gray-400">
-    Connect your GitLab account to PipesHub in just a few minutes. Follow the step-by-step guide above to enable project code, work items and merge-requests search across all your GitLab content.
+    Connect your GitLab account to Novaplan AI in just a few minutes. Follow the step-by-step guide above to enable project code, work items and merge-requests search across all your GitLab content.
   </p>
 </div>

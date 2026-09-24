@@ -69,14 +69,14 @@ The Jira connector supports **two authentication methods**. Both sync the same d
 
 <Warning>
   <div className="text-lg font-semibold">
-    **Each user in your organization must set their email address to be visible** in order for PipesHub to correctly assign permissions and make records visible to them.
+    **Each user in your organization must set their email address to be visible** in order for Novaplan AI to correctly assign permissions and make records visible to them.
   </div>
 </Warning>
 
 This prerequisite applies to **both** authentication methods (OAuth and API Token).
 
-**Why email visibility matters.** PipesHub uses email addresses to match Jira users with their permissions. If a user's email is hidden:
-- PipesHub cannot identify the user when syncing permissions
+**Why email visibility matters.** Novaplan AI uses email addresses to match Jira users with their permissions. If a user's email is hidden:
+- Novaplan AI cannot identify the user when syncing permissions
 - Records will appear invisible to that user even if they have proper access in Jira
 - The user won't be able to see any content they should have access to
 
@@ -105,7 +105,7 @@ This prerequisite applies to **both** authentication methods (OAuth and API Toke
 </div>
 
 <Warning>
-  **Do not select "Only you and admins"** — this will prevent PipesHub from accessing your email address and matching you to permissions, making all records invisible to you.
+  **Do not select "Only you and admins"** — this will prevent Novaplan AI from accessing your email address and matching you to permissions, making all records invisible to you.
 </Warning>
 
 📖 **Official documentation:** [Update your profile and visibility settings](https://support.atlassian.com/atlassian-account/docs/update-your-profile-and-visibility-settings/)
@@ -157,7 +157,7 @@ This prerequisite applies to **both** authentication methods (OAuth and API Toke
 </div>
 
 <Warning>
-  **You must select "Resource-level" access type.** PipesHub does not ask for a site URL — the connector uses the exact site you authorize during the OAuth step. If you choose **Account-level**, authentication will not work.
+  **You must select "Resource-level" access type.** Novaplan AI does not ask for a site URL — the connector uses the exact site you authorize during the OAuth step. If you choose **Account-level**, authentication will not work.
 </Warning>
 
 <Info>
@@ -196,14 +196,14 @@ Use the left sidebar to navigate between **Permissions**, **Authorization**, and
   />
 </div>
 
-4. **Get the Redirect URL from PipesHub:**
-   - In PipesHub, go to **Workspace Settings** → **Connectors**, find **Jira**, and click **+ Setup** for a new instance.
+4. **Get the Redirect URL from Novaplan AI:**
+   - In Novaplan AI, go to **Workspace Settings** → **Connectors**, find **Jira**, and click **+ Setup** for a new instance.
    - The connector panel opens as a right-side drawer. On the **Authenticate Instance** tab, copy the **Redirect URL**.
 
 <div className="text-center">
   <img
     src="/images/connectors/jira/jira_config.png"
-    alt="PipesHub Jira Authenticate Instance tab — copy the Redirect URL"
+    alt="Novaplan AI Jira Authenticate Instance tab — copy the Redirect URL"
     className="block mx-auto w-11/12"
   />
 </div>
@@ -220,7 +220,7 @@ Use the left sidebar to navigate between **Permissions**, **Authorization**, and
 </div>
 
 <Warning>
-  The Callback URL must match exactly between Atlassian Developer Console and PipesHub. Any difference — trailing slash, protocol, casing — causes authentication to fail.
+  The Callback URL must match exactly between Atlassian Developer Console and Novaplan AI. Any difference — trailing slash, protocol, casing — causes authentication to fail.
 </Warning>
 
 #### Step 5: Add API permissions
@@ -310,8 +310,8 @@ Next, the **Granular scopes** tab. Add these read permissions for fine-grained a
 1. In the left sidebar, click **Settings**.
 2. Scroll to the **Authentication details** section.
 3. Copy:
-   - **Client ID** — used as **Application (Client) ID** in PipesHub.
-   - **Secret** — used as **Client Secret** in PipesHub. Copy it immediately.
+   - **Client ID** — used as **Application (Client) ID** in Novaplan AI.
+   - **Secret** — used as **Client Secret** in Novaplan AI. Copy it immediately.
 
 <div className="text-center">
   <img
@@ -322,12 +322,12 @@ Next, the **Granular scopes** tab. Add these read permissions for fine-grained a
 </div>
 
 <Warning>
-  Store the Client ID and Client Secret securely. The secret can be regenerated if needed, but you'll have to update your PipesHub configuration with the new value.
+  Store the Client ID and Client Secret securely. The secret can be regenerated if needed, but you'll have to update your Novaplan AI configuration with the new value.
 </Warning>
 
 #### Step 7: Authenticate Instance tab — enter credentials
 
-The connector drawer in PipesHub has three tabs: **Authenticate Instance**, **Authorize**, and **Configure Records**. Start on the **Authenticate Instance** tab.
+The connector drawer in Novaplan AI has three tabs: **Authenticate Instance**, **Authorize**, and **Configure Records**. Start on the **Authenticate Instance** tab.
 
 1. Confirm the **Redirect URL** matches the Callback URL you saved in Atlassian in Step 4.
 2. If your admin has pre-registered an OAuth app, pick it from the **OAuth app** dropdown. Otherwise leave it blank and enter credentials manually.
@@ -351,7 +351,7 @@ On the **Authorize** tab, all the OAuth authorization work happens. The tab show
 <div className="text-center">
   <img
     src="/images/connectors/jira/connector_authenticate_option.png"
-    alt="PipesHub Authorize tab with the Authenticate button"
+    alt="Novaplan AI Authorize tab with the Authenticate button"
     className="block mx-auto w-11/12"
   />
 </div>
@@ -368,7 +368,7 @@ On the **Authorize** tab, all the OAuth authorization work happens. The tab show
 </div>
 
 <Warning>
-  **Authorize using the same email as your PipesHub account.** Using a different email causes permission issues on the PipesHub platform.
+  **Authorize using the same email as your Novaplan AI account.** Using a different email causes permission issues on the Novaplan AI platform.
 </Warning>
 
 3. Review the permissions requested by the connector and click **Accept**.
@@ -381,7 +381,7 @@ On the **Authorize** tab, all the OAuth authorization work happens. The tab show
   />
 </div>
 
-4. The popup closes and returns you to PipesHub. The connector tile shows an **Authenticated** badge with a **Reauthenticate** option.
+4. The popup closes and returns you to Novaplan AI. The connector tile shows an **Authenticated** badge with a **Reauthenticate** option.
 
 5. Click **Next** to move to the **Configure Records** tab.
 
@@ -444,7 +444,7 @@ Available sync filters:
 - *Recent issues only:* Modified Date → Operator `Is After` → Date `2024-06-01`
 - *Index issues but not attachments:* disable the **Index Issue and Comment Attachments** toggle
 
-Click **Save** to save your configuration. PipesHub confirms the instance is ready with a final dialog — **"Instance is configured and ready to sync"** — offering two choices: **I'll do it later** or **Start syncing now**.
+Click **Save** to save your configuration. Novaplan AI confirms the instance is ready with a final dialog — **"Instance is configured and ready to sync"** — offering two choices: **I'll do it later** or **Start syncing now**.
 
 <div className="text-center">
   <img
@@ -496,14 +496,14 @@ Use this method when you want the fastest setup and only need a single user acco
 
 #### Step 2: Authenticate Instance tab — enter credentials
 
-1. In PipesHub, go to **Workspace Settings** → **Connectors**, find **Jira**, and click **+ Setup**.
+1. In Novaplan AI, go to **Workspace Settings** → **Connectors**, find **Jira**, and click **+ Setup**.
 2. The connector panel opens as a right-side drawer with three tabs: **Authenticate Instance**, **Authorize**, and **Configure Records**.
 3. On the **Authenticate Instance** tab, pick **API Token** in the **Authentication method** dropdown.
 4. Enter:
    - **Base URL** — your Jira site URL (e.g., `https://your-domain.atlassian.net`; no trailing slash)
    - **Email** — your Atlassian account email (the account that created the API token)
    - **API Token** — the token you copied in Step 1
-5. Click **Next**. PipesHub validates the credentials and advances directly to the **Configure Records** tab (the **Authorize** tab is skipped for API Token because the token authenticates on its own).
+5. Click **Next**. Novaplan AI validates the credentials and advances directly to the **Configure Records** tab (the **Authorize** tab is skipped for API Token because the token authenticates on its own).
 
 <div className="text-center">
   <img
@@ -557,7 +557,7 @@ Available sync filters:
 - **Index Issues** (default: enabled) — include issue content (description + comments) in search
 - **Index Issue and Comment Attachments** (default: enabled) — include attachments in search
 
-Click **Save** to save your configuration. PipesHub confirms the instance is ready with a final dialog — **"Instance is configured and ready to sync"** — offering two choices: **I'll do it later** or **Start syncing now**.
+Click **Save** to save your configuration. Novaplan AI confirms the instance is ready with a final dialog — **"Instance is configured and ready to sync"** — offering two choices: **I'll do it later** or **Start syncing now**.
 
 <div className="text-center">
   <img
@@ -607,10 +607,10 @@ The Jira connector syncs the following data from your Jira Cloud workspace:
 **Invalid client credentials error (OAuth):**
 - Verify Client ID and Client Secret are correct — no extra spaces
 - Check that the OAuth app is active in Atlassian Developer Console
-- Regenerate the secret if necessary and update PipesHub
+- Regenerate the secret if necessary and update Novaplan AI
 
 **Callback URL mismatch error (OAuth):**
-- Ensure the Redirect URL in PipesHub exactly matches the Callback URL in Atlassian
+- Ensure the Redirect URL in Novaplan AI exactly matches the Callback URL in Atlassian
 - Check for trailing slashes, protocol differences (`http` vs `https`), or casing
 - Update both configurations to use the same URL
 
@@ -653,7 +653,7 @@ The Jira connector syncs the following data from your Jira Cloud workspace:
 - Ensure attachment size limits are not exceeded
 
 <Warning>
-  If you modify OAuth application settings in Atlassian Developer Console (Client ID, Secret, Callback URL, or scopes), update the configuration in PipesHub and re-authorize. For API tokens, re-enter the token in the Authenticate Instance tab if you regenerate it.
+  If you modify OAuth application settings in Atlassian Developer Console (Client ID, Secret, Callback URL, or scopes), update the configuration in Novaplan AI and re-authorize. For API tokens, re-enter the token in the Authenticate Instance tab if you regenerate it.
 </Warning>
 
 </Accordion>
@@ -771,7 +771,7 @@ Choose **OAuth** for production and anything that needs per-user attribution. Ch
 | Aspect | Jira Connector | Jira Toolset |
 |--------|----------------|--------------|
 | **Purpose** | Sync and index Jira data for search | Enable agents to perform actions in Jira |
-| **Data Flow** | One-way (import data into PipesHub) | Two-way (read and write via API) |
+| **Data Flow** | One-way (import data into Novaplan AI) | Two-way (read and write via API) |
 | **When to Use** | Query/search issues, projects, comments | Create issues, update tickets, add comments |
 
 **Example:** Use **Jira Connector** to search and retrieve existing ticket information. Use **Jira Toolset** to let agents create new issues or update ticket status.
@@ -782,13 +782,13 @@ Choose **OAuth** for production and anything that needs per-user attribution. Ch
 
 Check these in order:
 
-1. **PipesHub email mismatch** — the email used to authenticate the Jira connector must match your PipesHub account email. For OAuth, this is the email you signed in with during consent; for API Token, it's the **Email** field on the Authenticate Instance tab.
-   - **Fix:** reconfigure the connector and authenticate using the same email as your PipesHub account.
+1. **Novaplan AI email mismatch** — the email used to authenticate the Jira connector must match your Novaplan AI account email. For OAuth, this is the email you signed in with during consent; for API Token, it's the **Email** field on the Authenticate Instance tab.
+   - **Fix:** reconfigure the connector and authenticate using the same email as your Novaplan AI account.
 
-2. **Email visibility not set** — if your Atlassian email visibility is set to *Only you and admins*, PipesHub can't match you to Jira permissions and no records will be visible.
+2. **Email visibility not set** — if your Atlassian email visibility is set to *Only you and admins*, Novaplan AI can't match you to Jira permissions and no records will be visible.
    - **Fix:** set it to **Anyone** or **Your organization** (see the *Prerequisite: Email Visibility* section above).
 
-3. **Verify in All Records** — go to **All Records** in PipesHub and confirm the Jira issues you expect are actually present. If they're missing, the sync hasn't reached them yet — check sync status in **Settings → Connectors**.
+3. **Verify in All Records** — go to **All Records** in Novaplan AI and confirm the Jira issues you expect are actually present. If they're missing, the sync hasn't reached them yet — check sync status in **Settings → Connectors**.
 
 </Accordion>
 
@@ -805,6 +805,6 @@ Yes. On the **Configure Records** tab, use the **Project Keys** filter with the 
 <div className="text-center mt-12 p-6 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl">
   <h3 className="text-lg font-semibold mb-2">Ready to Get Started?</h3>
   <p className="text-gray-600 dark:text-gray-400">
-    Connect your Jira workspace to PipesHub in just a few minutes. Follow the step-by-step guide above to enable organization-wide project and issue search across all your Jira content.
+    Connect your Jira workspace to Novaplan AI in just a few minutes. Follow the step-by-step guide above to enable organization-wide project and issue search across all your Jira content.
   </p>
 </div>

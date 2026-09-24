@@ -105,7 +105,7 @@ The user generating the token must have a role assigned that includes the **"Acc
 
 </Accordion>
 
-<Accordion title="Connect BookStack to PipesHub" icon="plug">
+<Accordion title="Connect BookStack to Novaplan AI" icon="plug">
 
 The integration requires three pieces of information:
 
@@ -117,7 +117,7 @@ The integration requires three pieces of information:
 
 #### Step 1: Access and Configure Connector
 
-- Go to **Connector Settings** in the PipesHub dashboard.
+- Go to **Connector Settings** in the Novaplan AI dashboard.
 - Select the **BookStack Connector**.
 - Click the **Configure Setting** button.
 
@@ -128,7 +128,7 @@ The integration requires three pieces of information:
 - Paste the **BookStack Token Secret**.
 
 <Warning>
-  **Important:** Use API credentials generated from a BookStack account that has the same email address as your PipesHub account. Using a different email will cause permission issues on the PipesHub platform.
+  **Important:** Use API credentials generated from a BookStack account that has the same email address as your Novaplan AI account. Using a different email will cause permission issues on the Novaplan AI platform.
 </Warning>
 
 #### Step 3: Set Sync Strategy
@@ -156,7 +156,7 @@ The integration requires three pieces of information:
 </Accordion>
 
 <Accordion title="Does the API Token expire?">
-  It depends on how you created it. During token creation, the "Expiry Date" field is optional. If you left it blank, the token will expire in 100 years. If you set a date, you will need to generate a new token and update the connector settings in PipesHub before that date.
+  It depends on how you created it. During token creation, the "Expiry Date" field is optional. If you left it blank, the token will expire in 100 years. If you set a date, you will need to generate a new token and update the connector settings in Novaplan AI before that date.
 </Accordion>
 
 <Accordion title="What permissions are required?">
@@ -177,8 +177,8 @@ The integration requires three pieces of information:
 
 There are three common causes:
 
-1. **Email mismatch** - The email used during connector authentication doesn't match your PipesHub account email. This causes permission issues preventing you from accessing synced data.
-   - **Fix:** Reconfigure the connector and authenticate using the same email as your PipesHub account.
+1. **Email mismatch** - The email used during connector authentication doesn't match your Novaplan AI account email. This causes permission issues preventing you from accessing synced data.
+   - **Fix:** Reconfigure the connector and authenticate using the same email as your Novaplan AI account.
 
 2. **Records show in "All Records" but not in search** - Documents display in the All Records section but don't appear in search query results.
    - **Fix:** Verify sync filters in the connector settings and ensure indexing has completed. Check that the data matches your search query criteria.

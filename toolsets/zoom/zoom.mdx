@@ -120,21 +120,23 @@ In the app creation dialog, choose:
 | **Would you like to publish this app on Zoom App Marketplace?** | **No** (keep private) |
 
 <Warning>
-  The choice between **Account-level** and **User-managed** is **permanent** — it cannot be changed after the app is created. User-managed apps let each Zoom user install and authorize individually, which matches how the PipesHub integration works.
+  The choice between **Account-level** and **User-managed** is **permanent** — it cannot be changed after the app is created. User-managed apps let each Zoom user install and authorize individually, which matches how the Novaplan AI integration works.
 </Warning>
 
-### Step 3: Get the Redirect URI from PipesHub
+<div id="step-3-get-the-redirect-uri-from-pipeshub" />
 
-Before filling in the Zoom form, copy the Redirect URI from PipesHub so the values match exactly.
+### Step 3: Get the Redirect URI from Novaplan AI
 
-1. In PipesHub, go to **Workspace Settings** → **Actions**.
+Before filling in the Zoom form, copy the Redirect URI from Novaplan AI so the values match exactly.
+
+1. In Novaplan AI, go to **Workspace Settings** → **Actions**.
 2. Find **Zoom** in the list and click **+ Setup** (or **Configure**).
 3. Copy the **Redirect URI** shown in the dialog.
 
 <div style={{ textAlign: "center" }}>
   <img
     src="/images/toolsets/zoom/zoom_toolset_page.png"
-    alt="PipesHub Configure Zoom dialog showing Redirect URI"
+    alt="Novaplan AI Configure Zoom dialog showing Redirect URI"
     style={{ display: 'block', margin: '0 auto' }}
     width="90%"
   />
@@ -144,7 +146,7 @@ Before filling in the Zoom form, copy the Redirect URI from PipesHub so the valu
 
 In the Zoom app builder, open **Basic Information** and scroll to **OAuth Information**:
 
-1. Paste the PipesHub **Redirect URI** into the **OAuth Redirect URL** field.
+1. Paste the Novaplan AI **Redirect URI** into the **OAuth Redirect URL** field.
 2. Add the same URL to the **OAuth Allow List** below.
 3. Click **Save**.
 
@@ -215,8 +217,8 @@ Open the **Scopes** section in the app builder and add the following granular sc
 ### Step 6: Copy Client ID and Client Secret
 
 1. Go to **Basic Information → App Credentials** in the Zoom app builder.
-2. Copy the **Client ID** — used as **Client ID** in PipesHub.
-3. Copy the **Client Secret** — used as **Client Secret** in PipesHub.
+2. Copy the **Client ID** — used as **Client ID** in Novaplan AI.
+3. Copy the **Client Secret** — used as **Client Secret** in Novaplan AI.
 
 <div style={{ textAlign: "center" }}>
   <img
@@ -227,9 +229,11 @@ Open the **Scopes** section in the app builder and add the following granular sc
   />
 </div>
 
-### Step 7: Configure the Zoom toolset in PipesHub
+<div id="step-7-configure-the-zoom-toolset-in-pipeshub" />
 
-1. In PipesHub, return to **Workspace Settings** → **Actions**.
+### Step 7: Configure the Zoom toolset in Novaplan AI
+
+1. In Novaplan AI, return to **Workspace Settings** → **Actions**.
 2. Find **Zoom** and open setup / configuration (**+ Setup** or **Configure**).
 3. Confirm the **Redirect URI** in the dialog matches the **OAuth Redirect URL** you registered in Zoom in **Step 4**.
 4. Paste your **Client ID** and **Client Secret**, then save the instance.
@@ -237,7 +241,7 @@ Open the **Scopes** section in the app builder and add the following granular sc
 <div style={{ textAlign: "center" }}>
   <img
     src="/images/toolsets/zoom/enter_credentials.png"
-    alt="Enter Zoom Client ID and Secret in PipesHub"
+    alt="Enter Zoom Client ID and Secret in Novaplan AI"
     style={{ display: 'block', margin: '0 auto' }}
     width="90%"
   />
@@ -302,7 +306,7 @@ Authentication uses the same OAuth flow in either location:
 | Aspect | Zoom Connector | Zoom Toolset |
 |--------|----------------|--------------|
 | **Purpose** | Sync and index meetings, recordings, and transcripts for search | Enable agents to perform actions on Zoom |
-| **Data Flow** | One-way (import data into PipesHub) | Two-way (read and write via API) |
+| **Data Flow** | One-way (import data into Novaplan AI) | Two-way (read and write via API) |
 | **When to Use** | Query/search past meetings, recordings, and transcripts | Schedule meetings, update recurring series, fetch transcripts on demand |
 
 **Example:** Use **Zoom Connector** to search past meeting transcripts across your organization. Use **Zoom Toolset** to let agents schedule meetings, reschedule a specific occurrence, or pull a transcript in-conversation.

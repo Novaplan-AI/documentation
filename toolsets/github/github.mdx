@@ -114,18 +114,20 @@ The GitHub toolset enables AI agents to interact with your GitHub account and or
   To create an OAuth App under a **GitHub organization** instead of your personal account, open the organization's **Settings → Developer settings → OAuth Apps**. You need **admin access** to the organization.
 </Info>
 
-### Step 2: Get the Redirect URI from PipesHub
+<div id="step-2-get-the-redirect-uri-from-pipeshub" />
 
-Before filling in the GitHub form, copy the Redirect URI from PipesHub so the values match exactly.
+### Step 2: Get the Redirect URI from Novaplan AI
 
-1. In PipesHub, go to **Workspace Settings** → **Actions**.
+Before filling in the GitHub form, copy the Redirect URI from Novaplan AI so the values match exactly.
+
+1. In Novaplan AI, go to **Workspace Settings** → **Actions**.
 2. Find **GitHub** in the list and click **+ Setup** (or **Configure**).
 3. Copy the **Redirect URI** shown in the dialog.
 
 <div style={{ textAlign: "center" }}>
   <img
     src="/images/toolsets/github/github_toolset_page.png"
-    alt="PipesHub Configure GitHub dialog showing Redirect URI"
+    alt="Novaplan AI Configure GitHub dialog showing Redirect URI"
     style={{ display: 'block', margin: '0 auto' }}
     width="90%"
   />
@@ -138,9 +140,9 @@ In the GitHub **Register a new OAuth application** form:
 | Field | Value |
 |-------|-------|
 | **Application name** | For example, `PipesHub GitHub Toolset` |
-| **Homepage URL** | Your PipesHub URL (for example, `https://your-domain.com`) |
+| **Homepage URL** | Your Novaplan AI URL (for example, `https://your-domain.com`) |
 | **Application description** | Optional — short description of the integration |
-| **Authorization callback URL** | Paste the **Redirect URI** you copied from PipesHub |
+| **Authorization callback URL** | Paste the **Redirect URI** you copied from Novaplan AI |
 
 Click **Register application**.
 
@@ -154,16 +156,16 @@ Click **Register application**.
 </div>
 
 <Warning>
-  GitHub OAuth Apps support only **one** Authorization callback URL. If you need the toolset to work across multiple PipesHub environments, create a separate OAuth App for each.
+  GitHub OAuth Apps support only **one** Authorization callback URL. If you need the toolset to work across multiple Novaplan AI environments, create a separate OAuth App for each.
 </Warning>
 
 ### Step 4: Copy Client ID and generate a Client Secret
 
 After registration, GitHub shows the OAuth App settings page with your **Client ID** visible.
 
-1. Copy the **Client ID** — used as **Client ID** in PipesHub.
+1. Copy the **Client ID** — used as **Client ID** in Novaplan AI.
 2. Under **Client secrets**, click **Generate a new client secret**.
-3. Copy the secret immediately — used as **Client Secret** in PipesHub.
+3. Copy the secret immediately — used as **Client Secret** in Novaplan AI.
 
 <div style={{ textAlign: "center" }}>
   <img
@@ -180,7 +182,7 @@ After registration, GitHub shows the OAuth App settings page with your **Client 
 
 ### Step 5: Required scopes
 
-PipesHub requests the following scopes during the OAuth consent flow. You don't configure them on the GitHub side — they are requested automatically when the user authorizes.
+Novaplan AI requests the following scopes during the OAuth consent flow. You don't configure them on the GitHub side — they are requested automatically when the user authorizes.
 
 | Scope | Purpose |
 |-------|---------|
@@ -194,9 +196,11 @@ PipesHub requests the following scopes during the OAuth consent flow. You don't 
   If your GitHub organization has **OAuth App access restrictions** enabled (the default for new orgs), members may need to request approval from an organization owner before the toolset can access org-owned repositories.
 </Info>
 
-### Step 6: Configure the GitHub toolset in PipesHub
+<div id="step-6-configure-the-github-toolset-in-pipeshub" />
 
-1. In PipesHub, return to **Workspace Settings** → **Actions**.
+### Step 6: Configure the GitHub toolset in Novaplan AI
+
+1. In Novaplan AI, return to **Workspace Settings** → **Actions**.
 2. Find **GitHub** and open setup / configuration (**+ Setup** or **Configure**).
 3. Confirm the **Redirect URI** in the dialog matches the **Authorization callback URL** you registered in GitHub in **Step 3**.
 4. Paste your **Client ID** and **Client Secret**, then save the instance.
@@ -204,7 +208,7 @@ PipesHub requests the following scopes during the OAuth consent flow. You don't 
 <div style={{ textAlign: "center" }}>
   <img
     src="/images/toolsets/github/enter_credentials.png"
-    alt="Enter GitHub Client ID and Secret in PipesHub"
+    alt="Enter GitHub Client ID and Secret in Novaplan AI"
     style={{ display: 'block', margin: '0 auto' }}
     width="90%"
   />
@@ -269,7 +273,7 @@ Authentication uses the same OAuth flow in either location:
 | Aspect | GitHub Connector | GitHub Toolset |
 |--------|------------------|----------------|
 | **Purpose** | Sync and index repositories, issues, and PRs for search | Enable agents to perform actions on GitHub |
-| **Data Flow** | One-way (import data into PipesHub) | Two-way (read and write via API) |
+| **Data Flow** | One-way (import data into Novaplan AI) | Two-way (read and write via API) |
 | **When to Use** | Query/search code, issues, and PR history | Open issues, merge PRs, leave review comments |
 
 **Example:** Use the **GitHub Connector** to search past issues and PRs across your repos. Use the **GitHub Toolset** to let agents file bugs, merge PRs, or post review comments on your behalf.
@@ -278,7 +282,7 @@ Authentication uses the same OAuth flow in either location:
 
 <Accordion title="Should I use a GitHub OAuth App or a GitHub App?">
 
-PipesHub's GitHub toolset uses an **OAuth App** because the integration acts on behalf of a user. GitHub Apps offer finer-grained per-repository permissions and short-lived tokens, but require installation on each repo or organization. For most teams, the OAuth App flow is simpler to set up.
+Novaplan AI's GitHub toolset uses an **OAuth App** because the integration acts on behalf of a user. GitHub Apps offer finer-grained per-repository permissions and short-lived tokens, but require installation on each repo or organization. For most teams, the OAuth App flow is simpler to set up.
 
 </Accordion>
 

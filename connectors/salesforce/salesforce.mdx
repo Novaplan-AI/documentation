@@ -28,7 +28,7 @@ icon: "/logo/salesforce.png"
 
 ## Overview
 
-The Salesforce connector syncs your CRM data — accounts, contacts, leads, opportunities, cases, tasks, and attached files — from your Salesforce org into PipesHub using **OAuth 2.0** and an **External Client App** you create in Salesforce Setup.
+The Salesforce connector syncs your CRM data — accounts, contacts, leads, opportunities, cases, tasks, and attached files — from your Salesforce org into Novaplan AI using **OAuth 2.0** and an **External Client App** you create in Salesforce Setup.
 
 ### What Gets Synced
 
@@ -49,21 +49,23 @@ The Salesforce connector syncs your CRM data — accounts, contacts, leads, oppo
 
 ### Authentication
 
-In PipesHub the flow has three tabs: **Authenticate Instance** (Redirect/Callback URL, Salesforce Instance URL, and OAuth client credentials), **Authorize** (sign in to Salesforce), then **Configure Records** (sync strategy and indexing).
+In Novaplan AI the flow has three tabs: **Authenticate Instance** (Redirect/Callback URL, Salesforce Instance URL, and OAuth client credentials), **Authorize** (sign in to Salesforce), then **Configure Records** (sync strategy and indexing).
 
 <Note>
-  This connector matches people by **email**. Use the **same email** in PipesHub as in Salesforce so permissions and visible records line up.
+  This connector matches people by **email**. Use the **same email** in Novaplan AI as in Salesforce so permissions and visible records line up.
 </Note>
 
 ---
 
 ## Configuration Guide
 
-You will copy the **Redirect/Callback URL** from PipesHub, create an **External Client App** in Salesforce with that callback URL, then paste the app's **Consumer Key** and **Consumer Secret** back into PipesHub and run **Authorize**.
+You will copy the **Redirect/Callback URL** from Novaplan AI, create an **External Client App** in Salesforce with that callback URL, then paste the app's **Consumer Key** and **Consumer Secret** back into Novaplan AI and run **Authorize**.
 
 ### How to configure and enable the Salesforce connector
 
-#### Step 1: Copy the Redirect/Callback URL from PipesHub
+<div id="step-1-copy-the-redirectcallback-url-from-pipeshub" />
+
+#### Step 1: Copy the Redirect/Callback URL from Novaplan AI
 
 1. Open your **user profile** menu (bottom of the left sidebar) → **Workspace Settings**.
 2. Under **Workspace**, select **Connectors**.
@@ -73,7 +75,7 @@ You will copy the **Redirect/Callback URL** from PipesHub, create an **External 
 <div className="text-center">
   <img
     src="/images/connectors/salesforce/salesforce-5-callback-url.png"
-    alt="PipesHub Salesforce Configuration — Redirect/Callback URL and OAuth credentials"
+    alt="Novaplan AI Salesforce Configuration — Redirect/Callback URL and OAuth credentials"
     className="block mx-auto w-11/12"
   />
 </div>
@@ -164,7 +166,7 @@ Open the saved app → **Settings** → **OAuth Settings**, then click **Consume
   />
 </div>
 
-Copy the **Consumer Key** and **Consumer Secret** — these are your **Client ID** and **Client Secret** in PipesHub.
+Copy the **Consumer Key** and **Consumer Secret** — these are your **Client ID** and **Client Secret** in Novaplan AI.
 
 <div className="text-center">
   <img
@@ -190,7 +192,9 @@ Your **Instance URL** is the base domain shown in your browser's address bar whe
   />
 </div>
 
-#### Step 9: Finish Authenticate Instance in PipesHub
+<div id="step-9-finish-authenticate-instance-in-pipeshub" />
+
+#### Step 9: Finish Authenticate Instance in Novaplan AI
 
 Return to **Salesforce Configuration** → **Authenticate Instance** and fill in:
 
@@ -206,7 +210,7 @@ Confirm the Redirect/Callback URL still matches, then click **Next →**.
 <div className="text-center">
   <img
     src="/images/connectors/salesforce/salesforce-cred-in-pipeshub.png"
-    alt="PipesHub Salesforce Configuration — OAuth app name, instance URL, and client credentials"
+    alt="Novaplan AI Salesforce Configuration — OAuth app name, instance URL, and client credentials"
     className="block mx-auto w-11/12"
   />
 </div>
@@ -218,13 +222,13 @@ On **Authorize**, click **Authenticate Salesforce to Proceed**, sign in to Sales
 <div className="text-center">
   <img
     src="/images/connectors/salesforce/salesforce-10-authenticated.png"
-    alt="PipesHub Salesforce Configuration — Authorize tab showing Connected status"
+    alt="Novaplan AI Salesforce Configuration — Authorize tab showing Connected status"
     className="block mx-auto w-11/12"
   />
 </div>
 
 <Warning>
-  **Authorize with an administrator account using the same email you use in PipesHub.** A different account can cause missing records or permission issues.
+  **Authorize with an administrator account using the same email you use in Novaplan AI.** A different account can cause missing records or permission issues.
 </Warning>
 
 #### Step 11: Configure Records and save
@@ -238,7 +242,7 @@ When the **Start sync process?** dialog appears, click **Confirm** to begin sync
 <div className="text-center">
   <img
     src="/images/connectors/salesforce/salesforce-11-start-sync.png"
-    alt="PipesHub Salesforce Configure Records panel with Start sync process confirmation"
+    alt="Novaplan AI Salesforce Configure Records panel with Start sync process confirmation"
     className="block mx-auto w-11/12"
   />
 </div>
@@ -249,7 +253,7 @@ Use **Re-authenticate with provider** on **Authorize** if tokens are rotated or 
 
 - **Salesforce OAuth Web Server Flow:** [https://help.salesforce.com/s/articleView?id=sf.remoteaccess_oauth_web_server_flow.htm](https://help.salesforce.com/s/articleView?id=sf.remoteaccess_oauth_web_server_flow.htm)
 - **External Client Apps:** [https://help.salesforce.com/s/articleView?id=sf.create_external_client_apps.htm](https://help.salesforce.com/s/articleView?id=sf.create_external_client_apps.htm)
-- **PipesHub:** **Workspace Settings** → **Connectors** → **Salesforce** for the live Redirect/Callback URL
+- **Novaplan AI:** **Workspace Settings** → **Connectors** → **Salesforce** for the live Redirect/Callback URL
 
 ---
 
@@ -263,7 +267,7 @@ Use **Re-authenticate with provider** on **Authorize** if tokens are rotated or 
 
 **redirect_uri_mismatch**
 
-- The **Callback URL** in Salesforce must **exactly** match the Redirect/Callback URL shown in PipesHub (scheme, host, path, no stray spaces).
+- The **Callback URL** in Salesforce must **exactly** match the Redirect/Callback URL shown in Novaplan AI (scheme, host, path, no stray spaces).
 
 **invalid_client_id / invalid_client**
 
@@ -311,7 +315,7 @@ Use **Re-authenticate with provider** on **Authorize** if tokens are rotated or 
 
 <Accordion title="Queries not returning results. What could be wrong?">
 
-1. **Email mismatch** — Use the same email in PipesHub as in Salesforce.
+1. **Email mismatch** — Use the same email in Novaplan AI as in Salesforce.
 2. **Scope** — Confirm the OAuth scopes from Step 5 are selected and the authorizing user has access to the objects.
 3. **Still indexing** — Open **Workspace Settings** → **Connectors** → **Salesforce** and check **Overview** until queues complete.
 
@@ -324,6 +328,6 @@ Use **Re-authenticate with provider** on **Authorize** if tokens are rotated or 
 <div className="text-center mt-12 p-6 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl">
   <h3 className="text-lg font-semibold mb-2">Ready to get started?</h3>
   <p className="text-gray-600 dark:text-gray-400">
-    Connect Salesforce to PipesHub for unified search. Follow the steps above, or contact support if you need help.
+    Connect Salesforce to Novaplan AI for unified search. Follow the steps above, or contact support if you need help.
   </p>
 </div>

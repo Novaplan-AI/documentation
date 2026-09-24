@@ -1,6 +1,6 @@
 ---
 title: LM Studio
-description: "Configure PipesHub to use local models served by LM Studio"
+description: "Configure Novaplan AI to use local models served by LM Studio"
 ---
 
 # LM Studio Configuration
@@ -30,10 +30,10 @@ The address of the LM Studio server, including the `/v1` path.
 
 | Where LM Studio runs | Endpoint URL to enter |
 |---|---|
-| On the same machine as PipesHub | `http://host.docker.internal:1234/v1` |
+| On the same machine as Novaplan AI | `http://host.docker.internal:1234/v1` |
 | On another machine on your network | `http://192.168.1.50:1234/v1` |
 
-PipesHub runs inside a container, so `http://localhost:1234/v1` points at the PipesHub container rather than your desktop. Use `host.docker.internal` instead.
+Novaplan AI runs inside a container, so `http://localhost:1234/v1` points at the Novaplan AI container rather than your desktop. Use `host.docker.internal` instead.
 
 If LM Studio runs on a different machine, enable **Serve on Local Network** in its server settings, otherwise it only accepts connections from its own host.
 
@@ -55,11 +55,11 @@ LM Studio does not check API keys. Leave this blank unless you have put the serv
 
 ### Model Friendly Name
 
-A label shown in the PipesHub interface so you can tell several configurations apart. If you leave it blank, the model name is used.
+A label shown in the Novaplan AI interface so you can tell several configurations apart. If you leave it blank, the model name is used.
 
 ### Context Length
 
-The size of the model's context window, in tokens. PipesHub uses this number to decide how much retrieved content it can safely include in a prompt. Set it to the value published for your model. If you leave it blank, PipesHub uses a conservative default.
+The size of the model's context window, in tokens. Novaplan AI uses this number to decide how much retrieved content it can safely include in a prompt. Set it to the value published for your model. If you leave it blank, Novaplan AI uses a conservative default.
 
 ### Is Multimodal
 
@@ -73,7 +73,7 @@ Turn this on if the model performs extended reasoning before answering. It is on
 
 **"Connection refused".** The LM Studio server is not running, or you used `localhost` where `host.docker.internal` is needed.
 
-**Requests time out on the first message.** LM Studio loads the model into memory on the first request, which can take a minute for a large model. Load the model in the Developer tab before using it from PipesHub.
+**Requests time out on the first message.** LM Studio loads the model into memory on the first request, which can take a minute for a large model. Load the model in the Developer tab before using it from Novaplan AI.
 
 **"Model not found".** The identifier does not match. Copy it from the `curl` output above rather than typing it by hand.
 

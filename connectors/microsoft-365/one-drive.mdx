@@ -61,7 +61,7 @@ The OneDrive connector uses OAuth 2.0 via Microsoft Graph API with Application P
   />
 </div>
 - Enter application details:
-  - **Name:** Enter app name (e.g., "PipesHub Connector")
+  - **Name:** Enter app name (e.g., "Novaplan AI Connector")
   - **Supported account types:** Select "Accounts in this organizational directory only (Single tenant)"
   - Leave Redirect URI blank
 - Click "Register"
@@ -101,7 +101,7 @@ Copy the "Application (client) ID" NOT the "Object ID". These are different valu
 - In the left sidebar, click "Certificates & secrets"
 - Click "New client secret"
 - Configure the secret:
-  - **Description:** Enter a description (e.g., "PipesHub Connector Secret")
+  - **Description:** Enter a description (e.g., "Novaplan AI Connector Secret")
   - **Expires:** Choose expiration period (recommended: 24 months)
 - Click "Add"
 - Immediately copy the secret value from the "Value" column
@@ -152,16 +152,18 @@ The client secret value is only displayed once! If you navigate away, you cannot
 </div>
 
 <Warning>
-  **Important:** The administrator granting consent should use the same email address as the PipesHub account configuring this connector. Using a different email will cause permission issues on the PipesHub platform.
+  **Important:** The administrator granting consent should use the same email address as the Novaplan AI account configuring this connector. Using a different email will cause permission issues on the Novaplan AI platform.
 </Warning>
 
 <Note>
 Admin consent is required for application permissions. Only Global Administrators or Application Administrators can grant this consent.
 </Note>
 
-### Step 6: Configure Connector in PipesHub
+<div id="step-6-configure-connector-in-pipeshub" />
 
-- Navigate to Settings → Connectors in PipesHub
+### Step 6: Configure Connector in Novaplan AI
+
+- Navigate to Settings → Connectors in Novaplan AI
 - Find the OneDrive connector and click "Configure"
 - Enter the following details:
   - **Application (Client) ID:** From Step 2
@@ -347,8 +349,8 @@ This function manages the synchronization of a single user's OneDrive content us
 
 There are three common causes:
 
-1. **Email mismatch** - The email used during connector authentication doesn't match your PipesHub account email. This causes permission issues preventing you from accessing synced data.
-   - **Fix:** Reconfigure the connector and authenticate using the same email as your PipesHub account.
+1. **Email mismatch** - The email used during connector authentication doesn't match your Novaplan AI account email. This causes permission issues preventing you from accessing synced data.
+   - **Fix:** Reconfigure the connector and authenticate using the same email as your Novaplan AI account.
 
 2. **Records show in "All Records" but not in search** - Documents display in the All Records section but don't appear in search query results.
    - **Fix:** Verify sync filters in the connector settings and ensure indexing has completed. Check that the data matches your search query criteria.
@@ -365,7 +367,7 @@ Azure AD client secrets expire based on the duration set during creation. Once e
 1. Go to your app registration in the [Azure Portal](https://portal.azure.com)
 2. Navigate to **Certificates & secrets** → **New client secret**
 3. Set a new expiry and copy the secret **Value** immediately (it won't be shown again).
-4. Go to **Settings > Connectors** in PipesHub, open the OneDrive connector, and update the **Client Secret** field with the new value
+4. Go to **Settings > Connectors** in Novaplan AI, open the OneDrive connector, and update the **Client Secret** field with the new value
 
 <Note>
 To avoid disruption, set a calendar reminder before your secret's expiry date. The recommended duration is 24 months.
@@ -381,7 +383,7 @@ All subsequent syncs are incremental — only changes since the last run are fet
 
 </Accordion>
 
-<Accordion title="A file's sharing settings changed in OneDrive. When will that reflect in PipesHub?">
+<Accordion title="A file's sharing settings changed in OneDrive. When will that reflect in Novaplan AI?">
 
 Permission changes are picked up automatically on the next sync cycle. The connector compares current permissions from the Microsoft Graph API against what's stored and updates accordingly. 
 

@@ -1,11 +1,11 @@
 ---
 title: "System Overview"
-description: "How PipesHub is put together: the web app, REST and SDK clients, MCP, the API, the Python services, and the data stores."
+description: "How Novaplan AI is put together: the web app, REST and SDK clients, MCP, the API, the Python services, and the data stores."
 icon: "network-wired"
 mode: wide
 ---
 
-PipesHub is a workplace AI platform that you run yourself. It is made of three parts:
+Novaplan AI is a workplace AI platform that you run yourself. It is made of three parts:
 
 1. A **web app** that people use in the browser for search, chat, and administration.
 2. An **API** that authenticates users, enforces permissions, and manages knowledge bases and files.
@@ -27,7 +27,7 @@ A person using the web app, an application using the REST API or an SDK, and an 
   </Step>
 </Steps>
 
-That path only works after your company data is already in those stores. In the background, PipesHub fills them as follows:
+That path only works after your company data is already in those stores. In the background, Novaplan AI fills them as follows:
 
 1. **Connectors** pull data from Slack, Drive, Jira, Confluence, and your other sources.
 2. They publish new or changed records onto the **event bus**.
@@ -35,7 +35,7 @@ That path only works after your company data is already in those stores. In the 
 
 On a local machine, the event bus is **Redis Streams**. In a larger deployment, it is **Kafka**. The work the services do is the same in both cases; only the transport changes.
 
-The diagram below shows that flow. Read it from top to bottom: who talks to PipesHub, then the API and the event bus, then Query, Indexing, and Connectors, then the data stores.
+The diagram below shows that flow. Read it from top to bottom: who talks to Novaplan AI, then the API and the event bus, then Query, Indexing, and Connectors, then the data stores.
 
 ## Architecture diagram
 
@@ -43,7 +43,7 @@ The diagram below shows that flow. Read it from top to bottom: who talks to Pipe
   <a href="/images/system-architecture/architecture-diagram.svg" target="_blank">
     <img
       src="/images/system-architecture/architecture-diagram.svg"
-      alt="PipesHub architecture: presentation, application, and data tiers"
+      alt="Novaplan AI architecture: presentation, application, and data tiers"
       width="1200"
       height="980"
       className="w-full h-auto"
@@ -53,11 +53,13 @@ The diagram below shows that flow. Read it from top to bottom: who talks to Pipe
 
 The sections below follow the same order as the diagram.
 
-## Who talks to PipesHub
+<div id="who-talks-to-pipeshub" />
+
+## Who talks to Novaplan AI
 
 ### Web app
 
-People use PipesHub in the browser. The interface is a [Next.js](https://nextjs.org/) application for search, chat, and administration.
+People use Novaplan AI in the browser. The interface is a [Next.js](https://nextjs.org/) application for search, chat, and administration.
 
 ### REST and SDK clients
 
@@ -135,7 +137,7 @@ Each box along the bottom of the diagram holds a different kind of state. The ta
 
 ## Models you bring
 
-You point PipesHub at models you already use.
+You point Novaplan AI at models you already use.
 
 - An **embedding model** turns parsed text into vectors for Qdrant. The local embedding server is the default for this.
 - A **language model (LLM)** writes the cited answer. You can use any provider, or a local model through Ollama.
@@ -144,4 +146,4 @@ The AI models box on the left of the diagram is those two models.
 
 ## Identity and other company systems
 
-The right side of the diagram shows identity providers such as Azure AD and Okta, an SMTP server for email, and the 50+ apps that connectors sync. You register those connections in PipesHub. Auth uses the identity providers, Mail uses SMTP, and Connectors sync the company apps.
+The right side of the diagram shows identity providers such as Azure AD and Okta, an SMTP server for email, and the 50+ apps that connectors sync. You register those connections in Novaplan AI. Auth uses the identity providers, Mail uses SMTP, and Connectors sync the company apps.

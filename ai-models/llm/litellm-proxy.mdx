@@ -1,16 +1,16 @@
 ---
 title: LiteLLM Proxy
-description: "Configure PipesHub to reach any LLM through a self-hosted LiteLLM Proxy gateway"
+description: "Configure Novaplan AI to reach any LLM through a self-hosted LiteLLM Proxy gateway"
 ---
 
 # LiteLLM Proxy Configuration
 
-LiteLLM Proxy is a self-hosted gateway that speaks the OpenAI API and forwards requests to more than 100 upstream providers. You run it yourself, define your models in its configuration, and point PipesHub at it.
+LiteLLM Proxy is a self-hosted gateway that speaks the OpenAI API and forwards requests to more than 100 upstream providers. You run it yourself, define your models in its configuration, and point Novaplan AI at it.
 
-Use LiteLLM Proxy when you want one place to manage keys, spending limits, and fallbacks for every model your organisation uses, instead of configuring each provider separately in PipesHub.
+Use LiteLLM Proxy when you want one place to manage keys, spending limits, and fallbacks for every model your organisation uses, instead of configuring each provider separately in Novaplan AI.
 
 <Info>
-LiteLLM Proxy is the only provider in PipesHub that supports all five model types: text generation, embeddings, image generation, text to speech, and speech to text. You configure each one separately, and they can point at the same proxy.
+LiteLLM Proxy is the only provider in Novaplan AI that supports all five model types: text generation, embeddings, image generation, text to speech, and speech to text. You configure each one separately, and they can point at the same proxy.
 </Info>
 
 ## Before you start
@@ -29,17 +29,17 @@ The address where your LiteLLM Proxy is reachable, including the scheme and port
 
 | Where LiteLLM Proxy runs | Endpoint URL to enter |
 |---|---|
-| On the same machine as PipesHub, in Docker | `http://host.docker.internal:4000` |
+| On the same machine as Novaplan AI, in Docker | `http://host.docker.internal:4000` |
 | On another server | `https://litellm.your-domain.com` |
-| In the same Docker network as PipesHub | `http://<container-name>:4000` |
+| In the same Docker network as Novaplan AI | `http://<container-name>:4000` |
 
-PipesHub runs inside a container, so `http://localhost:4000` refers to the PipesHub container itself and will not reach a proxy running on your host. Use `host.docker.internal` instead.
+Novaplan AI runs inside a container, so `http://localhost:4000` refers to the Novaplan AI container itself and will not reach a proxy running on your host. Use `host.docker.internal` instead.
 
 ### API Key *
 
 The master key or virtual key from your LiteLLM Proxy. This is the key you set as `master_key` in the proxy's configuration, or a virtual key you generated with it.
 
-This is not the upstream provider's key. Your OpenAI or Anthropic keys stay in the proxy's own configuration; PipesHub never sees them.
+This is not the upstream provider's key. Your OpenAI or Anthropic keys stay in the proxy's own configuration; Novaplan AI never sees them.
 
 ### Model Name *
 
@@ -66,11 +66,11 @@ curl http://localhost:4000/v1/models -H "Authorization: Bearer YOUR_MASTER_KEY"
 
 ### Model Friendly Name
 
-A label shown in the PipesHub interface so you can tell several configurations apart. If you leave it blank, the model name is used.
+A label shown in the Novaplan AI interface so you can tell several configurations apart. If you leave it blank, the model name is used.
 
 ### Context Length
 
-The size of the model's context window, in tokens. PipesHub uses this number to decide how much retrieved content it can safely include in a prompt. Set it to the value published for your model. If you leave it blank, PipesHub uses a conservative default.
+The size of the model's context window, in tokens. Novaplan AI uses this number to decide how much retrieved content it can safely include in a prompt. Set it to the value published for your model. If you leave it blank, Novaplan AI uses a conservative default.
 
 ### Is Multimodal
 
@@ -82,7 +82,7 @@ Turn this on if the model performs extended reasoning before answering. It is on
 
 ## Troubleshooting
 
-**"Connection refused" when saving.** PipesHub cannot reach the endpoint. Check that the proxy is running, and that you used `host.docker.internal` rather than `localhost` if the proxy runs on the Docker host.
+**"Connection refused" when saving.** Novaplan AI cannot reach the endpoint. Check that the proxy is running, and that you used `host.docker.internal` rather than `localhost` if the proxy runs on the Docker host.
 
 **"Model not found".** The model name does not match any `model_name` in the proxy configuration. List the available names with the `curl` command above.
 

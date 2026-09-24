@@ -1,9 +1,9 @@
 ---
 title: "AI Models Overview"
-description: "Connect PipesHub to LLM and embedding providers to power AI features across your workspace"
+description: "Connect Novaplan AI to LLM and embedding providers to power AI features across your workspace"
 ---
 
-The AI Models page is where workspace admins connect PipesHub to one or more AI providers. Once configured, these models power every AI feature in the platform — answering questions in chat, summarising documents, and running AI agents. You can connect as many providers as you need and switch between them at any time.
+The AI Models page is where workspace admins connect Novaplan AI to one or more AI providers. Once configured, these models power every AI feature in the platform — answering questions in chat, summarising documents, and running AI agents. You can connect as many providers as you need and switch between them at any time.
 
 You need at least one **LLMs** provider configured before any AI feature in your workspace will work. Embedding models are used for document search and are configured separately.
 
@@ -40,7 +40,7 @@ Only workspace **admins** and **owners** can access the AI Models settings page.
     - **Reasoning** toggle — enable for chain-of-thought / o-series style models. Off by default.
   </Step>
   <Step title="Save and validate">
-    Click **Add Model**. PipesHub runs a live health check to validate your credentials.
+    Click **Add Model**. Novaplan AI runs a live health check to validate your credentials.
   </Step>
   <Step title="First model becomes the default">
     If this is the first LLMs model you've added, it is automatically set as the default model used by all AI features.
@@ -75,9 +75,9 @@ The table below lists every supported LLMs provider, the fields you must fill in
 >
 > **OpenAI Compatible:** Use this for any provider that speaks the OpenAI API format (e.g. `https://api.together.xyz/v1/`).
 >
-> **Ollama:** No API key is required for a local Ollama instance. The endpoint defaults to `http://host.docker.internal:11434`. Ensure the Ollama server is reachable from the PipesHub Docker network.
+> **Ollama:** No API key is required for a local Ollama instance. The endpoint defaults to `http://host.docker.internal:11434`. Ensure the Ollama server is reachable from the Novaplan AI Docker network.
 >
-> **Amazon Bedrock:** If PipesHub is running on an EC2 instance with an appropriate IAM role attached, you can leave the AWS Access Key ID and Secret Access Key blank.
+> **Amazon Bedrock:** If Novaplan AI is running on an EC2 instance with an appropriate IAM role attached, you can leave the AWS Access Key ID and Secret Access Key blank.
 
 ## Managing configured models
 
@@ -99,9 +99,9 @@ If the health check fails when saving, double-check:
 
 ## Embedding models
 
-Embedding models convert documents and search queries into numerical vectors so PipesHub can find semantically similar content. They power document indexing, semantic search, and retrieval across your workspace. At least one embedding model must be configured before you can index documents or use search.
+Embedding models convert documents and search queries into numerical vectors so Novaplan AI can find semantically similar content. They power document indexing, semantic search, and retrieval across your workspace. At least one embedding model must be configured before you can index documents or use search.
 
-PipesHub ships with **BAAI/bge-large-en-v1.5** built-in as the system default — it works out of the box with no configuration required. Connect an external provider only if you need a different model.
+Novaplan AI ships with **BAAI/bge-large-en-v1.5** built-in as the system default — it works out of the box with no configuration required. Connect an external provider only if you need a different model.
 
 ### How to navigate to this page
 
@@ -135,7 +135,7 @@ Only workspace **admins** and **owners** can access the AI Models settings page.
     - **Multimodal** toggle — enable if this model can embed images as well as text (off by default).
   </Step>
   <Step title="Save and validate">
-    Click **Add Model**. PipesHub runs a live health check to validate your credentials.
+    Click **Add Model**. Novaplan AI runs a live health check to validate your credentials.
   </Step>
   <Step title="First model becomes the default">
     If this is the first embedding model you have added, it is automatically set as the default used for all document indexing and search.
@@ -170,9 +170,9 @@ Only workspace **admins** and **owners** can access the AI Models settings page.
 >
 > **Ollama:** No API key required for a local instance. Endpoint defaults to `http://host.docker.internal:11434`.
 >
-> **Sentence Transformers / HuggingFace:** Run locally inside PipesHub. No external API or API key needed.
+> **Sentence Transformers / HuggingFace:** Run locally inside Novaplan AI. No external API or API key needed.
 >
-> **Amazon Bedrock:** Leave AWS keys blank when running PipesHub on EC2 with an appropriate IAM role. Provider dropdown: Cohere, Amazon (Titan), Other.
+> **Amazon Bedrock:** Leave AWS keys blank when running Novaplan AI on EC2 with an appropriate IAM role. Provider dropdown: Cohere, Amazon (Titan), Other.
 
 ### Managing configured embedding models
 
@@ -199,12 +199,12 @@ If the health check fails when saving, double-check:
 </Note>
 
 <Warning>
-  Keep your API keys secure. PipesHub stores these credentials securely, but you should never share them publicly or commit them to version control.
+  Keep your API keys secure. Novaplan AI stores these credentials securely, but you should never share them publicly or commit them to version control.
 </Warning>
 
 ## Image Generation models
 
-Image generation models allow AI agents and workflows in PipesHub to generate images from text prompts. Once configured, these models are available to agents that support image creation tasks. At least one image generation model must be configured before image generation features are available in your workspace.
+Image generation models allow AI agents and workflows in Novaplan AI to generate images from text prompts. Once configured, these models are available to agents that support image creation tasks. At least one image generation model must be configured before image generation features are available in your workspace.
 
 Currently two providers are supported: **OpenAI** (DALL-E / GPT-Image models) and **Gemini** (Imagen / Gemini Image models).
 
@@ -235,7 +235,7 @@ Only workspace **admins** and **owners** can access the AI Models settings page.
     Optionally set a **Model Friendly Name** — a human-readable label displayed in the UI.
   </Step>
   <Step title="Save and validate">
-    Click **Add Model**. PipesHub runs a live health check to validate your credentials.
+    Click **Add Model**. Novaplan AI runs a live health check to validate your credentials.
   </Step>
   <Step title="First model becomes the default">
     If this is the first image generation model you have added, it is automatically set as the default used when image generation is triggered.
@@ -272,7 +272,7 @@ If the health check fails when saving, double-check:
 
 ## Text to Speech (TTS) models
 
-Text to Speech models convert AI text responses into spoken audio, enabling voice output in AI workflows and agents. Once configured, these models are available wherever PipesHub produces audio output. At least one TTS model must be configured before voice features are available in your workspace.
+Text to Speech models convert AI text responses into spoken audio, enabling voice output in AI workflows and agents. Once configured, these models are available wherever Novaplan AI produces audio output. At least one TTS model must be configured before voice features are available in your workspace.
 
 Currently two providers are supported: **OpenAI** (tts-1, tts-1-hd, gpt-4o-mini-tts) and **Gemini** (gemini-2.5-flash-preview-tts and related models).
 
@@ -305,7 +305,7 @@ Only workspace **admins** and **owners** can access the AI Models settings page.
     - **Model Friendly Name** — a custom display label for this configuration.
   </Step>
   <Step title="Save and validate">
-    Click **Add Model**. PipesHub validates your credentials with a live health check.
+    Click **Add Model**. Novaplan AI validates your credentials with a live health check.
   </Step>
   <Step title="First model becomes the default">
     If this is the first TTS model you have added, it is automatically set as the default used for all TTS output.
@@ -325,7 +325,7 @@ Only workspace **admins** and **owners** can access the AI Models settings page.
 >
 > **Gemini voices:** 30 prebuilt voices named after astronomical objects — Zephyr, Puck, Charon, Kore, Fenrir, Leda, Orus, Aoede, Callirrhoe, Autonoe, Enceladus, Iapetus, Umbriel, Algieba, Despina, Erinome, Algenib, Rasalgethi, Laomedeia, Achernar, Alnilam, Schedar, Gacrux, Pulcherrima, Achird, Zubenelgenubi, Vindemiatrix, Sadachbia, Sadaltager, Sulafat. Get your API key at [aistudio.google.com/app/apikey](https://aistudio.google.com/app/apikey).
 >
-> **Gemini audio formats:** WAV and PCM work without any extra dependencies. MP3, Opus, AAC, and FLAC require **ffmpeg** installed on the PipesHub backend host.
+> **Gemini audio formats:** WAV and PCM work without any extra dependencies. MP3, Opus, AAC, and FLAC require **ffmpeg** installed on the Novaplan AI backend host.
 
 ### Managing configured TTS models
 
@@ -341,12 +341,12 @@ After saving, your model appears under the **Configured** tab. Each row has the 
 If the health check fails when saving, double-check:
 - The API key is correct and has not expired.
 - The model name exactly matches what the provider API expects (e.g. `tts-1`, not `TTS-1`).
-- For Gemini compressed formats (MP3, Opus, AAC, FLAC), ensure ffmpeg is installed on the machine running the PipesHub backend. WAV and PCM work without any additional dependencies.
+- For Gemini compressed formats (MP3, Opus, AAC, FLAC), ensure ffmpeg is installed on the machine running the Novaplan AI backend. WAV and PCM work without any additional dependencies.
 </Note>
 
 ## Speech to Text (STT) models
 
-Speech to Text models transcribe spoken audio into text, enabling voice input in AI workflows and agents. Once configured, these models power voice-driven interactions across your PipesHub workspace.
+Speech to Text models transcribe spoken audio into text, enabling voice input in AI workflows and agents. Once configured, these models power voice-driven interactions across your Novaplan AI workspace.
 
 Four providers are supported: **OpenAI** and **Gemini** (cloud APIs), **Whisper** (self-hosted open-source via faster-whisper), and **Wispr Flow** (hosted specialist transcription service). At least one STT model must be configured before voice input features are available.
 
@@ -380,7 +380,7 @@ Only workspace **admins** and **owners** can access the AI Models settings page.
     Optionally set a **Model Friendly Name** — a custom label shown in the UI.
   </Step>
   <Step title="Save and validate">
-    Click **Add Model**. PipesHub validates your configuration with a live health check.
+    Click **Add Model**. Novaplan AI validates your configuration with a live health check.
   </Step>
   <Step title="First model becomes the default">
     If this is the first STT model you have added, it is automatically set as the default used for all speech transcription.

@@ -1,17 +1,17 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "PipesHub Workplace AI",
+  "name": "Novaplan AI",
   "colors": {
-    "primary": "#047857",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "primary": "#104068",
+    "light": "#CBDFF9",
+    "dark": "#104068"
   },
-  "favicon": "/favicon.svg",
+  "favicon": "/logo/novaplan-icon.png",
   "navigation": {
     "groups": [
       {
-        "group": "Welcome To PipesHub",
+        "group": "Welcome To Novaplan AI",
         "pages": [
           "introduction",
           "for-agents",
@@ -28,7 +28,7 @@
         "pages": [
           "system-overview",
           {
-            "group": "PipesHub Services",
+            "group": "Novaplan AI Services",
             "pages": [
               "system-overview/authentication",
               "system-overview/configuration-manager",
@@ -357,7 +357,7 @@
       "anchors": [
         {
           "anchor": "Documentation",
-          "href": "https://docs.pipeshub.com/introduction",
+          "href": "https://docs.novaplan.ai/introduction",
           "icon": "book"
         },
         {
@@ -366,9 +366,9 @@
           "icon": "discord"
         },
         {
-          "anchor": "PipesHub",
-          "href": "https://pipeshub.com",
-          "icon": "/logo/pipeshub-logo.svg"
+          "anchor": "Novaplan AI",
+          "href": "https://www.novaplan.ai",
+          "icon": "/logo/novaplan-icon.png"
         }
       ]
     }
@@ -461,8 +461,8 @@
     }
   ],
   "logo": {
-    "light": "/logo/pipeshub-logo.svg",
-    "dark": "/logo/pipeshub-logo.svg"
+    "light": "/logo/novaplan-icon.png",
+    "dark": "/logo/novaplan-icon.png"
   },
   "navbar": {
     "primary": {
@@ -473,8 +473,8 @@
   "footer": {
     "socials": {
       "x": "https://x.com/PipesHub",
-      "github": "https://github.com/pipeshub-ai",
-      "linkedin": "https://www.linkedin.com/company/pipeshub/",
+      "github": "https://github.com/Novaplan-AI",
+      "linkedin": "https://www.linkedin.com/company/novaplan-ai/",
       "youtube": "https://www.youtube.com/@PipesHub-GenAI",
       "discord": "https://discord.com/invite/K5RskzJBm2"
     }
@@ -487,5 +487,21 @@
       "Do not use OAuth client_credentials for user-facing agents (no user identity). Prefer a personal access token or an OAuth app with the user's login.",
       "Never print, log, or ask anyone to paste a PipesHub token."
     ]
+  },
+  "fonts": {
+    "heading": {
+      "family": "Poppins",
+      "weight": 400
+    },
+    "body": {
+      "family": "Poppins",
+      "weight": 300
+    }
+  },
+  "background": {
+    "color": {
+      "light": "#FFFFFF",
+      "dark": "#0B1014"
+    }
   }
 }

@@ -1,12 +1,14 @@
 ---
 title: "MCP Server Overview"
-description: "Connect MCP clients to the PipesHub MCP server using OAuth or a personal access token"
+description: "Connect MCP clients to the Novaplan AI MCP server using OAuth or a personal access token"
 icon: "/logo/mcp.svg"
 ---
 
-## What is the PipesHub MCP Server?
+<div id="what-is-the-pipeshub-mcp-server" />
 
-PipesHub exposes a **remote MCP endpoint** over **Streamable HTTP** at `/mcp`. MCP clients connect to this endpoint directly — no local npm packages or stdio processes needed.
+## What is the Novaplan AI MCP Server?
+
+Novaplan AI exposes a **remote MCP endpoint** over **Streamable HTTP** at `/mcp`. MCP clients connect to this endpoint directly — no local npm packages or stdio processes needed.
 
 <Tip>
   If you are a coding agent (or setting one up), start at [For coding agents](/for-agents).
@@ -24,7 +26,7 @@ This lets AI clients such as **Cursor**, **Claude Code**, **Gemini CLI**, **Clau
 
 ## Prerequisites
 
-- A running PipesHub instance (self-hosted or cloud). If they have none yet, follow [Local Docker demo](/for-agents-local-demo) instead of scaffolding LangChain.
+- A running Novaplan AI instance (self-hosted or cloud). If they have none yet, follow [Local Docker demo](/for-agents-local-demo) instead of scaffolding LangChain.
 - Either an OAuth app (see [Step 1](#step-1-create-an-oauth-app) below), **or** a [Personal Access Token](/developer/personal-access-tokens) — see the note below for which one to use
 
 <Note>
@@ -37,7 +39,7 @@ This lets AI clients such as **Cursor**, **Claude Code**, **Gemini CLI**, **Clau
 
 <Steps>
   <Step title="Open Developer Settings">
-    Log in to your PipesHub instance as an admin and navigate to **Settings > Developer Settings > OAuth Apps**.
+    Log in to your Novaplan AI instance as an admin and navigate to **Settings > Developer Settings > OAuth Apps**.
   </Step>
   <Step title="Create the app">
     Click **Create OAuth App** and fill in the app details:
@@ -68,7 +70,7 @@ Add all the redirect URIs for the clients you plan to use:
 
 ### Customizing Default Scopes
 
-By default, PipesHub exposes some default scopes in its `/.well-known/oauth-protected-resource/mcp` discovery endpoint. You can customize which scopes are exposed by setting the [`MCP_SCOPES`](https://github.com/pipeshub-ai/pipeshub-ai/blob/main/backend/env.template#L57) environment variable on your PipesHub instance. This is useful for clients like Claude Code that automatically request all exposed scopes.
+By default, Novaplan AI exposes some default scopes in its `/.well-known/oauth-protected-resource/mcp` discovery endpoint. You can customize which scopes are exposed by setting the [`MCP_SCOPES`](https://github.com/pipeshub-ai/pipeshub-ai/blob/main/backend/env.template#L57) environment variable on your Novaplan AI instance. This is useful for clients like Claude Code that automatically request all exposed scopes.
 
 The recommended `MCP_SCOPES` value covers the common chat, search, and directory workflows:
 
@@ -82,7 +84,7 @@ Replace these placeholders in all client configurations:
 
 | Placeholder | Description | Example |
 |---|---|---|
-| `PIPESHUB_INSTANCE_URL` | Your PipesHub instance URL | `https://app.pipeshub.com` |
+| `PIPESHUB_INSTANCE_URL` | Your Novaplan AI instance URL | `https://app.pipeshub.com` |
 | `YOUR_CLIENT_ID` | OAuth app client ID | `clid_abc123...` |
 | `YOUR_CLIENT_SECRET` | OAuth app client secret | `clsec_xyz789...` |
 | `YOUR_BEARER_TOKEN` | [Personal access token](/developer/personal-access-tokens) — used by the local stdio bridge and by [Omnigent](/mcp/omnigent) | `phpat_eyJhbGci...` |
@@ -91,7 +93,7 @@ The remote MCP endpoint URL is: `PIPESHUB_INSTANCE_URL/mcp`
 
 ## Client Setup Guides
 
-Pick your client to connect it to the PipesHub MCP server:
+Pick your client to connect it to the Novaplan AI MCP server:
 
 <CardGroup cols={2}>
   <Card title="Cursor" icon="/logo/cursor.svg" href="/mcp/cursor">
@@ -143,7 +145,7 @@ AI Client (Cursor / Claude Code / Gemini CLI / Claude.ai / LibreChat / Omnigent)
 
 ### OAuth Protected Resource Discovery
 
-PipesHub exposes OAuth protected resource discovery at:
+Novaplan AI exposes OAuth protected resource discovery at:
 
 ```
 PIPESHUB_INSTANCE_URL/.well-known/oauth-protected-resource/mcp
@@ -170,7 +172,7 @@ This returns all OAuth endpoints automatically:
     - **Gemini CLI**: `http://localhost:7777/oauth/callback`
     - **LibreChat**: `http://localhost:3080/api/mcp/<server-identifier>/oauth/callback`
 
-    Also make sure the OAuth app is **active** (not suspended) in PipesHub.
+    Also make sure the OAuth app is **active** (not suspended) in Novaplan AI.
   </Accordion>
   <Accordion title="Cannot reach MCP endpoint">
     - Verify the endpoint is accessible: `curl -X POST PIPESHUB_INSTANCE_URL/mcp` (should return 401, not a connection error).
@@ -187,8 +189,8 @@ This returns all OAuth endpoints automatically:
 
 <AccordionGroup>
   <Accordion title="How do I update the scopes for my MCP integration?">
-    1. **Update the [`MCP_SCOPES`](https://github.com/pipeshub-ai/pipeshub-ai/blob/main/backend/env.template#L57) environment variable** on your PipesHub instance to include the new scopes you want exposed via the discovery endpoint.
-    2. **Update the OAuth app scopes** in PipesHub: go to **Settings > Developer Settings > OAuth Apps**, select your OAuth app, and add or remove scopes as needed.
+    1. **Update the [`MCP_SCOPES`](https://github.com/pipeshub-ai/pipeshub-ai/blob/main/backend/env.template#L57) environment variable** on your Novaplan AI instance to include the new scopes you want exposed via the discovery endpoint.
+    2. **Update the OAuth app scopes** in Novaplan AI: go to **Settings > Developer Settings > OAuth Apps**, select your OAuth app, and add or remove scopes as needed.
     3. **Re-authenticate the client** — existing tokens carry the old scopes, so you need to re-authenticate to get a new token with the updated scopes:
        - **Cursor**: Remove and re-add the MCP server, or clear the cached OAuth token and reconnect.
        - **Claude Code**: Run `/mcp` and complete the browser login flow again.

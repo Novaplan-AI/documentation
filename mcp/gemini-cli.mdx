@@ -1,17 +1,17 @@
 ---
 title: "Gemini CLI"
-description: "Connect Gemini CLI to the PipesHub MCP server"
+description: "Connect Gemini CLI to the Novaplan AI MCP server"
 icon: "/logo/gemini.svg"
 ---
 
-Gemini CLI supports remote MCP servers with OAuth via `dynamic_discovery` (the default), which auto-discovers authorization and token endpoints from PipesHub's `/.well-known/oauth-protected-resource/mcp`.
+Gemini CLI supports remote MCP servers with OAuth via `dynamic_discovery` (the default), which auto-discovers authorization and token endpoints from Novaplan AI's `/.well-known/oauth-protected-resource/mcp`.
 
 <Note>
-  Before you start, create an OAuth app in PipesHub and note your **Client ID** and **Client Secret**. See [MCP Server Overview](/mcp/overview#step-1-create-an-oauth-app).
+  Before you start, create an OAuth app in Novaplan AI and note your **Client ID** and **Client Secret**. See [MCP Server Overview](/mcp/overview#step-1-create-an-oauth-app).
 </Note>
 
 <Tip>
-  Coding agents: read [For coding agents](/for-agents) first. If they have no PipesHub yet, follow [Local Docker demo](/for-agents-local-demo) (do not scaffold LangChain). MCP config is not enough — also install the skill into **this** repo (`npx skills add pipeshub-ai/mcp-server`) and append the `AGENTS.md` snippet on that page.
+  Coding agents: read [For coding agents](/for-agents) first. If they have no Novaplan AI yet, follow [Local Docker demo](/for-agents-local-demo) (do not scaffold LangChain). MCP config is not enough — also install the skill into **this** repo (`npx skills add pipeshub-ai/mcp-server`) and append the `AGENTS.md` snippet on that page.
 </Tip>
 
 ## Option A: Settings File
@@ -85,7 +85,7 @@ gemini mcp enable pipeshub
 
 | Property | Required | Description |
 |---|---|---|
-| `clientId` | Yes | OAuth 2.0 Client ID from PipesHub |
+| `clientId` | Yes | OAuth 2.0 Client ID from Novaplan AI |
 | `clientSecret` | No | OAuth 2.0 Client Secret (for confidential clients) |
 | `scopes` | No | OAuth scopes to request |
 | `authorizationUrl` | No | Override authorization endpoint (auto-discovered by default) |

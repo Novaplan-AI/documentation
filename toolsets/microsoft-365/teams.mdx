@@ -97,7 +97,7 @@ These are the Graph-backed **tools** your agents can call once the Microsoft Tea
 1. Sign in to the [Azure portal](https://portal.azure.com) as an administrator (or a user who can register apps).
 2. Open **Microsoft Entra ID** (Azure Active Directory).
 3. Under **Manage**, select **App registrations** → **New registration**.
-4. Enter a name (for example, “PipesHub Teams actions”), choose **Accounts in any organizational directory and personal Microsoft accounts** if you need the broadest sign-in audience (or a stricter option for your tenant), then register.
+4. Enter a name (for example, “Novaplan AI Teams actions”), choose **Accounts in any organizational directory and personal Microsoft accounts** if you need the broadest sign-in audience (or a stricter option for your tenant), then register.
 5. Copy the **Application (client) ID** for later.
 
 {/* Screenshot: Entra app registration overview (application name and client ID) */}
@@ -186,7 +186,9 @@ These align with the agent OAuth scope configuration for the Microsoft Teams act
   />
 </div>
 
-### Step 5: Create the Microsoft Teams action in PipesHub
+<div id="step-5-create-the-microsoft-teams-action-in-pipeshub" />
+
+### Step 5: Create the Microsoft Teams action in Novaplan AI
 
 These steps require a **workspace administrator**. Open **Workspace → Actions** (or `/workspace/actions/team`). Use the path that matches whether your organization already has a Microsoft Teams **org instance**.
 
@@ -246,12 +248,12 @@ The **Action configuration** drawer does not show the redirect URL; you copy it 
 
 4. In the Entra app registration, open **Authentication**.
 5. Under **Platform configurations**, add a **Web** platform if needed.
-6. Under **Redirect URIs**, paste the **exact** Redirect URI from PipesHub.
+6. Under **Redirect URIs**, paste the **exact** Redirect URI from Novaplan AI.
 7. For a web-based OAuth callback, you can enable **Access tokens** and **ID tokens** under **Implicit grant and hybrid flows** only if your organization’s security policy requires it; many confidential-client flows use the authorization code flow only.
 8. Save the **Authentication** blade.
 
 <Warning>
-  The Redirect URI in Azure must match the value from PipesHub **exactly** (including scheme, host, path, and trailing slashes).
+  The Redirect URI in Azure must match the value from Novaplan AI **exactly** (including scheme, host, path, and trailing slashes).
 </Warning>
 
 {/* Screenshot: Azure Authentication blade with redirect URI */}
@@ -267,7 +269,7 @@ The **Action configuration** drawer does not show the redirect URL; you copy it 
 ### Step 7: Sign in and authorize
 
 **Administrators (org instance)**  
-On **Workspace → Actions**, open Microsoft Teams, select your instance, and use **Authenticate** to complete the Microsoft sign-in and consent flow. After redirect back to PipesHub, the instance should show as authenticated.
+On **Workspace → Actions**, open Microsoft Teams, select your instance, and use **Authenticate** to complete the Microsoft sign-in and consent flow. After redirect back to Novaplan AI, the instance should show as authenticated.
 
 **End users**  
 Each person who should use Microsoft Teams in agents opens **Your actions** in the workspace sidebar (`/workspace/actions/personal`), finds Microsoft Teams, and completes **Authenticate** for the organization instance they need.
@@ -296,8 +298,8 @@ Each person who should use Microsoft Teams in agents opens **Your actions** in t
 
 | Aspect | Teams Connector | Microsoft Teams action |
 |--------|-----------------|-------------------------|
-| **Purpose** | Sync and index Teams-related content for search in PipesHub | Let agents call Microsoft Graph in real time (messages, meetings, membership, and more) |
-| **Data flow** | Primarily one-way import into PipesHub | Two-way: read and write through APIs |
+| **Purpose** | Sync and index Teams-related content for search in Novaplan AI | Let agents call Microsoft Graph in real time (messages, meetings, membership, and more) |
+| **Data flow** | Primarily one-way import into Novaplan AI | Two-way: read and write through APIs |
 | **When to use** | Search historical Teams or Microsoft 365 content already indexed | Create events, post messages, add members, fetch live meeting transcripts, and similar operations |
 
 Use a **connector** when you need retrieval over indexed data; use the **Microsoft Teams action** when the agent should **act** in Teams or Graph on behalf of the signed-in user (within granted permissions).

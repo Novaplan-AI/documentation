@@ -1,15 +1,15 @@
 ---
 title: Amazon Bedrock
-description: "Configure PipesHub to use Amazon Bedrock embedding models"
+description: "Configure Novaplan AI to use Amazon Bedrock embedding models"
 ---
 
 # Amazon Bedrock Embeddings Configuration
 
 ![Amazon Bedrock Embeddings Configuration Interface](/images/ai-models/embedding/Bedrock_EmbeddingConfig.png)
 
-*The Amazon Bedrock embeddings configuration screen in PipesHub where you'll enter your AWS Region, Model Name, and Provider*
+*The Amazon Bedrock embeddings configuration screen in Novaplan AI where you'll enter your AWS Region, Model Name, and Provider*
 
-PipesHub allows you to integrate with Amazon Bedrock's foundation embedding models to enable vector search, semantic similarity, and document retrieval in your workspace. AWS Bedrock provides access to embedding models from leading AI providers including Cohere and Amazon.
+Novaplan AI allows you to integrate with Amazon Bedrock's foundation embedding models to enable vector search, semantic similarity, and document retrieval in your workspace. AWS Bedrock provides access to embedding models from leading AI providers including Cohere and Amazon.
 
 ## Required Fields
 
@@ -32,7 +32,7 @@ The AWS Region where your Bedrock service is deployed.
 
 ### Model Name *
 
-The Model Name field specifies the model ID you want to use with PipesHub.
+The Model Name field specifies the model ID you want to use with Novaplan AI.
 
 **Available Amazon Bedrock embedding models:**
 - `cohere2.embed-multilingual-v3` - Cohere's multilingual embedding model, supports 100+ languages
@@ -45,7 +45,7 @@ The Model Name field specifies the model ID you want to use with PipesHub.
 
 ### Provider *
 
-Select the provider of the embedding model you are using. This helps PipesHub properly format requests for the specific model.
+Select the provider of the embedding model you are using. This helps Novaplan AI properly format requests for the specific model.
 
 **Available providers:**
 - **Cohere** - Cohere embedding models
@@ -60,7 +60,7 @@ The AWS Access Key ID for authenticating requests to AWS Bedrock.
 
 **Example format:** `AKIAIOSFODNN7EXAMPLE`
 
-**Note:** If PipesHub is running on an EC2 instance with an appropriate IAM role attached, you can leave this field blank.
+**Note:** If Novaplan AI is running on an EC2 instance with an appropriate IAM role attached, you can leave this field blank.
 
 ### AWS Secret Access Key
 
@@ -68,7 +68,7 @@ The secret portion of your AWS credentials.
 
 **Note:** Leave blank if using EC2 IAM role authentication.
 
-**Security Note:** Your secret key should be kept secure and never shared publicly. PipesHub securely stores your credentials.
+**Security Note:** Your secret key should be kept secure and never shared publicly. Novaplan AI securely stores your credentials.
 
 ## Configuration Steps
 
@@ -82,7 +82,7 @@ As shown in the image above:
 6. (Optional) Enter your AWS Secret Access Key — leave blank if using an EC2 IAM role
 7. Click **Add Model** to save and validate your credentials
 
-> Region, Model Name, and Provider are required fields. AWS Access Key ID and Secret Key are optional when running PipesHub on EC2 with an appropriate IAM role.
+> Region, Model Name, and Provider are required fields. AWS Access Key ID and Secret Key are optional when running Novaplan AI on EC2 with an appropriate IAM role.
 
 ## IAM Permissions
 
@@ -118,4 +118,4 @@ Ensure your IAM user or role has the following permissions to use AWS Bedrock em
 - Check that you have model access enabled for the specific model in the AWS Bedrock console
 - Ensure the model ID is correctly formatted as shown in the Bedrock console
 
-For additional support, refer to the [AWS Bedrock documentation](https://docs.aws.amazon.com/bedrock/) or contact PipesHub support.
+For additional support, refer to the [AWS Bedrock documentation](https://docs.aws.amazon.com/bedrock/) or contact Novaplan AI support.

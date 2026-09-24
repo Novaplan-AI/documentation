@@ -58,7 +58,7 @@ This makes syncing highly efficient as you only process the differences.
 
 <Accordion title="Generate App Password" icon="key">
 
-This guide will walk you through generating an App Password to connect your Nextcloud account to PipesHub.
+This guide will walk you through generating an App Password to connect your Nextcloud account to Novaplan AI.
 
 ### Step 1: Access Your Nextcloud Account
 
@@ -76,7 +76,7 @@ This guide will walk you through generating an App Password to connect your Next
 ### Step 3: Create App Password
 
 1. Scroll down to the **Devices & sessions** section.
-2. In the **App name** field, enter a descriptive name for this connection (e.g., "PipesHub Connector").
+2. In the **App name** field, enter a descriptive name for this connection (e.g., "Novaplan AI Connector").
 3. Click the **Create new app password** button.
 
 <img src="/images/connectors/nextcloud/n2.png" alt="Personal Settings" style={{ display: 'block', margin: '0 auto' }} width="90%" />
@@ -100,13 +100,13 @@ Keep the following information ready for the next step:
 
 </Accordion>
 
-<Accordion title="Connect Nextcloud to PipesHub" icon="plug">
+<Accordion title="Connect Nextcloud to Novaplan AI" icon="plug">
 
 Nextcloud is a **personal** connector — each user connects their own Nextcloud account.
 
 ### Step 1: Open the Connector Catalog
 
-1. In PipesHub, navigate to **Workspace Settings** > **Connectors** > **Personal**.
+1. In Novaplan AI, navigate to **Workspace Settings** > **Connectors** > **Personal**.
 2. Find the **Nextcloud** card and click **Setup**.
 
 ### Step 2: Authenticate
@@ -126,10 +126,10 @@ On the **Authenticate** tab, enter:
 />
 
 <Warning>
-  **Email must match.** Use a Nextcloud account whose email matches the email on your PipesHub account. A mismatch breaks permission resolution and you will not see your synced records in search.
+  **Email must match.** Use a Nextcloud account whose email matches the email on your Novaplan AI account. A mismatch breaks permission resolution and you will not see your synced records in search.
 </Warning>
 
-Click **Save** to store the credentials. PipesHub validates the connection against Nextcloud before persisting.
+Click **Save** to store the credentials. Novaplan AI validates the connection against Nextcloud before persisting.
 
 </Accordion>
 
@@ -147,7 +147,7 @@ Sync settings control how the connector pulls data from Nextcloud.
 
 **Sync Interval:** For scheduled syncs, the cadence in minutes (default: 60).
 
-**Batch Size:** Number of items processed per batch when committing to PipesHub (default: 100). Lower this if you hit memory pressure on very large libraries.
+**Batch Size:** Number of items processed per batch when committing to Novaplan AI (default: 100). Lower this if you hit memory pressure on very large libraries.
 
 <img
   src="/images/connectors/nextcloud/nc3.png"
@@ -178,7 +178,7 @@ Filters split into two categories:
   width="90%"
 />
 
-Once your settings are configured, click **Save Configuration**. PipesHub confirms the instance is ready with a final dialog — *"Instance is configured and ready to sync"* — offering two choices: **I'll do it later** or **Start syncing now**.
+Once your settings are configured, click **Save Configuration**. Novaplan AI confirms the instance is ready with a final dialog — *"Instance is configured and ready to sync"* — offering two choices: **I'll do it later** or **Start syncing now**.
 
 </Accordion>
 
@@ -317,7 +317,7 @@ Since this is a personal connector:
 
 1. **Default Ownership:** The authenticated user is assigned **OWNER** permissions for all files and folders
 2. **Share Information:** The connector can detect shares via Nextcloud's OCS Share API
-3. **Permission Types:** Maps Nextcloud permissions (READ, UPDATE, DELETE, SHARE) to PipesHub permission types
+3. **Permission Types:** Maps Nextcloud permissions (READ, UPDATE, DELETE, SHARE) to Novaplan AI permission types
 
 ### Nextcloud Permission Mapping
 
@@ -473,8 +473,8 @@ The connector provides authenticated file downloads:
 
 There are three common causes:
 
-1. **Email mismatch** - The email used during connector authentication doesn't match your PipesHub account email. This causes permission issues preventing you from accessing synced data.
-   - **Fix:** Reconfigure the connector and authenticate using the same email as your PipesHub account.
+1. **Email mismatch** - The email used during connector authentication doesn't match your Novaplan AI account email. This causes permission issues preventing you from accessing synced data.
+   - **Fix:** Reconfigure the connector and authenticate using the same email as your Novaplan AI account.
 
 2. **Records show in "All Records" but not in search** - Documents display in the All Records section but don't appear in search query results.
    - **Fix:** Verify sync filters in the connector settings and ensure indexing has completed. Check that the data matches your search query criteria.

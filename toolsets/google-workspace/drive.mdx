@@ -86,16 +86,18 @@ The Google Drive toolset enables AI agents to manage files and folders in Google
 2. Configure the OAuth consent screen with your app information
 3. Add the required scopes (see Step 6)
 
-### Step 4: Get Redirect URI from PipesHub
+<div id="step-4-get-redirect-uri-from-pipeshub" />
 
-1. In PipesHub, go to **Settings > Toolsets**
+### Step 4: Get Redirect URI from Novaplan AI
+
+1. In Novaplan AI, go to **Settings > Toolsets**
 2. Find **Drive** and click **"Configure"**
 3. Copy the **Redirect URI** shown in the dialog
 
 <div className="text-center">
   <img
     src="/images/toolsets/drive/pipeshub-config.png"
-    alt="Copy Redirect URI from PipesHub"
+    alt="Copy Redirect URI from Novaplan AI"
     className="block mx-auto w-11/12"
   />
 </div>
@@ -105,12 +107,12 @@ The Google Drive toolset enables AI agents to manage files and folders in Google
 1. Navigate to **APIs & Services > Credentials**
 2. Click **"Create Credentials"** > **"OAuth client ID"**
 3. Select **"Web application"**
-4. Set the **Authorized redirect URI** to the URI from PipesHub
+4. Set the **Authorized redirect URI** to the URI from Novaplan AI
 5. Click **"Create"**
 6. Copy your **Client ID** and **Client Secret**
 
 <Info>
-  The redirect URI must match exactly your PipesHub URL.
+  The redirect URI must match exactly your Novaplan AI URL.
 </Info>
 
 ### Step 6: Add Required Scopes
@@ -122,16 +124,18 @@ Add these OAuth scopes in the **OAuth consent screen > Scopes** section:
 - `https://www.googleapis.com/auth/drive.file` - Access files created by the app
 - `https://www.googleapis.com/auth/drive.metadata.readonly` - Read file metadata
 
-### Step 7: Configure in PipesHub
+<div id="step-7-configure-in-pipeshub" />
 
-1. Return to the PipesHub Drive configuration dialog
+### Step 7: Configure in Novaplan AI
+
+1. Return to the Novaplan AI Drive configuration dialog
 2. Enter your **Client ID** and **Client Secret**
 3. Click **"Authenticate"**
 
 <div className="text-center">
   <img
     src="/images/toolsets/drive/enter-credentials.png"
-    alt="Enter Credentials in PipesHub"
+    alt="Enter Credentials in Novaplan AI"
     className="block mx-auto w-11/12"
   />
 </div>
@@ -150,7 +154,7 @@ Add these OAuth scopes in the **OAuth consent screen > Scopes** section:
   />
 </div>
 
-4. You'll be redirected back to PipesHub
+4. You'll be redirected back to Novaplan AI
 5. The toolset will show **"Authenticated"** status
 
 </Accordion>
@@ -168,7 +172,7 @@ Add these OAuth scopes in the **OAuth consent screen > Scopes** section:
 | Aspect | Drive Connector | Drive Toolset |
 |--------|----------------|---------------|
 | **Purpose** | Sync and index files for search | Enable agents to perform file actions |
-| **Data Flow** | One-way (import data into PipesHub) | Two-way (read and write via API) |
+| **Data Flow** | One-way (import data into Novaplan AI) | Two-way (read and write via API) |
 | **When to Use** | Query/search files and folders | Create files, manage folders |
 
 **Example:** Use **Drive Connector** to search and retrieve document content. Use **Drive Toolset** to let agents create new documents or manage folders.

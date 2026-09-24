@@ -8,7 +8,7 @@ icon: "tools"
   <div className="p-6 border border-gray-200 dark:border-gray-700 rounded-xl bg-blue-50 dark:bg-gray-800">
     <div className="flex items-center gap-3 mb-4">
       <span className="text-4xl">🔧</span>
-      <div className="text-xl font-semibold text-gray-900 dark:text-white">PipesHub Toolsets</div>
+      <div className="text-xl font-semibold text-gray-900 dark:text-white">Novaplan AI Toolsets</div>
     </div>
     <p className="text-base text-gray-700 dark:text-gray-300 my-0">Give your AI agents the ability to interact with external applications</p>
   </div>
@@ -195,7 +195,7 @@ Follow the authentication flow for the toolset:
 2. Click **"Authenticate"**
 3. For OAuth toolsets, a popup window opens for authorization
 4. Grant the requested permissions (OAuth flow)
-5. You'll be redirected back to PipesHub with authentication confirmed
+5. You'll be redirected back to Novaplan AI with authentication confirmed
 
 <Info>
   Each toolset may have different authentication requirements. See individual toolset documentation for specific setup steps and credentials needed.
@@ -267,7 +267,7 @@ OAuth 2.0 is the recommended authentication method for most toolsets. It provide
 
 **Requirements:**
 - Create an OAuth application in the service's developer console
-- Configure redirect URI (provided by PipesHub)
+- Configure redirect URI (provided by Novaplan AI)
 - Obtain Client ID and Client Secret
 
 ### Basic Auth
@@ -293,7 +293,7 @@ Basic Auth is used by toolsets like MariaDB. It works as follows:
 | Aspect | Connectors | Toolsets |
 |--------|-----------|----------|
 | **Purpose** | Sync and index data for search | Enable agents to perform actions |
-| **Data Flow** | One-way (import data into PipesHub) | Two-way (read and write via API) |
+| **Data Flow** | One-way (import data into Novaplan AI) | Two-way (read and write via API) |
 | **When to Use** | Query/search data | Perform actions on data |
 
 **Example:** Use a **Gmail Connector** to index and search your email history. Use a **Gmail Toolset** to send new emails through an agent.
@@ -312,14 +312,14 @@ Basic Auth is used by toolsets like MariaDB. It works as follows:
 
 <Accordion title="Where do I find the callback URL to add in the OAuth app?">
 
-The callback URL is displayed in PipesHub when configuring a toolset:
+The callback URL is displayed in Novaplan AI when configuring a toolset:
 
 1. Go to **Settings > Toolsets**
 2. Click **"Configure"** on the toolset you want to set up
 3. Copy the **Redirect URI** shown in the dialog
 4. Add it to your OAuth app's allowed redirect URIs in the service's developer console
 
-The callback URL must match exactly between PipesHub and the OAuth app for authentication to succeed.
+The callback URL must match exactly between Novaplan AI and the OAuth app for authentication to succeed.
 
 </Accordion>
 

@@ -28,7 +28,7 @@ icon: "/logo/notion.png"
 
 ## Overview
 
-The Notion connector syncs **pages**, **databases**, and **users** from your Notion workspace into PipesHub using **OAuth 2.0** and a **public connection** you register in Notion’s developer experience.
+The Notion connector syncs **pages**, **databases**, and **users** from your Notion workspace into Novaplan AI using **OAuth 2.0** and a **public connection** you register in Notion’s developer experience.
 
 ### What gets synced
 
@@ -41,21 +41,23 @@ The Notion connector syncs **pages**, **databases**, and **users** from your Not
 
 ### Authentication
 
-In PipesHub the flow has three tabs: **Authenticate Instance** (Redirect URL + OAuth client credentials), **Authorize** (sign in to Notion and pick what to share), then **Configure Records** (sync strategy and indexing).
+In Novaplan AI the flow has three tabs: **Authenticate Instance** (Redirect URL + OAuth client credentials), **Authorize** (sign in to Notion and pick what to share), then **Configure Records** (sync strategy and indexing).
 
 <Note>
-  This connector matches people by **email**. Use the **same email** in PipesHub as in Notion so permissions and visible records line up.
+  This connector matches people by **email**. Use the **same email** in Novaplan AI as in Notion so permissions and visible records line up.
 </Note>
 
 ---
 
 ## Configuration Guide
 
-You will create a **public connection** in Notion, copy the **Redirect URL** from PipesHub into that connection, then finish setup in PipesHub and run **Authorize**.
+You will create a **public connection** in Notion, copy the **Redirect URL** from Novaplan AI into that connection, then finish setup in Novaplan AI and run **Authorize**.
 
 ### How to configure and enable the Notion connector
 
-#### Step 1: Open Connectors in PipesHub
+<div id="step-1-open-connectors-in-pipeshub" />
+
+#### Step 1: Open Connectors in Novaplan AI
 
 1. Open your **user profile** menu (bottom of the left sidebar) → **Workspace Settings**.
 2. Under **Workspace**, select **Connectors**.
@@ -134,8 +136,8 @@ In Notion: **Settings & members** → **Features** → **Connections** → **Dev
 
 #### Step 5: Capabilities and OAuth secrets
 
-1. Under **Capabilities**, enable at least **Read content** and **Read comments**, and choose **Read user information including email addresses** so PipesHub can map users.
-2. Open the **Authorization (OAuth)** section. Copy **OAuth Client ID** and **OAuth Client Secret** and confirm **Redirect URIs** still match PipesHub.
+1. Under **Capabilities**, enable at least **Read content** and **Read comments**, and choose **Read user information including email addresses** so Novaplan AI can map users.
+2. Open the **Authorization (OAuth)** section. Copy **OAuth Client ID** and **OAuth Client Secret** and confirm **Redirect URIs** still match Novaplan AI.
 
 <div className="text-center">
   <img
@@ -153,14 +155,16 @@ In Notion: **Settings & members** → **Features** → **Connections** → **Dev
   />
 </div>
 
-#### Step 6: Finish Authenticate Instance in PipesHub
+<div id="step-6-finish-authenticate-instance-in-pipeshub" />
+
+#### Step 6: Finish Authenticate Instance in Novaplan AI
 
 Return to **Notion Configuration** → **Authenticate Instance** if you navigated away. Paste **Client ID** and **Client Secret** from Step 5, confirm the Redirect URL, then click **Next →**.
 
 <div className="text-center">
   <img
     src="/images/connectors/notion/notion-connector-new.png"
-    alt="PipesHub Notion Configuration — OAuth credentials on Authenticate Instance"
+    alt="Novaplan AI Notion Configuration — OAuth credentials on Authenticate Instance"
     className="block mx-auto w-11/12"
   />
 </div>
@@ -173,7 +177,7 @@ Return to **Notion Configuration** → **Authenticate Instance** if you navigate
 <div className="text-center">
   <img
     src="/images/connectors/notion/notion-connector-authenticate.png"
-    alt="PipesHub Notion Configuration — Authorize tab before signing in"
+    alt="Novaplan AI Notion Configuration — Authorize tab before signing in"
     className="block mx-auto w-11/12"
   />
 </div>
@@ -194,20 +198,20 @@ Return to **Notion Configuration** → **Authenticate Instance** if you navigate
   />
 </div>
 
-On this Notion screen you **choose exactly which content the connector may access**: use **Search pages**, expand **Teamspaces** or **Private**, check only the pages and databases you want synced, or use **Deselect all** and select a smaller set. Whatever you include here is the scope Notion grants the integration **Configure Records** in PipesHub refines sync and indexing further, but it cannot access pages you never selected. When you are done, click **Allow access**.
+On this Notion screen you **choose exactly which content the connector may access**: use **Search pages**, expand **Teamspaces** or **Private**, check only the pages and databases you want synced, or use **Deselect all** and select a smaller set. Whatever you include here is the scope Notion grants the integration **Configure Records** in Novaplan AI refines sync and indexing further, but it cannot access pages you never selected. When you are done, click **Allow access**.
 
 When you see **Connected – you can continue to Configure records**, click **Continue to configuration →**.
 
 <div className="text-center">
   <img
     src="/images/connectors/notion/notion-connector-auth-done.png"
-    alt="PipesHub Notion Configuration — Authorization success"
+    alt="Novaplan AI Notion Configuration — Authorization success"
     className="block mx-auto w-11/12"
   />
 </div>
 
 <Warning>
-  **Authorize with the same email you use in PipesHub.** A different account can cause missing pages or permission issues.
+  **Authorize with the same email you use in Novaplan AI.** A different account can cause missing pages or permission issues.
 </Warning>
 
 #### Step 8: Configure Records and save
@@ -217,7 +221,7 @@ Set **Sync strategy** and **Sync interval**, optional **Manual indexing**, and i
 <div className="text-center">
   <img
     src="/images/connectors/notion/notion-connector-filters.png"
-    alt="PipesHub Notion Configuration — Configure Records"
+    alt="Novaplan AI Notion Configuration — Configure Records"
     className="block mx-auto w-11/12"
   />
 </div>
@@ -250,7 +254,7 @@ Use **Re-authenticate with provider** on **Authorize** if tokens are rotated or 
 
 - **Notion for developers:** [https://developers.notion.com/](https://developers.notion.com/)  
 - **Public OAuth connections:** see Notion docs for **connections** and **OAuth** under your product version  
-- **PipesHub:** **Workspace Settings** → **Connectors** → **Notion** for the live Redirect URL  
+- **Novaplan AI:** **Workspace Settings** → **Connectors** → **Notion** for the live Redirect URL<br />
 
 ---
 
@@ -264,7 +268,7 @@ Use **Re-authenticate with provider** on **Authorize** if tokens are rotated or 
 
 **Redirect URI mismatch**
 
-- The value in Notion must **exactly** match the Redirect URL shown in PipesHub (scheme, host, path, no stray spaces).
+- The value in Notion must **exactly** match the Redirect URL shown in Novaplan AI (scheme, host, path, no stray spaces).
 
 **Invalid client / secret**
 
@@ -276,7 +280,7 @@ Use **Re-authenticate with provider** on **Authorize** if tokens are rotated or 
 
 **Email / visibility**
 
-- Confirm the **Capabilities** user scope includes **email** and that users sign in to PipesHub with the same address as in Notion.
+- Confirm the **Capabilities** user scope includes **email** and that users sign in to Novaplan AI with the same address as in Notion.
 
 </Accordion>
 
@@ -308,7 +312,7 @@ Use **Re-authenticate with provider** on **Authorize** if tokens are rotated or 
 
 <Accordion title="Queries not returning results. What could be wrong?">
 
-1. **Email mismatch** — Use the same email in PipesHub as in Notion.  
+1. **Email mismatch** — Use the same email in Novaplan AI as in Notion.<br />
 2. **Scope** — Confirm the right pages were selected during **Authorize** and that indexing toggles match what you expect.  
 3. **Still indexing** — Open **Workspace Settings** → **Connectors** → **Notion** and check **Overview** until queues complete.
 
@@ -321,6 +325,6 @@ Use **Re-authenticate with provider** on **Authorize** if tokens are rotated or 
 <div className="text-center mt-12 p-6 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl">
   <h3 className="text-lg font-semibold mb-2">Ready to get started?</h3>
   <p className="text-gray-600 dark:text-gray-400">
-    Connect Notion to PipesHub for unified search. Follow the steps above, or contact support if you need help.
+    Connect Notion to Novaplan AI for unified search. Follow the steps above, or contact support if you need help.
   </p>
 </div>

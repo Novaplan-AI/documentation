@@ -107,12 +107,12 @@ On the **App registrations** page, click **+ New registration**.
 
 1. **Name**: Enter a display name (for example, `PipesHub Outlook Toolset`).
 2. **Supported account types**: Choose who can sign in—for example **Accounts in any organizational directory and personal Microsoft accounts** for the broadest support, or a single-tenant option if you only use your organization.
-3. **Redirect URI**: Get the Redirect URI from the PipesHub **Configure Outlook** dialog in **connector settings** (where Outlook is set up—for example **Workspace → Actions** and Outlook **+ Setup** / **Configure**).
+3. **Redirect URI**: Get the Redirect URI from the Novaplan AI **Configure Outlook** dialog in **connector settings** (where Outlook is set up—for example **Workspace → Actions** and Outlook **+ Setup** / **Configure**).
 
 <div style={{ textAlign: "center" }}>
   <img
     src="/images/toolsets/outlook/outlook_toolset_page.png"
-    alt="PipesHub Configure Outlook dialog showing Redirect URI"
+    alt="Novaplan AI Configure Outlook dialog showing Redirect URI"
     style={{ display: 'block', margin: '0 auto' }}
     width="90%"
   />
@@ -133,8 +133,8 @@ On the **App registrations** page, click **+ New registration**.
 
 On the **Overview** page for your app, copy:
 
-- **Application (client) ID** — used as **Client ID** in PipesHub.
-- **Directory (tenant) ID** — used as **Tenant ID** in PipesHub (or use `common` / leave blank per the toolset dialog if you want both work/school and personal accounts).
+- **Application (client) ID** — used as **Client ID** in Novaplan AI.
+- **Directory (tenant) ID** — used as **Tenant ID** in Novaplan AI (or use `common` / leave blank per the toolset dialog if you want both work/school and personal accounts).
 
 <div style={{ textAlign: "center" }}>
   <img
@@ -211,9 +211,11 @@ Click **Grant admin consent for** your organization (the button includes your te
   />
 </div>
 
-### Step 8: Configure the Outlook toolset in PipesHub
+<div id="step-8-configure-the-outlook-toolset-in-pipeshub" />
 
-1. In PipesHub, go to **Workspace** → **Actions**.
+### Step 8: Configure the Outlook toolset in Novaplan AI
+
+1. In Novaplan AI, go to **Workspace** → **Actions**.
 2. Find **Outlook** and open setup / configuration (**+ Setup** or **Configure**).
 3. Confirm the **Redirect URI** in the dialog matches the **Web** redirect URI you registered in Azure **Step 3**.
 4. Enter **Client ID**, **Client Secret**, and optionally **Tenant ID** (`common` or your tenant/domain per the form), then create or save the instance.
@@ -271,7 +273,7 @@ Click **Grant admin consent for** your organization (the button includes your te
 | Aspect | Outlook Connector | Outlook Toolset |
 |--------|-------------------|-----------------|
 | **Purpose** | Sync and index emails for search | Enable agents to perform email and calendar actions |
-| **Data Flow** | One-way (import data into PipesHub) | Two-way (read and write via API) |
+| **Data Flow** | One-way (import data into Novaplan AI) | Two-way (read and write via API) |
 | **Auth Type** | Application permissions (admin-consent) | Delegated permissions (user-consent) |
 | **When to Use** | Query/search email history and conversations | Send emails, manage calendar, create meetings |
 

@@ -30,7 +30,7 @@ icon: "/logo/gcs.png"
 
 **Google Cloud Storage (GCS)** is where a lot of teams keep their files in the cloud — documents, images, backups, anything.
 
-This connector copies those files into PipesHub so you can **search them with AI**, just like any other file in your workspace.
+This connector copies those files into Novaplan AI so you can **search them with AI**, just like any other file in your workspace.
 
 ### What you'll need before you start
 
@@ -43,7 +43,7 @@ This connector copies those files into PipesHub so you can **search them with AI
 - **Files** of any type (PDFs, Word docs, images, videos, code, archives)
 - **Folders** (including the nested folder structure inside each bucket)
 - **Details** like file name, size, when it was last changed
-- **Who can see what** — PipesHub respects the permissions already set in Google Cloud
+- **Who can see what** — Novaplan AI respects the permissions already set in Google Cloud
 
 ---
 
@@ -59,7 +59,7 @@ This connector copies those files into PipesHub so you can **search them with AI
 
 Instead of logging in with a password, the connector uses a **service account** — a kind of robot user inside Google Cloud that has its own key file.
 
-You'll create this service account, download its key (a small `.json` file), and upload that file into PipesHub. That's it.
+You'll create this service account, download its key (a small `.json` file), and upload that file into Novaplan AI. That's it.
 
 <Info>
   Service accounts are the standard way to let one system talk to Google Cloud on your behalf. Keep the key file safe — anyone who has it can read the buckets you give it access to.
@@ -113,7 +113,7 @@ Google Cloud needs to know what this service account is allowed to do. We only w
 
 ### Step 3: Download the key file
 
-This is the file you'll upload to PipesHub.
+This is the file you'll upload to Novaplan AI.
 
 1. You'll land on the list of service accounts. Click the one you just made.
 2. Open the **Keys** tab.
@@ -151,13 +151,15 @@ This is the file you'll upload to PipesHub.
   />
 </div>
 
-That's the Google Cloud side done. Now over to PipesHub.
+That's the Google Cloud side done. Now over to Novaplan AI.
 
-### Part B — In PipesHub (about 3 minutes)
+<div id="part-b--in-pipeshub-about-3-minutes" />
+
+### Part B — In Novaplan AI (about 3 minutes)
 
 ### Step 4: Open the GCS connector
 
-1. In PipesHub, click **Workspace → Connectors** on the left sidebar.
+1. In Novaplan AI, click **Workspace → Connectors** on the left sidebar.
 2. Find the tile called **GCS** ("Sync files and folders from Google Cloud Storage").
 3. Click **+ Setup** on that tile.
 
@@ -191,7 +193,7 @@ A panel slides in from the right with two tabs: **Authenticate Instance** and **
   />
 </div>
 
-At the top of this tab, set how the connector should keep PipesHub up to date:
+At the top of this tab, set how the connector should keep Novaplan AI up to date:
 
 - **Sync Strategy**
   - **Scheduled** — runs on its own. (Recommended for most people.)
@@ -278,7 +280,7 @@ Click the instance card to open the **Overview** panel. This is where you'll com
 - **Full sync** — re-scan everything from scratch (use sparingly, it's slow)
 - **Manage Configuration** — re-opens the two tabs from Steps 5–7 so you can change credentials or filters later
 
-That's it — once **Not Started** and **Processing** both hit zero, all supported files are content-indexed and searchable in PipesHub. Unsupported files remain synced but aren't searchable by content.
+That's it — once **Not Started** and **Processing** both hit zero, all supported files are content-indexed and searchable in Novaplan AI. Unsupported files remain synced but aren't searchable by content.
 
 </div>
 
@@ -343,11 +345,11 @@ Once the initial sync is done, the connector only asks Google Cloud: *"what's ch
 
 ### Who can see the synced files?
 
-PipesHub respects two things:
+Novaplan AI respects two things:
 
 1. **Google Cloud permissions** — the connector can only pull files the service account has access to.
 2. **The scope you picked when setting up the connector**:
-   - **Personal** — only you can see the files in PipesHub
+   - **Personal** — only you can see the files in Novaplan AI
    - **Team** — everyone in your organization can see them
 
 Bucket-level IAM rules and ACLs in Google Cloud are also respected.
@@ -525,7 +527,7 @@ Most often, the service account key was rotated or deleted in Google Cloud.
 </Accordion>
 
 <Accordion title="What happens when I delete a file from GCS?">
-  On the next sync, the connector notices it's gone and removes it from PipesHub too — including from search results.
+  On the next sync, the connector notices it's gone and removes it from Novaplan AI too — including from search results.
   
   If you use **object versioning** in GCS, older versions may still appear until they're also deleted.
 </Accordion>

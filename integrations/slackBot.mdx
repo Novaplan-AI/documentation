@@ -1,23 +1,23 @@
 ---
 title: Slack Bot Configuration
-description: Create a Slack app from manifest, configure request URL, and connect it in Pipeshub frontend.
+description: Create a Slack app from manifest, configure request URL, and connect it in Novaplan AI frontend.
 ---
 
 ## Overview
 
-This guide explains the full setup for Slack bot integration in Pipeshub:
+This guide explains the full setup for Slack bot integration in Novaplan AI:
 
 1. Create a Slack app using a manifest.
 2. Configure Slack Events API request URL.
 3. Install the app and collect credentials.
-4. Add the configuration in Pipeshub frontend.
+4. Add the configuration in Novaplan AI frontend.
 
 
 ## Prerequisites
 
 - A HTTPS Node backend base URL (placeholder: `{node_backend_url}`).
 - Admin access in the target Slack workspace.
-- Pipeshub admin access (Slack Bot settings page is admin-only).
+- Novaplan AI admin access (Slack Bot settings page is admin-only).
 
 ## Request Flow
 
@@ -123,9 +123,11 @@ flowchart LR
    - **Bot User OAuth Token** (starts with `xoxb-`)
    - **Signing Secret**
 
-You will use these values in Pipeshub Slack Bot settings.
+You will use these values in Novaplan AI Slack Bot settings.
 
-## Step 3: Configure Slack Bot In Pipeshub Frontend
+<div id="step-3-configure-slack-bot-in-pipeshub-frontend" />
+
+## Step 3: Configure Slack Bot In Novaplan AI Frontend
 
 ### Navigation
 
@@ -136,7 +138,7 @@ You will use these values in Pipeshub Slack Bot settings.
 
 Click **Add Bot** then select **Slack Bot** and fill:
 
-- **Slack Bot Name**: Friendly display name in Pipeshub.
+- **Slack Bot Name**: Friendly display name in Novaplan AI.
 - **Bot Token**: Paste Slack **Bot User OAuth Token**.
 - **Signing Secret**: Paste Slack app signing secret.
 - **Agent (Optional)**: Select a specific agent, or leave empty to use default/global chatbot handling.
@@ -194,7 +196,7 @@ After setup, verify all layers:
 1. Slack app created successfully from manifest.
 2. Event Subscriptions Request URL verified in Slack.
 3. App installed to workspace after any scope/event changes.
-4. Bot token + signing secret saved in Pipeshub Slack Bot settings.
+4. Bot token + signing secret saved in Novaplan AI Slack Bot settings.
 5. Send test interactions:
    - Mention bot in a channel (`@YourBot hello`)
    - Send a direct message to the bot
@@ -210,17 +212,21 @@ After setup, verify all layers:
 
 ### 401 errors from Slack event delivery
 
-- Confirm Signing Secret in Pipeshub matches Slack app Signing Secret.
+- Confirm Signing Secret in Novaplan AI matches Slack app Signing Secret.
 - Confirm system clock skew is not larger than 5 minutes.
 
-### Bot does not respond in Pipeshub flow
+<div id="bot-does-not-respond-in-pipeshub-flow" />
+
+### Bot does not respond in Novaplan AI flow
 
 - Confirm app was reinstalled after manifest scope changes.
 - Confirm Bot Token entered is a valid `xoxb-` token.
 - Confirm the expected bot events are enabled in Event Subscriptions.
-- Confirm bot configuration exists in Pipeshub and is not deleted.
+- Confirm bot configuration exists in Novaplan AI and is not deleted.
 
-### Pipeshub save form errors
+<div id="pipeshub-save-form-errors" />
+
+### Novaplan AI save form errors
 
 - Ensure all required fields are non-empty:
   - Slack Bot Name

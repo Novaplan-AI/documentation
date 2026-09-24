@@ -141,18 +141,20 @@ The Slack toolset enables AI agents to interact with your Slack workspace. Send 
   You need **admin access** to install Slack apps in your workspace, or your workspace must allow members to install apps. If app installation is restricted, ask a workspace admin to approve the app after you create it.
 </Info>
 
-### Step 2: Get the Redirect URI from PipesHub
+<div id="step-2-get-the-redirect-uri-from-pipeshub" />
 
-Before configuring the Redirect URL in Slack, copy the Redirect URI from PipesHub so the values match exactly.
+### Step 2: Get the Redirect URI from Novaplan AI
 
-1. In PipesHub, go to **Workspace Settings** → **Actions**.
+Before configuring the Redirect URL in Slack, copy the Redirect URI from Novaplan AI so the values match exactly.
+
+1. In Novaplan AI, go to **Workspace Settings** → **Actions**.
 2. Find **Slack** in the list and click **+ Setup** (or **Configure**).
 3. Copy the **Redirect URI** shown in the dialog.
 
 <div style={{ textAlign: "center" }}>
   <img
     src="/images/toolsets/slack/pipeshub-config.png"
-    alt="PipesHub Configure Slack toolset — copy the Redirect URI"
+    alt="Novaplan AI Configure Slack toolset — copy the Redirect URI"
     style={{ display: 'block', margin: '0 auto' }}
     width="90%"
   />
@@ -162,7 +164,7 @@ Before configuring the Redirect URL in Slack, copy the Redirect URI from PipesHu
 
 1. In your Slack app settings, open **OAuth & Permissions** in the left sidebar.
 2. Under **Redirect URLs**, click **Add New Redirect URL**.
-3. Paste the Redirect URI you copied from PipesHub.
+3. Paste the Redirect URI you copied from Novaplan AI.
 4. Click **Add**, then **Save URLs**.
 
 <div style={{ textAlign: "center" }}>
@@ -175,7 +177,7 @@ Before configuring the Redirect URL in Slack, copy the Redirect URI from PipesHu
 </div>
 
 <Warning>
-  The Redirect URL must match exactly between Slack and PipesHub — protocol, host, path, and trailing slash. Any mismatch causes authentication to fail.
+  The Redirect URL must match exactly between Slack and Novaplan AI — protocol, host, path, and trailing slash. Any mismatch causes authentication to fail.
 </Warning>
 
 ### Step 4: Add required scopes
@@ -252,8 +254,8 @@ Scroll further down on the same page to the **User Token Scopes** section and ad
 1. In Slack app settings, open **Basic Information**.
 2. Scroll to **App Credentials**.
 3. Copy:
-   - **Client ID** — used as **Client ID** in PipesHub.
-   - **Client Secret** — click **Show** to reveal, then copy. Used as **Client Secret** in PipesHub.
+   - **Client ID** — used as **Client ID** in Novaplan AI.
+   - **Client Secret** — click **Show** to reveal, then copy. Used as **Client Secret** in Novaplan AI.
 
 <div style={{ textAlign: "center" }}>
   <img
@@ -265,12 +267,14 @@ Scroll further down on the same page to the **User Token Scopes** section and ad
 </div>
 
 <Warning>
-  Store the Client Secret securely. It can be regenerated if needed, but you'll have to update your PipesHub configuration with the new value and re-authorize.
+  Store the Client Secret securely. It can be regenerated if needed, but you'll have to update your Novaplan AI configuration with the new value and re-authorize.
 </Warning>
 
-### Step 6: Configure the Slack toolset in PipesHub
+<div id="step-6-configure-the-slack-toolset-in-pipeshub" />
 
-1. In PipesHub, return to **Workspace Settings** → **Actions**.
+### Step 6: Configure the Slack toolset in Novaplan AI
+
+1. In Novaplan AI, return to **Workspace Settings** → **Actions**.
 2. Find **Slack** and reopen the setup dialog.
 3. Confirm the **Redirect URI** matches the Redirect URL you saved in Slack in Step 3.
 4. Paste your **Client ID** and **Client Secret**, then save the instance.
@@ -278,7 +282,7 @@ Scroll further down on the same page to the **User Token Scopes** section and ad
 <div style={{ textAlign: "center" }}>
   <img
     src="/images/toolsets/slack/enter-credentials.png"
-    alt="Enter Slack Client ID and Client Secret in PipesHub"
+    alt="Enter Slack Client ID and Client Secret in Novaplan AI"
     style={{ display: 'block', margin: '0 auto' }}
     width="90%"
   />
@@ -306,7 +310,7 @@ Authentication uses the same OAuth flow in either location:
 3. The popup closes and the Slack tile shows **Authenticated** status.
 
 <Warning>
-  **Authorize using the same email as your PipesHub account.** Using a different email causes permission issues on the PipesHub platform.
+  **Authorize using the same email as your Novaplan AI account.** Using a different email causes permission issues on the Novaplan AI platform.
 </Warning>
 
 ### Step 8: Add Slack to an agent
@@ -330,7 +334,7 @@ Authentication uses the same OAuth flow in either location:
 | Aspect | Slack Connector | Slack Toolset |
 |--------|----------------|---------------|
 | **Purpose** | Sync and index messages for search | Enable agents to perform Slack actions |
-| **Data Flow** | One-way (import data into PipesHub) | Two-way (read and write via API) |
+| **Data Flow** | One-way (import data into Novaplan AI) | Two-way (read and write via API) |
 | **When to Use** | Query/search messages and conversations | Send messages, add reactions, manage channels |
 
 **Example:** Use **Slack Connector** to search past message history. Use **Slack Toolset** to let agents send messages or post updates.

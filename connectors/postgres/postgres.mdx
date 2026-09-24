@@ -1,6 +1,6 @@
 ---
 title: "PostgreSQL"
-description: "Sync schemas, tables, and row data from PostgreSQL into PipesHub"
+description: "Sync schemas, tables, and row data from PostgreSQL into Novaplan AI"
 icon: "/logo/postgres.png"
 ---
 
@@ -28,7 +28,7 @@ icon: "/logo/postgres.png"
 
 ## Overview
 
-The PostgreSQL connector indexes schemas, tables, and row data from a PostgreSQL database into PipesHub so your AI assistant can search across structured data alongside your other knowledge sources.
+The PostgreSQL connector indexes schemas, tables, and row data from a PostgreSQL database into Novaplan AI so your AI assistant can search across structured data alongside your other knowledge sources.
 
 ### What Gets Synced
 
@@ -84,7 +84,7 @@ Download the installer from the [pgAdmin Downloads page](https://www.pgadmin.org
 
 ### Create a user for the connector
 
-Create a dedicated read-only role for PipesHub. Run these as a superuser (e.g. `postgres`) against the target database:
+Create a dedicated read-only role for Novaplan AI. Run these as a superuser (e.g. `postgres`) against the target database:
 
 ```sql
 CREATE USER pipeshub_user WITH PASSWORD 'a_strong_password';
@@ -133,9 +133,9 @@ The dataset includes Formula 1 tables: `circuits`, `constructors`, `constructorr
 
 </Accordion>
 
-<Accordion title="Step 3: Configure the connector in PipesHub" icon="plug">
+<Accordion title="Step 3: Configure the connector in Novaplan AI" icon="plug">
 
-1. In PipesHub, open **Connector Settings**.
+1. In Novaplan AI, open **Connector Settings**.
 2. In the **Available** tab, find the **PostgreSQL** card and click **Configure**.
 
 <div className="text-center">
@@ -280,7 +280,7 @@ The connector also reads schema metadata from `information_schema` and `pg_catal
 <Accordion title="Can I connect to a remote PostgreSQL server?">
 
 Yes. Use the public host and port. Make sure:
-- `pg_hba.conf` allows connections from the PipesHub deployment IP range.
+- `pg_hba.conf` allows connections from the Novaplan AI deployment IP range.
 - The PostgreSQL service is listening on a reachable interface (`listen_addresses` in `postgresql.conf`).
 - Any firewall or security group allows traffic on the chosen port (default `5432`).
 

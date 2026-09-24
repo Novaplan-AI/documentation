@@ -28,12 +28,12 @@ icon: "/logo/github.png"
 ## Overview
 
 GitHub is a platform for hosting code, tracking work, and reviewing changes. The connector brings
-your repositories, issues, pull requests, and source code into PipesHub so you can search across
+your repositories, issues, pull requests, and source code into Novaplan AI so you can search across
 all of them in one place.
 
 ### GitHub Data Structure
 
-PipesHub mirrors how GitHub organizes your content:
+Novaplan AI mirrors how GitHub organizes your content:
 
 ```
 Organization
@@ -89,7 +89,7 @@ The GitHub connector uses **OAuth Apps** for secure authentication.
 ### Prerequisite: Email Visibility
 
 <Warning>
-  **PipesHub matches GitHub users to PipesHub accounts by email address.** A user whose email
+  **Novaplan AI matches GitHub users to Novaplan AI accounts by email address.** A user whose email
   cannot be read receives no permissions and will not see any synced records.
 </Warning>
 
@@ -105,7 +105,7 @@ ways. Pick whichever fits your organization — you only need one.
 
 <Tab title="Verify your domain (recommended)">
 
-Verifying your domain lets PipesHub read every member's company email address, even when their
+Verifying your domain lets Novaplan AI read every member's company email address, even when their
 profile email is private. An organization owner does this once:
 
 1. Open your organization on GitHub and go to **Settings**.
@@ -130,14 +130,14 @@ This takes two steps — the address must be verified and non-private before it 
 #### Step 1: Add and verify your email
 
 1. Go to [github.com/settings/emails](https://github.com/settings/emails).
-2. Under **Add email address**, enter the address that matches your PipesHub account and click
+2. Under **Add email address**, enter the address that matches your Novaplan AI account and click
    **Add**. If it is already listed with a green **Verified** badge, skip to step 4.
 3. Open the verification link GitHub emails you. The address must show **Verified** before it can
    be used.
 4. Scroll down to **Keep my email addresses private** and switch it **Off**.
 
 While that setting is on, GitHub hides your profile email behind a `@users.noreply.github.com`
-placeholder that PipesHub cannot use, and the **Public email** dropdown in Step 2 stays empty.
+placeholder that Novaplan AI cannot use, and the **Public email** dropdown in Step 2 stays empty.
 
 #### Step 2: Set it as your public profile email
 
@@ -154,7 +154,7 @@ with your team during rollout.
 </Tabs>
 
 <Warning>
-  The email must **match the user's PipesHub account email**, and must not be a
+  The email must **match the user's Novaplan AI account email**, and must not be a
   `@users.noreply.github.com` address — that is GitHub's privacy placeholder, not a real
   deliverable address. A mismatched or placeholder email means the user sees no records.
 </Warning>
@@ -184,12 +184,12 @@ as their email becomes readable, the next sync grants their access automatically
 
 1. Click the **"New OAuth App"** button in the top right corner
 2. Fill in the application details:
-   - **Application Name**: Enter a meaningful name (e.g., "PipesHub GitHub Connector")
-   - **Homepage URL**: Enter PipesHub Homepage URL (e.g., "http://localhost:3000")
+   - **Application Name**: Enter a meaningful name (e.g., "Novaplan AI GitHub Connector")
+   - **Homepage URL**: Enter Novaplan AI Homepage URL (e.g., "http://localhost:3000")
    - **Application description**: Description about app (Optional)
    - **Authorization callback URL**: 
-      - You need to enter the redirect URI provided by PipesHub
-      - To get this URL, open PipesHub in another tab, navigate to **PipesHub (bottom left corner)** → **Workspace settings** → **Connectors** → **Your Connectors**, find the **Github** connector, and click **"Setup"**
+      - You need to enter the redirect URI provided by Novaplan AI
+      - To get this URL, open Novaplan AI in another tab, navigate to **Novaplan AI (bottom left corner)** → **Workspace settings** → **Connectors** → **Your Connectors**, find the **Github** connector, and click **"Setup"**
         <Info>
           GitHub OAuth App allows only one callback URL.
         </Info>
@@ -197,7 +197,7 @@ as their email becomes readable, the next sync grants their access automatically
     <div className="text-center">
       <img
         src="/images/connectors/github/copy_redirect_url.png"
-        alt="PipesHub GitHub Configuration - Copy Redirect URL"
+        alt="Novaplan AI GitHub Configuration - Copy Redirect URL"
         className="block mx-auto w-11/12"
       />
     </div>
@@ -219,12 +219,14 @@ as their email becomes readable, the next sync grants their access automatically
 </div>
 
 <Warning>
-  Store the Client ID and Client Secret securely. The secret can be regenerated if needed, but you'll need to update your PipesHub configuration with the new value.
+  Store the Client ID and Client Secret securely. The secret can be regenerated if needed, but you'll need to update your Novaplan AI configuration with the new value.
 </Warning>
 
-### Step 4: Configure Connector in PipesHub
+<div id="step-4-configure-connector-in-pipeshub" />
 
-1. Return to the Pipeshub Github configuration dialog (if you closed it, navigate to **Pipeshub (bottom left corner)** → **Workspace settings** → **Connectors** → **Your Connectors**, find the **Github** connector, and click **Setup**)
+### Step 4: Configure Connector in Novaplan AI
+
+1. Return to the Novaplan AI Github configuration dialog (if you closed it, navigate to **Novaplan AI (bottom left corner)** → **Workspace settings** → **Connectors** → **Your Connectors**, find the **Github** connector, and click **Setup**)
 2. The configuration dialog has two steps:
    - **Step 1: Authentication** - Enter OAuth credentials
    - **Step 2: Sync Settings** - Configure synchronization
@@ -237,7 +239,7 @@ as their email becomes readable, the next sync grants their access automatically
 <div className="text-center">
   <img
     src="/images/connectors/github/ph-github-auth.png"
-    alt="Enter OAuth Credentials in PipesHub"
+    alt="Enter OAuth Credentials in Novaplan AI"
     className="block mx-auto w-11/12"
   />
 </div>
@@ -269,7 +271,7 @@ as their email becomes readable, the next sync grants their access automatically
 |-------|-------------|
 | `read:org` | Read organization membership and teams — required to enumerate repositories and resolve who has access to them |
 | `repo` | Read repository contents, issues, and pull requests, including private repositories |
-| `user:email` | Read email addresses, used to match GitHub members to PipesHub accounts |
+| `user:email` | Read email addresses, used to match GitHub members to Novaplan AI accounts |
 
 <Note>
   Authorize with an account that is an **organization owner**. A member-level account can only see
@@ -279,10 +281,10 @@ as their email becomes readable, the next sync grants their access automatically
 
 <Info>
   `repo` is GitHub's narrowest scope that covers private repository contents — it is not
-  separable into read-only. PipesHub only ever reads; it never writes to your repositories.
+  separable into read-only. Novaplan AI only ever reads; it never writes to your repositories.
 </Info>
 
-5. You'll be redirected back to PipesHub with a success message
+5. You'll be redirected back to Novaplan AI with a success message
 6. The connector status will update to show **"Connected — you can continue to Configure records"**
 
 <div className="text-center">
@@ -330,12 +332,12 @@ retrieved, so narrowing scope also shortens sync time.
 <div className="text-center">
   <img
     src="/images/connectors/github/ph-github-sync-filters.png"
-    alt="GitHub connector sync filters in PipesHub"
+    alt="GitHub connector sync filters in Novaplan AI"
     className="block mx-auto w-11/12"
   />
 </div>
 
-Both are live pickers — start typing and PipesHub searches GitHub for matches. Each supports an
+Both are live pickers — start typing and Novaplan AI searches GitHub for matches. Each supports an
 **In** operator (sync only these) or **Not In** (sync everything except these).
 
 #### Indexing Filters
@@ -352,7 +354,7 @@ Indexing filters control **what gets indexed for search** from the content that 
 <div className="text-center">
   <img
     src="/images/connectors/github/ph-github-indexing-filters.png"
-    alt="GitHub connector indexing filters in PipesHub"
+    alt="GitHub connector indexing filters in Novaplan AI"
     className="block mx-auto w-11/12"
   />
 </div>
@@ -407,10 +409,10 @@ The GitHub connector syncs the following data from your GitHub repositories:
 - Verify Client ID and Client Secret are correct
 - Ensure you copied the full values without extra spaces
 - Check that the OAuth app is active in GitHub Developer Settings
-- Regenerate the secret if necessary and update PipesHub
+- Regenerate the secret if necessary and update Novaplan AI
 
 **Callback URL mismatch error:**
-- Ensure the Redirect URI in PipesHub exactly matches the callback URL in GitHub
+- Ensure the Redirect URI in Novaplan AI exactly matches the callback URL in GitHub
 - Check for trailing slashes or protocol differences (http vs https)
 - Update both configurations to use the same URL
 
@@ -435,7 +437,7 @@ The GitHub connector syncs the following data from your GitHub repositories:
 - Their email could not be read. Either verify your organization's domain in GitHub, or ask them
   to set a public profile email — see *Prerequisite: Email Visibility* above
 - A `@users.noreply.github.com` address does not count as a usable email
-- Their GitHub email must match their PipesHub account email
+- Their GitHub email must match their Novaplan AI account email
 
 **Organization repositories are missing:**
 - Authorize with an **organization owner** account. A member-level account only sees repositories
@@ -453,7 +455,7 @@ The GitHub connector syncs the following data from your GitHub repositories:
   Type a more specific query rather than scrolling
 
 <Warning>
-  If you modify OAuth application settings in GitHub Developer Settings (Client ID, Secret, callback URL), you must update the configuration in PipesHub and re-authorize the connection.
+  If you modify OAuth application settings in GitHub Developer Settings (Client ID, Secret, callback URL), you must update the configuration in Novaplan AI and re-authorize the connection.
 </Warning>
 
 </Accordion>
@@ -475,7 +477,7 @@ Every sync run executes the same ordered cycle:
 
 | Step | Stage | What happens |
 |------|-------|--------------|
-| 1 | **User sync** | Resolve organization members and outside collaborators and match them to PipesHub accounts by email |
+| 1 | **User sync** | Resolve organization members and outside collaborators and match them to Novaplan AI accounts by email |
 | 2 | **Repository sync** | Discover repositories, create the organization → repository → container hierarchy, and apply collaborator and visibility permissions |
 | 3 | **Content sync** | For each repository, sync issues, pull requests, and the code repository |
 | 4 | **Timestamp backfill** | A background pass fills in authoritative commit timestamps for code files after the main sync completes |
@@ -588,7 +590,7 @@ Each repository's collaborator list is read from GitHub and translated into perm
 already includes team members, outside collaborators, default-organization-permission members, and
 owners, so no separate team grant is needed.
 
-| GitHub role | PipesHub permission |
+| GitHub role | Novaplan AI permission |
 |-------------|---------------------|
 | **Admin** | Owner |
 | **Maintain** | Write |
@@ -601,13 +603,13 @@ access to code alongside issues and pull requests.
 
 **Repository visibility adds further access**, matching what GitHub itself exposes:
 
-| Visibility | Who gets read access in PipesHub |
+| Visibility | Who gets read access in Novaplan AI |
 |------------|----------------------------------|
-| **Public** | Everyone in your PipesHub organization |
+| **Public** | Everyone in your Novaplan AI organization |
 | **Internal** | Each resolved organization member individually |
 | **Private** | Collaborators only |
 
-A GitHub user is matched to a PipesHub account **by email address** — see *Prerequisite: Email
+A GitHub user is matched to a Novaplan AI account **by email address** — see *Prerequisite: Email
 Visibility* in the Configuration Guide.
 
 ### Checkpoint Management
@@ -637,8 +639,8 @@ duplicates.
 
 Common causes:
 
-1. **Email mismatch** - The email used during connector authentication doesn't match your PipesHub account email. This causes permission issues preventing you from accessing synced data.
-   - **Fix:** Reconfigure the connector and authenticate using the same email as your PipesHub account.
+1. **Email mismatch** - The email used during connector authentication doesn't match your Novaplan AI account email. This causes permission issues preventing you from accessing synced data.
+   - **Fix:** Reconfigure the connector and authenticate using the same email as your Novaplan AI account.
 
 2. **Data not yet indexed** - The connector is still syncing or hasn't completed the initial indexing process.
    - **Fix:** Go to **Settings > Connectors**, check the sync status, and wait for indexing to complete.
@@ -661,7 +663,7 @@ Common causes:
 </Accordion>
 
 <Accordion title="Why do I see no issues after authenticating?">
-  The most common causes are missing scopes or selecting the wrong GitHub account. Re-run authentication, ensure the PipesHub email and GitHub account email matches.
+  The most common causes are missing scopes or selecting the wrong GitHub account. Re-run authentication, ensure the Novaplan AI email and GitHub account email matches.
 </Accordion>
 
 <Accordion title="Can I sync only specific organizations or repositories?">
@@ -700,6 +702,6 @@ the **Repositories** sync filter instead.
 <div className="text-center mt-12 p-6 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl">
   <h3 className="text-lg font-semibold mb-2">Ready to Get Started?</h3>
   <p className="text-gray-600 dark:text-gray-400">
-    Connect your GitHub account to PipesHub in just a few minutes. Follow the step-by-step guide above to enable repository issues and pull-requests search across all your GitHub content.
+    Connect your GitHub account to Novaplan AI in just a few minutes. Follow the step-by-step guide above to enable repository issues and pull-requests search across all your GitHub content.
   </p>
 </div>

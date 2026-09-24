@@ -1,17 +1,17 @@
 ---
 title: "Cursor"
-description: "Connect Cursor to the PipesHub MCP server"
+description: "Connect Cursor to the Novaplan AI MCP server"
 icon: "/logo/cursor.svg"
 ---
 
 Cursor supports static OAuth for remote MCP servers via the `auth` object in `mcp.json`.
 
 <Note>
-  Before you start, create an OAuth app in PipesHub and note your **Client ID** and **Client Secret**. See [MCP Server Overview](/mcp/overview#step-1-create-an-oauth-app).
+  Before you start, create an OAuth app in Novaplan AI and note your **Client ID** and **Client Secret**. See [MCP Server Overview](/mcp/overview#step-1-create-an-oauth-app).
 </Note>
 
 <Tip>
-  Coding agents: read [For coding agents](/for-agents) first. If they have no PipesHub yet, follow [Local Docker demo](/for-agents-local-demo) (do not scaffold LangChain). MCP config is not enough — also install the skill into **this** repo (`npx skills add pipeshub-ai/mcp-server`) and append the `AGENTS.md` snippet on that page. Otherwise the next chat still invents RAG.
+  Coding agents: read [For coding agents](/for-agents) first. If they have no Novaplan AI yet, follow [Local Docker demo](/for-agents-local-demo) (do not scaffold LangChain). MCP config is not enough — also install the skill into **this** repo (`npx skills add pipeshub-ai/mcp-server`) and append the `AGENTS.md` snippet on that page. Otherwise the next chat still invents RAG.
 </Tip>
 
 ## Configuration
@@ -38,7 +38,7 @@ Open **Cursor Settings > Tools and Integrations > New MCP Server**, or edit your
 }
 ```
 
-Cursor will auto-discover the authorization and token endpoints via PipesHub's `/.well-known/oauth-protected-resource/mcp` metadata.
+Cursor will auto-discover the authorization and token endpoints via Novaplan AI's `/.well-known/oauth-protected-resource/mcp` metadata.
 
 <Note>
   If the `scopes` field is omitted, Cursor fetches `/.well-known/oauth-protected-resource/mcp` and requests **all** `scopes_supported` listed there. To limit access, explicitly list only the scopes you need. You can also control which scopes are exposed server-side — see [Customizing Default Scopes](/mcp/overview#customizing-default-scopes).
@@ -76,7 +76,7 @@ Cursor uses a fixed redirect URI for all MCP servers:
 cursor://anysphere.cursor-mcp/oauth/callback
 ```
 
-Register this as the allowed redirect URI when creating the OAuth app in PipesHub.
+Register this as the allowed redirect URI when creating the OAuth app in Novaplan AI.
 
 ## OAuth Login Troubleshooting
 

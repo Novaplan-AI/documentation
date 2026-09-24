@@ -1,18 +1,18 @@
 ---
 title: Whisper (Local)
-description: "Configure PipesHub to use a self-hosted Whisper speech-to-text model"
+description: "Configure Novaplan AI to use a self-hosted Whisper speech-to-text model"
 ---
 
 # Whisper (Local) Speech to Text Configuration
 
 ![Whisper Local STT Configuration Interface](/images/ai-models/stt/Whisper_STTConfig.png)
 
-*The Whisper local STT configuration screen in PipesHub where you'll select your model size and compute settings*
+*The Whisper local STT configuration screen in Novaplan AI where you'll select your model size and compute settings*
 
-PipesHub supports running Whisper entirely on your own infrastructure using the faster-whisper library. No API key is required — all audio processing happens locally, keeping your data private and eliminating per-request API costs.
+Novaplan AI supports running Whisper entirely on your own infrastructure using the faster-whisper library. No API key is required — all audio processing happens locally, keeping your data private and eliminating per-request API costs.
 
 <Note>
-Whisper model weights are downloaded from HuggingFace on first use. Ensure the PipesHub backend host has internet access during initial setup. The `faster-whisper` Python package must also be installed on the backend host.
+Whisper model weights are downloaded from HuggingFace on first use. Ensure the Novaplan AI backend host has internet access during initial setup. The `faster-whisper` Python package must also be installed on the backend host.
 </Note>
 
 ## Required Fields
@@ -42,7 +42,7 @@ Select the Whisper model size from the dropdown. Larger models are more accurate
 
 Controls which hardware the model runs on.
 
-- **Auto** (default) — PipesHub automatically uses a GPU if one is available, otherwise falls back to CPU
+- **Auto** (default) — Novaplan AI automatically uses a GPU if one is available, otherwise falls back to CPU
 - **CPU** — forces CPU inference (slower but works on any machine)
 - **CUDA** — forces NVIDIA GPU inference (requires a compatible NVIDIA GPU with CUDA support)
 
@@ -77,7 +77,7 @@ As shown in the image above:
 6. (Optional) Set a **Model Friendly Name**
 7. Click **Add Model** to save your configuration
 
-> On first use after saving, PipesHub will download the selected model weights from HuggingFace. This may take several minutes depending on model size and network speed.
+> On first use after saving, Novaplan AI will download the selected model weights from HuggingFace. This may take several minutes depending on model size and network speed.
 
 ## Usage Considerations
 
@@ -93,6 +93,6 @@ As shown in the image above:
 - If model weights fail to download, check that the backend host has internet access and can reach HuggingFace (huggingface.co)
 - If transcription is very slow, consider switching to a smaller model or enabling GPU inference with CUDA
 - If you get out-of-memory errors, switch to a smaller model or use `int8` compute type
-- Ensure the Model Cache Directory (if set) exists and is writable by the PipesHub process
+- Ensure the Model Cache Directory (if set) exists and is writable by the Novaplan AI process
 
-For additional support, refer to the [faster-whisper documentation](https://github.com/SYSTRAN/faster-whisper) or contact PipesHub support.
+For additional support, refer to the [faster-whisper documentation](https://github.com/SYSTRAN/faster-whisper) or contact Novaplan AI support.

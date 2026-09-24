@@ -127,18 +127,20 @@ The ClickUp toolset enables AI agents to interact with your ClickUp workspace. A
   If **ClickUp API** or the **ClickUp API Settings** tab is not visible, your role doesn't permit creating OAuth apps. Ask a Workspace Owner or Admin to complete this step.
 </Info>
 
-### Step 2: Get the Redirect URI from PipesHub
+<div id="step-2-get-the-redirect-uri-from-pipeshub" />
 
-Before creating the app, copy the Redirect URI from PipesHub so the values match exactly.
+### Step 2: Get the Redirect URI from Novaplan AI
 
-1. In PipesHub, go to **Workspace Settings** → **Actions**.
+Before creating the app, copy the Redirect URI from Novaplan AI so the values match exactly.
+
+1. In Novaplan AI, go to **Workspace Settings** → **Actions**.
 2. Find **ClickUp** in the list and click **+ Setup** (or **Configure**).
 3. Copy the **Redirect URI** shown in the dialog.
 
 <div style={{ textAlign: "center" }}>
   <img
     src="/images/toolsets/clickup/clickup_toolset_page.png"
-    alt="PipesHub Configure ClickUp dialog showing Redirect URI"
+    alt="Novaplan AI Configure ClickUp dialog showing Redirect URI"
     style={{ display: 'block', margin: '0 auto' }}
     width="90%"
   />
@@ -148,7 +150,7 @@ Before creating the app, copy the Redirect URI from PipesHub so the values match
 
 1. Back on the **ClickUp API Settings** tab, click **Create an App**.
 2. In the dialog that opens, enter an **App Name** (for example, `PipesHub ClickUp Toolset`).
-3. Paste the **Redirect URI** you copied from PipesHub into the **Redirect URL** field.
+3. Paste the **Redirect URI** you copied from Novaplan AI into the **Redirect URL** field.
 4. Click **Create App**.
 
 <div style={{ textAlign: "center" }}>
@@ -168,8 +170,8 @@ Before creating the app, copy the Redirect URI from PipesHub so the values match
 
 After you click **Create App**, ClickUp lists the app on the **ClickUp API Settings** tab with its **Client ID** and **Client Secret**.
 
-- **Client ID** — used as **Client ID** in PipesHub.
-- **Client Secret** — used as **Client Secret** in PipesHub. Copy it immediately; you cannot view it again later.
+- **Client ID** — used as **Client ID** in Novaplan AI.
+- **Client Secret** — used as **Client Secret** in Novaplan AI. Copy it immediately; you cannot view it again later.
 
 <div style={{ textAlign: "center" }}>
   <img
@@ -190,9 +192,11 @@ After you click **Create App**, ClickUp lists the app on the **ClickUp API Setti
   ClickUp OAuth does **not** use granular scopes. When a user authorizes the app, they choose one or more **Workspaces** to grant access to, and the access token inherits whatever permissions that user already has in those Workspaces. There is no scope selection step on either side.
 </Info>
 
-### Step 6: Configure the ClickUp toolset in PipesHub
+<div id="step-6-configure-the-clickup-toolset-in-pipeshub" />
 
-1. In PipesHub, return to **Workspace Settings** → **Actions**.
+### Step 6: Configure the ClickUp toolset in Novaplan AI
+
+1. In Novaplan AI, return to **Workspace Settings** → **Actions**.
 2. Find **ClickUp** and open setup / configuration (**+ Setup** or **Configure**).
 3. Confirm the **Redirect URI** in the dialog matches the **Redirect URL** you registered in ClickUp in **Step 3**.
 4. Paste your **Client ID** and **Client Secret**, then save the instance.
@@ -200,7 +204,7 @@ After you click **Create App**, ClickUp lists the app on the **ClickUp API Setti
 <div style={{ textAlign: "center" }}>
   <img
     src="/images/toolsets/clickup/enter_credentials.png"
-    alt="Enter ClickUp Client ID and Secret in PipesHub"
+    alt="Enter ClickUp Client ID and Secret in Novaplan AI"
     style={{ display: 'block', margin: '0 auto' }}
     width="90%"
   />

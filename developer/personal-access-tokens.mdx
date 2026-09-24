@@ -1,12 +1,12 @@
 ---
 title: "Personal Access Tokens"
-description: "Create long-lived, scoped, revocable credentials that act as you — the recommended way to connect external agents and scripts to PipesHub"
+description: "Create long-lived, scoped, revocable credentials that act as you — the recommended way to connect external agents and scripts to Novaplan AI"
 icon: "id-badge"
 ---
 
 A **Personal Access Token (PAT)** is a long-lived, scoped, revocable credential that you create for yourself. Unlike a session token, it doesn't expire after a day. Unlike an [OAuth 2.0 Application](/developer/oauth2), it authenticates as **you** — every request made with it respects your own per-user permissions, not an app's.
 
-Use a PAT when you want to connect something to PipesHub programmatically — most commonly, an MCP client (see [MCP Server Overview](/mcp/overview)) — without setting up an OAuth app or scraping a short-lived session token.
+Use a PAT when you want to connect something to Novaplan AI programmatically — most commonly, an MCP client (see [MCP Server Overview](/mcp/overview)) — without setting up an OAuth app or scraping a short-lived session token.
 
 <Note>
   PATs are self-service: **any org member** can create their own, no administrator involvement required.
@@ -31,7 +31,7 @@ If you're connecting your own tooling and want it to see exactly what you can se
 
 ### Step 1: Open Personal Access Tokens
 
-1. Sign in to your PipesHub account
+1. Sign in to your Novaplan AI account
 2. Navigate to **Workspace-settings**
 3. Select **Personal Access Tokens** under the **Developer Settings** section
 
@@ -51,7 +51,7 @@ Click **New token** and fill in:
 
 ### Step 3: Copy the Token
 
-PipesHub generates the token and shows it to you **exactly once**, along with a ready-to-paste block for connecting an MCP client:
+Novaplan AI generates the token and shows it to you **exactly once**, along with a ready-to-paste block for connecting an MCP client:
 
 ```
 PIPESHUB_MCP_URL=https://your-pipeshub-instance.com/mcp
@@ -65,7 +65,7 @@ PIPESHUB_MCP_TOKEN=phpat_eyJhbGciOiJIUzI1NiIs...
 <Tip>
   The `phpat_` prefix is intentional and display-only — it makes personal access tokens easy to recognize in logs, config files, and secret-scanning tools, unlike a bare JWT. It's stripped automatically before the token is verified, so nothing else about how you use the token changes.
 
-  If a `phpat_` token returns 401, your instance predates the prefix-stripping fix — upgrade PipesHub. Until you can, store the token without the `phpat_` prefix and add it back afterwards.
+  If a `phpat_` token returns 401, your instance predates the prefix-stripping fix — upgrade Novaplan AI. Until you can, store the token without the `phpat_` prefix and add it back afterwards.
 </Tip>
 
 `PIPESHUB_MCP_TOKEN` is the same value you'll pass as `--bearer-auth` or in an `Authorization: Bearer` header below — the paste block just saves you from copying it twice.
@@ -78,7 +78,7 @@ PIPESHUB_MCP_TOKEN=phpat_eyJhbGciOiJIUzI1NiIs...
 
 ## Using a Personal Access Token
 
-Send it as a standard bearer token on any authenticated PipesHub API request, including the [MCP endpoint](/mcp/overview):
+Send it as a standard bearer token on any authenticated Novaplan AI API request, including the [MCP endpoint](/mcp/overview):
 
 ```bash
 curl -X POST https://your-pipeshub-instance.com/mcp \
@@ -213,7 +213,7 @@ Both accept an optional body:
 <CardGroup cols={2}>
 
 <Card title="One-time display" icon="eye-slash">
-  The raw token is shown only at creation time. Only its hash is stored — PipesHub can't show it to you again if you lose it.
+  The raw token is shown only at creation time. Only its hash is stored — Novaplan AI can't show it to you again if you lose it.
 </Card>
 
 <Card title="Scanner-friendly prefix" icon="magnifying-glass">
@@ -249,7 +249,7 @@ No, unless you're an org admin. Regular users can only see and revoke tokens the
 </Accordion>
 
 <Accordion title="What happens to my tokens if I'm removed from the org?">
-They stop authenticating immediately — PipesHub rejects a personal access token whose owning user has been deleted, the same way it would reject an expired one.
+They stop authenticating immediately — Novaplan AI rejects a personal access token whose owning user has been deleted, the same way it would reject an expired one.
 </Accordion>
 
 <Accordion title="Is there a limit on how many tokens I can create?">

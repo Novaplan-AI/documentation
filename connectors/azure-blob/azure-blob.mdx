@@ -30,9 +30,9 @@ icon: "/logo/azure-blob.png"
 
 Azure Blob Storage is Microsoft's cloud place to keep files — documents, images, backups, anything.
 
-This connector copies those files into PipesHub so you can **search them from the PipesHub chat and knowledge base**, just like any other document.
+This connector copies those files into Novaplan AI so you can **search them from the Novaplan AI chat and knowledge base**, just like any other document.
 
-You do **not** move or delete anything in Azure. PipesHub only reads the files.
+You do **not** move or delete anything in Azure. Novaplan AI only reads the files.
 
 ### How Azure organises your files
 
@@ -44,13 +44,13 @@ Three words you'll see again and again:
 | **Container** | A folder at the top of the house. You can have many. |
 | **Blob** | One file inside a container (PDF, image, CSV — anything). |
 
-When you set up this connector, PipesHub will read the blobs from the containers you pick.
+When you set up this connector, Novaplan AI will read the blobs from the containers you pick.
 
 ### What you need before you start
 
 1. An Azure account with access to a Storage account.
 2. Permission to view the storage account's **Access keys** (usually Owner or Contributor role).
-3. A PipesHub account where you can add connectors.
+3. A Novaplan AI account where you can add connectors.
 
 That's it. You don't need to install anything.
 
@@ -66,11 +66,11 @@ That's it. You don't need to install anything.
 
 ### Step 1 — Get the connection string from Azure
 
-The **connection string** is one long password-like line that tells PipesHub how to reach your storage. We just need to copy it.
+The **connection string** is one long password-like line that tells Novaplan AI how to reach your storage. We just need to copy it.
 
 1. Go to [https://portal.azure.com](https://portal.azure.com) and sign in.
 2. In the search bar at the top, type **Storage accounts** and click it.
-3. Click the storage account you want PipesHub to read.
+3. Click the storage account you want Novaplan AI to read.
 4. In the left menu, click **Security + networking → Access keys**.
 
 <div className="text-center">
@@ -92,9 +92,11 @@ You now have the connection string in your clipboard. Don't close the tab yet �
 
 ---
 
-### Step 2 — Open Azure Blob in PipesHub
+<div id="step-2--open-azure-blob-in-pipeshub" />
 
-1. In PipesHub, look at the left sidebar.
+### Step 2 — Open Azure Blob in Novaplan AI
+
+1. In Novaplan AI, look at the left sidebar.
 2. Under **Workspace**, click **Connectors**.
 3. In the list, find **Azure Blob**.
 4. Click **Setup** on its tile.
@@ -144,8 +146,8 @@ The panel moves you to the second tab, **Configure Records**.
 
 Under **Sync settings** there are two choices:
 
-- **Sync Strategy** — leave as **Scheduled** if you want PipesHub to update on its own. Pick **Manual** if you want to press a button every time.
-- **Sync Interval** — how often PipesHub checks Azure for new files. **1 Hour** is a good starting point.
+- **Sync Strategy** — leave as **Scheduled** if you want Novaplan AI to update on its own. Pick **Manual** if you want to press a button every time.
+- **Sync Interval** — how often Novaplan AI checks Azure for new files. **1 Hour** is a good starting point.
 
 <Info>
   Not sure? Keep **Scheduled** and **1 Hour**. You can change it later.
@@ -155,7 +157,7 @@ Under **Sync settings** there are two choices:
 
 ### Step 5 — (Optional) Narrow down what gets synced
 
-If your storage account has lots of files you don't need, you can tell PipesHub to skip some.
+If your storage account has lots of files you don't need, you can tell Novaplan AI to skip some.
 
 Scroll to **Indexing & sync filters**. Click **+ Add filter** on the right.
 
@@ -187,7 +189,7 @@ Common examples:
 - **Only one container** — field: *Container Names* · operator: *In* · pick the container
 
 <Info>
-  If you don't add any filters, PipesHub will sync every file it can read. That's fine for small accounts.
+  If you don't add any filters, Novaplan AI will sync every file it can read. That's fine for small accounts.
 </Info>
 
 When you're done, click **Save Configuration** at the bottom of the panel.
@@ -211,7 +213,7 @@ Right now it says **Sync Paused**. To start syncing:
 1. Find the **Sync Enabled** toggle on the right side of the row.
 2. Click it.
 
-The status changes to **Syncing** and PipesHub starts reading your files.
+The status changes to **Syncing** and Novaplan AI starts reading your files.
 
 ---
 
@@ -229,7 +231,7 @@ Click anywhere on the row to open the **Overview** panel on the right.
 
 Here you can see:
 
-- **Total** — how many files PipesHub has found.
+- **Total** — how many files Novaplan AI has found.
 - **Failed** — files it couldn't read (usually permission or file-type issues).
 - **Processing** — files it's still reading right now.
 - **Not Started** — files waiting their turn.
@@ -238,7 +240,7 @@ Here you can see:
 
 You can close the panel and come back any time — the sync keeps running in the background.
 
-That's it! 🎉 Your Azure Blob files are now searchable in PipesHub.
+That's it! 🎉 Your Azure Blob files are now searchable in Novaplan AI.
 
 </div>
 
@@ -250,7 +252,7 @@ That's it! 🎉 Your Azure Blob files are now searchable in PipesHub.
 
 ### First sync (full scan)
 
-The very first time, PipesHub reads **everything** in the containers you chose. Big accounts take longer:
+The very first time, Novaplan AI reads **everything** in the containers you chose. Big accounts take longer:
 
 | Number of files | Roughly how long |
 |-----------------|------------------|
@@ -263,7 +265,7 @@ Tip: using filters (e.g. PDFs only) makes the first sync much faster.
 
 ### Later syncs (just what's new)
 
-After the first sync, PipesHub only looks at **what changed**:
+After the first sync, Novaplan AI only looks at **what changed**:
 
 - New files — added.
 - Updated files — refreshed.
@@ -275,16 +277,16 @@ These later syncs are usually quick, even for big accounts.
 
 When you set up the connector you picked a scope:
 
-- **Personal** — only you can search the files inside PipesHub.
+- **Personal** — only you can search the files inside Novaplan AI.
 - **Team** — everyone in your organisation can search them.
 
-This only controls PipesHub. It does **not** change access in Azure.
+This only controls Novaplan AI. It does **not** change access in Azure.
 
 </div>
 
 </Accordion>
 
-<Accordion title="What PipesHub can read">
+<Accordion title="What Novaplan AI can read">
 
 <div className="mt-4">
 
@@ -321,7 +323,7 @@ They still show up in results by filename.
 
 <Accordion title="I get an 'authentication failed' error">
 
-- Go back to Azure, click **Copy** on the Connection string again, and paste it fresh in PipesHub.
+- Go back to Azure, click **Copy** on the Connection string again, and paste it fresh in Novaplan AI.
 - Check you didn't paste an extra space or line break.
 - If the connection string was recently rotated in Azure, you need the new one.
 - Make sure the storage account still exists.
@@ -332,7 +334,7 @@ They still show up in results by filename.
 
 - Double-check the connection string is the right one.
 - Make sure the storage account has containers (blob containers, not file shares).
-- Some storage accounts have firewall rules — ask your Azure admin to allow PipesHub.
+- Some storage accounts have firewall rules — ask your Azure admin to allow Novaplan AI.
 
 </Accordion>
 
@@ -364,7 +366,7 @@ They still show up in results by filename.
 Usually this means the Azure access keys were changed.
 
 - Go back to Step 1 and copy the new connection string.
-- In PipesHub, open the instance panel and click **Manage Configuration**.
+- In Novaplan AI, open the instance panel and click **Manage Configuration**.
 - Paste the new string on the Authenticate Instance tab and save.
 
 </Accordion>
@@ -381,12 +383,12 @@ Usually this means the Azure access keys were changed.
   Yes. On the Azure Blob instance page click **+ Add Another Instance** and repeat the steps with the new connection string.
 </Accordion>
 
-<Accordion title="Does PipesHub change anything in Azure?">
+<Accordion title="Does Novaplan AI change anything in Azure?">
   No. The connector only **reads** files. It doesn't upload, move, rename, or delete anything.
 </Accordion>
 
 <Accordion title="What happens if I delete a file in Azure?">
-  On the next sync, PipesHub notices it's gone and removes it from search.
+  On the next sync, Novaplan AI notices it's gone and removes it from search.
 </Accordion>
 
 <Accordion title="Can I sync just one folder inside a container?">
@@ -394,7 +396,7 @@ Usually this means the Azure access keys were changed.
 </Accordion>
 
 <Accordion title="Is the connection string encrypted?">
-  Yes. PipesHub stores it as a secret — it's not visible in logs or to other users.
+  Yes. Novaplan AI stores it as a secret — it's not visible in logs or to other users.
 </Accordion>
 
 </AccordionGroup>

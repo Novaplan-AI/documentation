@@ -30,7 +30,7 @@ icon: "/logo/jira.png"
 
 Jira Data Center (and Jira Server) is the version of Jira that you install and run on your own servers. Atlassian does not host it for you.
 
-The Jira Data Center connector syncs projects, issues, comments, and attachments from your instance. It keeps Jira's permissions, so each user in PipesHub only sees what they can already see in Jira.
+The Jira Data Center connector syncs projects, issues, comments, and attachments from your instance. It keeps Jira's permissions, so each user in Novaplan AI only sees what they can already see in Jira.
 
 <Info>
   If Atlassian hosts your Jira for you, that is Jira Cloud. Use the [Jira Cloud connector](/connectors/jira/jira) instead. The two connectors are not interchangeable.
@@ -79,7 +79,7 @@ Check these before you start:
 
 | Requirement | Detail |
 |-------------|--------|
-| **Deployment** | Jira Data Center or Jira Server that PipesHub can reach over HTTPS |
+| **Deployment** | Jira Data Center or Jira Server that Novaplan AI can reach over HTTPS |
 | **Base URL** | The root URL of your instance, such as `https://jira.company.com`. Not a page URL like `/browse/PROJ-1` |
 | **PAT support** | Personal Access Tokens need Jira Core 8.14 or later. On older versions, use Basic Authentication |
 | **Service account** | Use a dedicated account for the integration rather than someone's personal account |
@@ -101,13 +101,13 @@ The connector reads a few admin-only APIs to work out who is allowed to see what
 
 ### Prerequisite: Email visibility
 
-PipesHub matches Jira users to PipesHub accounts by email address.
+Novaplan AI matches Jira users to Novaplan AI accounts by email address.
 
 <Info>
-  If a user hides their email in Jira, PipesHub can still find them, as long as that user already exists in PipesHub or in another connected app. Making emails public is not required here. It only makes the first sync faster, because the connector does not have to look up each user one by one.
+  If a user hides their email in Jira, Novaplan AI can still find them, as long as that user already exists in Novaplan AI or in another connected app. Making emails public is not required here. It only makes the first sync faster, because the connector does not have to look up each user one by one.
 </Info>
 
-This is different from Jira Cloud, where a hidden email stops PipesHub from matching the user at all.
+This is different from Jira Cloud, where a hidden email stops Novaplan AI from matching the user at all.
 
 <Note>
   On Jira Data Center, email visibility is a **global setting that an administrator controls**. Users cannot change it for themselves, unlike Jira Cloud where each person sets their own.
@@ -186,13 +186,13 @@ To make the first sync faster, a Jira administrator can make email addresses vis
 
 #### Step 2: Authenticate Instance tab — enter your credentials
 
-1. In PipesHub, go to **Workspace Settings** → **Connectors**, find **Jira Data Center**, and click **+ Setup**.
+1. In Novaplan AI, go to **Workspace Settings** → **Connectors**, find **Jira Data Center**, and click **+ Setup**.
 2. The connector panel opens as a drawer on the right.
 3. On the **Authenticate Instance** tab, select **Personal Access Token** in the **Authentication method** dropdown.
 4. Enter:
    - **Base URL** — the root URL of your Jira, such as `https://jira.company.com`, with no trailing slash
    - **Personal Access Token** — the token you copied in Step 1
-5. Click **Next**. PipesHub checks the credentials and moves you to the **Configure Records** tab.
+5. Click **Next**. Novaplan AI checks the credentials and moves you to the **Configure Records** tab.
 
 <div className="text-center">
   <img
@@ -219,13 +219,13 @@ Use this on instances that do not support Personal Access Tokens, or where an ad
 
 #### Step 2: Authenticate Instance tab — enter your credentials
 
-1. In PipesHub, go to **Workspace Settings** → **Connectors**, find **Jira Data Center**, and click **+ Setup**.
+1. In Novaplan AI, go to **Workspace Settings** → **Connectors**, find **Jira Data Center**, and click **+ Setup**.
 2. On the **Authenticate Instance** tab, select **Basic Authentication** in the **Authentication method** dropdown.
 3. Enter:
    - **Base URL** — the root URL of your Jira, such as `https://jira.company.com`, with no trailing slash
    - **Username** — the Jira username of the service account, such as `svc-jira-sync`
    - **Password** — the account password
-4. Click **Next**. PipesHub checks the credentials and moves you to the **Configure Records** tab.
+4. Click **Next**. Novaplan AI checks the credentials and moves you to the **Configure Records** tab.
 
 <div className="text-center">
   <img
@@ -306,7 +306,7 @@ Available sync filters:
 - *Recent issues only:* Modified Date → `Is After` → `2024-06-01`
 - *Issues but not attachments:* turn off **Index issue and comment attachments**
 
-Click **Save**. PipesHub shows a dialog saying **"Instance is configured and ready to sync"**, with two choices: **I'll do it later** or **Start syncing now**.
+Click **Save**. Novaplan AI shows a dialog saying **"Instance is configured and ready to sync"**, with two choices: **I'll do it later** or **Start syncing now**.
 
 <div className="text-center">
   <img
@@ -334,7 +334,7 @@ The Jira Data Center connector syncs:
 - **Permissions** — project permission schemes and issue-level security
 
 <Info>
-  **Want agents to act in Jira?** This connector only syncs data into PipesHub. To let agents create and update issues, set up the [Jira Data Center toolset](/toolsets/jira/jira-data-center) as well.
+  **Want agents to act in Jira?** This connector only syncs data into Novaplan AI. To let agents create and update issues, set up the [Jira Data Center toolset](/toolsets/jira/jira-data-center) as well.
 </Info>
 
 ## Useful Links
@@ -372,8 +372,8 @@ The Jira Data Center connector syncs:
 - The account may be CAPTCHA-locked after failed sign-ins. Sign in once in a browser to clear it
 
 **Connection times out, or you see a certificate error:**
-- Check that PipesHub can reach the base URL through your firewall, VPN, or allowlist
-- If your instance uses a self-signed or internal certificate, PipesHub needs to trust that certificate
+- Check that Novaplan AI can reach the base URL through your firewall, VPN, or allowlist
+- If your instance uses a self-signed or internal certificate, Novaplan AI needs to trust that certificate
 
 **Nothing is syncing:**
 - Check that the connector shows **Active**
@@ -531,6 +531,6 @@ Check these in order:
 <div className="text-center mt-12 p-6 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl">
   <h3 className="text-lg font-semibold mb-2">Ready to Get Started?</h3>
   <p className="text-gray-600 dark:text-gray-400">
-    Connect your self-hosted Jira Data Center instance to PipesHub in a few minutes. Follow the steps above to search every project and issue across your Jira content.
+    Connect your self-hosted Jira Data Center instance to Novaplan AI in a few minutes. Follow the steps above to search every project and issue across your Jira content.
   </p>
 </div>
