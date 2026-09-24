@@ -23,6 +23,10 @@ Use the preview URL printed by the CLI. It may select another port if the reques
 - Skip guides that are missing upstream until PipesHub supplies them. Review and rebrand them before adding them here.
 - Keep internal audit reports, Enterprise artifacts, credentials, and deferred review material outside this public repository.
 
+## Languages
+
+The existing root-level guide paths are English. German translations live under `de/` with matching page paths; the language navigation is configured in `docs.json`. Translate customer guides first, then complete the full technical reference. Keep links within the current language when a translation exists and label links to untranslated English guides clearly. Preserve technical identifiers and recognizable UI field names.
+
 ## Upstream updates
 
 Compare incoming changes with the upstream PipesHub documentation and apply selected updates. Review each update for product applicability, instructions, links, screenshots, and branding. Do not overwrite Novaplan configuration with upstream defaults. Preserve any upstream license or attribution notices supplied with imported material.

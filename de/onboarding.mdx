@@ -1,0 +1,115 @@
+---
+title: "Workspace-Einrichtung"
+description: "Konfigurationsreferenz für die Workspace-Administration. Novaplan übernimmt den Großteil der Einrichtung."
+---
+
+## Bevor Sie Einstellungen ändern
+
+Novaplan erstellt Ihren Workspace, übernimmt den Großteil der Einrichtung und Verwaltung und lädt Sie ein. Wenn Sie sich zum ersten Mal anmelden, beginnen Sie mit [Erste Schritte](/de/quickstart).
+
+<Info>
+  Diese Anleitung bleibt als Referenz für Administratorinnen und Administratoren verfügbar. Stimmen Sie Änderungen mit dem Novaplan-Team ab und führen Sie nur die für Ihren Workspace erforderlichen Schritte aus. Bereits eingerichtete Einstellungen müssen Sie nicht erneut konfigurieren. Abbildungen und einzelne Feldnamen zeigen die englische Oberfläche.
+</Info>
+
+## Schritt 1: KI-Modell konfigurieren, falls erforderlich
+
+Für KI-Funktionen muss ein Modell konfiguriert sein. Ist bereits ein Modell eingerichtet, können Sie diesen Schritt überspringen. Andernfalls kann die zuständige Administration das Modell in Abstimmung mit Novaplan einrichten.
+
+1. Wählen Sie den KI-Anbieter, beispielsweise OpenAI oder Azure OpenAI.
+2. Tragen Sie bei Bedarf die Client ID ein.
+3. Geben Sie den API Key zur Authentifizierung an.
+4. Geben Sie den Model Name ein, beispielsweise `gpt-4-turbo`.
+5. Klicken Sie auf **Continue**, um fortzufahren.
+
+<img src="/images/onboarding/aiModels.png" alt="Einrichtung des KI-Modells" width="100%" />
+
+Weitere Informationen: [KI-Modellkonfiguration (Englisch)](/ai-models/overview).
+
+<Info>Ein konfiguriertes KI-Modell ist Voraussetzung für KI-Funktionen.</Info>
+
+## Schritt 2: Embedding-Modell konfigurieren, optional
+
+Embeddings ermöglichen semantische Suche und das Auffinden von Dokumenten. Legen Sie den Anbieter und das Modell fest, mit dem Textinhalte in Vektoren umgewandelt werden.
+
+1. Wählen Sie den Embedding-Anbieter, beispielsweise OpenAI, Azure OpenAI oder Sentence Transformer.
+2. Tragen Sie bei Bedarf den Endpoint ein.
+3. Geben Sie bei Bedarf den API Key an.
+4. Geben Sie den Namen des gewünschten Embedding-Modells ein.
+5. Klicken Sie auf **Continue**.
+
+<img src="/images/onboarding/embeddings.png" alt="Einrichtung des Embedding-Modells" width="100%" />
+
+<Info>Sie können diesen Schritt überspringen.</Info>
+
+## Schritt 3: Speicher konfigurieren, optional
+
+Die Speicherkonfiguration bestimmt, wo Dateien gespeichert und abgerufen werden. Die Standardkonfiguration verwendet lokalen Speicher auf dem System, auf dem die Plattform betrieben wird.
+
+1. Wählen Sie einen Storage Provider, beispielsweise AWS S3, Local oder Azure Blob Storage.
+2. Tragen Sie die zugehörigen Einstellungen ein:
+   - **Local Storage:** Mount Name und Base URL.
+   - **Amazon S3:** Access Key, Secret Key und Bucket- beziehungsweise Speicherangaben.
+   - **Azure Blob:** Account Name, Container Name, Account Key, Protocol und Endpoint Suffix.
+3. Klicken Sie auf **Continue**, um die Einstellungen zu speichern.
+
+<img src="/images/onboarding/storage.png" alt="Speicherkonfiguration" width="100%" />
+
+Weitere Informationen: [Speicherdienst (Englisch)](/system-overview/storage).
+
+<Info>Sie können diesen Schritt überspringen. Standardmäßig wird lokaler Speicher gewählt.</Info>
+
+## Schritt 4: Öffentliche URLs konfigurieren, optional
+
+Diese Einstellungen legen die öffentlich erreichbaren Adressen für Frontend und Konnektordienste fest. Die Adressen werden unter anderem für OAuth-Anmeldung, Weiterleitungen und Webhook-Callbacks verwendet.
+
+1. Tragen Sie bei Bedarf den Frontend Endpoint ein.
+2. Tragen Sie bei Bedarf den Connector Endpoint ein.
+3. Klicken Sie auf **Continue**.
+
+<img src="/images/onboarding/publicUrls.png" alt="Konfiguration öffentlicher URLs" width="100%" />
+
+Weitere Informationen: [Interne Dienste (Englisch)](/system-overview/internal-services).
+
+<Info>Sie können diesen Schritt überspringen.</Info>
+
+## Schritt 5: Konnektoren konfigurieren, optional
+
+Konnektoren verbinden externe Anwendungen mit dem System. Geben Sie die erforderlichen Zugangsdaten ein, um die Verbindung zu authentifizieren.
+
+### Unternehmenszugang
+
+Für die hier gezeigte Google-Konfiguration benötigen Sie die Dienstkonto-Zugangsdaten als JSON-Datei und die E-Mail-Adresse Ihres Google-Administratorkontos.
+
+Weitere Informationen: [Google-Drive-Konnektor (Englisch)](/connectors/google-workspace/drive/drive).
+
+### Individueller Zugang
+
+Sie benötigen Google Client ID und Client Secret. Hinterlegen Sie die im Dialog angezeigte Redirect URI in der Google Cloud Console.
+
+Weitere Informationen: [Google-Drive-Konnektor (Englisch)](/connectors/google-workspace/drive/drive).
+
+<img src="/images/onboarding/connectors.png" alt="Konnektorkonfiguration" width="100%" />
+
+Klicken Sie auf **Continue**, um die Konfiguration zu speichern.
+
+<Info>Sie können diesen Schritt überspringen und die Konnektoren später über die Einstellungen im Profil konfigurieren.</Info>
+
+## Schritt 6: SMTP konfigurieren, optional
+
+SMTP ermöglicht den E-Mail-Versand, beispielsweise für Einladungen und das Zurücksetzen von Passwörtern.
+
+1. Geben Sie die SMTP Server Address ein, beispielsweise `smtp.example.com`.
+2. Tragen Sie die Port Number ein, beispielsweise `587` für TLS.
+3. Geben Sie Username und Password zur Authentifizierung an.
+4. Legen Sie die From Email Address fest, beispielsweise `noreply@example.com`.
+5. Klicken Sie auf **Save**, um die Einrichtung zu speichern.
+
+<img src="/images/onboarding/smtp.png" alt="SMTP-Einrichtung" width="100%" />
+
+Weitere Informationen: [SMTP-Konfiguration (Englisch)](/smtp).
+
+<Info>Wenn keine E-Mail-Funktionen benötigt werden, können Sie diesen Schritt überspringen. Die Konfiguration lässt sich später in den Authentifizierungseinstellungen ergänzen.</Info>
+
+## Einrichtung prüfen
+
+Prüfen Sie nach den vereinbarten Einrichtungsschritten, ob Anmeldung und gewünschte Funktionen verfügbar sind. Wenden Sie sich an [Novaplan Support](/de/contact-us), wenn eine Einstellung fehlt oder Sie nicht sicher sind, ob ein Schritt für Ihren Workspace erforderlich ist.

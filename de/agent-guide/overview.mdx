@@ -1,0 +1,121 @@
+---
+title: "Agentenübersicht"
+description: "Erstellen Sie KI-Agenten mit dem visuellen Editor, Toolsets und Dokumentensammlungen."
+---
+
+<div className="not-prose mt-10">
+  <div className="p-6 border border-gray-200 dark:border-gray-700 rounded-xl bg-blue-50 dark:bg-gray-800">
+    <div className="text-xl font-semibold text-gray-900 dark:text-white">Novaplan AI Agents</div>
+    <p className="text-base text-gray-700 dark:text-gray-300 mt-0 mb-5">Erstellen Sie eigene KI-Agenten, die Aktionen in Ihren verbundenen Anwendungen ausführen.</p>
+    <div className="flex flex-wrap items-center gap-2">
+      <span className="px-3 py-1.5 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-sm font-medium">Beta</span>
+      <span className="px-3 py-1.5 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-sm font-medium">Visueller Editor</span>
+    </div>
+  </div>
+</div>
+
+## Was sind Agenten?
+
+Agenten sind anpassbare KI-Assistenten, die mit verbundenen Anwendungen interagieren, Dokumentensammlungen durchsuchen und Aktionen für Sie ausführen. Sie werden für bestimmte Arbeitsabläufe konfiguriert:
+
+- **Reasoning Models:** KI-Modelle mit Schlussfolgerungsfähigkeiten.
+- **Toolsets:** Werkzeuge für externe Dienste wie Slack, Jira und Confluence.
+- **Wissensquellen:** Indexierte Dokumente und Sammlungen.
+- **Eigene System-Prompts:** Vorgaben für Verhalten und Persönlichkeit des Agenten.
+
+<Note>
+  Wenn Sie Konnektoren und Toolsets gemeinsam verwenden möchten, fügen Sie im Agent Builder Knoten aus **Knowledge** für Dokumentensuche und Kontext hinzu und Knoten aus **Tools** für Aktionen. Verbinden Sie beide mit dem **Agent Core**. Die englischen Bezeichnungen entsprechen den Begriffen in den gezeigten Anleitungen.
+</Note>
+
+## Grundbegriffe
+
+### Visueller Workflow-Editor
+
+Der auf ReactFlow basierende Editor verwendet Drag-and-drop:
+
+1. Fügen Sie einen **Agent Core** für die Grundkonfiguration hinzu.
+2. Verbinden Sie **Reasoning Model**-Knoten mit aktivierter Reasoning-Funktion.
+3. Fügen Sie **Toolset**-Knoten für externe Anwendungen hinzu.
+4. Verbinden Sie **Collection**-Knoten für die Suche in indexierten Dokumenten.
+5. Verbinden Sie die Komponenten mit Verbindungslinien.
+
+### Agent Core
+
+| Feld | Bedeutung |
+| --- | --- |
+| **Name** | Anzeigename des Agenten. |
+| **Description** | Kurze Beschreibung seiner Aufgabe. |
+| **Start Message** | Begrüßung beim Start eines Gesprächs. |
+| **Instruction** | Detaillierte Anweisungen zu Verhalten und Fähigkeiten. |
+| **System Prompt** | Vorgaben zu Verhalten und Persönlichkeit. |
+
+### Toolsets
+
+Toolsets bündeln Aktionen für externe Anwendungen:
+
+- **Jira:** Vorgänge erstellen, Tickets suchen und Kommentare hinzufügen.
+- **Slack:** Nachrichten senden, Kanäle durchsuchen und Gespräche verwalten.
+- **Confluence:** Seiten erstellen oder aktualisieren und Inhalte suchen.
+- **Gmail:** E-Mails senden, lesen und durchsuchen.
+- **Calendar:** Termine erstellen oder ändern und Verfügbarkeiten prüfen.
+- **Drive:** Dateien auflisten, Ordner verwalten und Dokumente suchen.
+
+<Info>
+  Toolsets müssen vor der Verwendung konfiguriert und authentifiziert sein. Novaplan übernimmt den Großteil der Einrichtung; die [Toolset-Referenz (Englisch)](/toolsets/overview) bleibt für Sie verfügbar.
+</Info>
+
+### Dokumentensammlungen
+
+- **Konnektoren:** Synchronisierte und indexierte Daten aus verbundenen Anwendungen wie Google Drive oder SharePoint.
+- **Collections:** Eigene Sammlungen hochgeladener Dokumente.
+
+## Fähigkeiten
+
+| Fähigkeit | Beschreibung |
+| --- | --- |
+| Wissen durchsuchen | Indexierte Dokumente abfragen und relevante Informationen finden. |
+| Aktionen ausführen | Über Toolsets Tickets erstellen, Nachrichten senden und Seiten aktualisieren. |
+| Mehrere Werkzeuge kombinieren | Verschiedene Toolsets innerhalb eines Gesprächs verwenden. |
+| Kontextbezogen antworten | Mit System-Prompts ein konsistentes Verhalten vorgeben. |
+
+## Einstieg
+
+1. Richten Sie die benötigten Toolsets in Abstimmung mit Novaplan ein: [Toolset-Übersicht (Englisch)](/toolsets/overview).
+2. Erstellen Sie Ihren Agenten im visuellen Editor: [Einrichtungsanleitung (Englisch)](/agent-guide/setup-guide).
+3. Testen Sie den Agenten im Chat und verfeinern Sie die Konfiguration.
+
+## Häufige Fragen
+
+<AccordionGroup>
+  <Accordion title="Was unterscheidet Konnektoren und Toolsets?">
+    | Aspekt | Konnektoren | Toolsets |
+    | --- | --- | --- |
+    | Zweck | Daten für die Suche synchronisieren und indexieren. | Aktionen durch Agenten ermöglichen. |
+    | Datenfluss | Import in Novaplan AI. | Lesen und Schreiben über APIs. |
+    | Verwendung | Daten abfragen und durchsuchen. | Aktionen mit Daten ausführen. |
+
+    Beispiel: Ein Gmail-Konnektor indexiert Ihren E-Mail-Verlauf. Ein Gmail-Toolset ermöglicht einem Agenten, neue E-Mails zu senden.
+  </Accordion>
+  <Accordion title="Wann verwende ich einen Konnektor und wann ein Toolset?">
+    Verwenden Sie einen **Konnektor** für die Suche in Dokumenten, E-Mails und Seiten. Verwenden Sie ein **Toolset** für Aktionen wie das Erstellen oder Ändern von Inhalten, den Nachrichtenversand oder analytische Abfragen wie JQL, CQL und Berichte.
+  </Accordion>
+  <Accordion title="Kann eine OAuth-Anwendung für Konnektor und Toolset verwendet werden?">
+    Ja. Hinterlegen Sie in der Entwicklerkonsole des jeweiligen Dienstes beide Redirect-URLs, beispielsweise `/connectors/oauth/callback/Gmail` für den Konnektor und `/api/oauth/callback/Gmail` für das Toolset. Ergänzen Sie die erforderlichen Leseberechtigungen für den Konnektor und die Lese-, Schreib- beziehungsweise Löschberechtigungen für die gewünschten Toolset-Aktionen.
+
+    Beide Konfigurationen können dann dieselbe Client ID und dasselbe Client Secret verwenden. Das vereinfacht Einrichtung und Verwaltung.
+  </Accordion>
+  <Accordion title="Welche Knoten muss ich im Agent Builder verbinden?">
+    Der **Agent Core** ist die Zentrale. Verbinden Sie mindestens ein **Reasoning Model**. Ergänzen Sie bei Bedarf **Toolset**-Knoten für Aktionen und **Collection**-Knoten für die Suche. Alle Knoten müssen mit dem Agent Core verbunden sein; der Agent kann die verbundenen Toolsets und Sammlungen verwenden.
+  </Accordion>
+  <Accordion title="Kann ich im Chat Wissensquelle und Werkzeug auswählen?">
+    Ja. Im Gespräch können Sie bestimmte **Collections**, **Toolsets** und ein **Reasoning Model** auswählen. So legen Sie fest, welche Quellen durchsucht oder welche Werkzeuge für eine Aufgabe verwendet werden sollen.
+  </Accordion>
+  <Accordion title="Kann ich mehrere Reasoning Models mit einem Agenten verbinden?">
+    Ja. Verbinden Sie mehrere Reasoning-Model-Knoten mit dem Agent Core. Im Chat können Benutzer das passende Modell für eine Anfrage auswählen, beispielsweise abhängig von der Komplexität der Aufgabe.
+  </Accordion>
+</AccordionGroup>
+
+## Nächste Schritte
+
+- [Agenten einrichten (Englisch)](/agent-guide/setup-guide)
+- [Toolsets konfigurieren (Englisch)](/toolsets/overview)
