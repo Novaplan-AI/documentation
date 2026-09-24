@@ -1,0 +1,73 @@
+---
+title: "RSS"
+description: "Öffentliche RSS- und Atom-Feeds mit Novaplan AI synchronisieren."
+---
+
+## Überblick
+
+Der RSS-Konnektor importiert Einträge aus **öffentlich erreichbaren RSS-2.0- und Atom-Feeds**. Er ruft die Feed-Adressen regelmäßig ab und kann zusätzlich den vollständigen Text der verlinkten Artikel für die Suche laden. Sie benötigen dafür weder OAuth noch Zugangsdaten, sondern erreichbare Feed-Adressen mit `http://` oder `https://`.
+
+Ein Konnektor kann mehrere Feeds enthalten. Trennen Sie die Adressen mit Kommas oder Zeilenumbrüchen; doppelte Adressen werden entfernt.
+
+Novaplan übernimmt den Großteil der Einrichtung. Die folgenden Schritte dienen auch als Referenz, wenn Sie einen Konnektor selbst verwalten.
+
+## Konnektor einrichten
+
+### 1. Bereich auswählen
+
+Öffnen Sie in Novaplan AI den RSS-Konnektor:
+
+- **Persönlich:** **Workspace Settings → Personal → Your Connectors → RSS → Setup**. Die importierten Inhalte sollen nur für Sie sichtbar sein.
+- **Team:** **Workspace Settings → Workspace → Connectors → RSS → Setup**. Die importierten Inhalte sind für die Organisation lesbar; die Einrichtung erfordert Administratorrechte.
+
+<img src="/images/connectors/rss/rss-authenticate-instance.png" alt="RSS-Konfiguration im Reiter Authenticate Instance" />
+
+Für RSS ist keine Anmeldung beim Anbieter erforderlich. Geben Sie einen **Instance name** ein und wählen Sie **Next**.
+
+<img src="/images/connectors/rss/rss-instance-name-filled.png" alt="Name der RSS-Konnektorinstanz" />
+
+### 2. Feeds und Synchronisierung festlegen
+
+Im Reiter **Configure Records** legen Sie die folgenden Werte fest:
+
+| Feld in der Oberfläche | Bedeutung |
+| --- | --- |
+| **Sync Strategy** | **Scheduled** führt die Synchronisierung in festen Abständen aus; **Manual** nur nach manuellem Start. |
+| **Sync Interval** | Abstand zwischen geplanten Läufen; standardmäßig eine Stunde. |
+| **Feed URLs** | Erforderliche RSS- oder Atom-Adressen, etwa `https://blog.example.com/rss.xml`. Mehrere Adressen können durch Kommas oder Zeilenumbrüche getrennt werden. Ungültige oder doppelte Adressen werden übersprungen. |
+| **Max Articles Per Feed** | Höchstzahl neuerer Artikel pro Feed und Lauf: 1 bis 500, standardmäßig 50. |
+| **Fetch Full Content** | Bei Aktivierung wird der verlinkte Artikel abgerufen und sein Text extrahiert. Ohne diese Option wird nur die Zusammenfassung aus dem Feed indexiert. |
+
+<img src="/images/connectors/rss/rss-configure-records.png" alt="RSS-Einstellungen für Feeds und Synchronisierung" />
+
+Je nach Workspace-Einstellungen können zusätzlich Filter für manuelle Synchronisierung und Schalter für die Indexierung angezeigt werden. Diese lassen sich später auch unter **All Records** verwalten.
+
+### 3. Speichern und starten
+
+Wählen Sie **Save Configuration**. Im Bestätigungsfenster können Sie mit **Start Syncing Now** den ersten Lauf auslösen oder ihn mit **I'll do it later** verschieben.
+
+<img src="/images/connectors/rss/rss-ready-to-sync-dialog.png" alt="Bestätigung zum Start der RSS-Synchronisierung" />
+
+## Was synchronisiert wird
+
+Der Konnektor lädt jeden konfigurierten Feed, verarbeitet höchstens die festgelegte Anzahl neuerer Einträge und übernimmt deren Beschreibung. Mit **Fetch Full Content** versucht er außerdem, den Text der verlinkten Artikel zu extrahieren. Die Daten entsprechen dem Stand der letzten erfolgreichen Synchronisierung und werden nicht in Echtzeit aktualisiert.
+
+<Warning>
+  Ein persönlicher RSS-Konnektor sollte nur Inhalte für die Person freigeben, die ihn erstellt hat. Kann der Konnektor diese Person bei der Verarbeitung nicht ermitteln, vergibt die zugrunde liegende Implementierung stattdessen Leserechte auf Organisationsebene. Prüfen Sie die Berechtigungen nach dem ersten Lauf, insbesondere wenn Feeds vertrauliche Inhalte enthalten.
+</Warning>
+
+Nur öffentliche Feeds werden unterstützt. Seiten mit Anmeldung oder Cookies können nicht zuverlässig abgerufen werden. Manche Anbieter blockieren automatisierte Abrufe oder liefern nur kurze Zusammenfassungen; auch bei aktivierter Volltextoption ist deshalb nicht jeder Artikel vollständig verfügbar.
+
+## Häufige Fragen
+
+### Warum werden Feed-Adressen ignoriert?
+
+Nur Adressen mit `http://` oder `https://` werden übernommen. Leere Einträge und Dubletten entfallen. Wenn keine gültige Adresse übrig bleibt, müssen Sie die Liste korrigieren und erneut speichern.
+
+### Wann sollte ich „Fetch Full Content“ aktivieren?
+
+Aktivieren Sie die Option, wenn der Feed nur kurze Teaser enthält. Deaktivieren Sie sie, wenn der Feed bereits vollständige Texte liefert oder schnellere Läufe mit weniger Datenverkehr wichtiger sind.
+
+### Warum fehlt der Artikeltext?
+
+Die Zielseite kann automatisierte Abrufe blockieren, JavaScript für die Darstellung benötigen oder unpassendes HTML liefern. Deaktivieren Sie testweise **Fetch Full Content**, damit stattdessen die Feed-Zusammenfassung verwendet wird.

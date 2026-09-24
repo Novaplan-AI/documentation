@@ -1,0 +1,76 @@
+---
+title: "Web"
+description: "Öffentlich erreichbare Webseiten und Dateien mit Novaplan AI indexieren."
+---
+
+## Überblick
+
+Der Web-Konnektor ruft **öffentlich erreichbare** Seiten und Dateien einer Website über HTTP(S) ab. Er kann nur eine Startseite indexieren oder im rekursiven Modus Links verfolgen. Umfang, Tiefe und Dateigröße lassen sich begrenzen.
+
+Novaplan übernimmt den Großteil der Einrichtung. Diese Anleitung bleibt als Referenz für die Konfiguration verfügbar.
+
+## Konnektor einrichten
+
+### 1. Bereich und Namen auswählen
+
+Öffnen Sie unter **Workspace Settings → Personal → Your Connectors → Web → Setup** einen persönlichen Konnektor. Dessen Datensätze sind für Sie sichtbar. Administratoren können unter **Workspace Settings → Workspace → Connectors → Web → Setup** einen Team-Konnektor mit organisationsweit lesbaren Datensätzen einrichten.
+
+<img src="/images/connectors/web/1.png" alt="Web-Konnektor auswählen" />
+
+Geben Sie einen Namen für die Instanz ein und wählen Sie **Next**.
+
+<img src="/images/connectors/web/2.png" alt="Web-Konnektor benennen" />
+
+### 2. Startadresse angeben
+
+Tragen Sie die vollständige **Website URL** ein, beispielsweise `https://docs.example.com/guides/`.
+
+<Warning>
+  Die Startadresse und ihre Domain lassen sich nach dem Anlegen des Konnektors nicht ändern. Für eine andere Website müssen Sie eine neue Instanz erstellen.
+</Warning>
+
+<img src="/images/connectors/web/3.png" alt="Startadresse für den Web-Konnektor" />
+
+### 3. Crawling begrenzen
+
+| Feld in der Oberfläche | Bedeutung |
+| --- | --- |
+| **Crawl type** | **Single** verarbeitet nur die Startadresse. **Recursive** folgt Links innerhalb der festgelegten Grenzen. |
+| **Crawl depth** | Maximale Anzahl von Link-Ebenen ab der Startseite. |
+| **Maximum pages** | Höchstzahl unterschiedlicher Adressen pro Lauf. |
+| **Maximum size (MB)** | Größter zulässiger Antwortinhalt pro Adresse; größere Antworten werden übersprungen. |
+| **Follow external links** | Erlaubt bei Aktivierung Links zu anderen Domains. Standardmäßig bleibt das Crawling auf dem Host der Startadresse. |
+| **Restrict to start path** | Beschränkt den Abruf auf den Pfad unterhalb der Startadresse. Diese Option schließt das Folgen beliebiger externer Domains praktisch aus. |
+| **URL should contain** | Optionaler Teilstring-Filter ohne Beachtung der Großschreibung. Die Startadresse bleibt immer zugelassen. |
+
+### 4. Filter und Indexierung festlegen
+
+Mit **Enable manual sync filter** können Sie Datensätze zunächst ohne automatische Indexierung importieren und sie später unter **All Records** auswählen. Der **File extension filter** begrenzt Dateitypen. Über die Indexierungsschalter bestimmen Sie, ob Webseiten, Bilder und Dokumente an die Suche übergeben werden.
+
+<img src="/images/connectors/web/4.png" alt="Web-Konnektor: Crawling- und Indexierungseinstellungen" />
+
+Wählen Sie **Save Configuration** und aktivieren Sie anschließend den Konnektor, um das Crawling zu starten.
+
+## Verarbeitung und Grenzen
+
+Im rekursiven Modus entdeckt der Konnektor Links aus HTML und prüft Protokoll, Domain, Pfad, Dateiendung und optionale URL-Filter. Er verarbeitet HTML-Seiten sowie gängige Dokumentformate wie PDF, Office-Dateien, CSV, JSON, XML und Markdown. Für jede verarbeitete Adresse wird ein Datensatz angelegt; normalisierte URLs helfen, Dubletten zu vermeiden. Geplante Synchronisierung ist möglich, standardmäßig täglich.
+
+Der Konnektor erfasst ausschließlich Inhalte, die ohne Anmeldung erreichbar sind. Websites mit Bot-Schutz, Captchas oder strengen Abruflimits können die Synchronisierung verhindern. Beachten Sie die Nutzungsbedingungen der Zielseite und begrenzen Sie den Umfang bei Bedarf.
+
+## Häufige Fragen
+
+### Die Website liefert 403 oder blockiert den Abruf. Was kann ich tun?
+
+Wählen Sie eine einfachere Startadresse, beschränken Sie den Umfang auf einzelne Seiten oder prüfen Sie, ob die Website automatisierte Zugriffe erlaubt. Eine Anmeldung über Cookies oder eine interaktive Login-Seite kann der Web-Konnektor nicht ersetzen.
+
+### Warum wurden weniger Seiten als erwartet gefunden?
+
+Mögliche Gründe sind die Grenzen für Seitenzahl oder Tiefe, Domain- und Pfadregeln, URL- oder Dateifilter, zu große Antworten, HTTP-Fehler oder Links auf Dateitypen, denen der Crawler nicht als Seiten folgt.
+
+### Kann ich die Website-Adresse später ändern?
+
+Nein. Legen Sie für eine andere Startadresse oder Domain einen neuen Web-Konnektor an.
+
+### Wer kann die importierten Datensätze sehen?
+
+Bei Team-Konnektoren gelten organisationsweite Leserechte. Bei persönlichen Konnektoren orientiert sich die Sichtbarkeit an der Person, die den Konnektor erstellt hat. Prüfen Sie die konkreten Berechtigungen Ihres Workspaces nach der ersten Synchronisierung.
