@@ -1,201 +1,76 @@
 ---
-title: "Agents Overview"
-description: "Build intelligent AI agents with visual flow builder, toolsets, and collections"
+title: "KI-Agenten verstehen"
+description: "KI-Agenten mit passenden Modellen, Wissensquellen und Werkzeugen zusammenstellen."
 icon: "robot"
 ---
 
-<div className="not-prose mt-10">
-  <div className="p-6 border border-gray-200 dark:border-gray-700 rounded-xl bg-blue-50 dark:bg-gray-800">
-    <div className="flex items-center gap-3 mb-4">
-      <span className="text-4xl">🤖</span>
-      <div className="text-xl font-semibold text-gray-900 dark:text-white">PipesHub Agents</div>
-    </div>
-    <p className="text-base text-gray-700 dark:text-gray-300 mt-0 mb-5">Create custom AI agents that can perform actions across your connected applications</p>
-    <div className="flex flex-wrap items-center gap-2">
-      <span className="px-3 py-1.5 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-sm font-medium">
-        Beta
-      </span>
-      <span className="px-3 py-1.5 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-sm font-medium">
-        Visual Builder
-      </span>
-    </div>
-  </div>
-</div>
+Agenten sind anpassbare KI-Assistenten für bestimmte Aufgaben. Sie können Dokumente durchsuchen und über freigegebene Werkzeuge Aktionen in verbundenen Anwendungen ausführen.
 
-## What are Agents?
+## Die Bausteine eines Agenten
 
-Agents are customizable AI assistants that can interact with your connected applications, search collections, and perform actions on your behalf. Unlike the standard chatbot assistant, agents are purpose-built for specific workflows and can be configured with:
+| Baustein | Aufgabe |
+| --- | --- |
+| Agent Core | Name, Beschreibung, Begrüßung und Verhaltensanweisungen festlegen. |
+| Reasoning Model | Das KI-Modell bereitstellen, das die Aufgabe verarbeitet. |
+| Wissensquellen | Indexierte Daten aus Konnektoren und hochgeladene Sammlungen bereitstellen. |
+| Toolsets | Werkzeuge für externe Anwendungen verfügbar machen. |
 
-- **Reasoning Models** - Choose the AI model with reasoning capabilities that powers your agent
-- **Toolsets** - Connect to external services like Slack, Jira, Confluence, and more
-- **Knowledge sources** - Access indexed documents and collections
-- **Custom system prompts** - Define the agent's personality and behavior
+Im visuellen Editor ziehen Sie die benötigten Bausteine auf die Arbeitsfläche und verbinden sie mit dem **Agent Core**.
 
-<Note>
-  **When you want to use both Connector and Toolset:** In the Agent Builder add nodes from **Knowledge** (Collections, API Apps) for document search and context retrieval, and add nodes from **Tools** for performing actions. Connect both to your Agent Core so the agent can search context and take action in the same conversation.
-</Note>
+## Anweisungen festlegen
 
-## Key Concepts
+Im Agent Core definieren Sie:
 
-### Visual Flow Builder
+- **Name:** den angezeigten Namen,
+- **Beschreibung (Description):** den vorgesehenen Zweck,
+- **Startnachricht (Start Message):** die Begrüßung zu Beginn eines Chats,
+- **Anweisung (Instruction):** die Aufgaben und Fähigkeiten,
+- **System Prompt:** das gewünschte Verhalten, die Sprache und Grenzen des Agenten.
 
-Agents are built using a visual drag-and-drop flow builder powered by ReactFlow. You create agents by:
+Formulieren Sie konkret, welche Quellen verwendet werden sollen und welche Aktionen der Agent ausführen darf.
 
-1. Adding an **Agent Core** node that defines the agent's basic configuration
-2. Connecting **Reasoning Model** nodes (LLM with reasoning enabled) to power the agent's intelligence
-3. Adding **Toolset** nodes to give the agent access to external applications
-4. Connecting **Collection** nodes for indexed document search
-5. Configuring edges to connect all components together
+## Wissen durchsuchen oder Aktionen ausführen
 
-### Agent Core
+**Konnektoren** synchronisieren Daten für die Suche. **Toolsets** ermöglichen den Zugriff auf Werkzeuge, die beispielsweise Nachrichten versenden, Tickets erstellen oder Inhalte bearbeiten.
 
-The Agent Core is the central configuration for your agent:
+Ein Gmail-Konnektor erschließt beispielsweise E-Mails für die Suche. Ein Gmail-Toolset kann einem Agenten das Versenden neuer E-Mails ermöglichen.
 
-| Field | Description |
-|-------|-------------|
-| **Name** | Display name for your agent |
-| **Description** | Brief description of what the agent does |
-| **Start Message** | Initial greeting when users start a conversation |
-| **Instruction** | Detailed instructions for the agent's behavior and capabilities |
-| **System Prompt** | Instructions that define the agent's behavior and personality |
+Für einen Agenten, der beides benötigt, fügen Sie Wissensquellen aus **Knowledge** und Werkzeuge aus **Tools** hinzu und verbinden beide mit dem Agent Core.
 
-### Toolsets
+## Toolsets
 
-Toolsets are collections of tools that allow agents to interact with external applications. Each toolset provides specific actions:
+Beispiele für mögliche Werkzeuge:
 
-- **Jira Toolset** - Create issues, search tickets, add comments, etc.
-- **Slack Toolset** - Send messages, search channels, manage conversations, etc.
-- **Confluence Toolset** - Create/update pages, search content, etc.
-- **Gmail Toolset** - Send emails, read messages, search, etc.
-- **Calendar Toolset** - Create events, update events, check availability, etc.
-- **Drive Toolset** - List files, manage folders, search documents, etc.
+- **Jira:** Tickets erstellen, suchen und kommentieren.
+- **Slack:** Nachrichten versenden und Kanäle durchsuchen.
+- **Confluence:** Seiten finden, erstellen und bearbeiten.
+- **Gmail:** E-Mails lesen, suchen und versenden.
+- **Calendar:** Termine erstellen und Verfügbarkeiten prüfen.
+- **Drive:** Dateien suchen und Ordner verwalten.
 
 <Info>
-  Toolsets must be configured and authenticated before they can be used in agents. See [Toolsets Overview](/toolsets/overview) for setup instructions.
+  Ein Toolset muss eingerichtet und authentifiziert sein, bevor Sie es dem Agenten zuordnen. Die [Toolset-Referenz](/toolsets/overview) beschreibt die Einrichtung auf Englisch.
 </Info>
 
-### Collections
+## Wissensquellen
 
-Agents can access your indexed knowledge sources:
+Über Konnektoren indexierte Anwendungen und eigene Sammlungen stehen als Wissensquellen zur Verfügung. Verbinden Sie nur die Quellen, die der Agent für seine Aufgabe benötigt.
 
-- **Connectors** - Data synced and indexed from connected applications for querying and search (Google Drive, SharePoint, etc.)
-- **Collections** - Custom document collections you've uploaded
-
-## Agent Capabilities
-
-### What Agents Can Do
-
-| Capability | Description |
-|------------|-------------|
-| **Search Knowledge** | Query indexed documents and return relevant information |
-| **Perform Actions** | Create tickets, send messages, update pages via toolsets |
-| **Multi-tool Workflows** | Combine multiple toolsets in a single conversation |
-| **Context-Aware Responses** | Use system prompts to maintain consistent behavior |
-
-## Getting Started
-
-1. **Configure Toolsets** - Set up the toolsets your agent will use ([Toolsets Overview](/toolsets/overview))
-2. **Create an Agent** - Use the visual builder to create your agent ([Setup Guide](/agent-guide/setup-guide))
-3. **Test and Iterate** - Chat with your agent and refine its configuration
-
----
-
-## Frequently Asked Questions
+## Häufige Fragen
 
 <AccordionGroup>
-
-<Accordion title="What's the difference between Connectors and Toolsets?">
-
-| Aspect | Connectors | Toolsets |
-|--------|-----------|----------|
-| **Purpose** | Sync and index data for search | Enable agents to perform actions |
-| **Data Flow** | One-way (import data into PipesHub) | Two-way (read and write via API) |
-| **When to Use** | Query/search data | Perform actions on data |
-
-**Example:** Use a **Gmail Connector** to index and search your email history. Use a **Gmail Toolset** to send new emails through an agent.
-
-</Accordion>
-
-<Accordion title="When should I use a Connector vs a Toolset?">
-
-**Connector** — Use when you need document context search: connectors sync and index your documents, emails, and pages so your assistant can find and use that context.
-
-**Toolset** — When you need **actions**: create or update content, send messages, or run analytical queries (e.g. JQL, CQL, reports).
-
-**Quick takeaway:** Search & context → **Connector**. Actions → **Toolset**.
-
-</Accordion>
-
-<Accordion title="Can I use one OAuth app for both Connector and Toolset?">
-
-Yes! You can create a single OAuth app in the service's developer console and use it for both:
-
-**What you need to add in your OAuth app:**
-
-1. **Both redirect URLs:**
-   - Connector callback URL (e.g., `/connectors/oauth/callback/Gmail`)
-   - Toolset callback URL (e.g., `/api/oauth/callback/Gmail`)
-
-2. **Both scope types:**
-   - Read-only scopes for the Connector (to index data)
-   - Read/write/delete scopes for the Toolset (to perform actions)
-
-**Benefits:**
-- Simpler setup - One OAuth app instead of two
-- Same Client ID and Client Secret for both configurations
-- Easier management in the service's developer console
-
-</Accordion>
-
-<Accordion title="How do I know which nodes to connect in Agent Builder?">
-
-Follow this pattern:
-
-1. **Agent Core** (required) - The center of your agent
-2. **Reasoning Model** (required) - Connect at least one AI model
-3. **Toolset nodes** (optional) - For actions like sending emails, creating tickets
-4. **Collection nodes** (optional) - For searching indexed data from Connectors
-
-All nodes must connect to the Agent Core. The agent will have access to all connected toolsets and collections.
-
-</Accordion>
-
-<Accordion title="Can I choose what knowledge source or tool the agent uses during chat?">
-
-Yes! While chatting with an agent, you can select:
-
-- **Specific Collections** - Query data from particular Connectors (e.g., search only Confluence or only Drive)
-- **Specific Toolsets** - Use particular tools (e.g., send via Gmail or create Jira ticket)
-- **Reasoning Model** - Choose which AI model to use for the query
-
-This gives you control at any time during the conversation to specify where the agent should search or which action to perform.
-
-</Accordion>
-
-<Accordion title="Can I connect multiple Reasoning Models to one agent?">
-
-Yes! You can connect multiple Reasoning Model nodes to the Agent Core. 
-
-When chatting with the agent, users can select which model to use for specific queries from the chat interface. This allows:
-
-- Using different models for different complexity levels
-- Flexibility to choose the best model for each task
-
-</Accordion>
-
+  <Accordion title="Kann ich mehrere Modelle verbinden?">
+    Ja. Sie können mehrere Reasoning-Modelle mit dem Agent Core verbinden. Im Chat lässt sich je nach verfügbarer Oberfläche auswählen, welches Modell für eine Anfrage verwendet wird.
+  </Accordion>
+  <Accordion title="Kann ich im Chat Quellen und Werkzeuge auswählen?">
+    Die Chatoberfläche unterstützt die Auswahl bestimmter Sammlungen, Toolsets und Modelle. So können Sie beispielsweise eine Suche auf Confluence begrenzen oder für eine Aktion Gmail auswählen.
+  </Accordion>
+  <Accordion title="Kann dieselbe OAuth-App für Konnektor und Toolset verwendet werden?">
+    Je nach Anbieter kann dieselbe OAuth-App verwendet werden. Hinterlegen Sie dann beide angezeigten Callback-URLs und die jeweils benötigten Berechtigungen. Die Redirect-URLs für Konnektor und Toolset unterscheiden sich. Folgen Sie der Referenz des jeweiligen Dienstes.
+  </Accordion>
+  <Accordion title="Welche Verbindungen sind erforderlich?">
+    Ein Agent benötigt einen Agent Core und mindestens ein passendes Reasoning-Modell. Wissensquellen und Toolsets sind optional. Prüfen Sie, dass die verwendeten Bausteine mit dem Agent Core verbunden sind.
+  </Accordion>
 </AccordionGroup>
 
----
-
-## Next Steps
-
-<div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
-  <a href="/agent-guide/setup-guide" className="block p-4 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
-    <h3 className="text-lg font-semibold mb-2">Setup Guide</h3>
-    <p className="text-gray-600 dark:text-gray-400">Step-by-step instructions for creating your first agent</p>
-  </a>
-  <a href="/toolsets/overview" className="block p-4 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
-    <h3 className="text-lg font-semibold mb-2">Toolsets Overview</h3>
-    <p className="text-gray-600 dark:text-gray-400">Learn about available toolsets and how to configure them</p>
-  </a>
-</div>
+Starten Sie mit der Anleitung [Agenten erstellen](/agent-guide/setup-guide).

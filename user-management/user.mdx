@@ -1,91 +1,58 @@
 ---
-title: "Users"
-description: "Invite, manage, and remove users in your PipesHub workspace"
+title: "Benutzer verwalten"
+description: "Mitglieder in Ihren Novaplan-Arbeitsbereich einladen, Einladungen verwalten und Zugänge entfernen."
 ---
 
-The **Users** page lists everyone who has been invited to or is part of your workspace. Administrators can invite new members, manage existing ones, and act on pending invites from a single view.
+Auf der Seite **Benutzer (Users)** sehen Administratoren die Mitglieder ihres Arbeitsbereichs und offene Einladungen.
 
-## Navigating to Users
+## Benutzerübersicht öffnen
 
-1. Sign in to your PipesHub account with administrator credentials
-2. Open the user menu and click **Workspace Settings**
-3. In the workspace sidebar, expand the **People** section and select **Users**
+1. Melden Sie sich mit einem Administratorkonto an.
+2. Öffnen Sie im Benutzermenü **Arbeitsbereichseinstellungen (Workspace Settings)**.
+3. Wählen Sie unter **Personen (People)** den Eintrag **Benutzer (Users)**.
 
-The page shows a table of all workspace users with the following columns:
+Die Tabelle zeigt Name, E-Mail-Adresse, Rolle, Gruppenzugehörigkeit, Status, letzte Aktivität und Beitrittsdatum. Über die Suche finden Sie Mitglieder nach Name oder E-Mail-Adresse. Mit Filtern grenzen Sie die Liste beispielsweise nach Gruppe oder Status ein. Ein Klick auf eine Zeile öffnet das Profil.
 
-| Column | Description |
-|--------|-------------|
-| **User** | Avatar, display name, and email |
-| **Role** | `Admin` or `Member` |
-| **Groups** | Number of user groups this user belongs to |
-| **Status** | `Active`, `Pending`, or `Blocked` |
-| **Last Active** | Date of the user's most recent activity |
-| **Date Joined** | Date the user was added or invited |
+## Mitglieder einladen
 
-Use the **search** field in the header to look up users by name or email, and the **filters** above the table to narrow results by group, status, last active date, or date joined. Clicking any row opens that user's **profile** panel on the right.
+1. Klicken Sie oben rechts auf **Einladen (Invite)**.
+2. Tragen Sie eine oder mehrere E-Mail-Adressen in **Einladen an (Invite to)** ein. Trennen Sie mehrere Adressen mit Komma, Leerzeichen oder Eingabetaste.
+3. Wählen Sie bei Bedarf unter **Zu einer Benutzergruppe hinzufügen (Add to a User Group)** passende Gruppen aus.
+4. Klicken Sie auf **Einladung senden (Send Invite)**.
 
-## Inviting Users
+Die eingeladenen Personen erhalten eine E-Mail mit den nächsten Schritten. Bis zur ersten Anmeldung lautet ihr Status **Ausstehend (Pending)**. Für die Zustellung muss [SMTP](/smtp) eingerichtet sein.
 
-1. On the **Users** page, click the **Invite** button in the top-right corner
-2. The **Invite User(s)** panel opens on the right
-3. In the **Invite to** field, type or paste one or more email addresses (separated by comma, space, or Enter). Invalid addresses are flagged inline
-4. (Optional) In **Add to a User Group**, search and select one or more groups. New users inherit access from the groups they are added to
-5. Click **Send Invite**
+## Offene Einladungen bearbeiten
 
-<div style={{ textAlign: "center" }}>
-  <img
-    src="/images/account/users/bulk_invite.png"
-    alt="Invite Users panel with email and group selection"
-    width="90%"
-  />
-</div>
+Öffnen Sie das Menü **⋯** neben einer ausstehenden Einladung:
 
-Each invited user receives an email with instructions to join the workspace. Until they sign in, their status on the Users page is **Pending**.
+- **Einladung erneut senden (Resend Invite)** versendet die Einladung erneut.
+- **Einladung abbrechen (Cancel Invite)** zieht die offene Einladung zurück.
 
-## Managing Pending Invites
+Diese Optionen stehen auch bei abgelaufenen Einladungen zur Verfügung.
 
-Click the row actions menu (**⋯**) next to a user with status **Pending** to access invite-specific actions:
+## Mehrere Einträge bearbeiten
 
-- **Resend Invite** — Sends a fresh invitation email to the same address.
-- **Cancel Invite** — Revokes the outstanding invitation.
+Markieren Sie die gewünschten Zeilen über die Kontrollkästchen. Die Aktionsleiste bietet bei ausschließlich ausstehenden Einladungen das erneute Senden oder Abbrechen an.
 
-<div style={{ textAlign: "center" }}>
-  <img
-    src="/images/account/users/existing_invitation.png"
-    alt="Pending invite row actions"
-    width="90%"
-  />
-</div>
+Bei anderen Auswahlen steht **Aus dem Arbeitsbereich entfernen (Remove from Workplace)** zur Verfügung. Enthält die Auswahl ein Administratorkonto, ist das Entfernen deaktiviert.
 
-If an invitation expires, the same **Resend Invite** and **Cancel Invite** options appear so you can extend or revoke the invite.
+## Aktive und gesperrte Benutzer
 
-## Bulk Actions
+Für aktive Mitglieder können Sie im Zeilenmenü das Profil öffnen oder den Zugang entfernen. Die Funktion **Deaktivieren (Deactivate)** ist in der Ausgangsversion als noch nicht verfügbar gekennzeichnet.
 
-Select one or more rows using the checkboxes. A floating action bar appears at the bottom of the table:
+Bei einem gesperrten Benutzer wählen Sie **Entsperren (Unblock)**. Bestätigen Sie die Aktion, indem Sie den angezeigten Namen eingeben.
 
-- If every selected row is a **Pending** invite: **Resend Invite** or **Cancel Invite**.
-- Otherwise: **Remove from Workplace** (disabled when the selection contains any Admin).
+Administratorkonten lassen sich auf dieser Seite nicht entfernen; im Zeilenmenü steht nur die Profilansicht bereit.
 
-## Managing Active Users
+## Benutzer entfernen
 
-For an active (non-admin) user, the row actions menu offers:
-
-- **View Profile** — Opens the user's profile panel on the right
-- **Deactivate** — Temporarily disables the account (coming soon)
-- **Remove from Workplace** — Permanently removes the user. A confirmation dialog asks you to confirm.
-
-Admin users only expose **View Profile** in the row actions menu; admins cannot be removed from this screen.
-
-## Unblocking Users
-
-If a user is **Blocked**, open the row actions menu and choose **Unblock**. A confirmation dialog asks you to type the user's display name before the action is applied.
-
-## Removing a User
-
-1. Open the row actions menu (**⋯**) for the user
-2. Click **Remove from Workplace**
-3. In the confirmation dialog, click **Remove**
+1. Öffnen Sie das Menü **⋯** des betreffenden Mitglieds.
+2. Wählen Sie **Aus dem Arbeitsbereich entfernen (Remove from Workplace)**.
+3. Bestätigen Sie mit **Entfernen (Remove)**.
 
 <Warning>
-  Removing a user is immediate. They lose access to the workspace and their group memberships are cleared. Admin accounts cannot be removed from the Users page.
+  Das Mitglied verliert unmittelbar den Zugang zum Arbeitsbereich. Seine Gruppenzugehörigkeiten werden entfernt. Prüfen Sie vor der Bestätigung, ob Sie das richtige Konto ausgewählt haben.
 </Warning>
+
+Weitere Informationen: [Benutzergruppen](/user-management/user-group) und [Teams](/user-management/teams).

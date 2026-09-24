@@ -1,112 +1,62 @@
 ---
-title: "User Groups"
-description: "Create and manage user groups to organize members and control permissions"
+title: "Benutzergruppen"
+description: "Mitglieder in Gruppen organisieren und gruppenbezogene Zugriffe verwalten."
 ---
 
-## Overview
+Benutzergruppen helfen Administratoren, Mitglieder nach Aufgaben, Abteilungen oder Zugriffsbedarf zu organisieren. Eine Person kann mehreren Gruppen angehören; jede Gruppe kann mehrere Mitglieder enthalten.
 
-User groups let administrators organize workspace members into logical collections for permission management. Users can belong to multiple groups, and every group can contain multiple users. Group membership is inherited during invitation and can be updated at any time.
+## Gruppenübersicht öffnen
 
-<div style={{ textAlign: "center" }}>
-  <img
-    src="/images/account/groups/groups_view.png"
-    alt="Groups list with Create Group button"
-    width="90%"
-  />
-</div>
+1. Melden Sie sich als Administrator an.
+2. Öffnen Sie **Arbeitsbereichseinstellungen (Workspace Settings)**.
+3. Wählen Sie unter **Personen (People)** den Eintrag **Gruppen (Groups)**.
 
-## User Groups Functionality
+Die Übersicht zeigt Name, Beschreibung, Mitgliederzahl, Ersteller und Erstellungsdatum. Nutzen Sie die Suche und den Datumsfilter. Ein Klick auf eine Gruppe öffnet ihre Details.
 
-1. **Grouping Users:** Organize users into collections that reflect their team, function, or access needs.
-2. **Multiple Users per Group:** A single group can contain any number of members.
-3. **Multiple Groups per User:** A user can belong to any number of groups.
-4. **Permissions Inheritance:** Users inherit permissions assigned to each of their groups.
-5. **Custom Groups:** Create your own groups alongside the built-in system groups. System groups (for example, the everyone group) cannot be deleted.
+## Gruppe erstellen
 
-## Navigating to Groups
+1. Klicken Sie auf **Gruppe erstellen (Create Group)**.
+2. Geben Sie einen Gruppennamen ein, beispielsweise „Projektleitung“.
+3. Ergänzen Sie bei Bedarf eine Beschreibung.
+4. Wählen Sie unter **Benutzer hinzufügen (Add Users)** die ersten Mitglieder aus.
+5. Bestätigen Sie mit **Gruppe erstellen (Create Group)**.
 
-1. Sign in to your PipesHub account with administrator credentials
-2. Open the user menu and click **Workspace Settings**
-3. In the workspace sidebar, expand the **People** section and select **Groups**
+Neben eigenen Gruppen gibt es Systemgruppen, beispielsweise eine Gruppe für alle Mitglieder. Systemgruppen können nicht gelöscht werden.
 
-The page shows a table of all groups with columns for **Name**, **Description**, **Users** (member count), **Created By**, and **Created On**. Use the **search** field to find groups by name, the **Created On** filter to narrow by date, and click any row to open the group's detail panel on the right.
+<Note>
+  Der Bereich **Zugriffsberechtigungen (Access Permissions)** ist in der Ausgangsversion als noch nicht verfügbar gekennzeichnet. Die tatsächlichen Zugriffsmöglichkeiten richten sich nach der eingesetzten Version und der vorhandenen Gruppenanbindung.
+</Note>
 
-## Managing Groups
+## Mitglieder hinzufügen
 
-### Creating a Group
+Bei einer [Benutzereinladung](/user-management/user) können Sie die Gruppen direkt im Feld **Zu einer Benutzergruppe hinzufügen (Add to a User Group)** zuweisen.
 
-1. From the **Groups** page, click **Create Group** in the top-right corner
-2. The **Create Group** panel opens on the right
-3. Enter the **Group Name** (required) — for example, `Data Engineering`
-4. (Optional) Enter a **Group Description** that explains the group's purpose
-5. (Optional) Under **Add Users**, search for and select members to add to the group on creation
-6. Click **Create Group**
+Für bestehende Mitglieder:
 
-<div style={{ textAlign: "center" }}>
-  <img
-    src="/images/account/groups/create_group.png"
-    alt="Create Group side panel"
-    width="90%"
-  />
-</div>
+1. Öffnen Sie die gewünschte Gruppe.
+2. Klicken Sie auf **Gruppe bearbeiten (Edit Group)**.
+3. Suchen Sie unter **Benutzer hinzufügen (Add Users)** nach den Mitgliedern und wählen Sie sie aus.
+4. Klicken Sie auf **Änderungen speichern (Save Edits)**.
 
-<Tip>
-  **Access Permissions** for groups are shown as *Coming Soon* in the current UI — group membership itself controls access today.
-</Tip>
+## Mitglieder entfernen
 
-### Adding Users to Groups
+1. Öffnen Sie die Gruppe und wählen Sie **Gruppe bearbeiten (Edit Group)**.
+2. Klicken Sie neben dem Mitglied auf **Entfernen (Remove)**.
+3. Mit **Rückgängig (Undo)** können Sie die vorgemerkte Entfernung vor dem Speichern zurücknehmen.
+4. Speichern Sie die Änderungen.
 
-**Option 1 — During User Invitation**
+## Name oder Beschreibung ändern
 
-While inviting a user from the **Users** page, use the **Add to a User Group** field in the invite panel to assign one or more groups. New users inherit permissions from the groups you select.
+Öffnen Sie die Gruppendetails, wählen Sie **Gruppe bearbeiten (Edit Group)** und ändern Sie den Namen oder die Beschreibung. Bestätigen Sie mit **Änderungen speichern (Save Edits)**.
 
-<div style={{ textAlign: "center" }}>
-  <img
-    src="/images/account/users/bulk_invite.png"
-    alt="Assigning groups during user invitation"
-    width="90%"
-  />
-</div>
+## Gruppe löschen
 
-**Option 2 — From the Group Detail Panel**
-
-1. Navigate to the **Groups** page and click the group's row to open its detail panel
-2. Click **Edit Group**
-3. Under **Add Users**, search and select the members to add
-4. Click **Save Edits**
-
-<div style={{ textAlign: "center" }}>
-  <img
-    src="/images/account/groups/add_user_group.png"
-    alt="Adding existing users to a group from the group detail panel"
-    width="90%"
-  />
-</div>
-
-### Removing Users from a Group
-
-1. Open the group's detail panel from the **Groups** page
-2. Click **Edit Group**
-3. In the **Users** list, click **Remove** next to each user you want to remove. Click **Undo** to cancel a pending removal before saving
-4. Click **Save Edits** to apply the changes
-
-### Editing a Group's Name or Description
-
-1. Open the group's detail panel
-2. Click **Edit Group**
-3. Update the **Group Name** or **Group Description**
-4. Click **Save Edits**
-
-### Deleting a Group
-
-1. Open the group's detail panel
-2. Click **Delete Group** at the bottom of the panel, or use the **Delete** option in the row actions menu (**⋯**) on the Groups page
-3. Confirm the action
+1. Öffnen Sie die Gruppendetails.
+2. Wählen Sie **Gruppe löschen (Delete Group)** oder **Löschen (Delete)** im Menü **⋯**.
+3. Bestätigen Sie die Aktion.
 
 <Warning>
-  Deleting a group is irreversible. Members of the group are not deleted, but they lose any permissions that were inherited from it. System groups cannot be deleted.
+  Das Löschen lässt sich nicht rückgängig machen. Die Benutzerkonten bleiben bestehen, verlieren aber die aus dieser Gruppe abgeleiteten Berechtigungen. Systemgruppen können nicht gelöscht werden.
 </Warning>
 
-### Conclusion
-
-User groups simplify workspace management by letting you organize members around teams, functions, or access needs. Assign users to groups during invitation or from the group detail panel, and use the built-in filters on the Users page to find everyone in a specific group quickly.
+Für die Zusammenarbeit mit unterschiedlichen Rollen innerhalb eines Teams lesen Sie die Anleitung zu [Teams](/user-management/teams).

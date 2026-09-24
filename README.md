@@ -1,32 +1,23 @@
-# Mintlify Starter Kit
+# Novaplan documentation
 
-Click on `Use this template` to copy the Mintlify starter kit. The starter kit contains examples including
+German customer guides and English technical reference for docs.novaplan.ai, maintained as a fork of [pipeshub-ai/documentation](https://github.com/pipeshub-ai/documentation).
 
-- Guide pages
-- Navigation
-- Customizations
-- API Reference pages
-- Use of popular components
+See [NOVAPLAN-LAUNCH.md](NOVAPLAN-LAUNCH.md) for the launch checklist, translation scope, known application-link gaps, and upstream maintenance workflow.
 
-### Development
+## Preview and validate
 
-Install the [Mintlify CLI](https://www.npmjs.com/package/mintlify) to preview the documentation changes locally. To install, use the following command
+Use the current Mintlify CLI (`mint`, not the legacy `mintlify` package):
 
-```
-npm i -g mintlify
+```sh
+npm install -g mint
+mint validate
+mint dev --port 3035
 ```
 
-Run the following command at the root of your documentation (where docs.json is)
+Mintlify reads `docs.json` from the repository root. The twelve German guides keep their original page paths. Technical identifiers and installer URLs must remain compatible with the application.
 
-```
-mintlify dev
-```
+## Publishing
 
-### Publishing Changes
+Connect this repository to the company Mintlify account. Review the Novaplan branch before merging to the connected production branch. A push to that branch can trigger deployment automatically.
 
-Install our Github App to auto propagate changes from your repo to your deployment. Changes will be deployed to production automatically after pushing to the default branch. Find the link to install on your dashboard. 
-
-#### Troubleshooting
-
-- Mintlify dev isn't running - Run `mintlify install` it'll re-install dependencies.
-- Page loads as a 404 - Make sure you are running in a folder with `docs.json`
+The custom domain is configured in the Mintlify dashboard and your DNS provider, not by changing `docs.json` alone.

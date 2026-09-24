@@ -1,76 +1,44 @@
 ---
-title: "Introduction"
-description: "Self-hosted workplace AI: permissioned search across Slack, Drive, Gmail, Jira, Confluence, and 50+ connectors, with citations"
+title: "Einführung"
+description: "Mit Novaplan Unternehmenswissen durchsuchen, Antworten mit Quellen finden und KI-Agenten einrichten."
 icon: "arrow-right-to-arc"
 ---
 
-## What is PipesHub
+## Willkommen bei Novaplan
 
-[PipesHub](https://github.com/pipeshub-ai/pipeshub-ai) is the workplace AI platform for enterprises to improve how businesses operate and help employees and AI agents work more efficiently.
-In most companies, important work data is spread across multiple apps like Google Workspace, Microsoft 365, Slack, Jira, Confluence, among others. PipesHub AI helps you quickly find the right information using natural language search—just like Google.
-It can answer questions, provide insights, and automate workflows. The platform not only delivers the most relevant results but also shows where the information came from, with proper citations, using Knowledge Graphs and Page Ranking.
-Beyond search, our platform allows enterprises to create custom apps and AI agents using a No-Code interface.
+Novaplan verbindet Informationen aus Ihren Unternehmensanwendungen mit einer zentralen Suche und KI-Agenten. Stellen Sie Fragen in natürlicher Sprache und nutzen Sie die angegebenen Quellen, um Antworten nachzuvollziehen.
 
-PipesHub Agents are built on top of PipesHub Actions, which connect with enterprise apps to automate any task.
+Über Konnektoren lassen sich beispielsweise Inhalte aus Google Drive, Microsoft 365, Slack, Jira und Confluence erschließen. Welche Inhalte Ihnen zur Verfügung stehen, hängt von den eingerichteten Datenquellen und Ihren Zugriffsrechten ab.
 
-#### PipesHub High Level Architecture Diagram
+## Womit möchten Sie beginnen?
 
-<Frame>
-  <img
-    width="800"
-    height="1200"
-    src="/images/system-architecture/pipeshub-system-architecture.jpg"
-    alt="PipesHub System Architecture"
-  />
-</Frame>
+<CardGroup cols={2}>
+  <Card title="Novaplan einrichten" icon="gear" href="/onboarding">
+    KI-Modell, Datenquellen und E-Mail-Versand für Ihren Arbeitsbereich konfigurieren.
+  </Card>
+  <Card title="Datenquellen verbinden" icon="plug" href="/connectors/overview">
+    Unternehmensdaten für die Suche und für Agenten verfügbar machen.
+  </Card>
+  <Card title="Team einladen" icon="users" href="/user-management/user">
+    Mitglieder einladen und den Zugriff über Gruppen und Teams organisieren.
+  </Card>
+  <Card title="KI-Agenten erstellen" icon="robot" href="/agent-guide/setup-guide">
+    Einen Assistenten mit passenden Anweisungen, Wissensquellen und Werkzeugen aufbauen.
+  </Card>
+</CardGroup>
 
-### **Spotlight Features**
+## Die wichtigsten Bausteine
 
-#### Your Workplace, Our AI.
-<iframe
-  width="580"
-  height="315"
-  src="https://www.youtube.com/embed/PJ_b7IFhnsc?si=59K-qYpl4tGESmBj"
-  title="PipesHub Workplace AI"
-  frameborder="0"
-  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen;"
-  allowfullscreen
-></iframe>
+| Baustein | Aufgabe |
+| --- | --- |
+| Konnektoren | Inhalte aus verbundenen Anwendungen synchronisieren und für die Suche indexieren. |
+| Sammlungen (Collections) | Hochgeladene Dokumente als Wissensquelle bündeln. |
+| KI-Modelle | Fragen verarbeiten und Antworten erzeugen. Embedding-Modelle unterstützen die semantische Suche. |
+| Agenten | Definierte Aufgaben mit ausgewählten Modellen, Wissensquellen und Werkzeugen bearbeiten. |
+| Toolsets | Aktionen in verbundenen Anwendungen ermöglichen, beispielsweise ein Ticket erstellen. |
 
-## Unmatched Value of PipesHub
-- **Choose Any Model, Your Way** – Bring your preferred deep learning models for both indexing and inference with total flexibility.
-- **Real-Time or Scheduled Indexing** – Index data as it flows or schedule it to run exactly when you need. 
-- **Access-Driven Visibility** – Source-level permissions ensure every document is shown only to those who are authorized.
-- **Built-In Data Security** – Sensitive information stays secure, always..
-- **Deploy Anywhere** – Fully supports both on-premise and cloud-based deployments.
-- **Knowledge Graph Backbone** – All data is seamlessly structured into a powerful knowledge graph.
-- **Enterprise-Grade Connectors** – Scalable, reliable, and built for secure access across your organization.
-- **Modular & Scalable Architecture** – Every service is loosely coupled to scale independently and adapt to your needs.
+## Hilfe und weiterführende Dokumentation
 
-## Roadmap
+Die Kundenanleitungen sind auf Deutsch verfügbar. Die **Technische Referenz (Englisch)** enthält die weiterführenden Installations-, Anbieter-, API- und Integrationsanleitungen. Dazu gehören der [technische Schnellstart](/quickstart) und die [MCP-Einrichtung](/mcp/overview).
 
-We ship in the open. Here is what is done and what is next:
-
-**Shipped**
-- **Workplace AI agents** — no-code agent builder
-- **MCP** — Model Context Protocol, server and client
-- **Developer SDKs** — Python, TypeScript, and Go
-- **Code search** — [GitHub](/connectors/github/github) and [GitLab](/connectors/gitlab/gitlab)
-- **Production Kubernetes** — [Helm chart](https://github.com/pipeshub-ai/pipeshub-ai/blob/main/deployment/helm/pipeshub-ai/README.md) with HA presets (Neo4j Community and Redis stay single-node)
-
-**Next**
-- **Personalized search** — based on team, role, and history
-- **PageRank-augmented relevance** across the knowledge graph
-
-[Full product roadmap on Notion](https://plum-myrtle-9f7.notion.site/Pipeshub-s-Product-Roadmap-33841c164f54803a9989fd0fdbfdb1ee)
-
-
-## Deployment
-
-PipesHub can be run locally or on any server with Docker Compose. One command:
-
-```bash
-curl -fsSL https://get.pipeshub.com/install | bash
-```
-
-See the [Quickstart](/quickstart) for HTTPS notes, installer flags, and the cloned-repo developer path.
+Bei Fragen erreichen Sie uns unter [support@novaplan.ai](mailto:support@novaplan.ai).
