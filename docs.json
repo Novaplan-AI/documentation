@@ -361,11 +361,6 @@
           "icon": "book"
         },
         {
-          "anchor": "Discord",
-          "href": "https://discord.com/invite/K5RskzJBm2",
-          "icon": "discord"
-        },
-        {
           "anchor": "Novaplan AI",
           "href": "https://www.novaplan.ai",
           "icon": "/logo/novaplan-icon.png"
@@ -466,17 +461,17 @@
   },
   "navbar": {
     "primary": {
-      "type": "github",
-      "href": "https://github.com/pipeshub-ai/pipeshub-ai"
+      "type": "button",
+      "label": "GitHub",
+      "href": "https://github.com/Novaplan-AI/"
     }
   },
   "footer": {
     "socials": {
       "x": "https://x.com/PipesHub",
-      "github": "https://github.com/Novaplan-AI",
+      "github": "https://github.com/Novaplan-AI/",
       "linkedin": "https://www.linkedin.com/company/novaplan-ai/",
-      "youtube": "https://www.youtube.com/@PipesHub-GenAI",
-      "discord": "https://discord.com/invite/K5RskzJBm2"
+      "youtube": "https://www.youtube.com/@PipesHub-GenAI"
     }
   },
   "markdown": {
