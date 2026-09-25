@@ -104,9 +104,13 @@ Configure the storage service with specific backend details.
 {
   "storageType": "local",
   "mountName": "PipesHub",
-  "baseUrl": "http://localhost:3000"
+  "baseUrl": "https://workspace.example.com"
 }
 ```
+
+This is an illustrative API origin. Novaplan supplies the actual `baseUrl` and
+storage mount for a managed workspace; do not copy these example values into a
+production configuration.
 </Tab>
 
 <Tab title="Response">
@@ -159,7 +163,7 @@ Retrieve the current storage configuration.
 ```json
 {
   "mountName": "PipesHub",
-  "baseUrl": "http://localhost:3000"
+  "baseUrl": "https://workspace.example.com"
 }
 ```
 </Tab>
@@ -570,32 +574,30 @@ message broker are **no longer configured through this API**. The endpoints that
 them (`/mongoDBConfig`, `/arangoDBConfig`, `/qdrantConfig`, `/redisConfig`, `/kafkaConfig`)
 have been removed.
 
-These are now read from the environment at startup. On the Docker Compose
-deployment, `install.sh` writes them into `deployment/docker-compose/.env`; on
-Kubernetes, the Helm chart sets them from `values.yaml`.
+These are read from the managed runtime environment at startup. Novaplan configures
+them when preparing the customer workspace; they are not settings customers change
+through this API or by following a platform installation procedure.
 
-| Setting | Environment variable in `.env` | Default |
+| Setting | Technical environment variable | Reference configuration |
 |---------|-------------------------------|---------|
 | Graph database | `DATA_STORE` | `neo4j` (or `arangodb`) |
 | Key-value store | `KV_STORE_TYPE` | `redis` (or `etcd`) |
-| Message broker | `MESSAGE_BROKER` | `kafka` on a full install, `redis` on slim (or set either explicitly) |
-| MongoDB credentials | `MONGO_USERNAME`, `MONGO_PASSWORD` | generated at install time |
+| Message broker | `MESSAGE_BROKER` | `kafka` or `redis` |
+| MongoDB credentials | `MONGO_USERNAME`, `MONGO_PASSWORD` | set by Novaplan for the workspace |
 
-Compose builds the MongoDB connection string from those two credentials, so there
-is no `MONGO_URI` key in `.env` to edit. The graph, vector and cache passwords
-(`NEO4J_PASSWORD` or `ARANGO_PASSWORD`, `QDRANT_API_KEY`, `REDIS_PASSWORD`) are
-generated at install time and live in the same file.
+Graph, vector, and cache credentials are likewise managed by Novaplan. Their
+technical names may include `NEO4J_PASSWORD` or `ARANGO_PASSWORD`,
+`QDRANT_API_KEY`, and `REDIS_PASSWORD`; never copy values into support messages or
+documentation.
 
 <Note>
-The vector database is Qdrant. The provider is selected by the `VECTOR_DB_TYPE`
-environment variable, which defaults to `qdrant` when it is unset — and the Docker
-Compose deployment does not set it. Adding `VECTOR_DB_TYPE` to `.env` has no effect
-on Compose, because the variable is not passed into the container.
+The reference configuration uses Qdrant for vector search. The application also
+supports other vector backends through `VECTOR_DB_TYPE`; Novaplan confirms which
+backend and configuration are active in your workspace.
 </Note>
 
-To change any of them, edit `.env` and re-run `./install.sh --upgrade`, or set the value in
-your Helm values and upgrade the release. See the
-[Quickstart](/quickstart) for the installer flags.
+For an infrastructure change, contact [Novaplan Support](/contact-us) so the
+workspace configuration and dependent services can be reviewed together.
 </Accordion>
 
 <Accordion title="AI Models Configuration">
