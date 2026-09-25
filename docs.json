@@ -201,7 +201,11 @@
               "de/toolsets/mariadb/mariadb",
               "de/toolsets/redshift/redshift",
               "de/toolsets/jira/jira-data-center",
-              "de/toolsets/confluence/confluence-data-center"
+              "de/toolsets/confluence/confluence-data-center",
+              "de/toolsets/microsoft-365/outlook",
+              "de/toolsets/microsoft-365/onedrive",
+              "de/toolsets/microsoft-365/sharepoint",
+              "de/toolsets/microsoft-365/teams"
             ]
           },
           {

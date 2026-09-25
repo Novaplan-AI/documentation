@@ -1,0 +1,51 @@
+---
+title: "SharePoint-Toolset"
+description: "SharePoint-Websites, Seiten und Dateien über Microsoft Graph mit Agenten bearbeiten."
+---
+
+## Überblick
+
+Mit dem SharePoint-Toolset können Agenten SharePoint-Online-Websites, Seiten, Dokumentbibliotheken und OneNote-Inhalte über Microsoft Graph lesen und bearbeiten. Aktionen laufen mit **delegierten Berechtigungen** der angemeldeten Microsoft-Person. Der [SharePoint-Konnektor](/de/connectors/microsoft-365/sharepoint) synchronisiert Inhalte dagegen für die Novaplan-AI-Suche.
+
+| Bereich | Verfügbare Tools |
+| --- | --- |
+| Websites | `get_sites`, `get_site` |
+| Seiten | `get_pages`, `get_page`, `search_pages`, `create_page`, `update_page` |
+| Dateien und Drives | `list_drives`, `list_files`, `search_files`, `get_file_metadata`, `get_file_content`, `create_folder`, `create_word_document`, `move_item` |
+| OneNote | `find_notebook`, `list_notebook_pages`, `get_notebook_page_content`, `create_onenote_notebook` |
+
+<Warning>
+  Das Toolset kann Seiten und Dateien erstellen oder ändern. Prüfen Sie Zielwebsite, Dokumentbibliothek und Inhalt vor schreibenden Agentenaktionen. Delegierte Microsoft-Graph-Rechte können tenantweit formuliert sein, werden aber zusätzlich durch die Rechte der angemeldeten Person begrenzt.
+</Warning>
+
+## Microsoft-Entra-Anwendung vorbereiten
+
+1. Öffnen Sie [Azure Portal](https://portal.azure.com) und wählen Sie **Microsoft Entra ID → App registrations → New registration**.
+2. Vergeben Sie einen Namen und wählen Sie die passenden **Supported account types**.
+3. Kopieren Sie aus dem Novaplan-Dialog unter **Workspace Settings → Actions → SharePoint → Configure** die **Redirect URI**. Tragen Sie genau diesen Wert in Entra als **Web**-Redirect-URI ein.
+4. Kopieren Sie **Application (client) ID** und **Directory (tenant) ID**. Verwenden Sie nicht die **Object ID** als Client ID.
+5. Erstellen Sie unter **Certificates & secrets** einen **Client secret** mit geeigneter Laufzeit und kopieren Sie dessen Wert sofort. Er ist später nicht erneut abrufbar.
+
+## Microsoft-Graph-Rechte und Zustimmung
+
+Die englische Quellanleitung nennt unter **Delegated permissions** folgende Rechte:
+
+| Berechtigung | Verwendung |
+| --- | --- |
+| `Sites.ReadWrite.All` | SharePoint-Websites und Seiten lesen oder bearbeiten. |
+| `Files.ReadWrite.All` | Dateien lesen und ändern, auf die die angemeldete Person Zugriff hat. |
+| `Notes.ReadWrite.All` | OneNote-Inhalte lesen und bearbeiten. |
+| `User.Read`, `offline_access` | Benutzerprofil und erneuerbare Anmeldung. |
+
+Diese `*.All`-Scopes benötigen laut Quellanleitung eine **Grant admin consent**-Freigabe auf Tenant-Ebene. Lassen Sie Ihre Microsoft-Administration die beantragten Rechte und den Einsatz des Agenten prüfen. Eine persönliche OAuth-Anmeldung ist anschließend weiterhin erforderlich.
+
+## In Novaplan AI verbinden
+
+1. Öffnen Sie **Workspace Settings → Actions → SharePoint** und hinterlegen Sie **Client ID**, **Client Secret** und **Tenant ID**.
+2. Vergleichen Sie die angezeigte **Redirect URI** Zeichen für Zeichen mit dem Entra-Eintrag und speichern Sie.
+3. Administrierende Personen können die Instanz unter **Actions** authentifizieren; Benutzerinnen und Benutzer melden sich für ihre Nutzung unter **Your actions** mit **Authenticate with OAuth** an.
+4. Fügen Sie das authentifizierte SharePoint-Toolset im **Agent Builder** unter **Tools** hinzu.
+
+Sie können einen Agenten beispielsweise nach Ihren Websites, einer Datei in einer Dokumentbibliothek oder einer bestimmten Seite fragen. Bei `create_page`, `update_page`, `create_word_document` und `move_item` sollten Ziel und Inhalt eindeutig sein und vor Ausführung geprüft werden.
+
+Wenn OAuth oder eine Aktion scheitert, prüfen Sie **Redirect URI**, Secret-Ablauf, Admin-Zustimmung, delegierte Scopes und persönliche SharePoint-Berechtigungen. Bei Fragen wenden Sie sich an [Novaplan Support](/de/contact-us).

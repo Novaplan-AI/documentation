@@ -1,0 +1,51 @@
+---
+title: "OneDrive-Toolset"
+description: "Dateien, Freigaben und OneNote-Inhalte mit Agenten bearbeiten."
+---
+
+## Überblick
+
+Das OneDrive-Toolset arbeitet über Microsoft Graph mit OneDrive-Dateien und anderen für die angemeldete Person erreichbaren Drives. Es kann Ordner und Dateien suchen, lesen, verschieben, kopieren und freigeben sowie einfache OneNote-Aktionen ausführen. Aktionen verwenden **delegiertes OAuth** und damit die Rechte der angemeldeten Person. Der [OneDrive-Konnektor](/de/connectors/microsoft-365/one-drive) synchronisiert Dateien dagegen für die Suche.
+
+| Bereich | Verfügbare Tools |
+| --- | --- |
+| Drives und Dateien | `get_drives`, `get_drive`, `get_root_folder`, `get_files`, `get_folder_children`, `get_file` |
+| Suche und Freigaben | `search_files`, `get_shared_with_me`, `search_shared_with_me` |
+| Änderungen | `create_folder`, `rename_item`, `move_item`, `copy_item`, `share_item` |
+| Inhalte | `get_download_url`, `get_file_content`, `create_word_file` |
+| OneNote | `create_onenote_notebook`, `create_onenote_section`, `create_onenote_page`, `get_onenote_sections`, `get_onenote_pages`, `get_onenote_page_content` |
+
+Viele Dateiaktionen benötigen eine `drive_id`. Wenn sie unbekannt ist, kann der Agent zuerst `get_drives` verwenden. **Get shared with me** benötigt keine Drive-ID. Kopieraktionen können asynchron abgeschlossen werden; kurzlebige Download-URLs sollten nicht dauerhaft gespeichert oder weitergegeben werden. Große Dateien können beim direkten Lesen durch `get_file_content` abgelehnt werden.
+
+## Microsoft-Entra-Anwendung vorbereiten
+
+1. Öffnen Sie [Azure Portal](https://portal.azure.com) und wählen Sie **Microsoft Entra ID → App registrations → New registration**.
+2. Vergeben Sie einen Namen und wählen Sie die Kontotypen nach Ihrer Organisationsrichtlinie.
+3. Kopieren Sie die **Redirect URI** aus **Workspace Settings → Actions → OneDrive → Configure** in Novaplan AI. Tragen Sie sie in Entra als **Web**-Redirect-URI exakt ein.
+4. Kopieren Sie **Application (client) ID** und **Directory (tenant) ID** aus der Übersicht. Erstellen Sie unter **Certificates & secrets** einen **Client secret** und kopieren Sie dessen Wert sofort.
+
+Der Secret-Wert wird nur einmal angezeigt. Stimmen Sie Laufzeit, Rotation und sichere Ablage mit Ihrer Microsoft-Administration ab.
+
+## Delegierte Rechte auswählen
+
+Unter **API permissions → Microsoft Graph → Delegated permissions** nennt die Quellanleitung diese Rechte als Ausgangspunkt:
+
+| Berechtigung | Verwendung |
+| --- | --- |
+| `Files.ReadWrite.All` | Dateien lesen, bearbeiten, verschieben, kopieren und freigeben, soweit die Person Zugriff hat. |
+| `User.Read` | Angemeldetes Profil lesen. |
+| `Notes.Create`, `Notes.ReadWrite` | OneNote-Notizbücher, Abschnitte und Seiten erstellen oder bearbeiten. |
+| `offline_access` | Erneuerbare Benutzeranmeldung. |
+
+Für SharePoint-Bibliotheken, die als Drives erscheinen, können zusätzlich delegierte `Sites`-Rechte erforderlich sein. Prüfen Sie den konkreten Bedarf und **Grant admin consent** mit Ihrer Microsoft-Administration. **Files.ReadWrite.All** ist breit; konfigurieren Sie nur Aktionen und Freigaben, die Ihr Anwendungsfall braucht.
+
+## In Novaplan AI verbinden
+
+1. Öffnen Sie **Workspace Settings → Actions → OneDrive** und hinterlegen Sie **Client ID**, **Client Secret** sowie gegebenenfalls **Tenant ID**.
+2. Prüfen Sie die exakte Übereinstimmung der **Redirect URI** mit der Entra-Anwendung und speichern Sie.
+3. Öffnen Sie **Your actions → OneDrive** und führen Sie **Authenticate with OAuth** aus.
+4. Fügen Sie das authentifizierte Toolset im **Agent Builder** unter **Tools** hinzu.
+
+Prüfen Sie bei Aktionen wie `share_item`, `move_item` und `copy_item` Zielordner, Empfänger und Freigaberolle. Mögliche Rollen für eine Freigabe sind `read`, `write` und `owner`; die tatsächliche Vergabe hängt von Microsoft- und Tenant-Richtlinien ab.
+
+Wenn Dateien fehlen, kontrollieren Sie die persönliche Microsoft-Anmeldung, Drive-ID, Zugriffsrechte, Graph-Scopes und gegebenenfalls die zusätzlichen SharePoint-Sites-Rechte. Bei Fragen hilft [Novaplan Support](/de/contact-us).
