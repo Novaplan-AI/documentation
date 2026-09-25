@@ -575,8 +575,8 @@ When enabled, files the user has shared with others are indexed. Disable this to
 
 There are three common causes:
 
-1. **Email mismatch** - The email used during connector authentication doesn't match your Novaplan AI account email. This causes permission issues preventing you from accessing synced data.
-   - **Fix:** Reconfigure the connector and authenticate using the same email as your Novaplan AI account.
+1. **Identity or Drive permissions do not match** - For a Personal connection, check that the Google account belongs to the person who connected it. For a Team connection, the service account and domain authorization are separate from each viewer's Google identity and file permissions.
+   - **Fix:** Ask your administrator to check the affected viewer's account mapping and access to the file, then check the connection's source authorization and filters. Do not reauthorize the Team service account as that viewer.
 
 2. **Records show in "All Records" but not in search** - Documents display in the All Records section but don't appear in search query results.
    - **Fix:** Verify sync filters in the connector settings and ensure indexing has completed. Check that the data matches your search query criteria.

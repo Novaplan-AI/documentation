@@ -681,8 +681,8 @@ No. The connector is read-only — it reads channels, messages, files, and links
 
 There are three common causes:
 
-1. **Email mismatch** — the email used during authentication doesn't match your Novaplan AI account email, which causes permission issues on synced data.
-   - **Fix:** Reconfigure the connector and authenticate with the same email as your Novaplan AI account.
+1. **Identity or channel access does not match** — for a Personal connection, the Slack account must map to the person who authorized it. For the Team connection, each viewer's Slack email and channel membership determine access separately from the administrator who installed the app.
+   - **Fix:** Check the affected viewer's account mapping and channel membership. Reauthorize only the connection whose Slack token is invalid or belongs to the wrong account.
 
 2. **Records show in "All Records" but not in search** — indexing hasn't run for those records.
    - **Fix:** Check whether **Enable Manual Indexing** is on, or whether the relevant indexing filter (messages, threads, files, links) is disabled. Index the records manually from **All Records** if needed.

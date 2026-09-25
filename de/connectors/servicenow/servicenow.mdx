@@ -31,7 +31,7 @@ Für die Einrichtung brauchen Sie Zugriff auf **Application Registry** in Servic
 
 ## ServiceNow in Novaplan AI autorisieren
 
-Prüfen Sie vorab, ob das für **Authorize** verwendete ServiceNow-Konto Zugriff auf die gewünschten Wissensinhalte hat. Die Quellanleitung nennt als mögliche Rollen **`admin`** oder instanzabhängige Impersonationsrechte wie **`impersonator`** beziehungsweise **`impersonate`**. Das sind weitreichende Rechte, keine pauschale Anforderung: Ihre ServiceNow-Administration muss die konkreten Rollen, Tabellen-ACLs und Knowledge-Base-Rechte für Ihre Instanz festlegen. Die Quellanleitung empfiehlt für dieses Konto dieselbe E-Mail-Adresse wie im zugeordneten Novaplan-AI-Konto, damit Berechtigungen korrekt zugeordnet werden.
+Prüfen Sie vorab, ob das für **Authorize** verwendete ServiceNow-Konto Zugriff auf die gewünschten Wissensinhalte hat. Die Quellanleitung nennt als mögliche Rollen **`admin`** oder instanzabhängige Impersonationsrechte wie **`impersonator`** beziehungsweise **`impersonate`**. Das sind weitreichende Rechte, keine pauschale Anforderung: Ihre ServiceNow-Administration muss die konkreten Rollen, Tabellen-ACLs und Knowledge-Base-Rechte für Ihre Instanz festlegen. Die E-Mail-Adresse dieses gemeinsamen Verbindungskontos muss nicht mit dem Novaplan-AI-Administratorkonto übereinstimmen; die Rechte der späteren Nutzenden werden getrennt zugeordnet.
 
 1. Ergänzen Sie unter **Authenticate Instance** die OAuth-Zugangsdaten. Wählen Sie eine bereits gespeicherte **OAuth app**, falls Ihr Workspace sie anbietet, oder tragen Sie **Client ID** und **Client Secret** ein.
 2. Verwenden Sie für die drei Endpunkte den Host Ihrer eigenen Instanz, ohne abschließenden Schrägstrich bei der Instanz-URL:

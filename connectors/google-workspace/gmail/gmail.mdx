@@ -540,8 +540,8 @@ When disabled, file attachments on synced messages are not indexed for search by
 
 There are three common causes:
 
-1. **Email mismatch** - The email used during connector authentication doesn't match your Novaplan AI account email. This causes permission issues preventing you from accessing synced data.
-   - **Fix:** Reconfigure the connector and authenticate using the same email as your Novaplan AI account.
+1. **Identity or mailbox access does not match** - For a Personal connection, check the Google account that authorized its mailbox. For a Team connection, the service account and domain delegation are separate from each person's mapped mailbox identity.
+   - **Fix:** Ask your administrator to check the affected person's account mapping and the intended mailbox, then verify the connection's source authorization and filters. Do not reauthorize the Team service account as that person.
 
 2. **Records show in "All Records" but not in search** - Documents display in the All Records section but don't appear in search query results.
    - **Fix:** Verify sync filters in the connector settings and ensure indexing has completed. Check that the data matches your search query criteria.

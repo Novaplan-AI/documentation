@@ -616,8 +616,8 @@ stage is simply repeated on the next run.
 
 Common causes:
 
-1. **Email mismatch** - The email used during connector authentication doesn't match your Novaplan AI account email. This causes permission issues preventing you from accessing synced data.
-   - **Fix:** Reconfigure the connector and authenticate using the same email as your Novaplan AI account.
+1. **Viewer email or project membership does not match** - A viewer's public GitLab profile email or project membership may not map to their Novaplan AI account.
+   - **Fix:** Check the affected viewer's public GitLab email and access to the project. The account authorizing the shared connector must be able to read the project, but need not match every viewer.
 
 2. **Data not yet indexed** - The connector is still syncing or hasn't completed the initial indexing process.
    - **Fix:** Go to **Settings > Connectors**, check the sync status, and wait for indexing to complete.
@@ -640,7 +640,7 @@ Common causes:
 </Accordion>
 
 <Accordion title="Why do I see no records after authenticating?">
-  The most common causes are missing scopes or selecting the wrong GitLab account. Re-run authentication, ensure the Novaplan AI email and GitLab account emails match.
+  The most common causes are missing scopes or an authorizing GitLab account that cannot read the intended group or project. Check the connection's source access and filters, then check the affected viewer's public GitLab email and project membership against their Novaplan AI account.
 </Accordion>
 
 <Accordion title="Can I sync only specific groups or projects?">

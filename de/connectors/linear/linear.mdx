@@ -36,7 +36,7 @@ Bei öffentlichen Teams sind Inhalte für Mitglieder der Linear-Organisation sic
 3. Melden Sie sich bei Linear an, prüfen Sie Workspace und angeforderten Lesezugriff und wählen Sie **Authorize**.
 4. Nach erfolgreicher Authentifizierung zeigt der Konnektor **Authenticated** an. Gehen Sie mit **Next** zu **Configure Records**.
 
-Laut Quellanleitung sollte die E-Mail-Adresse des autorisierenden Linear-Kontos der zugeordneten E-Mail-Adresse in Novaplan AI entsprechen. Bei Abweichungen können Berechtigungsprobleme auftreten. Wird das Client Secret neu erzeugt oder die Callback URL geändert, aktualisieren Sie die Konfiguration und autorisieren Sie erneut.
+Autorisieren Sie den gemeinsamen Konnektor mit einem Linear-Konto, das die benötigten Teams lesen darf. Die E-Mail-Adressen und Mitgliedschaften der späteren Nutzenden werden getrennt ihren Novaplan-AI-Konten zugeordnet. Wird das Client Secret neu erzeugt oder die Callback URL geändert, aktualisieren Sie die Konfiguration und autorisieren Sie erneut.
 
 ## Synchronisierung und Filter
 
@@ -60,7 +60,7 @@ Speichern Sie mit **Save**. Wählen Sie anschließend **Start syncing now** oder
 | Problem | Prüfen Sie |
 | --- | --- |
 | OAuth-Fehler | **Client ID**, **Client Secret**, aktive Linear-Anwendung und exakte Callback URL |
-| Autorisierung schlägt fehl | Linear-Konto, Workspace-Zugang und zugeordnete E-Mail-Adresse |
+| Autorisierung schlägt fehl | Linear-Konto mit Zugriff auf die benötigten Teams, OAuth-Scopes und exakt registrierte Callback-Adresse |
 | Teams oder Issues fehlen | Rechte des autorisierenden Kontos, private Teammitgliedschaft und **Teams**-Filter |
 | Kommentare oder Anhänge fehlen | **Index Issues** beziehungsweise **Index Issue Attachments** sowie Quellrechte |
 | Dateien fehlen | **Index Issue and Comment Files** und Herkunft der Datei vom Linear-Uploaddienst |

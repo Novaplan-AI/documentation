@@ -45,7 +45,7 @@ The Microsoft Outlook connector provides access to organizational email data thr
 The connector uses **OAuth 2.0** with Microsoft Graph **application permissions** (client credentials plus **admin consent**). It runs as a background integration—no per-user interactive sign-in inside Novaplan AI for this connector.
 
 <Warning>
-  Registering the app, granting admin consent, and entering secrets in Novaplan AI requires appropriate **Microsoft Entra ID** (Azure AD) and **Microsoft 365** admin privileges. Use the same administrator identity in Azure and Novaplan AI when configuring consent-related steps to avoid permission mismatches.
+  Registering the app, granting admin consent, and entering secrets in Novaplan AI requires appropriate **Microsoft Entra ID** (Azure AD) and **Microsoft 365** admin privileges. The Microsoft administrator granting tenant consent can be different from the Novaplan AI administrator configuring the shared connector; verify each viewer's mailbox permissions separately.
 </Warning>
 
 ---
@@ -274,7 +274,7 @@ Click **Save Configuration** when finished, or **← Back** to return to **Authe
 #### Step 9: Enable sync and monitor
 
 <Warning>
-  The administrator who grants consent in Azure should align with the **Novaplan AI account** used to configure this connector; mismatched identities often cause permission issues in Novaplan AI.
+  Confirm the Microsoft app has tenant admin consent for the intended mailboxes. The consenting administrator's email need not match the Novaplan AI administrator's email; individual mailbox visibility is mapped separately.
 </Warning>
 
 After saving, you may see **Instance is configured and ready to sync** — choose **Start Syncing Now** or **I'll do it later**.
@@ -386,8 +386,8 @@ The Outlook connector syncs the following data:
 
 There are three common causes:
 
-1. **Email mismatch** — The email used during connector authentication does not match your Novaplan AI account email. That causes permission issues and can hide synced data.<br />
-   - **Fix:** Reconfigure the connector and complete the flow using the **same email** as your Novaplan AI account (see the warning in Step 9).
+1. **Viewer identity or mailbox access does not match** — A viewer's Microsoft 365 email or mailbox permissions may not map to their Novaplan AI account.<br />
+   - **Fix:** Ask your administrator to check the affected viewer's email and mailbox access. The tenant admin who granted app consent can be a different person.
 
 2. **Records show in "All Records" but not in search** — Documents appear in All Records but not in search results.  
    - **Fix:** Verify sync filters and indexing toggles on **Configure Records**, and ensure indexing has finished for those items.

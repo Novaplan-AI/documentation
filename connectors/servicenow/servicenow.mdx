@@ -43,7 +43,7 @@ The ServiceNow connector syncs **Knowledge Base** content from your instance int
 
 ### Authentication
 
-The connector uses **OAuth 2.0** with a **three-step** flow in Novaplan AI: **Authenticate Instance** (credentials + redirect URL), **Authorize** (browser sign-in to ServiceNow), then **Configure Records** (sync strategy and related options). The admin who completes **Authorize** should use the **same email** as their Novaplan AI account so permissions line up.
+The connector uses **OAuth 2.0** with a **three-step** flow in Novaplan AI: **Authenticate Instance** (credentials + redirect URL), **Authorize** (browser sign-in to ServiceNow), then **Configure Records** (sync strategy and related options). The ServiceNow account used for the shared connection needs access to the intended knowledge bases; each viewer's source identity and permissions are mapped separately.
 
 <Warning>
   Creating the OAuth application in ServiceNow and registering the redirect URL requires **ServiceNow admin** access. If you change Client ID, Client Secret, or Redirect URL in ServiceNow, update the connector in Novaplan AI and complete **Authorize** again.
@@ -239,7 +239,7 @@ Click **Next →** to open the **Authorize** tab.
 </div>
 
 <Warning>
-  **Authorize using the same email as your Novaplan AI account.** A different identity often causes permission or visibility issues in Novaplan AI.
+  Authorize with the ServiceNow account approved for this shared connector. It needs the agreed knowledge-base and table access; its email does not have to match the Novaplan AI administrator's account.
 </Warning>
 
 #### Step 7: Configure Records
@@ -380,8 +380,8 @@ This connector is validated on recent **ServiceNow** releases (for example **Zur
 
 There are three common causes:
 
-1. **Email mismatch** — The email used during **Authorize** does not match your Novaplan AI account email.<br />
-   - **Fix:** Re-run **Authorize** with the same email as your Novaplan AI account (see Step 6).
+1. **Viewer identity or ServiceNow access does not match** — A viewer's ServiceNow email, group, or role may not map to their Novaplan AI account and the expected article.<br />
+   - **Fix:** Ask your administrator to check the affected viewer's identity and source permissions, then verify that the connector's authorized account can read the knowledge base.
 
 2. **Records in All Records but not in search** — Indexing or filters may exclude content.  
    - **Fix:** Review **Configure Records** and connector filters; wait for indexing to finish.
