@@ -1,0 +1,55 @@
+---
+title: "E-Mail-Dienst: API-Referenz"
+description: "Vorlagenbasierte System-E-Mails und die verwaltete SMTP-Konfiguration."
+---
+
+Der E-Mail-Dienst versendet Nachrichten für Anmeldung, Passwortzurücksetzung, Kontenerstellung, Einladungen und Sicherheitsmeldungen. Novaplan richtet den SMTP-Versand für den Kunden-Workspace ein. Die [SMTP-Anleitung](/de/smtp) beschreibt die administrativen Einstellungen; diese Seite dokumentiert die internen API-Abläufe.
+
+<Warning>
+  Die folgenden Endpunkte und Token-Scopes stammen aus der technischen Referenz. Prüfen Sie vor produktiver Nutzung, ob sie im Novaplan Enterprise Workspace freigegeben sind. Verwenden Sie keine administrativen SMTP-Endpunkte in einer Kundenanwendung ohne ausdrückliche Freigabe.
+</Warning>
+
+## Authentifizierung und Vorlagen
+
+Alle hier beschriebenen Endpunkte beginnen mit `/api/v1` und erwarten einen Bearer-Token. Die Referenz nennt `SEND_MAIL` für das Versenden und `FETCH_CONFIG` für das Aktualisieren der geladenen SMTP-Konfiguration. Diese Namen sind technische Kennungen und dürfen nur nach Prüfung des bereitgestellten Dienstes geändert werden.
+
+Verfügbare Vorlagentypen sind `loginWithOTP`, `resetPassword`, `accountCreation`, `appuserInvite` und `suspiciousLoginAttempt`. Die Variable `templateData` enthält die zur Vorlage passenden Werte, etwa `userName`, `companyName`, `otp`, `resetLink` oder `inviteLink`.
+
+## Nachricht versenden
+
+**`POST /api/v1/mail/emails/sendEmail`** erwartet laut Referenz einen Token mit `SEND_MAIL` und folgende Felder:
+
+| Feld | Pflicht | Bedeutung |
+| --- | --- | --- |
+| `emailTemplateType` | Ja | Einer der unterstützten Vorlagentypen |
+| `sendEmailTo` | Ja | Liste der Empfängeradressen |
+| `subject` | Ja | Betreff |
+| `templateData` | Ja | Variablen für die gewählte Vorlage |
+| `sendCcTo` | Nein | CC-Empfänger |
+| `attachments` | Nein | Anhänge, beispielsweise mit Base64-kodiertem Inhalt |
+| `fromEmailDomain` | Nein | Absenderdomain überschreiben |
+| `productName` | Nein | Produktname in der Vorlage |
+| `isAutoEmail` | Nein | Kennzeichnung als automatische Nachricht |
+
+Ein Beispiel ohne echte Zugangsdaten:
+
+```json
+{
+  "emailTemplateType": "appuserInvite",
+  "sendEmailTo": ["user@example.com"],
+  "subject": "Einladung zu Novaplan AI",
+  "templateData": {
+    "userName": "Erika Beispiel",
+    "companyName": "Beispiel GmbH",
+    "inviteLink": "https://workspace.example.com/invite/example"
+  }
+}
+```
+
+Nach erfolgreichem Versand wird ein Datensatz mit Betreff, Empfängern, Vorlagentyp und Zeitstempel gespeichert. Typische Fehler betreffen eine fehlende SMTP-Konfiguration, eine unbekannte Vorlage, ungültige Empfängerangaben oder einen Token ohne passenden Scope.
+
+## SMTP-Konfiguration neu laden
+
+**`POST /api/v1/mail/updateSmtpConfig`** lädt die zuvor im Configuration Manager gespeicherten SMTP-Einstellungen neu. Laut Referenz benötigt der Aufruf `FETCH_CONFIG` und keinen Request-Body. Die Konfiguration umfasst Host, Port, Standard-Absenderadresse und gegebenenfalls SMTP-Benutzername und -Passwort. Ein Passwort wird in der Antwort nicht zurückgegeben.
+
+Der Dienst prüft vor einem Versand, ob die notwendigen SMTP-Felder vorhanden sind. Vorlagen werden verarbeitet und anschließend über den konfigurierten SMTP-Anbieter verschickt. Bei Zustellfehlern prüfen Sie zuerst die Workspace-Konfiguration und den SMTP-Anbieter; [Novaplan Support](/de/contact-us) kann die serverseitigen Protokolle prüfen.

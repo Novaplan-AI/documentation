@@ -21,6 +21,8 @@
               "de/system-overview",
               "de/system-overview/external-services",
               "de/system-overview/internal-services",
+              "de/system-overview/mail-service",
+              "de/system-overview/crawling-manager",
               "de/quickstart",
               "de/contact-us",
               "de/additional-resources/faq"

@@ -1,0 +1,59 @@
+---
+title: "Crawling-Verwaltung: API-Referenz"
+description: "Synchronisationsaufträge für Konnektoren planen, überwachen, pausieren und fortsetzen."
+---
+
+Der Crawling Manager verwaltet geplante Synchronisationen angebundener Datenquellen. Novaplan übernimmt die Einrichtung und Überwachung des Kunden-Workspaces. Die folgenden technischen Endpunkte sind für berechtigte Administrationen vorgesehen; sie sollten nicht als allgemeine Kunden-API vorausgesetzt werden.
+
+<Warning>
+  Die Referenz setzt einen gültigen Bearer-Token und Administratorrechte voraus. Prüfen Sie vor produktiver Nutzung, welche Endpunkte in Ihrem Novaplan Enterprise Workspace freigegeben sind. Das Löschen oder Pausieren eines Zeitplans kann die Aktualität der Suche beeinflussen.
+</Warning>
+
+## Unterstützte Datenquellen und Zeitpläne
+
+Die technische Referenz nennt unter anderem `gmail`, `drive`, `onedrive`, `sharepointonline`, `confluence`, `slack`, `linear`, `dropbox`, `outlook`, `jira`, `atlassian`, `github`, `box`, `s3`, `azure`, `airtable`, `zammad` und `zendesk` als Konnektor-Kennungen. Der konkrete Bestand eines Workspaces richtet sich nach seinen eingerichteten Integrationen.
+
+Ein Zeitplan enthält `scheduleConfig` mit einem `scheduleType`, `isEnabled` und `timezone`. Unterstützte Typen sind `hourly`, `daily`, `weekly`, `monthly`, `custom` mit Cron-Ausdruck sowie `once` für einen einzelnen Zeitpunkt. Weitere optionale Werte sind `priority`, `maxRetries` und `timeout`.
+
+| Typ | Zusätzliche Angaben |
+| --- | --- |
+| `hourly` | Minute und optionales Stundenintervall |
+| `daily` | Stunde und Minute |
+| `weekly` | Wochentage, Stunde und Minute |
+| `monthly` | Kalendertag, Stunde und Minute |
+| `custom` | `cronExpression` und optional eine Beschreibung |
+| `once` | `scheduledTime` als ISO-8601-Zeitpunkt in der Zukunft |
+
+## Endpunkte
+
+Alle Pfade beginnen mit `/api/v1/crawlingManager`.
+
+| Methode und Pfad | Aufgabe |
+| --- | --- |
+| `POST /:connector/schedule` | Zeitplan für einen Konnektortyp anlegen |
+| `GET /:connector/schedule` | Status des Zeitplans abrufen |
+| `GET /schedule/all` | Zeitpläne der Organisation abrufen |
+| `DELETE /:connector/schedule` | Zeitplan eines Konnektortyps entfernen |
+| `DELETE /schedule/all` | Alle Zeitpläne entfernen |
+| `POST /:connector/pause` | Zeitplan pausieren |
+| `POST /:connector/resume` | Pausierten Zeitplan fortsetzen |
+| `GET /stats` | Statistiken zu Aufträgen und Warteschlange abrufen |
+
+Ein Beispiel für den Body von `POST /:connector/schedule`:
+
+```json
+{
+  "scheduleConfig": {
+    "scheduleType": "daily",
+    "hour": 9,
+    "minute": 0,
+    "isEnabled": true,
+    "timezone": "Europe/Berlin"
+  },
+  "priority": 5,
+  "maxRetries": 3,
+  "timeout": 300000
+}
+```
+
+Statuswerte können `waiting`, `active`, `completed`, `failed`, `delayed` oder `paused` sein. Bei Fehlern prüfen Sie zuerst, ob der Zeitplan gültig ist, der Zeitpunkt in der Zukunft liegt, der Konnektor existiert und der Token die erforderlichen Administrationsrechte besitzt. Für die operative Fehlersuche hilft [Novaplan Support](/de/contact-us).
