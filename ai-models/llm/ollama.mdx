@@ -9,7 +9,7 @@ description: "Configure Novaplan AI to use different Ollama models"
 
 *The Ollama configuration screen in Novaplan AI where you'll configure your local Ollama instance connection*
 
-Novaplan AI allows you to integrate with Ollama to run open-source language models locally, providing privacy-focused AI capabilities in your workspace with full control over your data and infrastructure.
+Novaplan AI can connect to an Ollama service operated by your organization or Novaplan. Coordinate the model server, network access, and data handling with Novaplan before adding it to a managed workspace.
 
 ## Required Fields
 
@@ -32,12 +32,12 @@ The Model Name field defines which Ollama model you want to use with Novaplan AI
 The Endpoint URL specifies where your Ollama instance is running. Defaults to `http://host.docker.internal:11434` if left blank.
 
 **Common configurations:**
-- `http://host.docker.internal:11434` - For accessing Ollama from within a Docker container (default)
-- `https://your-server-domain` - For remote Ollama instances
+- `http://host.docker.internal:11434` - Application default; use only if Novaplan confirms that this hostname resolves to your Ollama service from the workspace
+- `https://your-server-domain` - Example of a separately hosted, reachable Ollama service
 
 **Default port:** Ollama runs on port `11434` by default.
 
-**Note:** Ensure your Ollama instance is running and accessible at the specified endpoint before configuring Novaplan AI.
+**Note:** Your computer's `localhost` is not automatically reachable from a managed Novaplan AI workspace. Confirm the endpoint with Novaplan before configuring it.
 
 ### API Key
 
@@ -105,15 +105,15 @@ Before configuring Ollama in Novaplan AI, ensure you have:
    ollama serve
    ```
 
-4. **Network accessibility** - Ensure Novaplan AI can reach your Ollama endpoint
+4. **Network accessibility** - Ask Novaplan to verify that the managed workspace can reach your Ollama endpoint
 
 ## Usage Considerations
 
 ### Advantages of Ollama
-- **Privacy:** All processing happens locally or on your infrastructure
+- **Data location:** Processing occurs on the Ollama server your organization or Novaplan provides; confirm its location and access controls before use
 - **Cost-effective:** No API usage fees or quotas
 - **Customizable:** Full control over model selection and configuration
-- **Offline capable:** Works without internet connectivity (after initial model download)
+- **Network-dependent:** The managed workspace must maintain access to the Ollama server
 - **No rate limits:** Process as many requests as your hardware can handle
 
 ### System Requirements
@@ -132,7 +132,7 @@ Before configuring Ollama in Novaplan AI, ensure you have:
 - **Verify Ollama is running:** Run `ollama list` in your terminal
 - **Check endpoint URL:** Ensure the URL matches where Ollama is accessible
 - **Firewall settings:** Verify that port 11434 is not blocked
-- **Docker networking:** If using Docker, ensure proper network configuration for `host.docker.internal`
+- **Managed workspace routing:** Ask Novaplan to verify the endpoint and network path; the default `host.docker.internal` may not resolve in your workspace
 
 ### Model Issues
 - **Model not found:** Ensure you've pulled the model with `ollama pull <model-name>`

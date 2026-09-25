@@ -5,7 +5,7 @@ description: "Configure Novaplan AI to reach any LLM through a self-hosted LiteL
 
 # LiteLLM Proxy Configuration
 
-LiteLLM Proxy is a self-hosted gateway that speaks the OpenAI API and forwards requests to more than 100 upstream providers. You run it yourself, define your models in its configuration, and point Novaplan AI at it.
+LiteLLM Proxy is a gateway that speaks the OpenAI API and forwards requests to upstream providers. Your organization or Novaplan can operate the proxy; coordinate its configuration and network access with Novaplan before connecting it to a managed workspace.
 
 Use LiteLLM Proxy when you want one place to manage keys, spending limits, and fallbacks for every model your organisation uses, instead of configuring each provider separately in Novaplan AI.
 
@@ -15,7 +15,7 @@ LiteLLM Proxy is the only provider in Novaplan AI that supports all five model t
 
 ## Before you start
 
-You need a running LiteLLM Proxy instance. Follow the [LiteLLM Proxy quick start](https://docs.litellm.ai/docs/simple_proxy) to install it and add at least one model to its `config.yaml`. Note the port it listens on; the default is `4000`.
+You need a running LiteLLM Proxy instance that the managed Novaplan AI workspace can reach. The [LiteLLM Proxy quick start](https://docs.litellm.ai/docs/simple_proxy) covers proxy setup for its operator. Add at least one model to its `config.yaml`; its default port is `4000`.
 
 ## Required Fields
 
@@ -23,17 +23,7 @@ You need a running LiteLLM Proxy instance. Follow the [LiteLLM Proxy quick start
 
 The address where your LiteLLM Proxy is reachable, including the scheme and port.
 
-**Default:** `http://host.docker.internal:4000`
-
-**Which value to use:**
-
-| Where LiteLLM Proxy runs | Endpoint URL to enter |
-|---|---|
-| On the same machine as Novaplan AI, in Docker | `http://host.docker.internal:4000` |
-| On another server | `https://litellm.your-domain.com` |
-| In the same Docker network as Novaplan AI | `http://<container-name>:4000` |
-
-Novaplan AI runs inside a container, so `http://localhost:4000` refers to the Novaplan AI container itself and will not reach a proxy running on your host. Use `host.docker.internal` instead.
+**Application default:** `http://host.docker.internal:4000`. This hostname works only if the managed workspace can resolve and reach it. Ask Novaplan for the actual reachable proxy URL, for example `https://litellm.example.com`. A `localhost` address on your computer is not reachable from the managed workspace by default.
 
 ### API Key *
 
@@ -56,7 +46,7 @@ model_list:
 
 then enter `my-gpt` here.
 
-You can list the names your proxy exposes with:
+The proxy administrator can list the names it exposes from a machine that can reach it, for example:
 
 ```bash
 curl http://localhost:4000/v1/models -H "Authorization: Bearer YOUR_MASTER_KEY"
@@ -82,7 +72,7 @@ Turn this on if the model performs extended reasoning before answering. It is on
 
 ## Troubleshooting
 
-**"Connection refused" when saving.** Novaplan AI cannot reach the endpoint. Check that the proxy is running, and that you used `host.docker.internal` rather than `localhost` if the proxy runs on the Docker host.
+**"Connection refused" when saving.** Novaplan AI cannot reach the endpoint. Ask the proxy administrator and Novaplan to check its status and the network address from the managed workspace.
 
 **"Model not found".** The model name does not match any `model_name` in the proxy configuration. List the available names with the `curl` command above.
 
