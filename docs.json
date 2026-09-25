@@ -18,21 +18,40 @@
             "group": "Willkommen bei Novaplan AI",
             "pages": [
               "de/introduction",
-              "de/system-overview",
-              "de/system-overview/external-services",
-              "de/system-overview/internal-services",
-              "de/system-overview/mail-service",
-              "de/system-overview/crawling-manager",
-              "de/system-overview/authentication",
-              "de/system-overview/connector-manager",
-              "de/system-overview/configuration-manager",
-              "de/system-overview/enterprise-search",
-              "de/system-overview/knowledge-base",
-              "de/system-overview/user-management",
-              "de/system-overview/storage",
               "de/quickstart",
-              "de/contact-us",
-              "de/additional-resources/faq"
+              "de/contact-us"
+            ]
+          },
+          {
+            "group": "Systemübersicht",
+            "pages": [
+              "de/system-overview",
+              {
+                "group": "Novaplan AI Dienste",
+                "pages": [
+                  "de/system-overview/authentication",
+                  "de/system-overview/configuration-manager",
+                  "de/system-overview/connector-manager",
+                  "de/system-overview/crawling-manager",
+                  "de/system-overview/enterprise-search",
+                  "de/system-overview/knowledge-base",
+                  "de/system-overview/mail-service",
+                  "de/system-overview/storage",
+                  "de/system-overview/user-management"
+                ]
+              },
+              {
+                "group": "Externe Dienste",
+                "pages": [
+                  "de/system-overview/external-services"
+                ]
+              },
+              {
+                "group": "Interne Dienste",
+                "pages": [
+                  "de/system-overview/internal-services"
+                ]
+              }
             ]
           },
           {
@@ -42,11 +61,7 @@
               "de/smtp",
               "de/user-management/user",
               "de/user-management/user-group",
-              "de/user-management/teams",
-              "de/developer/getting-started",
-              "de/developer/oauth2",
-              "de/developer/personal-access-tokens",
-              "de/developer/api-reference"
+              "de/user-management/teams"
             ]
           },
           {
@@ -61,46 +76,76 @@
             "group": "Konnektoren",
             "pages": [
               "de/connectors/overview",
-              "de/connectors/box/box",
-              "de/connectors/confluence/confluence",
-              "de/connectors/confluence/confluence-data-center",
-              "de/connectors/dropbox/dropbox_personal",
-              "de/connectors/dropbox/dropbox_teams",
-              "de/connectors/google-workspace/drive/drive",
-              "de/connectors/google-workspace/gmail/gmail",
-              "de/connectors/github/github",
-              "de/connectors/gitlab/gitlab",
-              "de/connectors/jira/jira",
-              "de/connectors/jira/jira-data-center",
-              "de/connectors/rss/rss",
-              "de/connectors/salesforce/salesforce",
-              "de/connectors/slack/slack",
-              "de/connectors/web/web",
-              "de/connectors/zoom/zoom",
-              "de/connectors/notion/notion",
-              "de/connectors/google-workspace/docs/docs",
-              "de/connectors/google-workspace/sheets/sheets",
-              "de/connectors/google-workspace/slides/slides",
-              "de/connectors/google-workspace/calendar/calendar",
-              "de/connectors/microsoft-365/one-note",
-              "de/connectors/microsoft-365/one-drive",
-              "de/connectors/microsoft-365/outlook",
-              "de/connectors/microsoft-365/sharepoint",
-              "de/connectors/microsoft-365/teams",
+              {
+                "group": "Dropbox",
+                "pages": [
+                  "de/connectors/dropbox/dropbox_personal",
+                  "de/connectors/dropbox/dropbox_teams"
+                ]
+              },
+              {
+                "group": "Google Workspace",
+                "pages": [
+                  "de/connectors/google-workspace/calendar/calendar",
+                  "de/connectors/google-workspace/docs/docs",
+                  "de/connectors/google-workspace/drive/drive",
+                  "de/connectors/google-workspace/gmail/gmail",
+                  "de/connectors/google-workspace/sheets/sheets",
+                  "de/connectors/google-workspace/slides/slides"
+                ]
+              },
+              {
+                "group": "Microsoft 365",
+                "pages": [
+                  "de/connectors/microsoft-365/one-drive",
+                  "de/connectors/microsoft-365/one-note",
+                  "de/connectors/microsoft-365/outlook",
+                  "de/connectors/microsoft-365/sharepoint",
+                  "de/connectors/microsoft-365/teams"
+                ]
+              },
               "de/connectors/airtable/airtable",
-              "de/connectors/zendesk/zendesk",
-              "de/connectors/bookstack/bookstack",
-              "de/connectors/zammad/zammad",
-              "de/connectors/servicenow/servicenow",
-              "de/connectors/nextcloud/nextcloud",
-              "de/connectors/linear/linear",
-              "de/connectors/local-fs/local-fs",
               "de/connectors/azure-blob/azure-blob",
               "de/connectors/azure-files/azure-files",
+              "de/connectors/bookstack/bookstack",
+              "de/connectors/box/box",
+              {
+                "group": "Confluence",
+                "pages": [
+                  "de/connectors/confluence/confluence",
+                  "de/connectors/confluence/confluence-data-center"
+                ]
+              },
+              "de/connectors/github/github",
+              "de/connectors/gitlab/gitlab",
               "de/connectors/gcs/gcs",
+              {
+                "group": "Jira",
+                "pages": [
+                  "de/connectors/jira/jira",
+                  "de/connectors/jira/jira-data-center"
+                ]
+              },
+              "de/connectors/linear/linear",
+              "de/connectors/local-fs/local-fs",
+              {
+                "group": "Datenbanken",
+                "pages": [
+                  "de/connectors/mariadb/mariadb",
+                  "de/connectors/postgres/postgres"
+                ]
+              },
+              "de/connectors/nextcloud/nextcloud",
+              "de/connectors/notion/notion",
+              "de/connectors/rss/rss",
               "de/connectors/s3/s3",
-              "de/connectors/mariadb/mariadb",
-              "de/connectors/postgres/postgres"
+              "de/connectors/salesforce/salesforce",
+              "de/connectors/servicenow/servicenow",
+              "de/connectors/slack/slack",
+              "de/connectors/web/web",
+              "de/connectors/zammad/zammad",
+              "de/connectors/zendesk/zendesk",
+              "de/connectors/zoom/zoom"
             ]
           },
           {
@@ -118,6 +163,12 @@
           {
             "group": "Integrationen",
             "pages": [
+              "de/integrations/slackBot"
+            ]
+          },
+          {
+            "group": "MCP-Server",
+            "pages": [
               "de/mcp/overview",
               "de/mcp/claude-ai",
               "de/mcp/librechat",
@@ -128,8 +179,7 @@
               "de/mcp/omnigent",
               "de/mcp/claude-desktop",
               "de/mcp/local-server",
-              "de/mcp/qm",
-              "de/integrations/slackBot"
+              "de/mcp/qm"
             ]
           },
           {
@@ -221,29 +271,59 @@
             "group": "Toolsets",
             "pages": [
               "de/toolsets/overview",
-              "de/toolsets/google-workspace/drive",
-              "de/toolsets/google-workspace/gmail",
-              "de/toolsets/google-workspace/calendar",
-              "de/toolsets/mariadb/mariadb",
-              "de/toolsets/redshift/redshift",
-              "de/toolsets/jira/jira-data-center",
-              "de/toolsets/jira/jira",
-              "de/toolsets/confluence/confluence-data-center",
-              "de/toolsets/confluence/confluence",
+              {
+                "group": "Google Workspace",
+                "pages": [
+                  "de/toolsets/google-workspace/gmail",
+                  "de/toolsets/google-workspace/calendar",
+                  "de/toolsets/google-workspace/drive"
+                ]
+              },
+              {
+                "group": "Microsoft 365",
+                "pages": [
+                  "de/toolsets/microsoft-365/outlook",
+                  "de/toolsets/microsoft-365/sharepoint",
+                  "de/toolsets/microsoft-365/teams",
+                  "de/toolsets/microsoft-365/onedrive"
+                ]
+              },
+              {
+                "group": "Atlassian",
+                "pages": [
+                  "de/toolsets/jira/jira",
+                  "de/toolsets/jira/jira-data-center",
+                  "de/toolsets/confluence/confluence",
+                  "de/toolsets/confluence/confluence-data-center"
+                ]
+              },
+              "de/toolsets/slack/slack",
+              {
+                "group": "Datenbanken",
+                "pages": [
+                  "de/toolsets/mariadb/mariadb",
+                  "de/toolsets/redshift/redshift"
+                ]
+              },
               "de/toolsets/clickup/clickup",
               "de/toolsets/github/github",
-              "de/toolsets/slack/slack",
-              "de/toolsets/zoom/zoom",
               "de/toolsets/salesforce/salesforce",
-              "de/toolsets/microsoft-365/outlook",
-              "de/toolsets/microsoft-365/onedrive",
-              "de/toolsets/microsoft-365/sharepoint",
-              "de/toolsets/microsoft-365/teams"
+              "de/toolsets/zoom/zoom"
+            ]
+          },
+          {
+            "group": "Entwicklung",
+            "pages": [
+              "de/developer/getting-started",
+              "de/developer/oauth2",
+              "de/developer/personal-access-tokens",
+              "de/developer/api-reference"
             ]
           },
           {
             "group": "Weitere Informationen",
             "pages": [
+              "de/additional-resources/faq",
               "de/additional-resources/changelog",
               "de/additional-resources/telemetry"
             ]
