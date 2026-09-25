@@ -42,7 +42,7 @@ Ohne Filter werden alle für den IAM-Zugang erreichbaren Objekte berücksichtigt
 5. Speichern Sie mit **Save Configuration** und schalten Sie auf der Instanzkarte **Sync Enabled** ein, sofern sie **Sync Paused** zeigt.
 6. Prüfen Sie im **Overview**-Bereich **Total**, **Processing**, **Not Started**, **Failed** und **Unsupported**. **Sync** verarbeitet Änderungen; **Full sync** liest den gewählten Umfang erneut.
 
-Beim ersten Lauf liest der Konnektor Bucket- und Objektlisten vollständig. Er erkennt die Region der Buckets und übernimmt Dateinamen, Größen, Änderungszeiten, MIME-Typen und die aus Präfixen abgeleitete Struktur. Folgeläufe nutzen pro Bucket gespeicherte Änderungsstände. Gelöschte Objekte sollen beim nächsten Lauf aus der Suche entfernt werden; bei Versionierung sollten Sie die tatsächlich sichtbaren Versionen prüfen.
+Beim ersten Lauf liest der Konnektor Bucket- und Objektlisten vollständig. Er erkennt die Region der Buckets und übernimmt Dateinamen, Größen, Änderungszeiten, MIME-Typen und die aus Präfixen abgeleitete Struktur. Folgeläufe listen die gewählten Buckets erneut und nutzen pro Bucket gespeicherte Änderungsstände, um passende neue oder geänderte Objekte zu verarbeiten. Nach dem Löschen sensibler Quelldateien prüfen Sie, ob bereits indexierte Einträge auch in Novaplan AI verschwunden sind; wenden Sie sich andernfalls an [Novaplan Support](/de/contact-us). Quelllöschung allein ist kein bestätigter sofortiger Widerruf der Suchbarkeit.
 
 ## Dateitypen und besondere Speicherklassen
 

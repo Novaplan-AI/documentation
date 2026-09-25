@@ -418,41 +418,32 @@ The first sync performs a complete scan of your configured S3 buckets:
 - **Indexing**: Indexes file content for AI-powered search (based on indexing filter settings)
 - **Permission Assignment**: Assigns permissions based on connector scope (Personal or Team)
 
-**Sync Duration Estimates:**
-
-| Bucket Size | Objects | Estimated Time |
-|-------------|---------|----------------|
-| Small | < 1,000 | 5-15 minutes |
-| Medium | 1,000 - 10,000 | 15-45 minutes |
-| Large | 10,000 - 100,000 | 1-3 hours |
-| Very Large | 100,000 - 1,000,000 | 3-8 hours |
-| Enterprise | 1,000,000+ | 8+ hours |
+Sync duration depends on object count, size, file type, AWS limits, and your workspace's indexing capacity. Use the Overview panel to track the actual run.
 
 <Info>
-  Use bucket and file extension filters to significantly reduce initial sync time. For example, syncing only PDF files from a specific bucket can reduce sync time by 80-90%.
+  Use bucket and file-extension filters to limit the import to the content you need. Actual time savings depend on the bucket.
 </Info>
 
 ### Incremental Sync
 
-After the initial sync, subsequent syncs are much faster:
+After the initial sync, subsequent runs use a stored timestamp to avoid reprocessing unchanged objects:
 
 - **Timestamp-Based Detection**: Uses `LastModified` timestamps to identify changed objects
 - **Sync Point Tracking**: Stores the last sync timestamp per bucket in sync points
-- **Change Detection**: Only fetches objects modified since the last sync timestamp
+- **Change Detection**: Lists selected buckets and checks object timestamps against the last sync timestamp
 - **Pagination Resume**: Uses continuation tokens to resume interrupted syncs
-- **Efficient Updates**: Processes only new, modified, or deleted objects
-- **API Optimization**: Reduces API calls by 90%+ compared to full syncs
+- **Eligible Updates**: Processes new or modified objects that pass the filters; verify source deletions separately
 
 **How It Works:**
 
 1. Connector reads the sync point for each bucket (stored in our database)
 2. Retrieves the `last_sync_time` timestamp
-3. Queries S3 for objects with `LastModified >= last_sync_time`
+3. Lists selected S3 objects and compares their `LastModified` values with `last_sync_time`
 4. Processes only the changed objects
 5. Updates the sync point with the new maximum timestamp
 
 <Info>
-  Incremental syncs typically take 5-15 minutes for most buckets, regardless of total bucket size, as they only process changes.
+  Later syncs can still take time for large buckets because object listing is required. Monitor the run in your workspace.
 </Info>
 
 ### Permission Handling
@@ -460,9 +451,9 @@ After the initial sync, subsequent syncs are much faster:
 The connector respects AWS IAM permissions and Novaplan AI access controls:
 
 - **IAM-Based Access**: Only syncs buckets and objects the IAM user has permission to access
-- **Bucket Policies**: Respects S3 bucket policies and access control lists (ACLs)
+- **Bucket Policies**: The connector's AWS identity can import only objects it is allowed to read; each Novaplan AI viewer's separate AWS permissions are not reproduced
 - **Novaplan AI Scope**:
-  - **Personal Scope**: Only the connector creator can access synced content
+  - **Personal Scope**: Intended for the connector creator; verify access with a second workspace account
   - **Team Scope**: All organization users have read access to synced content
 - **Permission Inheritance**: Files inherit permissions from their parent bucket (Record Group)
 - **Access Control**: AWS IAM and bucket policies limit what the connector's IAM identity can ingest. The selected Personal or Team scope governs who can see that ingested content in Novaplan AI. Verify this scope before syncing sensitive buckets; individual Novaplan AI users do not authenticate to S3 through this connector.
@@ -673,17 +664,7 @@ This connector is designed for **Amazon S3** and uses the AWS S3 API. It support
 <AccordionGroup type="single" collapsible>
 
 <Accordion title="How long does the initial sync take?" defaultOpen>
-  The initial sync duration depends on the size of your S3 buckets:
-  
-  | Bucket Size | Estimated Time |
-  |-------------|----------------|
-  | Small (< 1,000 objects) | 5-15 minutes |
-  | Medium (1,000 - 10,000 objects) | 15-45 minutes |
-  | Large (10,000 - 100,000 objects) | 1-3 hours |
-  | Very Large (100,000 - 1,000,000 objects) | 3-8 hours |
-  | Enterprise (1,000,000+ objects) | 8+ hours |
-  
-  **Tip**: Use bucket and file extension filters to significantly reduce initial sync time. For example, syncing only PDF files from specific buckets can reduce sync time by 80-90%.
+  It depends on object count, size, file type, AWS limits, filters, and indexing capacity. Start with a limited bucket or file-type filter and check the Overview panel. Novaplan Support can help plan a large import.
 </Accordion>
 
 <Accordion title="Can I sync multiple AWS accounts?">
@@ -719,11 +700,11 @@ This connector is designed for **Amazon S3** and uses the AWS S3 API. It support
   After the initial sync, the connector uses timestamp-based incremental sync:
   
   1. **Stores Sync Point**: Saves the last sync timestamp for each bucket
-  2. **Queries Changes**: On next sync, queries S3 for objects modified since that timestamp
+  2. **Lists Objects**: On the next sync, lists selected buckets and compares object modification times with that timestamp
   3. **Processes Only Changes**: Downloads and indexes only new or modified objects
   4. **Updates Timestamp**: Saves the new maximum timestamp for the next sync
   
-  This makes subsequent syncs 90%+ faster than full syncs, typically completing in 5-15 minutes regardless of bucket size.
+  This avoids reprocessing unchanged objects, but listing a large bucket can still take time. Check the actual run in the Overview panel.
 </Accordion>
 
 <Accordion title="Can I sync S3 Glacier files?">
@@ -738,14 +719,7 @@ This connector is designed for **Amazon S3** and uses the AWS S3 API. It support
 </Accordion>
 
 <Accordion title="What happens if I delete a file in S3?">
-  When a file is deleted from S3:
-  
-  - The deletion is detected during the next incremental sync
-  - The file record is marked as deleted in Novaplan AI
-  - The file is removed from search results
-  - Historical access to the file may still be available depending on your retention settings
-  
-  **Note**: If you use S3 versioning, deleted files may still appear if previous versions exist.
+  Do not assume that deleting an S3 object immediately removes an already indexed record or search result. After deleting sensitive content, verify its absence in Novaplan AI and contact [Novaplan Support](/contact-us) if it remains. Confirm deletion and versioning behavior for your Enterprise workspace before relying on source deletion to revoke access.
 </Accordion>
 
 <Accordion title="Can I sync encrypted S3 buckets?">
