@@ -8,6 +8,10 @@ Reference for the tools exposed by the Novaplan AI MCP server. These tools let a
 
 The server exposes **seven** tools. Each one wraps several lower-level API calls so the LLM gets a single, well-shaped response. This reference was checked against MCP package version **2.3.3**. The package's [upstream tool reference](https://github.com/pipeshub-ai/mcp-server/blob/main/TOOLS.md) may describe a newer schema; confirm the version in your workspace before relying on optional arguments.
 
+<Warning>
+  The `pipeshub_*` names below are functional tool IDs in the underlying MCP implementation. Use the exact names returned by your workspace; changing them for branding would not call the existing tools.
+</Warning>
+
 ## `pipeshub_chat`
 
 Ask a question and get an answer grounded in the org's indexed sources, with citations. It reads a **few retrieved passages** — never a whole document, never a complete list.
