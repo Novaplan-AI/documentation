@@ -28,18 +28,22 @@ Cursor kann sich über OAuth mit dem entfernten MCP-Endpunkt Ihres Novaplan AI W
 }
 ```
 
-Ersetzen Sie die Platzhalter durch Ihre Workspace-Adresse und OAuth-Zugangsdaten. Der Name `novaplan` ist nur der lokale Eintrag in Cursor. Wählen Sie die Scopes passend zu den Werkzeugen, die die OAuth-Anwendung tatsächlich verwenden darf. Ohne ausdrückliche Liste kann Cursor alle über `/.well-known/oauth-protected-resource/mcp` veröffentlichten Scopes anfordern.
+Ersetzen Sie die Platzhalter durch Ihre Workspace-Adresse und OAuth-Zugangsdaten. Der Name `novaplan` ist nur der lokale Eintrag in Cursor. Wählen Sie die Scopes passend zu den Werkzeugen, die die OAuth-Anwendung tatsächlich verwenden darf. Ohne ausdrückliche Liste verwendet Cursor laut aktueller Dokumentation `scopes_supported` aus `/.well-known/oauth-authorization-server`.
 
 <Warning>
   Speichern Sie ein Client Secret nicht in einer Datei, die Sie ins Repository einchecken. Verwenden Sie für lokale Konfigurationen die von Cursor unterstützte Umgebungsvariablen-Interpolation wie `${env:NOVAPLAN_CLIENT_SECRET}` und schützen Sie die Werte entsprechend.
 </Warning>
 
-## Redirect URI registrieren
+## Redirect-URIs registrieren
 
-Tragen Sie in der Novaplan-OAuth-Anwendung die feste Redirect URI von Cursor ein:
+Tragen Sie in der Novaplan-OAuth-Anwendung die Redirect-URI für jede verwendete Cursor-Oberfläche ein:
 
-```text
-cursor://anysphere.cursor-mcp/oauth/callback
-```
+| Cursor-Oberfläche | Redirect-URI |
+| --- | --- |
+| Desktop-App (aktuell) | `http://localhost:8787/callback` |
+| Desktop-App (ältere Installationen) | `cursor://anysphere.cursor-mcp/oauth/callback` |
+| Web und Cursor Agents | `https://www.cursor.com/agents/mcp/oauth/callback` |
+
+Die aktuelle [Cursor-MCP-Dokumentation](https://cursor.com/docs/mcp#static-redirect-url) nennt für die Desktop-App die localhost-URI und für Web/Agents die HTTPS-URI. Einige ältere Desktop-Installationen verwenden weiterhin die `cursor://`-URI. Der zugängliche Novaplan-OAuth-Quellcode erlaubt sowohl diese ältere URI als auch localhost- und HTTPS-Weiterleitungen; die Enterprise-Version muss noch praktisch getestet werden. Bei einem Redirect-Fehler vergleichen Sie die von Cursor tatsächlich gesendete URI mit dem exakten Eintrag in der OAuth-Anwendung.
 
 Wenn das interne Browserfenster die Novaplan-Anmeldung nicht lädt, öffnen Sie die angezeigte Autorisierungsadresse in Ihrem normalen Browser. Prüfen Sie bei einem OAuth-Fehler außerdem Redirect URI, Client-Zugangsdaten und Scopes.

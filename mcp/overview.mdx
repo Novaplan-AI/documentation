@@ -57,7 +57,8 @@ Add all the redirect URIs for the clients you plan to use:
 
 | Client | Redirect URI |
 |---|---|
-| **Cursor** | `cursor://anysphere.cursor-mcp/oauth/callback` |
+| **Cursor Desktop** | `http://localhost:8787/callback`; older installations may use `cursor://anysphere.cursor-mcp/oauth/callback` |
+| **Cursor Web / Agents** | `https://www.cursor.com/agents/mcp/oauth/callback` |
 | **Claude Code** | `http://localhost:<PORT>/callback` (e.g., `http://localhost:8080/callback`) |
 | **Claude.ai (Web)** | `https://claude.ai/api/mcp/auth_callback` |
 | **Claude Desktop** (custom connector) | `https://claude.ai/api/mcp/auth_callback` |
@@ -166,7 +167,8 @@ This returns all OAuth endpoints automatically:
   </Accordion>
   <Accordion title="Authentication fails / redirect error">
     Ensure the **Redirect URI** in your OAuth app matches exactly what the client uses:
-    - **Cursor**: `cursor://anysphere.cursor-mcp/oauth/callback`
+    - **Cursor Desktop**: `http://localhost:8787/callback` (or `cursor://anysphere.cursor-mcp/oauth/callback` on an older installation)
+    - **Cursor Web / Agents**: `https://www.cursor.com/agents/mcp/oauth/callback`
     - **Claude Code**: `http://localhost:<callbackPort>/callback`
     - **Claude.ai**: `https://claude.ai/api/mcp/auth_callback`
     - **Gemini CLI**: `http://localhost:7777/oauth/callback`
