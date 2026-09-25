@@ -65,11 +65,105 @@
             ]
           },
           {
-            "group": "Agenten",
+            "group": "Anmeldung",
             "pages": [
-              "de/agent-guide/overview",
-              "de/for-agents",
-              "de/agent-guide/setup-guide"
+              "de/auth",
+              {
+                "group": "Methoden",
+                "pages": [
+                  "de/auth/password",
+                  "de/auth/otp",
+                  "de/auth/google",
+                  "de/auth/microsoft-azureAd",
+                  "de/auth/saml",
+                  "de/auth/oauth"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "KI-Modelle",
+            "pages": [
+              "de/ai-models/overview",
+              {
+                "group": "Sprachmodelle",
+                "pages": [
+                  "de/ai-models/llm/openai",
+                  "de/ai-models/llm/anthropic",
+                  "de/ai-models/llm/gemini",
+                  "de/ai-models/llm/azure-openai",
+                  "de/ai-models/llm/azure-ai",
+                  "de/ai-models/llm/bedrock",
+                  "de/ai-models/llm/cohere",
+                  "de/ai-models/llm/mistral",
+                  "de/ai-models/llm/groq",
+                  "de/ai-models/llm/xai",
+                  "de/ai-models/llm/minimax",
+                  "de/ai-models/llm/fireworks",
+                  "de/ai-models/llm/together",
+                  "de/ai-models/llm/openai-compatible",
+                  "de/ai-models/llm/ollama",
+                  "de/ai-models/llm/vertex-ai",
+                  "de/ai-models/llm/deepseek",
+                  "de/ai-models/llm/openrouter",
+                  "de/ai-models/llm/vllm",
+                  "de/ai-models/llm/litellm-proxy",
+                  "de/ai-models/llm/lm-studio"
+                ]
+              },
+              {
+                "group": "Embedding-Modelle",
+                "pages": [
+                  "de/ai-models/embedding/BAAI",
+                  "de/ai-models/embedding/openai",
+                  "de/ai-models/embedding/gemini",
+                  "de/ai-models/embedding/azure-openai",
+                  "de/ai-models/embedding/azure-ai",
+                  "de/ai-models/embedding/cohere",
+                  "de/ai-models/embedding/mistral",
+                  "de/ai-models/embedding/together",
+                  "de/ai-models/embedding/openai-compatible",
+                  "de/ai-models/embedding/ollama",
+                  "de/ai-models/embedding/sentence-transformer",
+                  "de/ai-models/embedding/huggingface",
+                  "de/ai-models/embedding/jina",
+                  "de/ai-models/embedding/voyage",
+                  "de/ai-models/embedding/bedrock",
+                  "de/ai-models/embedding/vertex-ai",
+                  "de/ai-models/embedding/openrouter",
+                  "de/ai-models/embedding/litellm-proxy",
+                  "de/ai-models/embedding/lm-studio"
+                ]
+              },
+              {
+                "group": "Bildgenerierung",
+                "pages": [
+                  "de/ai-models/image-generation/openai",
+                  "de/ai-models/image-generation/gemini",
+                  "de/ai-models/image-generation/openrouter",
+                  "de/ai-models/image-generation/litellm-proxy"
+                ]
+              },
+              {
+                "group": "Text-zu-Sprache",
+                "pages": [
+                  "de/ai-models/tts/openai",
+                  "de/ai-models/tts/gemini",
+                  "de/ai-models/tts/openrouter",
+                  "de/ai-models/tts/litellm-proxy"
+                ]
+              },
+              {
+                "group": "Sprache-zu-Text",
+                "pages": [
+                  "de/ai-models/stt/openai",
+                  "de/ai-models/stt/gemini",
+                  "de/ai-models/stt/whisper",
+                  "de/ai-models/stt/wispr-flow",
+                  "de/ai-models/stt/openrouter",
+                  "de/ai-models/stt/litellm-proxy"
+                ]
+              }
             ]
           },
           {
@@ -149,122 +243,17 @@
             ]
           },
           {
-            "group": "Anmeldung",
-            "pages": [
-              "de/auth",
-              "de/auth/password",
-              "de/auth/otp",
-              "de/auth/oauth",
-              "de/auth/google",
-              "de/auth/microsoft-azureAd",
-              "de/auth/saml"
-            ]
-          },
-          {
             "group": "Integrationen",
             "pages": [
               "de/integrations/slackBot"
             ]
           },
           {
-            "group": "MCP-Server",
+            "group": "Agenten",
             "pages": [
-              "de/mcp/overview",
-              "de/mcp/claude-ai",
-              "de/mcp/librechat",
-              "de/mcp/cursor",
-              "de/mcp/gemini-cli",
-              "de/mcp/claude-code",
-              "de/mcp/tools",
-              "de/mcp/omnigent",
-              "de/mcp/claude-desktop",
-              "de/mcp/local-server",
-              "de/mcp/qm"
-            ]
-          },
-          {
-            "group": "KI-Modelle",
-            "pages": [
-              "de/ai-models/overview",
-              {
-                "group": "Sprachmodelle",
-                "pages": [
-                  "de/ai-models/llm/openai",
-                  "de/ai-models/llm/anthropic",
-                  "de/ai-models/llm/gemini",
-                  "de/ai-models/llm/azure-openai",
-                  "de/ai-models/llm/azure-ai",
-                  "de/ai-models/llm/bedrock",
-                  "de/ai-models/llm/cohere",
-                  "de/ai-models/llm/mistral",
-                  "de/ai-models/llm/groq",
-                  "de/ai-models/llm/xai",
-                  "de/ai-models/llm/minimax",
-                  "de/ai-models/llm/fireworks",
-                  "de/ai-models/llm/together",
-                  "de/ai-models/llm/vertex-ai",
-                  "de/ai-models/llm/openai-compatible",
-                  "de/ai-models/llm/ollama",
-                  "de/ai-models/llm/litellm-proxy",
-                  "de/ai-models/llm/lm-studio",
-                  "de/ai-models/llm/deepseek",
-                  "de/ai-models/llm/openrouter",
-                  "de/ai-models/llm/vllm"
-                ]
-              },
-              {
-                "group": "Embedding-Modelle",
-                "pages": [
-                  "de/ai-models/embedding/openai",
-                  "de/ai-models/embedding/gemini",
-                  "de/ai-models/embedding/azure-openai",
-                  "de/ai-models/embedding/azure-ai",
-                  "de/ai-models/embedding/cohere",
-                  "de/ai-models/embedding/mistral",
-                  "de/ai-models/embedding/jina",
-                  "de/ai-models/embedding/voyage",
-                  "de/ai-models/embedding/together",
-                  "de/ai-models/embedding/BAAI",
-                  "de/ai-models/embedding/sentence-transformer",
-                  "de/ai-models/embedding/huggingface",
-                  "de/ai-models/embedding/openai-compatible",
-                  "de/ai-models/embedding/ollama",
-                  "de/ai-models/embedding/openrouter",
-                  "de/ai-models/embedding/bedrock",
-                  "de/ai-models/embedding/vertex-ai",
-                  "de/ai-models/embedding/litellm-proxy",
-                  "de/ai-models/embedding/lm-studio"
-                ]
-              },
-              {
-                "group": "Bildgenerierung",
-                "pages": [
-                  "de/ai-models/image-generation/openai",
-                  "de/ai-models/image-generation/gemini",
-                  "de/ai-models/image-generation/openrouter",
-                  "de/ai-models/image-generation/litellm-proxy"
-                ]
-              },
-              {
-                "group": "Text-zu-Sprache",
-                "pages": [
-                  "de/ai-models/tts/openai",
-                  "de/ai-models/tts/gemini",
-                  "de/ai-models/tts/openrouter",
-                  "de/ai-models/tts/litellm-proxy"
-                ]
-              },
-              {
-                "group": "Sprache-zu-Text",
-                "pages": [
-                  "de/ai-models/stt/openai",
-                  "de/ai-models/stt/gemini",
-                  "de/ai-models/stt/whisper",
-                  "de/ai-models/stt/wispr-flow",
-                  "de/ai-models/stt/openrouter",
-                  "de/ai-models/stt/litellm-proxy"
-                ]
-              }
+              "de/agent-guide/overview",
+              "de/agent-guide/setup-guide",
+              "de/for-agents"
             ]
           },
           {
@@ -309,6 +298,22 @@
               "de/toolsets/github/github",
               "de/toolsets/salesforce/salesforce",
               "de/toolsets/zoom/zoom"
+            ]
+          },
+          {
+            "group": "MCP-Server",
+            "pages": [
+              "de/mcp/overview",
+              "de/mcp/qm",
+              "de/mcp/cursor",
+              "de/mcp/claude-code",
+              "de/mcp/claude-desktop",
+              "de/mcp/gemini-cli",
+              "de/mcp/claude-ai",
+              "de/mcp/librechat",
+              "de/mcp/omnigent",
+              "de/mcp/local-server",
+              "de/mcp/tools"
             ]
           },
           {
@@ -358,9 +363,7 @@
             "group": "Welcome To Novaplan AI",
             "pages": [
               "introduction",
-              "for-agents",
               "quickstart",
-              "onboarding",
               "contact-us"
             ]
           },
@@ -397,6 +400,16 @@
             ]
           },
           {
+            "group": "Administration",
+            "pages": [
+              "onboarding",
+              "smtp",
+              "user-management/user",
+              "user-management/user-group",
+              "user-management/teams"
+            ]
+          },
+          {
             "group": "Authentication",
             "pages": [
               "auth",
@@ -411,12 +424,6 @@
                   "auth/oauth"
                 ]
               }
-            ]
-          },
-          {
-            "group": "Mail Configuration",
-            "pages": [
-              "smtp"
             ]
           },
           {
@@ -590,7 +597,8 @@
             "group": "Agents",
             "pages": [
               "agent-guide/overview",
-              "agent-guide/setup-guide"
+              "agent-guide/setup-guide",
+              "for-agents"
             ]
           },
           {
@@ -654,14 +662,6 @@
             ]
           },
           {
-            "group": "User Management",
-            "pages": [
-              "user-management/user",
-              "user-management/user-group",
-              "user-management/teams"
-            ]
-          },
-          {
             "group": "Developer",
             "pages": [
               "developer/getting-started",
@@ -673,9 +673,9 @@
           {
             "group": "Additional Resources",
             "pages": [
+              "additional-resources/faq",
               "additional-resources/changelog",
-              "additional-resources/telemetry",
-              "additional-resources/faq"
+              "additional-resources/telemetry"
             ]
           }
         ],
