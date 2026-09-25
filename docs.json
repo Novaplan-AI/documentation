@@ -75,6 +75,7 @@
               "de/connectors/zammad/zammad",
               "de/connectors/servicenow/servicenow",
               "de/connectors/nextcloud/nextcloud",
+              "de/connectors/linear/linear",
               "de/connectors/mariadb/mariadb",
               "de/connectors/postgres/postgres"
             ]
