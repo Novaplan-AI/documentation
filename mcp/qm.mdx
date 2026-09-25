@@ -147,7 +147,7 @@ If the CLI says it is not connected, have the agent run `pipeshub auth connect-h
 | Symptom | Cause | What to do |
 | --- | --- | --- |
 | Agent says it needs `semantic:read` | It called `GET /api/v1/search` (history) instead of the CLI | New chat. Tell it to use `pipeshub ask` / `search`. Do not widen the PAT |
-| `sources: []` and `ask` 401 with a `phpat_` token | Novaplan AI older than [pipeshub-ai#2971](https://github.com/pipeshub-ai/pipeshub-ai/pull/2971) (not in `v0.6.0-beta`) | Upgrade Novaplan AI. Keep the `phpat_` prefix — do not strip it |
+| `sources: []` and `ask` 401 with a `phpat_` token | The deployed version or token handling may differ from the package's expectations | Contact Novaplan Support to check compatibility. Keep the token intact — do not strip its prefix |
 | `localhost` / connection refused from the agent | The sandbox is not on your machine | Use public HTTPS; put that origin in the keychain |
 | `PIPESHUB_TOKEN` set, `PIPESHUB_BASE_URL` missing | `sandbox.env` does not reach Sprites | Second keychain entry (or org credential) for the URL |
 | `pipeshub: command not found` | Stock Sprite image, no first-run install | `npm install -g @pipeshub-ai/mcp` once on that Sprite |
