@@ -34,6 +34,10 @@ The Redshift toolset lets agents query your Amazon Redshift database.
   Admin creates the Redshift toolset once. After that, each user authenticates with their own Redshift username and password.
 </Note>
 
+<Warning>
+  `execute_query` sends SQL to Redshift with the authenticated user's database privileges; the tool is not limited to read-only statements. For analytical agents, use an account with only the required read permissions. Review any write or administrative access separately.
+</Warning>
+
 ---
 
 ## Configuration Guide
@@ -79,10 +83,12 @@ The Redshift toolset lets agents query your Amazon Redshift database.
 
 From the Redshift **Workgroup** page, copy the endpoint. Example:
 
-`redshift-dev-wg.891377406506.ap-south-1.redshift-serverless.amazonaws.com:5439/dev`
+`redshift-dev-wg.your-account.ap-south-1.redshift-serverless.amazonaws.com:5439/dev`
+
+Replace `your-account` with the account-specific value from your actual workgroup endpoint; this example is not a usable address.
 
 Use these values in Novaplan AI setup:
-- **Host**: `redshift-dev-wg.891377406506.ap-south-1.redshift-serverless.amazonaws.com` (only hostname before `:`)
+- **Host**: `redshift-dev-wg.your-account.ap-south-1.redshift-serverless.amazonaws.com` (only hostname before `:`)
 - **Port**: `5439`
 - **Database**: `dev`
 
@@ -110,7 +116,7 @@ psql --version
 Then run:
 
 ```bash
-psql "sslmode=require host=redshift-dev-wg.891377406506.ap-south-1.redshift-serverless.amazonaws.com port=5439 user=root dbname=dev" -f "/path/to/tickitdb.sql"
+psql "sslmode=require host=redshift-dev-wg.your-account.ap-south-1.redshift-serverless.amazonaws.com port=5439 user=your_test_user dbname=dev" -f "/path/to/tickitdb.sql"
 ```
 
 </Accordion>
@@ -253,10 +259,10 @@ After admin creates the toolset, each user must authenticate with their own Reds
 Use only the hostname part of the endpoint.
 
 If endpoint is:
-`redshift-dev-wg.891377406506.ap-south-1.redshift-serverless.amazonaws.com:5439/dev`
+`redshift-dev-wg.your-account.ap-south-1.redshift-serverless.amazonaws.com:5439/dev`
 
 Then use:
-- **Host**: `redshift-dev-wg.891377406506.ap-south-1.redshift-serverless.amazonaws.com`
+- **Host**: `redshift-dev-wg.your-account.ap-south-1.redshift-serverless.amazonaws.com`
 - **Port**: `5439`
 - **Database**: `dev`
 
