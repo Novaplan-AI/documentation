@@ -114,7 +114,7 @@ These are the Graph-backed **tools** your agents can call once the Microsoft Tea
 
 1. In the app registration, open **API permissions**.
 2. Click **Add a permission** → **Microsoft Graph** → **Delegated permissions**.
-3. Add the permissions required by the Teams action (see the table below). Add each permission that appears in your product version; your administrator may consolidate or adjust these over time.
+3. Add only the permissions required by the Teams actions you have approved (see the reference table below). Verify the action list and scopes in your deployed product version with your Microsoft administrator.
 4. Click **Add permissions**.
 
 {/* Screenshot: Microsoft Graph delegated permissions for the Teams app */}
@@ -136,7 +136,7 @@ These align with the agent OAuth scope configuration for the Microsoft Teams act
 | `Team.ReadBasic.All` | Read basic team properties |
 | `Channel.ReadBasic.All` | Read basic channel properties |
 | `Channel.Create` | Create channels |
-| `Channel.Delete.All` | Delete channels |
+| `Channel.Delete.All` | Channel deletion permission listed in the source reference; no channel-deletion action is documented on this page, so confirm a real need before granting it |
 | `ChannelMessage.Read.All` | Read channel messages |
 | `ChannelMessage.Send` | Send channel messages |
 | `TeamMember.ReadWrite.All` | Add or manage team members |
@@ -154,6 +154,10 @@ These align with the agent OAuth scope configuration for the Microsoft Teams act
 | `OnlineMeetingTranscript.Read.All` | Read meeting transcripts |
 | `OnlineMeetingArtifact.Read.All` | Read meeting artifacts |
 | `ChannelMember.ReadWrite.All` | Add or manage channel members |
+
+<Warning>
+  This table records the source integration's documented delegated scopes; it is not a blanket consent request. The tool list above has no channel-deletion action. Do not grant `Channel.Delete.All` solely because it appears in this reference—confirm the deployed action and approval with your Microsoft administrator first.
+</Warning>
 
 ### Step 3: Grant admin consent (if required)
 
