@@ -1,91 +1,36 @@
 ---
-title: "Authentication Overview"
-description: "Configure how users authenticate and access the application"
+title: "Authentication overview"
+description: "Sign-in methods available in a Novaplan AI workspace and where administrators manage them."
 ---
 
-Our application supports multiple authentication methods to provide secure and flexible access for your users. This guide explains each authentication option, how to configure them, and best practices for implementation.
+Novaplan AI supports several sign-in methods. The methods available to you depend on your organization's workspace configuration. Novaplan prepares most settings and invites users to join; administrators should coordinate changes to sign-in with the Novaplan team and, where applicable, their identity-provider administrator.
 
-## Overview
+## Where administrators manage sign-in
 
-Authentication is the process of verifying a user's identity before granting access to your application. Selecting the right authentication method(s) depends on your organization's security requirements, user experience preferences, and existing infrastructure.
+An authorized workspace administrator can open **Workspace Settings → Authentication** to review the enabled methods and their configuration. Other users should follow the sign-in method shown for their workspace. If you received an invitation, start with [Getting started](/quickstart).
 
-<CardGroup>
-  <Card title="Security" icon="shield">
-    Choose authentication methods that align with your security policies and
-    compliance requirements.
-  </Card>
-  <Card title="User Experience" icon="user">
-    Balance security with a smooth login experience to enhance user adoption.
-  </Card>
-</CardGroup>
+<Warning>
+  Changing an active sign-in method can prevent users from accessing the workspace. Agree on a test account and a recovery path with Novaplan AI before changing a production authentication configuration.
+</Warning>
 
-You can edit the authentication method and configure the respective credentials under the authentication page of settings in Company profie as shown in below image.
+## Available methods
 
-<img
-  src="/images/auth/authentication_settings.png"
-  alt="Auth methods"
-  width="100%"
-/>
+| Method | What it does | Setup guide |
+| --- | --- | --- |
+| Password | Sign in with an email address and password. | [Password](/auth/password) |
+| One-time password (OTP) | Sign in with a code delivered by email. Workspace email delivery must be configured. | [OTP](/auth/otp) and [SMTP](/smtp) |
+| Google | Sign in with a Google account through OAuth 2.0. | [Google](/auth/google) |
+| Microsoft | Sign in with a Microsoft account through OAuth 2.0. | [Microsoft / Azure AD](/auth/microsoft-azureAd) |
+| Other OAuth/OIDC provider | Connect a supported identity provider using its authorization, token, and user-info endpoints. | [OAuth/OIDC](/auth/oauth) |
+| SAML SSO | Use your organization's SAML identity provider for single sign-on. | [SAML](/auth/saml) |
 
-## Available Authentication Methods
+An identity-provider integration requires the redirect URI and other values shown in your workspace. Use the exact values from the deployed Novaplan AI configuration rather than copying an address from a screenshot.
 
-<Tabs>
-  <Tab title="Password">
-    ## Password Authentication 
-    Traditional username and password authentication for your application.
+## If sign-in fails
 
-    ### For more info, refer to [Password Configuration Guide](/auth/password).
+1. Confirm that you are using the email address that received the invitation and the method configured for your workspace.
+2. If you use OTP or password reset, check email delivery and your spam folder.
+3. If you use an identity provider, ask your administrator to check its app assignment, redirect URI, and any relevant certificate or consent settings.
+4. Ask an authorized administrator to review the available workspace error details. Do not send passwords, tokens, or one-time codes in support messages.
 
-
-    <Info>
-      Password authentication is the simplest to set up your app.
-    </Info>
-
-  </Tab>
-
-<Tab title="One-Time Password">
-
-## One-Time Password (OTP)
-
-Single-use codes sent via email for secure, passwordless authentication.
-
-### For more info, refer to [OTP Configuration Guide](/auth/otp).
-
-</Tab>
-
-<Tab title="Google">
-
-## Google Authentication Allow users to sign in with their Google accounts using OAuth 2.0.
-
-Get credentials from Google Cloud console.
-
-### For more info, refer to [Google Configuration Guide](/auth/google).
-
-</Tab>
-
-<Tab title="Microsoft/AzureAd">
-  ## Microsoft Authentication Allow users to sign in with their Microsoft
-  accounts using OAuth 2.0.
-
-</Tab>
-
-  <Tab title="SAML SSO">
-    ## Enterprise single sign-on using Security Assertion Markup Language (SAML) protocol.
-    <Warning>
-      SAML configuration requires technical coordination between your application admin and the Identity Provider admin.
-    </Warning>
-
-  </Tab>
-</Tabs>
-
-## Troubleshooting
-
-If users encounter authentication issues:
-
-1. Verify the authentication method configuration
-2. Check server logs for specific error messages
-3. Confirm network connectivity to identity providers
-4. Validate certificate expiration dates
-5. Test authentication flow with a test account
-
-## Next Steps
+If you cannot regain access, contact your workspace administrator or [Novaplan AI support](mailto:support@novaplan.ai).

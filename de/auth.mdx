@@ -9,9 +9,11 @@ Novaplan AI unterstützt mehrere Methoden zur Anmeldung. Welche Methode in Ihrem
 
 Bei der Authentifizierung wird die Identität einer Person geprüft, bevor sie Zugriff auf den Workspace erhält. Die Auswahl der Anmeldemethoden richtet sich nach den Sicherheitsanforderungen, der gewünschten Benutzererfahrung und der bestehenden Identitätsinfrastruktur Ihrer Organisation.
 
-Administratoren können Anmeldemethoden und zugehörige Zugangsdaten in den **Authentication Settings** konfigurieren. Stimmen Sie Änderungen an der Anmeldung mit dem Novaplan-Team und gegebenenfalls mit der Administration Ihres Identitätsanbieters ab.
+Autorisierte Administratorinnen und Administratoren können Anmeldemethoden unter **Workspace Settings → Authentication** prüfen und konfigurieren. Stimmen Sie Änderungen an der Anmeldung mit dem Novaplan-Team und gegebenenfalls mit der Administration Ihres Identitätsanbieters ab. Wenn Sie eine Einladung erhalten haben, beginnen Sie mit [Erste Schritte](/de/quickstart).
 
-<img src="/images/auth/authentication_settings.png" alt="Einstellungen für Anmeldemethoden" width="100%" />
+<Warning>
+  Eine Änderung an der aktiven Anmeldemethode kann Nutzerinnen und Nutzer vom Workspace ausschließen. Vereinbaren Sie vor einer produktiven Änderung ein Testkonto und einen Weg zur Wiederherstellung des Zugangs mit Novaplan AI.
+</Warning>
 
 ## Verfügbare Anmeldemethoden
 
@@ -20,13 +22,16 @@ Administratoren können Anmeldemethoden und zugehörige Zugangsdaten in den **Au
     Benutzer melden sich mit E-Mail-Adresse und Passwort an. Die [Passwort-Anleitung](/de/auth/password) beschreibt Anmeldung, Änderung und Zurücksetzen des Passworts.
   </Tab>
   <Tab title="Einmalcode">
-    Einmalig gültige Codes werden per E-Mail gesendet und erlauben die Anmeldung ohne Passwort. Einzelheiten stehen in der [OTP-Anleitung](/de/auth/otp).
+    Einmalig gültige Codes werden per E-Mail gesendet und erlauben die Anmeldung ohne Passwort. Dafür muss der [E-Mail-Versand](/de/smtp) im Workspace funktionieren. Einzelheiten stehen in der [OTP-Anleitung](/de/auth/otp).
   </Tab>
   <Tab title="Google">
     Benutzer können sich mit ihrem Google-Konto über OAuth 2.0 anmelden. Die erforderlichen Zugangsdaten werden in der Google Cloud Console eingerichtet. Weitere Schritte finden Sie in der [Google-Anleitung](/de/auth/google).
   </Tab>
   <Tab title="Microsoft / Azure AD">
     Benutzer können sich mit ihrem Microsoft-Konto über OAuth 2.0 anmelden. Weitere Schritte finden Sie in der [Microsoft-Anleitung](/de/auth/microsoft-azureAd).
+  </Tab>
+  <Tab title="Weitere OAuth-/OIDC-Anbieter">
+    Ein unterstützter Identitätsanbieter kann über seine Autorisierungs-, Token- und Benutzerinfo-Endpunkte verbunden werden. Weitere Schritte stehen in der [OAuth-/OIDC-Anleitung](/de/auth/oauth).
   </Tab>
   <Tab title="SAML SSO">
     Enterprise Single Sign-on über SAML erfordert die Abstimmung zwischen Ihrer Workspace-Administration und der Administration des Identitätsanbieters. Siehe [SAML-Anleitung](/de/auth/saml).
@@ -41,6 +46,6 @@ Wenn sich Benutzer nicht anmelden können:
 2. Prüfen Sie als Administrator die verfügbaren Fehlermeldungen und Protokolle.
 3. Prüfen Sie die Verbindung zum Identitätsanbieter.
 4. Prüfen Sie, ob verwendete Zertifikate noch gültig sind.
-5. Testen Sie die Anmeldung mit einem geeigneten Testkonto.
+5. Testen Sie die Anmeldung mit einem geeigneten Testkonto. Senden Sie keine Passwörter, Tokens oder Einmalcodes in Support-Nachrichten.
 
 Wenn Sie Ihren Zugang nicht selbst wiederherstellen können, wenden Sie sich an Ihre Workspace-Administration oder an [Novaplan Support](/de/contact-us).
