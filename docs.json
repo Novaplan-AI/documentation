@@ -27,6 +27,9 @@
               "de/system-overview/connector-manager",
               "de/system-overview/configuration-manager",
               "de/system-overview/enterprise-search",
+              "de/system-overview/knowledge-base",
+              "de/system-overview/user-management",
+              "de/system-overview/storage",
               "de/quickstart",
               "de/contact-us",
               "de/additional-resources/faq"

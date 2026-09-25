@@ -1,0 +1,43 @@
+---
+title: "Benutzerverwaltung: API-Referenz"
+description: "Organisation, Einladungen, Benutzergruppen und Teams in Novaplan AI."
+---
+
+Novaplan erstellt Kunden-Workspaces und lädt die ersten Nutzenden ein. Administrierende können danach, soweit freigegeben, Personen, Gruppen und Teams im Workspace verwalten. Für die Bedienung der Oberfläche verwenden Sie die [Benutzeranleitung](/de/user-management/user), [Gruppenanleitung](/de/user-management/user-group) und [Teamanleitung](/de/user-management/teams). Diese Seite ordnet die technischen API-Bereiche ein.
+
+<Warning>
+  Organisationsanlage, systeminterne Konfiguration, Löschungen und Massen-Einladungen sind administrative Vorgänge. Führen Sie sie nicht aus einem normalen Kunden-Client aus, ohne Rollen und Auswirkungen zu prüfen. Vertrauen Sie keiner vom Client frei gesetzbaren Organisations- oder Benutzer-ID; der Server muss die Identität und Zugehörigkeit prüfen.
+</Warning>
+
+## Organisation
+
+Unter `/api/v1/org` dokumentiert die Referenz das Prüfen, Anlegen, Abrufen, Aktualisieren und Löschen einer Organisation. Weitere Endpunkte betreffen Logo, Onboarding-Status und Zustandsprüfung. Die Anlage und grundlegende Konfiguration eines Kunden-Workspaces übernimmt Novaplan.
+
+| Methode und Pfad | Aufgabe |
+| --- | --- |
+| `GET /api/v1/org` und `PATCH /api/v1/org` | Organisationsdaten lesen oder ändern |
+| `GET /api/v1/org/onboarding-status` und `PUT /api/v1/org/onboarding-status` | Onboarding-Status lesen oder setzen |
+| `PUT /api/v1/org/logo`, `GET /api/v1/org/logo`, `DELETE /api/v1/org/logo` | Logo verwalten |
+
+## Personen und Einladungen
+
+Unter `/api/v1/users` liegen Endpunkte zum Auflisten und Lesen von Konten, zum Ändern von Namen, E-Mail-Adresse, Profilbild und weiteren Profilfeldern sowie zum Löschen berechtigter Konten. Die Referenz nennt außerdem:
+
+| Methode und Pfad | Aufgabe |
+| --- | --- |
+| `GET /api/v1/users` und `GET /api/v1/users/:id` | Personen auflisten oder lesen |
+| `POST /api/v1/users` | Person anlegen, sofern freigegeben |
+| `PUT /api/v1/users/:id` und `DELETE /api/v1/users/:id` | Person ändern oder löschen |
+| `POST /api/v1/users/bulk/invite` | Mehrere Einladungen versenden |
+| `POST /api/v1/users/:id/resend-invite` | Einladung erneut versenden |
+| `GET /api/v1/users/:id/adminCheck` | Administrationsstatus prüfen |
+
+Einladungen werden im Novaplan-Kundenprozess vorbereitet; prüfen Sie vor einem API-Aufruf, ob diese Verwaltungsfunktion für Ihren Workspace tatsächlich freigegeben ist.
+
+## Benutzergruppen und Teams
+
+`/api/v1/userGroups` verwaltet Gruppen und deren Mitgliedschaften. Dazu gehören `POST`, `GET`, `PUT` und `DELETE /:groupId`, `POST /add-users`, `POST /remove-users` sowie Abfragen der Personen einer Gruppe.
+
+`/api/v1/teams` verwaltet Teams und ihre Mitglieder. Neben dem Anlegen, Auflisten, Lesen, Ändern und Löschen nennt die Referenz `GET /:teamId/users`, `POST /:teamId/users`, `DELETE /:teamId/users` und `PUT /:teamId/users/permissions`. Änderungen an Mitgliedschaften oder Teamrechten sollten anhand der vorgesehenen Zugriffsstruktur geprüft werden.
+
+Die genaue Sichtbarkeit und Zulässigkeit eines Endpunkts hängt von Authentifizierung, Rolle und Workspace-Konfiguration ab. Bei Fragen zu einer administrativen Integration hilft [Novaplan Support](/de/contact-us).

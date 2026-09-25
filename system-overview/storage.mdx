@@ -33,13 +33,13 @@ The Storage Service is built on a Node.js backend with MongoDB for metadata pers
 
 The service integrates with other components such as:
 
-- **Configuration Manager** - Manages storage configuration settings stored in etcd
+- **Configuration Manager** - Manages storage configuration settings in the configured key-value backend
 - **IAM Service** - Handles user authentication and authorization
-- **Key-Value Store** - Provides access to configuration data from etcd
+- **Key-Value Store** - Provides access to managed configuration data
 
 ## Storage Configuration
 
-Storage configuration is maintained in etcd under the `/services/storage` path. The configuration determines which storage vendor is active and the credentials needed to access it. The service dynamically loads this configuration at runtime and can switch between storage vendors without restarting.
+Storage configuration is maintained in the managed key-value backend under `/services/storage`. Redis is the reference default and etcd is also supported. The configuration determines which storage vendor is active and the credentials needed to access it. The service dynamically loads this configuration at runtime.
 
 ## Authentication Modes
 
@@ -1280,7 +1280,7 @@ All endpoints return structured error responses:
 
 <Tabs>
 <Tab title="Storage Configuration">
-Storage configuration is maintained in etcd under `/services/storage` path:
+Storage configuration is maintained in the configured key-value backend under `/services/storage`:
 
 ```json
 {
@@ -1299,7 +1299,7 @@ Storage configuration is maintained in etcd under `/services/storage` path:
 </Tab>
 
 <Tab title="Service Integration">
-**Key-Value Store (etcd):**
+**Key-Value Store (Redis or etcd):**
 - Storage configuration management under `/services/storage`
 - Endpoint configuration under `/services/endpoints`
 - Dynamic configuration updates via watch mechanism

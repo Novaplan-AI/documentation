@@ -1,0 +1,44 @@
+---
+title: "Wissensdatenbank: API-Referenz"
+description: "Wissensdatenbanken, Ordner, Datensätze und Indexierung in Novaplan AI."
+---
+
+Die Wissensdatenbank verwaltet Dateien und Datensätze, die für Suche und Antworten indexiert werden. Einträge können direkt hochgeladen oder über Konnektoren synchronisiert werden. Der [Schnelleinstieg](/de/quickstart) erklärt den Einstieg in den Workspace; diese Seite beschreibt technische Endpunkte und administrative Vorgänge.
+
+<Warning>
+  Lese- und Schreibzugriff auf Datensätze hängen von der angemeldeten Person und den Workspace-Berechtigungen ab. Verwenden Sie keinen Anwendungs-Token ohne Benutzeridentität, um persönliche Dateiberechtigungen zu umgehen. Lösch-, Reindexierungs- und Resynchronisationsaufrufe können viele Inhalte betreffen und benötigen eine gesonderte Freigabe.
+</Warning>
+
+## Endpunkte für Wissensdatenbanken
+
+Alle Pfade beginnen mit `/api/v1/kb` und erwarten eine zulässige Authentifizierung.
+
+| Methode und Pfad | Aufgabe |
+| --- | --- |
+| `POST /` | Wissensdatenbank anlegen |
+| `GET /` | Zugängliche Wissensdatenbanken auflisten |
+| `GET /:kbId` | Wissensdatenbank abrufen |
+| `PUT /:kbId` | Einstellungen ändern |
+| `DELETE /:kbId` | Wissensdatenbank löschen |
+| `GET /records` | Datensätze abrufen |
+| `GET /:kbId/records` | Datensätze einer Wissensdatenbank abrufen |
+| `GET /record/:recordId` | Einen Datensatz lesen |
+| `PUT /record/:recordId` | Datensatz ändern |
+| `DELETE /record/:recordId` | Datensatz löschen |
+| `GET /stream/record/:recordId` | Datensatzinhalt als Stream abrufen |
+
+## Upload, Ordner und Indexierung
+
+| Methode und Pfad | Aufgabe |
+| --- | --- |
+| `POST /:kbId/upload` | Dateien in eine Wissensdatenbank hochladen |
+| `POST /:kbId/folder/:folderId/upload` | Dateien in einen Ordner hochladen |
+| `GET /:kbId/folder/:folderId/records` | Ordnerinhalte abrufen |
+| `PUT /:kbId/folder/:folderId` | Ordner ändern |
+| `DELETE /:kbId/folder/:folderId` | Ordner löschen |
+| `POST /reindex/record/:recordId` | Einen Datensatz erneut indexieren |
+| `GET /stats/:connector` | Statistiken eines Konnektors abrufen |
+| `POST /reindex-all/connector` | Inhalte eines Konnektors erneut indexieren |
+| `POST /resync/connector` | Konnektor-Synchronisierung erneut anstoßen |
+
+Nach einem Upload verarbeitet Indexing den Inhalt für die Suche. Das kann zeitversetzt geschehen; ein erfolgreicher Upload bedeutet nicht zwangsläufig, dass die Datei sofort in Suchtreffern erscheint. Bei fehlenden Inhalten prüfen Sie Zugriffsrechte, Synchronisationsstatus und Indexierungsfehler. Für serverseitige Diagnose hilft [Novaplan Support](/de/contact-us).

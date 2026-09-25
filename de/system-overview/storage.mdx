@@ -1,0 +1,38 @@
+---
+title: "Speicherdienst: API-Referenz"
+description: "Dateien hochladen, abrufen und versionieren, unabhängig vom konfigurierten Speicheranbieter."
+---
+
+Der Speicherdienst verwaltet Dateiinhalt und Metadaten. Er unterstützt je nach verwalteter Workspace-Konfiguration lokalen Speicher, Amazon S3 oder Azure Blob Storage. Für Kunden ist die freigegebene API maßgeblich; Novaplan richtet Backend, Zugangsdaten und Ablagepfade ein.
+
+<Warning>
+  Interne Datei-Endpunkte und technische Speicherpfade sind nicht automatisch für Kundenanwendungen freigegeben. Authentifizieren Sie nutzerbezogene Zugriffe mit der Identität der berechtigten Person. Verwenden Sie keine Beispielpfade als produktive Ablagekonvention; die tatsächliche Mount- und Pfadkonfiguration muss für den Enterprise Workspace bestätigt werden.
+</Warning>
+
+## Zugriff und Datenmodell
+
+Die Pfade beginnen mit `/api/v1/document`. Nutzeraufrufe erwarten einen Bearer-Token und eine Berechtigungsprüfung. Interne Service-Aufrufe können technische Scopes wie `STORAGE_TOKEN` oder `FETCH_CONFIG` benötigen. Metadaten enthalten unter anderem Name, MIME-Typ, Größe, Berechtigungen, Speicherort und Versionsverlauf; der eigentliche Dateiinhalt liegt im konfigurierten Datei-Backend.
+
+## Endpunkte
+
+| Methode und Pfad | Aufgabe |
+| --- | --- |
+| `POST /upload` | Neue Datei hochladen |
+| `POST /placeholder` | Platzhalter für eine Datei anlegen |
+| `GET /:documentId` | Dateimetadaten abrufen |
+| `DELETE /:documentId/` | Datei löschen |
+| `GET /:documentId/download` | Datei herunterladen |
+| `GET /:documentId/buffer` | Dateiinhalt als Buffer abrufen |
+| `PUT /:documentId/buffer` | Dateiinhalt aktualisieren |
+| `POST /:documentId/uploadNextVersion` | Neue Dateiversion hochladen |
+| `POST /:documentId/rollBack` | Zu einer früheren Version zurückkehren |
+| `POST /:documentId/directUpload` | Direkten Upload über das konfigurierte Backend beginnen |
+| `GET /:documentId/isModified` | Änderungsstatus prüfen |
+
+Die technische Referenz führt für viele dieser Vorgänge zusätzlich eine Variante unter `/internal/` auf. Diese ist für Service-zu-Service-Kommunikation gedacht und sollte nicht als Alternative zur normalen Nutzer-API verwendet werden. `POST /api/v1/document/updateAppConfig` ist ein interner Konfigurationsaufruf.
+
+Ein Upload über `POST /upload` verwendet `multipart/form-data` und erwartet unter anderem die Datei, einen Namen ohne Dateiendung sowie die Angabe `isVersionedFile`. Weitere optionale Angaben betreffen Ablagepfad, Berechtigungen und Metadaten. Für größere Dateien kann der Dienst einen direkten Upload über den konfigurierten Cloud-Speicher anbieten; der tatsächlich gültige Grenzwert ist vor Veröffentlichung mit Novaplan zu prüfen.
+
+## Versionen, Sicherheit und Fehlersuche
+
+Bei aktivierter Versionierung bleiben frühere Dateistände mit Metadaten erhalten. Ein Rollback sollte nur mit geprüfter Zielversion ausgeführt werden. Signierte Download-Links und Upload-Berechtigungen können zeitlich begrenzt sein. Bei Fehlern prüfen Sie Token-Rechte, Dateigröße, MIME-Typ, Versions-ID und die serverseitige Speicherkonfiguration. [Novaplan Support](/de/contact-us) hilft bei Problemen, die den verwalteten Speicheranbieter betreffen.
