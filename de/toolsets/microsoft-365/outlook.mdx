@@ -19,6 +19,15 @@ Das Outlook-Toolset gibt Agenten Live-Zugriff auf E-Mails, Kalenderereignisse un
 
 `list_message_attachments` zeigt Metadaten ohne Dateidownload. `stage_attachment_to_blob` lädt einen Anhang als Workspace-Datensatz und liefert eine Datensatz-ID für weitere Tool-Aktionen. Prüfen Sie Zielanwendung und Empfängerkreis, bevor ein Agent diesen Datensatz außerhalb des Workspaces teilt.
 
+| Aktion | Wichtige Eingaben und Ergebnis |
+| --- | --- |
+| `search_messages` | Kann E-Mails mit OData-Abfragen wie `$search`, `$filter` und `$orderby` suchen oder sortiert auflisten. |
+| `get_message`, `get_calendar_event` | Rufen einen bestimmten Eintrag anhand seiner Nachrichten- beziehungsweise Ereignis-ID ab. |
+| `create_calendar_event` | Kann Teilnehmende, Ort, Wiederholung und einen Online-Meeting-Link enthalten. |
+| `get_recurring_events`, `get_recurring_events_ending` | Zeigen Serien und ihre Termine in einem Zeitraum beziehungsweise Serien, die bald enden. |
+| `delete_recurring_event_occurrence` | Löscht einzelne Termine einer Serie anhand des Datums; prüfen Sie die ausgewählte Instanz vor der Aktion. |
+| `get_meeting_transcripts` | Ruft verfügbare Teams-Transkripte mit Sprecherzuordnung und Text ab, sofern die erforderlichen Rechte vorliegen. |
+
 ## Microsoft-Entra-Anwendung einrichten
 
 1. Öffnen Sie im [Azure-Portal](https://portal.azure.com) **Microsoft Entra ID → App registrations → New registration**.

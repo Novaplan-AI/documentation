@@ -17,6 +17,15 @@ Das OneDrive-Toolset arbeitet über Microsoft Graph mit OneDrive-Dateien und and
 
 Viele Dateiaktionen benötigen eine `drive_id`. Wenn sie unbekannt ist, kann der Agent zuerst `get_drives` verwenden. **Get shared with me** benötigt keine Drive-ID. Kopieraktionen können asynchron abgeschlossen werden; kurzlebige Download-URLs sollten nicht dauerhaft gespeichert oder weitergegeben werden. Große Dateien können beim direkten Lesen durch `get_file_content` abgelehnt werden.
 
+| Aktion | Wichtige Eingaben und Ergebnis |
+| --- | --- |
+| `get_files`, `get_folder_children`, `get_file` | Verwenden eine `drive_id` und bei Bedarf eine `folder_id` beziehungsweise `item_id`, um Ordnerinhalte oder Metadaten gezielt abzurufen. |
+| `copy_item`, `move_item` | Benötigen den betroffenen Eintrag und einen Zielordner; beim Kopieren kann auch ein anderes Drive gewählt werden. Prüfen Sie nach einem asynchronen Kopiervorgang das Ergebnis. |
+| `share_item` | Lädt Personen per E-Mail ein. Die Rollen `read`, `write` und `owner` sowie Nachricht und Einladungsoptionen hängen von den Microsoft- und Tenant-Richtlinien ab. |
+| `get_download_url`, `get_file_content` | Liefern eine kurzlebige Download-URL beziehungsweise heruntergeladenen, für unterstützte Formate aufbereiteten Dateiinhalt. Große Dateien können abgelehnt werden. |
+| `create_word_file` | Erstellt eine `.docx` im gewählten Ordner; `file_type` muss `word` sein. Ein anfänglicher `content` ist optional. |
+| OneNote-Aktionen | `create_onenote_section` und `get_onenote_sections` verwenden die `web_url` eines Notizbuchs. `create_onenote_page` benötigt eine `section_id`; `get_onenote_page_content` liest anhand einer `page_id` den HTML-Inhalt. |
+
 ## Microsoft-Entra-Anwendung vorbereiten
 
 1. Öffnen Sie [Azure Portal](https://portal.azure.com) und wählen Sie **Microsoft Entra ID → App registrations → New registration**.
@@ -49,3 +58,5 @@ Für SharePoint-Bibliotheken, die als Drives erscheinen, können zusätzlich del
 Prüfen Sie bei Aktionen wie `share_item`, `move_item` und `copy_item` Zielordner, Empfänger und Freigaberolle. Mögliche Rollen für eine Freigabe sind `read`, `write` und `owner`; die tatsächliche Vergabe hängt von Microsoft- und Tenant-Richtlinien ab.
 
 Wenn Dateien fehlen, kontrollieren Sie die persönliche Microsoft-Anmeldung, Drive-ID, Zugriffsrechte, Graph-Scopes und gegebenenfalls die zusätzlichen SharePoint-Sites-Rechte. Bei Fragen hilft [Novaplan Support](/de/contact-us).
+
+Der OneDrive-Konnektor verwendet im Unterschied zum Toolset Anwendungsberechtigungen für die Hintergrundsynchronisierung und Indexierung. Das Toolset führt interaktive Datei- und OneNote-Aktionen mit delegierten Rechten der angemeldeten Person aus. Nutzen Sie den Konnektor für die Suche über synchronisierte Dateien und das Toolset für aktuelle Aktionen in Microsoft 365.
