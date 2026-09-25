@@ -50,6 +50,8 @@
               "de/connectors/dropbox/dropbox_teams",
               "de/connectors/google-workspace/drive/drive",
               "de/connectors/google-workspace/gmail/gmail",
+              "de/connectors/github/github",
+              "de/connectors/gitlab/gitlab",
               "de/connectors/jira/jira",
               "de/connectors/rss/rss",
               "de/connectors/salesforce/salesforce",
