@@ -106,6 +106,15 @@
                   "de/ai-models/llm/azure-ai",
                   "de/ai-models/llm/bedrock"
                 ]
+              },
+              {
+                "group": "Embedding-Modelle",
+                "pages": [
+                  "de/ai-models/embedding/openai",
+                  "de/ai-models/embedding/gemini",
+                  "de/ai-models/embedding/azure-openai",
+                  "de/ai-models/embedding/azure-ai"
+                ]
               }
             ]
           },

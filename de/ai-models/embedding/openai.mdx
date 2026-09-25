@@ -1,0 +1,29 @@
+---
+title: "OpenAI Embeddings"
+description: "OpenAI-Embedding-Modelle für die Suche in Novaplan AI konfigurieren."
+---
+
+# OpenAI Embeddings konfigurieren
+
+![Konfigurationsansicht für OpenAI Embeddings](/images/ai-models/embedding/OpenAI_EmbeddingConfig.png)
+
+Embedding-Modelle wandeln Inhalte in Vektoren um, die Novaplan AI für semantische Suche und Dokumentabruf verwendet. Novaplan unterstützt Sie bei der Einrichtung eines OpenAI-Embedding-Modells.
+
+## Erforderliche Angaben
+
+**API Key:** Melden Sie sich bei Ihrem [OpenAI-Konto](https://platform.openai.com/account/api-keys) an, erstellen Sie im API-Bereich einen neuen geheimen Schlüssel und kopieren Sie ihn sofort. Bewahren Sie ihn geschützt auf.
+
+**Model Name:** Tragen Sie eine verfügbare Embedding-Modell-ID ein. Der Quellleitfaden nennt `text-embedding-3-small` als kostengünstige Option für viele Anwendungen und `text-embedding-3-large` für höhere Vektordimensionen. Prüfen Sie die [aktuelle OpenAI-Dokumentation zu Embeddings](https://platform.openai.com/docs/guides/embeddings) und die Verfügbarkeit für Ihr Konto.
+
+## Option: Output Dimensions
+
+Mit **Output Dimensions** können Sie bei Modellen der Reihe `text-embedding-3-*` die Vektorlänge festlegen, etwa um Speicherbedarf zu senken oder die Anforderungen Ihrer Vektordatenbank zu erfüllen. Lassen Sie das Feld leer, um die Standarddimension zu verwenden. Bei Modellen ohne Unterstützung für den Parameter `dimensions` führt ein Wert in diesem Feld zu einem Fehler. Stimmen Sie eine Änderung der Dimension mit Novaplan ab, wenn bereits Daten indexiert sind.
+
+## Modell hinzufügen
+
+1. Klicken Sie auf der OpenAI-Embedding-Anbieterkarte auf **Configure**.
+2. Geben Sie **API Key** und **Model Name** ein.
+3. Legen Sie bei Bedarf **Output Dimensions** fest.
+4. Klicken Sie auf **Add Model**, um die Angaben zu speichern und prüfen zu lassen.
+
+API Key und Model Name sind erforderlich. Nutzung zählt zu Kontingent und Abrechnung Ihres OpenAI-Kontos. Bei Fehlern prüfen Sie Schlüssel, Modell-ID, Kontozugang und ob das Modell die gewählte Vektordimension unterstützt. [Novaplan Support](/de/contact-us) hilft bei der Einrichtung.
