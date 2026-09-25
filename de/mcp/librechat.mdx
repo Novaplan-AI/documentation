@@ -1,0 +1,25 @@
+---
+title: "LibreChat"
+description: "LibreChat über OAuth mit dem Novaplan AI MCP-Server verbinden."
+---
+
+LibreChat kann den entfernten MCP-Endpunkt Ihres Novaplan AI Workspaces als benutzerdefinierten Connector einbinden. Sie benötigen die Workspace-Adresse sowie **Client ID** und **Client Secret** einer Novaplan-OAuth-Anwendung. Die Voraussetzungen stehen im [MCP-Überblick](/de/mcp/overview#schritt-1-oauth-anwendung-erstellen).
+
+## Connector anlegen
+
+1. Melden Sie sich in Ihrer LibreChat-Instanz an und öffnen Sie die Einstellungen für **MCP Servers**.
+2. Wählen Sie **Add** und tragen Sie einen Namen wie `Novaplan AI` sowie `NOVAPLAN_WORKSPACE_URL/mcp` als **MCP Server URL** ein.
+3. Wählen Sie **Streamable HTTPS** als Transport und **OAuth** als Authentifizierung.
+4. Tragen Sie die **Client ID** und das **Client Secret** Ihrer OAuth-Anwendung ein. Die Novaplan-Endpunkte lauten `NOVAPLAN_WORKSPACE_URL/api/v1/oauth2/authorize` für die Autorisierung und `NOVAPLAN_WORKSPACE_URL/api/v1/oauth2/token` für Tokens.
+5. Wählen Sie die benötigten Scopes. Der Basissatz `openid email` deckt nur die Anmeldung ab. Für Suche, Chat und weitere MCP-Werkzeuge müssen die entsprechenden Novaplan-Scopes in der OAuth-Anwendung freigegeben sein. Der [MCP-Überblick](/de/mcp/overview#standard-scopes-anpassen) zeigt einen Beispielwert.
+6. Prüfen Sie die Serveradresse, bestätigen Sie **I trust this application** und speichern Sie den Connector.
+
+## Redirect URI registrieren und anmelden
+
+LibreChat zeigt die **Redirect URI** erst nach dem Erstellen des Connectors an. Kopieren Sie genau diesen Wert aus den Connector-Einstellungen und hinterlegen Sie ihn als erlaubte Redirect URI in der Novaplan-OAuth-Anwendung. Eine lokale LibreChat-Instanz kann beispielsweise eine Adresse nach diesem Muster anzeigen:
+
+```text
+http://localhost:3080/api/mcp/<server-identifier>/oauth/callback
+```
+
+Bei einer gehosteten Instanz gelten deren tatsächlicher Host und Port. Kehren Sie danach zum Connector zurück und wählen Sie **Update**, um die persönliche OAuth-Anmeldung zu starten. Wenn die Anmeldung fehlschlägt, prüfen Sie die exakt registrierte Redirect URI, die angeforderten Scopes und die Workspace-Adresse.

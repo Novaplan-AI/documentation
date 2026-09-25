@@ -1,0 +1,28 @@
+---
+title: "Claude Code"
+description: "Claude Code mit dem entfernten Novaplan AI MCP-Server verbinden."
+---
+
+Claude Code kann sich über HTTP und OAuth mit `NOVAPLAN_WORKSPACE_URL/mcp` verbinden. Erstellen Sie dafür eine Novaplan-OAuth-Anwendung und sichern Sie **Client ID** und **Client Secret**. Der [MCP-Überblick](/de/mcp/overview#schritt-1-oauth-anwendung-erstellen) beschreibt die Einrichtung.
+
+<Warning>
+  Claude Code fordert bei dieser Verbindung alle Scopes an, die der MCP-Server über `/.well-known/oauth-protected-resource/mcp` als unterstützt bekannt gibt. Die OAuth-Anwendung muss diese Scopes erlauben. Wenn der Zugriff enger sein soll, muss die serverseitige Scope-Liste mit Novaplan abgestimmt werden.
+</Warning>
+
+## Verbindung mit der CLI hinzufügen
+
+```bash
+claude mcp add --transport http \
+  --client-id YOUR_CLIENT_ID \
+  --client-secret \
+  --callback-port 8080 \
+  novaplan NOVAPLAN_WORKSPACE_URL/mcp
+```
+
+Der Name `novaplan` ist ein lokaler Alias. `--client-secret` ohne Wert fordert eine verdeckte Eingabe an. Wenn die Verbindung für alle Ihre Projekte gelten soll, ergänzen Sie `--scope user`. Verwenden Sie die vom Workspace bereitgestellte URL und veröffentlichen Sie das Secret nicht in einer Projektdatei.
+
+Hinterlegen Sie in der Novaplan-OAuth-Anwendung die Redirect URI für den gewählten Callback-Port, beispielsweise `http://localhost:8080/callback`.
+
+## Anmelden und prüfen
+
+Öffnen Sie in Claude Code `/mcp` und folgen Sie der Browseranmeldung. Mit `claude mcp list` oder `claude mcp get novaplan` prüfen Sie den Servereintrag. Bei einem Anmeldefehler vergleichen Sie Callback-Port, Redirect URI, Client ID und die serverseitig veröffentlichten Scopes.

@@ -1,0 +1,39 @@
+---
+title: "Gemini CLI"
+description: "Gemini CLI über OAuth mit dem Novaplan AI MCP-Server verbinden."
+---
+
+Gemini CLI kann den entfernten MCP-Endpunkt Ihres Novaplan AI Workspaces per OAuth anbinden. Sie benötigen eine Novaplan-OAuth-Anwendung mit **Client ID** und gegebenenfalls **Client Secret**. Die Voraussetzungen stehen im [MCP-Überblick](/de/mcp/overview#schritt-1-oauth-anwendung-erstellen).
+
+## Einstellungen hinterlegen
+
+Bearbeiten Sie `~/.gemini/settings.json` und ersetzen Sie die Platzhalter:
+
+```json
+{
+  "mcpServers": {
+    "novaplan": {
+      "url": "NOVAPLAN_WORKSPACE_URL/mcp",
+      "oauth": {
+        "clientId": "YOUR_CLIENT_ID",
+        "clientSecret": "YOUR_CLIENT_SECRET",
+        "scopes": [
+          "openid", "profile", "email", "offline_access",
+          "semantic:write", "conversation:write", "conversation:chat",
+          "kb:read", "team:read", "user:read", "config:read"
+        ]
+      }
+    }
+  }
+}
+```
+
+Der lokale Servername `novaplan` kann frei gewählt werden; verwenden Sie ihn dann auch in den CLI-Befehlen. Passen Sie die Scopes an die Berechtigungen Ihrer OAuth-Anwendung an. Gemini CLI kann die Autorisierungs- und Token-Endpunkte über die Metadaten unter `/.well-known/oauth-protected-resource/mcp` erkennen.
+
+Alternativ können Sie zuerst `gemini mcp add --transport http novaplan NOVAPLAN_WORKSPACE_URL/mcp` ausführen und danach den `oauth`-Block in der Einstellungsdatei ergänzen.
+
+## Anmelden und prüfen
+
+Registrieren Sie in der Novaplan-OAuth-Anwendung die Redirect URI `http://localhost:7777/oauth/callback`, sofern Sie den Standardwert von Gemini CLI verwenden. Öffnen Sie Gemini CLI und führen Sie `/mcp auth novaplan` aus. Ein Browserfenster führt Sie zur persönlichen Novaplan-Anmeldung. Mit `gemini mcp list` prüfen Sie anschließend die konfigurierte Verbindung.
+
+Das OAuth-Verfahren benötigt einen lokalen Browser. In einer Umgebung ohne Browser oder bei einer entfernten SSH-Sitzung muss die Anmeldung gesondert ermöglicht werden. Bewahren Sie ein Client Secret außerhalb eines gemeinsam genutzten oder eingecheckten Konfigurationsfiles auf.

@@ -103,6 +103,11 @@
             "group": "Integrationen",
             "pages": [
               "de/mcp/overview",
+              "de/mcp/claude-ai",
+              "de/mcp/librechat",
+              "de/mcp/cursor",
+              "de/mcp/gemini-cli",
+              "de/mcp/claude-code",
               "de/integrations/slackBot"
             ]
           },

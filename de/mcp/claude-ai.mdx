@@ -1,0 +1,32 @@
+---
+title: "Claude.ai (Web)"
+description: "Claude.ai per OAuth mit dem MCP-Server Ihres Novaplan AI Workspaces verbinden."
+---
+
+Claude.ai kann einen entfernten MCP-Server als benutzerdefinierten Connector einbinden. Dafür benötigen Sie die HTTPS-Adresse Ihres Novaplan AI Workspaces und eine OAuth-Anwendung mit **Client ID** und **Client Secret**. Wie diese Anwendung eingerichtet wird, steht im [MCP-Überblick](/de/mcp/overview#schritt-1-oauth-anwendung-erstellen).
+
+<Warning>
+  Claude.ai benötigt einen öffentlich erreichbaren HTTPS-Endpunkt. Eine lokale Adresse wie `http://localhost:3000/mcp` ist dafür ungeeignet. Fragen Sie [Novaplan Support](/de/contact-us) nach Ihrer Workspace-Adresse, wenn Sie sie nicht kennen.
+</Warning>
+
+## Persönliches Claude.ai-Konto verbinden
+
+1. Öffnen Sie in [Claude.ai](https://claude.ai) **Settings → Connectors**.
+2. Wählen Sie **Add custom connector**.
+3. Tragen Sie als MCP-Serveradresse `NOVAPLAN_WORKSPACE_URL/mcp` ein und ersetzen Sie den Platzhalter durch die Adresse Ihres Workspaces.
+4. Öffnen Sie **Advanced settings** und tragen Sie **OAuth Client ID** und **OAuth Client Secret** Ihrer Novaplan-OAuth-Anwendung ein.
+5. Wählen Sie **Add** und melden Sie sich im angezeigten Novaplan-Fenster an. Prüfen Sie die angeforderten Berechtigungen.
+
+## Claude-Team oder Enterprise verbinden
+
+Eine Person mit Organisationsrechten fügt unter **Organization settings → Connectors** den benutzerdefinierten Connector mit `NOVAPLAN_WORKSPACE_URL/mcp` und den OAuth-Zugangsdaten hinzu. Teammitglieder öffnen anschließend **Settings → Connectors**, suchen den Connector **Novaplan AI** und wählen **Connect** für ihre persönliche Anmeldung.
+
+## Redirect URI und Sicherheit
+
+Hinterlegen Sie in der Novaplan-OAuth-Anwendung die Claude.ai-Redirect-URI:
+
+```text
+https://claude.ai/api/mcp/auth_callback
+```
+
+Verbinden Sie nur einen MCP-Endpunkt, dessen Adresse Sie von Ihrer Workspace-Administration erhalten haben. Claude.ai verwendet nach der Freigabe ein OAuth-Token für Aktionen in Ihrem Namen; Ihr Novaplan-Passwort wird nicht an Claude.ai übergeben. Wenn die Anmeldung fehlschlägt, prüfen Sie HTTPS-Adresse, Redirect URI, OAuth-Zugangsdaten und freigegebene Scopes.

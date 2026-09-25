@@ -1,0 +1,45 @@
+---
+title: "Cursor"
+description: "Cursor per OAuth mit dem MCP-Server Ihres Novaplan AI Workspaces verbinden."
+---
+
+Cursor kann sich über OAuth mit dem entfernten MCP-Endpunkt Ihres Novaplan AI Workspaces verbinden. Dafür brauchen Sie eine OAuth-Anwendung mit **Client ID** und **Client Secret**. Die Einrichtung ist im [MCP-Überblick](/de/mcp/overview#schritt-1-oauth-anwendung-erstellen) beschrieben. Wenn Ihr Workspace noch nicht bereitsteht, wenden Sie sich an [Novaplan Support](/de/contact-us).
+
+## MCP-Server konfigurieren
+
+Öffnen Sie **Cursor Settings → Tools and Integrations → New MCP Server** oder bearbeiten Sie `.cursor/mcp.json` in Ihrem Projekt:
+
+```json
+{
+  "mcpServers": {
+    "novaplan": {
+      "url": "NOVAPLAN_WORKSPACE_URL/mcp",
+      "auth": {
+        "CLIENT_ID": "YOUR_CLIENT_ID",
+        "CLIENT_SECRET": "YOUR_CLIENT_SECRET",
+        "scopes": [
+          "openid", "profile", "email", "offline_access",
+          "semantic:write", "conversation:write", "conversation:chat",
+          "kb:read", "team:read", "user:read", "config:read"
+        ]
+      }
+    }
+  }
+}
+```
+
+Ersetzen Sie die Platzhalter durch Ihre Workspace-Adresse und OAuth-Zugangsdaten. Der Name `novaplan` ist nur der lokale Eintrag in Cursor. Wählen Sie die Scopes passend zu den Werkzeugen, die die OAuth-Anwendung tatsächlich verwenden darf. Ohne ausdrückliche Liste kann Cursor alle über `/.well-known/oauth-protected-resource/mcp` veröffentlichten Scopes anfordern.
+
+<Warning>
+  Speichern Sie ein Client Secret nicht in einer Datei, die Sie ins Repository einchecken. Verwenden Sie für lokale Konfigurationen die von Cursor unterstützte Umgebungsvariablen-Interpolation wie `${env:NOVAPLAN_CLIENT_SECRET}` und schützen Sie die Werte entsprechend.
+</Warning>
+
+## Redirect URI registrieren
+
+Tragen Sie in der Novaplan-OAuth-Anwendung die feste Redirect URI von Cursor ein:
+
+```text
+cursor://anysphere.cursor-mcp/oauth/callback
+```
+
+Wenn das interne Browserfenster die Novaplan-Anmeldung nicht lädt, öffnen Sie die angezeigte Autorisierungsadresse in Ihrem normalen Browser. Prüfen Sie bei einem OAuth-Fehler außerdem Redirect URI, Client-Zugangsdaten und Scopes.
