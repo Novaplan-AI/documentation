@@ -25,7 +25,7 @@ icon: "robot"
 
 Agents are customizable AI assistants that can interact with your connected applications, search collections, and perform actions on your behalf. Unlike the standard chatbot assistant, agents are purpose-built for specific workflows and can be configured with:
 
-- **Reasoning Models** - Choose the AI model with reasoning capabilities that powers your agent
+- **AI models** - Use the organization's default model or connect models to the agent; if you connect models, at least one must support reasoning
 - **Toolsets** - Connect to external services like Slack, Jira, Confluence, and more
 - **Knowledge sources** - Access indexed documents and collections
 - **Custom system prompts** - Define the agent's personality and behavior
@@ -41,7 +41,7 @@ Agents are customizable AI assistants that can interact with your connected appl
 Agents are built using a visual drag-and-drop flow builder powered by ReactFlow. You create agents by:
 
 1. Adding an **Agent Core** node that defines the agent's basic configuration
-2. Connecting **Reasoning Model** nodes (LLM with reasoning enabled) to power the agent's intelligence
+2. Optionally connecting **LLM Model** nodes; when models are connected, at least one must support reasoning
 3. Adding **Toolset** nodes to give the agent access to external applications
 4. Connecting **Collection** nodes for indexed document search
 5. Configuring edges to connect all components together
@@ -144,7 +144,7 @@ If the provider supports this arrangement and your administrator approves the co
 Follow this pattern:
 
 1. **Agent Core** (required) - The center of your agent
-2. **Reasoning Model** (required) - Connect at least one AI model
+2. **LLM Model** (optional) - With no model node, the agent uses the organization's default model at chat time. If you connect model nodes, at least one must support reasoning.
 3. **Toolset nodes** (optional) - For actions like sending emails, creating tickets
 4. **Collection nodes** (optional) - For searching indexed data from Connectors
 
@@ -166,7 +166,7 @@ This gives you control at any time during the conversation to specify where the 
 
 <Accordion title="Can I connect multiple Reasoning Models to one agent?">
 
-Yes! You can connect multiple Reasoning Model nodes to the Agent Core. 
+Yes. You can connect multiple model nodes to the Agent Core, provided at least one supports reasoning.
 
 When chatting with the agent, users can select which model to use for specific queries from the chat interface. This allows:
 

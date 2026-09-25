@@ -18,7 +18,7 @@ Novaplan übernimmt den Großteil der Einrichtung. Diese Anleitung bleibt als Re
 
 Bevor Sie einen Agenten erstellen, benötigen Sie:
 
-1. **Konfigurierte KI-Modelle:** Mindestens einen LLM-Anbieter mit aktivierter Reasoning-Funktion in Ihrer Organisation.
+1. **Verfügbares KI-Modell:** Ein Organisationsstandardmodell für Agenten ohne eigene Modellknoten oder Modelle, die Sie mit diesem Agenten verbinden. Wenn Sie Modellknoten hinzufügen, muss mindestens eines Reasoning unterstützen.
 2. **Konfigurierte Toolsets (optional):** Die externen Toolsets, die Ihr Agent verwenden soll.
 3. **Wissensquellen (optional):** Konnektoren oder Dokumentensammlungen für die Suche.
 
@@ -88,9 +88,9 @@ Der **Agent Builder** öffnet eine visuelle Arbeitsfläche. Darauf ist bereits e
 
 ---
 
-## Schritt 4: Reasoning-Modell hinzufügen
+## Schritt 4: LLM-Modell hinzufügen (optional)
 
-Jeder Agent benötigt mindestens ein LLM-Modell mit aktivierter Reasoning-Funktion.
+Ohne verbundenen Modellknoten verwendet der Agent beim Chat das Organisationsstandardmodell. Wenn Sie eigene Modelle auswählen möchten, verbinden Sie einen oder mehrere LLM-Modellknoten. Mindestens eines der verbundenen Modelle muss Reasoning unterstützen; sonst kann der Agent nicht gespeichert werden.
 
 1. Öffnen Sie in der linken Seitenleiste den Bereich **LLM Models**.
 2. Ziehen Sie einen Modellknoten auf die Arbeitsfläche.
@@ -221,10 +221,10 @@ Das integrierte Werkzeug **Internal Retrieval** durchsucht Ihre indexierten Inha
     3. Warten Sie bei neu hinzugefügten Quellen, bis die Indexierung abgeschlossen ist.
   </Accordion>
   <Accordion title="Der Agent lässt sich nicht speichern">
-    **Mögliche Ursachen:** Pflichtangaben wie Name oder Reasoning-Modell fehlen oder Knoten sind ungültig verbunden.
+    **Mögliche Ursachen:** Der Agentenname fehlt, die verbundenen Modelle enthalten kein Reasoning-fähiges Modell oder Knoten sind ungültig verbunden.
 
     1. Stellen Sie sicher, dass der Agent einen Namen hat.
-    2. Verbinden Sie mindestens ein Reasoning-Modell mit dem Agent Core.
+    2. Falls Sie Modellknoten verbunden haben, prüfen Sie, ob mindestens eines der Modelle Reasoning unterstützt und mit dem Agent Core verbunden ist. Ohne eigene Modellknoten muss ein Organisationsstandardmodell für den Chat verfügbar sein.
     3. Prüfen Sie alle Knotenverbindungen.
   </Accordion>
 </AccordionGroup>

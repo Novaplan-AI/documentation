@@ -17,7 +17,7 @@ icon: "wrench"
 
 Before creating an agent, ensure you have:
 
-1. **AI Models Configured** - At least one reasoning-enabled LLM provider set up in your organization
+1. **AI model available** - An organization default LLM for agents without attached model nodes, or models to connect to this agent. If you attach model nodes, at least one must support reasoning.
 2. **Toolsets Configured** (optional) - Any external toolsets you want the agent to use
 3. **Knowledge Sources** (optional) - Connectors or collections for document search
 
@@ -105,9 +105,9 @@ The **Agent Builder** opens with a visual flow canvas. You'll see an **Agent Cor
 
 ---
 
-## Step 4: Add Reasoning LLM Model
+## Step 4: Add an LLM Model (Optional)
 
-Every agent needs at least one reasoning-enabled LLM model to power its intelligence.
+An agent with no connected model uses the organization's default LLM at chat time. To choose models for this agent, connect one or more LLM model nodes. At least one connected model must support reasoning, or the agent cannot be saved.
 
 1. In the left sidebar, expand the **"LLM Models"** section
 2. Drag a LLM model node onto the canvas
@@ -292,12 +292,12 @@ The **Internal Retrieval** tool is a built-in utility that searches across all y
 <Accordion title="Cannot save agent">
 
 **Possible causes:**
-- Missing required fields (name, reasoning model)
+- Missing agent name, or connected models with no reasoning-capable model
 - Invalid node connections
 
 **Solution:**
 1. Ensure the agent has a name
-2. Verify at least one reasoning model is connected to the Agent Core
+2. If you connected model nodes, verify that at least one reasoning-capable model is connected to the Agent Core. If you connected none, check that your organization's default LLM is available for chat.
 3. Check all node connections are valid
 
 </Accordion>

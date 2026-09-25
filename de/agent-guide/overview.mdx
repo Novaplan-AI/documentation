@@ -18,7 +18,7 @@ description: "Erstellen Sie KI-Agenten mit dem visuellen Editor, Toolsets und Do
 
 Agenten sind anpassbare KI-Assistenten, die mit verbundenen Anwendungen interagieren, Dokumentensammlungen durchsuchen und Aktionen für Sie ausführen. Sie werden für bestimmte Arbeitsabläufe konfiguriert:
 
-- **Reasoning Models:** KI-Modelle mit Schlussfolgerungsfähigkeiten.
+- **KI-Modelle:** Verwenden Sie das Organisationsstandardmodell oder verbinden Sie eigene Modelle mit dem Agenten. Wenn Sie Modelle verbinden, muss mindestens eines Reasoning unterstützen.
 - **Toolsets:** Werkzeuge für externe Dienste wie Slack, Jira und Confluence.
 - **Wissensquellen:** Indexierte Dokumente und Sammlungen.
 - **Eigene System-Prompts:** Vorgaben für Verhalten und Persönlichkeit des Agenten.
@@ -34,7 +34,7 @@ Agenten sind anpassbare KI-Assistenten, die mit verbundenen Anwendungen interagi
 Der auf ReactFlow basierende Editor verwendet Drag-and-drop:
 
 1. Fügen Sie einen **Agent Core** für die Grundkonfiguration hinzu.
-2. Verbinden Sie **Reasoning Model**-Knoten mit aktivierter Reasoning-Funktion.
+2. Verbinden Sie bei Bedarf **LLM Model**-Knoten. Wenn Sie Modelle verbinden, muss mindestens eines Reasoning unterstützen.
 3. Fügen Sie **Toolset**-Knoten für externe Anwendungen hinzu.
 4. Verbinden Sie **Collection**-Knoten für die Suche in indexierten Dokumenten.
 5. Verbinden Sie die Komponenten mit Verbindungslinien.
@@ -105,13 +105,13 @@ Toolsets bündeln Aktionen für externe Anwendungen:
     Prüfen Sie die Berechtigungen beider Anleitungen und die Einwilligungsseite des Anbieters. Konnektorberechtigungen sind nicht immer auf Lesen beschränkt; ein Toolset benötigt nicht zwangsläufig Schreib- oder Löschrechte. Wenn der Anbieter die gemeinsame Anwendung unterstützt und Ihre Administration die kombinierten Berechtigungen freigibt, können beide Konfigurationen dieselbe Client ID und dasselbe Client Secret verwenden. Andernfalls richten Sie getrennte OAuth-Anwendungen ein und stimmen die Einrichtung mit Novaplan ab.
   </Accordion>
   <Accordion title="Welche Knoten muss ich im Agent Builder verbinden?">
-    Der **Agent Core** ist die Zentrale. Verbinden Sie mindestens ein **Reasoning Model**. Ergänzen Sie bei Bedarf **Toolset**-Knoten für Aktionen und **Collection**-Knoten für die Suche. Alle Knoten müssen mit dem Agent Core verbunden sein; der Agent kann die verbundenen Toolsets und Sammlungen verwenden.
+    Der **Agent Core** ist die Zentrale. Ohne verbundenes Modell verwendet der Agent beim Chat das Organisationsstandardmodell. Wenn Sie **LLM Model**-Knoten verbinden, muss mindestens eines der Modelle Reasoning unterstützen. Ergänzen Sie bei Bedarf **Toolset**-Knoten für Aktionen und **Collection**-Knoten für die Suche. Alle verwendeten Knoten müssen mit dem Agent Core verbunden sein.
   </Accordion>
   <Accordion title="Kann ich im Chat Wissensquelle und Werkzeug auswählen?">
     Ja. Im Gespräch können Sie bestimmte **Collections**, **Toolsets** und ein **Reasoning Model** auswählen. So legen Sie fest, welche Quellen durchsucht oder welche Werkzeuge für eine Aufgabe verwendet werden sollen.
   </Accordion>
   <Accordion title="Kann ich mehrere Reasoning Models mit einem Agenten verbinden?">
-    Ja. Verbinden Sie mehrere Reasoning-Model-Knoten mit dem Agent Core. Im Chat können Benutzer das passende Modell für eine Anfrage auswählen, beispielsweise abhängig von der Komplexität der Aufgabe.
+    Ja. Verbinden Sie mehrere Modellknoten mit dem Agent Core; mindestens eines der Modelle muss Reasoning unterstützen. Im Chat können Benutzer das passende Modell für eine Anfrage auswählen, beispielsweise abhängig von der Komplexität der Aufgabe.
   </Accordion>
 </AccordionGroup>
 
