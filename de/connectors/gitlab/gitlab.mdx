@@ -69,9 +69,23 @@ Unter **Indexing Filters** sind **Index Issues**, **Index Merge Requests** und *
 
 Ohne zuordenbare E-Mail erhält ein Mitglied keinen Zugriff über Novaplan AI. Kann der Konnektor Mitglieder eines Projekts nicht abrufen, erhält ersatzweise **nur die Person, die den Konnektor erstellt hat**, Zugriff; er gibt die Daten niemals pauschal für alle frei.
 
-Projekte werden anhand ihrer numerischen GitLab-ID zugeordnet. Ein umbenanntes oder verschobenes Projekt behält daher seine Datensätze und Synchronisierungsstände. Für Code verfolgt der Konnektor den Commit-Stand des Standardbranches und übernimmt danach Änderungen schrittweise. Er überspringt unter anderem Abhängigkeits- und Build-Verzeichnisse, Lockdateien, minimierte oder generierte Dateien sowie Dateien mit führendem Punkt. Die Dateizahl in Novaplan AI kann deshalb geringer sein als im Repository. Ein Lauf, der mehr als die Hälfte der bisher erfassten Projektdateien löschen würde, wird als Schutz vor unvollständigen GitLab-Antworten nicht übernommen.
+Projekte werden anhand ihrer numerischen GitLab-ID zugeordnet. Ein umbenanntes oder verschobenes Projekt behält daher seine Datensätze und Synchronisierungsstände. Für Code verfolgt der Konnektor den Commit-Stand des Standardbranches. Beim ersten Lauf erfasst er den Repository-Baum; danach vergleicht er den gespeicherten Commit mit dem aktuellen Stand. Umbenannte Dateien können ihren Datensatz behalten, statt als Löschung und Neuanlage zu erscheinen.
+
+Nicht jede Datei des Standardbranches wird zum Datensatz. Der zugängliche Quellcode schließt unter anderem Folgendes aus:
+
+| Kategorie | Beispiele |
+| --- | --- |
+| Abhängigkeiten | `node_modules`, `vendor`, `third_party`, `site-packages`, `venv` |
+| Builds und Caches | `dist`, `build`, `target`, `out`, `.next`, `__pycache__`, `.pytest_cache`, `coverage` |
+| Lockdateien | `package-lock.json`, `yarn.lock`, `poetry.lock`, `Cargo.lock`, `Gemfile.lock` |
+| Abgeleitete Dateien | `*.min.js`, `*.min.css`, `*.map`, `*.snap`, `*.pb.go`, `*_pb2.py`, `*.generated.*`, `generated/` |
+| Dateien mit führendem Punkt und Metadaten | `.git`, `.idea`, `.vscode`, `.gradle` und andere Dotfiles |
+
+Die Dateizahl in Novaplan AI kann deshalb geringer sein als im Repository. Ein Lauf, der mehr als die Hälfte der bisher erfassten Projektdateien löschen würde, wird als Schutz vor unvollständigen GitLab-Antworten nicht übernommen. Bei einem fehlgeschlagenen Lauf bleibt der zuletzt erfolgreiche Synchronisierungsstand erhalten.
 
 Vorgänge und Merge Requests behalten ihre Beschreibungen, Kommentare und zugehörigen Anhänge als zusammengehörige Inhalte. Bei Merge Requests kommen Commits, Dateiänderungen mit Diffs und Review-Kommentare hinzu. Ein Synchronisierungsstand wird erst nach erfolgreichem Abschluss des jeweiligen Schritts gespeichert; ein fehlgeschlagener Schritt kann beim nächsten Lauf wiederholt werden.
+
+Bei einem GitLab-Administrator- oder EE-Auditor-Konto versucht der Konnektor, alle für dieses Konto lesbaren Gruppen und Projekte aufzulisten. Liefert ein Auditor wegen Einschränkungen der GitLab-Listing-Endpunkte keine Ergebnisse, versucht der Konnektor stattdessen eine auf Mitgliedschaften begrenzte Abfrage. Für eine erwartete instanzweite Abdeckung prüfen Sie diesen Fall mit einem Administratorkonto.
 
 ## Fehler beheben
 

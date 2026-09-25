@@ -313,17 +313,7 @@ Nextcloud uses the **Activity API** to track changes:
 
 ### Simplified Personal Model
 
-Since this is a personal connector:
-
-1. **Default Ownership:** The authenticated user is assigned **OWNER** permissions for all files and folders
-2. **Share Information:** The connector can detect shares via Nextcloud's OCS Share API
-3. **Permission Types:** Maps Nextcloud permissions (READ, UPDATE, DELETE, SHARE) to Novaplan AI permission types
-
-### Nextcloud Permission Mapping
-
-* **Permission 31 (ALL):** Maps to OWNER
-* **Permissions with DELETE or UPDATE:** Maps to WRITE
-* **Permission with READ only:** Maps to READ
+The accessible Personal connector assigns the authenticated user **OWNER** permission on the drive, files, and folders it syncs. Its source contains helpers for reading Nextcloud OCS shares and mapping their permission bits, but the reviewed sync path does not call those helpers. This guide therefore does not promise that external share recipients or Nextcloud's per-item permissions are copied into Novaplan AI. Verify visibility with separate test accounts before relying on shared content in a customer workspace.
 
 ---
 
