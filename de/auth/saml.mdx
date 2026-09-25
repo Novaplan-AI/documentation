@@ -65,7 +65,7 @@ Der IdP übermittelt die E-Mail-Adresse in der SAML-Antwort. Der Name des Attrib
 
 ### Schritt 3: SAML SSO in Novaplan AI konfigurieren
 
-1. Öffnen Sie **Workspace → Authentication**. Nur Workspace-Administratoren haben Zugriff auf diese Einstellungen.
+1. Öffnen Sie **Workspace Settings → Authentication**. Nur Workspace-Administratoren haben Zugriff auf diese Einstellungen.
 2. Klicken Sie in der Zeile **SAML SSO** auf das Zahnradsymbol, um den Konfigurationsbereich zu öffnen.
 
 <div style={{ textAlign: "center" }}>
@@ -81,14 +81,15 @@ Der IdP übermittelt die E-Mail-Adresse in der SAML-Antwort. Der Name des Attrib
 | **SSO Entry Point** | Ja | Anmelde-URL des IdP aus Schritt 1. |
 | **X.509 Certificate** | Ja | Signaturzertifikat des IdP aus Schritt 1. |
 | **Email Attribute Key** | Ja | Attributname für die E-Mail-Adresse aus Schritt 2. |
-| **Entity ID** | Nein | Optionale Kennung des Service Providers. |
-| **Logout URL** | Nein | Optionale Abmelde-URL des IdP. |
+| **SP Entity ID (Issuer)** | Automatisch | Schreibgeschützte Kennung des Service Providers. Übernehmen Sie den angezeigten Wert als Audience oder Entity ID in die IdP-Anwendung. |
 | **Provider Name** | Nein | Anzeigename, etwa „Okta“ oder „Azure AD“, für die Anmeldeschaltfläche. |
 | **Just-in-Time Provisioning** | Nein | Erstellt bei der ersten Anmeldung automatisch ein Konto; laut Einrichtungsreferenz standardmäßig aktiviert. |
 
 <Info>
   **Save** bleibt deaktiviert, bis die drei Pflichtfelder **SSO Entry Point**, **X.509 Certificate** und **Email Attribute Key** ausgefüllt sind.
 </Info>
+
+Prüfen Sie die angezeigte ACS URL und SP Entity ID im tatsächlich bereitgestellten Workspace, bevor Sie die Werte beim IdP hinterlegen.
 
 4. Klicken Sie auf **Save**.
 5. Klicken Sie auf der Seite **Authentication Settings** auf **Edit**, aktivieren Sie **SAML SSO** und speichern Sie erneut.
@@ -108,7 +109,7 @@ Der IdP übermittelt die E-Mail-Adresse in der SAML-Antwort. Der Name des Attrib
 
 | Problem | Prüfung |
 | --- | --- |
-| SSO-Schaltfläche fehlt | Prüfen Sie, ob **SAML SSO** unter **Workspace → Authentication** aktiviert ist. |
+| SSO-Schaltfläche fehlt | Prüfen Sie, ob **SAML SSO** unter **Workspace Settings → Authentication** aktiviert ist. |
 | Anmeldung schlägt nach Eingabe der IdP-Zugangsdaten fehl | Prüfen Sie **SSO Entry Point** und **X.509 Certificate**. |
 | „JIT Disabled“ bei der ersten Anmeldung | Laden Sie die Person zuerst ein oder prüfen Sie mit Novaplan, ob automatische Benutzeranlage vorgesehen ist. |
 | Rückleitung zur Anmeldeseite mit Fehler | Prüfen Sie, ob **Email Attribute Key** zum E-Mail-Attribut Ihres IdP passt. |
