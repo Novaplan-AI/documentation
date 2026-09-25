@@ -45,8 +45,10 @@
             "group": "Konnektoren",
             "pages": [
               "de/connectors/overview",
+              "de/connectors/confluence/confluence",
               "de/connectors/google-workspace/drive/drive",
               "de/connectors/google-workspace/gmail/gmail",
+              "de/connectors/jira/jira",
               "de/connectors/rss/rss",
               "de/connectors/slack/slack",
               "de/connectors/web/web",

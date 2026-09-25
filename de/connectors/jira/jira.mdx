@@ -1,0 +1,141 @@
+---
+title: "Jira Cloud"
+description: "Jira-Projekte, Vorgänge, Kommentare und Anhänge mit Novaplan AI durchsuchen."
+---
+
+Der Jira-Cloud-Konnektor synchronisiert Projekte, Vorgänge, Kommentare, Anhänge und die zugehörigen Berechtigungen mit Novaplan AI. Für selbst betriebenes Jira verwenden Sie stattdessen den [Jira-Data-Center-Konnektor](/connectors/jira/jira-data-center); dafür liegt noch keine deutsche Fassung vor.
+
+Novaplan richtet Ihren Workspace weitgehend für Sie ein. Die Atlassian-Anwendung, Authentifizierung und Projektauswahl stimmen Sie mit Novaplan und Ihrer Jira-Administration ab.
+
+## Welche Daten werden synchronisiert?
+
+| Daten | Verwendung |
+| --- | --- |
+| **Projekte** | Projektstruktur und projektbezogene Berechtigungen |
+| **Vorgänge** | Zusammenfassung, Beschreibung, Status, Priorität, Labels, Zeitstempel und benutzerdefinierte Felder |
+| **Kommentare** | Diskussionen mit Autorenzuordnung |
+| **Anhänge** | Dateien und Bilder an Vorgängen und Kommentaren |
+| **Nutzer, Gruppen und Projektrollen** | Zuordnung der Zugriffsrechte in Novaplan AI |
+
+Der Konnektor übernimmt Projekt- und Vorgangsberechtigungen. Damit Novaplan AI Jira-Konten zu Personen zuordnen kann, muss die E-Mail-Adresse für die Integration sichtbar sein.
+
+## Vor dem Start: E-Mail-Sichtbarkeit prüfen
+
+Die E-Mail-Zuordnung gilt für **OAuth 2.0** und **API Token**. Wenn Jira die E-Mail-Adresse einer Person für die Integration verbirgt, können Datensätze trotz vorhandener Jira-Berechtigung in Novaplan AI unsichtbar bleiben.
+
+Jede betroffene Person öffnet in ihrem Atlassian-Konto **Account Settings → Profile and visibility → Contact → Who can see this?** und wählt eine Sichtbarkeit, die die benötigte Zuordnung ermöglicht, beispielsweise **Your organization**. Verwenden Sie **Anyone** nur, wenn dies zu Ihren Datenschutzvorgaben passt. **Only you and admins** kann die Zuordnung verhindern. Diese Einstellung wird pro Person vorgenommen; Ihre Administration kann sie laut Quellleitfaden nicht stellvertretend für andere Personen ändern. Weitere Hinweise stehen in der [Atlassian-Dokumentation zur Profilsichtbarkeit](https://support.atlassian.com/atlassian-account/docs/update-your-profile-and-visibility-settings/).
+
+## Authentifizierung wählen
+
+| Methode | Geeignet für | Voraussetzungen |
+| --- | --- | --- |
+| **OAuth 2.0 (3LO)** | Mehrere Personen und produktive Nutzung mit individueller Zustimmung | Zugriff auf die Atlassian Developer Console und Registrierung einer OAuth-Anwendung |
+| **API Token** | Verbindung mit einem einzelnen Atlassian-Konto | API-Token eines Kontos mit Zugriff auf die benötigten Projekte |
+
+Beide Methoden synchronisieren dieselben Datentypen. Novaplan koordiniert mit Ihnen, welche Methode für den vorgesehenen Betrieb geeignet ist.
+
+## OAuth 2.0 (3LO) einrichten
+
+### 1. Atlassian-Anwendung erstellen
+
+1. Öffnen Sie die [Atlassian Developer Console](https://developer.atlassian.com/console/myapps/) und wählen Sie **Create → OAuth 2.0 integration**.
+2. Vergeben Sie einen Namen, beispielsweise `Novaplan AI Jira Connector`.
+3. Wählen Sie bei **Access type** unbedingt **Resource-level** und schließen Sie die Registrierung ab. Mit **Account-level** funktioniert die hier dokumentierte Autorisierung nicht: Der Konnektor verwendet die Jira-Site, die während OAuth ausgewählt wird.
+4. Öffnen Sie in der Anwendung **Authorization → OAuth 2.0 (3LO) → Add**.
+
+### 2. Exakte Callback-Adresse hinterlegen
+
+1. Öffnen Sie in Novaplan AI **Workspace Settings → Connectors → Jira → + Setup**.
+2. Kopieren Sie unter **Authenticate Instance** die angezeigte **Redirect URL**.
+3. Tragen Sie diesen exakten Wert in der Atlassian Developer Console unter **Callback URL** ein und klicken Sie auf **Save changes**.
+
+Schema, Host, Groß- und Kleinschreibung, Pfad und ein möglicher abschließender Schrägstrich müssen übereinstimmen. Verwenden Sie die Adresse Ihrer tatsächlichen Novaplan-Instanz, nicht eine Beispieladresse.
+
+### 3. API-Scopes eintragen
+
+Öffnen Sie in der Atlassian-Anwendung **Permissions** und fügen Sie die folgenden Berechtigungen hinzu:
+
+| API | Scope | Zweck |
+| --- | --- | --- |
+| **User identity API** | `read:account` | Nutzerprofile zuordnen |
+| **Jira API · Classic** | `read:jira-work` | Projekte, Vorgänge und zugehörige Inhalte lesen |
+| **Jira API · Classic** | `read:jira-user` | Nutzerinformationen lesen |
+| **Jira API · Granular** | `read:user:jira` | Nutzerdetails lesen |
+| **Jira API · Granular** | `read:group:jira` | Gruppen und Mitglieder lesen |
+| **Jira API · Granular** | `read:avatar:jira` | Avatare lesen |
+| **Jira API · Granular** | `read:audit-log:jira` | Löschungen über Audit-Ereignisse erkennen |
+| **Jira API · Granular** | `read:application-role:jira` | Anwendungsrollen lesen |
+| **Jira API · Granular** | `read:project-role:jira` | Projektrollen lesen |
+
+`offline_access` wird bei OAuth 2.0 (3LO) automatisch ergänzt und ermöglicht Refresh-Tokens für geplante Synchronisierungen. Die dokumentierten Classic-Scopes sind lesend; der Konnektor benötigt dafür keine Schreib- oder Verwaltungs-Scopes.
+
+### 4. Zugangsdaten in Novaplan AI eintragen
+
+1. Öffnen Sie in der Atlassian Developer Console **Settings → Authentication details** und kopieren Sie **Client ID** und **Secret**. Bewahren Sie das Secret sicher auf.
+2. Wählen Sie in Novaplan AI unter **Authenticate Instance** eine bereits hinterlegte **OAuth app** aus oder tragen Sie **Application (Client) ID** und **Client Secret** ein.
+3. Prüfen Sie die **Redirect URL** und klicken Sie auf **Next**.
+4. Klicken Sie unter **Authorize** auf **Authenticate**, wählen Sie Ihre Jira-Site und bestätigen Sie die Berechtigungen mit **Accept**.
+5. Verwenden Sie für die Autorisierung ein Atlassian-Konto mit derselben E-Mail-Adresse wie Ihr Novaplan-AI-Konto. Nach erfolgreicher Autorisierung zeigt die Instanz **Authenticated** an.
+6. Wählen Sie **Next**, legen Sie die [Synchronisierung und Filter](#synchronisierung-und-filter) fest und speichern Sie die Konfiguration.
+
+Wenn Sie Client ID, Secret, Callback-Adresse oder Scopes in Atlassian ändern, aktualisieren Sie die Werte in Novaplan AI und autorisieren Sie erneut.
+
+## API-Token-Verbindung einrichten
+
+### 1. Atlassian-Token erstellen
+
+1. Öffnen Sie [Atlassian API tokens](https://id.atlassian.com/manage-profile/security/api-tokens) und wählen Sie **Create API token**.
+2. Vergeben Sie einen Namen, legen Sie gegebenenfalls eine Laufzeit fest und klicken Sie auf **Create**.
+3. Kopieren Sie den Token sofort und bewahren Sie ihn sicher auf. Er wird nur einmal angezeigt.
+
+Der Token übernimmt die Rechte seines Atlassian-Kontos. Verwenden Sie ein Konto, das die benötigten Jira-Projekte lesen darf; stimmen Sie mit Ihrer Administration ab, ob ein gesondertes Integrationskonto verwendet werden soll.
+
+### 2. Token in Novaplan AI eintragen
+
+1. Öffnen Sie **Workspace Settings → Connectors → Jira → + Setup**.
+2. Wählen Sie unter **Authenticate Instance → Authentication method** die Option **API Token**.
+3. Tragen Sie **Base URL** Ihrer Jira-Cloud-Site ein, beispielsweise `https://your-domain.atlassian.net`, ohne abschließenden Schrägstrich und ohne zusätzliche Pfade.
+4. Tragen Sie die **Email** des Kontos ein, das den Token erstellt hat, und fügen Sie den **API Token** hinzu.
+5. Klicken Sie auf **Next**. Bei dieser Methode entfällt der Tab **Authorize**. Legen Sie unter **Configure Records** die [Synchronisierung und Filter](#synchronisierung-und-filter) fest.
+
+Die E-Mail-Adresse muss zum Token-Konto gehören. Für eine korrekte Berechtigungszuordnung sollte sie auch mit dem vorgesehenen Novaplan-AI-Konto übereinstimmen.
+
+## Synchronisierung und Filter
+
+Diese Einstellungen gelten für beide Authentifizierungsmethoden.
+
+- **Sync Strategy:** **Scheduled** für automatische Läufe oder **Manual** für einen Start auf Anforderung.
+- **Sync Interval:** Intervall geplanter Läufe; die Voreinstellung beträgt 60 Minuten.
+- **Project Keys:** Projekte mit **In** einbeziehen oder mit **Not In** ausschließen. Die auswählbaren Projekte werden aus Ihrer Jira-Site geladen.
+- **Modified Date / Created Date:** Vorgänge nach Änderungs- oder Erstellungsdatum begrenzen, etwa mit **Is After**, **Is Before** oder **Is Between**.
+- **Index Issues:** Vorgangsbeschreibungen und Kommentare für die Suche indexieren; standardmäßig aktiviert.
+- **Index Issue and Comment Attachments:** Anhänge an Vorgängen und Kommentaren indexieren; standardmäßig aktiviert.
+
+Synchronisierungsfilter begrenzen, was überhaupt aus Jira geladen wird. Indexierungsfilter bestimmen, welche der synchronisierten Inhalte durchsuchbar werden. Kommentare werden mit dem jeweiligen Vorgang gespeichert und bei aktivem **Index Issues** mit indexiert.
+
+Klicken Sie auf **Save** und wählen Sie im Dialog **Start syncing now** oder **I'll do it later**. Den Fortschritt können Sie unter **Indexing Progress** prüfen.
+
+## Verhalten bei weiteren Läufen
+
+Ein Lauf synchronisiert zunächst Nutzer und Gruppen, dann Projekte, Projektrollen, Vorgänge, Kommentare und Anhänge. Projekt- und vorgangsbezogene Rechte werden dabei übernommen. Der erste Lauf, ein geänderter Filter oder ein manuell gestarteter vollständiger Lauf führt eine umfassende Synchronisierung aus. Spätere Läufe verwenden einen gespeicherten Fortschrittspunkt und holen geänderte Vorgänge, beispielsweise über JQL mit `updated >= "last_sync_time"`.
+
+Die technische Implementierung verarbeitet Vorgänge in Batches (im Quellleitfaden standardmäßig 100 pro Anfrage), wandelt ADF-Beschreibungen in durchsuchbaren Inhalt um und ordnet Kommentare und Anhänge ihren Vorgängen zu. Löschungen werden über `ISSUE_DELETE`-Ereignisse aus Jiras Audit Log erkannt. Projektbezogene Fortschrittspunkte helfen, abgebrochene Läufe fortzusetzen.
+
+## Fehlerbehebung
+
+- **OAuth-Zugangsdaten ungültig:** Prüfen Sie Client ID und Secret ohne zusätzliche Leerzeichen sowie den Status der Atlassian-Anwendung.
+- **Callback-Fehler:** Vergleichen Sie die **Redirect URL** in Novaplan AI exakt mit der **Callback URL** in Atlassian.
+- **API-Token schlägt fehl:** Prüfen Sie Token, Ablauf, **Email** und **Base URL**. Die URL beginnt mit `https://`, enthält keinen abschließenden Schrägstrich und keinen Pfad wie `/browse/...`.
+- **Autorisierung fehlgeschlagen:** Verwenden Sie ein Konto mit Jira-Zugriff, wählen Sie die richtige Site und prüfen Sie alle Scopes.
+- **Keine Daten:** Prüfen Sie den Status **Active**, den Projektzugriff des authentifizierenden Kontos und die Filter. Kontrollieren Sie die Synchronisierungsprotokolle.
+- **Einzelne Vorgänge fehlen:** Prüfen Sie Projektberechtigungen und Vorgangssicherheitsregeln in Jira.
+- **Kommentare oder Anhänge fehlen:** Prüfen Sie die Indexierungsfilter, Jira-Berechtigungen und mögliche Größenbeschränkungen.
+- **Datensätze vorhanden, aber unsichtbar:** Prüfen Sie die E-Mail-Zuordnung und Sichtbarkeit im Atlassian-Profil sowie den Indexierungsstatus unter **All Records**.
+
+Der **Jira-Konnektor** importiert Daten für die Suche. Das Jira-Toolset erlaubt entsprechend konfigurierten Agenten Aktionen wie das Anlegen oder Ändern von Vorgängen. Für Hilfe schreiben Sie an [support@novaplan.ai](mailto:support@novaplan.ai).
+
+## Weiterführende Atlassian-Dokumentation
+
+- [OAuth 2.0 (3LO)](https://developer.atlassian.com/cloud/jira/platform/oauth-2-3lo-apps/)
+- [Jira-Scopes](https://developer.atlassian.com/cloud/jira/platform/scopes-for-oauth-2-3LO-and-forge-apps/)
+- [Jira REST API v3](https://developer.atlassian.com/cloud/jira/platform/rest/v3/)
