@@ -384,15 +384,15 @@ Once a cursor is established, incremental sync processes only new events:
 
 ## Record Groups Sync Workflow
 
-Record Groups in Box represent user "drives" - the root "All Files" folder (ID: 0) for each user.
+Record Groups in Box represent each user's root **All Files** drive (folder ID 0) and an internal **Shared with Me** area for items shared with that user.
 
 ### Full Sync
 
 1. **Fetch Active Users:** Retrieves list of all active enterprise users.
 
-2. **Create Record Groups:** For each user, creates a `RecordGroup` representing their root folder.
+2. **Create Record Groups:** For each user, creates a `RecordGroup` for their root folder and an internal **Shared with Me** group.
 
-3. **Set Permissions:** Assigns OWNER permission to each user for their own drive.
+3. **Set Permissions:** Assigns OWNER permission to each user for their own drive and **Shared with Me** group.
 
 4. **Batch Submission:** Sends all record groups to the processor with full permission mappings.
 
@@ -428,10 +428,10 @@ Record groups sync operates as a full sync, re-processing all active users to en
    - **Permission Fetching:** Retrieves collaborations and sharing settings via `client.folder(id).get_collaborations()`
    - **Conversion:** Maps Box permissions to Novaplan AI permission types:
      - `owner` → OWNER
-     - `co-owner` → OWNER
+     - `co-owner` → WRITE
      - `editor` → WRITE
-     - `viewer uploader` → WRITE
-     - `previewer uploader` → WRITE
+     - `viewer uploader` → READ
+     - `previewer uploader` → READ
      - `viewer` → READ
      - `previewer` → READ
 

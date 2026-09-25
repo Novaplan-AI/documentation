@@ -62,6 +62,26 @@ Beim ersten Lauf werden Personen, Gruppen, Stammordner sowie Dateien und Ordner 
 
 Die Dateiberechtigungen stammen aus Box-Zusammenarbeit und Freigabelinks. Eine Datei kann über direkte Freigabe, einen übergeordneten Ordner, eine Gruppe oder einen öffentlichen beziehungsweise organisationsweiten Link zugänglich sein. Änderungen an solchen Rechten werden beim nächsten erfolgreichen Lauf übernommen. Gerade bei öffentlichen Links sollten Sie die Freigabeeinstellungen in Box selbst kontrollieren.
 
+### Benutzer, Gruppen und persönliche Bereiche
+
+`run_sync` verarbeitet Box-Nutzende und Profile, Gruppen samt Mitgliedschaften, persönliche Stammordner und danach die Datei- und Ordnerhierarchie. Die zugängliche Implementierung liest aktive Benutzer bei einem weiteren Lauf erneut vollständig; für Gruppen und Dateiänderungen verwendet sie gespeicherte Fortschrittspunkte. `user_sync_point`, `user_group_sync_point` und `box_cursor_sync_point` halten die jeweiligen Stände fest.
+
+Jede aktive Person erhält eine `RecordGroup` für ihren Stammordner **All Files** und einen internen Bereich **Shared with Me**. Für beide Bereiche erhält diese Person das Recht **OWNER**. Box-Gruppen und Mitgliedschaften werden separat übernommen, damit Gruppenfreigaben bei der Suche berücksichtigt werden können.
+
+### Dateien, Ereignisse und Rechte
+
+Für einen vollständigen Lauf durchläuft der Konnektor die Ordnerstruktur der aktiven Personen. Über den Box-**As-User**-Kontext liest er Inhalte und Zusammenarbeit im passenden Quellkontext. Metadaten und Berechtigungen neuer oder geänderter Elemente werden paketweise verarbeitet; die voreingestellte **Batch Size** beträgt 100. Für spätere Läufe verwendet der Konnektor Ereignisse wie `FILE.UPLOADED`, `FILE.MOVED`, `FILE.DELETED`, `FOLDER.CREATED`, `FOLDER.MOVED` und `COLLABORATION.CREATED` beziehungsweise `COLLABORATION.REMOVED`. Danach speichert er die neue `stream_position`. Prüfen Sie nach einem wichtigen Entzug oder einer Löschung, ob die Änderung in Novaplan AI angekommen ist.
+
+Die zugängliche Implementierung ordnet Box-Zusammenarbeitsrollen für Dateien und Ordner so zu:
+
+| Box-Rolle | Recht im Konnektor |
+| --- | --- |
+| `owner` | **OWNER** |
+| `editor`, `co-owner` | **WRITE** |
+| `viewer`, `previewer`, `viewer uploader`, `previewer uploader` und sonstige Rollen ohne eigene Zuordnung | **READ** |
+
+Organisationweite und öffentliche Links können einen größeren Personenkreis berechtigen als eine direkte Zusammenarbeit. Die technische Quelle verwendet dafür `ORGANIZATION_ACCESS_GROUP` und `PUBLIC_ACCESS_GROUP`. Prüfen Sie Freigabelinks vor der ersten Synchronisierung und nach Änderungen besonders sorgfältig.
+
 ## Fehler beheben
 
 | Problem | Prüfen Sie |
