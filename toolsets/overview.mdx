@@ -21,10 +21,10 @@ Toolsets are collections of tools that enable AI agents to **perform actions** i
 **Use Toolsets when you want agents to take action on data** — sending emails, creating tickets, updating documents, or modifying content in external services.
 
 **Key characteristics:**
-- **Two-way API access** - Read and write data in real-time
-- **Action-oriented** - Send emails, create tickets, update documents
-- **OAuth callback URL required** - Secure authorization flow
-- **Instant execution** - Actions happen immediately when agents invoke tools
+- **Direct API access** - Use the read or write actions that a configured toolset actually provides
+- **Action-oriented** - For example, send emails, create tickets, or query a database
+- **Toolset-specific authentication** - OAuth, user credentials, or another method depending on the service
+- **Execution on invocation** - Actions run when agents call the relevant tool
 
 Unlike **Connectors** (which index data for querying and search), **Toolsets** provide real-time API access for performing actions.
 
@@ -39,7 +39,7 @@ Unlike **Connectors** (which index data for querying and search), **Toolsets** p
 | Feature | Connectors | Toolsets |
 |---------|------------|----------|
 | **Purpose** | Sync and index data for search | Perform actions via API |
-| **Data Flow** | One-way (import) | Two-way (read/write) |
+| **Data Flow** | Import into the search index | Direct API call; read or write depends on the tool |
 | **Use Case** | Query/search data | Actions on data |
 | **Real-time** | Periodic sync | Instant API calls |
 
@@ -250,7 +250,7 @@ Once a toolset is configured, it becomes available in the Agent Builder:
 </div>
 
 <Warning>
-  Only authenticated toolsets appear in the Agent Builder. If a toolset is missing, check its configuration status in **Settings > Toolsets**.
+  A toolset must be authenticated before an agent can use it. If it cannot be added, check its configuration and authentication status under **Workspace settings → Actions** or **Your Actions**, as appropriate.
 </Warning>
 
 ---
@@ -263,7 +263,7 @@ OAuth 2.0 is the recommended authentication method for most toolsets. It provide
 
 - **Secure token-based access** - No passwords stored
 - **Automatic token refresh** - Tokens are refreshed automatically
-- **Granular permissions** - Only request necessary scopes
+- **Scope review** - Check the actual permissions requested by the toolset before granting access
 - **User authorization** - Users explicitly grant access
 
 **Requirements:**
@@ -294,7 +294,7 @@ Basic Auth is used by toolsets like MariaDB. It works as follows:
 | Aspect | Connectors | Toolsets |
 |--------|-----------|----------|
 | **Purpose** | Sync and index data for search | Enable agents to perform actions |
-| **Data Flow** | One-way (import data into Novaplan AI) | Two-way (read and write via API) |
+| **Data Flow** | Import data into the search index | Direct API calls; available read and write actions vary |
 | **When to Use** | Query/search data | Perform actions on data |
 
 **Example:** Use a **Gmail Connector** to index and search your email history. Use a **Gmail Toolset** to send new emails through an agent.
@@ -315,7 +315,7 @@ Basic Auth is used by toolsets like MariaDB. It works as follows:
 
 The callback URL is displayed in Novaplan AI when configuring a toolset:
 
-1. Go to **Settings > Toolsets**
+1. Go to **Workspace settings → Actions** or **Your Actions**, as appropriate
 2. Click **"Configure"** on the toolset you want to set up
 3. Copy the **Redirect URI** shown in the dialog
 4. Add it to your OAuth app's allowed redirect URIs in the service's developer console
@@ -326,13 +326,13 @@ The callback URL must match exactly between Novaplan AI and the OAuth app for au
 
 <Accordion title="What OAuth scopes do Toolsets require?">
 
-Toolsets need **read, write and delete permissions** to perform actions on your behalf:
+Different toolsets request different permissions. A read-only database query does not need the same rights as a tool that changes or deletes content:
 
 - **Read permissions** - Access existing data (messages, tickets, files)
 - **Write permissions** - Create and update content (send emails, create tickets)
 - **Delete permissions** - Remove items (delete messages, delete comment)
 
-The required scopes depend on what actions your agents will perform. Check each toolset's documentation page for the complete list of required scopes based on your use case.
+Check the individual toolset page and the permissions shown by the provider during authorization. Some accessible implementations request broader scopes than their listed tools appear to use; ask Novaplan to confirm the permissions required by the deployed workspace before approving them.
 
 </Accordion>
 
@@ -340,7 +340,7 @@ The required scopes depend on what actions your agents will perform. Check each 
 
 Toolsets appear in the Agent Builder but can only be used after authentication:
 
-1. Check **Settings > Toolsets** for the authentication status
+1. Check **Workspace settings → Actions** or **Your Actions** for the authentication status
 2. If not "Authenticated", click **"Configure"** and complete the OAuth flow
 3. If expired, click **"Reauthenticate"**
 4. Return to Agent Builder and the toolset will be available to drag and connect
