@@ -40,6 +40,48 @@ Die Verarbeitung läuft in dieser Reihenfolge: Benutzer, Rollen und Gruppenmitgl
 
 Die englische technische Quellanleitung kennzeichnet die Behandlung bestimmter Löschungen und verschobener Seiten als noch nicht implementiert beziehungsweise beabsichtigt. Verlassen Sie sich deshalb bei solchen Änderungen nicht allein auf die automatische Übernahme. Prüfen Sie nach Löschungen oder Verschiebungen die Suchergebnisse und Berechtigungen und kontaktieren Sie bei Abweichungen [Novaplan Support](/de/contact-us).
 
+### Reihenfolge und Fortschrittspunkte
+
+`run_sync` verarbeitet die vier Bereiche nacheinander. Erst wenn ein Bereich erfolgreich abgeschlossen ist, wird sein Fortschrittspunkt für spätere Läufe verwendet:
+
+| Schritt | Funktion | Übernommene Daten |
+| --- | --- | --- |
+| 1 | `_sync_users()` | BookStack-Benutzerkonten |
+| 2 | `_sync_user_groups()` | Rollen und ihre Mitglieder |
+| 3 | `_sync_record_groups()` | Regale, Bücher, Kapitel und deren Rechte |
+| 4 | `_sync_records()` | Seiten, Anhänge und Seitenrechte |
+
+Ohne gespeicherten Zeitpunkt liest der jeweilige Bereich seinen Bestand vollständig. Danach fragt der Konnektor das BookStack-Audit-Log seit `last_sync_timestamp` ab. Ein solcher Fortschrittspunkt wird in der technischen Quelle unter einem Schlüssel nach dem Muster `{app_id}/BOOKSTACK/{SyncDataPointType}/bookstack/{entity_type}/global` gespeichert. Die Audit-Log-Abfrage verwendet UTC-Zeitstempel, beispielsweise `?filter[type]=user_update&filter[created_at:gte]=2025-10-16T00:00:00Z`.
+
+### Benutzer und Rollen
+
+Beim ersten Lauf liest der Konnektor alle Benutzer und Rollen samt Rollenmitgliedschaften. Für eine Rolle erstellt er eine Benutzergruppe und ordnet die zugehörigen Personen zu. Spätere Läufe werten diese Audit-Log-Ereignisse aus:
+
+| Ereignis | Handler | Verarbeitung laut technischer Quelle |
+| --- | --- | --- |
+| `user_create` | `_handle_user_create_event` | Neuen Benutzer aus der aktuellen Benutzerliste übernehmen. |
+| `user_update` | `_handle_user_update_event` | Name und E-Mail aktualisieren, alte Gruppenzuordnungen entfernen und Rollenmitgliedschaften neu einlesen. |
+| `user_delete` | `_handle_user_delete_event` | Benutzer anhand seiner ID und E-Mail über `on_user_removed` vom Konnektor lösen; der Löschpfad ist in der Quellanleitung als noch ausstehend gekennzeichnet. |
+| `role_create` | `_handle_role_create_event` | Neue Rolle mit ihren Mitgliedern über `on_new_user_groups` übernehmen. |
+| `role_update` | `_handle_role_update_event` | Rolle und Mitgliedsliste über Entfernen und erneutes Anlegen aktualisieren. |
+| `role_delete` | `_handle_role_delete_event` | Rolle und ihre Mitgliedschaftsbeziehungen über `on_user_group_deleted` entfernen. |
+
+Eine Änderung an einer Person kann also auch ihre Rollenzuordnung betreffen, selbst wenn die Rolle selbst nicht geändert wurde. Prüfen Sie nach Entzug wichtiger Rechte die tatsächliche Sichtbarkeit in Novaplan AI.
+
+### Regale, Bücher und Kapitel
+
+Beim vollständigen Lauf verarbeitet `_sync_content_type_as_record_group` nacheinander `bookshelf`, `book` und `chapter`. Für jedes Element wird eine `RecordGroup` mit externer Kennung, übergeordneter Beziehung und den über `get_content_permissions` gelesenen Rechten aufgebaut. `_parse_bookstack_permissions` löst diese Rechte für Personen und Rollen auf; `on_new_record_groups()` übernimmt die Ergebnisse paketweise. Ein Regal organisiert Bücher, bildet in BookStack aber nicht deren eigentlichen Elternknoten.
+
+Bei weiteren Läufen wertet `_sync_record_groups_events` die Ereignisse `[type]_create`, `[type]_update` und `permissions_update` aus. `_handle_record_group_create_event` liest das betroffene Element und seine Rechte erneut ein. Die technische Quelle beschreibt für `[type]_delete` einen beabsichtigten Löschpfad über `_handle_record_group_delete_event` und `on_record_group_deleted`; behandeln Sie ihn bis zur Prüfung in Ihrer Enterprise-Instanz nicht als garantierte automatische Bereinigung.
+
+### Seiten und Anhänge
+
+Ein vollständiger Seitenlauf über `_sync_records_full` liest BookStack-Seiten seitenweise über `list_pages`. `_process_bookstack_page` prüft für jede Seite, ob schon ein Datensatz existiert. Der Wert `revision_count` hilft, `content_changed` von `metadata_changed` zu unterscheiden. Die Seite wird als `FileRecord` in einem `RecordUpdate` verarbeitet. `_handle_record_updates` übergibt neue Seiten paketweise an `on_new_records`; für bestehende Seiten können `on_record_content_update`, `on_record_metadata_update` und `on_updated_record_permissions` ausgelöst werden. Anhänge werden mit den Seiten verarbeitet.
+
+Weitere Läufe über `_sync_records_incremental` nutzen `page_create`, `page_update` und `permissions_update`. `_handle_page_upsert_event` lädt die aktuelle Seite und ihre Rechte erneut. Die Quellanleitung beschreibt `page_delete` mit `on_record_deleted` und `page_move` nur als beabsichtigte Verarbeitung; insbesondere die Aktualisierung von `external_record_group_id` nach einem Verschieben ist daher vor dem Einsatz mit sensiblen Inhalten zu testen.
+
+Für die technische Einordnung: `create_connector` erstellt den Konnektor mit seinem Datenprozessor; `init` liest `base_url`, `token_id` und `token_secret` aus der Konfiguration und richtet `BookStackClient` sowie `BookStackDataSource` ein. `stream_record` gibt den Seiteninhalt als Markdown aus. Die API-Oberfläche von BookStack ist in der [BookStack-API-Dokumentation](https://demo.bookstackapp.com/api/docs) beschrieben.
+
 BookStack begrenzt API-Zugriffe standardmäßig auf **180 Anfragen pro Minute**. Bei großen Wikis kann das eine Synchronisierung bremsen oder scheitern lassen. Die Quellanleitung empfiehlt dann, den BookStack-Wert `API_REQUESTS_PER_MIN` serverseitig auf etwa **1000–1500** anzuheben. Diese Änderung betrifft Ihre BookStack-Instanz, nicht die Installation von Novaplan AI, und sollte mit der BookStack-Administration abgestimmt werden.
 
 ## Probleme beheben
