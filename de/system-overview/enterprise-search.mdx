@@ -13,6 +13,8 @@ Enterprise Search verbindet semantische Suche mit Gesprächen und Agenten. Antwo
 
 Die Pfade beginnen mit `/api/v1` und erwarten in der Regel `Authorization: Bearer <token>`. Gespräche enthalten Nachrichten und gegebenenfalls Quellenverweise. Agentengespräche beziehen sich zusätzlich auf einen konfigurierten Agenten. Suchobjekte speichern Anfrage, Treffer und Metadaten. Interne Aufrufe können technische Scopes wie `CONVERSATION_CREATE` oder `FETCH_CONFIG` verlangen; solche Aufrufe sind keine allgemeine Kunden-API.
 
+Der Node-Dienst verwaltet Gesprächs- und Suchmetadaten in MongoDB und leitet die Verarbeitung an das AI-Backend weiter. Eine Quellenangabe kann einen Textausschnitt, Datensatz-ID und -Name, Seite, MIME-Typ, Herkunft, Quell-URL und Relevanzwert enthalten. Ergebnisse und Antworten müssen zusätzlich die Zugriffsrechte der angemeldeten Person beachten; eine im Index vorhandene Datei ist nicht automatisch für alle Nutzer sichtbar.
+
 ## Gespräche
 
 | Methode und Pfad | Aufgabe |
@@ -31,11 +33,21 @@ Die Pfade beginnen mit `/api/v1` und erwarten in der Regel `Authorization: Beare
 
 Die Referenz enthält außerdem Endpunkte zum Regenerieren von Antworten, zum Anzeigen archivierter Gespräche und für interne Gesprächsoperationen.
 
+`POST /api/v1/conversations/create` erwartet `query` mit **1 bis 100.000 Zeichen**. Optional können `recordIds` und `departments` als Listen von 24-stelligen hexadezimalen IDs, `filters`, `modelKey`, `modelName` und `chatMode` übergeben werden. `filters.apps` filtert nach Quellanwendungen, `filters.kb` nach Wissensdatenbanken. **Wichtig:** Die Quellreferenz verlangt für `filters.kb` UUIDs und für `recordIds` MongoDB-IDs; die beiden Formate sind nicht austauschbar. Die erfolgreiche Anlage liefert `201 Created` mit `conversation` und `meta`. Das Gespräch kann Nachrichten, Quellenangaben, Status, Eigentümer- und Zugriffsangaben enthalten.
+
+`POST /api/v1/conversations/:conversationId/messages` nimmt eine weitere `query` und optional dieselben Filter- und Modellfelder entgegen. Den bisherigen Gesprächsverlauf ermittelt der Server; senden Sie kein eigenes `previousConversations`-Feld. Die Antwort enthält das aktualisierte Gespräch. Der `conversationId`-Pfadwert ist eine 24-stellige hexadezimale ID.
+
+`POST /api/v1/conversations/stream` und `POST /api/v1/conversations/:conversationId/messages/stream` liefern Antworten als **Server-Sent Events**. Der dokumentierte Stream kann `connected`, `content`, `complete` und `error` senden. Das abschließende `complete`-Ereignis enthält beim Anlegen das gespeicherte Gespräch in einem vom API-Dienst erzeugten Format. Ein Client sollte Daten erst als vollständig behandeln, wenn dieses Ereignis empfangen und geprüft wurde. Prüfen Sie bei einem Verbindungsabbruch den gespeicherten Gesprächszustand, bevor Sie dieselbe Anfrage erneut senden.
+
+`GET /api/v1/conversations` und die Archivansicht liefern paginierte Listen. Freigeben, Entfreigeben, Archivieren, Löschen und Regenerieren betreffen gespeicherte Inhalte und sollten nur mit der berechtigten Nutzeridentität ausgeführt werden. Feedback kann an eine konkrete Antwort (`messageId`) gebunden werden; behandeln Sie Kommentare und Freigaben als möglicherweise sichtbare Workspace-Daten.
+
 ## Agenten und Vorlagen
 
 Agentengespräche liegen unter `/api/v1/agent/:agentKey/conversations` und unterstützen Erstellen, Nachrichten, Streaming, Listen, Lesen und Löschen. Agenten werden unter `/api/v1/agent/create`, `/api/v1/agent/:agentKey` und `/api/v1/agent/` verwaltet. Die technische Referenz enthält außerdem Vorlagen unter `/api/v1/agent/template`, eine Werkzeugliste unter `/api/v1/agent/tools/list` sowie Freigabe- und Berechtigungsendpunkte unter `/api/v1/agent/:agentKey/permissions`, `/share` und `/unshare`.
 
 Nutzen Sie für die Einrichtung in der Oberfläche den [Agenten-Leitfaden](/de/agent-guide/overview). Berechtigungsänderungen an Agenten sollten vor der Freigabe geprüft werden.
+
+Agentengespräche verwenden `agentKey` zusätzlich zur Gesprächs-ID. Die API führt für sie eigene Endpunkte für Erstellen, Streamen, Nachrichten, Listen, Lesen und Löschen. Vorlagen und Agenten besitzen getrennte Verwaltungsrouten; eine Vorlage ist noch kein freigegebener Agent. `GET /api/v1/agent/tools/list` zeigt verfügbare Werkzeuge. Prüfen Sie vor `POST /api/v1/agent/:agentKey/share` beziehungsweise Berechtigungsänderungen, welche Personen den Agenten und seine Datenquellen nutzen dürfen.
 
 ## Semantische Suche
 
@@ -49,3 +61,7 @@ Nutzen Sie für die Einrichtung in der Oberfläche den [Agenten-Leitfaden](/de/a
 | `PATCH /api/v1/search/:searchId/archive` und `/unarchive` | Archivierung ändern |
 
 Eine Antwort ohne Quellenangaben sollte als unbelegt behandelt werden. Für eine bestimmte Datei suchen Sie zunächst den passenden Datensatz und lesen anschließend seinen Inhalt über eine dafür freigegebene Schnittstelle. Bei Fragen zu API-Zugang und Quellberechtigungen hilft [Novaplan Support](/de/contact-us).
+
+`POST /api/v1/search` erwartet `query` und akzeptiert `limit` von **1 bis 100** (Standard **10**), `filters.apps`, `filters.kb`, `modelKey`, `modelName` und `chatMode`. Die Antwort enthält eine `searchId` sowie `searchResponse.searchResults` mit Treffertext und Quellenmetadaten; `searchResponse.records` kann zusätzliche Datensatzinformationen enthalten. `GET /api/v1/search` ruft dagegen den **Suchverlauf** ab und führt keine neue Anfrage aus. Dafür nennt die Referenz `page` (Standard **1**), `limit` (Standard **10**, höchstens **100**), `sortBy` (Standard `createdAt`) und `sortOrder` (Standard `desc`).
+
+Die Such- und Gesprächsreferenz unterscheidet `400` bei ungültigen Anfragen, `401` ohne gültige Authentifizierung, `403` ohne ausreichende Rechte, `404` bei unbekannten Objekten und Fehler des AI-Dienstes wie `AI_SERVICE_UNAVAILABLE`. Strukturierte Fehler enthalten `error.code`, `error.message`, gegebenenfalls `error.details` und eine Request-ID in `meta`. Bei fehlenden Treffern prüfen Sie zuerst Quellberechtigungen, gewählte Filter und Indexierungsstatus; eine leere Trefferliste allein beweist keinen Fehler des AI-Dienstes.
