@@ -228,7 +228,7 @@ On **Authorize**, click **Authenticate Salesforce to Proceed**, sign in to Sales
 </div>
 
 <Warning>
-  **Authorize with an administrator account using the same email you use in Novaplan AI.** A different account can cause missing records or permission issues.
+  Authorize this shared connector with the Salesforce account approved by your administrator. It must be able to read the intended records; it does not need the same email as the Novaplan AI administrator configuring the connection. Check each viewer's source identity and record access separately where Salesforce permissions apply.
 </Warning>
 
 #### Step 11: Configure Records and save
@@ -315,7 +315,7 @@ Use **Re-authenticate with provider** on **Authorize** if tokens are rotated or 
 
 <Accordion title="Queries not returning results. What could be wrong?">
 
-1. **Email mismatch** — Use the same email in Novaplan AI as in Salesforce.
+1. **Viewer identity or Salesforce access does not match** — Check the affected viewer's Salesforce email and record access against their Novaplan AI account. The account authorizing the shared connector can be different.
 2. **Scope** — Confirm the OAuth scopes from Step 5 are selected and the authorizing user has access to the objects.
 3. **Still indexing** — Open **Workspace Settings** → **Connectors** → **Salesforce** and check **Overview** until queues complete.
 
