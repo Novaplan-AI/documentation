@@ -7,7 +7,7 @@ description: "Dateien aus Amazon-S3-Buckets für die Suche synchronisieren."
 
 Der S3-Konnektor liest Objekte aus ausgewählten Amazon-S3-Buckets und macht unterstützte Inhalte in Novaplan AI durchsuchbar. Ein Bucket enthält Objekte mit eindeutigen Schlüsseln; vermeintliche Ordner sind Präfixe dieser Schlüssel. Der Konnektor verwendet eine **AWS Access Key ID** und einen **Secret Access Key** eines berechtigten IAM-Kontos. Novaplan unterstützt Sie bei der Einrichtung.
 
-Die IAM-Berechtigungen begrenzen, welche Buckets und Objekte der Konnektor lesen kann. Die Auswahl **Personal** oder **Team** steuert zusätzlich, wer synchronisierte Inhalte in Novaplan AI sehen kann. Eine Team-Verbindung kann deshalb alle eingelesenen Objekte für berechtigte Workspace-Mitglieder sichtbar machen; prüfen Sie Bucket-Auswahl und Zugriffsmodell mit Ihrer AWS-Administration, bevor Sie sie aktivieren.
+Die IAM-Berechtigungen begrenzen, welche Buckets und Objekte der Konnektor lesen kann. Die Auswahl **Personal** oder **Team** steuert zusätzlich, wer synchronisierte Inhalte in Novaplan AI sehen kann; individuelle AWS-Rechte der späteren Workspace-Nutzenden werden nicht automatisch übernommen. Eine Team-Verbindung kann deshalb alle eingelesenen Objekte für berechtigte Workspace-Mitglieder sichtbar machen. Prüfen Sie Bucket-Auswahl und Zugriffsmodell mit Ihrer AWS-Administration und einem zweiten Testkonto, bevor Sie sie aktivieren.
 
 ## IAM-Zugang vorbereiten
 

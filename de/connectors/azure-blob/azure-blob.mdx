@@ -7,7 +7,7 @@ description: "Dateien aus Azure-Blob-Containern für die Suche synchronisieren."
 
 Der Azure-Blob-Konnektor liest Dateien aus **Blob-Containern** eines Azure Storage Accounts und macht sie in Novaplan AI durchsuchbar. Er ändert oder löscht keine Quelldateien. Ein *Storage Account* enthält Container; ein *Blob* ist eine Datei beziehungsweise ein Objekt innerhalb eines Containers. Für echte Azure-Dateifreigaben verwenden Sie den [Azure-Files-Konnektor](/de/connectors/azure-files/azure-files).
 
-Novaplan unterstützt Sie bei der Einrichtung. Legen Sie vorab fest, welche Container und Dateitypen im Workspace sichtbar sein sollen. Die Auswahl **Personal** oder **Team** steuert laut Quellanleitung die Sichtbarkeit in Novaplan AI; sie verändert keine Azure-Berechtigungen. Prüfen Sie bei Teamfreigaben sorgfältig, ob der gesamte gewählte Inhalt für alle vorgesehenen Workspace-Mitglieder geeignet ist.
+Novaplan unterstützt Sie bei der Einrichtung. Legen Sie vorab fest, welche Container und Dateitypen im Workspace sichtbar sein sollen. Die Auswahl **Personal** oder **Team** steuert die Sichtbarkeit in Novaplan AI; sie verändert keine Azure-Berechtigungen und übernimmt die individuellen Azure-Rechte einzelner Workspace-Mitglieder nicht automatisch. Prüfen Sie bei Teamfreigaben mit einem zweiten Testkonto, ob der gesamte gewählte Inhalt für die vorgesehenen Workspace-Mitglieder geeignet ist.
 
 ## Connection String vorbereiten
 

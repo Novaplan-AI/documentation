@@ -51,7 +51,7 @@ The connector indexes the following content for AI-powered search:
 - **Files**: Supported file types stored in S3 buckets, including documents and images
 - **Folders**: Directory structure and organization
 - **Metadata**: File names, sizes, modification dates, MIME types
-- **Permissions**: Access control based on bucket and object permissions
+- **Permissions**: AWS permissions limit what the connector can import; the selected Personal or Team scope controls access to imported records in Novaplan AI
 
 ---
 
@@ -402,7 +402,7 @@ The S3 connector syncs the following data from your AWS S3 buckets:
 - **Buckets**: All accessible buckets in your AWS account
 - **Files**: All file types with their metadata (name, size, modification date, MIME type)
 - **Folders**: Directory structure and organization using S3 prefixes
-- **Permissions**: Access control based on bucket and object-level permissions
+- **Permissions**: AWS bucket and object permissions limit ingestion; Novaplan AI visibility is set by the connector's Personal or Team scope
 
 ## Data Sync Behavior
 
