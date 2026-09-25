@@ -7,7 +7,7 @@ icon: "laptop-code"
 Instead of connecting to Novaplan AI's remote MCP endpoint directly, you may be able to run a local stdio bridge using the existing `@pipeshub-ai/mcp` npm package. Novaplan must confirm that this package is supported for your Enterprise workspace before you use it. Prefer the remote MCP endpoint when your client supports it.
 
 <Warning>
-  Permissioned company search needs a **user-bound** credential. Use a personal access token for this bridge. OAuth `client_credentials` does not represent a user and must not be used to retrieve content under a person's source permissions.
+  Permissioned company search needs a **user-bound** credential. Use a personal access token for this bridge. OAuth `client_credentials` does not represent a user and must not be used to retrieve content under a person's Novaplan AI access rights.
 </Warning>
 
 ## Prerequisites
