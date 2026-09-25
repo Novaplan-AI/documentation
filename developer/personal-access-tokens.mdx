@@ -4,7 +4,7 @@ description: "Create long-lived, scoped, revocable credentials that act as you �
 icon: "id-badge"
 ---
 
-A **Personal Access Token (PAT)** is a long-lived, scoped, revocable credential that you create for yourself. Unlike a session token, it doesn't expire after a day. Unlike an [OAuth 2.0 Application](/developer/oauth2), it authenticates as **you** — every request made with it respects your own per-user permissions, not an app's.
+A **Personal Access Token (PAT)** is a long-lived, scoped, revocable credential that you create for yourself. Unlike a session token, it doesn't expire after a day. It authenticates as **you** — every request made with it respects your own per-user permissions. OAuth's `client_credentials` grant instead has no user identity; an [OAuth 2.0 Application](/developer/oauth2) using the authorization-code flow can authenticate a consenting user.
 
 Use a PAT when you want to connect something to Novaplan AI programmatically — most commonly, an MCP client (see [MCP Server Overview](/mcp/overview)) — without setting up an OAuth app or scraping a short-lived session token.
 

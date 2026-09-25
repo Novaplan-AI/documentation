@@ -55,3 +55,22 @@ Bei `offline_access` kann ein Refresh Token ausgegeben werden. Speichern Sie den
 | `/.well-known/jwks.json` | Öffentliche Schlüssel zur Tokenprüfung |
 
 Bei Fehlern vergleichen Sie Redirect URI, Grant-Typ, registrierte Scopes und bei PKCE die Code-Challenge mit dem Verifier. Prüfen Sie außerdem, ob ein Secret abgelaufen oder eine Anwendung ausgesetzt wurde. Für Freigaben und Fragen zu produktiven Integrationen kontaktieren Sie [Novaplan Support](/de/contact-us).
+
+## Anwendungen verwalten
+
+In der Detailansicht einer OAuth-Anwendung können Administrierende die Client ID, erlaubten Scopes, Grant-Typen, Redirect-URIs und Token-Einstellungen prüfen. Wenn ein Client Secret kompromittiert wurde oder rotiert werden soll, wählen Sie **Generate new client secret** und hinterlegen den neuen Wert in allen betroffenen Integrationen. Das bisherige Secret wird sofort ungültig; Anwendungen mit dem alten Wert können sich danach nicht mehr authentifizieren.
+
+Unter **Advanced** lässt sich eine Anwendung mit **Suspend Application** vorübergehend aussetzen. Dadurch sind neue Autorisierungen und Token-Ausgaben nicht mehr möglich; bereits ausgegebene Tokens bleiben laut Quellanleitung bis zu ihrem Ablauf gültig. Über **Activate application** kann die Anwendung wieder freigegeben werden.
+
+Für einen Sicherheitsvorfall können Administrierende **Revoke all tokens** verwenden und die Aktion durch Eingabe des Anwendungsnamens bestätigen. **Delete Application** ist dauerhaft und widerruft die zugehörigen Access- und Refresh-Tokens; damit verlieren angebundene Integrationen unmittelbar den Zugang. Stimmen Sie solche Schritte mit den Verantwortlichen der betroffenen Anwendungen ab.
+
+## Sicherheitsregeln und Fehlersuche
+
+- Bewahren Sie Client Secrets nur in einem geschützten Secret-Speicher auf. Öffentliche Clients dürfen kein fest eingebautes Secret enthalten und benötigen PKCE, vorzugsweise mit `S256`.
+- Erzeugen Sie für jeden Autorisierungsversuch einen neuen, nicht vorhersehbaren `state`-Wert und vergleichen Sie ihn beim Rückruf. Speichern Sie nach jeder Token-Erneuerung den zuletzt ausgegebenen Refresh Token. Widerrufen Sie Tokens, wenn eine Person die Integration trennt.
+- Schlägt die Autorisierung fehl, prüfen Sie `client_id`, den Status der Anwendung, exakt passende Redirect URI und erlaubte Scopes.
+- Bei `invalid_grant` kann der Autorisierungscode abgelaufen oder schon verwendet worden sein. Die Quellanleitung nennt zehn Minuten Gültigkeit. Prüfen Sie außerdem Redirect URI und den PKCE-`code_verifier` gegen die ursprüngliche Challenge; beginnen Sie danach einen neuen Anmeldeversuch.
+- Wird ein Refresh Token abgelehnt, kann er bereits rotiert, abgelaufen oder administrativ widerrufen worden sein. Melden Sie die Person erneut über den Authorization-Code-Ablauf an.
+- Bei `403 Forbidden` prüfen Sie sowohl den Scope des Access Tokens als auch die Berechtigung der angemeldeten Person in der Organisation. Ein zusätzlicher Scope ersetzt keine fehlende Quellberechtigung.
+
+Die Quellanleitung nennt höchstens zehn registrierte Redirect-URIs pro Anwendung. Prüfen Sie diese und die unterstützten PKCE-Verfahren gegen die tatsächlich bereitgestellte Novaplan-Version, bevor Sie eine produktive Integration freigeben.
