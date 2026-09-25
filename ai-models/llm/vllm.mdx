@@ -24,7 +24,7 @@ vLLM is an open-source library for fast LLM inference and serving. It provides:
 
 Before configuring vLLM in Novaplan AI, ensure you have:
 1. A running vLLM server instance
-2. The endpoint URL where your vLLM server is accessible
+2. An endpoint URL that Novaplan has confirmed is accessible from your managed workspace
 3. (Optional) API key if you've configured authentication on your vLLM server
 4. The model name/path used when starting your vLLM server
 
@@ -40,7 +40,7 @@ pip install "vllm>=0.8.5"
 vllm serve Qwen/Qwen3-8B --port 8000 --api-key your-secret-key
 ```
 
-Your vLLM server will be accessible at `http://localhost:8000/v1/` (or your server's IP/domain).
+From the vLLM server itself, this example is available at `http://localhost:8000/v1/`. A managed Novaplan AI workspace needs a separately reachable network address; confirm it with Novaplan.
 
 ## Required Fields
 
@@ -51,7 +51,7 @@ The Endpoint URL is the base API endpoint of your vLLM server.
 **Format:** `http://your-server:port/v1/`
 
 **Examples:**
-- Local deployment: `http://localhost:8000/v1/`
+- On the vLLM server itself: `http://localhost:8000/v1/` (for local checks only)
 - Remote server: `http://192.168.1.100:8000/v1/`
 - Domain-based: `https://vllm.yourdomain.com/v1/`
 
@@ -119,7 +119,7 @@ Enable this checkbox if your model has enhanced reasoning capabilities.
 As shown in the image above:
 
 1. Select "OpenAI API Compatible" as your Provider Type from the dropdown
-2. Enter your vLLM server's Endpoint URL (e.g., `http://localhost:8000/v1/`)
+2. Enter the vLLM Endpoint URL that Novaplan has confirmed is reachable from your workspace (for example, `https://vllm.example.com/v1/`)
 3. Enter your API Key (or a placeholder if authentication is disabled)
 4. Specify the exact Model Name used when starting your vLLM server
 5. (Optional) Check "Multimodal" if using a vision-language model
