@@ -6,9 +6,9 @@ Novaplan AI is a closed-source product. Novaplan creates customer workspaces and
 
 For existing-workspace support, use support@novaplan.ai. The contact form at https://www.novaplan.ai/contact is for sales and demo enquiries.
 
-Novaplan manages most setup and administration. The full reference remains available. Both German and English documentation are being maintained; the German translation is in progress and currently covers the priority guides below. Do not describe the full reference as already translated.
+Novaplan manages most setup and administration. Both German and English pages exist for every active documentation route. German pages are draft adaptations under editorial review; some technical references are shorter than their English counterparts. Do not claim complete translation parity or production-verified API behavior until that review is finished.
 
-## Deutsche Anleitungen
+## Ausgewählte deutsche Einstiegspunkte
 
 - [Einführung](https://docs.novaplan.ai/de/introduction.md)
 - [Erste Schritte](https://docs.novaplan.ai/de/quickstart.md)
