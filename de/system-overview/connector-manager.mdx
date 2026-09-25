@@ -9,6 +9,8 @@ Der Connector Manager verwaltet Konnektor-Instanzen, Einstellungen und die OAuth
 
 Der Dienst speichert Konnektor-Metadaten, verschlüsselt sensible Konfiguration und informiert andere Dienste über Änderungen. Der verwaltete Workspace kann Redis oder etcd als Konfigurationsspeicher sowie Redis Streams oder Kafka als Event-Bus verwenden. Die konkrete Auswahl ist keine Einstellung, die Nutzende für eine Verbindung treffen müssen.
 
+Der Node-Dienst prüft Identität und Berechtigung und leitet viele Anfragen an den Python-Konnektordienst weiter. Deshalb können Antwortfelder je nach angebundenem Dienst und Enterprise-Version variieren. Die eigentliche Synchronisierung, Verarbeitung von Quelldaten und Ermittlung der Quellberechtigungen erfolgen nicht durch diese Verwaltungs-API. Konnektor-Metadaten liegen in MongoDB; vertrauliche Einstellungen und Tokens werden über die verwalteten Konfigurationsdienste gespeichert.
+
 Die meisten hier dokumentierten Aufrufe benötigen einen Bearer-Token. Einige Listen- und Konfigurationsfunktionen setzen Administratorrechte voraus. Interne Service-Aufrufe können zusätzlich den technischen Scope `FETCH_CONFIG` benötigen. OAuth-Secrets und Access Tokens gehören weder in Chats noch in ungeschützte Logs.
 
 ## Endpunkte
@@ -34,12 +36,28 @@ Alle Konnektorpfade beginnen mit `/api/v1/connectors`.
 
 Die separate Zustandsprüfung liegt unter `GET /api/v1/health`. Die Antwortformate und verfügbaren Konnektoren hängen vom bereitgestellten Backend ab. Verwenden Sie für eine Datenquelle bevorzugt die jeweilige [Konnektor-Anleitung](/de/connectors/overview), statt interne Endpunkte direkt anzusprechen.
 
+`GET /api/v1/connectors/` listet Konnektoren einer Organisation und verlangt laut Quellreferenz Administratorrechte. `GET /active` und `GET /inactive` trennen aktive und inaktive Einträge. Eine Konnektorantwort kann `name`, `appGroup`, `authType`, `supportsSync`, `supportsRealtime`, `isActive` und `isConfigured` enthalten. Diese Eigenschaften beschreiben die vom Backend bereitgestellte Instanz; sie sind keine allgemeingültige Zusage für jeden Konnektor.
+
+`GET /config/:connectorName` liest die Konfiguration eines bestimmten Konnektors, `GET /schema/:connectorName` dessen erlaubte Felder. `PUT /config/:connectorName` nimmt laut Referenz Bereiche wie `auth`, `sync` und `filters` entgegen. Die Parametertabelle nennt zusätzlich `baseUrl` als erforderlich, während das direkt daneben stehende Beispiel dieses Feld nicht enthält. Behandeln Sie das als **ungeklärte Quellinkonsistenz**: Prüfen Sie das tatsächlich gelieferte Schema und die Enterprise-Version, bevor Sie den Aufruf automatisieren. Übermitteln Sie Client-Secrets nur an die freigegebene Konfigurationsschnittstelle und geben Sie sie nicht in Log-Ausgaben wieder.
+
+`POST /toggle/:connectorName` schaltet eine Instanz um. Lesen Sie vorher den aktuellen Aktivierungszustand; ein Toggle ist ohne Zustandsprüfung keine sichere Methode, um ausdrücklich „aktiv“ oder „inaktiv“ herzustellen. Eine Deaktivierung kann die Synchronisierung unterbrechen, während bereits indexierte Inhalte und ihre Berechtigungen gesondert geprüft werden müssen.
+
 ## OAuth- und Token-Ablauf
 
 Bei OAuth leitet die Anwendung zur Autorisierung des externen Anbieters weiter. Nach dem Rückruf werden Code und Benutzeridentität geprüft, Tokens sicher gespeichert und die Konnektor-Instanz aktualisiert. Der Dienst kann Access Tokens erneuern oder widerrufen und entsprechende Ereignisse über den konfigurierten Event-Bus verteilen. Für Einzelheiten der Freigaben und Redirect URIs nutzen Sie die Anleitung der jeweiligen Integration.
+
+`GET /:connectorName/oauth/authorize` verlangt laut Quellreferenz einen `baseUrl`-Query-Parameter und gibt eine `authorizationUrl` zurück. Nach der Freigabe kann `GET /:connectorName/oauth/callback` `code`, `state` oder `error` sowie `baseUrl` erhalten. Der `state`-Wert schützt den OAuth-Ablauf gegen fremde Rückrufe und darf nicht durch einen frei erfundenen Wert ersetzt werden. Das Backend kann statt einer direkten Weiterleitung ein JSON-Objekt mit `redirectUrl` liefern. Die ältere Route `POST /getTokenFromCode` ist als Google-Workspace-spezifischer Code-Tausch dokumentiert; verwenden Sie sie nur, wenn der bereitgestellte Ablauf sie tatsächlich vorsieht.
+
+`GET /filters/:connectorName` liest verfügbare Synchronisationsfilter. `POST /filters/:connectorName` speichert ein Objekt `filterOptions`, beispielsweise für Dateitypen, Ordner oder Zeiträume. Filter verändern den Umfang künftig synchronisierter Inhalte und können beeinflussen, welche Records nach einem erneuten Lauf in der Suche erscheinen. Prüfen Sie bei fehlenden Dateien sowohl Filter als auch Indexierungsstatus und Quellrechte, bevor Sie eine vollständige Neusynchronisierung auslösen.
 
 <Warning>
   Aktivierung, Filter und Token-Erneuerung beeinflussen die synchronisierten Daten. Verwenden Sie diese administrativen Schnittstellen nur, wenn sie für Ihren Novaplan Enterprise Workspace freigegeben und Ihre Berechtigungen geprüft wurden.
 </Warning>
 
 Bei Verbindungsfehlern prüfen Sie Anbieterfreigaben, Redirect URI, gespeicherte Konfiguration und den Status des Konnektors. Für die serverseitige Analyse hilft [Novaplan Support](/de/contact-us).
+
+## Interne Vorgänge und Fehler
+
+`POST /internal/refreshIndividualConnectorToken` dient laut Referenz der technischen Token-Erneuerung und verlangt `FETCH_CONFIG`. `POST /updateAppConfig` lädt die Dienstkonfiguration neu. Beide Endpunkte sind für die interne Service-Kommunikation gedacht; ein Nutzer-Bearer-Token ersetzt den erforderlichen Service-Scope nicht.
+
+Bei `400` fehlen oder widersprechen sich Parameter, bei `401` ist die Authentifizierung ungültig, bei `403` fehlen die nötigen Rechte, bei `404` wurde ein Konnektor nicht gefunden und bei `500` kann der Konnektordienst oder eine Abhängigkeit ausgefallen sein. Fehler können `error.code`, `error.message`, `error.details` sowie eine Request-ID in `meta` enthalten. Bei einem fehlgeschlagenen Backend-Aufruf prüfen Sie zuerst den Health-Status und die konkrete Request-ID; wiederholte OAuth-Freigaben oder Token-Tausche können den Zustand sonst weiter verändern.
