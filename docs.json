@@ -43,6 +43,7 @@
             "group": "Agenten",
             "pages": [
               "de/agent-guide/overview",
+              "de/for-agents",
               "de/agent-guide/setup-guide"
             ]
           },

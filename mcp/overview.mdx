@@ -65,12 +65,12 @@ Add all the redirect URIs for the clients you plan to use:
 | **LibreChat** | `http://localhost:3080/api/mcp/<server-identifier>/oauth/callback` |
 
 <Warning>
-  The scopes in [`MCP_SCOPES`](https://github.com/pipeshub-ai/pipeshub-ai/blob/main/backend/env.template#L57) must match the scopes granted to your OAuth app — a mismatch will result in an authorization error.
+  The scopes in `MCP_SCOPES` must match the scopes granted to your OAuth app — a mismatch will result in an authorization error. Novaplan manages the server-side configuration.
 </Warning>
 
 ### Customizing Default Scopes
 
-By default, Novaplan AI exposes some default scopes in its `/.well-known/oauth-protected-resource/mcp` discovery endpoint. You can customize which scopes are exposed by setting the [`MCP_SCOPES`](https://github.com/pipeshub-ai/pipeshub-ai/blob/main/backend/env.template#L57) environment variable on your Novaplan AI instance. This is useful for clients like Claude Code that automatically request all exposed scopes.
+By default, Novaplan AI exposes some scopes in its `/.well-known/oauth-protected-resource/mcp` discovery endpoint. Novaplan can adjust the server-side `MCP_SCOPES` configuration when a client such as Claude Code requires a different set.
 
 The recommended `MCP_SCOPES` value covers the common chat, search, and directory workflows:
 
@@ -189,12 +189,12 @@ This returns all OAuth endpoints automatically:
 
 <AccordionGroup>
   <Accordion title="How do I update the scopes for my MCP integration?">
-    1. **Update the [`MCP_SCOPES`](https://github.com/pipeshub-ai/pipeshub-ai/blob/main/backend/env.template#L57) environment variable** on your Novaplan AI instance to include the new scopes you want exposed via the discovery endpoint.
+    1. **Ask Novaplan to review `MCP_SCOPES`** on the managed instance if the scopes exposed by the discovery endpoint need to change.
     2. **Update the OAuth app scopes** in Novaplan AI: go to **Settings > Developer Settings > OAuth Apps**, select your OAuth app, and add or remove scopes as needed.
     3. **Re-authenticate the client** — existing tokens carry the old scopes, so you need to re-authenticate to get a new token with the updated scopes:
        - **Cursor**: Remove and re-add the MCP server, or clear the cached OAuth token and reconnect.
        - **Claude Code**: Run `/mcp` and complete the browser login flow again.
-       - **Gemini CLI**: Run `/mcp auth pipeshub` to re-authenticate.
+       - **Gemini CLI**: Run `/mcp auth novaplan` to re-authenticate.
        - **Claude.ai**: Disconnect and reconnect the connector in **Settings > Connectors**.
   </Accordion>
 </AccordionGroup>

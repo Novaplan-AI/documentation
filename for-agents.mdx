@@ -10,7 +10,7 @@ This reference explains how a coding agent can connect to an existing Novaplan A
 
 This page is for coding agents and the people who configure them. For a product overview, see [Introduction](/introduction). For the no-code agent builder, see [Agents overview](/agent-guide/overview).
 
-<div id="when-to-use-pipeshub" />
+<div id="when-to-use-novaplan-ai" />
 
 ## When to use Novaplan AI
 
@@ -36,34 +36,7 @@ Novaplan creates customer workspaces and invites users. If access is missing, co
 
 MCP configuration tells tools how to connect to Novaplan AI. Repository instructions can explain when to use that connection for company documents.
 
-Do both. Do not put them in PipesHub's own repos — those `AGENTS.md` files are for contributors.
-
-### Skill
-
-```bash
-npx skills add pipeshub-ai/mcp-server
-```
-
-That copies [`skills/pipeshub`](https://github.com/pipeshub-ai/mcp-server/tree/main/skills/pipeshub) into the directory **that agent** loads. Prefer the CLI: it picks the path. Do not assume `.agents/skills/` — Claude Code reads [`.claude/skills/`](https://code.claude.com/docs/en/skills), not `.agents/skills/`.
-
-If you copy by hand:
-
-| Agent | Path |
-| --- | --- |
-| Cursor, Codex, Gemini CLI | `.agents/skills/pipeshub/SKILL.md` |
-| Claude Code | `.claude/skills/pipeshub/SKILL.md` |
-
-```bash
-# Cursor, Codex, Gemini CLI
-mkdir -p .agents/skills/pipeshub
-curl -fsSL https://raw.githubusercontent.com/pipeshub-ai/mcp-server/main/skills/pipeshub/SKILL.md \
-  -o .agents/skills/pipeshub/SKILL.md
-
-# Claude Code
-mkdir -p .claude/skills/pipeshub
-curl -fsSL https://raw.githubusercontent.com/pipeshub-ai/mcp-server/main/skills/pipeshub/SKILL.md \
-  -o .claude/skills/pipeshub/SKILL.md
-```
+Add repository instructions only to the customer's repository where the coding agent works. The MCP connection supplies the actual tools; the instructions explain when to use them. A separate Novaplan skill package has not been verified for publication.
 
 ### `AGENTS.md`
 
@@ -74,7 +47,7 @@ If the repo already has an `AGENTS.md`, append this. Claude Code loads `CLAUDE.m
 
 When a question could be answered by Slack, Drive, Gmail, Jira, Confluence,
 SharePoint, or the internal knowledge base, use the Novaplan AI MCP server
-(`pipeshub_*` tools). Do not guess from training data.
+(discover the tools exposed by that connection). Do not guess from training data.
 
 - Cite `recordId` / `webUrl` when the tools return them. If chat returns
   facts with no citations, relay them as unsourced and not confirmed.
@@ -113,7 +86,7 @@ The native shape is **remote MCP** over Streamable HTTP. No npm process is requi
 ```json
 {
   "mcpServers": {
-    "pipeshub": {
+    "novaplan": {
       "url": "NOVAPLAN_WORKSPACE_URL/mcp",
       "auth": {
         "CLIENT_ID": "YOUR_CLIENT_ID",
@@ -131,30 +104,20 @@ claude mcp add --transport http \
   --client-id YOUR_CLIENT_ID \
   --client-secret \
   --callback-port 8080 \
-  pipeshub NOVAPLAN_WORKSPACE_URL/mcp
+  novaplan NOVAPLAN_WORKSPACE_URL/mcp
 ```
 
 Project-scoped `.mcp.json` uses `type: "http"` and an `oauth` object. See [Connect Claude Code](/mcp/claude-code).
 
-Tools: `pipeshub_chat`, `pipeshub_search`, `pipeshub_get_record_content`, `pipeshub_download_record`, `pipeshub_directory`, `pipeshub_sources`, `pipeshub_agents`. See [Tools](/mcp/tools).
+The tools exposed by the MCP connection support chat, search, document reading, downloads, directory lookup, source discovery, and configured agents. Their exact names are determined by the deployed server. Verify them in your client before writing tool-specific instructions.
 
-If `pipeshub_chat` returns an answer with no citations, relay it as **unsourced and not confirmed**; do not restate its claims as fact. Cite `recordId` / `webUrl` when they are present. Do not invent a source.
+If a chat tool returns an answer with no citations, relay it as **unsourced and not confirmed**; do not restate its claims as fact. Cite `recordId` / `webUrl` when they are present. Do not invent a source.
 
 <Warning>
   **Do not invent a REST client** when MCP is available. The Python / TypeScript / Go SDKs are for product integrations, not for Cursor or Claude Code.
 </Warning>
 
-## Directories
-
-The following upstream PipesHub listings are retained as technical references. They are not Novaplan AI directory listings.
-
-| Catalog | Status |
-| --- | --- |
-| [Official MCP Registry](https://registry.modelcontextprotocol.io) | Listed as `io.github.pipeshub-ai/mcp`. Remote URL template is `https://{instance_host}/mcp`. |
-| [Cursor Directory](https://cursor.directory/plugins/mcp-server-3) | Community plugin list. Listed as [PipesHub](https://cursor.directory/plugins/mcp-server-3) from [`pipeshub-ai/mcp-server`](https://github.com/pipeshub-ai/mcp-server). Independent of the official registry. |
-| [Claude Connectors Directory](https://claude.com/docs/connectors/directory) | Independent of the official registry. Submit from a Claude Team or Enterprise org (Owners, or a role with directory-management access). Per-tenant instance URLs are a supported mode (`custom_connection`) — there does not need to be a single `pipeshub.com/mcp`. The gate is a **public HTTPS** instance plus a populated test account reviewers can use end to end (not localhost). Directory connectors authenticate with OAuth 2.0, not a PAT. |
-
-Auth for an IDE or stdio client is the signed-in user (OAuth app or a PAT from the settings panel). Never paste a token into chat. Never `client_credentials`. A Claude Directory listing is OAuth 2.0 only.
+Auth for an IDE or stdio client is the signed-in user (OAuth app or a PAT from the settings panel). Never paste a token into chat. Never use `client_credentials` when results must respect that user's permissions.
 
 ## First-run without a browser
 
@@ -170,4 +133,4 @@ QM cannot attach `/mcp`. Use [Use with QM](/mcp/qm).
 
 ## SDKs (product code, not IDEs)
 
-For an application that is not an MCP host: [Python](https://github.com/pipeshub-ai/pipeshub-sdk-python), [TypeScript](https://github.com/pipeshub-ai/pipeshub-sdk-typescript), [Go](https://github.com/pipeshub-ai/pipeshub-sdk-go). Still authenticate as a user (PAT or OAuth authorization code), never `client_credentials`, if results must respect that user's permissions.
+For an application that is not an MCP host, use the [API reference](/developer/api-reference) and ask [Novaplan Support](/contact-us) about supported SDK options. Authenticate as a user (PAT or OAuth Authorization Code) when results must respect that user's permissions.

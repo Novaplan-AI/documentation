@@ -11,7 +11,7 @@ Gemini CLI supports remote MCP servers with OAuth via `dynamic_discovery` (the d
 </Note>
 
 <Tip>
-  Coding agents: read [For coding agents](/for-agents) first. If they do not have workspace access yet, contact [Novaplan AI support](/contact-us). MCP config is not enough — also install the skill into **this** repo (`npx skills add pipeshub-ai/mcp-server`) and append the `AGENTS.md` snippet on that page.
+  Coding agents: read [For coding agents](/for-agents) first. If they do not have workspace access yet, contact [Novaplan AI support](/contact-us). MCP configuration and repository instructions are separate setup steps.
 </Tip>
 
 ## Option A: Settings File
@@ -21,7 +21,7 @@ Edit `~/.gemini/settings.json`:
 ```json
 {
   "mcpServers": {
-    "pipeshub": {
+    "novaplan": {
       "url": "NOVAPLAN_WORKSPACE_URL/mcp",
       "oauth": {
         "clientId": "YOUR_CLIENT_ID",
@@ -45,7 +45,7 @@ Edit `~/.gemini/settings.json`:
 ## Option B: CLI Command
 
 ```bash
-gemini mcp add --transport http pipeshub NOVAPLAN_WORKSPACE_URL/mcp
+gemini mcp add --transport http novaplan NOVAPLAN_WORKSPACE_URL/mcp
 ```
 
 Then edit `~/.gemini/settings.json` to add the `oauth` block as shown above.
@@ -59,10 +59,10 @@ Inside Gemini CLI, use the `/mcp auth` commands:
 /mcp auth
 
 # Authenticate with Novaplan AI (opens browser for login)
-/mcp auth pipeshub
+/mcp auth novaplan
 
 # Re-authenticate if tokens expire
-/mcp auth pipeshub
+/mcp auth novaplan
 ```
 
 On first connection, Gemini will automatically detect the 401 response, discover the OAuth endpoints, and open a browser for login. Tokens are stored securely in `~/.gemini/mcp-oauth-tokens.json` and refreshed automatically.
@@ -74,11 +74,11 @@ On first connection, Gemini will automatically detect the 401 response, discover
 gemini mcp list
 
 # Remove the server
-gemini mcp remove pipeshub
+gemini mcp remove novaplan
 
 # Temporarily disable/enable
-gemini mcp disable pipeshub
-gemini mcp enable pipeshub
+gemini mcp disable novaplan
+gemini mcp enable novaplan
 ```
 
 ## OAuth Configuration Properties
