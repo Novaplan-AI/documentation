@@ -197,7 +197,11 @@
               "de/toolsets/overview",
               "de/toolsets/google-workspace/drive",
               "de/toolsets/google-workspace/gmail",
-              "de/toolsets/google-workspace/calendar"
+              "de/toolsets/google-workspace/calendar",
+              "de/toolsets/mariadb/mariadb",
+              "de/toolsets/redshift/redshift",
+              "de/toolsets/jira/jira-data-center",
+              "de/toolsets/confluence/confluence-data-center"
             ]
           },
           {

@@ -1,0 +1,60 @@
+---
+title: "MariaDB-Toolset"
+description: "MariaDB-Schema und Live-Abfragen für Agenten bereitstellen."
+---
+
+## Überblick
+
+Mit dem MariaDB-Toolset kann ein Agent Tabellenstrukturen lesen und SQL-Abfragen direkt gegen eine MariaDB-Datenbank ausführen. Für die Suche in zuvor synchronisierten Tabellen verwenden Sie dagegen den [MariaDB-Konnektor](/de/connectors/mariadb/mariadb). Das Toolset greift zum Zeitpunkt der Agentenaktion auf aktuelle Daten zu.
+
+| Tool | Zweck |
+| --- | --- |
+| `execute_query` | SQL-Abfrage ausführen |
+| `list_tables` | Tabellen auflisten |
+| `fetch_db_schema` | Datenbankschema einschließlich Spalten und Schlüsseln abrufen |
+| `get_tables_schema` | Schema bestimmter Tabellen abrufen |
+| `get_table_ddl` | `CREATE TABLE`-Definition einer Tabelle anzeigen |
+
+<Warning>
+  Ein Agent kann mit `execute_query` SQL gegen die Berechtigungen des angemeldeten Datenbankbenutzers ausführen. Für Analysezwecke sollten Sie einem solchen Benutzer nur die tatsächlich benötigten Leserechte geben und schreibende Abfragen nur nach einer gesonderten Freigabe ermöglichen.
+</Warning>
+
+## Datenbankzugang vorbereiten
+
+Benötigt werden ein aus der Novaplan-Umgebung erreichbarer **Host**, **Port** (üblicherweise `3306`) und **Database**. `localhost` bezeichnet den Host des Konnektorprozesses und ist bei einem verwalteten Workspace normalerweise nicht Ihre Datenbank. Stimmen Sie Netzwerkerreichbarkeit und Zugriffsregeln mit Novaplan und Ihrer Datenbankadministration ab.
+
+Für reine Leseabfragen kann ein Datenbankadministrator beispielsweise `SELECT` auf der relevanten Datenbank vergeben:
+
+```sql
+GRANT SELECT ON example_db.* TO 'username'@'%';
+```
+
+Beschränken Sie das Hostmuster und die betroffenen Tabellen entsprechend Ihrer Umgebung. Jede Person meldet sich später mit ihren **eigenen** MariaDB-Zugangsdaten an; diese bestimmen ihre tatsächlichen Datenbankrechte.
+
+## Instanz durch Administratoren anlegen
+
+1. Öffnen Sie in Novaplan AI **Workspace Settings → Actions**.
+2. Suchen Sie **MariaDB** und wählen Sie **+ Setup**.
+3. Geben Sie **Instance name**, **Host**, **Port** und **Database** ein und wählen Sie **Create**.
+
+Die Administratorin oder der Administrator hinterlegt dabei nur die Verbindungsdaten der Instanz. **Username** und **Password** gehören zur anschließenden persönlichen Authentifizierung.
+
+## Persönlich authentifizieren und im Agenten verwenden
+
+1. Öffnen Sie die MariaDB-Instanz unter **Workspace Settings → Actions**. Vor der Anmeldung kann **Authentication needed** angezeigt werden.
+2. Wählen Sie **Authenticate**, geben Sie Ihren MariaDB-**Username** und Ihr **Password** ein und speichern Sie mit **Save credentials**.
+3. Prüfen Sie den Status **Authenticated**.
+4. Öffnen Sie den **Agent Builder**, fügen Sie im Bereich **Tools** das MariaDB-Toolset hinzu und verbinden Sie es mit dem Agenten.
+
+Sie können den Agenten beispielsweise nach vorhandenen Tabellen, dem Schema von `orders` oder einer Auswertung über einen begrenzten Zeitraum fragen. Prüfen Sie generierte SQL-Abfragen und die zurückgegebenen Daten, bevor Sie den Agenten breit einsetzen. Bei Änderungen an Host oder Datenbank durch die Administration kann eine erneute Authentifizierung nötig sein.
+
+## Fehler beheben
+
+| Problem | Prüfen Sie |
+| --- | --- |
+| Keine Verbindung | Host und Port aus Sicht von Novaplan, Firewall und Datenbankstatus. |
+| **Authentication needed** bleibt bestehen | Persönliche MariaDB-Zugangsdaten und Berechtigung auf die Datenbank. |
+| Abfrage wird abgelehnt | `SELECT`- beziehungsweise benötigte Tabellenrechte des angemeldeten Benutzers. |
+| Toolset fehlt im Agent Builder | Instanz angelegt, persönliche Anmeldung abgeschlossen und Status **Authenticated**. |
+
+Bei Fragen zur Einrichtung wenden Sie sich an [Novaplan Support](/de/contact-us).

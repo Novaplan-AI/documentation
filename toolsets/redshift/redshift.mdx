@@ -56,23 +56,23 @@ The Redshift toolset lets agents query your Amazon Redshift database.
 5. Under **Workgroup**, set:
    - **Workgroup name**: `redshift-dev-wg`
    - **RPU**: change from `128` to `16` for testing
-   - Enable **Turn on public accessibility**
+   - Choose the network accessibility agreed with your AWS administrator and Novaplan. Public accessibility is not required when a private route from Novaplan to Redshift is available.
 6. Keep other values as default and click **Save configuration**.
 
-### Open port 5439 in security group
+### Allow the Novaplan connection in the security group
 
 1. In Redshift, open your **Workgroup** page.
 2. Open **Network and security**.
 3. Click the linked **Security group**.
 4. In EC2 security group, click **Edit inbound rules**.
-5. Add rule:
+5. Add a rule for the connection source confirmed for your Novaplan workspace:
    - **Type**: `Custom TCP`
    - **Port range**: `5439`
-   - **Source**: `My IP`
+   - **Source**: the approved Novaplan egress address or private network range, not automatically `My IP` on your laptop
 6. Click **Save rules**.
 
 <Info>
-  Redshift uses port `5439` by default.
+  Redshift uses port `5439` by default. Confirm the actual network path and source with Novaplan before opening an inbound rule.
 </Info>
 
 ### Copy endpoint and database details

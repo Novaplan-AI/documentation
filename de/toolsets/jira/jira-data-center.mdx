@@ -1,0 +1,50 @@
+---
+title: "Jira-Data-Center-Toolset"
+description: "Vorgänge in einer selbst betriebenen Jira-Instanz durch Agenten bearbeiten."
+---
+
+## Überblick
+
+Mit dem Jira-Data-Center-Toolset können Agenten Vorgänge suchen, anlegen und aktualisieren sowie Kommentare hinzufügen. Es greift zum Zeitpunkt der Aktion auf Ihre selbst betriebene Jira-Instanz zu. Für von Atlassian gehostete Instanzen verwenden Sie das [Jira-Cloud-Toolset](/toolsets/jira/jira). Für die Suche in synchronisierten Daten verwenden Sie zusätzlich den [Jira-Data-Center-Konnektor](/de/connectors/jira/jira-data-center).
+
+| Verfügbare Tools | Zweck |
+| --- | --- |
+| `get_create_issue_fields`, `create_issue`, `update_issue` | Pflichtfelder ermitteln, Vorgang anlegen oder ändern. |
+| `get_issue`, `search_issues` | Vorgang lesen oder mit JQL suchen. |
+| `add_comment`, `get_comments` | Kommentare hinzufügen oder lesen. |
+| `get_projects`, `get_project`, `get_project_metadata` | Projekte, Vorgangstypen und Komponenten untersuchen. |
+| `search_users`, `get_current_user`, `validate_connection` | Benutzer finden, eigene Identität und Verbindung prüfen. |
+
+Schreibaktionen laufen mit den Rechten der jeweils angemeldeten Jira-Person. Prüfen Sie vor dem produktiven Einsatz, welche Agenten Vorgänge erstellen, Status ändern oder Kommentare veröffentlichen dürfen.
+
+## Anmeldung vorbereiten
+
+Das Toolset bietet **Personal Access Token** und **Basic Authentication**, jedoch kein OAuth aus der Atlassian Developer Console. Persönliche Tokens sind laut Quellanleitung ab Jira Core 8.14 verfügbar. Bei älteren Instanzen oder deaktivierten Tokens kann Basic Authentication verwendet werden.
+
+Für ein persönliches Token öffnen Sie in Jira **Profile → Personal Access Tokens → Create token**, vergeben einen Namen und ein Ablaufdatum gemäß Ihrer Richtlinie und kopieren das Token sofort. Es wird nur einmal angezeigt. Bei Basic Authentication benötigen Sie Ihren Jira-**Benutzernamen** und das Passwort; der Benutzername ist nicht zwingend die E-Mail-Adresse.
+
+## Gemeinsame Instanz anlegen
+
+1. Eine Administratorin oder ein Administrator öffnet in Novaplan AI **Workspace Settings → Actions**.
+2. Wählen Sie **Jira Data Center → + Setup**.
+3. Legen Sie die **Authentication method** fest und geben Sie **Instance Name** sowie **Base URL** der Jira-Instanz ein, etwa `https://jira.example.com` ohne abschließenden Schrägstrich.
+4. Speichern Sie mit **Create**.
+
+Die Administration hinterlegt dabei keine persönlichen Zugangsdaten. Die Instanz muss aus der Novaplan-Umgebung erreichbar sein. Stimmen Sie Netzwerk- und TLS-Anforderungen mit Novaplan ab.
+
+## Persönlich authentifizieren
+
+1. Öffnen Sie **Your actions** im Bereich **Personal** und wählen Sie die eingerichtete Jira-Data-Center-Instanz.
+2. Geben Sie entweder Ihr eigenes **Personal Access Token** oder bei Basic Authentication Ihren **Username** und Ihr **Password** ein.
+3. Wählen Sie **Save credentials** und prüfen Sie den Status **Authenticated**.
+4. Fügen Sie im **Agent Builder** das Jira-Data-Center-Toolset unter **Tools** hinzu und verbinden Sie es mit dem **Agent Core**.
+
+Jede Person authentifiziert sich getrennt. Dadurch werden Jira-Aktionen mit ihren jeweiligen Quellrechten ausgeführt und in der Jira-Historie entsprechend zugeordnet.
+
+## Agenten sicher verwenden
+
+Geben Sie beim Erstellen eines Vorgangs Projektkürzel, Titel und Vorgangstyp an. Der Agent kann mit `get_create_issue_fields` Pflichtfelder und zulässige Werte ermitteln, bevor er `create_issue` aufruft. Für Suchanfragen können Sie einen Zeitraum nennen; das Toolset verwendet JQL. Bei Zuweisungen sucht es nach dem Jira-Benutzernamen. Für Statusänderungen muss eine passende Jira-Workflow-Transition verfügbar sein.
+
+Beschreibungen und Kommentare in Jira Data Center verwenden Klartext oder Jira-Wiki-Markup, nicht das Atlassian Document Format der Cloud-Variante. Prüfen Sie erzeugte Inhalte und den Zielvorgang vor einer schreibenden Aktion.
+
+Bei Anmelde- oder Berechtigungsproblemen wenden Sie sich an [Novaplan Support](/de/contact-us).

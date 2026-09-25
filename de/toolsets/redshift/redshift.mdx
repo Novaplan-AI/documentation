@@ -1,0 +1,46 @@
+---
+title: "Redshift-Toolset"
+description: "Amazon-Redshift-Abfragen aus Agenten mit eigenen Benutzerrechten ausführen."
+---
+
+## Überblick
+
+Das Redshift-Toolset erlaubt Agenten Live-Abfragen gegen eine Amazon-Redshift-Datenbank. Eine Administratorin oder ein Administrator legt die Instanz mit Host, Port und Datenbank an. Danach authentifiziert sich jede nutzende Person mit ihrem eigenen Redshift-Benutzernamen und Passwort. Die Datenbankrechte dieser Person bestimmen, welche Abfragen möglich sind.
+
+<Warning>
+  Verwenden Sie für Analyse-Agenten nach Möglichkeit Datenbankkonten mit den nötigen Leserechten. Ein Agent kann Abfragen gegen die Rechte des angemeldeten Kontos ausführen; weitreichende Schreib- oder Administrationsrechte sollten nicht ohne gesonderte Prüfung bereitgestellt werden.
+</Warning>
+
+## Redshift-Verbindung vorbereiten
+
+Sie benötigen einen Redshift-Endpunkt, den Datenbanknamen und einen aus der Novaplan-Umgebung erreichbaren Port (standardmäßig `5439`). Der **Host** ist nur der DNS-Name vor `:`; **Port** und **Database** werden getrennt eingetragen. Bei einem Endpunkt wie `redshift.example.amazonaws.com:5439/analytics` wären dies `redshift.example.amazonaws.com`, `5439` und `analytics`.
+
+Redshift Serverless kann über Namespace und Workgroup bereitgestellt werden. Die technische Quellanleitung enthält hierfür ein Testbeispiel mit öffentlicher Erreichbarkeit. Für einen verwalteten Novaplan-Workspace müssen die tatsächliche Netzwerkanbindung, Sicherheitsgruppe und erlaubte Quelladressen von Novaplan und Ihrer AWS-Administration festgelegt werden; eine Regel für **My IP** Ihres Laptops genügt dafür möglicherweise nicht. Eine öffentliche Freigabe ist nicht automatisch erforderlich.
+
+## Instanz durch Administratoren anlegen
+
+1. Öffnen Sie in Novaplan AI **Workspace Settings → Actions → Create Toolset**.
+2. Wählen Sie **Redshift**.
+3. Tragen Sie **Instance name**, **Host**, **Port** und **Database** ein und wählen Sie **Create**.
+
+Hier werden noch keine persönlichen Datenbank-Zugangsdaten hinterlegt. Die Administration kann die Verbindung nur dann sinnvoll freigeben, wenn Host und Port aus der Novaplan-Umgebung erreichbar sind.
+
+## Persönlich anmelden und Agenten verbinden
+
+1. Öffnen Sie **Workspace Settings → Actions** und die Redshift-Instanz.
+2. Wählen Sie **Authenticate**, geben Sie Ihren Redshift-**Username** und Ihr **Password** ein und speichern Sie mit **Save credentials**.
+3. Prüfen Sie den Status **Authenticated**.
+4. Öffnen Sie den **Agent Builder**, ziehen Sie **Redshift** aus **Tools** in den Ablauf und verbinden Sie es mit dem Agenten.
+
+Fragen Sie den Agenten nach klar eingegrenzten Auswertungen und prüfen Sie die verwendeten Tabellen und Ergebnisse. Wenn die Instanzdaten geändert werden, können Benutzer ihre Authentifizierung erneut durchführen müssen.
+
+## Fehler beheben
+
+| Problem | Prüfen Sie |
+| --- | --- |
+| Verbindung läuft in einen Timeout | Host, Port `5439`, Sicherheitsgruppe und Erreichbarkeit aus der Novaplan-Umgebung. |
+| Authentifizierung schlägt fehl | Persönlicher Benutzername, Passwort und Berechtigung für die Datenbank. |
+| Falscher Endpunkt | Nur den Host in **Host** eintragen; Port und Datenbank in die eigenen Felder. |
+| Toolset im Agenten nicht verfügbar | Instanz angelegt, persönliche Anmeldung abgeschlossen und Status **Authenticated**. |
+
+Bei Netzwerk- oder Berechtigungsfragen hilft [Novaplan Support](/de/contact-us) gemeinsam mit Ihrer AWS-Administration.

@@ -1,0 +1,51 @@
+---
+title: "Confluence-Data-Center-Toolset"
+description: "Seiten einer selbst betriebenen Confluence-Instanz mit Agenten lesen und bearbeiten."
+---
+
+## Überblick
+
+Mit dem Confluence-Data-Center-Toolset können Agenten Bereiche und Seiten lesen, Inhalte suchen, Seiten anlegen oder aktualisieren und Kommentare schreiben. Für von Atlassian gehostete Instanzen verwenden Sie das [Confluence-Cloud-Toolset](/toolsets/confluence/confluence). Für die Indexierung in der Novaplan-AI-Suche dient der getrennte [Confluence-Data-Center-Konnektor](/de/connectors/confluence/confluence-data-center).
+
+| Verfügbare Tools | Zweck |
+| --- | --- |
+| `create_page`, `update_page` | Seite erstellen, Titel oder Inhalt ändern, Seite verschieben. |
+| `get_page_content`, `get_pages_in_space`, `get_child_pages`, `get_page_versions` | Seiteninhalte, Hierarchie und Versionen lesen. |
+| `search_pages`, `search_content` | Nach Seitentitel oder Volltext suchen. |
+| `get_spaces`, `get_space` | Bereiche auflisten und Details lesen. |
+| `add_comment`, `get_comments` | Kommentare oder Antworten schreiben und lesen. |
+| `search_users`, `get_current_user`, `validate_connection` | Benutzer und Verbindungsstatus prüfen. |
+
+Der Agent handelt mit den Rechten der jeweils angemeldeten Confluence-Person. Legen Sie vor dem produktiven Einsatz fest, welche Agenten Seiten erstellen oder ändern und in welchen Bereichen sie eingesetzt werden dürfen.
+
+## Anmeldung vorbereiten
+
+Das Data-Center-Toolset unterstützt **Personal Access Token** und **Basic Authentication**. OAuth-Anwendungen aus der Atlassian Developer Console sind für die Cloud-Variante bestimmt. Persönliche Tokens sind laut Quellanleitung ab Confluence 7.9 verfügbar.
+
+Für ein Token öffnen Sie in Confluence **Settings → Personal Access Tokens → Create token**, vergeben einen Namen und ein Ablaufdatum und kopieren den Wert sofort; er wird nur einmal angezeigt. Bei Basic Authentication geben Sie später Ihren Confluence-**Benutzernamen** und Ihr Passwort ein. Benutzernamen und E-Mail-Adressen können voneinander abweichen.
+
+## Gemeinsame Instanz anlegen
+
+1. Eine Administratorin oder ein Administrator öffnet **Workspace Settings → Actions** in Novaplan AI.
+2. Wählen Sie **Confluence Data Center → + Setup**.
+3. Wählen Sie **Personal Access Token** oder **Basic Authentication** und geben Sie **Instance Name** und **Base URL** ein, zum Beispiel `https://confluence.example.com` ohne abschließenden Schrägstrich.
+4. Speichern Sie mit **Create**.
+
+Die Administration legt nur die gemeinsame Instanz fest; persönliche Zugangsdaten werden dabei nicht hinterlegt. Novaplan und Ihre Confluence-Administration müssen die Erreichbarkeit der Instanz sicherstellen.
+
+## Persönlich authentifizieren
+
+1. Öffnen Sie **Your actions** im Bereich **Personal** und wählen Sie die Confluence-Data-Center-Instanz.
+2. Tragen Sie Ihr eigenes **Personal Access Token** oder für Basic Authentication **Username** und **Password** ein.
+3. Wählen Sie **Save credentials** und prüfen Sie den Status **Authenticated**.
+4. Fügen Sie das Toolset im **Agent Builder** unter **Tools** hinzu und verbinden Sie es mit dem **Agent Core**.
+
+Jede Person meldet sich selbst an. Dadurch kann ein Agent nur die Seiten sehen und ändern, für die dieses Confluence-Konto berechtigt ist; Änderungen werden der angemeldeten Identität zugeordnet.
+
+## Agenten verwenden
+
+Nennen Sie beim Erstellen einer Seite den **Bereichsschlüssel**, den Titel, den Inhalt und gegebenenfalls die Elternseite. Ein persönlicher Bereichsschlüssel kann mit `~` beginnen. Bei Änderungen können Sie Titel, Inhalt oder Position gezielt angeben; nicht genannte Teile sollen unverändert bleiben. Die Volltextsuche findet Themen, die Titelsuche bestimmte Seiten. Für Antworten auf einen Kommentar geben Sie den betroffenen Thread an.
+
+Confluence Data Center verwendet für Seiteninhalte das **Confluence Storage Format (XHTML)**. Klartext kann vom Toolset dafür aufbereitet werden. Prüfen Sie erzeugte Seiten und Kommentare vor einer schreibenden Aktion.
+
+Bei Anmelde- oder Berechtigungsproblemen hilft [Novaplan Support](/de/contact-us).
