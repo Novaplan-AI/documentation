@@ -2,6 +2,10 @@
 
 The Configuration Manager Service provides a centralized way to manage configuration settings across your organization's services. It stores configuration in the managed environment's key-value backend (Redis by default, with etcd supported) and provides APIs to manage these settings.
 
+<Warning>
+  This is a source-derived reference to administrative and internal configuration endpoints, not a verified contract for the deployed Novaplan Enterprise API. Novaplan normally manages these settings. Confirm the route, request fields, permissions, and effect in your workspace before using an endpoint or changing production configuration.
+</Warning>
+
 ## Base URL
 
 All endpoints are prefixed with `/api/v1/configurationManager`
