@@ -29,14 +29,12 @@ The API Key is required to authenticate your requests to x.ai services.
 
 The Model Name field defines which x.ai Grok model you want to use with Novaplan AI.
 
-**Available x.ai Grok models:**
-- `grok-3-latest` - Grok 3: x.ai's flagship multimodal model optimized for high-performance agentic tool calling
-- `grok-3-mini-latest` - Grok 3 Mini: A lighter, faster option for cost-effective use cases
+**Choose a current model:** xAI's [model catalog](https://docs.x.ai/developers/models) currently lists `grok-4.7` for text and image input. Copy the exact ID available to your API key from the xAI Console or `GET /v1/models`. Older Grok 3 IDs in previous versions of this guide may redirect to a newer model with different behavior or pricing.
 
 **How to choose a model:**
-- For tasks requiring complex reasoning and maximum capability, select `grok-3-latest`
-- For faster, more cost-effective responses, select `grok-3-mini-latest`
-- Check x.ai's [model documentation](https://docs.x.ai/docs) for the most up-to-date options
+- Check the current model page for supported input, reasoning behavior, context length, availability, and pricing
+- Confirm the model is enabled for the API key and endpoint used by your managed Novaplan workspace
+- Test the selected model in Novaplan AI before assigning it to customer workflows
 
 ## Optional Fields
 
@@ -49,11 +47,11 @@ Specify the maximum context window for your model. x.ai Grok models typically su
 
 ### Multimodal Support
 
-x.ai Grok models support multimodal capabilities, enabling both text and image processing. Enable this option if you want to use image understanding features in your application.
+Enable this only if the selected model accepts image input and the deployed Novaplan integration has been tested with it. Model capabilities vary; do not infer image support from the Grok name alone.
 
 ### Reasoning
 
-Enable this option if your selected model supports advanced reasoning capabilities. This allows for deeper chain-of-thought analysis and complex problem-solving.
+Enable this option only if the selected model supports reasoning and Novaplan has verified how the checkbox maps to that model's API settings. xAI model variants can expose different reasoning controls.
 
 ## Configuration Steps
 

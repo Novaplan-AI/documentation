@@ -13,11 +13,11 @@ Novaplan AI kann Grok-Modelle von xAI für KI-Funktionen in Ihrem Workspace verw
 
 **API Key:** Melden Sie sich in der [xAI Console](https://console.x.ai/) an, öffnen Sie **API Keys**, erstellen Sie mit **Create new key** einen Schlüssel oder wählen Sie einen vorhandenen aus. Kopieren Sie ihn und bewahren Sie ihn geschützt auf.
 
-**Model Name:** Geben Sie die genaue Grok-Modell-ID ein. Beispiele sind `grok-3-latest` und `grok-3-mini-latest`. Prüfen Sie die [aktuelle xAI-Modellübersicht](https://docs.x.ai/docs) und den Zugang Ihres Kontos, bevor Sie eine ID übernehmen.
+**Model Name:** Geben Sie die genaue Grok-Modell-ID ein, die für Ihren API-Schlüssel verfügbar ist. Die [aktuelle xAI-Modellübersicht](https://docs.x.ai/developers/models) nennt beispielsweise `grok-4.7`; die verfügbaren IDs können Sie auch in der xAI Console oder über `GET /v1/models` prüfen. Ältere Grok-3-IDs aus früheren Anleitungen können auf neuere Modelle mit anderem Verhalten oder anderen Preisen umgeleitet werden.
 
 ## Optionale Einstellungen
 
-**Context Length** begrenzt den Kontext auf einen Wert, den das Modell tatsächlich unterstützt. **Multimodal** aktivieren Sie nur für Modelle mit Bildeingabe; **Reasoning** nur, wenn das gewählte Modell einen entsprechenden Modus bietet. Die unterstützten Fähigkeiten und Kontextlimits unterscheiden sich je nach Grok-Modell.
+**Context Length** begrenzt den Kontext auf einen Wert, den das Modell tatsächlich unterstützt. **Multimodal** aktivieren Sie nur für Modelle mit Bildeingabe und nach einem Test der bereitgestellten Novaplan-Integration. **Reasoning** aktivieren Sie nur, wenn das gewählte Modell einen entsprechenden Modus bietet und Novaplan die Zuordnung des Kontrollkästchens zu den API-Einstellungen geprüft hat. Fähigkeiten und Kontextlimits unterscheiden sich je nach Grok-Modell.
 
 ## Modell hinzufügen
 
