@@ -12,7 +12,34 @@ Der Authentifizierungsdienst prüft Identitäten und unterstützt je nach Worksp
 3. Der Client sendet die gewählte Methode und die benötigten Daten an `POST /api/v1/userAccount/authenticate` und übergibt dabei `x-session-token`.
 4. Wenn ein weiterer Faktor verlangt wird, wiederholt der Client den Anmeldeschritt mit den angeforderten Daten. Nach erfolgreicher Anmeldung erhält er ein Access Token und ein Refresh Token.
 
-Temporäre Sitzungen werden in Redis verwaltet und nach Abschluss oder Ablauf gelöscht. Das Access Token dient API-Anfragen im Namen der angemeldeten Person; mit einem Refresh Token kann eine Sitzung fortgesetzt werden. Die tatsächlichen Laufzeiten und Methoden müssen für die bereitgestellte Novaplan-Version geprüft werden.
+Temporäre Sitzungen werden in Redis über eine eindeutige Kennung verwaltet und nach Abschluss oder Ablauf gelöscht. Die technische Referenz nennt dafür standardmäßig **eine Stunde**. Sie nennt für das Access Token typischerweise **eine Stunde** und für das Refresh Token typischerweise **sieben Tage**; die tatsächlichen Laufzeiten und Methoden müssen für die bereitgestellte Novaplan-Version geprüft werden. Das Access Token enthält die Identität und Berechtigungen der angemeldeten Person und dient ihren API-Anfragen. Das Refresh Token erneuert den Zugriff ohne erneute vollständige Anmeldung.
+
+`x-session-token` kommt bei `initAuth` im **Response-Header**, nicht im JSON-Body zurück. Bewahren Sie es nur für den laufenden Anmeldevorgang auf und senden Sie es bei jedem folgenden Aufruf von `authenticate` als Request-Header mit.
+
+### Anmelde-Requests und Antworten
+
+`initAuth` erwartet einen Body mit `email`. Eine erfolgreiche Antwort kann `currentStep`, `allowedMethods` und Angaben zu den verfügbaren Anbietern enthalten:
+
+```json
+{
+  "email": "user@example.com"
+}
+```
+
+`authenticate` erwartet `method` und `credentials`. Die dokumentierten Methoden sind `password`, `otp`, `google`, `microsoft`, `azureAd`, `oauth` und `samlSso`. Für Passwort verwenden die `credentials` ein Feld `password`, für Einmalcode ein Feld `otp`. Bei Google ist ein ID-Token dokumentiert; Microsoft, Azure AD und generisches OAuth verwenden Access- und ID-Token des jeweiligen Identitätsanbieters. Senden Sie nur die Felder, die der aktuelle Anmeldeschritt verlangt.
+
+Wenn weitere Schritte nötig sind, kann die Antwort `nextStep` und die nächsten `allowedMethods` enthalten. Nach Abschluss liefert sie `accessToken` und `refreshToken`; die temporäre Redis-Sitzung wird beendet. Behandeln Sie alle Tokens als vertrauliche Werte.
+
+## Datenmodelle und Organisationsregeln
+
+| Modell | Technische Felder und Aufgabe |
+| --- | --- |
+| `OrgAuthConfig` | Organisations-ID, optionale Domain und geordnete `authSteps` mit erlaubten Methoden. |
+| `UserCredentials` | Benutzer- und Organisationszuordnung, IP-Adresse, gehashte Passwörter und Einmalcodes, Zähler fehlgeschlagener Versuche sowie Sperrstatus. |
+| `UserActivities` | Ereignisse wie `LOGIN`, `LOGOUT`, `LOGIN_ATTEMPT`, `OTP_GENERATE`, `WRONG_OTP`, `WRONG_PASSWORD` und `REFRESH_TOKEN`. |
+| `SessionData` | Benutzer, E-Mail, Organisation, Authentifizierungsschritte, aktueller Schritt und temporärer Zustand der Anmeldung. |
+
+Eine Organisationskonfiguration kann laut Referenz **ein bis drei** Authentifizierungsschritte enthalten. Jeder Schritt braucht eine eindeutige Reihenfolge und mindestens eine Methode. Dieselbe Methode darf weder innerhalb eines Schritts noch in verschiedenen Schritten doppelt vorkommen. Änderungen an diesen Regeln können bestehende Anmeldungen unterbrechen; sie gehören in einen geprüften Administrationsablauf.
 
 ## Endpunkte
 
@@ -40,6 +67,15 @@ Die technische Referenz nennt folgende Pfade. Die meisten geschützten Aufrufe e
 <Warning>
   Endpunkte für SAML-Konfiguration, Organisationsauthentifizierung und interne Prüfungen sind nicht für gewöhnliche Kundenanwendungen bestimmt. Stimmen Sie deren Nutzung mit Novaplan ab. Tokens, Einmalcodes und Zurücksetzungslinks dürfen nicht protokolliert oder in Chats geteilt werden.
 </Warning>
+
+## Antworten nach Funktionsbereich
+
+- **Einmalcode:** `POST /userAccount/login/otp/generate` erzeugt für die aktuelle Anmeldesitzung einen einmalig gültigen Code. Der nachfolgende `authenticate`-Schritt übergibt ihn in `credentials.otp`.
+- **OAuth:** `POST /userAccount/oauth/exchange` tauscht die Daten eines zugelassenen OAuth-Anbieters gegen die für den Novaplan-Anmeldeablauf benötigten Angaben aus. Für Kundenintegrationen gilt der freigegebene [OAuth-Anwendungsablauf](/de/developer/oauth2).
+- **Passwort:** `password/forgot` startet die Zurücksetzung; `password/reset/token` prüft den Link-Token und `password/reset` setzt mit gültiger Autorisierung ein neues Passwort. Prüfen Sie die tatsächliche Freigabe und Tokenlaufzeit in Ihrer Workspace-Version.
+- **Sitzung:** `refresh/token` erneuert ein abgelaufenes Access Token mit einem gültigen Refresh Token. `logout/manual` beendet die Sitzung. Nach Logout darf ein zurückgezogenes Token nicht weiter verwendet werden.
+- **SAML:** `GET /saml/signIn` beginnt die Weiterleitung zum Identitätsanbieter; der Callback verarbeitet dessen Antwort. `POST /saml/updateAppConfig` ist ein administrativer Konfigurationsaufruf.
+- **Organisation:** `GET /orgAuthConfig/authMethods` gibt geordnete Anmeldeschritte zurück. `POST /orgAuthConfig/updateAuthMethod` ändert sie nach den oben beschriebenen Regeln; `POST /orgAuthConfig/` legt die Konfiguration an. Diese Aufrufe erfordern einen berechtigten Administrationskontext.
 
 ## Sicherheit und Fehlerbehebung
 
