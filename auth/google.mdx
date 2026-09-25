@@ -1,73 +1,25 @@
 ---
-title: "Google Authentication"
-description: "Configure how users authenticate and access the application using google"
+title: "Google sign-in"
+description: "Configure Google as a sign-in method for a managed Novaplan AI workspace."
 icon: "google"
 ---
 
-## Google Authentication Allow users to sign in with their Google accounts using OAuth 2.0.
+Google sign-in lets invited users authenticate with their Google accounts. Novaplan AI normally prepares the workspace and coordinates identity-provider changes with your administrator.
 
-### How It Works
+## Configure the Google OAuth client
 
-1. User clicks "Sign in with Google"
-2. User is redirected to Google's authentication page
-3. After authenticating with Google, user is returned to the application
-4. Upon successful validation, access is granted
+1. In the [Google Cloud Console](https://console.cloud.google.com/), create or select the approved project and configure the OAuth consent screen.
+2. Create an OAuth client of type **Web application**. Google's [client ID guide](https://developers.google.com/identity/gsi/web/guides/get-google-api-clientid) describes this client type.
+3. In Novaplan AI, an authorized administrator opens **Workspace Settings → Authentication → Google**. Copy the **Redirect URI** and **Authorized Origin** displayed there.
+4. Add the exact Redirect URI to Google's **Authorized redirect URIs**. Add the origin, without a callback path, to **Authorized JavaScript origins**. Use the deployed workspace's HTTPS address, not a URL from a screenshot or a local test.
+5. Copy the Google **Client ID** into the Novaplan AI Google settings and save. The current workspace form asks for a Client ID; do not put a Google client secret in that field.
 
-### Configuration To enable Google authentication:
+<Warning>
+  The accessible configuration supports just-in-time (JIT) user creation and defaults it to enabled. For a workspace where Novaplan creates accounts and invites users, confirm that JIT is disabled before enabling Google sign-in. Test with an invited account and an uninvited test account. Confirm the actual switch and behavior in the deployed Enterprise workspace.
+</Warning>
 
-1. Create OAuth credentials in [Google Cloud Console](https://console.cloud.google.com/) Google Cloud Console: - Create a project (if you don't have one) - Configure
-   OAuth consent screen - Create OAuth client ID (Web application) - Note your Client ID and Client Secret
+## Check sign-in
 
-   <div style={{ textAlign: "center" }}>
-     <img
-       src="/images/auth/google/google_create_clientId.png"
-       alt="Google create credentials in console"
-       width="90%"
-     />
-   </div>
+Ask an invited test user to select **Sign in with Google** and complete the provider flow. If access fails, check the exact Redirect URI, Authorized Origin, Client ID, Google app assignment or consent settings, and the email address on the invitation. Keep a working administrator sign-in method while testing changes.
 
-   <Warning>
-     Redirect Uri in you Google Cloud Console should match exactly with the
-     (your-app-url/auth/google/callback)
-     <Info>
-       For example - if your app is running on https://f7f0-240.ngrok-free.app
-       then redirectUri should be
-       https://f7f0-240.ngrok-free.app/auth/google/callback in Google Cloud
-       Console.
-     </Info>
-   </Warning>
-
-   <div style={{ textAlign: "center" }}>
-     <img
-       src="/images/auth/google/google_redirectUri.png"
-       alt="Google console redirect uri page"
-       width="90%"
-     />
-   </div>
-
-   <Warning>
-     Authorized Javascript Origin in you Google Cloud Console should match
-     exactly with the (your-app-url)
-     <Info>
-       For example - if your app is running on https://f7f0-240.ngrok-free.app
-       then authorized Javascript origin should be
-       https://f7f0-240.ngrok-free.app in Google Cloud Console.
-     </Info>
-   </Warning>
-
-   <div style={{ textAlign: "center" }}>
-     <img
-       src="/images/auth/google/google_origin.png"
-       alt="Google console origin"
-       width="90%"
-     />
-   </div>
-
-2. Navigate to Authentication Settings - Toggle on "Google" - Enter Client ID - Click "Save"
-   <div style={{ textAlign: "center" }}>
-     <img
-       src="/images/auth/google/google_config.png"
-       alt="Google configuration Dialog"
-       width="90%"
-     />
-   </div>
+For account-access help, contact your workspace administrator or [Novaplan AI support](mailto:support@novaplan.ai).
