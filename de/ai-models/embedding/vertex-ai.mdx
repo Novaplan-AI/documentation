@@ -1,0 +1,29 @@
+---
+title: "Vertex AI Embeddings"
+description: "Embedding-Modelle über Google Cloud Vertex AI mit Novaplan AI verbinden."
+---
+
+# Vertex AI Embeddings konfigurieren
+
+Vertex AI stellt Embedding-Modelle über Ihr Google-Cloud-Projekt bereit. Novaplan AI verbindet sich mit einem dafür berechtigten Dienstkonto. Die [Vorbereitung von Projekt, API und Dienstkonto](/de/ai-models/llm/vertex-ai) entspricht der Vertex-AI-Verbindung für Sprachmodelle.
+
+## Erforderliche Angaben
+
+| Feld | Bedeutung |
+| --- | --- |
+| **GCP Project ID** | Google-Cloud-Projekt für Vertex AI. Der Wert muss mit `project_id` in der JSON-Datei des Dienstkontos übereinstimmen. |
+| **Service Account JSON** | JSON-Schlüsseldatei eines Dienstkontos mit **Vertex AI User**-Berechtigung. Novaplan AI prüft gültiges JSON sowie `type`, `project_id`, `private_key` und `"type": "service_account"`. |
+| **Model Name** | Genaue ID des Embedding-Modells, beispielsweise `text-embedding-004` oder `text-multilingual-embedding-002`. Wählen Sie für nicht ausschließlich englische Dokumente ein geeignetes mehrsprachiges Modell. |
+
+Bewahren Sie die Dienstkonto-Schlüsseldatei geschützt auf. Ein OAuth-Client-Secret ist kein Ersatz. Prüfen Sie die Verfügbarkeit des Modells in Ihrem Google-Cloud-Projekt und Ihrer Region.
+
+## Optionale Angaben
+
+- **Region:** Zielregion für Vertex AI, standardmäßig `us-central1`.
+- **Model Friendly Name:** Anzeigename; ohne Eintrag wird der Modellname verwendet.
+- **Dimensions:** Vektordimensionen des Modells; Novaplan AI nutzt den Wert für die Vektorsammlung.
+- **Is Multimodal:** Nur einschalten, wenn das Modell Bilder und Text einbetten kann; standardmäßig ausgeschaltet.
+
+**Wenn Sie nach der Indexierung das Embedding-Modell oder die Dimensionen ändern, müssen die betroffenen Inhalte neu indexiert werden.** Sonst passen alte und neue Vektoren nicht zusammen. Stimmen Sie den Wechsel mit Novaplan ab.
+
+Bei Zugriffsfehlern prüfen Sie aktivierte Vertex AI API, Dienstkonto-Rolle und Projekt-ID. Bei **Model not found** kontrollieren Sie Modell-ID und regionale Verfügbarkeit. Für Sprachmodelle gibt es die [Vertex-AI-Anleitung](/de/ai-models/llm/vertex-ai), für eine API-Schlüssel-Verbindung die [Gemini-Embedding-Anleitung](/de/ai-models/embedding/gemini). [Novaplan Support](/de/contact-us) hilft bei der Einrichtung.

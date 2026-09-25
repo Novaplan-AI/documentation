@@ -1,0 +1,30 @@
+---
+title: "LM Studio Embeddings"
+description: "Über LM Studio bereitgestellte Embedding-Modelle mit Novaplan AI verbinden."
+---
+
+# LM Studio Embeddings konfigurieren
+
+LM Studio kann neben Sprachmodellen auch Embedding-Modelle über seine OpenAI-kompatible API bereitstellen. Ihre Administration betreibt den Modellserver; Novaplan AI verbindet sich mit dessen erreichbarem Endpoint. Die [LM-Studio-Anleitung für Sprachmodelle](/de/ai-models/llm/lm-studio) beschreibt die allgemeinen Vorbereitungen.
+
+## Vorbereitungen
+
+Laden Sie in LM Studio ein Embedding-Modell, beispielsweise `nomic-ai/nomic-embed-text-v1.5-GGUF`, starten Sie den Server und notieren Sie seine Netzwerkadresse und die exakt angebotene Modell-ID. Das Modell muss auf dem Server geladen und für Novaplan AI erreichbar sein.
+
+## Erforderliche Angaben
+
+| Feld | Bedeutung |
+| --- | --- |
+| **Endpoint URL** | Erreichbare Serveradresse mit `/v1`, beispielsweise `http://host.docker.internal:1234/v1`. |
+| **Model Name** | Exakte Kennung des geladenen Embedding-Modells, beispielsweise `nomic-ai/nomic-embed-text-v1.5-GGUF`. |
+
+`host.docker.internal` ist ein mögliches Ziel, wenn LM Studio auf dem Host einer passend konfigurierten Containerumgebung läuft. Für andere Umgebungen tragen Sie die tatsächlich erreichbare Adresse ein.
+
+## Optionale Angaben
+
+- **API Key:** LM Studio selbst prüft normalerweise keinen Schlüssel. Das Feld bleibt leer, außer ein vorgeschalteter Proxy verlangt einen.
+- **Model Friendly Name:** Anzeigename; ohne Eintrag wird der Modellname verwendet.
+- **Dimensions:** Vektordimensionen des Modells, mit denen Novaplan AI die Vektorsammlung anlegt.
+- **Is Multimodal:** Nur für Modelle mit Bild- und Texteinbettung aktivieren; standardmäßig ausgeschaltet.
+
+**Nach einem Wechsel des Embedding-Modells oder seiner Dimensionen müssen bereits indexierte Inhalte neu indexiert werden.** Bei Verbindungsfehlern prüfen Sie, ob der LM-Studio-Server gestartet und über die angegebene Adresse erreichbar ist. Bei **Model not found** vergleichen Sie die ID mit der Serveransicht beziehungsweise `/v1/models`. [Novaplan Support](/de/contact-us) hilft bei der Anbindung.

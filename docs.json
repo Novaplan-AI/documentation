@@ -139,7 +139,11 @@
                   "de/ai-models/embedding/huggingface",
                   "de/ai-models/embedding/openai-compatible",
                   "de/ai-models/embedding/ollama",
-                  "de/ai-models/embedding/openrouter"
+                  "de/ai-models/embedding/openrouter",
+                  "de/ai-models/embedding/bedrock",
+                  "de/ai-models/embedding/vertex-ai",
+                  "de/ai-models/embedding/litellm-proxy",
+                  "de/ai-models/embedding/lm-studio"
                 ]
               }
             ]

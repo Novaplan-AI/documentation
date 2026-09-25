@@ -1,0 +1,30 @@
+---
+title: "LiteLLM Proxy Embeddings"
+description: "Embedding-Modelle über LiteLLM Proxy mit Novaplan AI verbinden."
+---
+
+# LiteLLM Proxy Embeddings konfigurieren
+
+Novaplan AI kann Embeddings über denselben LiteLLM Proxy erzeugen, der auch Sprachmodelle bereitstellt. Ihre Administration betreibt den Proxy und hinterlegt dort die eigentlichen Modellanbieter-Schlüssel. Novaplan unterstützt Sie bei der Anbindung.
+
+## Voraussetzung
+
+Ein erreichbarer LiteLLM Proxy muss mindestens ein Embedding-Modell in seiner `model_list` anbieten. Die [Anleitung für LiteLLM-Sprachmodelle](/de/ai-models/llm/litellm-proxy) erläutert den allgemeinen Zugang. Die [LiteLLM-Dokumentation zu Embeddings](https://docs.litellm.ai/docs/embedding/supported_embedding) nennt unterstützte Modelle.
+
+## Erforderliche Angaben
+
+| Feld | Bedeutung |
+| --- | --- |
+| **Endpoint URL** | Erreichbare Proxy-Adresse. Die Voreinstellung lautet `http://host.docker.internal:4000`; für andere Netzwerke tragen Sie die tatsächlich erreichbare Adresse ein. |
+| **API Key** | `master_key` oder ein gültiger virtueller Schlüssel des LiteLLM Proxys. |
+| **Model Name** | Exakter `model_name` des Embedding-Modells in der Proxy-Konfiguration, beispielsweise `text-embedding-3-small` oder `azure-embeddings`. |
+
+`host.docker.internal` funktioniert nur in einer dafür eingerichteten Containerumgebung. `localhost` bezeichnet den Host, von dem Novaplan AI die Anfrage sendet, und ist nicht automatisch der Proxy-Server.
+
+## Optionale Angaben
+
+- **Model Friendly Name:** Anzeigename; ohne Eintrag wird der Modellname verwendet.
+- **Dimensions:** Vektordimensionen des Modells, mit denen Novaplan AI die Vektorsammlung anlegt.
+- **Is Multimodal:** Nur für Modelle mit Bild- und Texteinbettung aktivieren; standardmäßig ausgeschaltet.
+
+**Ein Wechsel des Embedding-Modells oder seiner Dimensionen nach der Indexierung erfordert eine erneute Indexierung.** Stimmen Sie diesen Schritt mit Novaplan ab. Bei Verbindungsfehlern prüfen Sie Proxy-Status und Endpoint, bei Authentifizierungsfehlern den Proxy-Schlüssel und bei **Model not found** den `model_name` in der Proxy-Konfiguration. [Novaplan Support](/de/contact-us) hilft bei der Einrichtung.
