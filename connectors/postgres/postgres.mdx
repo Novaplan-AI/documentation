@@ -156,10 +156,10 @@ The dataset includes Formula 1 tables: `circuits`, `constructors`, `constructorr
 
 | Field | Example |
 |-------|---------|
-| **Host** | `localhost` |
+| **Host** | `db.example.com` — a host reachable from the Novaplan workspace |
 | **Port** | `5432` |
-| **Database** | `bird_mini_dev` |
-| **User** | `postgres` |
+| **Database** | `example_db` |
+| **User** | `novaplan_reader` |
 | **Password** | your password |
 
 #### Option 2: Connection String
@@ -167,7 +167,7 @@ The dataset includes Formula 1 tables: `circuits`, `constructors`, `constructorr
 Use a single PostgreSQL connection string:
 
 ```
-postgresql://postgres:your_password@localhost:5432/bird_mini_dev
+postgresql://novaplan_reader:your_password@db.example.com:5432/example_db
 ```
 
 If your password contains special characters, URL-encode them:
@@ -183,7 +183,7 @@ If your password contains special characters, URL-encode them:
 Example: `p@ss:word` becomes `p%40ss%3Aword`
 
 ```
-postgresql://postgres:p%40ss%3Aword@localhost:5432/bird_mini_dev
+postgresql://novaplan_reader:p%40ss%3Aword@db.example.com:5432/example_db
 ```
 
 <div className="text-center">
@@ -283,7 +283,7 @@ The connector also reads schema metadata from `information_schema` and `pg_catal
 
 <Accordion title="Can I connect to a remote PostgreSQL server?">
 
-Yes. Use the public host and port. Make sure:
+Yes. Use a host and port reachable from the Novaplan workspace through the network path approved by your database administrator and Novaplan. The database does not need to be exposed publicly if a private connection is available. Make sure:
 - `pg_hba.conf` allows connections from the Novaplan AI deployment IP range.
 - The PostgreSQL service is listening on a reachable interface (`listen_addresses` in `postgresql.conf`).
 - Any firewall or security group allows traffic on the chosen port (default `5432`).
