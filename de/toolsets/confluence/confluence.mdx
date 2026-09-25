@@ -5,13 +5,14 @@ description: "Confluence-Seiten mit Agenten suchen, erstellen und bearbeiten."
 
 ## Überblick
 
-Das Confluence-Toolset gibt Agenten Live-Zugriff auf Inhalte in Confluence Cloud. Sie können Seiten und Spaces durchsuchen, Seiten erstellen oder ändern, Versionen abrufen und Kommentare hinzufügen. Eine Workspace-Administration richtet die gemeinsame Instanz unter **Workspace Settings → Actions** ein. Jede Person verbindet anschließend ihr eigenes Atlassian-Konto unter **Your actions**. Für die Suche in zuvor synchronisierten Inhalten verwenden Sie den [Confluence-Konnektor](/de/connectors/confluence/confluence).
+Das Confluence-Toolset gibt Agenten Live-Zugriff auf Inhalte in Confluence Cloud. Sie können Seiten und Spaces durchsuchen, Seiten erstellen oder ändern, Versionen abrufen, Kommentare hinzufügen, Anhänge abrufen und Personen suchen. Eine Workspace-Administration richtet die gemeinsame Instanz unter **Workspace Settings → Actions** ein. Jede Person verbindet anschließend ihr eigenes Atlassian-Konto unter **Your actions**. Für die Suche in zuvor synchronisierten Inhalten verwenden Sie den [Confluence-Konnektor](/de/connectors/confluence/confluence).
 
 | Aufgabe | Verfügbare Tools |
 | --- | --- |
 | Seiten bearbeiten | `create_page`, `update_page`, `update_page_title`, `comment_on_page` |
 | Seiten lesen | `get_page_content`, `get_pages_in_space`, `get_child_pages`, `get_page_versions` |
 | Suche und Spaces | `search_pages`, `search_content`, `get_spaces`, `get_space` |
+| Anhänge und Personen | `list_page_attachments`, `get_attachment_metadata`, `download_attachment`, `search_users` |
 
 <Warning>
   Änderungen an Seiten und Kommentare sind für andere Confluence-Nutzende sichtbar. Prüfen Sie Ziel-Space, Seite und beabsichtigte Änderung vor einer schreibenden Agentenaktion.

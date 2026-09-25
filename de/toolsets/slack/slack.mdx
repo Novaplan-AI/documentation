@@ -10,12 +10,12 @@ Mit dem Slack-Toolset können Agenten live in Slack suchen und Aktionen im Namen
 | Bereich | Verfügbare Tools |
 | --- | --- |
 | Nachrichten senden und ändern | `send_message`, `send_direct_message`, `send_message_with_mentions`, `send_message_to_multiple_channels`, `reply_to_message`, `update_message`, `delete_message`, `schedule_message`, `get_scheduled_messages` |
-| Lesen und suchen | `get_channel_history`, `get_unread_messages`, `get_thread_replies`, `get_message_permalink`, `search_all`, `search_messages` |
-| Kanäle und Personen | `fetch_channels`, `get_user_conversations`, `get_user_channels`, `get_channel_info`, `get_channel_members`, `get_channel_members_by_id`, `get_user_info`, `get_users_list`, `resolve_user`, `get_user_groups`, `get_user_group_info` |
-| Weitere Aktionen | `set_user_status`, `add_reaction`, `remove_reaction`, `get_reactions`, `pin_message`, `unpin_message`, `get_pinned_messages`, `check_token_info` |
+| Lesen und suchen | `get_channel_history`, `get_dm_history`, `get_unread_messages`, `get_thread_replies`, `get_message_permalink`, `search_all`, `search_messages` |
+| Kanäle und Personen | `fetch_channels`, `get_user_conversations`, `get_user_channels`, `get_channel_info`, `get_channel_members`, `get_channel_members_by_id`, `get_user_info`, `get_users_list`, `search_users`, `resolve_user`, `get_user_groups`, `get_user_group_info` |
+| Weitere Aktionen | `set_user_status`, `add_reaction`, `remove_reaction`, `get_reactions`, `pin_message`, `unpin_message`, `get_pinned_messages`, `upload_file_to_channel`, `check_token_info` |
 
 <Warning>
-  Das Toolset kann Nachrichten auch in mehreren Kanälen versenden oder löschen. Prüfen Sie Empfänger, Kanal und Nachrichtentext vor einer schreibenden Aktion.
+  Das Toolset kann Nachrichten auch in mehreren Kanälen versenden oder löschen und Dateien in einen Kanal hochladen. Prüfen Sie Empfänger, Kanal, Nachrichtentext und Datei vor einer schreibenden Aktion.
 </Warning>
 
 ## Slack-App und gemeinsame Instanz einrichten

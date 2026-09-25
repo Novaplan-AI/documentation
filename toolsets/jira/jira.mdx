@@ -62,6 +62,11 @@ The Jira toolset enables AI agents to interact with your Jira workspace. Agents 
 | `get_current_user` | Get current authenticated user info | Search |
 | `validate_connection` | Validate Jira connection status | Utility |
 | `convert_text_to_adf` | Convert plain text to Atlassian Document Format | Utility |
+| `get_create_issue_fields` | Get required and optional fields for a project's issue type | Search |
+
+<Info>
+  Before creating an issue or changing its type, check `get_create_issue_fields` for required custom fields and allowed values. Ask the user for any missing required value; do not invent one to make the request pass.
+</Info>
 
 ---
 

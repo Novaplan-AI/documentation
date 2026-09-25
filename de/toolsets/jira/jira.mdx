@@ -12,7 +12,9 @@ Mit dem Jira-Toolset können Agenten live in Jira Cloud arbeiten: Vorgänge und 
 | Vorgänge | `create_issue`, `update_issue`, `get_issue`, `get_issues`, `search_issues` |
 | Kommentare | `add_comment`, `get_comments` |
 | Projekte und Personen | `get_projects`, `get_project`, `get_project_metadata`, `search_users`, `get_current_user` |
-| Hilfsfunktionen | `validate_connection`, `convert_text_to_adf` |
+| Hilfsfunktionen | `validate_connection`, `convert_text_to_adf`, `get_create_issue_fields` |
+
+Prüfen Sie vor dem Erstellen eines Vorgangs oder dem Wechsel des Vorgangstyps mit `get_create_issue_fields` die Pflichtfelder und zulässigen Werte. Fragen Sie fehlende Pflichtangaben bei der betreffenden Person nach, statt Werte zu erfinden.
 
 <Warning>
   Das Toolset kann Vorgänge und Kommentare im Namen der angemeldeten Person ändern. Prüfen Sie Projekt, Vorgangsschlüssel und beabsichtigte Änderung, bevor Sie eine schreibende Agentenaktion ausführen lassen.

@@ -51,7 +51,13 @@ The Outlook toolset enables AI agents to send, read, and manage emails, calendar
 | `forward_message` | Forward an email to one or more recipients |
 | `search_messages` | Search or list emails using OData queries (`$search`, `$filter`, `$orderby`) |
 | `get_message` | Get the full details of a specific email by message ID |
+| `list_message_attachments` | List an email's attachment names and metadata without downloading files |
+| `stage_attachment_to_blob` | Download an attachment into the workspace and return a record ID for another tool |
 | `get_mail_folders` | List mail folders (Inbox, Sent Items, Drafts, custom folders) |
+
+<Info>
+  Staging an Outlook attachment makes its contents available as a workspace record for subsequent tool actions. Review the destination tool and audience before an agent shares that record outside the workspace.
+</Info>
 
 ### Calendar Tools
 
@@ -295,4 +301,3 @@ Ask to create a "bug fixes" meeting tomorrow at 2pm for 1 hour with john@example
 
 **Example: Recurring meetings this week**  
 Ask to get your recurring meetings this week
-

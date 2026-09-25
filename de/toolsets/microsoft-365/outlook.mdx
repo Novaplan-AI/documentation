@@ -9,13 +9,15 @@ Das Outlook-Toolset gibt Agenten Live-Zugriff auf E-Mails, Kalenderereignisse un
 
 | Bereich | Aktionen |
 | --- | --- |
-| E-Mail | `send_email`, `reply_to_message`, `reply_all_to_message`, `forward_message`, `search_messages`, `get_message`, `get_mail_folders` |
+| E-Mail und Anhänge | `send_email`, `reply_to_message`, `reply_all_to_message`, `forward_message`, `search_messages`, `get_message`, `list_message_attachments`, `stage_attachment_to_blob`, `get_mail_folders` |
 | Kalender | `create_calendar_event`, `update_calendar_event`, `delete_calendar_event`, `get_calendar_events`, `get_calendar_event`, `search_calendar_events` |
 | Serien und Meetings | `get_recurring_events`, `get_recurring_events_ending`, `delete_recurring_event_occurrence`, `get_meeting_transcripts` |
 
 <Warning>
   Dieses Toolset kann Nachrichten versenden und Termine ändern oder löschen. Prüfen Sie Agentenaktionen und Empfänger, bevor Sie es breit freigeben. Zugriffe auf Meeting-Transkripte erfordern zusätzliche Berechtigungen und können von den Regeln Ihres Microsoft-Tenants abhängen.
 </Warning>
+
+`list_message_attachments` zeigt Metadaten ohne Dateidownload. `stage_attachment_to_blob` lädt einen Anhang als Workspace-Datensatz und liefert eine Datensatz-ID für weitere Tool-Aktionen. Prüfen Sie Zielanwendung und Empfängerkreis, bevor ein Agent diesen Datensatz außerhalb des Workspaces teilt.
 
 ## Microsoft-Entra-Anwendung einrichten
 

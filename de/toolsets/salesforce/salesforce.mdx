@@ -9,15 +9,17 @@ Das Salesforce-Toolset gibt Agenten Live-Zugriff auf die Salesforce-Daten, für 
 
 | Bereich | Verfügbare Tools |
 | --- | --- |
-| Suche und Datensätze | `soql_query`, `sosl_search`, `get_record`, `create_record`, `update_record`, `describe_object`, `list_recent_records` |
+| Suche und Datensätze | `soql_query`, `sosl_search`, `get_record`, `create_record`, `update_record`, `describe_object`, `list_recent_records`, `upload_file_to_salesforce`, `attach_file_to_record` |
 | Accounts, Kontakte, Leads | `search_accounts`, `create_account`, `search_contacts`, `create_contact`, `search_leads`, `create_lead` |
 | Opportunities und Cases | `search_opportunities`, `create_opportunity`, `search_cases`, `create_case` |
-| Produkte und Aktivitäten | `search_products`, `create_product`, `list_pricebooks`, `add_product_to_opportunity`, `search_tasks`, `create_task` |
+| Produkte und Aktivitäten | `search_products`, `create_product`, `list_pricebooks`, `create_pricebook_entry`, `add_product_to_opportunity`, `search_tasks`, `create_task` |
 | Chatter und Profil | `get_record_chatter`, `post_chatter_comment`, `post_chatter_to_record`, `get_current_user` |
 
 <Warning>
   Generische Datensatzaktionen können Standard- und benutzerdefinierte Objekte ändern. Prüfen Sie Objekt, Datensatz-ID und Feldwerte vor einer schreibenden Aktion. Der Salesforce-Scope `api` eröffnet breiten API-Zugriff innerhalb der Rechte des angemeldeten Kontos.
 </Warning>
+
+`upload_file_to_salesforce` lädt einen Workspace-Dateidatensatz als Salesforce File hoch; `attach_file_to_record` verknüpft eine vorhandene Salesforce-Datei mit einem Datensatz. `create_pricebook_entry` setzt einen Produktpreis in einer Preisliste. Prüfen Sie bei diesen schreibenden Aktionen den Zieldatensatz, die Sichtbarkeit und gegebenenfalls den Preis.
 
 ## Salesforce-App und gemeinsame Instanz einrichten
 
