@@ -185,11 +185,11 @@ as their email becomes readable, the next sync grants their access automatically
 1. Click the **"New OAuth App"** button in the top right corner
 2. Fill in the application details:
    - **Application Name**: Enter a meaningful name (e.g., "Novaplan AI GitHub Connector")
-   - **Homepage URL**: Enter Novaplan AI Homepage URL (e.g., "http://localhost:3000")
+   - **Homepage URL**: Enter your actual Novaplan AI workspace URL (for example, `https://novaplanai.app`); do not use `localhost` for a managed workspace.
    - **Application description**: Description about app (Optional)
    - **Authorization callback URL**: 
       - You need to enter the redirect URI provided by Novaplan AI
-      - To get this URL, open Novaplan AI in another tab, navigate to **Novaplan AI (bottom left corner)** → **Workspace settings** → **Connectors** → **Your Connectors**, find the **Github** connector, and click **"Setup"**
+      - To get this URL, open Novaplan AI in another tab, navigate to **Workspace Settings → Connectors → GitHub → Setup**, and copy the callback URL shown there.
         <Info>
           GitHub OAuth App allows only one callback URL.
         </Info>
@@ -226,7 +226,7 @@ as their email becomes readable, the next sync grants their access automatically
 
 ### Step 4: Configure Connector in Novaplan AI
 
-1. Return to the Novaplan AI Github configuration dialog (if you closed it, navigate to **Novaplan AI (bottom left corner)** → **Workspace settings** → **Connectors** → **Your Connectors**, find the **Github** connector, and click **Setup**)
+1. Return to the Novaplan AI GitHub configuration dialog (if you closed it, navigate to **Workspace Settings → Connectors → GitHub → Setup**)
 2. The configuration dialog has two steps:
    - **Step 1: Authentication** - Enter OAuth credentials
    - **Step 2: Sync Settings** - Configure synchronization
