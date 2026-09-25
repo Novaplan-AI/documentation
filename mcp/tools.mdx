@@ -6,7 +6,7 @@ icon: "wrench"
 
 Reference for the tools exposed by the Novaplan AI MCP server. These tools let an AI client (Cursor, Claude Code, Gemini CLI, Claude.ai, LibreChat, etc.) talk to Novaplan AI — search and chat over the org's indexed documents, look up people and groups, download files, and talk to configured Novaplan AI agents.
 
-The server exposes **seven** tools. Each one wraps several lower-level API calls so the LLM gets a single, well-shaped response. This page matches the package's [TOOLS.md](https://github.com/pipeshub-ai/mcp-server/blob/main/TOOLS.md).
+The server exposes **seven** tools. Each one wraps several lower-level API calls so the LLM gets a single, well-shaped response. This reference was checked against MCP package version **2.3.3**. The package's [upstream tool reference](https://github.com/pipeshub-ai/mcp-server/blob/main/TOOLS.md) may describe a newer schema; confirm the version in your workspace before relying on optional arguments.
 
 ## `pipeshub_chat`
 
@@ -69,7 +69,7 @@ Stream the binary content of a single record. Use it when the user wants the act
 | Argument | Type | Required | Description |
 |---|---|---|---|
 | `recordId` | string | yes | From a chat citation or `pipeshub_search` hit. |
-| `convertTo` | string | no | Optional server-side format conversion (e.g. `pdf`). Omit for the original bytes. |
+| `convertTo` | string | no | Optional server-side format conversion. Use the MIME type `application/pdf` for PDF conversion; a bare `pdf` value may be ignored. Omit for the original bytes. |
 
 ## `pipeshub_directory`
 

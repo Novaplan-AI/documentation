@@ -31,7 +31,7 @@ curl -X POST https://your-workspace.example.com/mcp \
   -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
 ```
 
-Die Workspace-Adresse und das persönliche Token müssen durch die für Ihren Zugang freigegebenen Werte ersetzt werden. Der in der englischen Quellanleitung gezeigte MCP-Paste-Block verwendet `PIPESHUB_MCP_URL` und `PIPESHUB_MCP_TOKEN`; für die [QM-Keychain](/de/mcp/qm) gelten andere funktionale Variablennamen. Übernehmen Sie die Werte aus Ihrer tatsächlichen Oberfläche, ohne den Tokenwert zu verändern.
+Die Workspace-Adresse und das persönliche Token müssen durch die für Ihren Zugang freigegebenen Werte ersetzt werden. Der MCP-Paste-Block der Token-Oberfläche verwendet `PIPESHUB_MCP_URL` und `PIPESHUB_MCP_TOKEN`. Die QM-CLI in MCP-Paketversion 2.3.3 akzeptiert diese Namen ebenfalls, sofern URL und Token als **zwei getrennte persönliche Keychain-Einträge** mit ausdrücklich gesetzten Variablennamen hinterlegt werden. Die [QM-Anleitung](/de/mcp/qm) empfiehlt zur besseren Lesbarkeit `PIPESHUB_BASE_URL` und `PIPESHUB_TOKEN`. Verändern Sie den Tokenwert nicht.
 
 Ein PAT ist weiterhin auf die bei seiner Erstellung gewählten Scopes beschränkt. Weniger Scopes reduzieren die Auswirkungen eines verlorenen Tokens. Für Personen mit unterschiedlichen Rechten müssen getrennte Tokens erstellt werden; ein gemeinsam genutzter Team-Token würde die persönliche Berechtigungsprüfung verfälschen.
 

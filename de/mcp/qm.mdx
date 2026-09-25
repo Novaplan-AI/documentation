@@ -30,14 +30,14 @@ Die bisherige technische Anleitung verlangt mindestens Version 2.3.2. Prüfen Si
 
 ## Persönliche Zugangsdaten in QM
 
-Jede Person legt **zwei persönliche Keychain-Einträge** an. In der derzeit dokumentierten CLI müssen Service und Variablennamen exakt so lauten:
+Jede Person legt **zwei persönliche Keychain-Einträge** an. Für das gebündelte QM-Setup empfehlen wir diese Bezeichnungen:
 
 | Service | Variable | Wert |
 | --- | --- | --- |
 | `pipeshub` | `PIPESHUB_TOKEN` | Eigenes PAT als reiner Wert |
 | `pipeshub` | `PIPESHUB_BASE_URL` | Öffentliche HTTPS-Origin des Workspaces ohne `/mcp` |
 
-Der automatisch angebotene MCP-Paste-Block verwendet andere Variablennamen und gehört nicht in diese QM-Keychain. Geben Sie ein PAT niemals in einem Chat ein und speichern Sie es nicht in `sandbox.secretEnv`, weil dieser Bereich für die gesamte Organisation gelten kann. Bei einem gemeinsam genutzten Workspace muss jede Person mit ihrer eigenen Identität arbeiten.
+Die QM-CLI in MCP-Paketversion 2.3.3 akzeptiert auch `PIPESHUB_MCP_TOKEN` und `PIPESHUB_MCP_URL`; bei letzterer entfernt sie den `/mcp`-Pfad. Wenn Sie den Paste-Block aus der Token-Oberfläche verwenden, teilen Sie ihn in **zwei persönliche Keychain-Einträge** auf und tragen Sie den jeweiligen Variablennamen ausdrücklich ein. Geben Sie ein PAT niemals in einem Chat ein und speichern Sie es nicht in `sandbox.secretEnv`, weil dieser Bereich für die gesamte Organisation gelten kann. Bei einem gemeinsam genutzten Workspace muss jede Person mit ihrer eigenen Identität arbeiten.
 
 ## Verbindung prüfen
 

@@ -3,7 +3,7 @@ title: "MCP-Werkzeugreferenz"
 description: "Suche, Chat, Dokumentzugriff, Verzeichnis und Agenten über den MCP-Endpunkt."
 ---
 
-Der MCP-Endpunkt stellt Werkzeuge bereit, mit denen kompatible Clients Unternehmensdaten suchen, Fragen mit Quellenangaben beantworten, Datensätze lesen und Dateien abrufen können. Die folgende Referenz übersetzt die dokumentierte Schnittstelle. Die tatsächlichen Namen und Argumente müssen vor Veröffentlichung gegen den Novaplan Enterprise Server geprüft werden.
+Der MCP-Endpunkt stellt Werkzeuge bereit, mit denen kompatible Clients Unternehmensdaten suchen, Fragen mit Quellenangaben beantworten, Datensätze lesen und Dateien abrufen können. Diese Referenz wurde anhand der MCP-Paketversion **2.3.3** geprüft. Die [aktuelle Upstream-Referenz](https://github.com/pipeshub-ai/mcp-server/blob/main/TOOLS.md) kann eine neuere Schnittstelle beschreiben. Prüfen Sie die Version Ihres Workspaces, bevor Sie optionale Argumente übernehmen.
 
 <Warning>
   Die hier gezeigten `pipeshub_*`-Namen sind derzeit technische Werkzeugkennungen der zugrunde liegenden MCP-Implementierung. Sie wurden nicht kosmetisch umbenannt, weil ein Client sonst ein nicht vorhandenes Werkzeug aufrufen würde. Diese Namen sind ein offener Punkt für die Novaplan-Freigabe.
@@ -52,7 +52,7 @@ Greift je nach `mode` auf einen Datensatz oder seine Struktur zu:
 
 | Werkzeug | Aufgabe | Wichtige Argumente |
 | --- | --- | --- |
-| `pipeshub_download_record` | Binärinhalt einer Datei herunterladen, optional mit `convertTo` (etwa `pdf`) konvertieren; für Textinhalte ist `content` besser geeignet | `recordId` |
+| `pipeshub_download_record` | Binärinhalt einer Datei herunterladen, optional mit `convertTo` auf den MIME-Typ `application/pdf` konvertieren; ein bloßes `pdf` kann ignoriert werden. Für Textinhalte ist `content` besser geeignet | `recordId` |
 | `pipeshub_directory` | Personen, Gruppen und Teams abfragen | `action`: `whoami`, `list_users`, `get_user`, `list_groups` oder `list_my_teams`; gegebenenfalls `userId`, `page`, `limit`, `search` |
 | `pipeshub_sources` | Zugängliche Quellen und KI-Modelle ermitteln | Optional `include`, standardmäßig `sources` und `llmModels`; `embeddingModels` bei Bedarf ergänzen |
 | `pipeshub_agents` | Für die Organisation konfigurierte Agenten auflisten | Kein Pflichtargument; `agentId` kann danach an `pipeshub_chat` übergeben werden |

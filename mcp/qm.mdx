@@ -89,7 +89,7 @@ npx qm check && npx qm up
 
 <Steps>
   <Step title="Create a personal access token">
-    In Novaplan AI: **Developer Settings → Personal Access Tokens → New token**. Accept the defaults. Keep the `phpat_` prefix if the token has one; it is for secret scanners, not a second secret.
+    In Novaplan AI: **Developer Settings → Personal Access Tokens → New token**. Select a bounded expiry and the minimum scopes needed for the approved integration; leaving scopes unselected can grant the server's full configured MCP scope set. Keep the `phpat_` prefix if the token has one; it is part of the displayed token.
 
     Do not add `semantic:read` if the agent asks for it — that scope is search *history*, not search, and it is not on a stock instance. Search is `semantic:write`, and the CLI already uses it.
 
@@ -103,7 +103,7 @@ npx qm check && npx qm up
     | `pipeshub` | `PIPESHUB_TOKEN` | The PAT only — no `KEY=`, no URL |
     | `pipeshub` | `PIPESHUB_BASE_URL` | Public HTTPS origin, no `/mcp` path |
 
-    Service must be exactly `pipeshub`. The environment-variable field is marked optional; fill it in. If you leave it blank on the token entry, QM derives `PIPESHUB_TOKEN` from the service name. It will not derive `PIPESHUB_BASE_URL`.
+    Use service `pipeshub` for the bundled QM setup. The environment-variable field is marked optional; fill it in. If you leave it blank on the token entry, QM derives `PIPESHUB_TOKEN` from the service name. It will not derive `PIPESHUB_BASE_URL`.
   </Step>
 </Steps>
 
@@ -112,7 +112,7 @@ npx qm check && npx qm up
 </Warning>
 
 <Note>
-  The create-token paste block (`PIPESHUB_MCP_URL=` / `PIPESHUB_MCP_TOKEN=`) is for a local MCP client, not for this keychain.
+  The CLI in bundled package 2.3.3 also accepts `PIPESHUB_MCP_TOKEN` and `PIPESHUB_MCP_URL`; it strips `/mcp` from the latter. If you use the create-token paste block in QM, split it into **two personal keychain entries** and set each environment-variable field explicitly. The table above is the recommended setup for clarity.
 </Note>
 
 ## First message
@@ -160,4 +160,4 @@ If the CLI says it is not connected, have the agent run `pipeshub auth connect-h
 - Point the sandbox at `http://localhost:…`
 - Invent a source the CLI did not return
 - Expect `qm sandbox publish` to put `pipeshub` on PATH (Sprites)
-- Paste the MCP create-token block (`PIPESHUB_MCP_URL` / `PIPESHUB_MCP_TOKEN`) into the QM keychain
+- Paste the MCP create-token block into a single QM keychain credential; split its URL and token into two personal entries with explicit variable names

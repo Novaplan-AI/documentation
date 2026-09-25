@@ -71,7 +71,7 @@ PIPESHUB_MCP_TOKEN=phpat_eyJhbGciOiJIUzI1NiIs...
 `PIPESHUB_MCP_TOKEN` is the same value you'll pass as `--bearer-auth` or in an `Authorization: Bearer` header below — the paste block just saves you from copying it twice.
 
 <Note>
-  This block is for MCP clients and the [local stdio server](/mcp/local-server). **QM expects different names**: the bare token as `PIPESHUB_TOKEN`, and the origin with no `/mcp` path as `PIPESHUB_BASE_URL`, on two personal keychain entries. Pasting this block into QM's keychain fails in a way that looks like a missing environment variable rather than a wrong one.
+  This block is intended for MCP clients and the [local stdio server](/mcp/local-server). The bundled QM CLI also accepts these `PIPESHUB_MCP_*` names, but QM still needs the token and URL as **two separate personal keychain entries** with explicit environment-variable fields. The [QM guide](/mcp/qm) recommends `PIPESHUB_TOKEN` and `PIPESHUB_BASE_URL` for clarity.
 </Note>
 
 ---
