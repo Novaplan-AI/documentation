@@ -128,7 +128,7 @@ Novaplan normally creates the workspace and invites users. For invitation-based 
 5. Click **Edit** on the Authentication Settings page, toggle **SAML SSO** on, and click **Save** to activate it
 
 <Warning>
-  Only one authentication method can be active at a time. Turn off any currently active method before enabling SAML SSO.
+  Only one authentication method can be active at a time in this setup flow. Before changing the active method, coordinate with Novaplan and confirm a recovery sign-in path for administrators. Test the new SAML connection with an invited account before switching everyone over.
 </Warning>
 
 ---
@@ -151,5 +151,5 @@ Once SAML SSO is enabled, users can log in as follows:
 |-------|------------|
 | SSO button is not visible on the login page | Check that SAML SSO is enabled in **Workspace → Authentication** |
 | Login fails after entering IdP credentials | Verify the SSO Entry Point URL and X.509 Certificate are correct in the configuration panel |
-| "JIT Disabled" error on first login | Ask your admin to enable Just-in-Time Provisioning, or have your admin create your account in Novaplan AI manually |
+| "JIT Disabled" error on first login | For invitation-based access, ask your admin or Novaplan to invite the user and confirm that their IdP email matches the invited account. Enable Just-in-Time Provisioning only if automatic account creation is part of your approved access policy. |
 | Login redirects back to login page with an error | Ensure the Email Attribute Key matches the attribute name your IdP uses for email |

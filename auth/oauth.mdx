@@ -5,7 +5,7 @@ description: "Let people sign in to Novaplan AI with any OAuth 2.0 or OpenID Con
 
 # OAuth / OIDC Sign-in
 
-Novaplan AI can accept sign-ins from any identity provider that speaks OAuth 2.0 or OpenID Connect. Use this when your provider is not one of the ones with a dedicated page — Okta, Auth0, Keycloak, Authentik, Ping, and self-hosted providers all work through this method.
+Novaplan AI can connect to an OAuth 2.0 or OpenID Connect identity provider that exposes the authorization, token, and user-info endpoints needed below and returns a usable email identity. Use this method when your provider has no dedicated page; Okta, Auth0, Keycloak, Authentik, Ping, and self-hosted providers are examples to configure and test with your administrator.
 
 If you use Google or Microsoft, configure those directly instead: [Google](/auth/google), [Microsoft / Azure AD](/auth/microsoft-azureAd). They need less setup.
 
