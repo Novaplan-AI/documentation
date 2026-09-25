@@ -1,0 +1,29 @@
+---
+title: "Mistral AI"
+description: "Mistral-Sprachmodelle in Novaplan AI konfigurieren."
+---
+
+# Mistral AI konfigurieren
+
+![Konfigurationsansicht für Mistral AI](/images/ai-models/llm/mistral_LLMConfig.png)
+
+Novaplan AI kann Sprachmodelle von Mistral AI für KI-Funktionen in Ihrem Workspace verwenden. Novaplan unterstützt Sie bei der Einrichtung. Dafür benötigen Sie einen gültigen Mistral-API-Schlüssel und eine verfügbare Modell-ID.
+
+## Erforderliche Angaben
+
+**API Key:** Melden Sie sich in der [Mistral AI Console](https://console.mistral.ai/) an, öffnen Sie **API Keys**, erstellen Sie mit **Create new key** einen Schlüssel oder wählen Sie einen vorhandenen aus. Kopieren Sie ihn und bewahren Sie ihn geschützt auf.
+
+**Model Name:** Wählen Sie die genaue ID des gewünschten Modells. Beispiele sind `mistral-large-latest` für anspruchsvollere Aufgaben, `mistral-medium-latest` für eine ausgewogene Wahl und `mistral-small-latest` für einfachere Aufgaben. Prüfen Sie die [aktuelle Mistral-Modellübersicht](https://docs.mistral.ai/getting-started/models/) und die Verfügbarkeit für Ihr Konto.
+
+## Optionale Einstellungen
+
+Mit **Context Length** geben Sie die Kontextlänge des Modells an. Der Wert darf dessen dokumentiertes Limit nicht überschreiten; bei manchen Mistral-Modellen sind beispielsweise 128.000 Token möglich. **Multimodal** aktivieren Sie nur, wenn das gewählte Modell Bildeingaben unterstützt. **Reasoning** aktivieren Sie nur für Modelle mit entsprechender Fähigkeit. Die Optionen gelten nicht pauschal für alle Mistral-Modelle.
+
+## Modell hinzufügen
+
+1. Klicken Sie auf der Mistral-Anbieterkarte auf **Configure**.
+2. Geben Sie **API Key** und **Model Name** ein.
+3. Legen Sie bei Bedarf **Context Length**, **Multimodal** und **Reasoning** passend zum Modell fest.
+4. Klicken Sie auf **Add Model**, um die Angaben zu speichern und prüfen zu lassen.
+
+API Key und Model Name sind erforderlich. Nutzung zählt zu den Kontingenten und gegebenenfalls zur Abrechnung Ihres Mistral-Kontos. Bei Authentifizierungs- oder Limitfehlern prüfen Sie Schlüssel, Modellzugang, Kontostatus und API-Nutzung in der Console. Weitere Informationen bietet die [Mistral-Dokumentation](https://docs.mistral.ai/); [Novaplan Support](/de/contact-us) hilft bei der Einrichtung.

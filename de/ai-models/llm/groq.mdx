@@ -1,0 +1,24 @@
+---
+title: "Groq"
+description: "Sprachmodelle über Groq in Novaplan AI konfigurieren."
+---
+
+# Groq konfigurieren
+
+![Konfigurationsansicht für Groq](/images/ai-models/llm/Groq_LLMConfig.png)
+
+Über Groq kann Novaplan AI Sprachmodelle mit geringer Antwortlatenz nutzen. Novaplan unterstützt Sie bei der Einrichtung. Sie benötigen einen Groq-API-Schlüssel und die Modell-ID eines für Ihr Konto verfügbaren Modells.
+
+## Erforderliche Angaben
+
+**API Key:** Melden Sie sich in der [Groq Console](https://console.groq.com/) an, öffnen Sie **API Keys**, wählen Sie **Create API Key** und kopieren Sie den neuen Schlüssel. Bewahren Sie ihn geschützt auf.
+
+**Model Name:** Tragen Sie die genaue Modell-ID ein. Ein Beispiel ist `meta-llama/llama-4-scout-17b-16e-instruct`. Prüfen Sie die [aktuelle Modellliste von Groq](https://console.groq.com/docs/models), denn unterstützte Modelle und Zugänge können sich ändern. Einige IDs verwenden das Format `anbieter/modellname`.
+
+## Modell hinzufügen
+
+1. Klicken Sie auf der Groq-Anbieterkarte auf **Configure**.
+2. Geben Sie **API Key** und **Model Name** ein.
+3. Klicken Sie auf **Add Model**, um die Angaben zu speichern und prüfen zu lassen.
+
+Beide Felder sind erforderlich. API-Aufrufe zählen zum Kontingent und gegebenenfalls zur Abrechnung Ihres Groq-Kontos. Bei Fehlern prüfen Sie Schlüssel, genaue Modell-ID und Modellzugang; bei Rate-Limits kontrollieren Sie die Nutzung in der Groq Console. Weitere Informationen finden Sie in der [Groq-Dokumentation](https://console.groq.com/docs/); bei Novaplan-Fragen hilft [Support](/de/contact-us).
