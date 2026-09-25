@@ -21,7 +21,9 @@ Mit dem MariaDB-Toolset kann ein Agent Tabellenstrukturen lesen und SQL-Abfragen
 
 ## Datenbankzugang vorbereiten
 
-Benötigt werden ein aus der Novaplan-Umgebung erreichbarer **Host**, **Port** (üblicherweise `3306`) und **Database**. `localhost` bezeichnet den Host des Konnektorprozesses und ist bei einem verwalteten Workspace normalerweise nicht Ihre Datenbank. Stimmen Sie Netzwerkerreichbarkeit und Zugriffsregeln mit Novaplan und Ihrer Datenbankadministration ab.
+Benötigt werden ein aus der Novaplan-Umgebung erreichbarer **Host**, **Port** (üblicherweise `3306`) und **Database**. `localhost` bezeichnet den Host des Toolset-Dienstes und ist bei einem verwalteten Workspace normalerweise nicht Ihre Datenbank. Stimmen Sie Netzwerkerreichbarkeit und Zugriffsregeln mit Novaplan und Ihrer Datenbankadministration ab.
+
+Falls Sie MariaDB ausschließlich lokal testen möchten, verwenden Sie die [offizielle MariaDB-Container-Anleitung](https://mariadb.com/docs/server/server-management/automated-mariadb-deployment-and-administration/docker-and-mariadb/installing-and-using-mariadb-via-docker) mit einem eigenen Testpasswort. Beschränken Sie einen veröffentlichten Test-Port auf `127.0.0.1`; [Docker beschreibt](https://docs.docker.com/engine/network/port-publishing/), dass eine Portfreigabe ohne Hostadresse auch andere Netzwerkschnittstellen erreichen kann. Diese lokale Testdatenbank ist dadurch nicht automatisch mit Ihrem verwalteten Novaplan-Workspace verbunden.
 
 Für reine Leseabfragen kann ein Datenbankadministrator beispielsweise `SELECT` auf der relevanten Datenbank vergeben:
 

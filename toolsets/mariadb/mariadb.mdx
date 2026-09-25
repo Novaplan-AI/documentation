@@ -64,25 +64,12 @@ The MariaDB toolset lets AI agents read schema information and run SQL queries a
 
 If you already have a MariaDB server, skip this step.
 
-### Option A: Docker (recommended for testing)
+### Option A: Docker (local testing only)
 
-Run a local MariaDB container:
-
-```bash
-docker run --name mariadb-test \
-  -e MARIADB_ROOT_PASSWORD=rootpass \
-  -e MARIADB_DATABASE=test_db \
-  -p 3306:3306 \
-  -d mariadb:latest
-```
-
-This starts a **test database** on your own machine at `localhost:3306` with:
-- Username: `root`
-- Password: `rootpass`
-- Database: `test_db`
+If you need a disposable test database on your own machine, follow the [official MariaDB container instructions](https://mariadb.com/docs/server/server-management/automated-mariadb-deployment-and-administration/docker-and-mariadb/installing-and-using-mariadb-via-docker). Set a unique test password instead of copying a published one. For a host-only test, bind the published port to `127.0.0.1` as described in [Docker's port-publishing guide](https://docs.docker.com/engine/network/port-publishing/); publishing `3306:3306` without a host address can expose the database on other network interfaces.
 
 <Warning>
-  The sample root password is only for local testing. A Novaplan-managed workspace cannot normally reach `localhost` on your laptop. Before configuring the toolset, agree on a database host reachable from the managed workspace and suitable network and access controls with Novaplan and your database administrator.
+  A Novaplan-managed workspace cannot normally reach `localhost` on your laptop. This local database is for testing MariaDB itself, not for connecting the managed toolset. Before configuring the toolset, agree on a database host reachable from the workspace and suitable network and access controls with Novaplan and your database administrator.
 </Warning>
 
 ### Option B: Install locally

@@ -46,7 +46,7 @@ The MariaDB connector indexes schema metadata, table contents from a MariaDB dat
 ## Configuration Guide
 
 <Info>
-  Novaplan prepares your workspace. The optional local MariaDB steps below set up a **database for testing**, not Novaplan AI. A managed Novaplan connector can reach `localhost` only on its own host, so use a database address reachable from your workspace and confirm network access with Novaplan Support. Do not use the sample `rootpass` password or publish the test database port in a production environment.
+  Novaplan prepares your workspace. The optional local MariaDB steps below set up a **database for testing**, not Novaplan AI. A managed Novaplan connector can reach `localhost` only on its own host, so use a database address reachable from your workspace and confirm network access with Novaplan Support.
 </Info>
 
 <AccordionGroup>
@@ -55,22 +55,9 @@ The MariaDB connector indexes schema metadata, table contents from a MariaDB dat
 
 If you already have a MariaDB server, skip this step.
 
-### Option A: Docker (recommended for testing)
+### Option A: Docker (local testing only)
 
-Run a local MariaDB container:
-
-```bash
-docker run --name mariadb-test \
-  -e MARIADB_ROOT_PASSWORD=rootpass \
-  -e MARIADB_DATABASE=test_db \
-  -p 3306:3306 \
-  -d mariadb:latest
-```
-
-This starts MariaDB on `localhost:3306` with:
-- Username: `root`
-- Password: `rootpass`
-- Database: `test_db`
+If you need a disposable test database, follow the [official MariaDB container instructions](https://mariadb.com/docs/server/server-management/automated-mariadb-deployment-and-administration/docker-and-mariadb/installing-and-using-mariadb-via-docker) and set a unique test password. For a host-only test, bind the published port to `127.0.0.1` as described in [Docker's port-publishing guide](https://docs.docker.com/engine/network/port-publishing/). A port published without a host address may be reachable on other network interfaces. This local test database is not automatically reachable from your Novaplan AI workspace.
 
 ### Option B: Install locally
 
