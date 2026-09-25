@@ -1,0 +1,24 @@
+---
+title: "Fireworks AI"
+description: "Modelle über Fireworks AI in Novaplan AI konfigurieren."
+---
+
+# Fireworks AI konfigurieren
+
+![Konfigurationsansicht für Fireworks AI](/images/ai-models/llm/Fireworks_LLMConfig.png)
+
+Über Fireworks AI kann Novaplan AI Sprachmodelle verschiedener Anbieter verwenden. Novaplan unterstützt Sie bei der Einrichtung. Sie benötigen einen Fireworks-API-Schlüssel und den vollständigen Modellpfad.
+
+## Erforderliche Angaben
+
+**API Key:** Melden Sie sich in der [Fireworks AI Console](https://fireworks.ai/account/api-keys) an, öffnen Sie **API Keys**, wählen Sie **Create API Key** und kopieren Sie den Schlüssel. Bewahren Sie ihn geschützt auf.
+
+**Model Name:** Verwenden Sie den **vollständigen Pfad** aus der [Fireworks-Modellbibliothek](https://fireworks.ai/models). Ein Beispiel ist `accounts/fireworks/models/kimi-k2-instruct`; das Format lautet `accounts/fireworks/models/<model-id>`. Der Name eines Modells ohne diesen Pfad reicht für die Konfiguration nicht aus. Prüfen Sie die aktuelle Verfügbarkeit in Ihrem Konto.
+
+## Modell hinzufügen
+
+1. Klicken Sie auf der Fireworks-Anbieterkarte auf **Configure**.
+2. Geben Sie **API Key** und den vollständigen Pfad unter **Model Name** ein.
+3. Klicken Sie auf **Add Model**, um die Angaben zu speichern und prüfen zu lassen.
+
+Beide Felder sind erforderlich. API-Aufrufe zählen zum Kontingent und gegebenenfalls zur Abrechnung Ihres Fireworks-Kontos. Bei Fehlern prüfen Sie Schlüssel, vollständigen Modellpfad, Modellverfügbarkeit und API-Limits. Weitere Informationen bietet die [Fireworks-Dokumentation](https://docs.fireworks.ai/); [Novaplan Support](/de/contact-us) hilft bei der Einrichtung.

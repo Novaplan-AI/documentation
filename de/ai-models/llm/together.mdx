@@ -1,0 +1,29 @@
+---
+title: "Together AI"
+description: "Modelle über Together AI in Novaplan AI konfigurieren."
+---
+
+# Together AI konfigurieren
+
+![Konfigurationsansicht für Together AI](/images/ai-models/llm/Together_LLMConfig.png)
+
+Über Together AI kann Novaplan AI Modelle verschiedener Anbieter verwenden. Novaplan unterstützt Sie bei der Einrichtung. Sie benötigen einen Together-API-Schlüssel und die genaue Modell-ID aus dem Katalog.
+
+## Erforderliche Angaben
+
+**API Key:** Melden Sie sich auf der [Together AI Platform](https://api.together.xyz/) an, öffnen Sie in Ihren Kontoeinstellungen **API Keys**, erstellen Sie mit **Create API Key** einen Schlüssel und kopieren Sie ihn. Bewahren Sie ihn geschützt auf.
+
+**Model Name:** Verwenden Sie die genaue ID aus dem [Together-Modellkatalog](https://api.together.xyz/models), beispielsweise `deepseek-ai/DeepSeek-V3`. Die Kennungen folgen häufig dem Format `anbieter/modellname`. Prüfen Sie die aktuelle Verfügbarkeit für Ihr Konto und Ihre Region.
+
+## Option: Endpoint URL
+
+Wenn **Endpoint URL** leer bleibt, nutzt Novaplan AI den regulären Together-API-Endpoint `https://api.together.xyz/v1/`. Tragen Sie nur dann eine andere Basisadresse ein, wenn Ihre Organisation einen eigenen Proxy, ein Gateway oder einen dedizierten Endpoint verwendet.
+
+## Modell hinzufügen
+
+1. Klicken Sie auf der Together-AI-Anbieterkarte auf **Configure**.
+2. Geben Sie **API Key** und **Model Name** ein.
+3. Tragen Sie bei Bedarf eine abweichende **Endpoint URL** ein; sonst lassen Sie das Feld leer.
+4. Klicken Sie auf **Add Model**, um die Angaben zu speichern und prüfen zu lassen.
+
+API Key und Model Name sind erforderlich; Endpoint URL ist optional. Nutzung zählt zu Kontingent, Guthaben und gegebenenfalls zur Abrechnung Ihres Together-Kontos. Bei Fehlern prüfen Sie Schlüssel, genaue Modell-ID, Kontostatus, Region und API-Limits. Weitere Informationen bietet die [Together-Dokumentation](https://docs.together.ai/); [Novaplan Support](/de/contact-us) hilft bei der Einrichtung.

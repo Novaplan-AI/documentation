@@ -108,7 +108,11 @@
                   "de/ai-models/llm/cohere",
                   "de/ai-models/llm/mistral",
                   "de/ai-models/llm/groq",
-                  "de/ai-models/llm/xai"
+                  "de/ai-models/llm/xai",
+                  "de/ai-models/llm/minimax",
+                  "de/ai-models/llm/fireworks",
+                  "de/ai-models/llm/together",
+                  "de/ai-models/llm/vertex-ai"
                 ]
               },
               {
