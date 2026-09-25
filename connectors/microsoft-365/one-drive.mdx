@@ -302,7 +302,7 @@ The system handles three types of changes:
 **Member Changes:**
 - Processes member additions and removals via `members@delta` field
 - Fetches user email for each member change
-- Removes the group member if `@remove` field is present
+- Removes the group member if an `@removed` marker is present in that member change
 - Member addition is handled as part of the group's ADD/UPDATE process.
 
 ---

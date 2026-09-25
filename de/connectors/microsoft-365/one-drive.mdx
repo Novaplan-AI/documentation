@@ -72,6 +72,8 @@ Für Gruppen und Drive-Inhalte verwendet die Implementierung Microsoft-Graph-Del
 
 Für die technische Nachverfolgung verwendet die Implementierung unter anderem `msgraph_client.get_all_users()`, `_sync_user_groups()`, `_process_users_in_batches()` und `_process_delta_items_generator`. Aktive Nutzer werden in kleinen parallelen Batches verarbeitet; im dokumentierten Ablauf liegt `max_concurrent_batches` bei `3`. Dieser Abschnitt beschreibt die zugrunde liegende Implementierung und ist für die normale Nutzung nicht erforderlich.
 
+Bei Gruppen meldet Microsoft Graph Löschungen mit `@removed` und Mitgliedschaftsänderungen über `members@delta`. Der Konnektor übernimmt neue und geänderte Gruppen mit ihren Mitgliedern; bei einem `@removed`-Eintrag für ein Mitglied entfernt er dessen Gruppenzuordnung. Für Drive-Einträge prüft `drive_delta_sync_point` den letzten Stand. Neue Datensätze gehen in Batches an `data_entities_processor.on_new_records`; aktualisierte und gelöschte Datensätze verarbeitet `_handle_record_updates`. Nach jeder Seite wird bei Bedarf `nextLink` und am Ende `deltaLink` gespeichert. Diese Details helfen bei der Fehlersuche, wenn eine Berechtigungs- oder Dateiänderung noch nicht sichtbar ist.
+
 ## Häufige Fragen
 
 ### Warum erscheinen Dateien nicht in der Suche?
