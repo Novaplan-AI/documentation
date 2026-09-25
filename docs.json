@@ -56,7 +56,9 @@
               "de/connectors/google-workspace/slides/slides",
               "de/connectors/google-workspace/calendar/calendar",
               "de/connectors/microsoft-365/one-note",
+              "de/connectors/microsoft-365/one-drive",
               "de/connectors/microsoft-365/outlook",
+              "de/connectors/microsoft-365/sharepoint",
               "de/connectors/microsoft-365/teams",
               "de/connectors/airtable/airtable",
               "de/connectors/zendesk/zendesk"

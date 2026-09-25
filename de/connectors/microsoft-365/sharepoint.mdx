@@ -1,0 +1,109 @@
+---
+title: "Microsoft SharePoint"
+description: "SharePoint-Websites und Dokumentbibliotheken mit Novaplan AI synchronisieren."
+---
+
+Der SharePoint-Konnektor synchronisiert Websites, Dokumentbibliotheken, Dateien und Seiten aus Microsoft 365 mit Novaplan AI. Die Verbindung verwendet Microsoft Entra ID und Microsoft Graph mit **Application permissions**. Sie läuft im Hintergrund, ohne dass sich jede Person einzeln bei Microsoft anmelden muss.
+
+Novaplan richtet Ihren Workspace weitgehend für Sie ein. Stimmen Sie App-Registrierung, Berechtigungsumfang, Zertifikate und die Auswahl der SharePoint-Websites mit Ihrer Microsoft-365-Administration und Novaplan ab.
+
+## Verbindung einrichten
+
+Diese Schritte sind eine technische Referenz für Ihre Administration und Novaplan. Die dokumentierten Berechtigungen umfassen weitreichende Zugriffe auf Dateien und Websites. Prüfen Sie ihren Umfang vor einer tenantweiten Freigabe.
+
+### 1. Anwendung in Microsoft Entra registrieren
+
+1. Öffnen Sie das [Azure-Portal](https://portal.azure.com) mit einem geeigneten Administratorkonto.
+2. Gehen Sie zu **Microsoft Entra ID → App registrations → New registration**.
+3. Vergeben Sie einen Namen, beispielsweise `Novaplan AI SharePoint Connector`.
+4. Wählen Sie **Accounts in this organizational directory only (Single tenant)**. Lassen Sie die **Redirect URI** leer und klicken Sie auf **Register**.
+5. Kopieren Sie auf der **Overview**-Seite die **Application (client) ID** und die **Directory (tenant) ID**. Die **Object ID** ist nicht die Client-ID.
+
+### 2. API-Berechtigungen erteilen
+
+Öffnen Sie **API permissions → Add a permission** und wählen Sie jeweils **Application permissions**, nicht **Delegated permissions**.
+
+Für **Microsoft Graph** dokumentiert die Verbindung diese Berechtigungen:
+
+```text
+User.Read.All
+GroupMember.Read.All
+Group.Read.All
+Files.ReadWrite.All
+Reports.Read.All
+Sites.FullControl.All
+Member.Read.Hidden
+```
+
+Für die **SharePoint**-API wird zusätzlich `Sites.FullControl.All` benötigt. Laut der technischen Referenz dient diese Berechtigung dem Abruf detaillierter Website-Gruppenrechte; `Files.ReadWrite.All` wird für Webhook-Abonnements von Dokumentbibliotheken verwendet.
+
+Klicken Sie danach auf **Grant admin consent for [Your Organization]** und bestätigen Sie die Freigabe. Prüfen Sie, ob die Berechtigungen als freigegeben angezeigt werden. Die freigebende Administratoridentität sollte mit dem Novaplan-AI-Konto abgestimmt sein, das den Konnektor einrichtet.
+
+### 3. Zertifikat und privaten Schlüssel vorbereiten
+
+Die technische Referenz verwendet ein Zertifikat und einen unverschlüsselten privaten Schlüssel im PKCS#8-Format. Lassen Sie die Erzeugung und sichere Übergabe durch Ihre Administration und Novaplan koordinieren. Die folgenden Befehle sind das im Quellleitfaden dokumentierte Beispiel:
+
+```bash
+openssl genrsa -out tempprivatekey.key 2048
+openssl pkcs8 -topk8 -inform PEM -outform PEM -in tempprivatekey.key -out privatekey.key -nocrypt
+openssl req -new -key privatekey.key -out request.csr
+openssl x509 -req -days 365 -in request.csr -signkey privatekey.key -out certificate.crt
+```
+
+Prüfen Sie, dass `certificate.crt` mit `BEGIN CERTIFICATE` und `privatekey.key` mit `BEGIN PRIVATE KEY` beginnt. Der private Schlüssel darf in diesem dokumentierten Ablauf weder einen RSA-Header noch eine Verschlüsselung aufweisen. Bewahren Sie ihn geschützt auf und übertragen Sie ihn nur über den mit Novaplan vereinbarten sicheren Weg.
+
+Laden Sie `certificate.crt` in der Entra-App unter **Certificates & secrets → Certificates → Upload certificate** hoch. In Novaplan AI werden dasselbe Zertifikat unter **Client Certificate** und `privatekey.key` unter **Private Key** benötigt.
+
+### 4. SharePoint-Konnektor konfigurieren
+
+1. Öffnen Sie **Workspace Settings → Connectors** und wählen Sie bei **SharePoint** die Option **Setup**.
+2. Vergeben Sie einen Instanznamen und tragen Sie **Application (Client) ID** sowie **Directory (Tenant) ID** ein.
+3. Tragen Sie die **SharePoint Domain** ein, beispielsweise `https://yourcompany.sharepoint.com`.
+4. Aktivieren Sie **Has Admin Consent**, sobald die Berechtigungen freigegeben sind.
+5. Laden Sie **Client Certificate** und **Private Key** hoch und speichern Sie die Verbindung.
+6. Prüfen Sie die [Konnektoreinstellungen](#konnektoreinstellungen) und klicken Sie auf **Save Configuration**. Starten Sie mit **Start syncing now** oder wählen Sie **I'll do it later**.
+
+## Konnektoreinstellungen
+
+### Synchronisierung
+
+- **Scheduled:** Synchronisiert automatisch im gewählten **Sync Interval**; die Voreinstellung beträgt 60 Minuten.
+- **Manual:** Synchronisiert nur nach manuellem Start durch eine Administration.
+
+Synchronisierungsfilter greifen vor dem Abruf. Nicht ausgewählte Inhalte werden nicht aus SharePoint geholt.
+
+| Filter | Ohne Einschränkung | Wirkung |
+| --- | --- | --- |
+| **Site Names** | Alle Websites | Bestimmte Websites einbeziehen oder ausschließen |
+| **Document Library Names** | Alle Bibliotheken | Bestimmte Dokumentbibliotheken einbeziehen oder ausschließen |
+| **File Extensions** | Alle Endungen | Dateitypen mit **Include** oder **Exclude** auswählen |
+| **Modified Date** | Kein Zeitraum | Nach letztem Änderungsdatum einschränken |
+| **Created Date** | Kein Zeitraum | Nach Erstellungsdatum einschränken |
+
+Prüfen Sie die Auswahl der Websites und Bibliotheken mit Ihrer Administration, bevor Sie einen breiten ersten Lauf starten.
+
+### Indexierung
+
+Indexierungsfilter greifen nach dem Abruf und bestimmen, was in der Suche erscheint. Nicht automatisch indexierte Inhalte bleiben unter **All Records** sichtbar.
+
+| Einstellung | Voreinstellung | Wirkung |
+| --- | --- | --- |
+| **Enable Manual Indexing** | Aus | Wenn aktiviert, müssen Datensätze unter **All Records** manuell indexiert werden. |
+| **Index Pages** | An | Steuert die automatische Indexierung von SharePoint-Seiten. |
+| **Index Documents** | An | Steuert die automatische Indexierung von Dateien wie Word-Dokumenten und PDFs. |
+
+## Häufige Fragen
+
+### Warum erscheinen Inhalte nicht in der Suche?
+
+Prüfen Sie, ob die Website und Bibliothek von den Synchronisierungsfiltern erfasst werden. Kontrollieren Sie danach unter **All Records**, ob die Datensätze synchronisiert wurden, und prüfen Sie **Enable Manual Indexing**, **Index Pages**, **Index Documents** sowie den Abschluss des ersten Laufs. Den Synchronisierungsstatus finden Sie unter **Workspace Settings → Connectors**.
+
+### Kann ich nur bestimmte SharePoint-Websites synchronisieren?
+
+Ja. Wählen Sie bei **Site Names** die benötigten Websites und verwenden Sie **Include**. Sie können auch einzelne Dokumentbibliotheken eingrenzen.
+
+### Kann ich nur bestimmte Unterordner indexieren?
+
+Wählen Sie die betroffene Website für eine eigene Konnektorinstanz und aktivieren Sie **Enable Manual Indexing**. Öffnen Sie anschließend unter **All Records** die gewünschten Ordner und Dateien und starten Sie die Indexierung gezielt. Der Website-Filter begrenzt den Abruf; die manuelle Indexierung begrenzt, was davon in der Suche erscheint.
+
+Bei Fragen zur Einrichtung oder zu fehlenden Ergebnissen schreiben Sie an [support@novaplan.ai](mailto:support@novaplan.ai).

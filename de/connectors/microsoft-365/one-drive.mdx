@@ -1,0 +1,93 @@
+---
+title: "Microsoft OneDrive"
+description: "Dateien und Freigaben aus OneDrive mit Novaplan AI synchronisieren und durchsuchen."
+---
+
+Der OneDrive-Konnektor synchronisiert Dateien, Ordner und Berechtigungen aus Microsoft 365 mit Novaplan AI. Er verwendet Microsoft Graph mit **Application permissions**. Dadurch kann die Verbindung im Hintergrund laufen, ohne dass sich jede Person einzeln bei Microsoft anmelden muss.
+
+Novaplan richtet Ihren Workspace weitgehend für Sie ein. Die Anwendung und ihre Freigabe in Microsoft Entra ID stimmen Sie mit Ihrer Microsoft-365-Administration und Novaplan ab.
+
+## Verbindung einrichten
+
+Dieser Abschnitt ist eine technische Referenz für Ihre Administration und Novaplan. Sie benötigen die entsprechenden Rechte für App-Registrierung und Administratorfreigabe in Ihrem Microsoft-365-Tenant.
+
+### 1. Anwendung in Microsoft Entra registrieren
+
+1. Öffnen Sie das [Azure-Portal](https://portal.azure.com) und melden Sie sich mit einem geeigneten Administratorkonto an.
+2. Öffnen Sie **Microsoft Entra ID → App registrations → New registration**.
+3. Vergeben Sie einen Namen, beispielsweise `Novaplan AI OneDrive Connector`.
+4. Wählen Sie **Accounts in this organizational directory only (Single tenant)**. Lassen Sie **Redirect URI** leer und klicken Sie auf **Register**.
+
+Diese Verbindung verwendet Anwendungszugangsdaten statt einer interaktiven OAuth-Weiterleitung.
+
+### 2. Kennungen und Client Secret erfassen
+
+1. Kopieren Sie auf der **Overview**-Seite die **Application (client) ID** und die **Directory (tenant) ID**. Die **Object ID** ist nicht die Client-ID.
+2. Öffnen Sie **Certificates & secrets → New client secret** und wählen Sie eine Beschreibung und eine zu Ihrer Richtlinie passende Laufzeit.
+3. Kopieren Sie nach **Add** sofort den **Value** des Secrets. Die Secret ID ist nicht der Wert, den der Konnektor benötigt. Der Wert wird nur einmal angezeigt.
+4. Übergeben Sie die Zugangsdaten nur über den mit Novaplan vereinbarten sicheren Weg.
+
+### 3. Microsoft-Graph-Berechtigungen freigeben
+
+1. Öffnen Sie **API permissions → Add a permission → Microsoft Graph**.
+2. Wählen Sie **Application permissions**, nicht **Delegated permissions**.
+3. Fügen Sie `User.Read.All`, `Group.Read.All` und `Files.Read.All` hinzu.
+4. Klicken Sie auf **Grant admin consent for [Your Organization]** und bestätigen Sie die Freigabe.
+5. Prüfen Sie, ob die Berechtigungen als freigegeben angezeigt werden.
+
+Diese Berechtigungen können Organisationsdateien im Hintergrund zugänglich machen. Prüfen Sie ihren Umfang vor der Freigabe mit Ihrer Administration. Das Konto, das die Freigabe erteilt, sollte mit dem Novaplan-AI-Konto abgestimmt sein, das den Konnektor einrichtet.
+
+### 4. OneDrive-Konnektor in Novaplan AI konfigurieren
+
+1. Öffnen Sie **Workspace Settings → Workspace → Connectors** und wählen Sie bei **OneDrive** die Option **Configure** oder **Setup**.
+2. Tragen Sie die **Application (Client) ID**, das **Client Secret** und die **Directory (Tenant) ID** ein.
+3. Aktivieren Sie **Has Admin Consent**, sobald die Freigabe erteilt ist, und klicken Sie auf **Next**.
+4. Prüfen Sie die [Synchronisierungs- und Indexierungsfilter](#konnektoreinstellungen), speichern Sie die Konfiguration und starten Sie den ersten Lauf.
+
+Nach der Administratorfreigabe gibt es für diese Verbindung keinen zusätzlichen interaktiven Microsoft-Anmeldeschritt in Novaplan AI.
+
+## Konnektoreinstellungen
+
+### Synchronisierung
+
+- **Scheduled:** Synchronisiert automatisch im gewählten **Sync Interval**; die Voreinstellung beträgt 60 Minuten.
+- **Manual:** Synchronisiert nur nach manuellem Start durch eine Administration.
+- **Created Date / Modified Date:** Begrenzt Dateien nach Erstellungs- oder Änderungsdatum, beispielsweise mit **Last 365 Days**, **Last 30 Days**, **Is After**, **Is Before** oder **Is Between**.
+- **File Extensions:** Mit **In** werden nur ausgewählte Dateiendungen synchronisiert; **Not In** schließt ausgewählte Endungen aus. Nicht unterstützte Endungen werden bei **In** ausgeschlossen und bei **Not In** nicht durch diesen Filter blockiert.
+
+Dateien außerhalb der Synchronisierungsfilter werden nicht abgerufen. Ordner bleiben für die Verzeichnisstruktur erhalten.
+
+### Indexierung
+
+Indexierungsfilter bestimmen, welche synchronisierten Dateien durchsuchbar werden. Dateien, die nicht automatisch indexiert sind, bleiben unter **All Records** sichtbar und tragen den Status **Manual Indexing**.
+
+- **Manual Indexing:** Synchronisiert ohne automatische Indexierung. Indexieren Sie einen Datensatz bei Bedarf unter **All Records** über das Dreipunktmenü mit **Start Indexing**.
+- **Index Shared Items:** Bezieht geteilte Dateien in die Suche ein. Wenn die Option deaktiviert ist, werden nur Dateien aus den eigenen Drives der Nutzer indexiert.
+
+## Technischer Ablauf
+
+Der erste Lauf erfasst Nutzer, Nutzergruppen und danach die OneDrive-Dateien aktiver Nutzer. Gruppenmitgliedschaften sind wichtig, um Freigaben korrekt zuzuordnen. Der Konnektor verarbeitet Dateien und Berechtigungen in Batches und speichert pro Drive einen Fortschrittspunkt für spätere Läufe.
+
+Für Gruppen und Drive-Inhalte verwendet die Implementierung Microsoft-Graph-Delta-Endpunkte. Beim ersten Lauf verarbeitet sie vorhandene Daten; danach helfen gespeicherte `deltaLink`- und gegebenenfalls `nextLink`-Werte, Ergänzungen, Änderungen und Löschungen seit dem letzten Lauf abzurufen. Änderungen an Freigaben werden mit den gespeicherten Berechtigungen abgeglichen.
+
+Für die technische Nachverfolgung verwendet die Implementierung unter anderem `msgraph_client.get_all_users()`, `_sync_user_groups()`, `_process_users_in_batches()` und `_process_delta_items_generator`. Aktive Nutzer werden in kleinen parallelen Batches verarbeitet; im dokumentierten Ablauf liegt `max_concurrent_batches` bei `3`. Dieser Abschnitt beschreibt die zugrunde liegende Implementierung und ist für die normale Nutzung nicht erforderlich.
+
+## Häufige Fragen
+
+### Warum erscheinen Dateien nicht in der Suche?
+
+Prüfen Sie unter **All Records**, ob die Dateien bereits synchronisiert wurden. Kontrollieren Sie anschließend Datums- und Dateiendungsfilter, **Manual Indexing**, **Index Shared Items** und den Abschluss der Indexierung. Den Laufstatus finden Sie unter **Workspace Settings → Connectors**. Falls Berechtigungen fehlen, prüfen Sie außerdem die Zuordnung der Microsoft-365-Konten zu Novaplan AI.
+
+### Was passiert, wenn das Client Secret abläuft?
+
+Die Verbindung kann dann nicht mehr authentifizieren und die Synchronisierung stoppt. Erstellen Sie unter **Certificates & secrets → New client secret** einen neuen Wert, kopieren Sie ihn sofort und aktualisieren Sie das Feld **Client Secret** der OneDrive-Instanz in Novaplan AI. Planen Sie die Erneuerung vor dem Ablaufdatum.
+
+### Warum dauert der erste Lauf länger?
+
+Beim ersten Lauf werden die Dateien, Ordner und Berechtigungen im gewählten Bereich vollständig erfasst. Bei vielen Nutzern und Dateien kann das dauern. Spätere Läufe verwenden die gespeicherten Delta-Fortschrittspunkte und rufen nur Änderungen ab.
+
+### Wann werden geänderte Freigaben sichtbar?
+
+Der Konnektor übernimmt Berechtigungsänderungen beim nächsten Lauf. Bei **Scheduled** richtet sich das nach dem gewählten Intervall; bei **Manual** starten Sie die Synchronisierung unter **Workspace Settings → Connectors** selbst.
+
+Wenn Sie Hilfe benötigen, schreiben Sie an [support@novaplan.ai](mailto:support@novaplan.ai).
