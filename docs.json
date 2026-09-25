@@ -112,7 +112,11 @@
                   "de/ai-models/llm/minimax",
                   "de/ai-models/llm/fireworks",
                   "de/ai-models/llm/together",
-                  "de/ai-models/llm/vertex-ai"
+                  "de/ai-models/llm/vertex-ai",
+                  "de/ai-models/llm/openai-compatible",
+                  "de/ai-models/llm/ollama",
+                  "de/ai-models/llm/litellm-proxy",
+                  "de/ai-models/llm/lm-studio"
                 ]
               },
               {

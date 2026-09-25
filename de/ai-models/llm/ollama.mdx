@@ -1,0 +1,42 @@
+---
+title: "Ollama"
+description: "Von Ollama bereitgestellte Sprachmodelle mit Novaplan AI verbinden."
+---
+
+# Ollama konfigurieren
+
+![Konfigurationsansicht für Ollama](/images/ai-models/llm/Ollama_LLMConfig.png)
+
+Ollama stellt Modelle auf einer eigenen Maschine oder einem Server über eine API bereit. Novaplan AI kann sich mit einer für den Workspace erreichbaren Ollama-Instanz verbinden. Die Ollama-Umgebung und der Modellbetrieb liegen bei der zuständigen Administration; Novaplan unterstützt Sie bei der Anbindung.
+
+## Vor der Verbindung
+
+Auf dem Modellserver muss [Ollama](https://ollama.com/) installiert sein, das gewünschte Modell muss heruntergeladen und der Dienst gestartet sein. Ein Administrationsbeispiel:
+
+```bash
+ollama pull qwen3-vl:8b
+ollama serve
+```
+
+Prüfen Sie mit `ollama list`, welche Modelle bereitstehen. Der Server muss von der Novaplan-AI-Umgebung aus erreichbar sein; ein Dienst, der nur auf `localhost` des Modellservers lauscht, ist von einem anderen Host nicht automatisch erreichbar.
+
+## Angaben in Novaplan AI
+
+| Feld | Verwendung |
+| --- | --- |
+| **Model Name** | Erforderlich. Genaue Ollama-Modell-ID, beispielsweise `qwen3-vl:8b`. Weitere IDs finden Sie in der [Ollama-Modellbibliothek](https://ollama.com/library). |
+| **Endpoint URL** | Optional. Adresse der erreichbaren Ollama-Instanz. Ohne Wert verwendet die Konfiguration `http://host.docker.internal:11434`. Eine entfernte Instanz kann eine eigene HTTPS-Adresse haben. |
+| **API Key** | Optional. Nur nötig, wenn ein vorgeschalteter Dienst oder Ihre Ollama-Umgebung Authentifizierung verlangt. |
+| **Multimodal** | Nur aktivieren, wenn das gewählte Modell Text und Bilder verarbeiten kann. |
+| **Reasoning** | Nur aktivieren, wenn das Modell eine entsprechende Fähigkeit anbietet. |
+
+Ollama verwendet standardmäßig Port `11434`. `host.docker.internal` ist ein mögliches Ziel, wenn die Novaplan-Komponente in einem Container läuft und Ollama auf dessen Host erreichbar ist. Für andere Betriebsumgebungen muss die Administration die tatsächlich erreichbare Adresse eintragen.
+
+## Modell hinzufügen
+
+1. Klicken Sie auf der Ollama-Anbieterkarte auf **Configure**.
+2. Geben Sie den **Model Name** ein und passen Sie bei Bedarf **Endpoint URL** und **API Key** an.
+3. Setzen Sie **Multimodal** und **Reasoning** nur passend zu den Fähigkeiten des Modells.
+4. Klicken Sie auf **Add Model**.
+
+Nur **Model Name** ist erforderlich. Bei Verbindungsfehlern prüfen Sie den laufenden Dienst, die Endpoint-Adresse, Firewall und Netzwerkerreichbarkeit. Bei **Model not found** prüfen Sie mit `ollama list`, ob die Modell-ID geladen ist. Bei Speichermangel oder langsamer Antwort helfen gegebenenfalls ein kleineres oder quantisiertes Modell beziehungsweise ein geeigneter GPU-Server. Weitere Informationen bietet die [Ollama-Dokumentation](https://github.com/ollama/ollama/tree/main/docs); [Novaplan Support](/de/contact-us) hilft bei der Anbindung.
