@@ -1,145 +1,33 @@
 ---
 title: "SMTP"
-description: "Configure email capabilities for authentication and notifications"
+description: "Administrator reference for email delivery in a managed workspace."
 icon: "envelope"
 ---
 
-# SMTP Configuration
+# Email delivery (SMTP)
 
-Your AI agent application requires SMTP configuration to enable email-based features like One-Time Password (OTP) authentication, password reset, and notifications.
+Novaplan AI uses its workspace mail configuration to send messages such as invitations, one-time codes, and password reset emails. Novaplan normally prepares this setting. An administrator should change it only after agreeing on the sender and mail service with the Novaplan team.
 
-Novaplan manages most workspace setup, including the mail configuration. This guide remains available to administrators as a reference; coordinate changes with the Novaplan team.
+<Info>
+  SMTP is configured separately from the initial AI model, embedding model, and storage setup. A workspace may inherit its mail settings from its managed deployment.
+</Info>
 
-<Callout type="info">
-  SMTP (Simple Mail Transfer Protocol) configuration is essential for all
-  email-based functionality in your application.
-</Callout>
+## Check or change the configuration
 
-When properly configured, your application can send automated emails to users for:
+1. Sign in with a workspace administrator account and open **Workspace → Mail**.
+2. Check whether the SMTP entry shows **Configured**. If it is inherited or already works, keep the current settings unless Novaplan has requested a change.
+3. To configure an agreed mail service, open the SMTP settings panel. Enter the host, port, and sender email address. Add a username and password only if the mail provider requires authentication.
+4. Save the settings and test delivery with an invitation or other approved test message. Check the sender address and spam filtering if the message does not arrive.
 
-- One-Time Password (OTP) authentication
-- Password reset requests
-- Send invitations to the users to your organisation
+The current settings form requires **SMTP Host**, **Port**, and **From Email Address**. The port defaults to `587` in the form; use the value and security settings specified by your mail provider. Credentials are optional when the provider does not require them. Store them in the configuration form, not in documentation or support messages.
 
-## Configuration Options
+<Warning>
+  Changing the mail service can interrupt invitations, one-time codes, and password resets. Coordinate production changes with Novaplan AI and confirm delivery before relying on the new settings.
+</Warning>
 
-<Tabs>
-  <Tab title="During Onboarding">
-    ### Configuring SMTP During Onboarding
-    At the time of setting up your app for the first time onboarding configuration dialog will open automatically 
-  <Steps>
-    <Step title="Access the SMTP Configuration Step">
-        After completing the LLM, Storage, and Connector setup steps in the onboarding process, you will reach the SMTP configuration screen.
-    </Step>
-    <Step title="Fill in Required Information">
-        Enter the necessary SMTP details:
-        - **SMTP Host** (*required*) - The address of your email server (e.g., smtp.gmail.com)
-        - **Port** (*required*) - The port number for your SMTP server (Default: 587)
-        - **From Email Address** (*required*) - The email address that will appear as the sender
-    </Step>
-    <Step title=" Add Authentication (if needed)">
-    If your email server requires authentication:
-      - **SMTP Username** (optional) - Username for SMTP authentication
-      - **SMTP Password** (optional) - Password for SMTP authentication
-    </Step>
-   <Step title="Complete Setup">
-      Click "Save" to save your configuration and proceed with the onboarding process.
-    </Step>
-   </Steps>
+## If mail is not arriving
 
-    <Callout type="warning">
-      You can skip this configuration during onboarding, but email-based features will not work until SMTP is properly configured.
-    </Callout>
-    <p align="center">
-    <img src="/images/smtp/smtp_onboarding.png" alt="Smtp in Onboarding setup" width="100%" />
-    </p>
-
-  </Tab>
-  <Tab title="From Settings">
-    ### Configuring SMTP in Settings
-    If you skipped SMTP configuration during onboarding or need to modify your settings later:
-    <Steps>
-    <Step title="Access Authentication Settings">
-        1. Navigate to the sidebar menu
-        2. Select "Settings"
-        3. Click on "Authentication" in the submenu
-        Scroll down to the "Server Configuration" section and find the SMTP configuration option.
-    </Step>
-    <Step title="Edit SMTP Settings">
-        Click the settings icon next to the SMTP configuration to open the configuration modal.
-    </Step>
-    <Step title="Update Configuration">
-        Enter or update the required fields:
-      - **SMTP Host** (*required*)
-      - **Port** (*required*, default 587)
-      - **From Email Address** (*required*)
-      - **Username** (optional)
-      - **Password** (optional)
-
-      Click **Save** to apply your new SMTP configuration.
-      If the Smtp box shows configured, then your smtp configuration has been successfully added.
-    </Step>
-    </Steps>
-    <p align="center">
-    <img src="/images/smtp/smtp_auth_settings.png" alt="Smtp in Auth Settings page" width="100%" />
-    <img src="/images/smtp/smtp_auth_config_dialog.png" alt="Smtp in Auth Settings page" width="100%" />
-    </p>
-
-  </Tab>
-</Tabs>
-
-## Required vs Optional Fields
-
-<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-  <Card title="Required Fields" icon="circle-exclamation">
-    <ul>
-      <li>**SMTP Host** - The address of your email server</li>
-      <li>**Port** - The port number (common: 25, 465, 587)</li>
-      <li>**From Email Address** - Sender email address</li>
-    </ul>
-  </Card>
-  <Card title="Optional Fields" icon="circle-info">
-    <ul>
-      <li>**SMTP Username** - For server authentication</li>
-      <li>**SMTP Password** - For server authentication</li>
-    </ul>
-  </Card>
-</div>
-
-## Common SMTP Providers
-
-The table below lists settings for popular email providers:
-
-| Provider           | SMTP Host                       | Port | Security |
-| ------------------ | ------------------------------- | ---- | -------- |
-| Gmail              | smtp.gmail.com                  | 587  | TLS      |
-| Outlook/Office 365 | smtp.office365.com              | 587  | TLS      |
-| Amazon SES         | email-smtp.region.amazonaws.com | 587  | TLS      |
-| SendGrid           | smtp.sendgrid.net               | 587  | TLS      |
-
-<Callout type="warning">
-  For Gmail and some other providers, you may need to create an "App Password"
-  instead of using your regular account password.
-</Callout>
-
-## Best Practices
-
-For optimal SMTP configuration:
-
-- Use a dedicated email address for system notifications (e.g., noreply@yourcompany.com)
-- Check with your email provider for specific SMTP settings and requirements
-- Test your configuration by sending a test email after setup
-- Use secure connections when possible (Port 465 for SSL or 587 for TLS)
-- Check spam filters if users report not receiving emails
-
-## Troubleshooting
-
-<Callout type="error">
-  If users are not receiving system emails, try these troubleshooting steps:
-</Callout>
-
-1. Verify your SMTP settings are correct
-2. Ensure the "From Email Address" is properly configured
-3. Check if your email provider restricts automated sending
-4. Look for error messages in your application logs
-5. Test your SMTP server connection using external tools
+- Confirm that the SMTP entry is configured and the sender address is accepted by your provider.
+- Check the provider's current host, port, authentication, and transport requirements.
+- Check the recipient's spam folder and your mail provider's delivery logs.
+- If the workspace inherits its mail configuration or you cannot access the settings, contact [Novaplan AI support](mailto:support@novaplan.ai).
