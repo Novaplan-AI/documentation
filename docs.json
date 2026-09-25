@@ -45,7 +45,10 @@
             "group": "Konnektoren",
             "pages": [
               "de/connectors/overview",
+              "de/connectors/google-workspace/drive/drive",
+              "de/connectors/google-workspace/gmail/gmail",
               "de/connectors/rss/rss",
+              "de/connectors/slack/slack",
               "de/connectors/web/web",
               "de/connectors/notion/notion",
               "de/connectors/google-workspace/docs/docs",
@@ -53,6 +56,7 @@
               "de/connectors/google-workspace/slides/slides",
               "de/connectors/google-workspace/calendar/calendar",
               "de/connectors/microsoft-365/one-note",
+              "de/connectors/microsoft-365/outlook",
               "de/connectors/microsoft-365/teams",
               "de/connectors/airtable/airtable",
               "de/connectors/zendesk/zendesk"

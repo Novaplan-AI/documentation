@@ -1,0 +1,177 @@
+---
+title: "Slack"
+description: "Slack-Kanäle, Nachrichten, Threads und Dateien mit Novaplan AI verbinden."
+---
+
+Der Slack-Konnektor synchronisiert Konversationen, Threads, geteilte Dateien und Links mit Novaplan AI. Die Inhalte können danach entsprechend den Zugriffsrechten durchsucht und von Agenten als Kontext verwendet werden.
+
+Novaplan richtet Ihren Workspace weitgehend für Sie ein. Stimmen Sie mit Novaplan und Ihrer Slack-Administration ab, ob eine gemeinsame Workspace-Verbindung, persönliche Verbindungen oder beide Varianten benötigt werden.
+
+## Zwei Verbindungsarten
+
+| | **Slack Workspace** (Team) | **Slack** (persönlich) |
+| --- | --- | --- |
+| **In Novaplan AI** | Workspace Settings → Workspace → Connectors | Workspace Settings → Personal → Your Connectors |
+| **Einrichtung** | Einmalig durch eine Workspace-Administration | Für das Konto der jeweiligen Person |
+| **Anmeldung** | **Bot User OAuth Token** (`xoxb-…`) | OAuth 2.0 mit **Client ID** und **Client Secret**; Nutzer-Token (`xoxp-…`) |
+| **Sichtbare Slack-Inhalte** | Öffentliche Kanäle und private Kanäle, in die der Bot eingeladen wurde | Öffentliche und private Kanäle, DMs und Gruppen-DMs, die die autorisierende Person sehen kann |
+| **Zugriff in Novaplan AI** | Öffentliche Kanäle für Workspace-Mitglieder; private Kanäle nur für ihre Slack-Mitglieder | Synchronisierte Datensätze nur für die autorisierende Person |
+| **Nutzer und Gruppen** | Workspace-Mitglieder und Slack-Nutzergruppen | Nur die autorisierende Person |
+
+Beide Konnektoren können parallel laufen: Die Teamverbindung erfasst gemeinsamen Kanalverlauf; persönliche Verbindungen ergänzen private Unterhaltungen, die nur die jeweilige Person sehen darf.
+
+Synchronisiert werden Kanäle, Nachrichten mit Reaktionen und aufgelösten Erwähnungen, Threads, geteilte Dateien und Links. Beim Teamkonnektor werden außerdem Mitglieder und Nutzergruppen erfasst. Nachrichten, die kurz nacheinander gepostet wurden, können vor der Indexierung zu einem Gesprächsausschnitt zusammengefasst werden.
+
+## Slack Workspace für Teams einrichten
+
+Diese Schritte dienen Ihrer Slack-Administration und Novaplan als technische Referenz. Für die Installation einer Slack-App kann eine Freigabe durch den Workspace-Owner nötig sein.
+
+### 1. Slack-App erstellen
+
+1. Öffnen Sie das [Slack-App-Dashboard](https://api.slack.com/apps) und klicken Sie auf **Create New App**.
+2. Wählen Sie **Blank app**, vergeben Sie einen App-Namen und wählen Sie den Slack-Workspace, dessen Inhalte synchronisiert werden sollen.
+3. Klicken Sie auf **Create**. Der gewählte Slack-Workspace kann für diese App später nicht geändert werden.
+
+### 2. Bot-Berechtigungen hinzufügen
+
+Öffnen Sie **OAuth & Permissions → Scopes → Bot Token Scopes** und fügen Sie die folgenden Scopes hinzu:
+
+```text
+channels:read
+channels:history
+channels:join
+groups:read
+groups:history
+mpim:read
+mpim:history
+im:read
+im:history
+users:read
+users:read.email
+users.profile:read
+files:read
+usergroups:read
+usergroups.users:read
+```
+
+Die `channels:*`- und `groups:*`-Scopes dienen Kanalmetadaten und Verlauf; `channels:join` erlaubt dem Bot, öffentlichen Kanälen beizutreten. Nutzer-Scopes unterstützen die Zuordnung von Slack-Konten zu Novaplan AI anhand der E-Mail-Adresse und die Auflösung von Erwähnungen. `files:read` betrifft geteilte Dateien; `usergroups:*` betrifft Nutzergruppen. Obwohl der Bot auch `im:*` und `mpim:*` erhält, synchronisiert der Teamkonnektor keine DMs. Dafür ist die persönliche Verbindung vorgesehen.
+
+### 3. App installieren und Bot-Token kopieren
+
+1. Wählen Sie unter **OAuth & Permissions → OAuth Tokens** die Option **Install to <your workspace>**.
+2. Prüfen Sie die Berechtigungen und klicken Sie auf **Allow**. Falls Ihr Workspace App-Freigaben verlangt, warten Sie auf die Genehmigung.
+3. Kopieren Sie den **Bot User OAuth Token**. Er beginnt mit `xoxb-`.
+
+Behandeln Sie den Token wie ein Passwort. Falls er bekannt wird, regenerieren Sie ihn in Slack und aktualisieren Sie die Verbindung in Novaplan AI.
+
+### 4. Teamkonnektor in Novaplan AI konfigurieren
+
+1. Öffnen Sie **Workspace Settings → Workspace → Connectors**.
+2. Wählen Sie bei **Slack Workspace** die Option **+ Setup**.
+3. Tragen Sie unter **Authenticate Instance** einen **Instance name** und den **Bot Access Token** ein. Klicken Sie auf **Next**.
+4. Wählen Sie unter **Configure Records** die Synchronisierungsstrategie und die [Filter](#konnektoreinstellungen). Speichern Sie mit **Save Configuration**.
+5. Starten Sie die Synchronisierung sofort oder später über die Instanzkarte.
+
+Mit `channels:join` kann der Bot öffentlichen Kanälen beitreten. Für einen privaten Kanal muss ein Mitglied den Bot innerhalb des Kanals einladen:
+
+```text
+/invite @your-app-name
+```
+
+Ersetzen Sie `your-app-name` durch den tatsächlichen Namen Ihrer Slack-App. Private Kanäle werden nicht automatisch für Apps freigegeben.
+
+## Persönliche Slack-Verbindung einrichten
+
+Diese Variante synchronisiert die persönliche Slack-Sicht einer Person, einschließlich ihrer DMs und Gruppen-DMs. Die Daten sind in Novaplan AI nur für diese Person sichtbar. Ihre Slack-E-Mail-Adresse muss mit der E-Mail-Adresse ihres Novaplan-AI-Kontos übereinstimmen.
+
+Wenn Ihre Administration bereits eine Slack-OAuth-Anwendung in Novaplan AI hinterlegt hat, wählen Sie diese aus und gehen Sie direkt zu [Slack autorisieren](#3-slack-autorisieren).
+
+### 1. Weiterleitungsadresse übernehmen
+
+1. Öffnen Sie **Workspace Settings → Personal → Your Connectors**.
+2. Wählen Sie bei **Slack** die Option **+ Setup** und unter **Authenticate Instance** die Methode **OAuth 2.0**.
+3. Kopieren Sie die angezeigte **Redirect/Callback URL**. Sie folgt dem Muster `https://your-workspace.example.com/connectors/oauth/callback/Slack`; maßgeblich ist der exakte Wert in Ihrem Workspace.
+
+### 2. OAuth-App vorbereiten
+
+Diese Arbeit kann Ihre Slack-Administration gemeinsam mit Novaplan übernehmen.
+
+1. Erstellen Sie im [Slack-App-Dashboard](https://api.slack.com/apps) eine **Blank app** im richtigen Workspace.
+2. Öffnen Sie **OAuth & Permissions → Redirect URLs**, fügen Sie die kopierte Adresse hinzu und klicken Sie auf **Save URLs**.
+3. Wenn dieselbe App auch für das Slack-Toolset verwendet werden soll, hinterlegen Sie zusätzlich dessen eigene Callback-Adresse mit `/toolsets/oauth/callback/Slack`.
+4. Fügen Sie unter **User Token Scopes** die folgenden Berechtigungen hinzu. Verwenden Sie nicht die **Bot Token Scopes** für diese persönliche Verbindung:
+
+```text
+channels:read
+channels:history
+groups:read
+groups:history
+mpim:read
+mpim:history
+im:read
+im:history
+users:read
+users:read.email
+users.profile:read
+files:read
+```
+
+5. Installieren Sie die App unter **OAuth Tokens → Install to <your workspace>** und bestätigen Sie mit **Allow**.
+6. Kopieren Sie unter **Settings → Basic Information → App Credentials** die **Client ID** und das **Client Secret**.
+7. Tragen Sie in Novaplan AI einen **OAuth app name**, die **Client ID** und das **Client Secret** ein. Prüfen Sie nochmals die Callback-Adresse und klicken Sie auf **Next**.
+
+Die Callback-Adresse muss exakt übereinstimmen, einschließlich Schema, Host, Port und Pfad. Andernfalls kann `bad_redirect_uri` auftreten.
+
+### 3. Slack autorisieren
+
+1. Klicken Sie unter **Authorize** auf **Authenticate Slack to Proceed**.
+2. Melden Sie sich mit dem Slack-Konto an, dessen E-Mail-Adresse zu Ihrem Novaplan-AI-Konto passt, und bestätigen Sie mit **Allow**.
+3. Wählen Sie **Continue to configuration**. Legen Sie unter **Configure Records** Strategie und [Filter](#konnektoreinstellungen) fest und klicken Sie auf **Save Configuration**.
+4. Starten Sie die Synchronisierung sofort oder später.
+
+<Warning>
+  Wenn sich die E-Mail-Adressen der Slack- und Novaplan-AI-Konten unterscheiden, können Berechtigungsprobleme entstehen oder die Synchronisierung frühzeitig enden.
+</Warning>
+
+## Konnektoreinstellungen
+
+### Synchronisierung
+
+- **Scheduled:** Synchronisiert automatisch im gewählten Intervall; die Voreinstellung beträgt 60 Minuten.
+- **Manual:** Synchronisiert nur nach manuellem Start.
+- **Channel:** Bezieht bestimmte Kanäle ein oder schließt sie aus.
+- **Channel Types:** Teamverbindungen unterstützen öffentliche und private Kanäle; persönliche Verbindungen zusätzlich **Direct Messages** und **Group Direct Messages**.
+- **Sync Messages From:** Legt den Zeitraum des ersten Laufs fest. Die Voreinstellung ist **Last 30 Days**; alternativ können Sie etwa **Is After** mit einem Datum wählen. Spätere Läufe sind inkrementell.
+
+Synchronisierungsfilter schließen Inhalte bereits beim Abruf aus. Ein längerer Anfangszeitraum verlängert den ersten Lauf. Stimmen Sie den Umfang mit Ihrer Administration und Novaplan ab.
+
+### Indexierung
+
+Mit **Enable Manual Indexing** werden Datensätze synchronisiert, aber nicht automatisch für die Suche indexiert. Öffnen Sie einen Datensatz unter **All Records** und wählen Sie im Dreipunktmenü **Start Indexing**, um ihn später aufzunehmen.
+
+Die Indexierungsfilter steuern, welche bereits synchronisierten Datensätze durchsuchbar sind: **Index Messages**, **Index Threads**, **Index Files** und **Index Links**. **Index Bot Messages** gilt nur für die Teamverbindung. **Index Direct Messages** und **Index Group Direct Messages** gelten nur für persönliche Verbindungen. Deaktivierte Inhalte bleiben als Datensätze mit **Manual Indexing** verfügbar, erscheinen jedoch zunächst nicht in der Suche.
+
+## Verhalten bei weiteren Synchronisierungen
+
+Der erste Lauf synchronisiert Nutzer, bei der Teamverbindung auch Nutzergruppen, danach Kanäle, Nachrichten, Dateien, Links und Thread-Antworten. Jeder Kanal erhält einen eigenen Fortschrittsstand. Spätere Läufe holen neue Nachrichten seit dem letzten erfolgreichen Lauf; Antworten auf ältere Threads werden gesondert geprüft.
+
+Slack liefert Nachrichten im Verlauf nach Erstellungszeit. Spätere Änderungen an älteren Nachrichten außerhalb des aktuellen Zeitfensters werden deshalb möglicherweise nicht erkannt. Bei großen Workspaces kann die Synchronisierung wegen Slack-API-Limits schrittweise erfolgen.
+
+## Fehlerbehebung
+
+- **Privater Kanal fehlt / `not_in_channel`:** Laden Sie den Bot im privaten Kanal mit `/invite @your-app-name` ein und starten Sie die Synchronisierung erneut.
+- **`missing_scope`:** Ergänzen Sie den fehlenden Scope unter **OAuth & Permissions** und installieren Sie die App erneut. Neue Scopes gelten erst danach.
+- **`bad_redirect_uri` oder `redirect_uri_mismatch`:** Vergleichen Sie die Slack-Weiterleitungsadresse Zeichen für Zeichen mit der Adresse in Novaplan AI.
+- **`invalid_auth` oder `token_revoked`:** Aktualisieren Sie bei der Teamverbindung den Bot-Token. Bei der persönlichen Verbindung autorisieren Sie die App erneut.
+- **Nur Bot-Token bei persönlicher Verbindung:** Die persönliche Verbindung braucht einen Nutzer-Token (`xoxp-…`). Prüfen Sie die **User Token Scopes** und autorisieren Sie erneut.
+- **Nutzer fehlen:** Slack-Mitglieder ohne E-Mail-Adresse im Profil können nicht per E-Mail zugeordnet werden. Bots werden für Erwähnungen erfasst, nicht als Nutzer angelegt.
+- **Ältere Nachrichten fehlen:** Prüfen Sie **Sync Messages From** für den ersten Lauf.
+- **Datensätze sichtbar, aber nicht durchsuchbar:** Prüfen Sie **Enable Manual Indexing** und die passenden Indexierungsfilter. Kontrollieren Sie auch, ob der erste Lauf abgeschlossen ist.
+
+## Häufige Fragen
+
+### Worin unterscheiden sich Konnektor und Slack-Toolset?
+
+Der **Konnektor** importiert Nachrichten, Dateien und Threads für die Suche. Das **Slack-Toolset** erlaubt entsprechend konfigurierten Agenten Aktionen in Slack, etwa Nachrichten zu senden oder in Threads zu antworten. Der Konnektor selbst postet keine Nachrichten. Der Bot kann mit `channels:join` allerdings öffentlichen Kanälen beitreten, um deren Verlauf zu lesen.
+
+Wenn Sie Hilfe bei der Einrichtung oder bei fehlenden Suchergebnissen benötigen, schreiben Sie an [support@novaplan.ai](mailto:support@novaplan.ai).
