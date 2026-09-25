@@ -50,6 +50,10 @@ The MariaDB toolset lets AI agents read schema information and run SQL queries a
 | `get_tables_schema` | Fetch schema (columns, primary keys, foreign keys) for specific tables |
 | `get_table_ddl` | Get the `CREATE TABLE` statement for a table |
 
+<Warning>
+  `execute_query` sends SQL to MariaDB with the authenticated user's database privileges; the tool does not restrict queries to `SELECT`. For analytics, use a database account with only the required read permissions. Grant write access only after separately reviewing the agent's intended actions.
+</Warning>
+
 ---
 
 ## Configuration Guide
@@ -72,10 +76,14 @@ docker run --name mariadb-test \
   -d mariadb:latest
 ```
 
-This starts MariaDB on `localhost:3306` with:
+This starts a **test database** on your own machine at `localhost:3306` with:
 - Username: `root`
 - Password: `rootpass`
 - Database: `test_db`
+
+<Warning>
+  The sample root password is only for local testing. A Novaplan-managed workspace cannot normally reach `localhost` on your laptop. Before configuring the toolset, agree on a database host reachable from the managed workspace and suitable network and access controls with Novaplan and your database administrator.
+</Warning>
 
 ### Option B: Install locally
 
@@ -138,7 +146,7 @@ Fill in the action configuration form:
 | Field | Description |
 |-------|-------------|
 | **Instance name** | A name for this toolset instance (e.g. `MariaDB`) |
-| **Host** | MariaDB server host (e.g. `localhost`) |
+| **Host** | MariaDB server host reachable from the managed workspace; `localhost` is valid only if the database actually runs beside the toolset service |
 | **Port** | MariaDB server port (default `3306`) |
 | **Database** | Database name  |
 
@@ -256,7 +264,7 @@ This way, every user queries the database with their own permissions.
 
 <Accordion title="Can I connect to a remote MariaDB server?">
 
-Yes. Use the public host and port of your MariaDB server. Make sure the server allows connections from the Novaplan AI deployment and that the user account has the required privileges.
+Yes. Use an approved host and port reachable from the Novaplan AI workspace; a private route may be preferable to exposing the database publicly. Coordinate connectivity and access rules with Novaplan and your database administrator.
 
 </Accordion>
 
