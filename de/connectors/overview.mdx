@@ -13,12 +13,12 @@ Konnektoren **synchronisieren und indexieren Daten** aus externen Anwendungen in
 
 - **Einseitige Synchronisierung:** Daten werden zur Indexierung in Novaplan AI importiert.
 - **Wissenssuche:** KI-Assistenten können die indexierten Daten durchsuchen.
-- **Regelmäßige Aktualisierung:** Die Synchronisierung erfolgt nach einem Zeitplan, nicht in Echtzeit.
+- **Geplante oder manuelle Aktualisierung:** Wählen Sie die verfügbare Synchronisierungsstrategie des Konnektors; Ergebnisse erscheinen nicht zwingend in Echtzeit.
 
 Novaplan übernimmt den Großteil der Einrichtung. Diese Übersicht und die verlinkten Anleitungen bleiben als Referenz verfügbar, wenn Sie Konnektoren selbst verwalten oder ihre Einrichtung nachvollziehen möchten.
 
 <Warning>
-  Verwenden Sie bei der Authentifizierung eines Konnektors dieselbe E-Mail-Adresse wie für Ihr Novaplan AI Konto. Eine andere Adresse kann zu Berechtigungsproblemen führen.
+  Konnektoren, die Quellkonten per E-Mail-Adresse zuordnen, benötigen lesbare und passende Adressen. Andere verwenden Dienstkonten, Schlüssel oder Berechtigungen nach Konnektorumfang. Prüfen Sie die Anforderungen und das Zugriffsmodell in der jeweiligen Konnektor-Anleitung.
 </Warning>
 
 <Note>
@@ -85,7 +85,7 @@ Novaplan AI unterstützt Konnektoren für verschiedene Anwendungen und Dienste. 
 
 | Konnektor | Beschreibung |
 | --- | --- |
-| **Local FS** | Einen Ordner auf dem Konnektor-Host indexieren; Einrichtung unter **Workspace Settings → Personal → Your Connectors**. In der Electron-App ist optional eine Desktop-Überwachung möglich. |
+| **Local FS** | Einen für den verwalteten Konnektorprozess erreichbaren Ordner indexieren; Verfügbarkeit vor der Einrichtung unter **Workspace Settings → Personal → Your Connectors** mit Novaplan prüfen. |
 
 ### Cloudspeicher und Infrastruktur
 
@@ -149,13 +149,13 @@ Der Zugriff eines Konnektors hängt von der Authentifizierung des externen Diens
     Die URL muss in beiden Anwendungen genau übereinstimmen, damit die Authentifizierung funktioniert.
   </Accordion>
   <Accordion title="Welche OAuth-Berechtigungen benötigen Konnektoren?">
-    Konnektoren benötigen Leseberechtigungen, um Daten zu synchronisieren und zu indexieren. Verwenden Sie beim Einrichten der OAuth-Anwendung nur die Berechtigungen, die in der jeweiligen Konnektor-Anleitung aufgeführt sind. Mit reinen Leseberechtigungen kann der Konnektor Inhalte indexieren, ohne sie im externen Dienst zu ändern oder zu löschen.
+    Die erforderlichen Scopes hängen von Datenquelle und Konnektor ab. Erteilen Sie nur die in der jeweiligen Konnektor-Anleitung genannten Rechte und lassen Sie sie von der Administration der Quelle prüfen. Manche Anbieter bündeln Lesezugriff mit weitergehenden Rechten: GitHubs OAuth-Scope `repo` ist beispielsweise nicht auf reines Lesen privater Repositories begrenzt, auch wenn der Konnektor laut technischer Referenz nur Daten liest.
   </Accordion>
   <Accordion title="Warum liefert die Suche keine Ergebnisse?">
     Drei häufige Ursachen sind:
 
-    1. **Abweichende E-Mail-Adresse:** Die bei der Konnektor-Authentifizierung verwendete Adresse stimmt nicht mit Ihrem Novaplan AI Konto überein. Richten Sie den Konnektor mit der passenden Adresse erneut ein.
-    2. **Keine Einträge unter „All Records“:** Prüfen Sie Berechtigungen, E-Mail-Adresse und den Synchronisierungsstatus unter **Settings > Connectors**.
+    1. **Konto nicht zugeordnet:** Bei Konnektoren mit E-Mail-Zuordnung kann eine nicht lesbare oder abweichende Adresse den Zugriff auf synchronisierte Einträge verhindern. Prüfen Sie zuerst die Anforderungen des betreffenden Konnektors und die Adressen der betroffenen Person.
+    2. **Keine Einträge unter „All Records“:** Prüfen Sie Berechtigungen und Synchronisierungsstatus unter **Settings > Connectors**. Bei Quellen mit E-Mail-Zuordnung prüfen Sie zusätzlich die Kontozuordnung.
     3. **Indexierung läuft noch:** Prüfen Sie den Status und warten Sie bei neu hinzugefügten Quellen auf den Abschluss der ersten Indexierung.
   </Accordion>
 </AccordionGroup>

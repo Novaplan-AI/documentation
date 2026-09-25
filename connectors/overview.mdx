@@ -12,10 +12,10 @@ Connectors are software components that **sync and index data** from external ap
 **Key characteristics:**
 - **One-way data sync** - Import data into Novaplan AI for indexing
 - **Knowledge retrieval** - Make data searchable for AI assistants
-- **Periodic syncing** - Data is synced on a schedule, not in real-time
+- **Scheduled or manual syncing** - Choose an available sync strategy for each connector; results are not necessarily updated in real time
 
 <Warning>
-  **Important:** When authenticating a connector, use the same email address as your Novaplan AI account. Using a different email will cause permission issues on the Novaplan AI platform.
+  **Important:** Connectors that match source users to Novaplan AI accounts by email need readable, matching addresses. Other connectors use service accounts, keys, or connector-scope permissions. Check the requirements and access model in the specific connector guide.
 </Warning>
 
 <Note>
@@ -94,7 +94,7 @@ Our platform supports a wide range of connectors organized by ecosystem to help 
 
 | Connector | Description |
 |-----------|-------------|
-| **Local FS** | Index a folder on the connector host; set up under **Workspace Settings → Personal → Your Connectors**; optional desktop watcher in the Electron app |
+| **Local FS** | Index a folder that the managed connector process can read; confirm its availability with Novaplan before setup under **Workspace Settings → Personal → Your Connectors** |
 
 ---
 
@@ -179,9 +179,7 @@ The callback URL must match exactly between Novaplan AI and the OAuth app for au
 
 <Accordion title="What OAuth scopes do Connectors require?">
 
-Connectors need **read-only permissions** to sync and index data. When creating your OAuth app in the service's developer console, grant only the scopes listed in the specific connector's documentation page.
-
-Using read-only scopes ensures connectors can access your data for indexing but cannot modify or delete anything in your external applications.
+The required scopes depend on the source and connector. Grant only those listed in the specific connector guide and review them with the source administrator. Some providers bundle read access with broader capabilities—for example, GitHub's `repo` OAuth scope—so a connector cannot always request a strictly read-only scope even if its sync workflow only reads data.
 
 </Accordion>
 
@@ -189,11 +187,11 @@ Using read-only scopes ensures connectors can access your data for indexing but 
 
 There are three common causes:
 
-1. **Email mismatch** - The email used during connector authentication doesn't match your Novaplan AI account email. This causes permission issues preventing you from accessing synced data.
-   - **Fix:** Reconfigure the connector and authenticate using the same email as your Novaplan AI account.
+1. **Identity mismatch** - For connectors that map source users by email, an unreadable or different address can prevent access to synced records.
+   - **Fix:** Check the connector's account-mapping requirements and the affected user's addresses before reauthorizing.
 
 2. **Records not displaying in "All Records"** - Documents or data from the connector are not showing up at all in the All Records section.
-   - **Fix:** Check permissions in the connector configuration, verify email match, and go to **Settings > Connectors** to ensure all records have synced successfully.
+   - **Fix:** Check the connector's permissions and sync status under **Settings > Connectors**. For email-mapped sources, also verify the account mapping.
 
 3. **Data not yet indexed** - The connector is still syncing or hasn't completed the initial indexing process.
    - **Fix:** Go to **Settings > Connectors**, check the sync status, and wait for indexing to complete.
