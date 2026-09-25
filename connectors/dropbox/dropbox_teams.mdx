@@ -454,8 +454,8 @@ This is an incremental, event-driven process designed to keep file and folder pe
 
 There are three common causes:
 
-1. **Email mismatch** - The email used during connector authentication doesn't match your Novaplan AI account email. This causes permission issues preventing you from accessing synced data.
-   - **Fix:** Reconfigure the connector and authenticate using the same email as your Novaplan AI account.
+1. **Viewer identity or source permissions do not match** - The Team connector imports Dropbox members, groups, and file permissions. A viewer may not see a file if their Dropbox email cannot be matched to their Novaplan AI account, or if Dropbox does not grant that viewer access.
+   - **Fix:** Ask your administrator to check that viewer's account email, Dropbox team membership, and access to the affected file or folder. The Dropbox admin account authorizing the shared connector does not have to be the same account as every viewer.
 
 2. **Records show in "All Records" but not in search** - Documents display in the All Records section but don't appear in search query results.
    - **Fix:** Verify sync filters in the connector settings and ensure indexing has completed. Check that the data matches your search query criteria.
