@@ -101,7 +101,10 @@
                 "pages": [
                   "de/ai-models/llm/openai",
                   "de/ai-models/llm/anthropic",
-                  "de/ai-models/llm/gemini"
+                  "de/ai-models/llm/gemini",
+                  "de/ai-models/llm/azure-openai",
+                  "de/ai-models/llm/azure-ai",
+                  "de/ai-models/llm/bedrock"
                 ]
               }
             ]

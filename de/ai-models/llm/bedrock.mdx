@@ -1,0 +1,44 @@
+---
+title: "AWS Bedrock"
+description: "Sprachmodelle aus Amazon Bedrock mit Novaplan AI verbinden."
+---
+
+# AWS Bedrock konfigurieren
+
+![Konfigurationsansicht für AWS Bedrock](/images/ai-models/llm/Bedrock_LLMConfig.png)
+
+Novaplan AI kann über Amazon Bedrock Modelle verschiedener Anbieter verwenden. Novaplan unterstützt Sie bei der Einrichtung. Ihre AWS-Region, der Modellzugang und die IAM-Berechtigungen müssen zur ausgewählten Modell-ID passen.
+
+## Erforderliche Angaben
+
+| Feld | Bedeutung |
+| --- | --- |
+| **Region** | AWS-Region des Bedrock-Zugangs, beispielsweise `eu-west-1` oder `us-east-1`. Das gewünschte Modell muss dort verfügbar und für Ihr Konto freigeschaltet sein. |
+| **Model Name** | Genaue Modell-ID oder ARN eines Inference Profiles. Beispiele aus dem Quellleitfaden sind `us.anthropic.claude-sonnet-4-20250514-v1:0`, `amazon.titan-text-express-v1` und `meta.llama3-70b-instruct-v1:0`. |
+| **Provider** | Anbieter des Modells, damit Novaplan AI die Anfrage passend formatiert. Der Quellleitfaden nennt Anthropic, Mistral, Qwen, DeepSeek, Cohere, Amazon, AI21 Labs und **Other**. |
+| **Custom Provider Name** | Nur erforderlich, wenn Sie unter **Provider** die Option **Other** wählen. |
+
+Die Modell-ID finden Sie in der [Amazon-Bedrock-Konsole](https://console.aws.amazon.com/bedrock/) unter Modellzugang und den verfügbaren Basismodellen, benutzerdefinierten Modellen oder Inference Profiles. Die Verfügbarkeit unterscheidet sich nach Region und Konto; übernehmen Sie die ID oder ARN exakt aus Ihrer AWS-Konfiguration.
+
+## Anmeldung und optionale Felder
+
+**AWS Access Key ID** und **AWS Access Secret Key** sind im Konfigurationsformular optional. Wenn die Novaplan-AI-Instanz mit einer geeigneten EC2-IAM-Rolle ausgeführt wird, können beide Felder leer bleiben. Andernfalls erstellen Sie die Zugangsdaten in AWS IAM und tragen das Paar ein. Der geheime Schlüssel wird bei der Erstellung nur einmal angezeigt; bewahren Sie ihn geschützt auf. Stimmen Sie die Authentifizierungsmethode mit Novaplan ab, statt unnötige dauerhafte Schlüssel zu erzeugen.
+
+Weitere optionale Felder sind **Context Length** für die dokumentierte maximale Kontextlänge, **Multimodal** für Modelle mit Bild- und Texteingabe und **Reasoning** für Modelle, die diese Fähigkeit unterstützen. Aktivieren Sie Funktionen nur, wenn das gewählte Modell sie tatsächlich anbietet.
+
+## Modell hinzufügen
+
+1. Klicken Sie auf der Amazon-Bedrock-Anbieterkarte auf **Configure**.
+2. Tragen Sie **Region** und **Model Name** ein und wählen Sie den passenden **Provider**. Bei **Other** geben Sie zusätzlich **Custom Provider Name** an.
+3. Ergänzen Sie bei Bedarf **AWS Access Key ID**, **AWS Access Secret Key**, **Context Length**, **Multimodal** und **Reasoning**.
+4. Klicken Sie auf **Add Model**, um die Angaben zu speichern und prüfen zu lassen.
+
+Die AWS-IAM-Rolle oder der IAM-Nutzer benötigt für das gewünschte Modell mindestens `bedrock:InvokeModel` und, wenn gestreamte Antworten verwendet werden, `bedrock:InvokeModelWithResponseStream`. Begrenzen Sie den **Resource**-Bereich der IAM-Richtlinie auf die tatsächlich benötigten Modell- oder Profil-ARNs, soweit Ihr Aufrufpfad dies erlaubt. Die konkreten Rechte richten sich nach Modell und Inference Profile.
+
+## Fehler beheben
+
+- **Authentifizierung schlägt fehl:** Prüfen Sie die IAM-Rolle oder beide Zugangsschlüssel und die Berechtigungen für den verwendeten Modell-ARN.
+- **Modell kann nicht aufgerufen werden:** Prüfen Sie Region, Modellzugang in Bedrock, genaue Modell-ID beziehungsweise vollständige Inference-Profile-ARN und Servicekontingent.
+- **Funktionen verhalten sich unerwartet:** Vergleichen Sie **Provider**, **Context Length**, **Multimodal** und **Reasoning** mit den Fähigkeiten des gewählten Modells.
+
+Bedrock-Nutzung zählt zu Ihren AWS-Kontingenten und Ihrer AWS-Abrechnung. Weitere Angaben finden Sie in der [Amazon-Bedrock-Dokumentation](https://docs.aws.amazon.com/bedrock/); für die Novaplan-Einrichtung wenden Sie sich an [Support](/de/contact-us).
