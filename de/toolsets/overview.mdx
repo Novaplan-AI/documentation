@@ -22,7 +22,7 @@ Die Dokumentation umfasst Toolsets für Google Workspace (Gmail, Calendar, Drive
 Zusätzlich stehen Agenten eingebaute Fähigkeiten zur Verfügung, etwa Berechnungen und die Verwaltung erzeugter Artefakte. Bei angebundenem Wissen kommen Suchfunktionen hinzu. Für Bildgenerierung muss zuvor ein geeignetes Modell unter **Workspace → AI Models → Image Generation** eingerichtet sein.
 
 <Warning>
-  Wenn Codeausführung für Ihren Workspace aktiviert ist, können Agenten Code in einer isolierten Umgebung ausführen. Klären Sie mit Novaplan, ob diese Funktion für Ihre Agenten und Daten zugelassen sein soll und wie sie in Ihrer bereitgestellten Version konfiguriert wird. Die ursprüngliche technische Dokumentation verwendet dafür einen noch zu verifizierenden produktinternen Konfigurationsnamen.
+  Wenn Codeausführung für Ihren Workspace aktiviert ist, können Agenten über `run_code`, `install_packages` und `read_sandbox_file` Code und Dateien in einer isolierten Umgebung verwenden. Diese Werkzeuge gehören zu den eingebauten Agentenfähigkeiten; die Repository-Einträge `coding_sandbox` und `database_sandbox` werden laut technischer Quellanleitung nicht zusätzlich als Toolsets an Agenten angehängt. Klären Sie mit Novaplan, ob diese Funktion für Ihre Agenten und Daten zugelassen sein soll und wie sie in Ihrer bereitgestellten Version konfiguriert wird.
 </Warning>
 
 ## Toolset einrichten

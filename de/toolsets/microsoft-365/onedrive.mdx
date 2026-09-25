@@ -37,7 +37,7 @@ Unter **API permissions → Microsoft Graph → Delegated permissions** nennt di
 | `Notes.Create`, `Notes.ReadWrite` | OneNote-Notizbücher, Abschnitte und Seiten erstellen oder bearbeiten. |
 | `offline_access` | Erneuerbare Benutzeranmeldung. |
 
-Für SharePoint-Bibliotheken, die als Drives erscheinen, können zusätzlich delegierte `Sites`-Rechte erforderlich sein. Prüfen Sie den konkreten Bedarf und **Grant admin consent** mit Ihrer Microsoft-Administration. **Files.ReadWrite.All** ist breit; konfigurieren Sie nur Aktionen und Freigaben, die Ihr Anwendungsfall braucht.
+Für SharePoint-Bibliotheken, die als Drives erscheinen, können zusätzlich delegierte `Sites`-Rechte erforderlich sein, etwa `Sites.Read.All` oder `Sites.ReadWrite.All`. Beginnen Sie mit den oben aufgeführten Rechten und ergänzen Sie diese nur, wenn Microsoft Graph für bestimmte Drives einen Berechtigungsfehler meldet. Prüfen Sie den konkreten Bedarf und **Grant admin consent** mit Ihrer Microsoft-Administration. **Files.ReadWrite.All** ist breit; konfigurieren Sie nur Aktionen und Freigaben, die Ihr Anwendungsfall braucht.
 
 ## In Novaplan AI verbinden
 
