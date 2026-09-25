@@ -1,0 +1,52 @@
+---
+title: "Systemüberblick"
+description: "Wie Weboberfläche, API, MCP, Suche, Konnektoren und Datenspeicher in Novaplan AI zusammenspielen."
+mode: wide
+---
+
+Novaplan AI ist eine von Novaplan verwaltete Workplace-AI-Plattform. Die Weboberfläche dient Suche, Chat und Administration. Die API authentifiziert Nutzende, prüft Berechtigungen und verwaltet Inhalte. Weitere Dienste verbinden Unternehmensanwendungen, indexieren Dokumente und beantworten Fragen mit Quellenangaben.
+
+Für Kunden ist die freigegebene Workspace-Adresse maßgeblich. Novaplan richtet die Infrastruktur ein. Die folgenden Komponenten erklären die Funktionsweise; sie sind keine Bereitstellungsanleitung.
+
+## Weg einer Anfrage
+
+1. Eine Person stellt eine Frage in der Weboberfläche, über die REST-API oder über einen mit `/mcp` verbundenen Agenten.
+2. Die API prüft Identität und Berechtigungen und leitet die Anfrage an den Query-Dienst weiter.
+3. Query findet passende Inhalte im Wissensgraphen und im Vektorspeicher. Ein Sprachmodell formuliert die Antwort und verweist mit Quellenangaben auf die zugrunde liegenden Dokumente.
+
+Welche Inhalte sichtbar sind, hängt von der angemeldeten Identität, der Konnektor-Konfiguration und den Berechtigungen im Workspace ab. Prüfen Sie die Zugriffsregeln der jeweiligen Datenquelle, bevor Sie Freigaben annehmen.
+
+Im Hintergrund synchronisieren **Konnektoren** Daten aus angebundenen Anwendungen. Ein **Event-Bus** übergibt neue oder geänderte Datensätze an **Indexing**. Dieser Dienst verarbeitet Dateien, bildet Vektoren und aktualisiert den Wissensgraphen. Die verwaltete Umgebung kann hierfür Redis Streams oder Kafka als Transport verwenden.
+
+## Architektur
+
+<Frame caption="Referenzarchitektur von Novaplan AI">
+  <a href="/images/system-architecture/architecture-diagram.svg" target="_blank">
+    <img src="/images/system-architecture/architecture-diagram.svg" alt="Novaplan AI: Weboberfläche und API, Verarbeitungsdienste und Datenspeicher" width="1200" height="980" className="w-full h-auto" />
+  </a>
+</Frame>
+
+### Weboberfläche, API und MCP
+
+Die Weboberfläche ist eine Next.js-Anwendung. REST-Clients und Agenten verwenden die freigegebenen API- beziehungsweise MCP-Endpunkte des Workspaces. Die Node.js-API übernimmt unter anderem Anmeldung, Berechtigungen, Wissensdatenbanken, Dateiübertragung und MCP. Die [API-Referenz](/developer/api-reference) enthält die dokumentierten Bereiche; [Novaplan Support](/de/contact-us) hilft bei Integrationszugang und unterstützten SDKs.
+
+### Verarbeitung
+
+**Connectors** verbinden Quellen wie Slack, Google Drive, Jira und Confluence. **Indexing** zerlegt Inhalte in durchsuchbare Abschnitte und schreibt sie in den Graph- und Vektorspeicher. **Query** ruft passende Inhalte ab und verwendet ein konfiguriertes Sprachmodell für Antworten. Ein separater Parser kann komplexe PDFs, Tabellen und OCR-Inhalte verarbeiten. Welche zusätzlichen Dienste in einem Workspace aktiv sind, hängt von seiner verwalteten Konfiguration ab.
+
+### Datenspeicher
+
+| Bereich | Aufgabe | Technologien der Referenzarchitektur |
+| --- | --- | --- |
+| Wissensgraph | Datensätze, Personen und ihre Beziehungen | Neo4j oder ArangoDB |
+| Vektorsuche | Semantisch ähnliche Textabschnitte finden | Qdrant; weitere unterstützte Backends können konfiguriert sein |
+| Anwendungsdaten | Sitzungen und Metadaten | MongoDB |
+| Dateiinhalt | Hochgeladene und synchronisierte Dateien | Lokaler Speicher, S3 oder Azure Blob |
+| Cache und Konfiguration | Häufig genutzte Daten und verschlüsselte Einstellungen | Redis; optional etcd für Konfiguration |
+| Event-Bus | Änderungen von Konnektoren an Indexing übergeben | Redis Streams oder Kafka |
+
+Diese Tabelle beschreibt unterstützte Komponenten, nicht die konkrete Ausstattung Ihres Workspaces. Weitere technische Einzelheiten stehen in den [externen Diensten](/system-overview/external-services) und in der [Speicher-Referenz](/system-overview/storage); beide Detailseiten sind derzeit auf Englisch.
+
+## Modelle und Unternehmenssysteme
+
+Ein **Embedding-Modell** bildet Text als Vektoren ab, damit semantisch ähnliche Passagen gefunden werden. Ein **Sprachmodell** erstellt Antworten auf Basis der gefundenen Inhalte. Die verwendeten Modelle werden für den Workspace konfiguriert. Identitätsanbieter, E-Mail-Dienste und weitere Unternehmensanwendungen werden als separate Integrationen angebunden.

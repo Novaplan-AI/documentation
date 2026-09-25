@@ -1,0 +1,24 @@
+---
+title: "Externe Dienste"
+description: "Welche Aufgaben Graph-, Vektor- und Dokumentenspeicher sowie Cache und Event-Bus erfüllen."
+---
+
+Diese Seite beschreibt die Datenspeicher und Nachrichtendienste der [Referenzarchitektur](/de/system-overview). Novaplan richtet sie für den Workspace ein und betreibt sie. Die genannten Technologien erklären ihre Funktion; sie sind keine Anleitung zur eigenen Bereitstellung.
+
+## Wissensgraph
+
+Der Wissensgraph verbindet Datensätze, Personen und ihre Beziehungen. Dadurch können Suche und Quellenangaben zusammengehörende Inhalte finden. Die Referenzarchitektur nennt **Neo4j** und **ArangoDB** als mögliche Backends. Die Anwendung greift über eine gemeinsame Graph-Schnittstelle darauf zu. Welches Backend Ihr Workspace nutzt, hängt von der verwalteten Konfiguration ab.
+
+## Vektorsuche
+
+Beim Indexieren wird Text in Abschnitte zerlegt und als Vektor dargestellt. Ein Vektorspeicher findet bei einer Anfrage semantisch ähnliche Abschnitte. **Qdrant** ist das Backend der Referenzkonfiguration; **OpenSearch** und **Redis** sind weitere unterstützte Optionen. Novaplan legt die konkrete Auswahl für den Workspace fest.
+
+## Anwendungsdaten und Dateien
+
+**MongoDB** speichert Anwendungsdaten wie Sitzungen und Dateimetadaten. Die eigentlichen Dateiinhalte liegen in einem gesonderten Speicher, beispielsweise lokal, in **Amazon S3** oder in **Azure Blob Storage**. Weitere Details enthält die [Speicher-Referenz (Englisch)](/system-overview/storage).
+
+## Event-Bus, Cache und Konfiguration
+
+Konnektoren veröffentlichen neue oder geänderte Datensätze auf einem **Event-Bus**; Indexing verarbeitet sie anschließend. Als Transport kommen **Redis Streams** oder **Kafka** infrage. **Redis** kann darüber hinaus Cache und verschlüsselte Konfiguration bereitstellen. **etcd** ist eine alternative Ablage für die Konfiguration.
+
+Diese Dienste sind interne Plattformkomponenten. Wenn Sie wissen müssen, welche davon in Ihrem Workspace verwendet werden, wenden Sie sich an [Novaplan Support](/de/contact-us).

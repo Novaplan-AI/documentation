@@ -18,6 +18,9 @@
             "group": "Willkommen bei Novaplan AI",
             "pages": [
               "de/introduction",
+              "de/system-overview",
+              "de/system-overview/external-services",
+              "de/system-overview/internal-services",
               "de/quickstart",
               "de/contact-us",
               "de/additional-resources/faq"

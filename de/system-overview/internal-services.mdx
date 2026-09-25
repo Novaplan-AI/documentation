@@ -1,0 +1,20 @@
+---
+title: "Interne Dienste und öffentliche DNS-Adressen"
+description: "Öffentliche Adressen für Weboberfläche und Konnektordienst im verwalteten Workspace."
+---
+
+Novaplan richtet die öffentlichen Adressen der Weboberfläche und des Konnektordienstes für den Kunden-Workspace ein. Diese Einstellungen wirken auf die Erreichbarkeit der Anwendung und auf Rückrufadressen externer Integrationen. Änderungen sollten mit Novaplan abgestimmt werden.
+
+<Warning>
+  Ändern Sie produktive DNS-Adressen nicht ohne Prüfung der betroffenen OAuth-Redirect-URIs, Webhooks, Zertifikate und bestehenden Links. Der genaue Administrationszugang und die Bezeichnungen der Felder müssen vor Veröffentlichung gegen den Novaplan-Workspace geprüft werden.
+</Warning>
+
+## Frontend Public DNS
+
+Die **Frontend Public DNS** ist die öffentliche Adresse der Weboberfläche. In der bestehenden Administrationsansicht führt der Weg über **Profile → Settings → Services → Internal services** zur Frontend-Karte. Eine berechtigte Administration öffnet deren Einstellungen, trägt die freigegebene öffentliche URL ein und speichert sie. Novaplan übernimmt diesen Schritt normalerweise bei der Workspace-Einrichtung.
+
+## Connector Public DNS
+
+Die **Connector Public DNS** ist die öffentliche Adresse des Konnektordienstes. Externe Anwendungen können sie für OAuth-Rückrufe oder Webhook-Ereignisse benötigen. In derselben Administrationsansicht öffnet eine berechtigte Person die Konnektor-Karte, trägt die freigegebene URL ein und speichert sie. Verwenden Sie ausschließlich die von Novaplan bestätigte Adresse; eine Beispiel-URL aus einem Screenshot ist kein gültiger Wert für Ihren Workspace.
+
+Bei Fragen zur Domain, zu Zertifikaten oder zur Erreichbarkeit hilft [Novaplan Support](/de/contact-us).

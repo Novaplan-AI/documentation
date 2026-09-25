@@ -11,7 +11,7 @@ Novaplan AI is a workplace AI platform managed primarily by the Novaplan team. I
 2. An **API** that authenticates users, enforces permissions, and manages knowledge bases and files.
 3. **Python services** that sync data from your company apps, turn documents into searchable pieces, and return answers with citations.
 
-A person using the web app, an application using the REST API or an SDK, and an agent calling MCP see the same records. If you could not open a file in Slack, none of them can see it either.
+A person using the web app, an application using the REST API, and an agent calling MCP receive access according to their authenticated identity and the permissions enforced by Novaplan AI. The exact visibility of each synchronized source depends on its connector and workspace configuration.
 
 ## Follow a question through the system
 
@@ -33,7 +33,7 @@ That path only works after your company data is already in those stores. In the 
 2. They publish new or changed records onto the **event bus**.
 3. **Indexing** parses the files, turns the text into vectors, and writes the knowledge graph and Qdrant.
 
-On a local machine, the event bus is **Redis Streams**. In a larger deployment, it is **Kafka**. The work the services do is the same in both cases; only the transport changes.
+The event bus can use **Redis Streams** or **Kafka**, depending on the managed environment. Novaplan configures this infrastructure.
 
 The diagram below shows that flow. Read it from top to bottom: who talks to Novaplan AI, then the API and the event bus, then Query, Indexing, and Connectors, then the data stores.
 
@@ -53,7 +53,7 @@ The diagram below shows that flow. Read it from top to bottom: who talks to Nova
 
 The sections below follow the same order as the diagram.
 
-<div id="who-talks-to-pipeshub" />
+<div id="who-talks-to-novaplan-ai" />
 
 ## Who talks to Novaplan AI
 
@@ -63,7 +63,7 @@ People use Novaplan AI in the browser. The interface is a [Next.js](https://next
 
 ### REST and SDK clients
 
-Your own applications talk to the HTTP API. Use the REST endpoints directly, or the [Python](https://github.com/pipeshub-ai/pipeshub-sdk-python), [TypeScript](https://github.com/pipeshub-ai/pipeshub-sdk-typescript), and [Go](https://github.com/pipeshub-ai/pipeshub-sdk-go) SDKs. The [API reference](/developer/api-reference) lists the routes.
+Your own applications can use the HTTP API. The [API reference](/developer/api-reference) lists the documented routes. Contact [Novaplan Support](/contact-us) for supported SDK options and integration access.
 
 ### Agents and MCP
 
@@ -73,7 +73,7 @@ Agents connect at `/mcp` using Streamable HTTP. Setup is in the [MCP overview](/
 
 The API is a Node.js process built with Express. The web app, REST and SDK clients, and MCP clients all talk to this process. It handles accounts, permissions, knowledge bases, file uploads, user authentication, personal access tokens, and MCP.
 
-On a default Docker install, this is the only Node process. It listens on port 3000 and serves the built Next.js files, `/api`, and `/mcp`. If you run from source during development, the Next.js dev server is typically on port 3001 and Express is on port 3000. Helm exposes this combined Node service on port 3001.
+Novaplan manages the runtime and exposes the web app, API, and MCP endpoint through the approved workspace address. Customers do not need local service ports to use these interfaces.
 
 If you need the HTTP reference for a specific area:
 
@@ -99,12 +99,12 @@ Auth, Storage, Mail, Config, Notifications, Crawling, and the connector manager 
 
 ### Event bus
 
-Connectors publish records onto the event bus, and Indexing consumes them. You choose the transport to match the size of the deployment:
+Connectors publish records onto the event bus, and Indexing consumes them. Novaplan selects the transport for the managed environment:
 
-- On a **local machine**, the event bus is Redis Streams (`MESSAGE_BROKER=redis`).
-- In a **larger deployment**, the event bus is Kafka (`MESSAGE_BROKER=kafka`).
+- **Redis Streams** can carry connector events to indexing.
+- **Kafka** is an alternative event bus for larger environments.
 
-Redis still runs in both cases. It is the cache, and by default it is also the encrypted configuration store.
+Redis can provide caching and encrypted configuration in either setup.
 
 ### Query, Indexing, and Connectors
 
@@ -112,7 +112,7 @@ Redis still runs in both cases. It is the cache, and by default it is also the e
 
 **Connectors** talk to Slack, Drive, Jira, Confluence, and the rest of your company apps. They complete OAuth with those providers, refresh the tokens, and publish new or changed records onto the event bus. The connector manager in the API stores the encrypted configuration and forwards the browser OAuth redirects to this Python service. See the [connectors overview](/connectors/overview) for the full list.
 
-**Indexing** consumes those records from the event bus. It parses files, splits them into chunks, embeds the text, and writes Qdrant and the knowledge graph. **Docling** is the heavier parser for PDFs, tables, and OCR. Two additional processes, Parsing and Extraction, start only if you set `USE_PARSING_SERVICE=true`.
+**Indexing** consumes those records from the event bus. It parses files, splits them into chunks, embeds the text, and writes to the vector store and knowledge graph. **Docling** is the heavier parser for PDFs, tables, and OCR. Separate Parsing and Extraction services may also be used, depending on the managed configuration.
 
 **Query** answers questions. It reads the knowledge graph and the vector store, then calls your language model. On the event bus it listens for configuration updates.
 
@@ -120,11 +120,11 @@ Redis still runs in both cases. It is the cache, and by default it is also the e
 
 Indexing and Query need **vectors**: lists of numbers that represent the meaning of a piece of text, so similar passages can be found later.
 
-On a default install they call a **local embedding server** over HTTP. The server speaks the OpenAI-compatible `/v1/embeddings` API. The box is dashed in the diagram because Query and Indexing call this server directly over HTTP. If you configure a cloud embedding provider, you can skip this process.
+The managed environment may use a dedicated embedding server over the OpenAI-compatible `/v1/embeddings` API or a configured cloud embedding provider. The box is dashed in the diagram because Query and Indexing call this service directly over HTTP when it is used.
 
 ## Where data lives
 
-Each box along the bottom of the diagram holds a different kind of state. The table below matches a default install. Vendor notes and links are on [external services](/system-overview/external-services).
+Each box along the bottom of the diagram holds a different kind of state. The table shows the technologies described by the reference architecture; the actual Novaplan environment may use a different supported backend. Vendor notes and links are on [external services](/system-overview/external-services).
 
 | Store | What it holds | Default |
 | --- | --- | --- |
@@ -132,8 +132,8 @@ Each box along the bottom of the diagram holds a different kind of state. The ta
 | **Vectors** | Embedded chunks used for similarity search. | Qdrant (`VECTOR_DB_TYPE=qdrant`). |
 | **Documents** | Sessions, file metadata, and other application state. | MongoDB. |
 | **Files** | The bytes of uploaded files and files pulled in by connectors. | Local disk, S3, or Azure Blob. See [storage](/system-overview/storage). |
-| **Redis** | Cache, the default encrypted configuration store, and Redis Streams when Redis is the event bus. | Always running. |
-| **etcd** | An alternative store for encrypted configuration. | Started when you set `KV_STORE_TYPE=etcd` (Compose profile `kv-etcd`). |
+| **Redis** | Cache, encrypted configuration, and Redis Streams when Redis is the event bus. | Used where configured. |
+| **etcd** | An alternative store for encrypted configuration. | Optional managed configuration. |
 
 ## Models you bring
 

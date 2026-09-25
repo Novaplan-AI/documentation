@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 980" width="1200" height="980" role="img" aria-labelledby="title desc">
-  <title id="title">PipesHub architecture</title>
+  <title id="title">Novaplan AI architecture</title>
   <desc id="desc">Three tiers. Presentation is the Next.js web app, REST and SDK clients, and MCP clients. Application is the Node.js API with in-process modules, an event bus of Redis Streams or Kafka, and Python query, indexing, and connector services plus a local embedding server. Data is Qdrant, Neo4j or ArangoDB, MongoDB, files, and Redis, with etcd optional.</desc>
   <defs>
     <marker id="arrow" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="8" markerHeight="9" orient="auto">

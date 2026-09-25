@@ -5,7 +5,11 @@ description: "Configure public DNS for the services"
 
 # Internal Services: Public DNS Configuration
 
-This document provides guidance on configuring public DNS for internal services, both for the connector and frontend components.
+Novaplan normally configures public DNS for the connector and frontend services when creating the customer workspace. The steps below document the administrative controls for authorized operators; confirm the actual Novaplan interface and approved URLs before changing a production workspace.
+
+<Warning>
+  A DNS change can affect OAuth redirects, webhooks, certificates, and existing links. Coordinate production changes with Novaplan Support rather than copying a URL from a screenshot.
+</Warning>
 
 ## Configuration
 
