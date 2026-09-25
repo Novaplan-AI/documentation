@@ -125,7 +125,7 @@ Add these OAuth scopes in the **OAuth consent screen > Scopes** section:
 - `https://www.googleapis.com/auth/gmail.send` - Gmail send permission requested by the implementation
 
 <Warning>
-  The listed tools perform calendar actions; they do not expose a separate Gmail send action. Confirm with Novaplan which scopes the deployed Enterprise toolset actually requires before approving the Gmail permission. Do not infer that calendar invitations alone require `gmail.send` from this list.
+  The accessible Calendar tools send invitations through the Calendar API's `sendUpdates` option; they do not call the Gmail API. Google's [event creation](https://developers.google.com/workspace/calendar/api/v3/reference/events/insert) and [event update](https://developers.google.com/workspace/calendar/api/v3/reference/events/update) references list Calendar scopes for those calls, not `gmail.send`. The accessible implementation still requests `gmail.send`. Ask Novaplan to confirm or remove that extra request in the deployed Enterprise toolset before approving it.
 </Warning>
 
 <div id="step-7-configure-in-novaplan-ai" />

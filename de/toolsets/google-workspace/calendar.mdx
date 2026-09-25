@@ -46,7 +46,7 @@ Novaplan übernimmt den Großteil der Einrichtung. Die Schritte bleiben als Refe
 | `https://www.googleapis.com/auth/gmail.send` | Von der Implementierung angeforderte Gmail-Sendeberechtigung. |
 
 <Warning>
-  Die aufgeführten Tools führen Kalenderaktionen aus; eine gesonderte Gmail-Sendeaktion ist nicht aufgeführt. Klären Sie mit Novaplan vor der Freigabe, welche Scopes das bereitgestellte Enterprise-Toolset tatsächlich benötigt. Aus dieser Liste allein folgt nicht, dass Kalendereinladungen `gmail.send` benötigen.
+  Die zugänglichen Calendar-Tools versenden Einladungen über die Calendar API mit der Option `sendUpdates`; sie rufen die Gmail API nicht auf. Google nennt für das [Erstellen](https://developers.google.com/workspace/calendar/api/v3/reference/events/insert) und [Aktualisieren](https://developers.google.com/workspace/calendar/api/v3/reference/events/update) von Terminen Calendar-Scopes, nicht `gmail.send`. Die zugängliche Implementierung fordert `gmail.send` dennoch an. Lassen Sie Novaplan vor der Freigabe prüfen, ob das bereitgestellte Enterprise-Toolset diese zusätzliche Berechtigung benötigt oder die Anfrage entfernen kann.
 </Warning>
 
 7. Tragen Sie **Client ID** und **Client Secret** in Novaplan AI ein und wählen Sie **Authenticate**.

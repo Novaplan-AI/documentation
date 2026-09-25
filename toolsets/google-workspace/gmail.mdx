@@ -107,10 +107,10 @@ The Gmail toolset enables AI agents to send, read, and manage emails in Gmail.
 **Scopes requested by the accessible toolset implementation:**
 - `https://www.googleapis.com/auth/gmail.send` - Send emails
 - `https://www.googleapis.com/auth/gmail.readonly` - Read emails
-- `https://www.googleapis.com/auth/gmail.modify` - Broader mailbox modification permission requested by the implementation
+- `https://www.googleapis.com/auth/gmail.modify` - Broader mailbox permission requested by the implementation; it also authorizes the documented draft action
 
 <Warning>
-  The listed Gmail tools do not include a label-management action. Confirm with Novaplan why the deployed Enterprise toolset requests `gmail.modify` before approving this broader permission.
+  The accessible toolset creates drafts with Gmail's `users.drafts.create` endpoint. Google accepts `gmail.modify` for that call, but also accepts the narrower [`gmail.compose` scope](https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.drafts/create). The toolset does not list a label-management action, while [Google classifies `gmail.modify` as a restricted scope](https://developers.google.com/workspace/gmail/api/auth/scopes). Confirm the deployed scope request and whether draft creation can use narrower access before approving this broader permission; changing the application's scopes requires an implementation and consent-flow check.
 </Warning>
 
 3. Click **"Update"** and **"Save and Continue"**

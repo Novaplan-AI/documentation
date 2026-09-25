@@ -36,10 +36,10 @@ Novaplan übernimmt den Großteil der Einrichtung. Diese Schritte sind auch als 
 | --- | --- |
 | `https://www.googleapis.com/auth/gmail.send` | Nachrichten senden. |
 | `https://www.googleapis.com/auth/gmail.readonly` | Nachrichten lesen. |
-| `https://www.googleapis.com/auth/gmail.modify` | Umfangreichere Berechtigung zur Änderung des Postfachs. |
+| `https://www.googleapis.com/auth/gmail.modify` | Umfangreichere Postfachberechtigung, die in der zugänglichen Implementierung auch die Entwurfsaktion autorisiert. |
 
 <Warning>
-  Die aufgeführten Gmail-Tools enthalten keine Aktion zum Bearbeiten von Labels. Klären Sie mit Novaplan, weshalb das bereitgestellte Enterprise-Toolset `gmail.modify` anfordert, bevor Sie diese weitergehende Berechtigung freigeben.
+  Das zugängliche Toolset erstellt Entwürfe über `users.drafts.create`. Google akzeptiert dafür `gmail.modify`, aber auch den engeren [Scope `gmail.compose`](https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.drafts/create). Eine Aktion zum Bearbeiten von Labels ist nicht aufgeführt; [Google stuft `gmail.modify` als „Restricted Scope“ ein](https://developers.google.com/workspace/gmail/api/auth/scopes). Lassen Sie vor der Freigabe die Scope-Anfrage der bereitgestellten Enterprise-Version und eine mögliche engere Berechtigung für Entwürfe prüfen. Eine Änderung der Scopes erfordert auch einen Test von Implementierung und Einwilligung.
 </Warning>
 
 5. Öffnen Sie in Novaplan AI **Settings → Toolsets → Gmail → Configure** und kopieren Sie die **Redirect URI**.
