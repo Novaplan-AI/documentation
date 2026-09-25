@@ -211,7 +211,7 @@ When you see **Connected – you can continue to Configure records**, click **Co
 </div>
 
 <Warning>
-  **Authorize with the same email you use in Novaplan AI.** A different account can cause missing pages or permission issues.
+  Authorize this shared connector with a Notion account that can select the intended pages and teamspaces. The account need not match the Novaplan AI administrator configuring the connection. Each viewer's Notion email is mapped separately where source permissions apply.
 </Warning>
 
 #### Step 8: Configure Records and save
@@ -312,7 +312,7 @@ Use **Re-authenticate with provider** on **Authorize** if tokens are rotated or 
 
 <Accordion title="Queries not returning results. What could be wrong?">
 
-1. **Email mismatch** — Use the same email in Novaplan AI as in Notion.<br />
+1. **Viewer identity or Notion access does not match** — Check the affected viewer's Notion email against their Novaplan AI account and confirm the intended page was shared with the connection.<br />
 2. **Scope** — Confirm the right pages were selected during **Authorize** and that indexing toggles match what you expect.  
 3. **Still indexing** — Open **Workspace Settings** → **Connectors** → **Notion** and check **Overview** until queues complete.
 
