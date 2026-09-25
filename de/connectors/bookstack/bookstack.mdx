@@ -7,6 +7,8 @@ description: "BookStack-Wissensinhalte und Zugriffsrechte mit Novaplan AI synchr
 
 Der BookStack-Konnektor übernimmt Inhalte aus der Struktur **Regale → Bücher → Kapitel → Seiten**. Er synchronisiert außerdem Benutzer, Rollen und Zugriffsrechte, damit die Suche in Novaplan AI die Berechtigungen der Quelle berücksichtigen kann. Ein Regal organisiert Bücher in BookStack, ist aber nicht der eigentliche übergeordnete Ordner eines Buches.
 
+BookStack wird von Ihrer Organisation betrieben. Falls die Quellinstanz noch eingerichtet werden muss, verwenden Sie die [offizielle BookStack-Installationsanleitung](https://www.bookstackapp.com/docs/admin/installation/); diese Schritte betreffen BookStack und nicht die Bereitstellung von Novaplan AI.
+
 Die erste Synchronisierung liest die relevanten Inhalte vollständig. Danach verwendet der Konnektor das BookStack-Audit-Log, um Änderungen zu erkennen. Dafür braucht das verwendete BookStack-Konto auch Zugriff auf das Audit-Log. Seiten und Anhänge werden als Inhalte übernommen; Benutzer und Rollen dienen der Berechtigungszuordnung.
 
 ## API-Zugang in BookStack erstellen
@@ -82,7 +84,7 @@ Weitere Läufe über `_sync_records_incremental` nutzen `page_create`, `page_upd
 
 Für die technische Einordnung: `create_connector` erstellt den Konnektor mit seinem Datenprozessor; `init` liest `base_url`, `token_id` und `token_secret` aus der Konfiguration und richtet `BookStackClient` sowie `BookStackDataSource` ein. `stream_record` gibt den Seiteninhalt als Markdown aus. Die API-Oberfläche von BookStack ist in der [BookStack-API-Dokumentation](https://demo.bookstackapp.com/api/docs) beschrieben.
 
-BookStack begrenzt API-Zugriffe standardmäßig auf **180 Anfragen pro Minute**. Bei großen Wikis kann das eine Synchronisierung bremsen oder scheitern lassen. Die Quellanleitung empfiehlt dann, den BookStack-Wert `API_REQUESTS_PER_MIN` serverseitig auf etwa **1000–1500** anzuheben. Diese Änderung betrifft Ihre BookStack-Instanz, nicht die Installation von Novaplan AI, und sollte mit der BookStack-Administration abgestimmt werden.
+BookStack begrenzt API-Zugriffe standardmäßig auf **180 Anfragen pro Minute**. Bei großen Wikis kann das eine Synchronisierung bremsen oder scheitern lassen. Die Quellanleitung empfiehlt dann, den BookStack-Wert `API_REQUESTS_PER_MIN` serverseitig auf etwa **1000–1500** anzuheben. Bei einer üblichen Linux-Installation steht die Variable in der `.env` der BookStack-Installation, häufig unter `/var/www/bookstack/.env`. Bei Docker Compose wird sie im Abschnitt `environment:` der BookStack-Konfiguration gesetzt, beispielsweise `API_REQUESTS_PER_MIN: 1000`; danach muss der BookStack-Container mit der neuen Konfiguration gestartet werden. Diese Änderung betrifft Ihre BookStack-Instanz, nicht die Installation von Novaplan AI, und sollte mit der BookStack-Administration abgestimmt werden.
 
 ## Probleme beheben
 
