@@ -17,12 +17,12 @@ Beantwortet eine Frage anhand einiger gefundener Passagen und liefert nach Mögl
 | --- | --- | --- |
 | `query` | Ja | Frage oder Nachricht |
 | `conversationId` | Nein | Vorhandenes Gespräch fortsetzen |
-| `filters` | Nein | Quellen über `{ apps: string[] }` eingrenzen; IDs liefert `pipeshub_sources` |
-| `modelKey` | Nein | Optionales Modell aus `llmModels` der Quellenübersicht |
+| `filters` | Nein | Quellen über `{ apps: string[] }` eingrenzen; IDs liefert `pipeshub_sources`. Der Filter ist für den ersten Gesprächszug relevant |
+| `modelKey` | Nein | Optionales Modell aus `llmModels[*].modelKey` der Quellenübersicht; sonst gilt das Standardmodell der Organisation |
 | `agentId` | Nein | Mit einem konfigurierten Agenten sprechen |
 | `chatMode` | Nein | Ohne Agent `internal_search` oder `web_search`; bei Agenten weglassen |
 
-Die Antwort enthält `answer`, `citations[]`, mögliche Anschlussfragen und eine `conversationId`. Ist `citations` leer, kennzeichnen Sie die Antwort als **unbelegt und nicht bestätigt**.
+Die Antwort enthält `answer`, `citations[]` mit `recordId`, mögliche Anschlussfragen und eine `conversationId`. Übergeben Sie diese ID bei weiteren Nachrichten desselben Gesprächs. Ist `citations` leer, kennzeichnen Sie die Antwort als **unbelegt und nicht bestätigt**. Für Fragen nach der Struktur eines Bereichs, einer vollständigen Liste oder dem Inhalt einer bestimmten benannten Datei wählen Sie die unten beschriebenen Datensatzwerkzeuge statt des Chats.
 
 ## `pipeshub_search`
 
@@ -32,9 +32,9 @@ Sucht semantisch nach passenden Dokumentabschnitten und liefert unter anderem `r
 | --- | --- | --- |
 | `query` | Ja | Suchanfrage |
 | `limit` | Nein | Maximale Trefferzahl von 1 bis 100, Standardwert 10 |
-| `apps` | Nein | Quellen-IDs zur Eingrenzung, aus `pipeshub_sources` |
+| `apps` | Nein | Connector-Instanz-UUIDs und/oder `knowledgeBase_<orgId>` zur Eingrenzung; IDs aus `pipeshub_sources` |
 
-Die Treffer sind eine sortierte Auswahl und keine vollständige Zählung aller passenden Inhalte.
+Die Antwort enthält sortierte `hits[]` sowie `uniqueRecords[]` für zusammengefasste Datensatzinformationen. Treffer sind eine sortierte Auswahl und keine vollständige Zählung aller passenden Inhalte. Verwenden Sie etwa 5 bis 10 Treffer, wenn Sie eine bestimmte Datei anhand ihres Namens auflösen möchten.
 
 ## `pipeshub_get_record_content`
 
@@ -46,15 +46,15 @@ Greift je nach `mode` auf einen Datensatz oder seine Struktur zu:
 | `navigate` | Hierarchie und vollständige Listen durchlaufen | Optional `nodeId`, `page`, `limit`, `depth` |
 | `lookup` | URL, Jira-Schlüssel oder externe ID zu `recordId` auflösen | `identifiers` erforderlich |
 
-`navigate` eignet sich für Fragen wie „Wie viele?“ oder „Liste alle auf“. `content` eignet sich für Zusammenfassungen und Textauszüge einer bestimmten Datei. `lookup` akzeptiert einen oder bis zu zehn Bezeichner. Die Seitenzählung beginnt bei 1; `depth` kann 1 bis 3 betragen.
+`navigate` eignet sich für Fragen wie „Wie viele?“ oder „Liste alle auf“ und liefert Struktur, aber keinen Dokumentvolltext. Ohne `nodeId` wird eine flache Liste erreichbarer Datensätze angefordert. Die Seitenzählung beginnt bei 1; die Quellanleitung nennt 50 bis 200 Einträge je Seite, Standardwert 50. `depth` kann 1 bis 3 betragen, standardmäßig 1. `content` eignet sich für Zusammenfassungen und Textauszüge einer bestimmten Datei. Die `recordId` kann aus einer Chat-Quelle, einem Suchtreffer oder einem `lookup` stammen. `lookup` akzeptiert einen oder bis zu zehn Bezeichner.
 
 ## Weitere Werkzeuge
 
 | Werkzeug | Aufgabe | Wichtige Argumente |
 | --- | --- | --- |
-| `pipeshub_download_record` | Binärinhalt einer Datei herunterladen, optional mit `convertTo` konvertieren | `recordId` |
+| `pipeshub_download_record` | Binärinhalt einer Datei herunterladen, optional mit `convertTo` (etwa `pdf`) konvertieren; für Textinhalte ist `content` besser geeignet | `recordId` |
 | `pipeshub_directory` | Personen, Gruppen und Teams abfragen | `action`: `whoami`, `list_users`, `get_user`, `list_groups` oder `list_my_teams`; gegebenenfalls `userId`, `page`, `limit`, `search` |
-| `pipeshub_sources` | Zugängliche Quellen und KI-Modelle ermitteln | Optional `include`, standardmäßig `sources` und `llmModels` |
+| `pipeshub_sources` | Zugängliche Quellen und KI-Modelle ermitteln | Optional `include`, standardmäßig `sources` und `llmModels`; `embeddingModels` bei Bedarf ergänzen |
 | `pipeshub_agents` | Für die Organisation konfigurierte Agenten auflisten | Kein Pflichtargument; `agentId` kann danach an `pipeshub_chat` übergeben werden |
 
 Rufen Sie `pipeshub_sources` zu Beginn einer Sitzung auf und verwenden Sie die gelieferten IDs. Wählen Sie einen Agenten anhand seiner Werkzeuge und Wissensquellen, nicht allein anhand seines Namens. Wenn kein geeigneter Agent existiert, können Sie den normalen Chat ohne `agentId` verwenden.
