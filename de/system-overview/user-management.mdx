@@ -5,10 +5,10 @@ description: "Organisation, Einladungen, Benutzergruppen und Teams in Novaplan A
 
 Novaplan erstellt Kunden-Workspaces und lädt die ersten Nutzenden ein. Administrierende können danach, soweit freigegeben, Personen, Gruppen und Teams im Workspace verwalten. Für die Bedienung der Oberfläche verwenden Sie die [Benutzeranleitung](/de/user-management/user), [Gruppenanleitung](/de/user-management/user-group) und [Teamanleitung](/de/user-management/teams). Diese Seite ordnet die technischen API-Bereiche ein.
 
-Die API verwendet Pfade unter `/api/v1` und für die meisten Aufrufe `Authorization: Bearer <Token>`. Ein Teil der Routen verlangt zusätzlich Administrationsrechte, die anhand der Gruppenzugehörigkeit geprüft werden. Die Dokumentation beschreibt Nutzer, Organisationen und Gruppen mit MongoDB-Metadaten; Teamaufrufe werden an den Konnektordienst weitergegeben. Interne Nutzerabfragen können den Scope `USER_LOOKUP` und Konfigurationsaufrufe `FETCH_CONFIG` verlangen.
+Die zugängliche Quellreferenz beschreibt Pfade unter `/api/v1` und für die meisten Aufrufe `Authorization: Bearer <Token>`. Ein Teil der Routen verlangt zusätzlich Administrationsrechte, die anhand der Gruppenzugehörigkeit geprüft werden. Die Dokumentation beschreibt Nutzer, Organisationen und Gruppen mit MongoDB-Metadaten; Teamaufrufe werden an den Konnektordienst weitergegeben. Interne Nutzerabfragen können den Scope `USER_LOOKUP` und Konfigurationsaufrufe `FETCH_CONFIG` verlangen.
 
 <Warning>
-  Organisationsanlage, systeminterne Konfiguration, Löschungen und Massen-Einladungen sind administrative Vorgänge. Führen Sie sie nicht aus einem normalen Kunden-Client aus, ohne Rollen und Auswirkungen zu prüfen. Vertrauen Sie keiner vom Client frei gesetzbaren Organisations- oder Benutzer-ID; der Server muss die Identität und Zugehörigkeit prüfen.
+  Diese Seite ist eine Quellreferenz, kein geprüfter öffentlicher API-Vertrag für den bereitgestellten Novaplan Enterprise Workspace. Organisationsanlage, systeminterne Konfiguration, Löschungen und Massen-Einladungen sind administrative Vorgänge. Führen Sie sie nicht aus einem normalen Kunden-Client aus, ohne Routen, Rollen und Auswirkungen mit Novaplan zu prüfen. Vertrauen Sie keiner vom Client frei gesetzbaren Organisations- oder Benutzer-ID; der Server muss die Identität und Zugehörigkeit prüfen.
 </Warning>
 
 ## Organisation
