@@ -1,6 +1,6 @@
 ---
 title: Whisper (Local)
-description: "Configure Novaplan AI to use a self-hosted Whisper speech-to-text model"
+description: "Configure Whisper speech-to-text in your Novaplan-managed workspace"
 ---
 
 # Whisper (Local) Speech to Text Configuration
@@ -9,10 +9,10 @@ description: "Configure Novaplan AI to use a self-hosted Whisper speech-to-text 
 
 *The Whisper local STT configuration screen in Novaplan AI where you'll select your model size and compute settings*
 
-Novaplan AI supports running Whisper entirely on your own infrastructure using the faster-whisper library. No API key is required — all audio processing happens locally, keeping your data private and eliminating per-request API costs.
+Novaplan AI can run Whisper through the `faster-whisper` library in the managed workspace backend. This option does not require a third-party transcription API key. Audio is processed by that backend rather than sent to a separate speech-to-text API; confirm your workspace's hosting and data-handling arrangements with Novaplan if you have specific residency requirements.
 
 <Note>
-Whisper model weights are downloaded from HuggingFace on first use. Ensure the Novaplan AI backend host has internet access during initial setup. The `faster-whisper` Python package must also be installed on the backend host.
+Whisper model weights are downloaded from Hugging Face on first use. Novaplan manages backend connectivity, package installation, storage, and compute capacity for your workspace. Contact [Novaplan Support](/contact-us) if model setup or the health check fails.
 </Note>
 
 ## Required Fields
@@ -34,7 +34,7 @@ Select the Whisper model size from the dropdown. Larger models are more accurate
 **How to choose a model size:**
 - For real-time voice input where speed matters most, start with `base` or `small`
 - For high-accuracy transcription of important audio, use `distil-large-v3` or `large-v3`
-- If you have a GPU available, larger models become much more practical
+- If your managed workspace has a GPU available, larger models may be practical; confirm capacity with Novaplan
 
 ## Optional Fields
 
@@ -43,8 +43,8 @@ Select the Whisper model size from the dropdown. Larger models are more accurate
 Controls which hardware the model runs on.
 
 - **Auto** (default) — Novaplan AI automatically uses a GPU if one is available, otherwise falls back to CPU
-- **CPU** — forces CPU inference (slower but works on any machine)
-- **CUDA** — forces NVIDIA GPU inference (requires a compatible NVIDIA GPU with CUDA support)
+- **CPU** — forces CPU inference on the workspace backend
+- **CUDA** — uses a compatible NVIDIA GPU on the workspace backend, if provisioned
 
 ### Compute Type
 
@@ -59,11 +59,11 @@ Controls the numerical precision used during inference. Lower precision uses les
 
 ### Model Cache Directory
 
-A filesystem path on the backend host where downloaded model weights will be stored. Leave blank to use the faster-whisper default cache location.
+A filesystem path on the managed backend where downloaded model weights will be stored. Leave blank to use the faster-whisper default cache location. Ask Novaplan before setting a custom path, since it must exist and be writable in your workspace environment.
 
 **Example:** `/data/whisper-models`
 
-This is useful if you want to pre-download models to a specific disk, or if the default cache location has limited storage.
+Novaplan can use this setting when it provisions a dedicated model cache or the default location has limited storage.
 
 ## Configuration Steps
 
@@ -81,18 +81,17 @@ As shown in the image above:
 
 ## Usage Considerations
 
-- No API costs — all transcription runs locally on your infrastructure
+- No separate third-party transcription API charge for this provider; managed compute and storage are still part of your service arrangement
 - The `large-v3` model requires approximately 3 GB of disk space and at least 4 GB of VRAM (or 8 GB of RAM for CPU inference)
-- `distil-large-v3` offers the best accuracy-to-speed ratio and is recommended for most production deployments
-- First use requires an internet connection to download the model weights; subsequent uses work offline
+- `distil-large-v3` is a faster large-model option; test accuracy and latency with your own audio before selecting it
+- First use requires the managed backend to download model weights; later transcription does not require a third-party transcription API, though other workspace functions may still need network access
 - Whisper supports transcription in 50+ languages automatically
 
 ## Troubleshooting
 
-- If the health check fails, confirm the `faster-whisper` Python package is installed on the backend host
-- If model weights fail to download, check that the backend host has internet access and can reach HuggingFace (huggingface.co)
-- If transcription is very slow, consider switching to a smaller model or enabling GPU inference with CUDA
-- If you get out-of-memory errors, switch to a smaller model or use `int8` compute type
-- Ensure the Model Cache Directory (if set) exists and is writable by the Novaplan AI process
+- If the health check fails or model weights cannot download, ask Novaplan to check the `faster-whisper` package, backend connectivity to `huggingface.co`, and model cache
+- If transcription is slow, try a smaller model or ask Novaplan whether GPU capacity is available
+- If you get out-of-memory errors, try a smaller model or `int8` compute type; Novaplan can check backend capacity
+- If a custom Model Cache Directory is configured, Novaplan should confirm that it exists and is writable by the workspace process
 
-For additional support, refer to the [faster-whisper documentation](https://github.com/SYSTRAN/faster-whisper) or contact Novaplan AI support.
+For implementation details, see the [faster-whisper documentation](https://github.com/SYSTRAN/faster-whisper). For workspace configuration, contact [Novaplan Support](/contact-us).
