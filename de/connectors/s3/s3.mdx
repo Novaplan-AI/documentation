@@ -1,0 +1,63 @@
+---
+title: "Amazon S3"
+description: "Dateien aus Amazon-S3-Buckets für die Suche synchronisieren."
+---
+
+## Überblick
+
+Der S3-Konnektor liest Objekte aus ausgewählten Amazon-S3-Buckets und macht unterstützte Inhalte in Novaplan AI durchsuchbar. Ein Bucket enthält Objekte mit eindeutigen Schlüsseln; vermeintliche Ordner sind Präfixe dieser Schlüssel. Der Konnektor verwendet eine **AWS Access Key ID** und einen **Secret Access Key** eines berechtigten IAM-Kontos. Novaplan unterstützt Sie bei der Einrichtung.
+
+Die IAM-Berechtigungen begrenzen, welche Buckets und Objekte der Konnektor lesen kann. Die Auswahl **Personal** oder **Team** steuert zusätzlich, wer synchronisierte Inhalte in Novaplan AI sehen kann. Eine Team-Verbindung kann deshalb alle eingelesenen Objekte für berechtigte Workspace-Mitglieder sichtbar machen; prüfen Sie Bucket-Auswahl und Zugriffsmodell mit Ihrer AWS-Administration, bevor Sie sie aktivieren.
+
+## IAM-Zugang vorbereiten
+
+1. Öffnen Sie die [AWS Management Console](https://console.aws.amazon.com) und wechseln Sie zu **IAM → Users → Create user**.
+2. Benennen Sie den Benutzer erkennbar, zum Beispiel `Novaplan-AI-S3-Connector`.
+3. Geben Sie nur die für die ausgewählten Buckets nötigen Leserechte. Die englische Quellanleitung verwendet **AmazonS3ReadOnlyAccess** als einfache Option; diese kann deutlich weiter reichen als ein einzelner Bucket. Lassen Sie für produktive Daten eine auf Ihre Buckets beschränkte Richtlinie prüfen.
+4. Öffnen Sie **Security credentials → Access keys → Create access key** und wählen Sie den passenden Anwendungsfall für eine außerhalb von AWS laufende Anwendung, sofern dies für Ihren Novaplan-Workspace zutrifft.
+5. Kopieren Sie **Access Key ID** und **Secret Access Key** sofort. Der geheime Teil wird nur einmal angezeigt.
+
+<Warning>
+  Access Keys sind langlebige Geheimnisse. Geben Sie sie nicht in Chat, E-Mail oder Quellcode weiter. Ihre AWS-Administration sollte Berechtigungsumfang, Rotation und mögliche Alternativen für die konkrete Novaplan-Bereitstellung prüfen. Nach einer Rotation müssen die Werte im Konnektor aktualisiert werden.
+</Warning>
+
+Für die in der Quellanleitung beschriebene Bucket-Erkennung und das Lesen sind unter anderem `s3:ListAllMyBuckets`, `s3:GetBucketLocation`, `s3:ListBucket` und `s3:GetObject` relevant. Bucket-ARNs und Objekt-ARNs sind verschieden; beschränken Sie beide passend. Eine Richtlinie mit `arn:aws:s3:::*/*` würde Objektzugriff über alle Buckets ausdehnen und ist für eine einzelne Freigabe ungeeignet.
+
+## Konnektor einrichten
+
+1. Öffnen Sie in Novaplan AI **Workspace → Connectors**, suchen Sie **S3** und wählen Sie **+ Setup**.
+2. Geben Sie unter **Authenticate Instance** einen **Instance name**, die **Access Key ID** in **Access Key** und den geheimen Schlüssel in **Secret Key** ein.
+3. Wählen Sie **Next** und unter **Configure Records** **Scheduled** oder **Manual**. Ein geplanter Lauf kann beispielsweise alle **1 Hour** stattfinden; bei großen, selten veränderten Buckets kann ein längeres Intervall sinnvoll sein.
+4. Begrenzen Sie die Synchronisierung unter **Indexing & sync filters → + Add filter**.
+
+| Filter | Wirkung |
+| --- | --- |
+| **Bucket Names** | Nur ausgewählte Buckets einschließen oder bestimmte Buckets ausschließen. |
+| **File Extensions** | Dateiendungen wie `pdf, docx, txt` ein- oder ausschließen. |
+| **Modified Date** und **Created Date** | Objekte nach Änderungs- oder Erstellungsdatum eingrenzen. |
+| **Enable Manual Indexing** | Aktiviert: Inhalte erst nach manuellem Start indexieren. Deaktiviert: nach dem Sync automatisch indexieren. |
+
+Ohne Filter werden alle für den IAM-Zugang erreichbaren Objekte berücksichtigt. Einen einzelnen Präfix-„Ordner“ innerhalb eines Buckets kann die Quellanleitung nicht direkt als Filter auswählen. Bei sensiblen Daten ist deshalb ein eng begrenzter IAM-Zugang und eine passende Bucket-Struktur wichtig.
+
+5. Speichern Sie mit **Save Configuration** und schalten Sie auf der Instanzkarte **Sync Enabled** ein, sofern sie **Sync Paused** zeigt.
+6. Prüfen Sie im **Overview**-Bereich **Total**, **Processing**, **Not Started**, **Failed** und **Unsupported**. **Sync** verarbeitet Änderungen; **Full sync** liest den gewählten Umfang erneut.
+
+Beim ersten Lauf liest der Konnektor Bucket- und Objektlisten vollständig. Er erkennt die Region der Buckets und übernimmt Dateinamen, Größen, Änderungszeiten, MIME-Typen und die aus Präfixen abgeleitete Struktur. Folgeläufe nutzen pro Bucket gespeicherte Änderungsstände. Gelöschte Objekte sollen beim nächsten Lauf aus der Suche entfernt werden; bei Versionierung sollten Sie die tatsächlich sichtbaren Versionen prüfen.
+
+## Dateitypen und besondere Speicherklassen
+
+Dokumente, Textdateien und Quellcode können inhaltlich indexiert werden. Bei Bildern hängt die Inhaltsauswertung von den im Workspace aktivierten Verarbeitungsfunktionen ab. Videos, Audio, Archive, unbekannte Binärdateien und passwortgeschützte Dateien sind nicht zuverlässig inhaltlich durchsuchbar und können als **Unsupported** erscheinen.
+
+Die Quellanleitung nennt Standard, Standard-IA, One Zone-IA und Intelligent-Tiering als unterstützte Speicherklassen. Glacier und Glacier Deep Archive benötigen vor dem Lesen einen Restore; **Requester Pays** und kundenseitig bereitgestellte Verschlüsselungsschlüssel (**SSE-C**) werden dort nicht unterstützt. Für **SSE-KMS** braucht der IAM-Zugang zusätzlich passende KMS-Rechte. Lassen Sie diese Punkte vor einer produktiven Verbindung prüfen.
+
+## Fehler beheben
+
+| Problem | Prüfen Sie |
+| --- | --- |
+| `InvalidAccessKeyId` oder `SignatureDoesNotMatch` | Schlüssel vollständig kopiert, aktiver IAM-Benutzer, keine Rotation oder Löschung. |
+| `AccessDenied` oder fehlende Buckets | `ListAllMyBuckets`, `GetBucketLocation`, `ListBucket`, `GetObject`, Bucket-Richtlinie und korrekte ARNs. |
+| Null Dateien | **Sync Enabled**, Bucket- und Datumsfilter, Objekt-Leserechte. |
+| Einzelne Dateien fehlen in der Suche | **Failed**/**Unsupported**, Indexierung, Dateityp, Verschlüsselung und Speicherklasse. |
+| Lauf ist sehr langsam | Anzahl der Objekte, Bucket- und Dateitypfilter, Abrufkosten und Synchronisierungsintervall. |
+
+Bei Fragen zu IAM-Richtlinien, Freigaben oder fehlenden Dateien wenden Sie sich an [Novaplan Support](/de/contact-us) und Ihre AWS-Administration.

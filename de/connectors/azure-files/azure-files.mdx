@@ -1,0 +1,54 @@
+---
+title: "Azure File Shares"
+description: "Azure-Dateifreigaben und deren Ordner für die Suche synchronisieren."
+---
+
+## Überblick
+
+Der Azure-Files-Konnektor liest Dateien und Ordner aus **Azure File Shares** eines Storage Accounts. Er stellt sie in Novaplan AI für die Suche bereit und verändert die Quelldateien nicht. Ein *File Share* entspricht einer Dateifreigabe mit echten Verzeichnissen. Liegen Ihre Daten dagegen in Blob-Containern, verwenden Sie [Azure Blob Storage](/de/connectors/azure-blob/azure-blob).
+
+Klären Sie mit Novaplan und Ihrer Azure-Administration, welche Freigaben und Dateitypen benötigt werden. Eine Team-Verbindung kann Inhalte in Novaplan AI einem größeren Personenkreis zugänglich machen als eine persönliche Verbindung; die Azure-Quellrechte selbst werden dadurch nicht geändert.
+
+## Connection String vorbereiten
+
+1. Melden Sie sich im [Azure Portal](https://portal.azure.com) an und öffnen Sie **Storage accounts**.
+2. Wählen Sie den Account mit den gewünschten **File shares**.
+3. Öffnen Sie **Security + networking → Access keys** und kopieren Sie unter **key1** die **Connection string**.
+
+<Warning>
+  Die Connection String enthält einen Storage-Account-Schlüssel mit weitreichendem Zugriff. Versenden oder veröffentlichen Sie ihn nicht. Stimmen Sie den Anmeldetyp und die Berechtigungen mit Ihrer Azure-Administration ab und verwenden Sie ausschließlich den vorgesehenen Konfigurationsdialog.
+</Warning>
+
+Der gleiche Storage Account kann sowohl Blob-Container als auch File Shares enthalten. Der Schlüssel kann deshalb für beide Konnektoren technisch derselbe sein; entscheiden Sie bewusst, ob Sie diesen weitreichenden Zugang für beide verwenden möchten. Netzwerkregeln müssen den Zugriff aus der Novaplan-Umgebung erlauben.
+
+## Konnektor einrichten
+
+1. Öffnen Sie in Novaplan AI **Workspace → Connectors** und wählen Sie **Azure Files → Setup**.
+2. Tragen Sie unter **Authenticate Instance** einen **Instance name** und die kopierte **Connection String** ein.
+3. Wählen Sie **Next** und unter **Configure Records** eine **Sync Strategy**: **Scheduled** oder **Manual**. Für **Sync Interval** kann **1 Hour** ein Anfangswert sein.
+4. Legen Sie unter **Indexing & sync filters** bei Bedarf fest, welche Inhalte gelesen werden.
+
+| Filter | Wirkung |
+| --- | --- |
+| **File Share Names** | Bestimmte Dateifreigaben mit `In` ein- oder mit `Not In` ausschließen. |
+| **File Extensions** | Dateitypen wie `pdf` auswählen oder unerwünschte Endungen ausschließen. |
+| **Modified Date** und **Created Date** | Dateien nach Änderungs- oder Erstellungsdatum eingrenzen. |
+
+Ohne Filter werden alle zugänglichen Dateien berücksichtigt. Einen einzelnen Unterordner innerhalb eines Shares kann der Filter laut Quellanleitung nicht direkt auswählen. Für eine enge Trennung kann eine eigene Freigabe sinnvoll sein.
+
+5. Speichern Sie mit **Save Configuration**. Aktivieren Sie auf der Instanzseite **Sync Enabled**, wenn der Status noch **Sync Paused** zeigt.
+6. Prüfen Sie im **Overview**-Bereich **Total**, **Processing**, **Not Started** und **Failed**. **Sync** und **Full sync** starten bei Bedarf einen Lauf; **Manage Configuration** öffnet Zugangsdaten und Filter erneut.
+
+Beim ersten Lauf wird der ausgewählte Datenbestand vollständig gelesen. Spätere Läufe verarbeiten neue oder geänderte Dateien und entfernen gelöschte Dateien aus der Suche. Dokumente und Textdateien können inhaltlich indexiert werden. Bei Bildern hängt die Inhaltsauswertung von den aktivierten Verarbeitungsfunktionen ab; Video, Audio und Archive werden nicht als durchsuchbarer Text versprochen.
+
+## Fehler beheben
+
+| Problem | Prüfen Sie |
+| --- | --- |
+| Authentifizierung schlägt fehl | Connection String vollständig kopiert, Schlüssel gültig, richtiger Storage Account. |
+| Shares fehlen in der Auswahl | Account enthält **File shares** statt Blob-Containern; außerdem Netzwerkzugriff prüfen. |
+| Lauf zeigt null Dateien | Freigabeinhalt, Filter, aktivierte Synchronisierung. |
+| Datei erscheint nicht in der Suche | Indexierungsstatus, **Failed**, unterstützter Dateityp und Passwortschutz. |
+| Verbindung stoppt nach Schlüsselwechsel | Connection String unter **Manage Configuration** aktualisieren. |
+
+Wenn Ihre Dateifreigaben nicht aus der Novaplan-Umgebung erreichbar sind oder Sie Hilfe bei der Eingrenzung benötigen, wenden Sie sich an [Novaplan Support](/de/contact-us).

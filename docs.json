@@ -79,6 +79,10 @@
               "de/connectors/nextcloud/nextcloud",
               "de/connectors/linear/linear",
               "de/connectors/local-fs/local-fs",
+              "de/connectors/azure-blob/azure-blob",
+              "de/connectors/azure-files/azure-files",
+              "de/connectors/gcs/gcs",
+              "de/connectors/s3/s3",
               "de/connectors/mariadb/mariadb",
               "de/connectors/postgres/postgres"
             ]

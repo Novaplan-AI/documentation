@@ -1,0 +1,55 @@
+---
+title: "Azure Blob Storage"
+description: "Dateien aus Azure-Blob-Containern für die Suche synchronisieren."
+---
+
+## Überblick
+
+Der Azure-Blob-Konnektor liest Dateien aus **Blob-Containern** eines Azure Storage Accounts und macht sie in Novaplan AI durchsuchbar. Er ändert oder löscht keine Quelldateien. Ein *Storage Account* enthält Container; ein *Blob* ist eine Datei beziehungsweise ein Objekt innerhalb eines Containers. Für echte Azure-Dateifreigaben verwenden Sie den [Azure-Files-Konnektor](/de/connectors/azure-files/azure-files).
+
+Novaplan unterstützt Sie bei der Einrichtung. Legen Sie vorab fest, welche Container und Dateitypen im Workspace sichtbar sein sollen. Die Auswahl **Personal** oder **Team** steuert laut Quellanleitung die Sichtbarkeit in Novaplan AI; sie verändert keine Azure-Berechtigungen. Prüfen Sie bei Teamfreigaben sorgfältig, ob der gesamte gewählte Inhalt für alle vorgesehenen Workspace-Mitglieder geeignet ist.
+
+## Connection String vorbereiten
+
+1. Öffnen Sie das [Azure Portal](https://portal.azure.com) und wählen Sie **Storage accounts**.
+2. Öffnen Sie den Storage Account mit den gewünschten Blob-Containern.
+3. Wählen Sie **Security + networking → Access keys**.
+4. Zeigen Sie unter **key1** die **Connection string** an und kopieren Sie sie über die Kopierfunktion.
+
+<Warning>
+  Eine Connection String mit Storage-Account-Schlüssel ist ein weitreichendes Geheimnis und kann mehr als nur Lesezugriff ermöglichen. Geben Sie sie nicht in Chat, E-Mail oder Dokumenten weiter. Lassen Sie Ihre Azure-Administration prüfen, ob dieser Anmeldetyp und sein Berechtigungsumfang für die Anbindung zulässig sind. Tragen Sie den Wert nur in den vorgesehenen Konfigurationsdialog ein.
+</Warning>
+
+Die Azure-Administration muss außerdem den Zugriff aus der Novaplan-Umgebung durch Netzwerkregeln oder Firewall zulassen. Wenn der Schlüssel rotiert wird, muss die gespeicherte Konfiguration aktualisiert werden.
+
+## Konnektor einrichten
+
+1. Öffnen Sie in Novaplan AI **Workspace → Connectors** und wählen Sie **Azure Blob → Setup**.
+2. Geben Sie unter **Authenticate Instance** einen **Instance name** ein und fügen Sie die **Connection String** in das gleichnamige Feld ein.
+3. Wählen Sie **Next**, dann unter **Configure Records** **Scheduled** oder **Manual**. **1 Hour** ist ein möglicher Anfangswert für **Sync Interval**.
+4. Begrenzen Sie unter **Indexing & sync filters** den Inhalt, falls nicht der gesamte Storage Account benötigt wird.
+
+| Filter | Wirkung |
+| --- | --- |
+| **Container Names** | Gewünschte Blob-Container mit `In` auswählen oder mit `Not In` ausschließen. |
+| **File Extensions** | Dateiendungen wie `pdf` einschließen oder andere wie `jpg, png, gif` ausschließen. |
+| **Modified Date** und **Created Date** | Dateien nach Änderungs- oder Erstellungsdatum eingrenzen. |
+
+Ohne Filter werden alle für die Verbindung lesbaren Blobs berücksichtigt. Ein einzelner Unterordner innerhalb eines Containers lässt sich laut Quellanleitung nicht direkt auswählen; dafür sollten Sie Inhalt und Containerstruktur vorab prüfen.
+
+5. Speichern Sie mit **Save Configuration**. Auf der Instanzseite kann zunächst **Sync Paused** angezeigt werden; aktivieren Sie **Sync Enabled**.
+6. Öffnen Sie die Instanz, um **Total**, **Processing**, **Not Started** und **Failed** zu verfolgen. Mit **Sync** oder **Full sync** können Sie einen Lauf bei Bedarf auslösen.
+
+Beim ersten Lauf wird der gewählte Umfang vollständig gelesen. Folgeläufe übernehmen neue und geänderte Dateien und entfernen gelöschte Quelldateien aus der Suche. Dokumente und Textdateien können inhaltlich indexiert werden; bei Bilddateien hängt die inhaltliche Auswertung von den im Workspace aktivierten Verarbeitungsfunktionen ab. Video, Audio, Archive und andere Binärdateien können als Dateieintrag erscheinen, ohne dass ihr Inhalt durchsucht wird.
+
+## Fehler beheben
+
+| Problem | Prüfen Sie |
+| --- | --- |
+| Authentifizierung schlägt fehl | Vollständige Connection String ohne zusätzliche Leerzeichen, gültiger Schlüssel und richtiger Storage Account. |
+| Container fehlen | Es handelt sich um Blob-Container, nicht um Azure-Dateifreigaben; außerdem Firewall und Zugang prüfen. |
+| Null Dateien | Containerinhalt, aktive Synchronisierung und Filter. |
+| Einzelne Dateien fehlen in der Suche | **Failed**/**Processing**, Dateityp, Passwortschutz und Abschluss der Indexierung. |
+| Verbindung funktionierte zuvor | Mögliche Rotation des Azure-Schlüssels; unter **Manage Configuration** aktualisieren. |
+
+Bei Fragen zur sicheren Bereitstellung der Connection String oder zu den Filtern wenden Sie sich an [Novaplan Support](/de/contact-us).

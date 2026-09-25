@@ -1,0 +1,60 @@
+---
+title: "Google Cloud Storage"
+description: "Dateien aus Google-Cloud-Storage-Buckets für die Suche synchronisieren."
+---
+
+## Überblick
+
+Der Konnektor für **Google Cloud Storage (GCS)** liest Objekte aus freigegebenen Buckets und macht unterstützte Dateiinhalte in Novaplan AI durchsuchbar. Er verwendet ein Google-Cloud-**Dienstkonto** mit JSON-Schlüssel. Novaplan unterstützt Sie bei der Einrichtung und bei der Auswahl der benötigten Buckets.
+
+Legen Sie vor der Freigabe fest, welche Buckets und Dateitypen im Workspace erscheinen sollen. Das Dienstkonto kann nur Objekte lesen, für die es Zugriff hat. Die Wahl **Personal** oder **Team** bestimmt zusätzlich die Sichtbarkeit in Novaplan AI. Prüfen Sie eine Team-Verbindung mit Testkonten, bevor Sie sensible Buckets vollständig synchronisieren.
+
+## Dienstkonto und Schlüssel vorbereiten
+
+1. Öffnen Sie die [Google Cloud Console](https://console.cloud.google.com) im Projekt mit den gewünschten Buckets.
+2. Wählen Sie **IAM & Admin → Service Accounts → Create Service Account** und vergeben Sie einen erkennbaren Namen, etwa `novaplan-gcs-connector`.
+3. Erteilen Sie die zum Lesen benötigten Berechtigungen. Die Quellanleitung verwendet **Storage Object Viewer**; prüfen Sie mit Ihrer Google-Cloud-Administration, ob Sie die Berechtigung auf ausgewählte Buckets begrenzen können und welche Listenrechte der Konnektor benötigt.
+4. Öffnen Sie das neue Dienstkonto, wählen Sie **Keys → Add Key → Create new key → JSON** und speichern Sie die heruntergeladene Datei sicher. Der private Schlüssel kann nicht erneut aus derselben Datei heruntergeladen werden.
+
+<Warning>
+  Die JSON-Datei ist ein Zugangsschlüssel. Versenden, veröffentlichen oder committen Sie sie nicht. Wenn sie kompromittiert wird, löschen Sie den Schlüssel in Google Cloud und richten Sie die Verbindung mit einem neuen Schlüssel ein. Stimmen Sie die Verwendung eines langlebigen Schlüssels mit Ihrer Sicherheitsrichtlinie ab.
+</Warning>
+
+Wenn Sie nur bestimmte Buckets freigeben möchten, kann Ihre Google-Cloud-Administration den Zugriff gezielt an einzelnen Buckets erteilen. Die technische Quellanleitung nennt als benötigte Berechtigungen `storage.buckets.get`, `storage.buckets.list`, `storage.objects.get` und `storage.objects.list`; die konkrete Rollen- und Bucket-Konfiguration muss zu Ihrem Projekt passen.
+
+## Konnektor in Novaplan AI einrichten
+
+1. Öffnen Sie **Workspace → Connectors**, suchen Sie **GCS** und wählen Sie **+ Setup**.
+2. Tragen Sie unter **Authenticate Instance** einen **Instance name** ein und laden Sie bei **Service Account JSON** die von Google Cloud heruntergeladene Originaldatei über **Upload JSON** hoch.
+3. Wählen Sie **Next**. Unter **Configure Records** legen Sie **Scheduled** oder **Manual** fest. Für geplante Läufe beträgt der voreingestellte **Sync Interval** laut Quellanleitung **1 Hour**.
+4. Wählen Sie unter **Indexing & sync filters → + Add filter** die benötigten Buckets und Inhalte aus.
+
+| Filter | Wirkung |
+| --- | --- |
+| **Bucket Names** | Nur bestimmte Buckets mit `In` laden oder mit `Not In` ausschließen. |
+| **File Extensions** | Endungen wie `pdf, docx, txt` ein- oder ausschließen. |
+| **Modified Date** und **Created Date** | Objekte nach Änderungs- oder Erstellungsdatum eingrenzen. |
+| **Enable Manual Indexing** | Bei Aktivierung werden synchronisierte Objekte erst nach manuellem Start indexiert. |
+
+Ohne Filter werden alle für das Dienstkonto erreichbaren Objekte berücksichtigt. Beginnen Sie bei großen Projekten mit einem einzelnen Bucket. Ein bestimmter Unterordner innerhalb eines Buckets lässt sich laut Quellanleitung nicht direkt als Filter auswählen.
+
+5. Speichern Sie mit **Save Configuration**. Aktivieren Sie auf der Instanzkarte **Sync Enabled**, falls sie noch **Sync Paused** zeigt.
+6. Prüfen Sie im **Overview**-Bereich **Total**, **Processing**, **Not Started**, **Failed** und **Unsupported**. **Sync** liest Änderungen nach; **Full sync** prüft den gewählten Umfang vollständig erneut.
+
+Beim ersten Lauf werden alle ausgewählten Objekte gelesen. Folgeläufe verwenden Änderungsinformationen wie `updated`. Unterstützte Dokumente, Textdateien und Quellcode können inhaltlich durchsucht werden. Für Bilder hängt die Inhaltsauswertung von den im Workspace aktivierten Funktionen ab. Video, Audio, Archive, SVG und verschlüsselte oder passwortgeschützte Inhalte können als **Unsupported** erscheinen, ohne inhaltlich durchsuchbar zu sein.
+
+## Besondere Speicherklassen und Verschlüsselung
+
+Die Quellanleitung beschreibt Standard, Nearline, Coldline und Archive als grundsätzlich lesbar; selten genutzte Speicherklassen können höhere Latenz oder Abrufkosten verursachen. **Requester Pays**-Buckets und kundenseitig bereitgestellte Schlüssel (**CSEK**) werden dort als nicht unterstützt genannt. Bei kundenseitig verwalteten Schlüsseln (**CMEK**) benötigt das Dienstkonto zusätzliche KMS-Entschlüsselungsrechte. Lassen Sie diese Punkte für Ihre konkrete Umgebung mit Novaplan und der Google-Cloud-Administration prüfen.
+
+## Fehler beheben
+
+| Problem | Prüfen Sie |
+| --- | --- |
+| Ungültige Anmeldung | Original-JSON, aktives Dienstkonto, nicht gelöschter Schlüssel. |
+| Buckets fehlen | Projekt, Bucket- und Listenrechte des Dienstkontos sowie Filter. |
+| Keine Dateien trotz **Sync Enabled** | Objekt-Leserechte, Filter und **Failed**-Status. |
+| Inhalte fehlen in der Suche | **Processing**, **Unsupported**, Dateityp und Indexierungsabschluss. |
+| Verbindung stoppt nach Schlüsselrotation | Neuen JSON-Schlüssel unter **Manage Configuration → Authenticate Instance** hochladen. |
+
+Bei Zugriffs- oder Kostenfragen unterstützt Sie [Novaplan Support](/de/contact-us) gemeinsam mit Ihrer Google-Cloud-Administration.
