@@ -23,6 +23,37 @@ Die IAM-Berechtigungen begrenzen, welche Buckets und Objekte der Konnektor lesen
 
 Für die in der Quellanleitung beschriebene Bucket-Erkennung und das Lesen sind unter anderem `s3:ListAllMyBuckets`, `s3:GetBucketLocation`, `s3:ListBucket` und `s3:GetObject` relevant. Bucket-ARNs und Objekt-ARNs sind verschieden; beschränken Sie beide passend. Eine Richtlinie mit `arn:aws:s3:::*/*` würde Objektzugriff über alle Buckets ausdehnen und ist für eine einzelne Freigabe ungeeignet.
 
+### Beispielrichtlinie für einen Bucket
+
+Die folgende IAM-Richtlinie erlaubt Lesezugriff auf Objekte in **einem** Bucket. Ersetzen Sie `your-bucket-name` durch den freigegebenen Bucket und lassen Sie die Richtlinie von Ihrer AWS-Administration an Ihre Umgebung anpassen:
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": "s3:ListAllMyBuckets",
+      "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": ["s3:ListBucket", "s3:GetBucketLocation"],
+      "Resource": "arn:aws:s3:::your-bucket-name"
+    },
+    {
+      "Effect": "Allow",
+      "Action": "s3:GetObject",
+      "Resource": "arn:aws:s3:::your-bucket-name/*"
+    }
+  ]
+}
+```
+
+`s3:ListAllMyBuckets` ermöglicht es, **alle Bucket-Namen** des AWS-Kontos aufzulisten. Die Richtlinie begrenzt den **Objektzugriff** auf den angegebenen Bucket, verbirgt aber die Namen anderer Buckets nicht. Der Konnektor verwendet die Bucket-Erkennung; entfernen Sie diese Berechtigung erst, wenn Novaplan eine andere Erkennung für Ihre bereitgestellte Version bestätigt hat. Die [AWS-Beispiele für S3-IAM-Richtlinien](https://docs.aws.amazon.com/AmazonS3/latest/userguide/example-policies-s3.html) trennen ebenfalls Bucket- und Objekt-ARNs.
+
+Unter **IAM → Policies → Create policy** können Sie die geprüfte JSON-Richtlinie anlegen und dem IAM-Benutzer zuweisen. Wenn mehrere Buckets zugelassen werden sollen, ergänzen Sie deren jeweilige Bucket- und Objekt-ARNs gezielt, statt einen Objekt-Wildcard für alle Buckets zu verwenden. Für mit **SSE-KMS** verschlüsselte Objekte sind zusätzlich passende KMS-Rechte erforderlich.
+
 ## Konnektor einrichten
 
 1. Öffnen Sie in Novaplan AI **Workspace → Connectors**, suchen Sie **S3** und wählen Sie **+ Setup**.

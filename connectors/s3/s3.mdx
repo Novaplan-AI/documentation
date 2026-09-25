@@ -317,7 +317,7 @@ For enhanced security, you can create a custom IAM policy that restricts access 
 
 ### Example Custom Policy
 
-Here's a basic example policy for a single bucket:
+Here's a read-only example for one bucket. Replace the placeholder and have your AWS administrator check it against the connector's actual calls and your account policies:
 
 ```json
 {
@@ -325,26 +325,27 @@ Here's a basic example policy for a single bucket:
   "Statement": [
     {
       "Effect": "Allow",
-      "Action": [
-        "s3:ListAllMyBuckets",
-        "s3:GetBucketLocation"
-      ],
+      "Action": "s3:ListAllMyBuckets",
       "Resource": "*"
     },
     {
       "Effect": "Allow",
       "Action": [
         "s3:ListBucket",
-        "s3:GetObject"
+        "s3:GetBucketLocation"
       ],
-      "Resource": [
-        "arn:aws:s3:::your-bucket-name",
-        "arn:aws:s3:::your-bucket-name/*"
-      ]
+      "Resource": "arn:aws:s3:::your-bucket-name"
+    },
+    {
+      "Effect": "Allow",
+      "Action": "s3:GetObject",
+      "Resource": "arn:aws:s3:::your-bucket-name/*"
     }
   ]
 }
 ```
+
+`s3:ListAllMyBuckets` permits discovery of bucket names across the AWS account even though object reads are limited to the named bucket. The connector uses bucket discovery, so do not describe this policy as hiding other bucket names. AWS distinguishes bucket and object ARNs in its [S3 IAM policy examples](https://docs.aws.amazon.com/AmazonS3/latest/userguide/example-policies-s3.html). If your AWS administrator must prohibit account-wide bucket listing, confirm with Novaplan whether the deployed connector supports a different discovery flow before removing that action.
 
 ### Enhanced Custom Policy (Multiple Buckets)
 
