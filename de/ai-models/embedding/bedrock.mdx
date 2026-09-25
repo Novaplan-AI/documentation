@@ -21,9 +21,9 @@ Prüfen Sie in der Bedrock-Konsole unter Modellzugang und Basismodellen die aktu
 
 ## AWS-Anmeldung
 
-**AWS Access Key ID** und **AWS Secret Access Key** sind optionale Felder. Wenn Novaplan AI in einer geeigneten EC2-Umgebung mit einer passenden IAM-Rolle läuft, können beide leer bleiben. Andernfalls benötigt die Verbindung ein geschütztes Zugangsschlüsselpaar. Stimmen Sie mit Novaplan ab, welche Authentifizierungsmethode für Ihren Workspace verwendet wird; veröffentlichen Sie geheime Schlüssel nicht.
+**AWS Access Key ID** und **AWS Secret Access Key** sind optionale Felder. Beide können leer bleiben, wenn Novaplan für den verwalteten Backend-Dienst eine geeignete AWS-Anmeldequelle eingerichtet hat, etwa eine Workload-Rolle. Der zugängliche Backend-Code verwendet dann die [Boto3-Anmeldekette](https://docs.aws.amazon.com/boto3/latest/guide/credentials.html). Eine AWS-Anmeldung auf Ihrem eigenen Computer steht dem Dienst nicht automatisch zur Verfügung. Ein dauerhaftes Zugangsschlüsselpaar verwenden Sie nur nach Abstimmung mit Ihrer AWS-Administration und Novaplan; klären Sie Berechtigungen, sichere Übergabe und Rotation. [AWS bevorzugt temporäre Zugangsdaten](https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html).
 
-Die verwendete IAM-Rolle oder der IAM-Nutzer braucht für Modellaufrufe `bedrock:InvokeModel` und, falls der Aufrufpfad gestreamte Antworten verwendet, `bedrock:InvokeModelWithResponseStream`. Begrenzen Sie Ressourcenberechtigungen nach Möglichkeit auf die tatsächlich verwendeten Modell-ARNs.
+Die verwendete AWS-Identität braucht für Modellaufrufe `bedrock:InvokeModel` und, falls der Aufrufpfad gestreamte Antworten verwendet, `bedrock:InvokeModelWithResponseStream`. Ein Inference Profile kann zusätzliche Rechte erfordern. Lassen Sie die AWS-Administration die Ressourcenberechtigungen auf die tatsächlich verwendeten Modelle oder Profile begrenzen. Siehe [AWS-Voraussetzungen für Modellaufrufe](https://docs.aws.amazon.com/bedrock/latest/userguide/inference-prereq.html).
 
 ## Modell hinzufügen
 

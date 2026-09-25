@@ -58,17 +58,13 @@ Select the provider of the embedding model you are using. This helps Novaplan AI
 
 The AWS Access Key ID for authenticating requests to AWS Bedrock.
 
-**Example format:** `AKIAIOSFODNN7EXAMPLE`
-
-**Note:** If Novaplan AI is running on an EC2 instance with an appropriate IAM role attached, you can leave this field blank.
+Both AWS key fields can remain blank when Novaplan has configured an approved credential source for the managed backend, such as a workload role. The accessible backend then uses the [Boto3 credential provider chain](https://docs.aws.amazon.com/boto3/latest/guide/credentials.html). Confirm which identity the deployed service uses; a login on your own computer is not automatically available to it.
 
 ### AWS Secret Access Key
 
 The secret portion of your AWS credentials.
 
-**Note:** Leave blank if using EC2 IAM role authentication.
-
-**Security Note:** Your secret key should be kept secure and never shared publicly. Novaplan AI securely stores your credentials.
+Use an explicit access key pair only if your AWS administrator and Novaplan agree it is needed. Define least-privilege permissions, a secure transfer method, and rotation before entering the keys. Never publish a real secret. [AWS recommends temporary credentials where possible](https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html).
 
 ## Configuration Steps
 
@@ -78,31 +74,15 @@ As shown in the image above:
 2. Specify your AWS Region (marked with *)
 3. Enter the Model Name (model ID) (marked with *)
 4. Select the appropriate Provider from the dropdown (marked with *)
-5. (Optional) Enter your AWS Access Key ID — leave blank if using an EC2 IAM role
-6. (Optional) Enter your AWS Secret Access Key — leave blank if using an EC2 IAM role
+5. (Optional) Enter the approved AWS Access Key ID only if Novaplan is using explicit keys
+6. (Optional) Enter its matching AWS Secret Access Key through the approved setup flow
 7. Click **Add Model** to save and validate your credentials
 
-> Region, Model Name, and Provider are required fields. AWS Access Key ID and Secret Key are optional when running Novaplan AI on EC2 with an appropriate IAM role.
+> Region, Model Name, and Provider are required. The two key fields may be blank only when the managed backend has another approved AWS credential source.
 
 ## IAM Permissions
 
-Ensure your IAM user or role has the following permissions to use AWS Bedrock embedding models:
-
-```json
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": [
-        "bedrock:InvokeModel",
-        "bedrock:InvokeModelWithResponseStream"
-      ],
-      "Resource": "*"
-    }
-  ]
-}
-```
+The AWS identity used by the managed service needs `bedrock:InvokeModel` for the selected embedding model. Add `bedrock:InvokeModelWithResponseStream` only if the actual call path requires streaming. An inference profile may need additional permissions. Ask your AWS administrator to scope resources to the model or profile in use; do not copy an unrestricted `Resource: "*"` policy. See [AWS's inference prerequisites](https://docs.aws.amazon.com/bedrock/latest/userguide/inference-prereq.html).
 
 ## Usage Considerations
 
@@ -112,8 +92,8 @@ Ensure your IAM user or role has the following permissions to use AWS Bedrock em
 
 ## Troubleshooting
 
-- If you encounter authentication errors, verify your AWS Access Key ID and Secret Key are correct
-- Ensure your IAM user or role has the necessary Bedrock permissions
+- If you encounter authentication errors, verify the AWS identity configured for the managed backend or, if explicit keys were approved, the matching key pair
+- Ensure that AWS identity has the necessary Bedrock permissions
 - Verify the selected region has AWS Bedrock available and your desired model is accessible
 - Check that you have model access enabled for the specific model in the AWS Bedrock console
 - Ensure the model ID is correctly formatted as shown in the Bedrock console

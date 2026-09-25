@@ -76,30 +76,13 @@ The AWS Access Key ID for authenticating requests to AWS Bedrock.
 
 **Example format:** `AKIAIOSFODNN7EXAMPLE`
 
-**How to obtain your Access Key ID:**
-1. Log in to the [AWS Management Console](https://aws.amazon.com/console/)
-2. Navigate to IAM (Identity and Access Management)
-3. Go to "Users" and select your user (or create a new one)
-4. Click on the "Security credentials" tab
-5. Under "Access keys", click "Create access key"
-6. Copy the Access Key ID
-
-**Note:** If Novaplan AI is running on an EC2 instance with an appropriate IAM role attached, you can leave this field blank.
+Both AWS key fields can remain blank when Novaplan has configured an approved credential source for the managed backend, such as a workload role. The accessible backend then uses the [Boto3 credential provider chain](https://docs.aws.amazon.com/boto3/latest/guide/credentials.html); an AWS login on your own computer does not automatically give the Novaplan service access. Confirm the deployed workspace's credential source with Novaplan before saving this configuration.
 
 ### AWS Access Secret Key
 
 The secret portion of your AWS credentials.
 
-**Example format:** `wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY`
-
-**How to obtain your Secret Key:**
-1. When creating an access key in IAM, the secret key is shown only once
-2. Download or copy the secret key immediately when created
-3. If you've lost your secret key, you'll need to create a new access key pair
-
-**Security Note:** Your secret key should be kept secure and never shared publicly. Novaplan AI securely stores your credentials.
-
-**Note:** Leave blank if using EC2 IAM role authentication.
+Use an explicit access key pair only when your AWS administrator and Novaplan have agreed that the managed deployment cannot use an approved role or another temporary-credential method. Ask them to define the required IAM permissions, secret-transfer method, and rotation plan. Never put a real key in documentation, a ticket, or a repository. [AWS recommends temporary credentials where possible](https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html).
 
 ### Context Length
 
@@ -128,36 +111,18 @@ As shown in the image above:
 3. Enter the Model Name (model ID or ARN) (marked with *)
 4. Select the appropriate Provider from the dropdown (marked with *)
 5. If you selected "Other" as provider, enter the Custom Provider Name
-6. (Optional) Enter your AWS Access Key ID — leave blank if using an EC2 IAM role
-7. (Optional) Enter your AWS Access Secret Key — leave blank if using an EC2 IAM role
+6. (Optional) Enter the approved AWS Access Key ID only if Novaplan is using explicit keys
+7. (Optional) Enter its matching AWS Access Secret Key through the approved setup flow
 8. (Optional) Set the Context Length for your model
 9. (Optional) Enable Multimodal if your model supports text + image inputs
 10. (Optional) Enable Reasoning if your model supports advanced reasoning
 11. Click **Add Model** to save and validate your credentials
 
-> Region, Model Name, and Provider are required fields. AWS Access Key ID and Secret Key are optional when running Novaplan AI on EC2 with an appropriate IAM role.
+> Region, Model Name, and Provider are required. The two key fields may be blank only when the managed backend has another approved AWS credential source.
 
 ## IAM Permissions
 
-Ensure your IAM user or role has the following permissions to use AWS Bedrock:
-
-```json
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": [
-        "bedrock:InvokeModel",
-        "bedrock:InvokeModelWithResponseStream"
-      ],
-      "Resource": "*"
-    }
-  ]
-}
-```
-
-For more restrictive access, specify the exact model ARNs in the Resource field.
+The AWS principal used by Novaplan needs `bedrock:InvokeModel` for model inference and `bedrock:InvokeModelWithResponseStream` if the chosen call path streams responses. An inference profile or a different Bedrock API path may need additional permissions and resource ARNs. Have your AWS administrator scope the policy to the model or profile used by this workspace rather than copying an unrestricted `Resource: "*"` example. See [AWS's inference prerequisites](https://docs.aws.amazon.com/bedrock/latest/userguide/inference-prereq.html) and [IAM policy examples](https://docs.aws.amazon.com/bedrock/latest/userguide/security_iam_id-based-policy-examples.html).
 
 ## Usage Considerations
 
@@ -173,8 +138,8 @@ For more restrictive access, specify the exact model ARNs in the Resource field.
 
 ## Troubleshooting
 
-- If you encounter authentication errors, verify your AWS Access Key ID and Secret Key are correct
-- Ensure your IAM user has the necessary Bedrock permissions
+- If you encounter authentication errors, verify the AWS identity configured for the managed backend or, if explicit keys were approved, the matching key pair
+- Ensure that AWS identity has the necessary Bedrock permissions
 - Verify the selected region has AWS Bedrock available and your desired model is accessible
 - Check that you have model access enabled for the specific model in the AWS Bedrock console
 - Ensure the model ID or ARN is correctly formatted

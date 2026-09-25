@@ -22,7 +22,7 @@ Die Modell-ID finden Sie in der [Amazon-Bedrock-Konsole](https://console.aws.ama
 
 ## Anmeldung und optionale Felder
 
-**AWS Access Key ID** und **AWS Access Secret Key** sind im Konfigurationsformular optional. Wenn die Novaplan-AI-Instanz mit einer geeigneten EC2-IAM-Rolle ausgeführt wird, können beide Felder leer bleiben. Andernfalls erstellen Sie die Zugangsdaten in AWS IAM und tragen das Paar ein. Der geheime Schlüssel wird bei der Erstellung nur einmal angezeigt; bewahren Sie ihn geschützt auf. Stimmen Sie die Authentifizierungsmethode mit Novaplan ab, statt unnötige dauerhafte Schlüssel zu erzeugen.
+**AWS Access Key ID** und **AWS Access Secret Key** sind im Konfigurationsformular optional. Beide Felder können leer bleiben, wenn Novaplan für den verwalteten Backend-Dienst eine geeignete AWS-Anmeldequelle eingerichtet hat, etwa eine Workload-Rolle. Der zugängliche Backend-Code verwendet dann die [Boto3-Anmeldekette](https://docs.aws.amazon.com/boto3/latest/guide/credentials.html). Eine AWS-Anmeldung auf Ihrem eigenen Computer steht dem Novaplan-Dienst nicht automatisch zur Verfügung. Nur wenn die AWS-Administration und Novaplan ausdrücklich ein Zugangsschlüsselpaar vereinbaren, tragen Sie beide Werte über den vorgesehenen sicheren Weg ein und klären die Rotation. [AWS bevorzugt nach Möglichkeit temporäre Zugangsdaten](https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html).
 
 Weitere optionale Felder sind **Context Length** für die dokumentierte maximale Kontextlänge, **Multimodal** für Modelle mit Bild- und Texteingabe und **Reasoning** für Modelle, die diese Fähigkeit unterstützen. Aktivieren Sie Funktionen nur, wenn das gewählte Modell sie tatsächlich anbietet.
 
@@ -33,7 +33,7 @@ Weitere optionale Felder sind **Context Length** für die dokumentierte maximale
 3. Ergänzen Sie bei Bedarf **AWS Access Key ID**, **AWS Access Secret Key**, **Context Length**, **Multimodal** und **Reasoning**.
 4. Klicken Sie auf **Add Model**, um die Angaben zu speichern und prüfen zu lassen.
 
-Die AWS-IAM-Rolle oder der IAM-Nutzer benötigt für das gewünschte Modell mindestens `bedrock:InvokeModel` und, wenn gestreamte Antworten verwendet werden, `bedrock:InvokeModelWithResponseStream`. Begrenzen Sie den **Resource**-Bereich der IAM-Richtlinie auf die tatsächlich benötigten Modell- oder Profil-ARNs, soweit Ihr Aufrufpfad dies erlaubt. Die konkreten Rechte richten sich nach Modell und Inference Profile.
+Die verwendete AWS-Identität benötigt für das gewünschte Modell `bedrock:InvokeModel` und, wenn gestreamte Antworten verwendet werden, `bedrock:InvokeModelWithResponseStream`. Ein Inference Profile oder ein anderer Bedrock-API-Pfad kann zusätzliche Rechte und Ressourcen-ARNs erfordern. Lassen Sie die AWS-Administration die Richtlinie auf die tatsächlich verwendeten Modelle oder Profile begrenzen. Maßgeblich sind die [AWS-Voraussetzungen für Modellaufrufe](https://docs.aws.amazon.com/bedrock/latest/userguide/inference-prereq.html).
 
 ## Fehler beheben
 
