@@ -1,0 +1,27 @@
+---
+title: "Gemini Bildgenerierung"
+description: "Google-Modelle für Bildgenerierung in Novaplan AI konfigurieren."
+---
+
+# Gemini Bildgenerierung konfigurieren
+
+![Konfigurationsansicht für Gemini Bildgenerierung](/images/ai-models/image-generation/Gemini_ImageGenConfig.png)
+
+Novaplan AI kann Gemini- und Imagen-Modelle von Google verwenden, um Bilder aus Textanweisungen zu erzeugen. Novaplan unterstützt Sie bei der Einrichtung für Agents und Workflows.
+
+## Erforderliche Angaben
+
+**API Key:** Öffnen Sie [Google AI Studio](https://aistudio.google.com/app/apikey), wählen Sie **Create API key** und ordnen Sie den Schlüssel einem bestehenden oder neuen Google-Cloud-Projekt zu. Kopieren Sie ihn und bewahren Sie ihn geschützt auf.
+
+**Model Name:** Geben Sie die genaue ID eines verfügbaren Bildmodells ein. Beispiele sind `gemini-2.5-flash-image` und `imagen-4.0-generate-001`. Prüfen Sie die [aktuelle Google-Dokumentation](https://ai.google.dev/docs), denn Modelle und Zugänge können sich ändern.
+
+Für Imagen kann eine Freigabe über Google AI Studio oder eine aktivierte **Vertex AI API** im Projekt nötig sein. Nicht jeder API-Schlüssel hat automatisch Zugriff auf Bildgenerierung.
+
+## Modell hinzufügen
+
+1. Klicken Sie auf der Gemini-Karte für Bildgenerierung auf **Configure**.
+2. Geben Sie **API Key** und **Model Name** ein.
+3. Vergeben Sie bei Bedarf einen **Model Friendly Name**.
+4. Klicken Sie auf **Add Model**, um die Angaben zu speichern und prüfen zu lassen.
+
+Beide Felder sind erforderlich. Nutzung zählt zu Kontingent und gegebenenfalls zur Abrechnung Ihres Google-Kontos. Bei Fehlern prüfen Sie Schlüssel, Modell-ID, Projektfreigabe für Bildgenerierung, Vertex AI API bei Imagen und API-Quota. [Novaplan Support](/de/contact-us) hilft bei der Einrichtung.

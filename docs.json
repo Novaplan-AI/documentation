@@ -145,6 +145,15 @@
                   "de/ai-models/embedding/litellm-proxy",
                   "de/ai-models/embedding/lm-studio"
                 ]
+              },
+              {
+                "group": "Bildgenerierung",
+                "pages": [
+                  "de/ai-models/image-generation/openai",
+                  "de/ai-models/image-generation/gemini",
+                  "de/ai-models/image-generation/openrouter",
+                  "de/ai-models/image-generation/litellm-proxy"
+                ]
               }
             ]
           },
