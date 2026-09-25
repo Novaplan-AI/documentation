@@ -70,7 +70,7 @@ Add all the redirect URIs for the clients you plan to use:
 
 ### Customizing Default Scopes
 
-By default, Novaplan AI exposes some scopes in its `/.well-known/oauth-protected-resource/mcp` discovery endpoint. Novaplan can adjust the server-side `MCP_SCOPES` configuration when a client such as Claude Code requires a different set.
+By default, Novaplan AI exposes scopes in its `/.well-known/oauth-protected-resource/mcp` discovery endpoint. Novaplan can review the server-side `MCP_SCOPES` configuration when those advertised defaults need to change. Claude Code can also pin an approved subset on the client with `oauth.scopes`; it does not require the OAuth app to allow every scope in the server's catalog merely because that scope is advertised.
 
 The recommended `MCP_SCOPES` value covers the common chat, search, and directory workflows:
 
@@ -189,7 +189,7 @@ This returns all OAuth endpoints automatically:
 
 <AccordionGroup>
   <Accordion title="How do I update the scopes for my MCP integration?">
-    1. **Ask Novaplan to review `MCP_SCOPES`** on the managed instance if the scopes exposed by the discovery endpoint need to change.
+    1. **Check the scopes your client actually requests.** Claude Code can pin a subset with `oauth.scopes`. Ask Novaplan to review `MCP_SCOPES` on the managed instance only if the advertised server defaults need to change.
     2. **Update the OAuth app scopes** in Novaplan AI: go to **Settings > Developer Settings > OAuth Apps**, select your OAuth app, and add or remove scopes as needed.
     3. **Re-authenticate the client** — existing tokens carry the old scopes, so you need to re-authenticate to get a new token with the updated scopes:
        - **Cursor**: Remove and re-add the MCP server, or clear the cached OAuth token and reconnect.

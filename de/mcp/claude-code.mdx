@@ -5,9 +5,9 @@ description: "Claude Code mit dem entfernten Novaplan AI MCP-Server verbinden."
 
 Claude Code kann sich über HTTP und OAuth mit `NOVAPLAN_WORKSPACE_URL/mcp` verbinden. Erstellen Sie dafür eine Novaplan-OAuth-Anwendung und sichern Sie **Client ID** und **Client Secret**. Der [MCP-Überblick](/de/mcp/overview#schritt-1-oauth-anwendung-erstellen) beschreibt die Einrichtung.
 
-<Warning>
-  Claude Code fordert bei dieser Verbindung alle Scopes an, die der MCP-Server über `/.well-known/oauth-protected-resource/mcp` als unterstützt bekannt gibt. Die OAuth-Anwendung muss diese Scopes erlauben. Wenn der Zugriff enger sein soll, muss die serverseitige Scope-Liste mit Novaplan abgestimmt werden.
-</Warning>
+<Note>
+  Claude Code kann mit `oauth.scopes` eine freigegebene Teilmenge der OAuth-Scopes anfordern. Ohne diese Einstellung verwendet eine aktuelle Claude-Code-Version die Scopes aus der Authentifizierungsantwort oder den Metadaten der geschützten Ressource, sofern dort Scopes angegeben sind. Die Novaplan-OAuth-Anwendung muss die tatsächlich angeforderten Scopes erlauben. Wenn die serverseitig bekannt gegebenen Standardwerte angepasst werden müssen, stimmen Sie dies mit Novaplan ab.
+</Note>
 
 ## Verbindung mit der CLI hinzufügen
 
@@ -19,9 +19,28 @@ claude mcp add --transport http \
   novaplan NOVAPLAN_WORKSPACE_URL/mcp
 ```
 
-Der Name `novaplan` ist ein lokaler Alias. `--client-secret` ohne Wert fordert eine verdeckte Eingabe an. Wenn die Verbindung für alle Ihre Projekte gelten soll, ergänzen Sie `--scope user`. Verwenden Sie die vom Workspace bereitgestellte URL und veröffentlichen Sie das Secret nicht in einer Projektdatei.
+Der Name `novaplan` ist ein lokaler Alias. `--client-secret` ohne Wert fordert bei **Hinzufügen des Servers** eine verdeckte Eingabe an. Wenn die Verbindung für alle Ihre Projekte gelten soll, ergänzen Sie `--scope user`. Verwenden Sie die vom Workspace bereitgestellte URL und veröffentlichen Sie das Secret nicht in einer Projektdatei.
 
 Hinterlegen Sie in der Novaplan-OAuth-Anwendung die Redirect URI für den gewählten Callback-Port, beispielsweise `http://localhost:8080/callback`.
+
+## Alternative: JSON und Projektkonfiguration
+
+Sie können dieselbe Verbindung mit `claude mcp add-json` hinzufügen. Das Secret wird separat abgefragt:
+
+```bash
+claude mcp add-json novaplan '{
+  "type": "http",
+  "url": "NOVAPLAN_WORKSPACE_URL/mcp",
+  "oauth": {
+    "clientId": "YOUR_CLIENT_ID",
+    "callbackPort": 8080
+  }
+}' --client-secret
+```
+
+Wenn die Konfiguration für ein Projekt freigegeben werden soll, führen Sie den obigen CLI-Befehl im Projektordner mit `--scope project` aus. Claude Code legt dann `.mcp.json` mit der nicht geheimen Serverkonfiguration an. Prüfen Sie die Datei vor dem Einchecken; alle Teammitglieder benötigen weiterhin eigenen Workspace-Zugang und müssen sich selbst anmelden. Claude Code speichert das bei der Einrichtung eingegebene Secret außerhalb dieser Projektdatei. Wo es liegt, hängt vom Betriebssystem ab.
+
+Für einen engeren Scope-Satz tragen Sie in der JSON-Konfiguration unter `oauth.scopes` eine einzelne, durch Leerzeichen getrennte Zeichenfolge der für die benötigten Werkzeuge freigegebenen Scopes ein und melden sich erneut an. Das aktuelle Format steht in der [Claude-Code-Dokumentation](https://code.claude.com/docs/en/mcp#restrict-oauth-scopes).
 
 ## Anmelden und prüfen
 

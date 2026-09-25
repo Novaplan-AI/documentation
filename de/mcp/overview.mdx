@@ -63,7 +63,7 @@ Tragen Sie die URIs der Clients ein, die Sie verwenden möchten:
 
 ### Standard-Scopes anpassen
 
-Novaplan AI gibt über `/.well-known/oauth-protected-resource/mcp` standardmäßig einige Scopes für die automatische Erkennung bekannt. Die Serverkonfiguration kann diese Auswahl mit `MCP_SCOPES` ändern. Das ist zum Beispiel für Clients relevant, die alle bekannt gegebenen Scopes anfordern.
+Novaplan AI gibt über `/.well-known/oauth-protected-resource/mcp` standardmäßig Scopes für die automatische Erkennung bekannt. Novaplan kann diese serverseitigen Standardwerte mit `MCP_SCOPES` prüfen und anpassen. Claude Code kann zusätzlich mit `oauth.scopes` eine freigegebene Teilmenge anfordern; allein die Bekanntgabe eines Scopes bedeutet nicht, dass die OAuth-Anwendung alle katalogisierten Scopes erlauben muss.
 
 Der dokumentierte Beispielwert für Chat-, Such- und Verzeichnisabläufe lautet:
 
@@ -151,6 +151,6 @@ Darüber erhält der Client die OAuth-Endpunkte:
 
 ## Häufige Frage: Wie ändere ich Scopes?
 
-1. Stimmen Sie eine Änderung des serverseitigen `MCP_SCOPES`-Werts mit Novaplan ab.
+1. Prüfen Sie, welche Scopes der Client tatsächlich anfordert. Claude Code kann mit `oauth.scopes` eine Teilmenge festlegen. Stimmen Sie eine Änderung von `MCP_SCOPES` nur dann mit Novaplan ab, wenn die serverseitig bekannt gegebenen Standardwerte geändert werden sollen.
 2. Passen Sie die Scopes der OAuth-Anwendung unter **Settings > Developer Settings > OAuth Apps** an.
 3. Verbinden Sie den Client erneut, da bestehende Tokens die bisherigen Scopes enthalten. Cursor kann neu hinzugefügt, Claude Code über `/mcp` erneut angemeldet und Claude.ai unter **Customize → Connectors** neu verbunden werden. Für Gemini CLI finden Sie den aktuellen Wiederanmeldungsbefehl in der [Client-Anleitung](/de/mcp/gemini-cli).
