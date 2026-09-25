@@ -132,12 +132,15 @@ The integration requires three pieces of information:
 </Warning>
 
 #### Step 3: Set Sync Strategy
-  - Set your sync strategy as **Manual** or **Webhooks** (to be implemented)
+
+- Choose **Scheduled** or **Manual**. The accessible connector definition defaults scheduled runs to a 60-minute interval; Manual runs start only when an administrator triggers them.
+- If needed, use **Book Name** to limit synchronization to selected books. The available configuration also includes created-date and modified-date filters and an **Enable Manual Indexing** option. Review the selected scope before the first run.
+- Webhook synchronization is not implemented in the accessible connector.
 
 #### Step 4: Activate Connection
 
 - Click **Enable App** button.
-- The BookStack Connector is now active and will start syncing the shelves, books, chapters, and pages.
+- If you selected **Scheduled**, the connector can begin syncing shelves, books, chapters, and pages. If you selected **Manual**, trigger the first sync from the connector page. Check synchronization and indexing status before expecting search results.
 
 </Accordion>
 

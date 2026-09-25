@@ -26,8 +26,9 @@ Geben Sie das Token Secret nur in der dafür vorgesehenen Konnektorkonfiguration
 1. Öffnen Sie **Connector Settings** und wählen Sie den **BookStack Connector**.
 2. Klicken Sie auf **Configure Setting**.
 3. Tragen Sie die **BookStack Base URL** ein, zum Beispiel `https://bookstack.example.com`, sowie **BookStack Token ID** und **BookStack Token Secret**.
-4. Wählen Sie die angebotene Synchronisierungsstrategie. Die Quellanleitung beschreibt **Manual**; Webhooks sind dort ausdrücklich als noch nicht implementiert markiert. Lassen Sie Novaplan Support prüfen, welche weiteren Optionen Ihr Workspace anbietet.
-5. Aktivieren Sie die Verbindung mit **Enable App** und kontrollieren Sie den Synchronisierungsstatus.
+4. Wählen Sie **Scheduled** oder **Manual**. Die zugängliche Konnektordefinition sieht für geplante Läufe standardmäßig ein Intervall von 60 Minuten vor. Bei **Manual** startet eine Administration die Synchronisierung selbst. Webhooks sind nicht implementiert.
+5. Begrenzen Sie bei Bedarf den Abruf über **Book Name** auf ausgewählte Bücher oder verwenden Sie Filter für Erstellungs- und Änderungsdatum. **Enable Manual Indexing** deaktiviert die automatische Indexierung synchronisierter Inhalte; prüfen Sie die Einstellung vor dem ersten Lauf.
+6. Aktivieren Sie die Verbindung mit **Enable App**. Starten Sie bei **Manual** den ersten Lauf selbst und prüfen Sie anschließend Synchronisierungs- und Indexierungsstatus, bevor Sie Suchergebnisse erwarten.
 
 <Warning>
   Verwenden Sie laut Quellanleitung für das BookStack-Token ein Konto mit derselben E-Mail-Adresse wie Ihr Novaplan-AI-Konto. Abweichende Adressen können dazu führen, dass synchronisierte Inhalte in Novaplan AI nicht zugänglich sind. Für gemeinsam genutzte Administrationskonten muss Novaplan die passende Kontozuordnung vor der Aktivierung prüfen.
