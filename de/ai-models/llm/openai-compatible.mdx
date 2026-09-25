@@ -13,7 +13,7 @@ Diese Anbieteroption verbindet Novaplan AI mit einem Dienst, dessen API das Open
 
 | Feld | Bedeutung |
 | --- | --- |
-| **Endpoint URL** | Basisadresse der kompatiblen API, üblicherweise mit `/v1/`. Beispiele: `https://api.together.xyz/v1/` oder `https://openrouter.ai/api/v1/`. Novaplan AI ergänzt die benötigten Pfade für Aufrufe. |
+| **Endpoint URL** | Vom gewählten Anbieter dokumentierte API-Basisadresse. Viele Anbieter verwenden `/v1/`, etwa `https://api.together.xyz/v1/` oder `https://openrouter.ai/api/v1/`; DeepSeek dokumentiert derzeit `https://api.deepseek.com` ohne dieses Suffix. Novaplan AI ergänzt die benötigten Pfade für Aufrufe. Lassen Sie die Verbindung aus dem verwalteten Workspace prüfen. |
 | **API Key** | Schlüssel des gewählten Anbieters. Erstellen Sie ihn im Konto oder in den Einstellungen des Dienstes und bewahren Sie ihn geschützt auf. |
 | **Model Name** | Genaue Modell-ID aus dem Katalog des Anbieters, beispielsweise `deepseek-ai/DeepSeek-V3`. |
 
@@ -31,4 +31,4 @@ Die Modell-ID muss exakt zur Bezeichnung beim Anbieter passen. Prüfen Sie dabei
 3. Aktivieren Sie **Multimodal** oder **Reasoning** nur bei bestätigter Modellunterstützung.
 4. Klicken Sie auf **Add Model**.
 
-Endpoint URL, API Key und Model Name sind erforderlich. Prüfen Sie bei Verbindungsproblemen die Basisadresse einschließlich `/v1/`, HTTPS und die Erreichbarkeit aus der Novaplan-Umgebung. Bei Authentifizierungsfehlern kontrollieren Sie Schlüssel und Berechtigungen. Bei **Model not found** vergleichen Sie die ID mit dem Modellkatalog und dem Zugang Ihres Kontos. Quoten und Abrechnung richten sich nach dem Anbieter; [Novaplan Support](/de/contact-us) hilft bei der Verbindung.
+Endpoint URL, API Key und Model Name sind erforderlich. Prüfen Sie bei Verbindungsproblemen die vom Anbieter dokumentierte Basisadresse, HTTPS und die Erreichbarkeit aus der Novaplan-Umgebung. Ergänzen Sie `/v1/` nur, wenn der gewählte Anbieter es verlangt. Bei Authentifizierungsfehlern kontrollieren Sie Schlüssel und Berechtigungen. Bei **Model not found** vergleichen Sie die ID mit dem Modellkatalog und dem Zugang Ihres Kontos. Quoten und Abrechnung richten sich nach dem Anbieter; [Novaplan Support](/de/contact-us) hilft bei der Verbindung.

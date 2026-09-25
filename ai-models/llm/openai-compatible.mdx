@@ -21,7 +21,7 @@ The Endpoint URL is the base API endpoint for your OpenAI-compatible service.
 - Together AI: `https://api.together.xyz/v1/`
 - OpenRouter: `https://openrouter.ai/api/v1/`
 
-**Important:** The endpoint URL should include the base path (typically ending in `/v1/`). Novaplan AI will append the necessary paths for completions and other operations.
+**Important:** Enter the base path documented by the selected provider. Many providers use `/v1/`, but this is not universal: DeepSeek currently documents `https://api.deepseek.com` without that suffix. Novaplan AI appends the paths needed for its requests. Confirm the value from the managed workspace before relying on the connection.
 
 ### API Key *
 
@@ -69,7 +69,7 @@ Enable this checkbox if your selected model supports multimodal input (text + im
 Enable this checkbox if your selected model has enhanced reasoning capabilities.
 
 **When to enable:**
-- Your model is designed for complex reasoning tasks (e.g., DeepSeek-V3, OpenAI o1-style models)
+- Your selected model and provider explicitly support a reasoning mode
 - You need advanced problem-solving capabilities
 - Your use case involves mathematical or logical reasoning
 
@@ -114,9 +114,9 @@ Novaplan AI's OpenAI-compatible configuration works with any provider that imple
 ## Troubleshooting
 
 **Connection Issues:**
-- Verify the endpoint URL is correct and includes the proper base path (usually `/v1/`)
+- Verify the endpoint URL matches the provider's documented base path; do not add `/v1/` unless that provider requires it
 - Ensure your endpoint URL uses `https://` for secure connections
-- Check that the endpoint is accessible from your network
+- Check that the endpoint is accessible from the managed Novaplan AI environment
 
 **Authentication Errors:**
 - Verify your API key is correct and has not expired
@@ -134,4 +134,3 @@ Novaplan AI's OpenAI-compatible configuration works with any provider that imple
 - Check your provider's status page for any ongoing issues
 
 For additional support, refer to your provider's documentation or contact Novaplan AI support.
-
