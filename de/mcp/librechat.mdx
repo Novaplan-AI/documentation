@@ -19,7 +19,7 @@ LibreChat kann den entfernten MCP-Endpunkt Ihres Novaplan AI Workspaces über di
 Die Redirect-URI setzt sich aus der LibreChat-Basisadresse und dem beim Anlegen gewählten **Servernamen** zusammen. Kopieren Sie den tatsächlichen Wert aus Ihrer Instanz, wenn er dort angezeigt wird, oder bestätigen Sie ihn mit Ihrer LibreChat-Administration. Hinterlegen Sie ihn als erlaubte Redirect-URI in der Novaplan-OAuth-Anwendung, bevor Sie sich anmelden. Eine lokale Instanz verwendet häufig dieses Muster:
 
 ```text
-http://localhost:3080/api/mcp/<server-identifier>/oauth/callback
+http://localhost:3080/api/mcp/<server-name>/oauth/callback
 ```
 
 Bei einer gehosteten Instanz gelten deren tatsächlicher Host und Port. Kehren Sie danach zu LibreChat zurück und wählen Sie beim Server **Authenticate/Connect** in den MCP-Einstellungen oder im Servermenü des Chats. Jede Person meldet sich einzeln an. Wenn die Anmeldung fehlschlägt, prüfen Sie die exakt registrierte Redirect-URI, die angeforderten Scopes und die Workspace-Adresse. Die aktuelle Callback-Struktur steht in der [LibreChat-MCP-Dokumentation](https://www.librechat.ai/docs/features/mcp#oauth-callback-url).
