@@ -106,11 +106,13 @@ The connector also reads schema metadata from `information_schema`, which is ava
 
 | Field | Example |
 |-------|---------|
-| **Host** | `localhost` |
+| **Host** | `db.example.com` — a host reachable from the Novaplan workspace |
 | **Port** | `3306` |
-| **Database** | `test_db` |
+| **Database** | `your_database` |
 | **User** | `novaplan_reader` |
 | **Password** | the password you set when creating the user |
+
+The local `test_db` and `localhost` in Step 1 are only for testing MariaDB on the same computer. For a managed Novaplan workspace, use the actual reachable database host and database name agreed with Novaplan and your database administrator.
 
 <div className="text-center">
   <img
