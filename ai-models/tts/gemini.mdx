@@ -73,7 +73,7 @@ Select the output audio format for generated speech (default: WAV).
 | **FLAC** | Yes — requires ffmpeg | Lossless, highest quality, larger file size. |
 
 <Note>
-If you select MP3, Opus, AAC, or FLAC and audio output is silent or failing, confirm that **ffmpeg** is installed on the machine running the Novaplan AI backend. WAV and PCM work without any additional dependencies.
+If you select MP3, Opus, AAC, or FLAC and audio output is silent or failing, ask [Novaplan Support](/contact-us) to check **ffmpeg** on the managed backend. WAV and PCM do not require this transcoding dependency.
 </Note>
 
 ## Configuration Steps
@@ -95,14 +95,14 @@ As shown in the image above:
 - API usage will count against your Google AI API quota and billing
 - Different models have different pricing — check Google AI's pricing page for details
 - WAV and PCM formats require no additional server-side dependencies
-- MP3, Opus, AAC, and FLAC require ffmpeg to be installed on your Novaplan AI backend host
+- MP3, Opus, AAC, and FLAC require ffmpeg on the Novaplan-managed backend
 
 ## Troubleshooting
 
 - If you encounter authentication errors, verify your API key is correct and has not expired
 - Ensure your Google account has billing set up if you are on a paid tier
 - Check that the model name is spelled correctly
-- If using MP3, Opus, AAC, or FLAC and audio is not playing, install ffmpeg on the backend host and restart Novaplan AI
+- If using MP3, Opus, AAC, or FLAC and audio is not playing, ask [Novaplan Support](/contact-us) to check ffmpeg and the backend audio configuration
 - If you are experiencing rate limits, check your quota in the Google AI Studio dashboard
 
-For additional support, refer to the [Google Gemini documentation](https://ai.google.dev/docs) or contact Novaplan AI support.
+For provider details, see the [Google Gemini documentation](https://ai.google.dev/docs). For workspace setup, contact [Novaplan Support](/contact-us).

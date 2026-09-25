@@ -12,7 +12,7 @@ description: "Configure Novaplan AI to use Wispr Flow for speech-to-text transcr
 Novaplan AI integrates with Wispr Flow, a specialist hosted transcription service optimised for professional and enterprise voice input. Wispr Flow's `flow-v1` model is purpose-built for dictation and AI prompt input, with context-aware formatting across multiple output styles.
 
 <Note>
-Wispr Flow requires **ffmpeg** installed on the Novaplan AI backend host for audio transcoding. Contact [enterprise@wisprflow.ai](mailto:enterprise@wisprflow.ai) to obtain an API key.
+Wispr Flow requires **ffmpeg** on the Novaplan-managed backend for audio transcoding. Novaplan checks this backend dependency during setup. Contact [enterprise@wisprflow.ai](mailto:enterprise@wisprflow.ai) to obtain an API key.
 </Note>
 
 ## Required Fields
@@ -75,7 +75,7 @@ As shown in the image above:
 
 ## Usage Considerations
 
-- ffmpeg must be installed on the machine running the Novaplan AI backend for audio transcoding to work
+- Novaplan must have ffmpeg available on the managed backend for audio transcoding to work
 - API usage is billed through your Wispr Flow enterprise account — check with your Wispr Flow contact for pricing details
 - Selecting the correct App Type improves output formatting significantly for email dictation versus chat/prompt use
 - For multilingual teams, leaving Default Language on Auto-detect gives the best results across different speakers
@@ -83,8 +83,8 @@ As shown in the image above:
 ## Troubleshooting
 
 - If the health check fails, verify your API key is correct and active — contact [enterprise@wisprflow.ai](mailto:enterprise@wisprflow.ai) if unsure
-- If audio output is silent or transcription fails entirely, confirm ffmpeg is installed on the backend host
+- If audio output is silent or transcription fails entirely, ask [Novaplan Support](/contact-us) to check ffmpeg on the managed backend
 - If you are seeing formatting issues in output, try switching the App Type to better match your use case
 - Verify the API Endpoint is correct if you have overridden it — an incorrect URL will cause all requests to fail
 
-For additional support, contact Wispr Flow at [enterprise@wisprflow.ai](mailto:enterprise@wisprflow.ai) or reach out to Novaplan AI support.
+For provider access, contact Wispr Flow at [enterprise@wisprflow.ai](mailto:enterprise@wisprflow.ai). For workspace setup, contact [Novaplan Support](/contact-us).
