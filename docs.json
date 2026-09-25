@@ -45,6 +45,7 @@
             "group": "Konnektoren",
             "pages": [
               "de/connectors/overview",
+              "de/connectors/box/box",
               "de/connectors/confluence/confluence",
               "de/connectors/dropbox/dropbox_personal",
               "de/connectors/dropbox/dropbox_teams",
