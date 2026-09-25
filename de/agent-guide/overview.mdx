@@ -91,7 +91,7 @@ Toolsets bündeln Aktionen für externe Anwendungen:
     | Aspekt | Konnektoren | Toolsets |
     | --- | --- | --- |
     | Zweck | Daten für die Suche synchronisieren und indexieren. | Aktionen durch Agenten ermöglichen. |
-    | Datenfluss | Import in Novaplan AI. | Lesen und Schreiben über APIs. |
+    | Datenfluss | Import in Novaplan AI. | Externe APIs lesen und, sofern erlaubt, Aktionen darüber ausführen. |
     | Verwendung | Daten abfragen und durchsuchen. | Aktionen mit Daten ausführen. |
 
     Beispiel: Ein Gmail-Konnektor indexiert Ihren E-Mail-Verlauf. Ein Gmail-Toolset ermöglicht einem Agenten, neue E-Mails zu senden.
@@ -100,9 +100,9 @@ Toolsets bündeln Aktionen für externe Anwendungen:
     Verwenden Sie einen **Konnektor** für die Suche in Dokumenten, E-Mails und Seiten. Verwenden Sie ein **Toolset** für Aktionen wie das Erstellen oder Ändern von Inhalten, den Nachrichtenversand oder analytische Abfragen wie JQL, CQL und Berichte.
   </Accordion>
   <Accordion title="Kann eine OAuth-Anwendung für Konnektor und Toolset verwendet werden?">
-    Ja. Hinterlegen Sie in der Entwicklerkonsole des jeweiligen Dienstes beide Redirect-URLs, beispielsweise `/connectors/oauth/callback/Gmail` für den Konnektor und `/api/oauth/callback/Gmail` für das Toolset. Ergänzen Sie die erforderlichen Leseberechtigungen für den Konnektor und die Lese-, Schreib- beziehungsweise Löschberechtigungen für die gewünschten Toolset-Aktionen.
+    Das hängt vom Anbieter, den erlaubten Redirect-URLs und den erforderlichen Berechtigungen ab. Kopieren Sie die vollständigen Callback-URLs aus den Einrichtungsseiten für Konnektor und Toolset. Falls der Anbieter mehrere Callbacks in einer OAuth-Anwendung zulässt, tragen Sie beide genau wie angezeigt ein.
 
-    Beide Konfigurationen können dann dieselbe Client ID und dasselbe Client Secret verwenden. Das vereinfacht Einrichtung und Verwaltung.
+    Prüfen Sie die Berechtigungen beider Anleitungen und die Einwilligungsseite des Anbieters. Konnektorberechtigungen sind nicht immer auf Lesen beschränkt; ein Toolset benötigt nicht zwangsläufig Schreib- oder Löschrechte. Wenn der Anbieter die gemeinsame Anwendung unterstützt und Ihre Administration die kombinierten Berechtigungen freigibt, können beide Konfigurationen dieselbe Client ID und dasselbe Client Secret verwenden. Andernfalls richten Sie getrennte OAuth-Anwendungen ein und stimmen die Einrichtung mit Novaplan ab.
   </Accordion>
   <Accordion title="Welche Knoten muss ich im Agent Builder verbinden?">
     Der **Agent Core** ist die Zentrale. Verbinden Sie mindestens ein **Reasoning Model**. Ergänzen Sie bei Bedarf **Toolset**-Knoten für Aktionen und **Collection**-Knoten für die Suche. Alle Knoten müssen mit dem Agent Core verbunden sein; der Agent kann die verbundenen Toolsets und Sammlungen verwenden.

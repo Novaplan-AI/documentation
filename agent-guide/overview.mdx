@@ -108,7 +108,7 @@ Agents can access your indexed knowledge sources:
 | Aspect | Connectors | Toolsets |
 |--------|-----------|----------|
 | **Purpose** | Sync and index data for search | Enable agents to perform actions |
-| **Data Flow** | One-way (import data into Novaplan AI) | Two-way (read and write via API) |
+| **Data Flow** | Import data into Novaplan AI | Read from an external API and, where permitted, perform actions through it |
 | **When to Use** | Query/search data | Perform actions on data |
 
 **Example:** Use a **Gmail Connector** to index and search your email history. Use a **Gmail Toolset** to send new emails through an agent.
@@ -127,22 +127,15 @@ Agents can access your indexed knowledge sources:
 
 <Accordion title="Can I use one OAuth app for both Connector and Toolset?">
 
-Yes! You can create a single OAuth app in the service's developer console and use it for both:
+Sometimes. Whether one OAuth app can serve both depends on the provider's rules, supported redirect URLs, and the permissions required by each integration. Check the connector and toolset setup screens before registering the app.
 
 **What you need to add in your OAuth app:**
 
-1. **Both redirect URLs:**
-   - Connector callback URL (e.g., `/connectors/oauth/callback/Gmail`)
-   - Toolset callback URL (e.g., `/api/oauth/callback/Gmail`)
+1. **Both redirect URLs:** Copy the full callback URL displayed for the connector and the full callback URL displayed for the toolset. Register both exactly as shown if the provider allows multiple callbacks on one app.
 
-2. **Both scope types:**
-   - Read-only scopes for the Connector (to index data)
-   - Read/write/delete scopes for the Toolset (to perform actions)
+2. **Required scopes:** Review the permissions in both setup guides and the provider consent screen. Connector scopes are not always read-only, and toolsets do not all require write or delete access. Approve only the scopes needed for the intended integration.
 
-**Benefits:**
-- Simpler setup - One OAuth app instead of two
-- Same Client ID and Client Secret for both configurations
-- Easier management in the service's developer console
+If the provider supports this arrangement and your administrator approves the combined permissions, the two integrations can share a Client ID and Client Secret. Otherwise, create separate OAuth apps. Novaplan can help confirm the callback and consent requirements.
 
 </Accordion>
 
