@@ -325,7 +325,7 @@ Only workspace **admins** and **owners** can access the AI Models settings page.
 >
 > **Gemini voices:** 30 prebuilt voices named after astronomical objects — Zephyr, Puck, Charon, Kore, Fenrir, Leda, Orus, Aoede, Callirrhoe, Autonoe, Enceladus, Iapetus, Umbriel, Algieba, Despina, Erinome, Algenib, Rasalgethi, Laomedeia, Achernar, Alnilam, Schedar, Gacrux, Pulcherrima, Achird, Zubenelgenubi, Vindemiatrix, Sadachbia, Sadaltager, Sulafat. Get your API key at [aistudio.google.com/app/apikey](https://aistudio.google.com/app/apikey).
 >
-> **Gemini audio formats:** WAV and PCM work without any extra dependencies. MP3, Opus, AAC, and FLAC require **ffmpeg** installed on the Novaplan AI backend host.
+> **Gemini audio formats:** WAV and PCM do not require server-side transcoding. MP3, Opus, AAC, and FLAC require **ffmpeg** on the Novaplan-managed backend; [Novaplan Support](/contact-us) can check its availability.
 
 ### Managing configured TTS models
 
@@ -341,7 +341,7 @@ After saving, your model appears under the **Configured** tab. Each row has the 
 If the health check fails when saving, double-check:
 - The API key is correct and has not expired.
 - The model name exactly matches what the provider API expects (e.g. `tts-1`, not `TTS-1`).
-- For Gemini compressed formats (MP3, Opus, AAC, FLAC), ensure ffmpeg is installed on the machine running the Novaplan AI backend. WAV and PCM work without any additional dependencies.
+- For Gemini compressed formats (MP3, Opus, AAC, FLAC), ask [Novaplan Support](/contact-us) to check ffmpeg on the managed backend. WAV and PCM do not require this transcoding dependency.
 </Note>
 
 ## Speech to Text (STT) models
@@ -400,9 +400,9 @@ Only workspace **admins** and **owners** can access the AI Models settings page.
 >
 > **Gemini:** Get your API key at [aistudio.google.com/app/apikey](https://aistudio.google.com/app/apikey).
 >
-> **Whisper (local):** No API key required. Runs on your own infrastructure using faster-whisper. Model weights are downloaded from HuggingFace on first use. Optional: Device (Auto/CPU/CUDA), Compute Type (int8/float16/float32), Model Cache Directory.
+> **Whisper (local):** No third-party transcription API key is required. `faster-whisper` runs on the Novaplan-managed backend, and model weights are downloaded from Hugging Face on first use. Optional: Device (Auto/CPU/CUDA), Compute Type (int8/float16/float32), Model Cache Directory.
 >
-> **Wispr Flow:** Contact [enterprise@wisprflow.ai](mailto:enterprise@wisprflow.ai) to obtain an API key. Requires ffmpeg on the backend host. Optional: Default Language, App Type, API Endpoint override.
+> **Wispr Flow:** Contact [enterprise@wisprflow.ai](mailto:enterprise@wisprflow.ai) to obtain an API key. Novaplan must have ffmpeg available on the managed backend. Optional: Default Language, App Type, API Endpoint override.
 
 ### Managing configured STT models
 
@@ -417,6 +417,6 @@ After saving, your model appears under the **Configured** tab. Each row has the 
 <Note>
 If the health check fails when saving, double-check:
 - For OpenAI and Gemini: the API key is correct and has not expired.
-- For Whisper (local): the faster-whisper package is installed on the backend host. On first use, model weights are downloaded — ensure internet access is available.
-- For Wispr Flow: ffmpeg must be installed on the backend host. Confirm your API key is active (contact [enterprise@wisprflow.ai](mailto:enterprise@wisprflow.ai) if unsure).
+- For Whisper (local): ask [Novaplan Support](/contact-us) to check `faster-whisper`, model downloads, and backend connectivity.
+- For Wispr Flow: confirm your API key is active (contact [enterprise@wisprflow.ai](mailto:enterprise@wisprflow.ai) if unsure). Ask [Novaplan Support](/contact-us) to check ffmpeg on the managed backend.
 </Note>
