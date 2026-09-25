@@ -139,6 +139,10 @@ This is the file you'll upload to Novaplan AI.
 
 5. A `.json` file downloads automatically. Keep it somewhere safe — you can't download it again later.
 
+<Note>
+  If **Create new key** is unavailable or Google Cloud says service-account key creation is disabled, your organization may enforce `iam.disableServiceAccountKeyCreation`. Ask your Google Cloud administrator and Novaplan to review the approved authentication path for this workspace. Do not change an organization policy solely to complete this guide. See [Google Cloud's key-creation troubleshooting guide](https://docs.cloud.google.com/iam/docs/troubleshoot-org-policies).
+</Note>
+
 <Warning>
   **Treat this file like a password.** Anyone who gets it can read the same files. Don't email it, don't check it into Git, don't paste it in chat. If you ever think it leaked, delete the key in Google Cloud and create a new one.
 </Warning>

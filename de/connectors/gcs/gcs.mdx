@@ -16,6 +16,10 @@ Legen Sie vor der Freigabe fest, welche Buckets und Dateitypen im Workspace ersc
 3. Erteilen Sie die zum Lesen benötigten Berechtigungen. Die Quellanleitung verwendet **Storage Object Viewer**; prüfen Sie mit Ihrer Google-Cloud-Administration, ob Sie die Berechtigung auf ausgewählte Buckets begrenzen können und welche Listenrechte der Konnektor benötigt.
 4. Öffnen Sie das neue Dienstkonto, wählen Sie **Keys → Add Key → Create new key → JSON** und speichern Sie die heruntergeladene Datei sicher. Der private Schlüssel kann nicht erneut aus derselben Datei heruntergeladen werden.
 
+<Note>
+  Falls **Create new key** fehlt oder Google Cloud die Schlüsselerstellung sperrt, kann die Organisationsrichtlinie `iam.disableServiceAccountKeyCreation` aktiv sein. Klären Sie mit Ihrer Google-Cloud-Administration und Novaplan, welcher Anmeldeweg für diesen Workspace freigegeben ist. Ändern Sie eine Organisationsrichtlinie nicht allein aufgrund dieser Anleitung. Weitere Hinweise bietet die [Google-Cloud-Fehlerbehebung zur Schlüsselerstellung](https://docs.cloud.google.com/iam/docs/troubleshoot-org-policies).
+</Note>
+
 <Warning>
   Die JSON-Datei ist ein Zugangsschlüssel. Versenden, veröffentlichen oder committen Sie sie nicht. Wenn sie kompromittiert wird, löschen Sie den Schlüssel in Google Cloud und richten Sie die Verbindung mit einem neuen Schlüssel ein. Stimmen Sie die Verwendung eines langlebigen Schlüssels mit Ihrer Sicherheitsrichtlinie ab.
 </Warning>
