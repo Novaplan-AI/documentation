@@ -7,7 +7,7 @@ description: "Dateien aus Google-Cloud-Storage-Buckets für die Suche synchronis
 
 Der Konnektor für **Google Cloud Storage (GCS)** liest Objekte aus freigegebenen Buckets und macht unterstützte Dateiinhalte in Novaplan AI durchsuchbar. Er verwendet ein Google-Cloud-**Dienstkonto** mit JSON-Schlüssel. Novaplan unterstützt Sie bei der Einrichtung und bei der Auswahl der benötigten Buckets.
 
-Legen Sie vor der Freigabe fest, welche Buckets und Dateitypen im Workspace erscheinen sollen. Das Dienstkonto kann nur Objekte lesen, für die es Zugriff hat. Die Wahl **Personal** oder **Team** bestimmt zusätzlich die Sichtbarkeit in Novaplan AI. Prüfen Sie eine Team-Verbindung mit Testkonten, bevor Sie sensible Buckets vollständig synchronisieren.
+Legen Sie vor der Freigabe fest, welche Buckets und Dateitypen im Workspace erscheinen sollen. Das Dienstkonto kann nur Objekte lesen, für die es Zugriff hat. Diese Berechtigungen gelten für das **Dienstkonto**; die individuellen Google-Cloud-Rechte einer Person werden nicht automatisch als Novaplan-Berechtigungen übernommen. **Personal** ist für die einrichtende Person gedacht, **Team** gibt importierte Inhalte für den Workspace frei. Prüfen Sie insbesondere eine Team-Verbindung mit einem zweiten Testkonto, bevor Sie sensible Buckets synchronisieren.
 
 ## Dienstkonto und Schlüssel vorbereiten
 
@@ -42,6 +42,8 @@ Ohne Filter werden alle für das Dienstkonto erreichbaren Objekte berücksichtig
 6. Prüfen Sie im **Overview**-Bereich **Total**, **Processing**, **Not Started**, **Failed** und **Unsupported**. **Sync** liest Änderungen nach; **Full sync** prüft den gewählten Umfang vollständig erneut.
 
 Beim ersten Lauf werden alle ausgewählten Objekte gelesen. Folgeläufe verwenden Änderungsinformationen wie `updated`. Unterstützte Dokumente, Textdateien und Quellcode können inhaltlich durchsucht werden. Für Bilder hängt die Inhaltsauswertung von den im Workspace aktivierten Funktionen ab. Video, Audio, Archive, SVG und verschlüsselte oder passwortgeschützte Inhalte können als **Unsupported** erscheinen, ohne inhaltlich durchsuchbar zu sein.
+
+Auch bei Folgeläufen listet der Konnektor Objekte in den ausgewählten Buckets. Eine feste Laufzeit lässt sich deshalb nicht zusagen; prüfen Sie den Fortschritt im **Overview**-Bereich. Wenn Sie ein Objekt in GCS löschen, gehen Sie nicht davon aus, dass eine bereits indexierte Kopie oder ein Suchergebnis sofort verschwindet. Prüfen Sie das Ergebnis in Novaplan AI und wenden Sie sich bei verbleibenden sensiblen Inhalten an [Novaplan Support](/de/contact-us).
 
 ## Besondere Speicherklassen und Verschlüsselung
 

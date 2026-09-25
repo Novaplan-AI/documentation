@@ -43,7 +43,7 @@ This connector copies those files into Novaplan AI so you can **search them with
 - **Files** of any type (PDFs, Word docs, images, videos, code, archives)
 - **Folders** (including the nested folder structure inside each bucket)
 - **Details** like file name, size, when it was last changed
-- **Who can see what** — Novaplan AI respects the permissions already set in Google Cloud
+- **Who can see what** — the service account's Google Cloud permissions control which objects can be imported; the connector's **Personal** or **Team** scope controls who can see imported records in Novaplan AI. Test the resulting access with another workspace account before syncing sensitive buckets.
 
 ---
 
@@ -276,7 +276,7 @@ Click the instance card to open the **Overview** panel. This is where you'll com
 
 **Buttons you'll use here:**
 
-- **Sync** — run an extra sync right now (only grabs what's changed)
+- **Sync** — run an extra sync now; the connector checks the selected buckets and processes eligible changes
 - **Full sync** — re-scan everything from scratch (use sparingly, it's slow)
 - **Manage Configuration** — re-opens the two tabs from Steps 5–7 so you can change credentials or filters later
 
@@ -336,23 +336,23 @@ When you turn the connector on, it does a full scan:
 This is the slow one. A few thousand files takes minutes. A few million takes hours.
 
 <Info>
-  **Want it faster?** Filters are the lever. Syncing only PDFs from one bucket is 90% quicker than syncing everything.
+  **Want to limit the work?** Select only the buckets and file types you need. The actual duration depends on bucket size, object types, and service limits.
 </Info>
 
 ### Every sync after that
 
-Once the initial sync is done, the connector only asks Google Cloud: *"what's changed since last time?"* So scheduled syncs usually finish in 5–15 minutes no matter how big the bucket is.
+After the initial sync, the connector keeps a sync timestamp and processes eligible objects changed since then. It still lists objects in the selected buckets, so a large bucket can make later runs slow too. Check the Overview panel for the actual progress in your workspace.
 
 ### Who can see the synced files?
 
-Novaplan AI respects two things:
+Two settings determine the reach of this connection:
 
-1. **Google Cloud permissions** — the connector can only pull files the service account has access to.
+1. **Google Cloud permissions** — the connector can only pull files the service account has access to. These are the service account's permissions, not a separate check of each viewer's Google Cloud identity.
 2. **The scope you picked when setting up the connector**:
-   - **Personal** — only you can see the files in Novaplan AI
-   - **Team** — everyone in your organization can see them
+   - **Personal** — intended for the person who creates the connection; verify access with a second account
+   - **Team** — imported records are available across your Novaplan AI workspace
 
-Bucket-level IAM rules and ACLs in Google Cloud are also respected.
+Do not assume that an individual viewer's bucket IAM role or object ACL is reproduced in Novaplan AI. A **Team** connection makes imported records available across the workspace. Before enabling it for sensitive buckets, confirm the intended connector scope and test access with an account that should not see the records.
 
 ### Sync frequency — scheduled vs manual
 
@@ -449,7 +449,7 @@ Big buckets take real time. Things that help:
 - Skip old files with a **Modified Date** filter
 - For gigantic buckets (millions of objects), raise the Sync Interval to 4–24 hours — less API usage, less cost
 
-As a rough guide, a bucket with 1 million objects takes 6–12 hours on the initial sync. Cutting it to 10% with filters gets that down to 1–2 hours.
+Sync time varies with object count, file size, file type, service limits, and the filters you choose. Watch **Processing**, **Failed**, and **Not Started** in the Overview panel instead of planning around a fixed completion estimate.
 
 ---
 
@@ -487,17 +487,7 @@ Most often, the service account key was rotated or deleted in Google Cloud.
 <AccordionGroup type="single" collapsible>
 
 <Accordion title="How long does the initial sync take?" defaultOpen>
-  Depends entirely on how many files are in the buckets you picked.
-  
-  | Bucket size | Rough time |
-  |---|---|
-  | Under 1,000 files | 5–15 minutes |
-  | 1,000 – 10,000 | 15–45 minutes |
-  | 10,000 – 100,000 | 1–3 hours |
-  | 100,000 – 1,000,000 | 3–8 hours |
-  | 1,000,000+ | 8+ hours |
-  
-  Using filters to sync only what you actually need is the biggest speedup.
+  It depends on the number and size of objects, their file types, API limits, and the indexing capacity of your workspace. Start with a limited bucket or file-type filter and check the Overview panel for progress. Novaplan Support can help plan a large initial import.
 </Accordion>
 
 <Accordion title="Can I connect more than one Google Cloud project?">
@@ -519,7 +509,7 @@ Most often, the service account key was rotated or deleted in Google Cloud.
 </Accordion>
 
 <Accordion title="How does the incremental sync know what's new?">
-  Every file in GCS has an `updated` timestamp. After each sync, the connector remembers the most recent timestamp it saw. Next time it runs, it just asks Google Cloud for files with a newer timestamp than that. Fast and efficient.
+  The connector stores a sync timestamp and checks object `updated` values against it. It lists objects in the selected buckets and processes those eligible for the new run. Later runs can still take time when buckets are large.
 </Accordion>
 
 <Accordion title="Will it sync Archive and Coldline files?">
@@ -527,9 +517,7 @@ Most often, the service account key was rotated or deleted in Google Cloud.
 </Accordion>
 
 <Accordion title="What happens when I delete a file from GCS?">
-  On the next sync, the connector notices it's gone and removes it from Novaplan AI too — including from search results.
-  
-  If you use **object versioning** in GCS, older versions may still appear until they're also deleted.
+  Do not assume that deleting a GCS object immediately removes an already indexed record or its search result. After deleting sensitive content, verify its absence in Novaplan AI and contact [Novaplan Support](/contact-us) if it remains. Confirm deletion behavior for your Enterprise workspace before relying on source deletion as an access-control step.
 </Accordion>
 
 <Accordion title="Does it work with encrypted buckets?">
