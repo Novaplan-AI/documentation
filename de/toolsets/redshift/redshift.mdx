@@ -11,6 +11,19 @@ Das Redshift-Toolset erlaubt Agenten Live-Abfragen gegen eine Amazon-Redshift-Da
   Verwenden Sie für Analyse-Agenten nach Möglichkeit Datenbankkonten mit den nötigen Leserechten. Ein Agent kann Abfragen gegen die Rechte des angemeldeten Kontos ausführen; weitreichende Schreib- oder Administrationsrechte sollten nicht ohne gesonderte Prüfung bereitgestellt werden.
 </Warning>
 
+## Verfügbare Tools
+
+| Tool | Funktion |
+| --- | --- |
+| `list_schemas` | Datenbankschemas auflisten. |
+| `list_schemas_and_tables` | Schemas und zugehörige Tabellen gemeinsam auflisten. |
+| `list_tables` | Tabellen eines ausgewählten Schemas auflisten. |
+| `get_table_ddl` | `CREATE TABLE`-Definition einer Tabelle abrufen. |
+| `get_schema_ddl` | Tabellendefinitionen eines Schemas abrufen. |
+| `get_tables_schema` | Spalten und Schlüssel ausgewählter Tabellen prüfen. |
+| `fetch_db_schema` | Datenbankschema mit Tabellen und Views abrufen. |
+| `execute_query` | SQL mit den Rechten des angemeldeten Datenbankkontos ausführen. |
+
 ## Redshift-Verbindung vorbereiten
 
 Sie benötigen einen Redshift-Endpunkt, den Datenbanknamen und einen aus der Novaplan-Umgebung erreichbaren Port (standardmäßig `5439`). Der **Host** ist nur der DNS-Name vor `:`; **Port** und **Database** werden getrennt eingetragen. Bei einem Endpunkt wie `redshift.example.amazonaws.com:5439/analytics` wären dies `redshift.example.amazonaws.com`, `5439` und `analytics`.

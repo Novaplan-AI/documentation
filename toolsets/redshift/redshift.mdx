@@ -38,6 +38,19 @@ The Redshift toolset lets agents query your Amazon Redshift database.
   `execute_query` sends SQL to Redshift with the authenticated user's database privileges; the tool is not limited to read-only statements. For analytical agents, use an account with only the required read permissions. Review any write or administrative access separately.
 </Warning>
 
+## Available Tools
+
+| Tool | Description |
+| --- | --- |
+| `list_schemas` | List database schemas |
+| `list_schemas_and_tables` | List schemas and their tables together |
+| `list_tables` | List tables in a selected schema |
+| `get_table_ddl` | Get the `CREATE TABLE` definition of a table |
+| `get_schema_ddl` | Get table definitions for a schema |
+| `get_tables_schema` | Inspect columns and keys for selected tables |
+| `fetch_db_schema` | Fetch the database schema, including tables and views |
+| `execute_query` | Run SQL under the authenticated user's database permissions |
+
 ---
 
 ## Configuration Guide
