@@ -34,7 +34,9 @@
               "de/user-management/user",
               "de/user-management/user-group",
               "de/user-management/teams",
-              "de/developer/getting-started"
+              "de/developer/getting-started",
+              "de/developer/oauth2",
+              "de/developer/api-reference"
             ]
           },
           {

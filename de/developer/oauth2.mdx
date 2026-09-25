@@ -1,0 +1,57 @@
+---
+title: "OAuth-2.0-Anwendungen"
+description: "OAuth-Anwendungen für den sicheren Zugriff auf freigegebene Novaplan AI Schnittstellen einrichten."
+---
+
+Novaplan AI stellt einen OAuth-2.0-Autorisierungsserver bereit. Eine Workspace-Administration kann Anwendungen registrieren, Redirect-URIs hinterlegen und deren Berechtigungen festlegen. Stimmen Sie Integrationen und administrative Scopes mit Novaplan ab, bevor Sie sie produktiv freigeben.
+
+## Anwendung anlegen
+
+1. Melden Sie sich als Administration an und öffnen Sie **Workspace-settings → Developer Settings → OAuth 2.0 Apps**.
+2. Wählen Sie **New OAuth application** und vergeben Sie einen **Application Name**. Optional können Sie eine Beschreibung sowie Homepage-, Datenschutz- und Nutzungsbedingungen-URLs eintragen. Diese Angaben helfen Nutzenden, die Anwendung im Einwilligungsdialog zu erkennen.
+3. Wählen Sie den passenden Grant-Typ. **Authorization Code** ist für Anwendungen mit persönlicher Anmeldung vorgesehen. Öffentliche Clients wie mobile Apps und Single-Page-Apps benötigen dabei **PKCE**. **Refresh Token** ermöglicht erneute Tokens nach erteilter `offline_access`-Berechtigung.
+4. Tragen Sie die Redirect-URIs der Clients ein. Die URI im Autorisierungsaufruf muss exakt einem registrierten Wert entsprechen. HTTPS ist erforderlich; `localhost` und `127.0.0.1` können für lokale Clients zulässig sein.
+5. Wählen Sie nur die Scopes, die die Anwendung tatsächlich benötigt. Speichern Sie die Anwendung und verwahren Sie **Client ID** und **Client Secret** sicher.
+
+<Warning>
+  **Client Credentials** authentifiziert eine Anwendung ohne persönliche Anmeldung. Verwenden Sie diesen Grant nicht für Anfragen, deren Ergebnis die Berechtigungen eines bestimmten Nutzers beachten muss. Dafür sind Authorization Code oder ein benutzergebundenes Token vorgesehen.
+</Warning>
+
+## Scopes auswählen
+
+Scopes begrenzen den angeforderten Zugriff. Zu den in der technischen Referenz dokumentierten Gruppen gehören:
+
+| Bereich | Beispiele |
+| --- | --- |
+| Identität | `openid`, `profile`, `email`, `offline_access` |
+| Organisation und Personen | `org:read`, `org:write`, `org:admin`, `user:read`, `user:write`, `user:invite`, `user:delete` |
+| Gruppen und Teams | `usergroup:read`, `usergroup:write`, `team:read`, `team:write` |
+| Wissensdatenbank und Suche | `kb:read`, `kb:write`, `kb:delete`, `kb:upload`, `semantic:read`, `semantic:write`, `semantic:delete` |
+| Chat und Agenten | `conversation:read`, `conversation:write`, `conversation:chat`, `agent:read`, `agent:write`, `agent:execute` |
+| Konnektoren und Konfiguration | `connector:read`, `connector:write`, `connector:sync`, `connector:delete`, `config:read`, `config:write` |
+| Dokumente und Crawling | `document:read`, `document:write`, `document:delete`, `crawl:read`, `crawl:write`, `crawl:delete` |
+
+Nicht jede Anwendung benötigt alle diese Scopes. Besonders Schreib-, Lösch- und Administrationsrechte sollten einzeln geprüft werden. Der MCP-Server kann über seine [OAuth-Metadaten](/de/mcp/overview#oauth-protected-resource-discovery) eine serverseitige Auswahl bekannt geben.
+
+## Authorization-Code-Ablauf
+
+1. Der Client leitet die Person zu `NOVAPLAN_WORKSPACE_URL/api/v1/oauth2/authorize` weiter. Er übergibt unter anderem `client_id`, `redirect_uri`, `response_type=code`, angeforderte `scope`-Werte und einen zufälligen `state`-Wert. Öffentliche Clients senden zusätzlich eine PKCE-Code-Challenge.
+2. Die Person meldet sich an und prüft die angeforderten Berechtigungen.
+3. Novaplan AI leitet zur registrierten Redirect URI mit einem kurzlebigen Autorisierungscode und `state` zurück. Der Client vergleicht `state` mit dem ursprünglich gespeicherten Wert.
+4. Der Client tauscht den Code per `POST` an `NOVAPLAN_WORKSPACE_URL/api/v1/oauth2/token` gegen Tokens. Die `redirect_uri` muss mit dem Autorisierungsaufruf übereinstimmen. Vertrauliche Clients authentifizieren sich mit ihrem Secret; öffentliche Clients verwenden den zugehörigen PKCE-Code-Verifier.
+
+Bei `offline_access` kann ein Refresh Token ausgegeben werden. Speichern Sie den jeweils zuletzt erhaltenen Wert sicher, da Refresh Tokens rotiert werden können. Tokens lassen sich über den Revocation-Endpunkt widerrufen.
+
+## Endpunkte
+
+| Pfad | Zweck |
+| --- | --- |
+| `/api/v1/oauth2/authorize` | Autorisierung und Einwilligung |
+| `/api/v1/oauth2/token` | Code tauschen, Token erneuern oder zulässigen Anwendungs-Grant ausführen |
+| `/api/v1/oauth2/revoke` | Token widerrufen |
+| `/api/v1/oauth2/introspect` | Gültigkeit und Metadaten eines Tokens prüfen |
+| `/api/v1/oauth2/userinfo` | Profilinformationen mit passendem Scope abrufen |
+| `/.well-known/openid-configuration` | OpenID-Connect-Metadaten |
+| `/.well-known/jwks.json` | Öffentliche Schlüssel zur Tokenprüfung |
+
+Bei Fehlern vergleichen Sie Redirect URI, Grant-Typ, registrierte Scopes und bei PKCE die Code-Challenge mit dem Verifier. Prüfen Sie außerdem, ob ein Secret abgelaufen oder eine Anwendung ausgesetzt wurde. Für Freigaben und Fragen zu produktiven Integrationen kontaktieren Sie [Novaplan Support](/de/contact-us).

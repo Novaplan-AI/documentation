@@ -97,7 +97,9 @@ The **Client Credentials** grant is designed for server-to-server communication 
 **When to use:**
 - Background services or automation scripts
 - Machine-to-machine integrations
-- Scheduled tasks that access organizational data
+- Scheduled tasks that use endpoints explicitly approved for application identity
+
+Do not use client credentials for requests whose results must respect a particular user's permissions. Use Authorization Code or a user-bound token for those requests.
 
 </Accordion>
 
@@ -404,7 +406,7 @@ curl -X GET https://your-workspace.example.com/api/v1/resource \
 
 ## Client Credentials Flow
 
-For server-to-server integrations that do not require user context:
+For server-to-server integrations that do not require user context and use scopes approved for application identity:
 
 ```bash
 curl -X POST https://your-workspace.example.com/api/v1/oauth2/token \
@@ -412,8 +414,12 @@ curl -X POST https://your-workspace.example.com/api/v1/oauth2/token \
   -d "grant_type=client_credentials" \
   -d "client_id=YOUR_CLIENT_ID" \
   -d "client_secret=YOUR_CLIENT_SECRET" \
-  -d "scope=kb:read semantic:read"
+  -d "scope=YOUR_APPLICATION_SCOPE"
 ```
+
+<Warning>
+  A client-credentials token does not represent a user. Do not use it to search or retrieve content where access must be checked against an individual user's permissions.
+</Warning>
 
 ---
 
