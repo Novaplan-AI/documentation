@@ -50,16 +50,12 @@ The API Key authenticates your requests to your Azure OpenAI service.
 
 The Model Name field defines which Azure OpenAI model you want to use with Novaplan AI.
 
-**Popular Azure OpenAI models include:**
-- `gpt-5` - OpenAI's latest flagship model, best for complex tasks and reasoning.
-- `gpt-5-mini` - Powerful model balancing cost and capability.
-- `gpt-5-nano` - Fastest, most cost-effective option.
+**Model choice:** Microsoft's [current model catalog](https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/models) includes the GPT-6 family, including `gpt-6-astra`. Enter the model ID associated with the deployment in your Azure resource. Catalog presence does not mean the model is available in every region, quota tier, or Novaplan integration.
 
 **How to choose a model:**
-- For complex reasoning and advanced features, select `gpt-5`
-- For balanced performance, select `gpt-5-mini`
-- For routine tasks and lower latency, select `gpt-5-nano`
-- Check the [Azure OpenAI model documentation](https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/models) for the most up-to-date options
+- Confirm the deployment, model ID, region, and quota in your Azure resource
+- Compare capabilities, latency, and cost in the current Microsoft catalog
+- Ask Novaplan to test the selected deployment, including any required agent tools, before assigning it to production workflows
 
 ## Configuration Steps
 
@@ -93,6 +89,6 @@ As shown in the image above:
 - Ensure your Azure subscription is active and has sufficient quota for the selected model
 - Verify that the deployment name exists in your Azure OpenAI resource
 - Check that the model name matches one of the models available in your Azure OpenAI service
-- Ensure your IP address is allowed if you've configured network access restrictions
+- Ensure the managed Novaplan workspace's network access is allowed if your Azure resource has network restrictions
 
 For additional support, refer to the [Azure OpenAI documentation](https://learn.microsoft.com/en-us/azure/ai-services/openai/) or contact Novaplan AI support.
