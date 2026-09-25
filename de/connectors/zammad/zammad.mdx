@@ -1,0 +1,70 @@
+---
+title: "Zammad"
+description: "Tickets, Wissensdatenbank und Berechtigungen aus Zammad synchronisieren."
+---
+
+## Überblick
+
+Der Zammad-Konnektor übernimmt Tickets mit Artikeln und Anhängen sowie Kategorien und Antworten der Wissensdatenbank in Novaplan AI. Benutzer, Gruppen und Rollen werden für die Zugriffssteuerung mitgeführt. Bei Tickets gelten gruppenbasierte Rechte; bei der Wissensdatenbank richten sich Zugriffe nach Rollen. Interne Ticketartikel behalten ihre Kennzeichnung als intern oder öffentlich.
+
+| Inhalt | Synchronisierte Angaben |
+| --- | --- |
+| Tickets | Titel, Status, Priorität, Gruppe, zuständige und anfragende Person, Nachrichten, Antworten und Anhänge |
+| Wissensdatenbank | Kategorien, Antworten, Übersetzungen und Anhänge |
+| Berechtigungen | Benutzer, Gruppen, Rollen und deren Zuordnung |
+
+Novaplan unterstützt Sie bei der Anbindung. Klären Sie vor der Synchronisierung, welche Supportgruppen und Zeiträume im Workspace durchsucht werden sollen.
+
+## API-Token in Zammad erstellen
+
+Der Konnektor verwendet einen **API Access Token**. Dessen Rechte entsprechen den Rechten des Zammad-Kontos, das ihn erstellt. Für Zugriff auf alle benötigten Tickets und API-Endpunkte empfiehlt die Quellanleitung ein Administratorkonto; stimmen Sie die tatsächlichen Rechte mit Ihrer Zammad-Administration ab.
+
+1. Öffnen Sie in Zammad über Ihren Avatar **Profile** und dann **Token Access**.
+2. Wählen Sie unter **Personal Access Tokens** die Schaltfläche **Create**.
+3. Vergeben Sie einen Namen, zum Beispiel `Novaplan-AI-Integration`, und legen Sie ein Ablaufdatum gemäß Ihrer Sicherheitsrichtlinie fest.
+4. Aktivieren Sie die für die Integration benötigten Tokenrechte: `ticket.agent`, `ticket.customer`, `knowledge_base.editor` und `knowledge_base.reader`.
+5. Erstellen Sie das Token und kopieren Sie es sofort. Es wird nur einmal angezeigt; nach Verlust müssen Sie ein neues Token erzeugen.
+
+Das Token sollte ausschließlich in der vorgesehenen Konnektorkonfiguration hinterlegt werden. Wird es erneuert oder widerrufen, muss auch der Eintrag in Novaplan AI aktualisiert werden.
+
+## Instanz in Novaplan AI verbinden
+
+1. Öffnen Sie **Workspace Settings → Connectors**, suchen Sie **Zammad** und wählen Sie **+ Setup**.
+2. Geben Sie auf **Authenticate Instance** die **Zammad URL** ohne abschließenden Schrägstrich ein, zum Beispiel `https://support.example.com`, und fügen Sie den **API Token** ein.
+3. Wählen Sie **Next**. Die Zugangsdaten werden geprüft. Bei Token-Authentifizierung entfällt der separate Schritt **Authorize**; Sie gelangen zu **Configure Records**.
+
+<Warning>
+  Die Quellanleitung verlangt, dass das Zammad-Konto für das Token dieselbe E-Mail-Adresse wie das zugeordnete Novaplan-AI-Konto verwendet. Andernfalls können Berechtigungsprobleme auftreten. Lassen Sie die Kontozuordnung bei administrativen oder gemeinsam genutzten Konten durch Novaplan prüfen.
+</Warning>
+
+## Synchronisierung und Indexierung festlegen
+
+Wählen Sie unter **Configure Records** zuerst **Scheduled** oder **Manual**. Das voreingestellte **Sync Interval** für geplante Läufe beträgt 60 Minuten. Eine manuelle Synchronisierung muss bei Bedarf ausgelöst werden.
+
+| Filter | Wirkung |
+| --- | --- |
+| **Enable Manual Indexing** | Aktiviert: indexiert erst nach manuellem Start. Deaktiviert (Standard): indexiert automatisch nach der Synchronisierung. |
+| **Groups** | Mit `In` nur ausgewählte Gruppen einschließen oder mit `Not In` Gruppen ausschließen. Ohne Auswahl alle zugänglichen Gruppen. |
+| **Modified Date** | Nach Änderungsdatum filtern: `Is After`, `Is Before` oder `Is Between`. |
+| **Created Date** | Nach Erstellungsdatum mit denselben Operatoren filtern. |
+
+Durch Synchronisierungsfilter ausgeschlossene Daten werden nicht heruntergeladen. Die separaten Indexierungsoptionen **Index Tickets**, **Index Attachments** und **Index Knowledge Base** steuern, welche synchronisierten Inhalte in der KI-Suche erscheinen; alle drei sind laut Quellanleitung standardmäßig aktiviert.
+
+Speichern Sie mit **Save**. Im abschließenden Dialog können Sie **Start syncing now** oder **I'll do it later** wählen. Unter **Indexing Progress** sehen Sie den Stand. Der erste Lauf liest die vorhandenen Daten; spätere Läufe erkennen Änderungen über `updated_at`. Die Verarbeitung erfolgt in der Reihenfolge Benutzer, Gruppen, Rollen, Tickets und Wissensdatenbank.
+
+## Berechtigungen prüfen
+
+Ein Ticket wird nur für Personen sichtbar, denen die betreffende Zammad-Gruppe Zugriff gewährt. Wissensdatenbankartikel verwenden die Rollenberechtigungen der Quelle. Prüfen Sie nach dem ersten Lauf mit geeigneten Testkonten, ob sowohl öffentliche als auch interne Inhalte entsprechend diesen Regeln erscheinen. Die Laufzeit der ersten Synchronisierung hängt insbesondere von Anzahl und Größe der Tickets, Artikel und Anhänge sowie der Netzwerkverbindung ab.
+
+## Fehler beheben
+
+| Problem | Prüfen Sie |
+| --- | --- |
+| Ungültiges Token | Kopierfehler, Ablaufdatum, Widerruf und aktive Berechtigungen |
+| Verbindung wird abgelehnt oder läuft in einen Timeout | URL ohne abschließenden Schrägstrich, Erreichbarkeit, Firewall und TLS-Zertifikat |
+| Unzureichende Rechte | Rechte und Status des Token-Kontos sowie dessen Zugriff auf die ausgewählten Gruppen |
+| Tickets fehlen | **Groups**-Filter, Datumsfilter, Gruppenrechte und Synchronisierungsstatus |
+| Datensätze unter **All Records**, aber keine Suchtreffer | Indexierungsoptionen, abgeschlossene Indexierung und Suchbegriff |
+| Ergebnisse fehlen für einzelne Personen | E-Mail-Zuordnung und synchronisierte Gruppen- oder Rollenrechte |
+
+Den Status finden Sie unter **Workspace Settings → Connectors**. Bei ungeklärten Fehlern wenden Sie sich an [Novaplan Support](/de/contact-us).

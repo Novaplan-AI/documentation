@@ -1,0 +1,71 @@
+---
+title: "PostgreSQL"
+description: "Schemas, Tabellen und Datensätze aus PostgreSQL mit Novaplan AI synchronisieren."
+---
+
+## Überblick
+
+Der PostgreSQL-Konnektor indexiert ausgewählte Datenbank-Schemas, Tabellenstrukturen und Datensätze. Diese Inhalte können Sie dann zusammen mit anderen Wissensquellen in Novaplan AI durchsuchen.
+
+| Inhalt | Umfang |
+| --- | --- |
+| Schemas | Alle über **Schemas** ausgewählten Bereiche |
+| Tabellen | Namen, Spalten, Datentypen sowie Primär- und Fremdschlüssel |
+| Schema-Metadaten | `CREATE TABLE`-Definitionen und Beziehungen |
+| Datensätze | Zeilen ausgewählter Tabellen bis zur Grenze **Max rows per table** |
+
+Novaplan unterstützt Sie bei der Einrichtung. Stimmen Sie Datenbankzugriff, Tabellenauswahl und Berechtigungen vor der Synchronisierung mit den zuständigen Administratoren ab.
+
+## Datenbankzugang vorbereiten
+
+Sie benötigen einen erreichbaren PostgreSQL-Server, den Datenbanknamen, Host, Port (standardmäßig `5432`) und einen Benutzer mit Leserechten. Für einen eigenen lesenden Benutzer können Datenbankadministratoren beispielsweise Folgendes ausführen:
+
+```sql
+CREATE USER novaplan_reader WITH PASSWORD 'a_strong_password';
+GRANT CONNECT ON DATABASE example_db TO novaplan_reader;
+GRANT USAGE ON SCHEMA public TO novaplan_reader;
+GRANT SELECT ON ALL TABLES IN SCHEMA public TO novaplan_reader;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO novaplan_reader;
+```
+
+Passen Sie Benutzer, Passwort, Datenbank und Schema an. Wiederholen Sie `USAGE` und `SELECT` für jedes weitere Schema, das Sie synchronisieren möchten. Die Berechtigungen für künftig angelegte Tabellen hängen von den jeweiligen Eigentümern und Standardberechtigungen ab; prüfen Sie diese gesondert. Schema-Metadaten werden außerdem aus `information_schema` und `pg_catalog` gelesen.
+
+Für einen entfernten Server müssen `pg_hba.conf`, `listen_addresses` und die Firewall Verbindungen aus der Novaplan-Umgebung zum gewünschten Port erlauben. Fragen Sie Novaplan Support nach den für Ihren Workspace erforderlichen Netzwerkdaten. Ein in Beispielen verwendetes `localhost` ist für einen verwalteten Workspace normalerweise nicht der Datenbankhost.
+
+## Konnektor konfigurieren
+
+1. Öffnen Sie **Connector Settings** in Novaplan AI.
+2. Wählen Sie auf **Available** die Karte **PostgreSQL** und dann **Configure**.
+3. Wählen Sie **Basic Auth** mit **Host**, **Port**, **Database**, **User** und **Password** oder verwenden Sie eine **Connection String** im Format `postgresql://user:password@host:5432/database`.
+4. Speichern Sie die Zugangsdaten und wählen Sie die Synchronisierungsfilter.
+
+Bei einer Connection String müssen reservierte Zeichen im Passwort URL-kodiert sein, beispielsweise `@` als `%40`, `:` als `%3A`, `/` als `%2F`, `%` als `%25` und `#` als `%23`. Das Passwort `p@ss:word` wird darin zu `p%40ss%3Aword`. Veröffentlichen Sie keine echte Connection String mit Zugangsdaten in einem Ticket oder Dokument.
+
+## Synchronisierung eingrenzen
+
+| Filter | Bedeutung | Standardwert |
+| --- | --- | --- |
+| **Schemas** | Gewünschte Schemas wie `public`. Ohne Auswahl werden alle Schemas berücksichtigt. | Alle Schemas |
+| **Tables** | Gewünschte Tabellen, etwa `public.account`. Ohne Auswahl werden alle Tabellen der gewählten Schemas berücksichtigt. | Alle Tabellen |
+| **Max rows per table** | Höchstzahl gelesener Zeilen pro Tabelle. | `1000` |
+| **Index tables** | Tabelleninhalte für die KI-Suche indexieren. Deaktiviert werden nur Schema-Metadaten indexiert. | Aktiviert |
+
+Die Listen für **Schemas** und **Tables** werden nach dem Speichern der Zugangsdaten aus der Datenbank gefüllt. Sie können mehrere Schemas und darin konkrete, voll qualifizierte Tabellennamen auswählen. Von Filtern ausgeschlossene Daten werden nicht heruntergeladen. Verwenden Sie die Zeilengrenze für große Tabellen und begrenzen Sie die Auswahl auf benötigte Inhalte.
+
+Wählen Sie danach **Scheduled** oder **Manual**. Bei geplanter Synchronisierung liegt das voreingestellte **Sync interval** bei 60 Minuten. Nach **Save** prüft der Konnektor die Verbindung und beginnt die erste Synchronisierung. Den Status verfolgen Sie unter **Indexing Progress**.
+
+## Häufige Fragen
+
+### Welche Rechte sind nötig?
+
+Der Benutzer benötigt `CONNECT` auf der Datenbank, `USAGE` auf den ausgewählten Schemas und `SELECT` auf den Tabellen. Schreibrechte sind für die Synchronisierung nicht erforderlich. Werden später Tabellen hinzugefügt, prüfen Sie deren effektive Leserechte erneut.
+
+### Warum schlägt die Verbindung fehl?
+
+Prüfen Sie Host und Port, Erreichbarkeit aus der Novaplan-Umgebung, `pg_hba.conf`, `listen_addresses`, Firewall und Zugangsdaten. Bei einer Connection String sollten Sie zusätzlich die URL-Kodierung von Sonderzeichen im Passwort kontrollieren.
+
+### Wie begrenze ich große Datenbestände?
+
+Wählen Sie nur benötigte **Schemas** und **Tables**, reduzieren Sie **Max rows per table** oder deaktivieren Sie **Index tables**, wenn Sie ausschließlich Schema-Metadaten durchsuchen möchten.
+
+Bei Fragen zur Anbindung wenden Sie sich an [Novaplan Support](/de/contact-us).

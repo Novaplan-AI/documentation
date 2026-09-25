@@ -70,7 +70,11 @@
               "de/connectors/microsoft-365/sharepoint",
               "de/connectors/microsoft-365/teams",
               "de/connectors/airtable/airtable",
-              "de/connectors/zendesk/zendesk"
+              "de/connectors/zendesk/zendesk",
+              "de/connectors/bookstack/bookstack",
+              "de/connectors/zammad/zammad",
+              "de/connectors/mariadb/mariadb",
+              "de/connectors/postgres/postgres"
             ]
           },
           {
