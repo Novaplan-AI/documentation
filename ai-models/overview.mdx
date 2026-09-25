@@ -49,19 +49,19 @@ Only workspace **admins** and **owners** can access the AI Models settings page.
 
 ## Provider reference
 
-The table below lists every supported LLMs provider, the fields you must fill in, and example model name strings.
+The table below lists LLM providers, their configuration fields, and example model names. Model access varies by provider account, and each model must be tested with your Novaplan AI workspace before production use.
 
 | Provider | Required fields | Optional fields | Example model names |
 |---|---|---|---|
-| **OpenAI** | API Key, Model Name | — | `gpt-5`, `gpt-5-mini`, `gpt-5-nano` |
-| **Anthropic** | API Key, Model Name | — | `claude-opus-4-7`, `claude-sonnet-4-6`, `claude-haiku-4-6` |
+| **OpenAI** | API Key, Model Name | — | `gpt-6-astra`, `gpt-6-sol`, `gpt-6-luna` |
+| **Anthropic** | API Key, Model Name | — | `claude-opus-5-5`, `claude-sonnet-5`, `claude-haiku-4-5` |
 | **Gemini** | API Key, Model Name | — | `gemini-3-flash-preview`, `gemini-3.1-pro-preview` |
 | **Azure OpenAI** | Endpoint URL, API Key, Deployment Name, Model Name | — | `gpt-5`, `gpt-5-mini`, `gpt-5-nano` |
-| **Azure AI** | Endpoint URL, API Key, Model Name | — | `gpt-5.1`, `claude-sonnet-4-5`, `DeepSeek-V3.1` |
+| **Azure AI** | Endpoint URL, API Key, Model Name | — | Your Foundry deployment name; see the [Azure AI guide](/ai-models/llm/azure-ai) |
 | **Cohere** | API Key, Model Name | — | `command-a-03-2025` |
 | **Mistral** | API Key, Model Name | — | `mistral-large-latest` |
 | **Groq** | API Key, Model Name | — | `meta-llama/llama-4-scout-17b-16e-instruct` |
-| **xAI** | API Key, Model Name | — | `grok-3-latest` |
+| **xAI** | API Key, Model Name | — | `grok-4.7` |
 | **MiniMax** | API Key, Model Name | — | `MiniMax-M2.7`, `MiniMax-M2.7-highspeed` |
 | **Fireworks** | API Key, Model Name | — | `accounts/fireworks/models/kimi-k2-instruct` |
 | **Together** | API Key, Model Name | Endpoint URL | `deepseek-ai/DeepSeek-V3` |
@@ -71,7 +71,7 @@ The table below lists every supported LLMs provider, the fields you must fill in
 
 > **Azure OpenAI — Deployment Name:** This is the name you assigned when deploying the model in Azure AI Studio, not the model ID itself.
 >
-> **Azure AI — Endpoint URL format:** Use `https://<resource>.inference.ai.azure.com/anthropic` for Claude models, or `https://<resource>.cognitiveservices.azure.com/openai/v1/` for OpenAI, DeepSeek, and other models.
+> **Azure AI — Endpoint URL format:** Copy the endpoint shown for your Foundry deployment. Claude's Messages API commonly uses `https://<resource>.services.ai.azure.com/anthropic`; OpenAI-compatible deployments use a resource-specific `/openai/v1/` endpoint. Check the [Azure AI guide](/ai-models/llm/azure-ai) and confirm that Novaplan supports the deployment's API format.
 >
 > **OpenAI Compatible:** Use this for any provider that speaks the OpenAI API format (e.g. `https://api.together.xyz/v1/`).
 >
