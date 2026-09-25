@@ -23,6 +23,8 @@
               "de/system-overview/internal-services",
               "de/system-overview/mail-service",
               "de/system-overview/crawling-manager",
+              "de/system-overview/authentication",
+              "de/system-overview/connector-manager",
               "de/quickstart",
               "de/contact-us",
               "de/additional-resources/faq"

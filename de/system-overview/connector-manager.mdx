@@ -1,0 +1,45 @@
+---
+title: "Konnektorverwaltung: API-Referenz"
+description: "Konnektor-Konfiguration, OAuth-Verbindungen und Token-Lebenszyklus."
+---
+
+Der Connector Manager verwaltet Konnektor-Instanzen, Einstellungen und die OAuth-Verbindung zu externen Anwendungen. Die eigentliche Datenabholung erfolgt durch weitere Konnektordienste. Novaplan richtet den Kunden-Workspace und die benötigten Integrationen ein; diese Seite ist eine technische Referenz für freigegebene administrative Abläufe.
+
+## Komponenten und Zugriff
+
+Der Dienst speichert Konnektor-Metadaten, verschlüsselt sensible Konfiguration und informiert andere Dienste über Änderungen. Der verwaltete Workspace kann Redis oder etcd als Konfigurationsspeicher sowie Redis Streams oder Kafka als Event-Bus verwenden. Die konkrete Auswahl ist keine Einstellung, die Nutzende für eine Verbindung treffen müssen.
+
+Die meisten hier dokumentierten Aufrufe benötigen einen Bearer-Token. Einige Listen- und Konfigurationsfunktionen setzen Administratorrechte voraus. Interne Service-Aufrufe können zusätzlich den technischen Scope `FETCH_CONFIG` benötigen. OAuth-Secrets und Access Tokens gehören weder in Chats noch in ungeschützte Logs.
+
+## Endpunkte
+
+Alle Konnektorpfade beginnen mit `/api/v1/connectors`.
+
+| Methode und Pfad | Aufgabe |
+| --- | --- |
+| `GET /` | Verfügbare Konnektoren abrufen |
+| `GET /active` | Aktive Konnektoren abrufen |
+| `GET /inactive` | Inaktive Konnektoren abrufen |
+| `GET /config/:connectorName` | Konfiguration eines Konnektors lesen |
+| `PUT /config/:connectorName` | Konfiguration ändern |
+| `GET /schema/:connectorName` | Konfigurationsschema abrufen |
+| `POST /toggle/:connectorName` | Konnektor aktivieren oder deaktivieren |
+| `GET /:connectorName/oauth/authorize` | OAuth-Autorisierung beginnen |
+| `GET /:connectorName/oauth/callback` | Rückruf des Anbieters verarbeiten |
+| `POST /getTokenFromCode` | Autorisierungscode gegen Token tauschen |
+| `GET /filters/:connectorName` | Synchronisationsfilter lesen |
+| `POST /filters/:connectorName` | Synchronisationsfilter setzen |
+| `POST /internal/refreshIndividualConnectorToken` | Token intern erneuern |
+| `POST /updateAppConfig` | Anwendungskonfiguration intern aktualisieren |
+
+Die separate Zustandsprüfung liegt unter `GET /api/v1/health`. Die Antwortformate und verfügbaren Konnektoren hängen vom bereitgestellten Backend ab. Verwenden Sie für eine Datenquelle bevorzugt die jeweilige [Konnektor-Anleitung](/de/connectors/overview), statt interne Endpunkte direkt anzusprechen.
+
+## OAuth- und Token-Ablauf
+
+Bei OAuth leitet die Anwendung zur Autorisierung des externen Anbieters weiter. Nach dem Rückruf werden Code und Benutzeridentität geprüft, Tokens sicher gespeichert und die Konnektor-Instanz aktualisiert. Der Dienst kann Access Tokens erneuern oder widerrufen und entsprechende Ereignisse über den konfigurierten Event-Bus verteilen. Für Einzelheiten der Freigaben und Redirect URIs nutzen Sie die Anleitung der jeweiligen Integration.
+
+<Warning>
+  Aktivierung, Filter und Token-Erneuerung beeinflussen die synchronisierten Daten. Verwenden Sie diese administrativen Schnittstellen nur, wenn sie für Ihren Novaplan Enterprise Workspace freigegeben und Ihre Berechtigungen geprüft wurden.
+</Warning>
+
+Bei Verbindungsfehlern prüfen Sie Anbieterfreigaben, Redirect URI, gespeicherte Konfiguration und den Status des Konnektors. Für die serverseitige Analyse hilft [Novaplan Support](/de/contact-us).

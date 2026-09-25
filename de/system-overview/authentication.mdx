@@ -1,0 +1,48 @@
+---
+title: "Authentifizierungsdienst: API-Referenz"
+description: "Anmeldung, Sitzungen und Tokens in Novaplan AI."
+---
+
+Der Authentifizierungsdienst prüft Identitäten und unterstützt je nach Workspace-Konfiguration Passwort, Einmalcode (OTP), Google, Microsoft, Azure AD, OAuth und SAML SSO. Novaplan richtet die zugelassenen Methoden für den Kunden-Workspace ein. Diese Seite fasst die technischen Abläufe zusammen; sie ersetzt keine Freigabe zur direkten Nutzung interner Endpunkte.
+
+## Mehrstufige Anmeldung
+
+1. Der Client sendet die E-Mail-Adresse an `POST /api/v1/userAccount/initAuth`.
+2. Der Dienst erzeugt eine temporäre Sitzung und gibt ein `x-session-token` sowie die verfügbaren Anmeldemethoden zurück.
+3. Der Client sendet die gewählte Methode und die benötigten Daten an `POST /api/v1/userAccount/authenticate` und übergibt dabei `x-session-token`.
+4. Wenn ein weiterer Faktor verlangt wird, wiederholt der Client den Anmeldeschritt mit den angeforderten Daten. Nach erfolgreicher Anmeldung erhält er ein Access Token und ein Refresh Token.
+
+Temporäre Sitzungen werden in Redis verwaltet und nach Abschluss oder Ablauf gelöscht. Das Access Token dient API-Anfragen im Namen der angemeldeten Person; mit einem Refresh Token kann eine Sitzung fortgesetzt werden. Die tatsächlichen Laufzeiten und Methoden müssen für die bereitgestellte Novaplan-Version geprüft werden.
+
+## Endpunkte
+
+Die technische Referenz nennt folgende Pfade. Die meisten geschützten Aufrufe erwarten `Authorization: Bearer <token>`; interne Service-Aufrufe können eigene Scopes wie `PASSWORD_RESET`, `TOKEN_REFRESH` oder `FETCH_CONFIG` verlangen.
+
+| Methode und Pfad | Aufgabe |
+| --- | --- |
+| `POST /api/v1/userAccount/initAuth` | Anmeldung beginnen und mögliche Methoden ermitteln |
+| `POST /api/v1/userAccount/authenticate` | Einen Anmeldeschritt abschließen |
+| `POST /api/v1/userAccount/login/otp/generate` | Einmalcode anfordern |
+| `POST /api/v1/userAccount/oauth/exchange` | OAuth-Daten austauschen |
+| `POST /api/v1/userAccount/password/forgot` | Passwortzurücksetzung anstoßen |
+| `POST /api/v1/userAccount/password/reset/token` | Zurücksetzungstoken prüfen |
+| `POST /api/v1/userAccount/password/reset` | Passwort zurücksetzen |
+| `POST /api/v1/userAccount/refresh/token` | Access Token erneuern |
+| `POST /api/v1/userAccount/logout/manual` | Sitzung beenden |
+| `GET /api/v1/saml/signIn` | SAML-Anmeldung beginnen |
+| `POST /api/v1/saml/signIn/callback` | SAML-Antwort verarbeiten |
+| `POST /api/v1/saml/updateAppConfig` | SAML-Konfiguration administrativ ändern |
+| `GET /api/v1/orgAuthConfig/authMethods` | Erlaubte Anmeldemethoden abrufen |
+| `POST /api/v1/orgAuthConfig/updateAuthMethod` | Anmeldemethoden administrativ ändern |
+| `POST /api/v1/orgAuthConfig/` | Organisationskonfiguration anlegen |
+| `GET /api/v1/userAccount/internal/password/check` | Intern prüfen, ob Passwortanmeldung aktiviert ist |
+
+<Warning>
+  Endpunkte für SAML-Konfiguration, Organisationsauthentifizierung und interne Prüfungen sind nicht für gewöhnliche Kundenanwendungen bestimmt. Stimmen Sie deren Nutzung mit Novaplan ab. Tokens, Einmalcodes und Zurücksetzungslinks dürfen nicht protokolliert oder in Chats geteilt werden.
+</Warning>
+
+## Sicherheit und Fehlerbehebung
+
+Die Referenz beschreibt gehashte Passwörter, begrenzte Lebensdauer von Anmeldesitzungen, signierte Tokens sowie Schutz gegen wiederholte fehlgeschlagene Anmeldeversuche. Ein fehlender oder abgelaufener Sitzungs-Token, eine nicht erlaubte Methode oder ein zusätzlicher Faktor kann den Ablauf unterbrechen. Prüfen Sie bei Fehlern die für den Workspace aktivierte Methode, die verwendeten Header und den nächsten vom Dienst angeforderten Schritt.
+
+Für eigene Integrationen bietet die [OAuth-Anwendungsanleitung](/de/developer/oauth2) den vorgesehenen Freigabeweg. Bei Problemen mit einer produktiven Anmeldung hilft [Novaplan Support](/de/contact-us).

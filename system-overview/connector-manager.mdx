@@ -19,19 +19,19 @@ Authorization: Bearer YOUR_TOKEN
 
 ## Architecture Overview
 
-The Connector Manager Service is built on a Node.js backend with MongoDB for data persistence, Redis for caching, and ETCD for secure configuration storage. The service consists of several key components:
+The Connector Manager Service runs in the Node.js API. MongoDB stores connector metadata, while caching, encrypted configuration, and event transport use the backends selected for the managed environment. The service consists of several key components:
 
 - **Token Management** - Handles OAuth token lifecycle including creation, refresh, and revocation
 - **Connector Configuration** - Manages connector settings and credentials
-- **Event Broadcasting** - Kafka-based events for system integration
+- **Event Broadcasting** - Events over the configured message broker
 - **Health Monitoring** - Service health checks and dependency monitoring
 
 The service integrates with these components:
 
 - **Configuration Manager** - Manages encrypted configuration storage
 - **IAM Service** - Handles user authentication and authorization
-- **Kafka** - Event streaming for token and connector state changes
-- **ETCD** - Encrypted key-value storage for sensitive configurations
+- **Message broker** - Kafka or Redis Streams for token and connector state changes
+- **Key-value store** - Redis or etcd for encrypted sensitive configuration
 - **Backend Connector Service** - Python service that handles actual connector implementations
 
 ## Data Models
@@ -904,7 +904,7 @@ Exchange OAuth authorization code for access and refresh tokens (Google Workspac
 3. Verifies the ID token matches the authenticated user's email
 4. Stores credentials securely via Configuration Manager
 5. Creates or updates connector in MongoDB
-6. Publishes connector enabled event to Kafka
+6. Publishes a connector-enabled event to the configured message broker
 7. Determines enabled apps based on OAuth scopes received
 </Tab>
 
@@ -1165,10 +1165,10 @@ Retrieve the health status of the service and all its dependencies.
 
 **Dependencies Checked:**
 - **Redis** - Cache and session storage
-- **Kafka** - Event streaming for token and connector events
+- **Message broker** - Event streaming for token and connector events
 - **MongoDB** - Connector configuration and metadata storage
-- **ArangoDB** - Knowledge base service dependency
-- **KVStoreservice** - ETCD key-value store for encrypted configuration
+- **Graph backend** - Knowledge base service dependency where applicable
+- **Key-value store** - Redis or etcd for encrypted configuration
 </Tab>
 </Tabs>
 </Accordion>
@@ -1180,7 +1180,7 @@ Retrieve the health status of the service and all its dependencies.
 
 ## Event System
 
-The Connector Manager Service broadcasts events through Kafka to notify other services about token and connector state changes. These events trigger actions like connector synchronization, indexing updates, and audit logging.
+The Connector Manager Service broadcasts events through the configured message broker to notify other services about token and connector state changes. These events trigger actions like connector synchronization, indexing updates, and audit logging.
 
 ### Event Topics
 
@@ -1487,7 +1487,7 @@ const handleOAuthCallbackSchema = z.object({
 
 ## Configuration Management
 
-The Connector Manager Service uses ETCD as a key-value store for managing configurations securely. All sensitive information, such as OAuth client IDs/secrets and access tokens, are encrypted using AES-256 before storage.
+The Connector Manager Service uses the configured key-value store (Redis or etcd) for sensitive configuration. OAuth client IDs, secrets, and access tokens are encrypted before storage.
 
 ### Configuration Types
 
@@ -1514,7 +1514,7 @@ The service manages several types of configurations:
 
 ### Security Measures
 
-- All sensitive configuration data is encrypted using AES-256 before storage in ETCD
+- Sensitive configuration data is encrypted before storage in the configured key-value backend
 - Encryption keys are securely managed and not stored in plaintext
 - Scoped JWT tokens are used for internal service communication
 - Token refresh operations include retry logic with exponential backoff
@@ -1591,5 +1591,5 @@ The service provides automatic token management with the following features:
 1. **Token Acquisition** - OAuth flow handling and token exchange
 2. **Token Refresh** - Automatic refresh before expiration with retry logic
 3. **Token Revocation** - Secure token deletion and cleanup
-4. **Event Broadcasting** - Kafka events for token state changes
+4. **Event Broadcasting** - Events over the configured message broker for token state changes
 5. **Error Handling** - Retry logic and fallback mechanisms
