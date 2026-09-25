@@ -17,13 +17,15 @@ Novaplan richtet Ihren Workspace weitgehend für Sie ein. Die Atlassian-Anwendun
 | **Nutzer und Gruppen** | Zuordnung von Konten und Gruppenmitgliedschaften |
 | **Berechtigungen** | Bereichsrechte und Einschränkungen einzelner Inhalte |
 
-Der Konnektor berücksichtigt Confluence-Zugriffsrechte. Für die Zuordnung einer Person benötigt Novaplan AI ihre in Atlassian sichtbare E-Mail-Adresse.
+Der Konnektor berücksichtigt Confluence-Zugriffsrechte. Für die Zuordnung einer Person benötigt Novaplan AI eine auflösbare Atlassian-Identität; die allgemeine Freigabe aller Profil-E-Mail-Adressen ist dafür nicht immer erforderlich.
 
-## Vor dem Start: E-Mail-Sichtbarkeit prüfen
+<span id="vor-dem-start-e-mail-sichtbarkeit-prüfen"></span>
 
-Diese Voraussetzung gilt für **OAuth 2.0** und **API Token**. Ist die E-Mail-Adresse für die Integration verborgen, kann Novaplan AI das Confluence-Konto nicht zuordnen; dadurch können berechtigte Inhalte unsichtbar bleiben.
+## Vor dem Start: Kontozuordnung prüfen
 
-Jede betroffene Person öffnet **Account Settings → Profile and visibility → Contact → Who can see this?** in ihrem Atlassian-Konto und wählt eine Sichtbarkeit, die die Zuordnung ermöglicht, beispielsweise **Your organization**. Wählen Sie **Anyone** nur, wenn dies zu Ihren Datenschutzvorgaben passt. **Only you and admins** kann die Zuordnung verhindern. Laut Quellleitfaden muss jede Person diese Einstellung selbst ändern. Weitere Hinweise finden Sie in der [Atlassian-Dokumentation zur E-Mail-Sichtbarkeit](https://support.atlassian.com/confluence-cloud/docs/configure-user-email-visibility/).
+Diese Prüfung gilt für **OAuth 2.0** und **API Token**. Die zugängliche Implementierung überspringt Personen ohne E-Mail-Adresse in der Confluence-Nutzersuche. Sie kann aber aktive Workspace-Nutzende über eine Jira-Suche ihrer E-Mail-Adresse zuordnen. Bei OAuth setzt dies **Grant Jira user access** und `read:jira-user` in der Atlassian-Anwendung voraus. Fehlen Jira-Zugriff oder eine eindeutige Antwort, kann die Zuordnung weiterhin scheitern. Prüfen Sie das mit betroffenen Testkonten, bevor Sie eine Änderung der Profilsichtbarkeit verlangen.
+
+Falls die Zuordnung im Test scheitert und eine Sichtbarkeitsänderung nach Prüfung nötig ist, öffnet die betroffene Person **Account Settings → Profile and visibility → Contact → Who can see this?**. **Your organization** kann eine passende Wahl sein, sofern die Datenschutzvorgaben dies erlauben; **Anyone** macht die Adresse breiter sichtbar. **Only you and admins** kann die E-Mail-Ausgabe in Confluence einschränken, schließt eine erfolgreiche Jira-Ersatzsuche aber nicht aus. Die Einstellung ist personenbezogen. Weitere Hinweise finden Sie in der [Atlassian-Dokumentation zur E-Mail-Sichtbarkeit](https://support.atlassian.com/confluence-cloud/docs/configure-user-email-visibility/).
 
 ## Authentifizierung wählen
 

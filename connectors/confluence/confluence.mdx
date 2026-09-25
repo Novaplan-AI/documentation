@@ -52,22 +52,19 @@ Confluence is Atlassian's team workspace and documentation platform, widely used
 
 The Confluence connector supports **two authentication methods**. Both sync the same data — pick whichever fits your rollout.
 
-### Prerequisite: Email Visibility
+<span id="prerequisite-email-visibility"></span>
+
+### Verify Confluence account mapping
 
 <Warning>
-  <div className="text-lg font-semibold">
-    **Each user in your organization must set their email address to be visible** in order for Novaplan AI to correctly assign permissions and make records visible to them.
-  </div>
+  Test account mapping with representative users before asking everyone to change Atlassian profile visibility. Making an email visible is a privacy decision and may not be necessary when the connector can resolve the account through Jira.
 </Warning>
 
-This prerequisite applies to **both** authentication methods (OAuth and API Token).
+This check applies to **both** authentication methods (OAuth and API Token).
 
-**Why email visibility matters.** Novaplan AI uses email addresses to match Confluence users with their permissions. If a user's email is hidden:
-- Novaplan AI cannot match the user's Confluence account to their Novaplan AI account
-- Permissions cannot be synced correctly for that user
-- The user will not see any Confluence content in Novaplan AI
+**Why mapping matters.** Novaplan AI uses email addresses to match Confluence users with their permissions. The accessible connector skips users whose email is absent from Confluence's user search, but it can also try to link active workspace users through Jira user search. For OAuth, that fallback requires **Grant Jira user access** and the `read:jira-user` scope in the Atlassian app. The fallback may fail if Jira is unavailable, lacks permission, or cannot find the user; verify the deployed result before changing profile settings.
 
-**How to configure email visibility.** Every user must complete these steps in their Atlassian account:
+**If an affected user needs to change visibility**, they can review these settings in their Atlassian account:
 
 1. Click your **profile picture** in the top right → select **Account Settings**.
 
@@ -81,7 +78,7 @@ This prerequisite applies to **both** authentication methods (OAuth and API Toke
 
 2. Select the **Profile and visibility** tab.
 3. Scroll down to the **Contact** section.
-4. In the **Who can see this?** dropdown for your email address, select either **Anyone** (recommended) or **Your organization**.
+4. In the **Who can see this?** dropdown for your email address, consider **Your organization** if your administrator confirms that a visibility change is needed and your privacy policy permits it. **Anyone** makes the address more broadly visible.
 
 <div className="text-center">
   <img
@@ -92,13 +89,13 @@ This prerequisite applies to **both** authentication methods (OAuth and API Toke
 </div>
 
 <Warning>
-  **Do not select "Only you and admins"** — this will prevent Novaplan AI from accessing your email address and matching you to permissions, making all records invisible to you.
+  **Only you and admins** may prevent Confluence user search from returning the address, but the Jira lookup can still resolve some users when configured. Test the mapping rather than assuming success or failure.
 </Warning>
 
 📖 **Official documentation:** [Configure User Email Visibility in Confluence](https://support.atlassian.com/confluence-cloud/docs/configure-user-email-visibility/)
 
 <Info>
-  This is a **per-user setting** that must be configured by each individual user. Administrators cannot change this setting for other users. We recommend communicating this requirement to your team during the Confluence connector rollout.
+  Profile email visibility is a **per-user setting**. Coordinate a change with the affected person and your privacy administrator only after a mapping test shows it is needed.
 </Info>
 
 ### Choose an authentication method
@@ -710,7 +707,7 @@ The Confluence connector syncs the following data from your Confluence Cloud wor
 | **Credentials model** | The account authorizing this connector instance grants consent; the connector maintains its OAuth credentials | The token-owning account supplies one API token for the connector instance |
 | **Prerequisites** | Atlassian Developer Console admin access | Any Atlassian account |
 
-Both methods sync the same data through one configured Team connector instance. They do not require every Novaplan AI viewer to authorize the connector separately. Confluence email visibility and mapped source permissions still matter for what each viewer can find; agree on the authenticating account and method with Novaplan and your Atlassian administrator.
+Both methods sync the same data through one configured Team connector instance. They do not require every Novaplan AI viewer to authorize the connector separately. Verified account mapping and source permissions determine what each viewer can find; agree on the authenticating account and method with Novaplan and your Atlassian administrator.
 
 </Accordion>
 

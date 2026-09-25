@@ -17,13 +17,15 @@ Novaplan richtet Ihren Workspace weitgehend für Sie ein. Die Atlassian-Anwendun
 | **Anhänge** | Dateien und Bilder an Vorgängen und Kommentaren |
 | **Nutzer, Gruppen und Projektrollen** | Zuordnung der Zugriffsrechte in Novaplan AI |
 
-Der Konnektor übernimmt Projekt- und Vorgangsberechtigungen. Damit Novaplan AI Jira-Konten zu Personen zuordnen kann, muss die E-Mail-Adresse für die Integration sichtbar sein.
+Der Konnektor übernimmt Projekt- und Vorgangsberechtigungen. Damit Novaplan AI Jira-Konten zu Personen zuordnen kann, muss deren Identität im Workspace aufgelöst werden. Eine allgemeine Freigabe aller Profil-E-Mail-Adressen ist dafür laut zugänglichem Konnektorcode nicht zwingend erforderlich.
 
-## Vor dem Start: E-Mail-Sichtbarkeit prüfen
+<span id="vor-dem-start-e-mail-sichtbarkeit-prüfen"></span>
 
-Die E-Mail-Zuordnung gilt für **OAuth 2.0** und **API Token**. Wenn Jira die E-Mail-Adresse einer Person für die Integration verbirgt, können Datensätze trotz vorhandener Jira-Berechtigung in Novaplan AI unsichtbar bleiben.
+## Vor dem Start: Kontozuordnung prüfen
 
-Jede betroffene Person öffnet in ihrem Atlassian-Konto **Account Settings → Profile and visibility → Contact → Who can see this?** und wählt eine Sichtbarkeit, die die benötigte Zuordnung ermöglicht, beispielsweise **Your organization**. Verwenden Sie **Anyone** nur, wenn dies zu Ihren Datenschutzvorgaben passt. **Only you and admins** kann die Zuordnung verhindern. Diese Einstellung wird pro Person vorgenommen; Ihre Administration kann sie laut Quellleitfaden nicht stellvertretend für andere Personen ändern. Weitere Hinweise stehen in der [Atlassian-Dokumentation zur Profilsichtbarkeit](https://support.atlassian.com/atlassian-account/docs/update-your-profile-and-visibility-settings/).
+Die Kontozuordnung gilt für **OAuth 2.0** und **API Token**. Der zugängliche Konnektorcode nutzt zunächst von Jira gelieferte E-Mail-Adressen, dann gespeicherte Zuordnungen und bei Bedarf eine Jira-Suche nach den E-Mail-Adressen aktiver Workspace-Nutzender. Eine verborgene Profiladresse verhindert die Zuordnung daher nicht automatisch. Diese Ersatzsuche kann je nach Jira-API-Zugriff, Konto und produktiver Konnektorversion scheitern. Prüfen Sie die Sichtbarkeit mit betroffenen Testkonten, bevor Sie eine Änderung der Profileinstellungen verlangen.
+
+Falls die Zuordnung im Test nicht gelingt und eine Sichtbarkeitsänderung nach Prüfung nötig ist, öffnet die betroffene Person in ihrem Atlassian-Konto **Account Settings → Profile and visibility → Contact → Who can see this?**. **Your organization** kann eine passende Wahl sein, sofern die Datenschutzvorgaben dies erlauben; **Anyone** macht die Adresse breiter sichtbar. **Only you and admins** kann die Adressausgabe in der Jira-Sammelabfrage einschränken, schließt eine erfolgreiche Ersatzsuche aber nicht aus. Die Einstellung ist personenbezogen. Weitere Hinweise stehen in der [Atlassian-Dokumentation zur Profilsichtbarkeit](https://support.atlassian.com/atlassian-account/docs/update-your-profile-and-visibility-settings/).
 
 ## Authentifizierung wählen
 
@@ -127,7 +129,18 @@ Diese persönliche Verbindung dient der Suche der einrichtenden Person und erset
 
 Ein Lauf synchronisiert zunächst Nutzer und Gruppen, dann Projekte, Projektrollen, Vorgänge, Kommentare und Anhänge. Projekt- und vorgangsbezogene Rechte werden dabei übernommen. Der erste Lauf, ein geänderter Filter oder ein manuell gestarteter vollständiger Lauf führt eine umfassende Synchronisierung aus. Spätere Läufe verwenden einen gespeicherten Fortschrittspunkt und holen geänderte Vorgänge, beispielsweise über JQL mit `updated >= "last_sync_time"`.
 
+Im zugänglichen Quellcode führt `run_sync` die folgenden Schritte aus:
+
+| Schritt | Interne Methode | Aufgabe |
+| --- | --- | --- |
+| Nutzer und Gruppen | `_fetch_users`, `_sync_user_groups` | Jira-Konten zuordnen und Gruppenmitgliedschaften übernehmen |
+| Projekte und Rollen | `_fetch_filtered_projects`, `_sync_project_roles`, `_sync_project_lead_roles` | Den gewählten Projektumfang und seine Berechtigungen vorbereiten |
+| Vorgänge | `_sync_all_project_issues` | Vorgänge, Kommentare und Anhänge der gewählten Projekte synchronisieren |
+| Löschungen | `_handle_issue_deletions` | Jira-Audit-Ereignisse prüfen und entfernte Vorgänge bereinigen |
+
 Die technische Implementierung verarbeitet Vorgänge in Batches (im Quellleitfaden standardmäßig 100 pro Anfrage), wandelt ADF-Beschreibungen in durchsuchbaren Inhalt um und ordnet Kommentare und Anhänge ihren Vorgängen zu. Löschungen werden über `ISSUE_DELETE`-Ereignisse aus Jiras Audit Log erkannt. Projektbezogene Fortschrittspunkte helfen, abgebrochene Läufe fortzusetzen.
+
+Die Audit-Log-Prüfung speichert einen eigenen Fortschrittspunkt nur nach einem vollständig erfolgreichen Lauf. Bei einem unvollständigen Audit-Abruf oder einem Verarbeitungsfehler wird dasselbe Zeitfenster beim nächsten Lauf erneut geprüft. Diese Methodennamen beschreiben die zugängliche Implementierung und sind keine öffentliche Novaplan-AI-API.
 
 ## Fehlerbehebung
 

@@ -65,22 +65,19 @@ The connector indexes the following content for AI-powered search:
 
 The Jira connector supports **two authentication methods**. Both sync the same data — pick whichever fits your rollout.
 
-### Prerequisite: Email Visibility
+<span id="prerequisite-email-visibility"></span>
+
+### Verify Jira account mapping
 
 <Warning>
-  <div className="text-lg font-semibold">
-    **Each user in your organization must set their email address to be visible** in order for Novaplan AI to correctly assign permissions and make records visible to them.
-  </div>
+  Test account mapping and search visibility with representative users before asking everyone to change Atlassian profile visibility. Making an email visible is a privacy decision for each person and may not be necessary for the deployed connector.
 </Warning>
 
-This prerequisite applies to **both** authentication methods (OAuth and API Token).
+This check applies to **both** authentication methods (OAuth and API Token).
 
-**Why email visibility matters.** Novaplan AI uses email addresses to match Jira users with their permissions. If a user's email is hidden:
-- Novaplan AI cannot identify the user when syncing permissions
-- Records will appear invisible to that user even if they have proper access in Jira
-- The user won't be able to see any content they should have access to
+**Why mapping matters.** Novaplan AI uses email addresses to associate Jira users and their permissions with workspace users. The accessible connector first reads emails returned by Jira, then tries cached mappings and a per-email Jira lookup for active workspace users whose profile email was not returned. A hidden profile email therefore does not automatically mean that mapping fails. The fallback still depends on the Jira API response, account permissions, and the deployed connector version; verify the result with the affected user before changing their privacy setting.
 
-**How to configure email visibility.** Every user must complete these steps in their Atlassian account:
+**If an affected user needs to change visibility**, they can review these settings in their Atlassian account:
 
 1. Click your **profile picture** in the top right → select **Account Settings**.
 
@@ -94,7 +91,7 @@ This prerequisite applies to **both** authentication methods (OAuth and API Toke
 
 2. Select the **Profile and visibility** tab.
 3. Scroll down to the **Contact** section.
-4. In the **Who can see this?** dropdown for your email address, select either **Anyone** (recommended) or **Your organization**.
+4. In the **Who can see this?** dropdown for your email address, consider **Your organization** if your administrator confirms that a visibility change is needed and your privacy policy permits it. **Anyone** makes the address more broadly visible.
 
 <div className="text-center">
   <img
@@ -105,13 +102,13 @@ This prerequisite applies to **both** authentication methods (OAuth and API Toke
 </div>
 
 <Warning>
-  **Do not select "Only you and admins"** — this will prevent Novaplan AI from accessing your email address and matching you to permissions, making all records invisible to you.
+  **Only you and admins** may prevent a bulk Jira user listing from returning the address, but the accessible connector also attempts a per-email lookup. Test the mapping rather than assuming either success or failure for your deployed workspace.
 </Warning>
 
 📖 **Official documentation:** [Update your profile and visibility settings](https://support.atlassian.com/atlassian-account/docs/update-your-profile-and-visibility-settings/)
 
 <Info>
-  This is a **per-user setting** that must be configured by each individual user. Administrators cannot change this setting for other users. We recommend communicating this requirement to your team during the Jira connector rollout.
+  Profile email visibility is a **per-user setting**. Coordinate a change with the affected person and your privacy administrator only after a mapping test shows it is needed.
 </Info>
 
 ### Choose an authentication method
@@ -685,10 +682,10 @@ The `run_sync` method executes a complete synchronization cycle in a specific or
 |------|----------|-------------|---------|
 | 1 | `_fetch_users()` | Users | Sync all Jira users with their profiles |
 | 2 | `_sync_user_groups()` | Groups | Sync groups and user-group memberships |
-| 3 | `_fetch_projects()` | Projects | Fetch projects (filtered if configured) |
+| 3 | `_fetch_filtered_projects()` | Projects | Fetch projects under the configured project filter |
 | 4 | `_sync_project_roles()` | Roles | Sync project role assignments |
 | 5 | `_sync_project_lead_roles()` | Lead Roles | Assign project lead permissions |
-| 6 | `_sync_project_issues()` | Issues | Sync issues, comments, and attachments |
+| 6 | `_sync_all_project_issues()` | Issues | Run issue, comment, and attachment sync across the selected projects |
 | 7 | `_handle_issue_deletions()` | Deletions | Detect and remove deleted issues |
 
 ### Full sync vs incremental sync
@@ -793,8 +790,8 @@ Check these in order:
 1. **Viewer identity or Jira access does not match** — the viewer's Jira email or project permissions may not map to their Novaplan AI account. The account authorizing the shared connector does not have to match every viewer.
    - **Fix:** ask your administrator to check the affected viewer's account email and Jira access, then confirm the connector's designated account can read the project.
 
-2. **Email visibility not set** — if your Atlassian email visibility is set to *Only you and admins*, Novaplan AI can't match you to Jira permissions and no records will be visible.
-   - **Fix:** set it to **Anyone** or **Your organization** (see the *Prerequisite: Email Visibility* section above).
+2. **Jira account mapping is unresolved** — a hidden email may need the connector's per-email lookup, which can fail because of Jira API access or an account mismatch.
+   - **Fix:** ask your administrator to test the affected account mapping and Jira lookup. Discuss a profile visibility change with the user only if that test shows it is necessary (see [Verify Jira account mapping](#verify-jira-account-mapping)).
 
 3. **Verify in All Records** — go to **All Records** in Novaplan AI and confirm the Jira issues you expect are actually present. If they're missing, the sync hasn't reached them yet — check sync status in **Settings → Connectors**.
 
