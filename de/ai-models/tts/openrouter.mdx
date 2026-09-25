@@ -1,0 +1,22 @@
+---
+title: "OpenRouter Text-zu-Sprache"
+description: "Sprachmodelle über OpenRouter für die Ausgabe in Novaplan AI konfigurieren."
+---
+
+# OpenRouter Text-zu-Sprache konfigurieren
+
+OpenRouter kann Text-zu-Sprache-Modelle verschiedener Anbieter über einen gemeinsamen API-Schlüssel bereitstellen. Novaplan unterstützt Sie bei der Einrichtung.
+
+## Erforderliche Angaben
+
+**API Key:** Erstellen Sie unter **Keys** in Ihrem [OpenRouter-Konto](https://openrouter.ai/) einen Schlüssel. Er beginnt üblicherweise mit `sk-or-`. Bewahren Sie ihn geschützt auf.
+
+**Model Name:** Verwenden Sie die genaue ID eines aktuell angebotenen TTS-Modells im Format `anbieter/modell`, beispielsweise `openai/gpt-4o-mini-tts-2025-12-15`. Prüfen Sie den [OpenRouter-Modellkatalog](https://openrouter.ai/models) und den Zugang Ihres Kontos.
+
+## Optionale Angaben
+
+- **Voice:** Stimme für die erzeugte Ausgabe. Die verfügbaren Werte hängen vom gewählten Modell ab.
+- **Audio Format:** Containerformat wie `mp3`, `opus`, `aac`, `flac`, `wav` oder `pcm`. MP3 ist häufig die am breitesten abspielbare Wahl.
+- **Model Friendly Name:** Anzeigename für die Konfiguration.
+
+Für Sprachmodelle zur Textgenerierung gibt es eine separate [OpenRouter-Anleitung](/de/ai-models/llm/openrouter). [Novaplan Support](/de/contact-us) hilft bei der Einrichtung.

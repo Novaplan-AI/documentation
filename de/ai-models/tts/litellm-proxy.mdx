@@ -1,0 +1,22 @@
+---
+title: "LiteLLM Proxy Text-zu-Sprache"
+description: "Sprachausgabe über LiteLLM Proxy mit Novaplan AI verbinden."
+---
+
+# LiteLLM Proxy Text-zu-Sprache konfigurieren
+
+Novaplan AI kann über einen LiteLLM Proxy Text in gesprochenes Audio umwandeln. Ihre Administration betreibt den Proxy und richtet dort das TTS-Modell ein; Novaplan unterstützt Sie bei der Anbindung.
+
+## Voraussetzung
+
+Der erreichbare Proxy muss mindestens ein TTS-Modell in seiner `model_list` anbieten. Die [LiteLLM-Anleitung für Sprachmodelle](/de/ai-models/llm/litellm-proxy) erklärt den gemeinsamen Proxy-Zugang.
+
+## Erforderliche Angaben
+
+| Feld | Bedeutung |
+| --- | --- |
+| **Endpoint URL** | Erreichbare Proxy-Adresse. Die Voreinstellung lautet `http://host.docker.internal:4000`; für andere Netzwerke tragen Sie die tatsächliche Adresse ein. |
+| **API Key** | `master_key` oder gültiger virtueller Schlüssel des LiteLLM Proxys. |
+| **Model Name** | Exakter `model_name` des TTS-Modells in der Proxy-Konfiguration, beispielsweise `tts-1` oder `tts-1-hd`. |
+
+**Voice**, **Audio Format** und **Model Friendly Name** sind optional. Die verfügbaren Stimmen hängen vom hinterlegten Modell ab. Als Audioformate kommen unter anderem `mp3`, `opus`, `aac`, `flac`, `wav` und `pcm` infrage. `host.docker.internal` funktioniert nur in einer dafür eingerichteten Containerumgebung; stimmen Sie die Netzadresse mit Ihrer Administration ab. [Novaplan Support](/de/contact-us) hilft bei der Anbindung.

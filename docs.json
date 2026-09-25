@@ -154,6 +154,15 @@
                   "de/ai-models/image-generation/openrouter",
                   "de/ai-models/image-generation/litellm-proxy"
                 ]
+              },
+              {
+                "group": "Text-zu-Sprache",
+                "pages": [
+                  "de/ai-models/tts/openai",
+                  "de/ai-models/tts/gemini",
+                  "de/ai-models/tts/openrouter",
+                  "de/ai-models/tts/litellm-proxy"
+                ]
               }
             ]
           },
