@@ -37,13 +37,17 @@ Novaplan übernimmt den Großteil der Einrichtung. Die Schritte bleiben als Refe
   Übernehmen Sie die Redirect URI exakt aus Ihrem Workspace. Eine abweichende Adresse verhindert die Authentifizierung.
 </Warning>
 
-6. Fügen Sie auf der OAuth-Einwilligungsseite die in der vorhandenen Toolset-Anleitung genannten Berechtigungen hinzu:
+6. Prüfen Sie auf der OAuth-Einwilligungsseite die von der zugänglichen Toolset-Implementierung angeforderten Berechtigungen:
 
 | Scope | Zweck laut vorhandener Anleitung |
 | --- | --- |
 | `https://www.googleapis.com/auth/calendar` | Kalenderzugriff. |
 | `https://www.googleapis.com/auth/calendar.events` | Termine verwalten. |
-| `https://www.googleapis.com/auth/gmail.send` | Einladungen und Benachrichtigungen senden. |
+| `https://www.googleapis.com/auth/gmail.send` | Von der Implementierung angeforderte Gmail-Sendeberechtigung. |
+
+<Warning>
+  Die aufgeführten Tools führen Kalenderaktionen aus; eine gesonderte Gmail-Sendeaktion ist nicht aufgeführt. Klären Sie mit Novaplan vor der Freigabe, welche Scopes das bereitgestellte Enterprise-Toolset tatsächlich benötigt. Aus dieser Liste allein folgt nicht, dass Kalendereinladungen `gmail.send` benötigen.
+</Warning>
 
 7. Tragen Sie **Client ID** und **Client Secret** in Novaplan AI ein und wählen Sie **Authenticate**.
 

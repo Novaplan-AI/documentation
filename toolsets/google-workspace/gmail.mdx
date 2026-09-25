@@ -104,10 +104,14 @@ The Gmail toolset enables AI agents to send, read, and manage emails in Gmail.
 1. On the **Scopes** page, click **"Add or Remove Scopes"**
 2. Search and add these Gmail API scopes:
 
-**Required Scopes:**
+**Scopes requested by the accessible toolset implementation:**
 - `https://www.googleapis.com/auth/gmail.send` - Send emails
 - `https://www.googleapis.com/auth/gmail.readonly` - Read emails
-- `https://www.googleapis.com/auth/gmail.modify` - Modify labels and metadata
+- `https://www.googleapis.com/auth/gmail.modify` - Broader mailbox modification permission requested by the implementation
+
+<Warning>
+  The listed Gmail tools do not include a label-management action. Confirm with Novaplan why the deployed Enterprise toolset requests `gmail.modify` before approving this broader permission.
+</Warning>
 
 3. Click **"Update"** and **"Save and Continue"**
 
@@ -194,7 +198,7 @@ The Gmail toolset enables AI agents to send, read, and manage emails in Gmail.
 | **Data Flow** | One-way (import data into Novaplan AI) | Two-way (read and write via API) |
 | **When to Use** | Query/search email history and conversations | Send emails, manage messages, create drafts |
 
-**Example:** Use **Gmail Connector** to search past email conversations. Use **Gmail Toolset** to let agents send replies or forward messages.
+**Example:** Use **Gmail Connector** to search past email conversations. Use **Gmail Toolset** to let agents draft, send, or reply to messages. The listed tools do not include a dedicated forwarding action.
 
 </Accordion>
 

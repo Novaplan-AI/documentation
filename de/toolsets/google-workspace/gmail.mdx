@@ -30,13 +30,17 @@ Novaplan übernimmt den Großteil der Einrichtung. Diese Schritte sind auch als 
 <img src="/images/connectors/googleWorkspace/enterprise/apis.png" alt="Gmail API aktivieren" />
 
 3. Richten Sie unter **APIs & Services → OAuth consent screen** die Einwilligungsseite ein. Wählen Sie den passenden Nutzertyp (**External** oder **Internal** für Google Workspace) und tragen Sie etwa **Novaplan AI Gmail Toolset** als App-Namen sowie die zuständigen Kontaktadressen ein.
-4. Fügen Sie die benötigten Berechtigungen hinzu:
+4. Prüfen Sie die von der zugänglichen Toolset-Implementierung angeforderten Berechtigungen:
 
 | Scope | Zweck |
 | --- | --- |
 | `https://www.googleapis.com/auth/gmail.send` | Nachrichten senden. |
 | `https://www.googleapis.com/auth/gmail.readonly` | Nachrichten lesen. |
-| `https://www.googleapis.com/auth/gmail.modify` | Nachrichten und Labels bearbeiten. |
+| `https://www.googleapis.com/auth/gmail.modify` | Umfangreichere Berechtigung zur Änderung des Postfachs. |
+
+<Warning>
+  Die aufgeführten Gmail-Tools enthalten keine Aktion zum Bearbeiten von Labels. Klären Sie mit Novaplan, weshalb das bereitgestellte Enterprise-Toolset `gmail.modify` anfordert, bevor Sie diese weitergehende Berechtigung freigeben.
+</Warning>
 
 5. Öffnen Sie in Novaplan AI **Settings → Toolsets → Gmail → Configure** und kopieren Sie die **Redirect URI**.
 

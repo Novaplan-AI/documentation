@@ -34,6 +34,7 @@ The Google Drive toolset enables AI agents to manage files and folders in Google
 
 - List and search files across Drive
 - View file details and metadata
+- Read supported file content when the agent has access
 - Create folders and organize content
 - Check file permissions and sharing settings
 - Access shared drives
@@ -51,6 +52,11 @@ The Google Drive toolset enables AI agents to manage files and folders in Google
 | `get_drive_info` | Get information about the user's Drive |
 | `get_shared_drives` | Get list of shared drives |
 | `get_file_permissions` | Get permissions for a specific file |
+| `get_file_content` | Read the text content of a supported file by ID |
+
+<Info>
+  `get_file_content` supports common document and text formats, including Google Docs, Sheets, and Slides. The accessible tool implementation rejects folders, unsupported Google Workspace formats, and files larger than 50 MB. Confirm the available tools and limits in your Enterprise workspace before relying on this action.
+</Info>
 
 ---
 
@@ -173,9 +179,9 @@ Add these OAuth scopes in the **OAuth consent screen > Scopes** section:
 |--------|----------------|---------------|
 | **Purpose** | Sync and index files for search | Enable agents to perform file actions |
 | **Data Flow** | One-way (import data into Novaplan AI) | Two-way (read and write via API) |
-| **When to Use** | Query/search files and folders | Create files, manage folders |
+| **When to Use** | Query indexed files and folders | Search Drive, read supported files, or create folders |
 
-**Example:** Use **Drive Connector** to search and retrieve document content. Use **Drive Toolset** to let agents create new documents or manage folders.
+**Example:** Use **Drive Connector** to search indexed documents. Use **Drive Toolset** to inspect a Drive file or create a folder. The tools listed here do not include document creation.
 
 </Accordion>
 
@@ -186,7 +192,7 @@ Add these OAuth scopes in the **OAuth consent screen > Scopes** section:
 ## Usage Tips
 
 **How do I find files?**  
-Ask your agent to "search Drive for [filename]" or "find my presentation about Q4 results". The agent searches both file names and content.
+Ask your agent to "search Drive for [filename]". The Drive tool searches file names for plain-text queries; a structured Drive query can use other supported fields. To read a supported file's content, ask the agent to open the file it found.
 
 **How do I create folders?**  
 Ask to "create a folder called Project Files" and specify the parent folder if needed. Folders help organize your Drive content.

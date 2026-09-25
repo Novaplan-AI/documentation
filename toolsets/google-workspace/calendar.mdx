@@ -119,10 +119,14 @@ The Google Calendar toolset enables AI agents to manage calendar events and sche
 
 Add these OAuth scopes in the **OAuth consent screen > Scopes** section:
 
-**Required Scopes:**
+**Scopes requested by the accessible toolset implementation:**
 - `https://www.googleapis.com/auth/calendar` - Full calendar access
 - `https://www.googleapis.com/auth/calendar.events` - Manage events
-- `https://www.googleapis.com/auth/gmail.send` - Send calendar invites and notifications
+- `https://www.googleapis.com/auth/gmail.send` - Gmail send permission requested by the implementation
+
+<Warning>
+  The listed tools perform calendar actions; they do not expose a separate Gmail send action. Confirm with Novaplan which scopes the deployed Enterprise toolset actually requires before approving the Gmail permission. Do not infer that calendar invitations alone require `gmail.send` from this list.
+</Warning>
 
 <div id="step-7-configure-in-novaplan-ai" />
 
