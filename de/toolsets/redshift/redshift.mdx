@@ -28,7 +28,7 @@ Das Redshift-Toolset erlaubt Agenten Live-Abfragen gegen eine Amazon-Redshift-Da
 
 Sie benötigen einen Redshift-Endpunkt, den Datenbanknamen und einen aus der Novaplan-Umgebung erreichbaren Port (standardmäßig `5439`). Der **Host** ist nur der DNS-Name vor `:`; **Port** und **Database** werden getrennt eingetragen. Bei einem Endpunkt wie `redshift.example.amazonaws.com:5439/analytics` wären dies `redshift.example.amazonaws.com`, `5439` und `analytics`.
 
-Redshift Serverless kann über Namespace und Workgroup bereitgestellt werden. Die technische Quellanleitung enthält hierfür ein Testbeispiel mit öffentlicher Erreichbarkeit. Für einen verwalteten Novaplan-Workspace müssen die tatsächliche Netzwerkanbindung, Sicherheitsgruppe und erlaubte Quelladressen von Novaplan und Ihrer AWS-Administration festgelegt werden; eine Regel für **My IP** Ihres Laptops genügt dafür möglicherweise nicht. Eine öffentliche Freigabe ist nicht automatisch erforderlich.
+Wenn bereits ein freigegebener Redshift-Cluster oder eine Workgroup vorhanden ist, verwenden Sie deren Endpunkt und Datenbank; für dieses Toolset muss keine neue Umgebung erstellt werden. Redshift Serverless kann für einen gesonderten Test über Namespace und Workgroup bereitgestellt werden. Stimmen Sie Ressourcen, Kapazität und Kosten vorher mit Ihrer AWS-Administration ab. Für einen verwalteten Novaplan-Workspace müssen die tatsächliche Netzwerkanbindung, Sicherheitsgruppe und erlaubte Quelladressen von Novaplan und Ihrer AWS-Administration festgelegt werden; eine Regel für **My IP** Ihres Laptops genügt dafür möglicherweise nicht. Eine öffentliche Freigabe ist nicht automatisch erforderlich.
 
 ## Instanz durch Administratoren anlegen
 

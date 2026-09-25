@@ -57,24 +57,24 @@ The Redshift toolset lets agents query your Amazon Redshift database.
 
 <AccordionGroup>
 
-<Accordion title="Step 1: Set up Redshift Serverless in AWS" icon="database">
+<Accordion title="Step 1: Prepare a Redshift database and network access" icon="database">
+
+If your organization already has a Redshift cluster or workgroup, use its approved endpoint and database; do not create another one for this toolset. The following Serverless names are only an example for an administrator preparing a separate test environment. Confirm resource creation, capacity, and cost with your AWS administrator.
 
 ### Create namespace and workgroup
 
-1. Open AWS Console and go to **Amazon Redshift**.
-2. Click **Try Amazon Redshift Serverless free trial**.
-3. Select **Customize settings**.
-4. Under **Namespace**, set:
+1. If a new test environment has been approved, open **Amazon Redshift** in the AWS Console and create a Serverless namespace and workgroup using your organization's process.
+2. Under **Namespace**, set:
    - **Namespace name**: `redshift-dev`
    - **Database name**: `dev`
    - **Admin username**: for example `root`
    - **Password**: choose **Add password manually** and set a password
    - Create or attach an IAM role for Redshift access
-5. Under **Workgroup**, set:
+3. Under **Workgroup**, set:
    - **Workgroup name**: `redshift-dev-wg`
-   - **RPU**: change from `128` to `16` for testing
+   - **Capacity**: use the setting approved by your AWS administrator for this test
    - Choose the network accessibility agreed with your AWS administrator and Novaplan. Public accessibility is not required when a private route from Novaplan to Redshift is available.
-6. Keep other values as default and click **Save configuration**.
+4. Review the remaining settings, expected charges, and access controls before saving the workgroup.
 
 ### Allow the Novaplan connection in the security group
 
