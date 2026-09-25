@@ -8,7 +8,7 @@ description: "Amazon-Redshift-Abfragen aus Agenten mit eigenen Benutzerrechten a
 Das Redshift-Toolset erlaubt Agenten Live-Abfragen gegen eine Amazon-Redshift-Datenbank. Eine Administratorin oder ein Administrator legt die Instanz mit Host, Port und Datenbank an. Danach authentifiziert sich jede nutzende Person mit ihrem eigenen Redshift-Benutzernamen und Passwort. Die Datenbankrechte dieser Person bestimmen, welche Abfragen möglich sind.
 
 <Warning>
-  Verwenden Sie für Analyse-Agenten nach Möglichkeit Datenbankkonten mit den nötigen Leserechten. Ein Agent kann Abfragen gegen die Rechte des angemeldeten Kontos ausführen; weitreichende Schreib- oder Administrationsrechte sollten nicht ohne gesonderte Prüfung bereitgestellt werden.
+  `execute_query` ist nicht auf `SELECT` beschränkt: Der Agent kann auch schreibende SQL-Befehle ausführen, wenn das angemeldete Datenbankkonto die entsprechenden Rechte hat. Geben Sie Analyse-Agenten nur die benötigten Leserechte. Schreib- oder Administrationsrechte sollten erst nach einer gesonderten Prüfung der vorgesehenen Aktionen bereitgestellt werden.
 </Warning>
 
 ## Verfügbare Tools
