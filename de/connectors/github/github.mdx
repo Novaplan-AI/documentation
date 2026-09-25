@@ -26,7 +26,7 @@ Es gibt zwei Wege, eine passende Adresse lesbar zu machen:
 
 ### Organisationsdomain verifizieren
 
-Öffnen Sie in Ihrer GitHub-Organisation **Settings → Verified and approved domains → Add a domain**. GitHub zeigt einen TXT-DNS-Eintrag an. Hinterlegen Sie ihn bei Ihrem DNS-Anbieter und klicken Sie danach auf **Verify**. Nach der Verifizierung können passende Unternehmensadressen laut Quellleitfaden auch bei privaten Profiladressen für die Organisationszuordnung genutzt werden. DNS-Änderungen können Zeit benötigen. Weitere Informationen bietet die [GitHub-Dokumentation zur Domainverifizierung](https://docs.github.com/en/organizations/managing-organization-settings/verifying-or-approving-a-domain-for-your-organization).
+Öffnen Sie in Ihrer GitHub-Organisation **Settings → Verified and approved domains → Add a domain**. GitHub zeigt einen TXT-DNS-Eintrag an. Hinterlegen Sie ihn bei Ihrem DNS-Anbieter und klicken Sie danach auf **Verify**. Nach der Verifizierung können passende Unternehmensadressen auch bei privaten Profiladressen für die Organisationszuordnung genutzt werden. DNS-Änderungen können Zeit benötigen. Weitere Informationen bietet die [GitHub-Dokumentation zur Domainverifizierung](https://docs.github.com/en/organizations/managing-organization-settings/verifying-or-approving-a-domain-for-your-organization).
 
 ### Öffentliche Profil-E-Mail festlegen
 
@@ -123,7 +123,7 @@ Fortschrittspunkte werden je Repository und Datentyp gespeichert: Issues und Pul
 - **Eine Person sieht keine Datensätze:** Prüfen Sie, ob ihre GitHub-E-Mail-Adresse lesbar ist, keine `@users.noreply.github.com`-Adresse verwendet und mit ihrem Novaplan-AI-Konto übereinstimmt.
 - **Organisations-Repositories fehlen:** Autorisieren Sie mit einem Organisationsinhaber und lassen Sie die OAuth-App gegebenenfalls genehmigen.
 - **Code-Dateien fehlen:** Nur der Standardbranch wird synchronisiert. Prüfen Sie **Index Code Files** für die Inhaltssuche; Dateien über 5 MB werden nicht inhaltlich indexiert.
-- **Große Organisation synchronisiert langsam:** GitHubs API-Budget kann Läufe begrenzen. Der Quellleitfaden nennt 5.000 authentifizierte Anfragen pro Stunde. Ein unterbrochener Lauf setzt beim nächsten Intervall fort. Engere Filter verringern den Aufwand.
+- **Große Organisation synchronisiert langsam:** GitHubs API-Limits können Läufe begrenzen. Ein unterbrochener Lauf setzt beim nächsten Intervall fort. Engere Filter verringern den Aufwand.
 - **Repository-Auswahl zeigt wenig:** GitHubs Such-API kann die Anzahl der Anfragen und Ergebnisse begrenzen. Geben Sie einen genaueren Namen ein.
 
 Die Dauer des ersten Laufs hängt von der Anzahl und Größe der Repositories ab. Prüfen Sie unter **Workspace Settings → Connectors** den aktuellen Status, bevor Sie einen fehlenden Suchtreffer als Fehler behandeln.

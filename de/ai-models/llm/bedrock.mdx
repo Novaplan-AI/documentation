@@ -14,8 +14,8 @@ Novaplan AI kann über Amazon Bedrock Modelle verschiedener Anbieter verwenden. 
 | Feld | Bedeutung |
 | --- | --- |
 | **Region** | AWS-Region des Bedrock-Zugangs, beispielsweise `eu-west-1` oder `us-east-1`. Das gewünschte Modell muss dort verfügbar und für Ihr Konto freigeschaltet sein. |
-| **Model Name** | Genaue Modell-ID oder ARN eines Inference Profiles. Beispiele aus dem Quellleitfaden sind `us.anthropic.claude-sonnet-4-20250514-v1:0`, `amazon.titan-text-express-v1` und `meta.llama3-70b-instruct-v1:0`. |
-| **Provider** | Anbieter des Modells, damit Novaplan AI die Anfrage passend formatiert. Der Quellleitfaden nennt Anthropic, Mistral, Qwen, DeepSeek, Cohere, Amazon, AI21 Labs und **Other**. |
+| **Model Name** | Genaue Modell-ID oder ARN eines Inference Profiles. Beispiele sind `us.anthropic.claude-sonnet-4-20250514-v1:0`, `amazon.titan-text-express-v1` und `meta.llama3-70b-instruct-v1:0`. |
+| **Provider** | Anbieter des Modells, damit Novaplan AI die Anfrage passend formatiert. Zur Auswahl stehen unter anderem Anthropic, Mistral, Qwen, DeepSeek, Cohere, Amazon, AI21 Labs und **Other**. |
 | **Custom Provider Name** | Nur erforderlich, wenn Sie unter **Provider** die Option **Other** wählen. |
 
 Die Modell-ID finden Sie in der [Amazon-Bedrock-Konsole](https://console.aws.amazon.com/bedrock/) unter Modellzugang und den verfügbaren Basismodellen, benutzerdefinierten Modellen oder Inference Profiles. Die Verfügbarkeit unterscheidet sich nach Region und Konto; übernehmen Sie die ID oder ARN exakt aus Ihrer AWS-Konfiguration.
