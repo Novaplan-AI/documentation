@@ -87,6 +87,10 @@ This guide will walk you through creating a Dropbox application to connect your 
    - `sharing.read` (Required to detect shared link permissions)
    - `sharing.write` (Required to create preview links)
 
+   <Note>
+     During sync, the connector attempts to create Dropbox shared links for file and folder preview URLs. The accessible connector code requests Dropbox's `no_one` audience for new links and may reuse an existing link. Review this permission and your Dropbox shared-link policy with your administrator.
+   </Note>
+
    > **Note:** You do **not** need to check any "Team Scopes" as this connector is for individual accounts only.
 
 3. Click **Submit** at the bottom of the page to save these changes.

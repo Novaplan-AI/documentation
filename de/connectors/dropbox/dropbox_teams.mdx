@@ -41,6 +41,10 @@ events.read
 
 Speichern Sie mit **Submit**. Prüfen Sie mit Ihrer Administration, dass die teamweiten Berechtigungen dem vorgesehenen Synchronisierungsumfang entsprechen.
 
+<Note>
+  Der Konnektor versucht während der Synchronisierung, für Dateien und Ordner Dropbox-Freigabelinks als Vorschauadresse zu erstellen. Dafür benötigt er `sharing.write`. Der zugängliche Quellcode fordert für neue Links die Dropbox-Zielgruppe `no_one` an und verwendet gegebenenfalls einen bereits vorhandenen Link. Prüfen Sie diese Berechtigung und Ihre Dropbox-Richtlinien für Freigabelinks mit Ihrer Administration.
+</Note>
+
 ### 3. Weiterleitungsadresse und Zugangsdaten
 
 1. Öffnen Sie **Settings → OAuth 2 → Redirect URIs**. Hinterlegen Sie die Adresse Ihres Novaplan-Workspaces mit diesem Pfad:
