@@ -30,7 +30,7 @@ Claude Desktop can talk to the Novaplan AI MCP server, but there's one important
 
 ## Option 1: Custom connector (hosted Novaplan AI)
 
-If your Novaplan AI instance is served over HTTPS on a valid domain, Claude Desktop can connect to the remote MCP endpoint directly — no local setup, no npm packages. This is the same flow as [Claude.ai (Web)](/mcp/claude-ai).
+If your Novaplan AI instance is served over HTTPS on a valid domain reachable from Anthropic's cloud, Claude Desktop can use a remote custom connector — no local npm package is needed. Remote connectors are configured through your Claude account and also appear in Claude Desktop. See the [Claude.ai guide](/mcp/claude-ai) and [Anthropic's current instructions](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp).
 
 <Note>
   Before you start, create an OAuth app in Novaplan AI and note your **Client ID** and **Client Secret**. See [MCP Server Overview](/mcp/overview#step-1-create-an-oauth-app).
@@ -38,14 +38,10 @@ If your Novaplan AI instance is served over HTTPS on a valid domain, Claude Desk
 
 <Steps>
   <Step title="Open Connectors settings">
-    In Claude Desktop, go to **Settings > Connectors**.
+    In Claude Desktop or [Claude.ai](https://claude.ai), open **Customize → Connectors** for an individual account. For a Team or Enterprise organization, an Owner first adds the connector under **Organization settings → Connectors**.
   </Step>
   <Step title="Add a custom connector">
-    Click **Add custom connector** at the bottom of the Connectors section.
-
-    <Frame caption="Claude Desktop Connectors settings">
-      <img src="/images/mcp-server/claude-desktop-1.png" alt="Claude Desktop Connectors settings" />
-    </Frame>
+    For an individual account, click **+** and then **Add custom connector**. For an organization, choose **Add → Custom → Web**.
   </Step>
   <Step title="Enter the MCP server URL">
     Use your public HTTPS instance URL with the `/mcp` path:
@@ -58,17 +54,9 @@ If your Novaplan AI instance is served over HTTPS on a valid domain, Claude Desk
     Click **Advanced settings** and enter your OAuth credentials:
     - **OAuth Client ID**: `YOUR_CLIENT_ID`
     - **OAuth Client Secret**: `YOUR_CLIENT_SECRET`
-
-    <Frame caption="Add custom connector dialog with Advanced settings">
-      <img src="/images/mcp-server/claude-desktop-2.png" alt="Claude Desktop add custom connector dialog" />
-    </Frame>
   </Step>
   <Step title="Add and authenticate">
-    Click **Add**. Claude Desktop opens your browser to Novaplan AI's login page so you can authenticate and grant permissions. Once that's done, the connector goes active and Novaplan AI becomes visible in your list of connectors.
-
-    <Frame caption="Novaplan AI connector active in Claude Desktop">
-      <img src="/images/mcp-server/claude-desktop-3.png" alt="Novaplan AI connector active in Claude Desktop" />
-    </Frame>
+    Click **Add**, then **Connect** if prompted. Complete the Novaplan AI sign-in and review the requested permissions. Once connected, the connector is available through your Claude account, including in Claude Desktop.
   </Step>
 </Steps>
 
@@ -80,7 +68,7 @@ Claude Desktop uses the same OAuth callback as the Claude web app:
 https://claude.ai/api/mcp/auth_callback
 ```
 
-Register this as an allowed redirect URI in your Novaplan AI OAuth app.
+Register this as an allowed redirect URI in your Novaplan AI OAuth app, and confirm the callback used in the live Claude connector flow before deployment.
 
 <Note>
   A custom connector needs the workspace to be reachable from the public internet over HTTPS. If it is internal-only, ask Novaplan whether the local bridge is approved for your environment.

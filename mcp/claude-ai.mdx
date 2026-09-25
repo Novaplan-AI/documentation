@@ -7,7 +7,7 @@ icon: "/logo/claude.svg"
 Claude.ai supports custom connectors via remote MCP servers. This lets you use Novaplan AI tools directly in the Claude.ai web interface without any local setup.
 
 <Note>
-  This feature is currently in beta. Free plan users are limited to one custom connector.
+  Claude.ai offers remote custom connectors on Free, Pro, Max, Team, and Enterprise plans. Free accounts are limited to one custom connector. Check [Anthropic's current connector guide](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp) if its interface changes.
 </Note>
 
 <Note>
@@ -18,22 +18,14 @@ Claude.ai supports custom connectors via remote MCP servers. This lets you use N
   Claude.ai needs **public HTTPS**. It cannot attach to `http://localhost:.../mcp`. Use the workspace endpoint supplied by your administrator. Contact [Novaplan AI support](/contact-us) if you need access.
 </Warning>
 
-<Frame caption="Claude.ai Connectors settings">
-  <img src="/images/mcp-server/claude-1.png" alt="Claude.ai Connectors Settings" />
-</Frame>
-
-<Frame caption="Add custom connector dialog (example URL; use your workspace endpoint)">
-  <img src="/images/mcp-server/claude-2.png" alt="Claude.ai Add Custom Connector Dialog" />
-</Frame>
-
-## For Individual Users (Pro / Max Plans)
+## For Individual Accounts (Free / Pro / Max)
 
 <Steps>
   <Step title="Open Connectors settings">
-    Go to [claude.ai](https://claude.ai) and navigate to **Settings > Connectors**.
+    Go to [claude.ai](https://claude.ai) and navigate to **Customize → Connectors**.
   </Step>
   <Step title="Add a custom connector">
-    Click **Add custom connector** at the bottom of the Connectors section.
+    Click **+** and then **Add custom connector**.
   </Step>
   <Step title="Enter the MCP server URL">
     ```
@@ -41,7 +33,7 @@ Claude.ai supports custom connectors via remote MCP servers. This lets you use N
     ```
   </Step>
   <Step title="Enter OAuth credentials">
-    Click **Advanced settings** and enter your OAuth credentials:
+    Open **Advanced settings** and enter the credentials for your Novaplan AI OAuth app:
     - **OAuth Client ID**: `YOUR_CLIENT_ID`
     - **OAuth Client Secret**: `YOUR_CLIENT_SECRET`
   </Step>
@@ -52,14 +44,14 @@ Claude.ai supports custom connectors via remote MCP servers. This lets you use N
 
 ## For Team / Enterprise Plans
 
-**Organization Owners** must first add the connector:
+An **Owner or Primary Owner** must first add the connector for the organization:
 
 <Steps>
   <Step title="Open organization Connectors settings">
     Navigate to **Organization settings > Connectors**.
   </Step>
   <Step title="Add a custom connector">
-    Click **Add custom connector** and enter the MCP server URL: `NOVAPLAN_WORKSPACE_URL/mcp`.
+    Click **Add**, choose **Custom → Web**, and enter the MCP server URL: `NOVAPLAN_WORKSPACE_URL/mcp`.
   </Step>
   <Step title="Enter OAuth credentials">
     Click **Advanced settings** and enter the OAuth Client ID and Client Secret, then click **Add**.
@@ -70,10 +62,10 @@ Claude.ai supports custom connectors via remote MCP servers. This lets you use N
 
 <Steps>
   <Step title="Open Connectors settings">
-    Go to **Settings > Connectors**.
+    Go to **Customize → Connectors**.
   </Step>
   <Step title="Find the Novaplan AI connector">
-    Find the Novaplan AI connector (marked with a "Custom" label).
+    Find the Novaplan AI connector. It usually has a **Custom** label.
   </Step>
   <Step title="Connect">
     Click **Connect** to authenticate via Novaplan AI's OAuth login.
@@ -88,7 +80,7 @@ Claude.ai uses the following redirect URI for OAuth:
 https://claude.ai/api/mcp/auth_callback
 ```
 
-Register this as an allowed redirect URI in your Novaplan AI OAuth app.
+Register this as an allowed redirect URI in your Novaplan AI OAuth app. Confirm the redirect URI used by your Claude connector when setting up the live integration; the deployed Novaplan AI OAuth flow has not yet been tested with Claude.ai.
 
 ## Security Notes
 
