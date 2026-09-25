@@ -42,6 +42,48 @@ Nicht jede Anwendung benötigt alle diese Scopes. Besonders Schreib-, Lösch- un
 
 Bei `offline_access` kann ein Refresh Token ausgegeben werden. Bei jeder Erneuerung wird das bisherige Refresh Token durch ein neues ersetzt und ungültig. Speichern Sie daher immer den zuletzt erhaltenen Wert sicher. Tokens lassen sich über den Revocation-Endpunkt widerrufen.
 
+### Token für einen vertraulichen Client abrufen
+
+Eine serverseitige Anwendung tauscht den Autorisierungscode mit ihrer Client ID und ihrem Client Secret aus. Ersetzen Sie die Platzhalter und verwenden Sie die tatsächliche Workspace-Adresse:
+
+```bash
+curl -X POST https://your-workspace.example.com/api/v1/oauth2/token \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -d "grant_type=authorization_code" \
+  -d "code=AUTHORIZATION_CODE" \
+  -d "redirect_uri=YOUR_REDIRECT_URI" \
+  -d "client_id=YOUR_CLIENT_ID" \
+  -d "client_secret=YOUR_CLIENT_SECRET"
+```
+
+Ein öffentlicher Client wie eine Single-Page-App darf kein Client Secret enthalten. Er sendet bei der Token-Anfrage stattdessen den `code_verifier`, der zur ursprünglichen PKCE-Challenge gehört. Verwenden Sie den erhaltenen Access Token als `Authorization: Bearer ACCESS_TOKEN` für freigegebene API-Aufrufe.
+
+### Token erneuern und widerrufen
+
+Nach Ablauf eines Access Tokens kann ein vertraulicher Client das aktuelle Refresh Token verwenden:
+
+```bash
+curl -X POST https://your-workspace.example.com/api/v1/oauth2/token \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -d "grant_type=refresh_token" \
+  -d "refresh_token=YOUR_REFRESH_TOKEN" \
+  -d "client_id=YOUR_CLIENT_ID" \
+  -d "client_secret=YOUR_CLIENT_SECRET"
+```
+
+Speichern Sie das **neue** Refresh Token aus jeder erfolgreichen Antwort, weil das bisherige ungültig wird. Ist ein Token nicht mehr erforderlich, widerrufen Sie es:
+
+```bash
+curl -X POST https://your-workspace.example.com/api/v1/oauth2/revoke \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -d "token=TOKEN_TO_REVOKE" \
+  -d "token_type_hint=access_token" \
+  -d "client_id=YOUR_CLIENT_ID" \
+  -d "client_secret=YOUR_CLIENT_SECRET"
+```
+
+Für ein Refresh Token setzen Sie `token_type_hint=refresh_token`. Ein `client_credentials`-Token eignet sich nur für genehmigte Anwendungs-Scopes ohne persönliche Benutzeridentität und darf nicht für benutzergebundene Suche verwendet werden.
+
 ## Endpunkte
 
 | Pfad | Zweck |
@@ -52,6 +94,7 @@ Bei `offline_access` kann ein Refresh Token ausgegeben werden. Bei jeder Erneuer
 | `/api/v1/oauth2/introspect` | Gültigkeit und Metadaten eines Tokens prüfen |
 | `/api/v1/oauth2/userinfo` | Profilinformationen mit passendem Scope abrufen |
 | `/.well-known/openid-configuration` | OpenID-Connect-Metadaten |
+| `/.well-known/oauth-authorization-server` | Metadaten des OAuth-Autorisierungsservers |
 | `/.well-known/jwks.json` | Öffentliche Schlüssel zur Tokenprüfung |
 
 Bei Fehlern vergleichen Sie Redirect URI, Grant-Typ, registrierte Scopes und bei PKCE die Code-Challenge mit dem Verifier. Prüfen Sie außerdem, ob ein Secret abgelaufen oder eine Anwendung ausgesetzt wurde. Für Freigaben und Fragen zu produktiven Integrationen kontaktieren Sie [Novaplan Support](/de/contact-us).
