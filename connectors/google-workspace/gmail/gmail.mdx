@@ -237,57 +237,9 @@ https://www.googleapis.com/auth/admin.directory.group.readonly,https://www.googl
    </div>
 
 
-### Enable Service Account Key Creation
+### If service account key creation is blocked
 
-If you encounter an error while creating the service account key due to organization policy constraints, follow these steps:
-
-#### 1. Switch to the Organization Context
-
-At the top of the Google Cloud Console (where the project name is shown), click the drop-down to see a list of organizations and projects.
-
-Select your organization rather than a specific project.
-
-If you don't see an organization listed, make sure you're signed in with an account that has access to the organization.
-
-
-#### 2. Add Organisation Policy Administrator Role
-
-Navigate to **IAM & Admin > IAM** in the Cloud Console
-
-Find the current user and Click on the **Pencil** icon.
-
-Click on the **Add another role** button.
-
-Search for the **Organisation Policy Administrator** role.
-
-Click on the **Add** button.
-
-<div style={{ textAlign: "center" }}>
-  <img
-    src="/images/connectors/googleWorkspace/enterprise/org_policy_admin.png"
-    alt="Add Organisation Policy Administrator"
-    style={{ display: 'block', margin: '0 auto' }}
-    width="80%"
-  />
-</div>
-
-Click on the **Save** button.
-
-#### 3. Disable the Service Account Key Creation constraint
-
-Navigate to **IAM & Admin > Organization Policies** in the Cloud Console
-
-Search for `"iam.disableServiceAccountKeyCreation"`
-
-Select the policy
-
-Click on the **Manage Policy** button
-
-In Policy source, Select **Override parent's policy**. Add a rule and set the enforcement to "Off"
-
-Click on the **Save** button
-
-After completing these steps, return to [Step 5](#step-5%3A-create-a-json-key-for-the-service-account) and try creating the service account key again.
+Your organization may enforce `iam.disableServiceAccountKeyCreation` to prevent long-lived service account keys. If the JSON-key step is blocked, ask your Google Cloud security administrator and Novaplan to agree on an approved connection method or a narrowly scoped exception. Do not grant yourself Organization Policy Administrator access or disable the restriction solely to complete this guide. Keep any approved key within your organization's credential-handling process.
 
 ## Google PubSub Configuration
 
