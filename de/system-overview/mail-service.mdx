@@ -13,7 +13,7 @@ Der E-Mail-Dienst versendet Nachrichten für Anmeldung, Passwortzurücksetzung, 
 
 Alle hier beschriebenen Endpunkte beginnen mit `/api/v1` und erwarten einen Bearer-Token. Die Referenz nennt `SEND_MAIL` für das Versenden und `FETCH_CONFIG` für das Aktualisieren der geladenen SMTP-Konfiguration. Diese Namen sind technische Kennungen und dürfen nur nach Prüfung des bereitgestellten Dienstes geändert werden.
 
-Verfügbare Vorlagentypen sind `loginWithOTP`, `resetPassword`, `accountCreation`, `appuserInvite` und `suspiciousLoginAttempt`. Die Variable `templateData` enthält die zur Vorlage passenden Werte, etwa `userName`, `companyName`, `otp`, `resetLink` oder `inviteLink`.
+Im zugänglichen Quellcode sind `loginWithOTP`, `resetPassword`, `resetEmail`, `accountCreation`, `orgEmailVerification`, `appuserInvite`, `suspiciousLoginAttempt` und `domainLimitReached` als Vorlagentypen registriert. Die Variable `templateData` enthält die zur Vorlage passenden Werte, etwa `userName`, `companyName`, `otp`, `resetLink` oder `inviteLink`. Prüfen Sie vor einer Integration, welche Vorlagen im bereitgestellten Enterprise-Dienst verfügbar sind.
 
 ## Nachricht versenden
 
@@ -26,10 +26,10 @@ Verfügbare Vorlagentypen sind `loginWithOTP`, `resetPassword`, `accountCreation
 | `subject` | Ja | Betreff |
 | `templateData` | Ja | Variablen für die gewählte Vorlage |
 | `sendCcTo` | Nein | CC-Empfänger |
-| `attachments` | Nein | Anhänge, beispielsweise mit Base64-kodiertem Inhalt |
-| `fromEmailDomain` | Nein | Absenderdomain überschreiben |
-| `productName` | Nein | Produktname in der Vorlage |
-| `isAutoEmail` | Nein | Kennzeichnung als automatische Nachricht |
+| `attachments` | Nein | An Nodemailer übergebene Anhangobjekte; Binärkodierung prüfen |
+| `fromEmailDomain` | Nein | Metadatenfeld; im geprüften Code kein Override des SMTP-Absenders |
+| `productName` | Nein | Feld im Request-Typ; der geprüfte Versandpfad verwendet es nicht direkt |
+| `isAutoEmail` | Nein | Feld im Request-Typ; der geprüfte Versandpfad verwendet es nicht direkt |
 
 Ein Beispiel ohne echte Zugangsdaten:
 
@@ -46,7 +46,7 @@ Ein Beispiel ohne echte Zugangsdaten:
 }
 ```
 
-Die optionale Liste `attachments` enthält Objekte mit `filename`, Base64-kodiertem `content` und `contentType`. Für Kopien verwenden Sie `sendCcTo`. Der Vorlagentyp bestimmt, welche Felder in `templateData` benötigt werden: `otp` für den Einmalcode, `resetLink` für die Passwortzurücksetzung und `inviteLink` für Einladungen.
+Die optionale Liste `attachments` wird an Nodemailer weitergegeben. Prüfen Sie das erforderliche Format und die Kodierung für Binärdateien im bereitgestellten Dienst. Für Kopien verwenden Sie `sendCcTo`; der geprüfte Request-Typ enthält kein BCC-Feld. Der SMTP-Absender stammt aus der Konfiguration `fromEmail`, nicht aus `fromEmailDomain`. Der Vorlagentyp bestimmt, welche Felder in `templateData` benötigt werden: `otp` für den Einmalcode, `resetLink` für die Passwortzurücksetzung und `inviteLink` für Einladungen.
 
 Bei Erfolg antwortet der Endpunkt laut technischer Referenz mit **`200 OK`** und einem Ergebnis wie diesem:
 
@@ -87,7 +87,7 @@ Die SMTP-Konfiguration umfasst `host`, `port` (in der Referenz standardmäßig *
 | `SmtpConfig` | `host`, `port`, `fromEmail`; optional `username` und `password` |
 | `MailConfig` | JWT-Schlüssel, MongoDB-Verbindungsdaten und die SMTP-Konfiguration |
 
-Die Vorlagentypen sind als technische Werte festgelegt: `loginWithOTP`, `resetPassword`, `accountCreation`, `appuserInvite` und `suspiciousLoginAttempt`. Ändern Sie diese Werte nicht für eine Übersetzung der sichtbaren E-Mail-Texte.
+Die Vorlagentypen sind technische Werte, darunter `loginWithOTP`, `resetPassword`, `resetEmail`, `accountCreation`, `orgEmailVerification`, `appuserInvite`, `suspiciousLoginAttempt` und `domainLimitReached`. Ändern Sie diese Werte nicht für eine Übersetzung der sichtbaren E-Mail-Texte.
 
 ## Verarbeitung und Sicherheit
 

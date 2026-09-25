@@ -30,10 +30,10 @@ The Mail Service is built on a Node.js backend with MongoDB for data persistence
 
 - **Template-Based Emails** - Pre-built templates for common use cases
 - **SMTP Configuration** - Flexible SMTP provider support
-- **Email Tracking** - Maintains records of sent emails
+- **Send Records** - Stores metadata after the SMTP provider accepts a message
 - **Authentication Integration** - Secure token-based access
 - **Attachment Support** - File attachment capabilities
-- **CC/BCC Support** - Multiple recipient management
+- **CC Support** - Copy recipients through `sendCcTo`; the reviewed route has no BCC field
 
 ## Supported Email Templates
 
@@ -44,6 +44,9 @@ The Mail Service includes built-in templates for:
 3. **Account Creation** - Welcome emails for new users
 4. **App User Invite** - User invitation emails
 5. **Suspicious Login Attempt** - Security alert notifications
+6. **Reset Email** - Email-address reset messages
+7. **Organization Email Verification** - Organization address verification messages
+8. **Domain Limit Reached** - Domain-limit notifications
 
 ## API Endpoints
 
@@ -73,9 +76,9 @@ Send an email using configured SMTP settings and specified template.
 | templateData | object | Yes | Data to populate the email template |
 | sendCcTo | string[] | No | Array of CC recipient email addresses |
 | attachments | object[] | No | Array of email attachments |
-| fromEmailDomain | string | No | Override sender email domain |
-| productName | string | No | Product name for branding |
-| isAutoEmail | boolean | No | Flag indicating automated email |
+| fromEmailDomain | string | No | Legacy metadata field; the reviewed sender uses configured SMTP `fromEmail` |
+| productName | string | No | Accepted by the body type; the reviewed send path does not use it directly |
+| isAutoEmail | boolean | No | Accepted by the body type; the reviewed send path does not use it directly |
 
 **Email Template Types:**
 - `loginWithOTP` - One-time password authentication
@@ -83,6 +86,11 @@ Send an email using configured SMTP settings and specified template.
 - `accountCreation` - New account welcome emails
 - `appuserInvite` - User invitation emails
 - `suspiciousLoginAttempt` - Security alert emails
+- `resetEmail` - Email-address reset messages
+- `orgEmailVerification` - Organization email verification
+- `domainLimitReached` - Domain-limit notifications
+
+The template list and field behavior above reflect the accessible source code. Confirm the enabled templates in the deployed Enterprise service before building against this internal API. The route does not expose a BCC field, and `fromEmailDomain` does not change the SMTP sender in the reviewed implementation.
 
 **Template Data Structure:**
 The `templateData` object should contain template-specific variables. Common fields include:
@@ -333,10 +341,10 @@ interface MailInfo extends Document {
 <Tab title="Mail Body Schema">
 ```typescript
 interface MailBody {
-  productName?: string; // Product name for branding
+  productName?: string; // Declared field; not used directly by the reviewed send path
   emailTemplateType: string; // Required template type
-  isAutoEmail?: boolean; // Flag for automated emails
-  fromEmailDomain?: string; // Override sender domain
+  isAutoEmail?: boolean; // Declared field; not used directly by the reviewed send path
+  fromEmailDomain?: string; // Stored as metadata; not the SMTP sender in the reviewed code
   sendEmailTo?: string[]; // Recipient email addresses
   subject?: string; // Email subject line
   templateData?: Record<string, any>; // Template variables
@@ -363,9 +371,12 @@ interface SmtpConfig {
 enum EmailTemplateType {
   LoginWithOtp = 'loginWithOTP',
   ResetPassword = 'resetPassword',
+  ResetEmail = 'resetEmail',
   AccountCreation = 'accountCreation',
+  OrgEmailVerification = 'orgEmailVerification',
   AppuserInvite = 'appuserInvite',
-  SuspiciousLoginAttempt = 'suspiciousLoginAttempt'
+  SuspiciousLoginAttempt = 'suspiciousLoginAttempt',
+  DomainLimitReached = 'domainLimitReached'
 }
 ```
 </Tab>
@@ -418,7 +429,7 @@ All endpoints return structured error responses:
 1. **Configuration Validation**
    - Verify SMTP configuration exists
    - Validate authentication credentials
-   - Check required fields
+   - Pass the request to the mail controller; callers must supply valid recipient and template data
 
 2. **Template Processing**
    - Select appropriate email template
@@ -435,23 +446,22 @@ All endpoints return structured error responses:
 4. **Delivery and Tracking**
    - Send email via configured SMTP provider
    - Record email metadata in database
-   - Return delivery confirmation
+   - Return the result of the SMTP send attempt, not a recipient-inbox delivery confirmation
    - Handle delivery errors gracefully
 
 ## Security Considerations
 
 - **Token-Based Authentication** - All endpoints require valid JWT tokens with appropriate scopes
 - **SMTP Credential Protection** - Passwords are not returned in API responses
-- **Input Validation** - Email addresses and template data are validated
-- **Error Handling** - Sensitive information is not exposed in error messages
-- **Container Security** - Dependency injection prevents unauthorized access to services
+- **Input Review** - Callers must validate recipient addresses and template data; the reviewed route does not show dedicated body-schema validation
+- **Error Review** - Treat provider error messages as sensitive operational data and avoid exposing them to customers
 
 ## Important Notes
 
 1. **SMTP Configuration Required** - Email sending requires proper SMTP configuration
-2. **Template Data Validation** - Template data must match expected template variables
-3. **Email Tracking** - All sent emails are automatically logged in MongoDB
-4. **Attachment Support** - Files can be attached using base64 encoding
+2. **Template Data** - Callers must provide the variables expected by the selected template
+3. **Send Records** - Metadata is stored in MongoDB after a successful SMTP send attempt; this is not proof of inbox delivery
+4. **Attachment Support** - The mail controller passes attachment objects to Nodemailer; confirm the required encoding for binary content in the deployed service
 5. **Responsive Templates** - Email templates are mobile-responsive by default
 6. **Error Recovery** - Service handles SMTP failures gracefully without crashing
 7. **Configuration Updates** - SMTP settings can be updated without service restart
