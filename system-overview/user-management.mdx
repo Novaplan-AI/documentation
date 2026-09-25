@@ -27,7 +27,7 @@ The User Management Service is built on Node.js with MongoDB for data persistenc
 - **Authentication Service** - Validates user credentials and authentication methods
 - **Mail Service** - Sends invitations and notifications via SMTP
 - **Configuration Manager** - Manages application settings and SMTP configuration
-- **Event Service** - Publishes entity lifecycle events via Kafka
+- **Event Service** - Publishes entity lifecycle events through the configured message broker
 - **AI Connector Backend** - Handles teams and graph-based user operations
 - **Prometheus Service** - Records metrics and activities
 
@@ -185,7 +185,7 @@ Creates a new organization with an admin user and sets up the entire system.
 - Creates default user groups: admin, everyone, standard
 - Sets up organization authentication configuration
 - Uses MongoDB transactions when replica sets available
-- Publishes `OrgCreatedEvent` and `NewUserEvent` via Kafka
+- Publishes `OrgCreatedEvent` and `NewUserEvent` through the configured message broker
 - Records activity in Prometheus metrics
 - Sends welcome email if `sendEmail: true`
 </Tab>
@@ -303,7 +303,7 @@ Updates organization details.
 ```
 
 **Side Effects:**
-- Publishes `OrgUpdatedEvent` via Kafka
+- Publishes `OrgUpdatedEvent` through the configured message broker
 </Tab>
 </Tabs>
 </Accordion>
@@ -341,7 +341,7 @@ Soft-deletes the organization.
 ```
 
 **Side Effects:**
-- Publishes `OrgDeletedEvent` via Kafka
+- Publishes `OrgDeletedEvent` through the configured message broker
 - Organization becomes inaccessible
 </Tab>
 </Tabs>
@@ -908,7 +908,7 @@ Creates a new user in the organization.
 
 **Side Effects:**
 - User automatically added to "everyone" group
-- Publishes `NewUserEvent` via Kafka
+- Publishes `NewUserEvent` through the configured message broker
 - Auto-generates unique slug
 </Tab>
 </Tabs>
@@ -960,7 +960,7 @@ Updates a user's full name only.
 ```
 
 **Side Effects:**
-- Publishes `UpdateUserEvent` via Kafka
+- Publishes `UpdateUserEvent` through the configured message broker
 </Tab>
 </Tabs>
 </Accordion>
@@ -1011,7 +1011,7 @@ Updates a user's first name only.
 ```
 
 **Side Effects:**
-- Publishes `UpdateUserEvent` via Kafka
+- Publishes `UpdateUserEvent` through the configured message broker
 </Tab>
 </Tabs>
 </Accordion>
@@ -1062,7 +1062,7 @@ Updates a user's last name only.
 ```
 
 **Side Effects:**
-- Publishes `UpdateUserEvent` via Kafka
+- Publishes `UpdateUserEvent` through the configured message broker
 </Tab>
 </Tabs>
 </Accordion>
@@ -1221,7 +1221,7 @@ Updates a user's job designation.
 ```
 
 **Side Effects:**
-- Publishes `UpdateUserEvent` via Kafka
+- Publishes `UpdateUserEvent` through the configured message broker
 </Tab>
 </Tabs>
 </Accordion>
@@ -1272,7 +1272,7 @@ Updates a user's email address.
 ```
 
 **Side Effects:**
-- Publishes `UpdateUserEvent` via Kafka
+- Publishes `UpdateUserEvent` through the configured message broker
 </Tab>
 </Tabs>
 </Accordion>
@@ -1355,7 +1355,7 @@ Updates comprehensive user information.
 ```
 
 **Side Effects:**
-- Publishes `UpdateUserEvent` via Kafka with conditional fields
+- Publishes `UpdateUserEvent` through the configured message broker with conditional fields
 </Tab>
 </Tabs>
 </Accordion>
@@ -1399,7 +1399,7 @@ Soft-deletes a user from the organization with comprehensive cleanup.
 - User credentials completely cleared (password removed)
 - User marked as deleted and logged out (`hasLoggedIn: false`)
 - `deletedBy` field set to requesting user ID
-- Publishes `DeleteUserEvent` via Kafka
+- Publishes `DeleteUserEvent` through the configured message broker
 - User becomes inaccessible for normal operations
 </Tab>
 </Tabs>
@@ -3094,7 +3094,7 @@ All endpoints return structured error responses:
    - Target size: under 100KB after compression
 
 9. **Event Publishing:** 
-   - All entity changes publish events via Kafka for system integration
+   - All entity changes publish events through the configured message broker for system integration
    - Events include organization and user lifecycle changes
 
 10. **Transaction Support:** 
