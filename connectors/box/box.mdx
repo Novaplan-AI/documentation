@@ -164,7 +164,7 @@ This guide will walk you through the process of creating a Box application and c
 #### Step 4: Admin Authorization
 
 <Warning>
-  **Important:** The admin who authorizes the Box app should use the same email address as the Novaplan AI account configuring this connector. Using a different email will cause permission issues on the Novaplan AI platform.
+  The Box admin must approve the Enterprise app and its requested access. The admin's email does not have to match the Novaplan AI account that configures this shared connector. Check each viewer's Box identity and item permissions separately.
 </Warning>
 
 1. As an admin, approve the app:
@@ -221,7 +221,7 @@ On the **Authenticate** tab, enter:
 />
 
 <Warning>
-  **Email must match.** The Box admin who authorized the app should use the same email address as the Novaplan AI admin configuring this connector. A mismatch breaks permission resolution and users will not see their synced records in search.
+  Use the Client ID, Client Secret, and Enterprise ID of the Box app your administrator approved. Search visibility depends on the synced Box users, collaborations, and permissions for each viewer, not on an email match between the two administrators.
 </Warning>
 
 Click **Save**. Novaplan AI fetches an access token using Client Credentials Grant to verify the credentials before persisting.
@@ -642,8 +642,8 @@ The connector automatically determines the optimal sync approach:
 
 There are three common causes:
 
-1. **Email mismatch** - The email used during connector authentication doesn't match your Novaplan AI account email. This causes permission issues preventing you from accessing synced data.
-   - **Fix:** Reconfigure the connector and authenticate using the same email as your Novaplan AI account.
+1. **Viewer identity or Box access does not match** - A viewer's Box login or collaborations may not map to their Novaplan AI account and the item they expect to find.
+   - **Fix:** Ask your administrator to check the affected viewer's email, Box membership, and access to that file or folder. The shared connector's Box admin can be a different person.
 
 2. **Records show in "All Records" but not in search** - Documents display in the All Records section but don't appear in search query results.
    - **Fix:** Verify sync filters in the connector settings and ensure indexing has completed. Check that the data matches your search query criteria.

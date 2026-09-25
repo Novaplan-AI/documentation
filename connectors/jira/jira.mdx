@@ -368,7 +368,7 @@ On the **Authorize** tab, all the OAuth authorization work happens. The tab show
 </div>
 
 <Warning>
-  **Authorize using the same email as your Novaplan AI account.** Using a different email causes permission issues on the Novaplan AI platform.
+  Authorize this shared Team connector with the Atlassian account agreed with your administrator. It needs access to the Jira projects you intend to sync. Each viewer's email and Jira permissions are matched separately in Novaplan AI.
 </Warning>
 
 3. Review the permissions requested by the connector and click **Accept**.
@@ -790,8 +790,8 @@ Both methods sync the same data through one configured Team connector instance. 
 
 Check these in order:
 
-1. **Novaplan AI email mismatch** — the email used to authenticate the Jira connector must match your Novaplan AI account email. For OAuth, this is the email you signed in with during consent; for API Token, it's the **Email** field on the Authenticate Instance tab.
-   - **Fix:** reconfigure the connector and authenticate using the same email as your Novaplan AI account.
+1. **Viewer identity or Jira access does not match** — the viewer's Jira email or project permissions may not map to their Novaplan AI account. The account authorizing the shared connector does not have to match every viewer.
+   - **Fix:** ask your administrator to check the affected viewer's account email and Jira access, then confirm the connector's designated account can read the project.
 
 2. **Email visibility not set** — if your Atlassian email visibility is set to *Only you and admins*, Novaplan AI can't match you to Jira permissions and no records will be visible.
    - **Fix:** set it to **Anyone** or **Your organization** (see the *Prerequisite: Email Visibility* section above).

@@ -371,7 +371,7 @@ On the **Authorize** tab, all the OAuth authorization work happens. The tab show
 </div>
 
 <Warning>
-  **Authorize using the same email as your Novaplan AI account.** Using a different email causes permission issues on the Novaplan AI platform.
+  Authorize this shared Team connector with the Atlassian account agreed with your administrator. It needs access to the Confluence spaces you intend to sync. Each viewer's email and Confluence permissions are matched separately in Novaplan AI.
 </Warning>
 
 3. Review the permissions requested by the connector and click **Accept**.
@@ -730,8 +730,8 @@ Both methods sync the same data through one configured Team connector instance. 
 
 There are three common causes:
 
-1. **Email mismatch** - The email used during connector authentication doesn't match your Novaplan AI account email. This causes permission issues preventing you from accessing synced data.
-   - **Fix:** Reconfigure the connector and authenticate using the same email as your Novaplan AI account.
+1. **Viewer identity or Confluence access does not match** - A viewer's Confluence email or space permissions may not map to their Novaplan AI account. The account authorizing the shared connector does not have to match every viewer.
+   - **Fix:** Ask your administrator to check the affected viewer's account email and Confluence access, then confirm the connector's designated account can read the space.
 
 2. **Records show in "All Records" but not in search** - Documents display in the All Records section but don't appear in search query results.
    - **Fix:** Verify sync filters in the connector settings and ensure indexing has completed. Check that the data matches your search query criteria.

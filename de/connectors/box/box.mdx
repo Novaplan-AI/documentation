@@ -7,7 +7,7 @@ Der Box-Konnektor übernimmt Dateien, Ordner, Personen, Gruppen und Freigaben au
 
 ## Voraussetzungen und Umfang
 
-Für den organisationsweiten Zugriff benötigen Sie ein **Box-Enterprise-Konto** und eine Box-App mit **OAuth 2.0 Client Credentials Grant (CCG)**. Eine Box-Administration muss die App autorisieren. Die Administration, die die Box-App autorisiert, sollte dieselbe E-Mail-Adresse verwenden wie das Novaplan-AI-Administratorkonto, das den Konnektor konfiguriert; andernfalls kann die Berechtigungszuordnung fehlschlagen.
+Für den organisationsweiten Zugriff benötigen Sie ein **Box-Enterprise-Konto** und eine Box-App mit **OAuth 2.0 Client Credentials Grant (CCG)**. Eine Box-Administration muss die App autorisieren. Ihre E-Mail-Adresse muss nicht mit dem Novaplan-AI-Administratorkonto übereinstimmen, das den gemeinsamen Konnektor konfiguriert. Die Suchberechtigungen werden für die einzelnen Box-Nutzenden und ihre Freigaben zugeordnet.
 
 Der Konnektor synchronisiert aktive Box-Nutzer, Gruppen und Mitgliedschaften, persönliche Stammordner sowie ihre Datei- und Ordnerstruktur. Er berücksichtigt direkte und geerbte Zusammenarbeit, Gruppenrechte sowie organisationsweite und öffentliche Freigabelinks. Wenn der Zugriff auf einen Ordner entzogen wird, werden die übernommenen Rechte auch für darunterliegende Elemente aktualisiert.
 
@@ -38,7 +38,7 @@ Die angeforderten Schreib- und Administrationsrechte sind weitreichend. Stimmen 
 3. Klicken Sie auf **Save**. Novaplan AI prüft die Angaben, bevor die Verbindung gespeichert wird.
 4. Öffnen Sie anschließend den Tab **Configure** und legen Sie Strategie, Intervall und Filter fest.
 
-Wenn die Autorisierung fehlschlägt, prüfen Sie besonders, ob die Box-App durch eine Administration freigegeben wurde und ob deren E-Mail-Adresse zum konfigurierenden Novaplan-AI-Konto passt.
+Wenn die Autorisierung fehlschlägt, prüfen Sie besonders, ob eine Box-Administration die richtige App mit den benötigten Rechten freigegeben hat und ob Client ID, Client Secret und Enterprise ID zu dieser App gehören.
 
 ## Synchronisierung und Filter
 
@@ -68,7 +68,7 @@ Die Dateiberechtigungen stammen aus Box-Zusammenarbeit und Freigabelinks. Eine D
 | --- | --- |
 | **Access Token kann nicht abgerufen werden** | Client ID, Client Secret und Enterprise ID; Status der App in der Box Admin Console und Enterprise-Konto. |
 | **Insufficient permissions oder Access denied** | Alle erforderlichen Scopes, **Perform actions as users**, **App + Enterprise Access** und erneute Autorisierung nach Scope-Änderungen. |
-| **Personen sehen keine synchronisierten Inhalte** | Gleiche E-Mail-Adresse der autorisierenden Box-Administration und des konfigurierenden Novaplan-AI-Administratorkontos; Box-Zusammenarbeit und Gruppenrechte. |
+| **Personen sehen keine synchronisierten Inhalte** | E-Mail-Zuordnung der betroffenen Person, ihre Box-Mitgliedschaft sowie Zusammenarbeit und Gruppenrechte am jeweiligen Inhalt. |
 | **Dateien fehlen oder Suche liefert keine Treffer** | Sync Filters, Indexing Filters, aktive Box-Nutzer, Box-Adminrichtlinien sowie Abschluss von Synchronisierung und Indexierung. |
 | **Synchronisierung ist langsam oder wird begrenzt** | Umfang der Dateifilter, Batch Size, Box-Rate-Limits und längeres Sync Interval. |
 

@@ -92,7 +92,7 @@ Die Classic-Scopes decken allgemeine Confluence-Endpunkte ab; die Granular-Scope
 2. Wählen Sie in Novaplan AI unter **Authenticate Instance** eine bereits hinterlegte **OAuth app** oder tragen Sie **Client ID** und **Client Secret** ein.
 3. Prüfen Sie die **Redirect URL**. Bei **Grant Jira user access** wählen Sie **Yes** nur, wenn dieselbe OAuth-Anwendung auch Jira umfasst und der Scope `read:jira-user` hinzugefügt wurde. Diese Option kann bei verborgenen Confluence-E-Mail-Adressen die Nutzerzuordnung über Jira unterstützen. Andernfalls wählen Sie **No**.
 4. Klicken Sie auf **Next** und dann unter **Authorize** auf **Authenticate**.
-5. Wählen Sie Ihre Confluence-Site, prüfen Sie die Berechtigungen und bestätigen Sie mit **Accept**. Verwenden Sie ein Atlassian-Konto mit derselben E-Mail-Adresse wie Ihr Novaplan-AI-Konto.
+5. Wählen Sie Ihre Confluence-Site, prüfen Sie die Berechtigungen und bestätigen Sie mit **Accept**. Verwenden Sie das mit Ihrer Administration abgestimmte Atlassian-Konto mit Zugriff auf die benötigten Bereiche. Die Konten der späteren Novaplan-AI-Nutzenden werden getrennt zugeordnet.
 6. Nach **Authenticated** wählen Sie **Next**, prüfen die [Synchronisierung und Filter](#synchronisierung-und-filter) und speichern die Konfiguration.
 
 Wenn Sie Client ID, Secret, Callback-Adresse oder Scopes in Atlassian ändern, aktualisieren Sie die Werte in Novaplan AI und autorisieren Sie erneut.
@@ -115,7 +115,7 @@ Der Token übernimmt die Rechte seines Atlassian-Kontos. Verwenden Sie ein Konto
 4. Tragen Sie die **Email** des Kontos ein, das den Token erstellt hat, und fügen Sie den **API Token** hinzu.
 5. Klicken Sie auf **Next**. Bei dieser Methode wird **Authorize** übersprungen. Legen Sie unter **Configure Records** die [Synchronisierung und Filter](#synchronisierung-und-filter) fest.
 
-Die E-Mail-Adresse muss zum Token-Konto gehören. Für die Berechtigungszuordnung sollte sie auch mit dem vorgesehenen Novaplan-AI-Konto übereinstimmen.
+Die E-Mail-Adresse muss zum Atlassian-Konto gehören, das den Token erstellt hat. Die Berechtigungen der späteren Novaplan-AI-Nutzenden werden anhand ihrer eigenen Confluence-Konten zugeordnet.
 
 ## Synchronisierung und Filter
 

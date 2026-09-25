@@ -128,7 +128,7 @@ The integration requires three pieces of information:
 - Paste the **BookStack Token Secret**.
 
 <Warning>
-  **Important:** Use API credentials generated from a BookStack account that has the same email address as your Novaplan AI account. Using a different email will cause permission issues on the Novaplan AI platform.
+  Use an approved BookStack account that can read the intended content and audit log. Its email does not have to match the Novaplan AI administrator configuring this shared connector. Search visibility is mapped from the synced BookStack users, roles, and content permissions.
 </Warning>
 
 #### Step 3: Set Sync Strategy
@@ -180,8 +180,8 @@ The integration requires three pieces of information:
 
 There are three common causes:
 
-1. **Email mismatch** - The email used during connector authentication doesn't match your Novaplan AI account email. This causes permission issues preventing you from accessing synced data.
-   - **Fix:** Reconfigure the connector and authenticate using the same email as your Novaplan AI account.
+1. **Viewer identity or BookStack access does not match** - A viewer's BookStack email, role, or content permission may not map to their Novaplan AI account.
+   - **Fix:** Ask your administrator to check the affected viewer's email and BookStack permissions. The API-token owner can be a different account.
 
 2. **Records show in "All Records" but not in search** - Documents display in the All Records section but don't appear in search query results.
    - **Fix:** Verify sync filters in the connector settings and ensure indexing has completed. Check that the data matches your search query criteria.

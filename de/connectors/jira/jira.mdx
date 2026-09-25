@@ -75,7 +75,7 @@ Schema, Host, Groß- und Kleinschreibung, Pfad und ein möglicher abschließende
 2. Wählen Sie in Novaplan AI unter **Authenticate Instance** eine bereits hinterlegte **OAuth app** aus oder tragen Sie **Application (Client) ID** und **Client Secret** ein.
 3. Prüfen Sie die **Redirect URL** und klicken Sie auf **Next**.
 4. Klicken Sie unter **Authorize** auf **Authenticate**, wählen Sie Ihre Jira-Site und bestätigen Sie die Berechtigungen mit **Accept**.
-5. Verwenden Sie für die Autorisierung ein Atlassian-Konto mit derselben E-Mail-Adresse wie Ihr Novaplan-AI-Konto. Nach erfolgreicher Autorisierung zeigt die Instanz **Authenticated** an.
+5. Verwenden Sie das mit Ihrer Administration abgestimmte Atlassian-Konto mit Zugriff auf die benötigten Projekte. Die Konten der späteren Novaplan-AI-Nutzenden werden getrennt zugeordnet. Nach erfolgreicher Autorisierung zeigt die Instanz **Authenticated** an.
 6. Wählen Sie **Next**, legen Sie die [Synchronisierung und Filter](#synchronisierung-und-filter) fest und speichern Sie die Konfiguration.
 
 Wenn Sie Client ID, Secret, Callback-Adresse oder Scopes in Atlassian ändern, aktualisieren Sie die Werte in Novaplan AI und autorisieren Sie erneut.
@@ -98,7 +98,7 @@ Der Token übernimmt die Rechte seines Atlassian-Kontos. Verwenden Sie ein Konto
 4. Tragen Sie die **Email** des Kontos ein, das den Token erstellt hat, und fügen Sie den **API Token** hinzu.
 5. Klicken Sie auf **Next**. Bei dieser Methode entfällt der Tab **Authorize**. Legen Sie unter **Configure Records** die [Synchronisierung und Filter](#synchronisierung-und-filter) fest.
 
-Die E-Mail-Adresse muss zum Token-Konto gehören. Für eine korrekte Berechtigungszuordnung sollte sie auch mit dem vorgesehenen Novaplan-AI-Konto übereinstimmen.
+Die E-Mail-Adresse muss zum Atlassian-Konto gehören, das den Token erstellt hat. Die Berechtigungen der späteren Novaplan-AI-Nutzenden werden anhand ihrer eigenen Jira-Konten zugeordnet.
 
 ## Synchronisierung und Filter
 
