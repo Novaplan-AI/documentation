@@ -1,0 +1,92 @@
+---
+title: "Zoom"
+description: "Meetings, Teilnehmende und AI-Companion-Transkripte mit Novaplan AI durchsuchen."
+---
+
+Der Zoom-Konnektor verbindet den Meeting-Verlauf einer Zoom-Organisation mit Novaplan AI. Er übernimmt Meetingdaten, Teilnehmende, Links zu Cloud-Aufzeichnungen und verfügbare **AI Companion**-Transkripte. Die Video- und Audiodateien der Aufzeichnungen werden **nicht** heruntergeladen.
+
+Novaplan richtet Ihren Workspace weitgehend für Sie ein. Die Zoom-App und ihre organisationsweiten Berechtigungen stimmen Sie mit Ihrer Zoom-Administration und Novaplan ab.
+
+## Welche Daten werden synchronisiert?
+
+| Daten | Inhalt |
+| --- | --- |
+| **Users** | Aktive Nutzer des Zoom-Kontos |
+| **Meetings** | Betreff, Zeiten, Host, alternative Hosts und Einstellungen |
+| **Participants** | Teilnehmende je Meeting |
+| **Cloud Recording Link** | Freigabelink zur Aufzeichnung, falls vorhanden; keine Mediendateien |
+| **AI Companion Transcripts** | Zeitgestempelte Transkripte, sofern für das Meeting verfügbar |
+| **Permissions** | Host als **Owner**; alternative Hosts, Teilnehmende und Eingeladene mit **Read** |
+
+## Voraussetzung: Admin-managed App
+
+Der Konnektor benötigt eine **Admin-managed** Zoom-App und eine Autorisierung durch eine Zoom-Administration. Eine Freigabe deckt das Zoom-Konto ab. Das Zoom-Toolset verwendet dagegen eine **User-managed** App und wird pro Person autorisiert. Die Wahl zwischen beiden App-Typen kann nach der Erstellung nicht geändert werden.
+
+## Verbindung einrichten
+
+### 1. Zoom General App erstellen
+
+1. Melden Sie sich mit Zoom-Administratorrechten im [Zoom App Marketplace](https://marketplace.zoom.us/) an.
+2. Wählen Sie **Develop → Build App → General App → Create**.
+3. Wählen Sie **Admin-managed app** und bei der Frage nach einer Veröffentlichung im Zoom App Marketplace **No**, wenn die App intern bleiben soll.
+
+Der Konnektor verwendet Admin-Scopes der Zoom Report APIs. Eine **User-managed** App kann diese Scopes nicht anfordern.
+
+### 2. Exakte Weiterleitungsadresse übernehmen
+
+1. Öffnen Sie in Novaplan AI **Workspace Settings → Connectors → Zoom → + Setup**.
+2. Kopieren Sie unter **Authenticate Instance** die **Redirect URL**.
+3. Öffnen Sie in der Zoom-App **Basic Information → OAuth Information**. Tragen Sie dieselbe Adresse unter **OAuth Redirect URL** und **OAuth Allow List** ein und klicken Sie auf **Save**.
+
+Zoom erlaubt für diese App nur eine primäre OAuth-Weiterleitungsadresse. Schema, Host und Pfad müssen exakt passen. Für produktive Workspaces verwenden Sie HTTPS; `http://localhost` ist nur für lokale Entwicklung vorgesehen.
+
+### 3. Admin-Scopes hinzufügen
+
+Fügen Sie unter **Scopes** alle sechs Berechtigungen hinzu:
+
+| Scope | Zweck |
+| --- | --- |
+| `user:read:list_users:admin` | Nutzer des Zoom-Kontos auflisten |
+| `report:read:user:admin` | Meeting-Verlauf je Nutzer lesen |
+| `report:read:list_meeting_participants:admin` | Teilnehmende über die Report API lesen |
+| `meeting:read:meeting:admin` | Meetingdetails lesen |
+| `cloud_recording:read:meeting_transcript:admin` | AI-Companion-Transkripte lesen |
+| `cloud_recording:read:list_recording_files:admin` | Aufzeichnungen auflisten und Freigabelinks ermitteln |
+
+Wenn die Admin-Scopes nicht auswählbar sind, wurde vermutlich eine **User-managed** statt einer **Admin-managed** App erstellt. Prüfen Sie den App-Typ mit Ihrer Zoom-Administration.
+
+### 4. Zugangsdaten eintragen und autorisieren
+
+1. Kopieren Sie unter **Basic Information → App Credentials** die **Client ID** und das **Client Secret**. Bewahren Sie das Secret geschützt auf.
+2. Tragen Sie beide Werte unter **Authenticate Instance** in Novaplan AI ein und prüfen Sie die **Redirect URL**.
+3. Klicken Sie auf **Next → Authenticate**. Melden Sie sich als Zoom-Administrator an und bestätigen Sie die Berechtigungen mit **Allow**.
+4. Nach erfolgreicher Autorisierung zeigt die Instanz **Authenticated** an. Wählen Sie **Next**.
+
+Falls Zoom **Only admins can install this app** meldet, prüfen Sie die Rechte des aktuell angemeldeten Zoom-Kontos.
+
+### 5. Synchronisierung konfigurieren
+
+Unter **Configure Records** wählen Sie **Scheduled** oder **Manual**. Das **Sync Interval** beträgt zunächst 60 Minuten. Mit **Index Meeting Transcripts** bestimmen Sie, ob verfügbare AI-Companion-Transkripte in der Suche erscheinen; die Option ist laut Quellleitfaden standardmäßig aktiviert.
+
+Klicken Sie auf **Save** und wählen Sie **Start syncing now** oder **I'll do it later**. Den Fortschritt sehen Sie unter **Indexing Progress**.
+
+## Umfang und Ablauf der Synchronisierung
+
+Der Konnektor erfasst aktive Nutzer und verarbeitet danach den Meeting-Verlauf pro Person. Der erste Lauf reicht höchstens **180 Tage** zurück; ältere Meetings werden nicht übernommen. Die Zoom Report API liefert Daten in Abschnitten von 30 Tagen. Weitere Läufe beginnen etwas vor dem gespeicherten Fortschrittspunkt, um Übergänge zuverlässig zu erfassen.
+
+Pro Meeting werden Details, Teilnehmende und gegebenenfalls ein Link zur Cloud-Aufzeichnung sowie ein AI-Companion-Transkript ermittelt. Host, alternative Hosts, Teilnehmende und Eingeladene erhalten die dokumentierten Leserechte. Transkripte werden laut technischer Referenz beim Öffnen des Datensatzes live von Zoom abgerufen; ohne AI Companion gibt es möglicherweise kein Transkript.
+
+Die Report API begrenzt die Anfragerate. Bei vielen Meetings kann der erste Lauf deshalb länger dauern. Der Konnektor verarbeitet Anfragen begrenzt parallel und wartet bei Drosselung, bevor er fortsetzt.
+
+## Fehlerbehebung
+
+- **Zugangsdaten ungültig:** Vergleichen Sie **Client ID** und **Client Secret** ohne zusätzliche Leerzeichen und prüfen Sie den App-Status im Zoom Marketplace.
+- **Weiterleitung schlägt fehl:** Vergleichen Sie die **Redirect URL** in Novaplan AI mit **OAuth Redirect URL** und **OAuth Allow List** in Zoom.
+- **Scopes fehlen:** Prüfen Sie den App-Typ **Admin-managed** und alle sechs Admin-Scopes. Nach Änderungen an Secret, Scopes oder Redirect URL müssen Sie in Novaplan AI erneut autorisieren.
+- **Keine Meetings:** Prüfen Sie, ob die autorisierende Person Zoom-Administrator ist und Zugriff auf die Nutzer des Kontos hat. Die Report APIs können einen Zoom-Tarif ab Pro erfordern. Der erste Lauf berücksichtigt nur die letzten 180 Tage.
+- **Transkripte fehlen:** Nur Meetings mit verfügbarem AI-Companion-Transkript können entsprechende Inhalte liefern. Prüfen Sie `cloud_recording:read:meeting_transcript:admin`. Zoom-Fehler `3322` bedeutet laut Quellleitfaden, dass kein Transkript vorhanden ist.
+- **Synchronisierung dauert lange:** Bei vielen Meetings und Teilnehmenden können Zoom-API-Limits den ersten Lauf verlängern. Prüfen Sie den Fortschritt, bevor Sie die Verbindung neu starten.
+
+Der **Zoom-Konnektor** importiert Meetinginformationen für die Suche. Das Zoom-Toolset erlaubt entsprechend konfigurierten Agenten Aktionen wie das Planen oder Ändern von Meetings und verwendet eine separate, pro Person autorisierte App.
+
+Wenn Sie Hilfe benötigen, schreiben Sie an [support@novaplan.ai](mailto:support@novaplan.ai). Technische Referenzen: [Zoom OAuth](https://developers.zoom.us/docs/integrations/oauth/), [Zoom-Scopes](https://developers.zoom.us/docs/api/rest/using-zoom-apis/#scopes) und [Zoom Report API](https://developers.zoom.us/docs/api/reports/).
