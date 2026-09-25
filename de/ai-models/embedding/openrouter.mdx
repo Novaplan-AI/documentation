@@ -1,0 +1,22 @@
+---
+title: "OpenRouter Embeddings"
+description: "Embedding-Modelle über OpenRouter mit Novaplan AI verbinden."
+---
+
+# OpenRouter Embeddings konfigurieren
+
+OpenRouter stellt Modelle verschiedener Anbieter über einen gemeinsamen Zugang bereit. Novaplan AI kann darüber auch Embeddings erzeugen. Novaplan unterstützt Sie bei der Einrichtung.
+
+## Erforderliche Angaben
+
+**API Key:** Erstellen Sie unter **Keys** in Ihrem [OpenRouter-Konto](https://openrouter.ai/) einen API-Schlüssel. OpenRouter-Schlüssel beginnen mit `sk-or-`. Bewahren Sie den Schlüssel geschützt auf und sorgen Sie vor der Nutzung für ausreichendes Guthaben.
+
+**Model Name:** Geben Sie die exakte ID eines verfügbaren Embedding-Modells im Format `anbieter/modell` ein. Prüfen Sie den [aktuellen OpenRouter-Modellkatalog](https://openrouter.ai/models).
+
+## Optionale Angaben
+
+- **Model Friendly Name:** Anzeigename für die Konfiguration; ohne Eintrag wird der Modellname verwendet.
+- **Dimensions:** Anzahl der Vektordimensionen, mit der Novaplan AI die Vektorsammlung anlegt. Verwenden Sie nur einen vom Modell unterstützten Wert.
+- **Is Multimodal:** Nur für Modelle einschalten, die Bilder ebenso wie Text einbetten können; standardmäßig ausgeschaltet.
+
+**Ein Modellwechsel oder eine Änderung der Dimensionen nach der Indexierung erfordert eine erneute Indexierung der betroffenen Inhalte.** Sonst passen vorhandene und neue Vektoren nicht zusammen. Stimmen Sie solche Änderungen mit Novaplan ab. Für die Textgenerierung gibt es die separate [OpenRouter-Anleitung](/de/ai-models/llm/openrouter). [Novaplan Support](/de/contact-us) hilft bei der Einrichtung.

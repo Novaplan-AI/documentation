@@ -133,7 +133,13 @@
                   "de/ai-models/embedding/mistral",
                   "de/ai-models/embedding/jina",
                   "de/ai-models/embedding/voyage",
-                  "de/ai-models/embedding/together"
+                  "de/ai-models/embedding/together",
+                  "de/ai-models/embedding/BAAI",
+                  "de/ai-models/embedding/sentence-transformer",
+                  "de/ai-models/embedding/huggingface",
+                  "de/ai-models/embedding/openai-compatible",
+                  "de/ai-models/embedding/ollama",
+                  "de/ai-models/embedding/openrouter"
                 ]
               }
             ]

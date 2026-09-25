@@ -1,0 +1,20 @@
+---
+title: "Sentence Transformers"
+description: "Sentence-Transformer-Modelle für die Suche in Novaplan AI konfigurieren."
+---
+
+# Sentence Transformers konfigurieren
+
+![Konfigurationsansicht für Sentence Transformers](/images/ai-models/embedding/SentenceTransformer_EmbeddingConfig.png)
+
+Novaplan AI kann Sentence-Transformer-Modelle innerhalb seiner Umgebung für semantische Suche und Dokumentabruf ausführen. Für die Modellaufrufe ist kein externer API-Schlüssel nötig. Novaplan unterstützt Sie bei Auswahl und Einrichtung.
+
+## Model Name
+
+**Model Name** ist das einzige Pflichtfeld. Beispiele sind `all-MiniLM-L6-v2` für geringeren Ressourcenbedarf, `all-mpnet-base-v2` für einen größeren allgemeinen Encoder und `paraphrase-multilingual-mpnet-base-v2` für mehrsprachige Inhalte. Prüfen Sie die [Sentence-Transformers-Modellübersicht](https://www.sbert.net/docs/pretrained_models.html), Sprachunterstützung und Eingabelimits des konkreten Modells.
+
+1. Klicken Sie auf der Karte **Sentence Transformers** auf **Configure**.
+2. Tragen Sie die genaue Modell-ID unter **Model Name** ein.
+3. Klicken Sie auf **Add Model**, um die Konfiguration prüfen zu lassen.
+
+Größere Modelle benötigen gewöhnlich mehr Arbeitsspeicher und laden langsamer. Die unterstützte Eingabelänge unterscheidet sich je nach Modell; planen Sie die Dokument-Chunks entsprechend. Bei Fehlern prüfen Sie die Schreibweise der ID, die verfügbaren Ressourcen und für mehrsprachige Bestände die Zielsprachen. Weitere Informationen bietet die [Sentence-Transformers-Dokumentation](https://www.sbert.net/); [Novaplan Support](/de/contact-us) hilft bei der Einrichtung.
