@@ -1,0 +1,40 @@
+---
+title: "Persönliche Zugriffstokens"
+description: "Benutzergebundene Tokens für freigegebene APIs und MCP-Clients erstellen und widerrufen."
+---
+
+Ein **Personal Access Token (PAT)** ist eine widerrufbare Zugangsdatenfolge, die im Namen der Person handelt, die sie erstellt hat. Anfragen unterliegen deren Berechtigungen und den beim Erstellen gewährten Scopes. Das unterscheidet ein PAT von einem OAuth-`client_credentials`-Token ohne Benutzeridentität. Für Drittanwendungen mit persönlicher Einwilligung kann stattdessen der [OAuth Authorization Code Flow](/de/developer/oauth2) geeignet sein.
+
+## Token erstellen
+
+1. Melden Sie sich in Ihrem Novaplan AI Workspace an und öffnen Sie **Workspace-settings → Developer Settings → Personal Access Tokens**.
+2. Wählen Sie **New token** und geben Sie einen aussagekräftigen Namen ein.
+3. Legen Sie ein Ablaufdatum und die benötigten Scopes fest. Die technische Referenz nennt 30, 90 und 365 Tage sowie **Never**; ohne Auswahl gilt dort 30 Tage. Verwenden Sie die kürzeste für Ihren Anwendungsfall passende Laufzeit.
+4. Kopieren Sie den Token sofort in einen geschützten Secret-Speicher. Der Rohwert wird nur beim Erstellen angezeigt. Wenn er verloren geht, widerrufen Sie ihn und erstellen einen neuen.
+
+<Warning>
+  Ein PAT ist so sensibel wie ein Passwort für die gewährten Rechte. Teilen Sie ihn weder im Chat noch in einem Repository oder Log. Der Präfix `phpat_` gehört zum angezeigten Tokenwert; entfernen oder verändern Sie ihn nicht aufgrund eines Beispielbefehls. Bei einem `401` kann [Novaplan Support](/de/contact-us) die bereitgestellte Version und Tokenbehandlung prüfen.
+</Warning>
+
+## Token verwenden
+
+Ein freigegebener API- oder MCP-Client sendet das PAT im Header `Authorization: Bearer <TOKEN>`. Der entfernte MCP-Endpunkt liegt unter `NOVAPLAN_WORKSPACE_URL/mcp`. Clients mit eigenem Header können den Token direkt verwenden; eine geprüfte [lokale Stdio-Brücke](/de/mcp/local-server) kann ihn über `--bearer-auth` erhalten.
+
+Ein PAT ist weiterhin auf die bei seiner Erstellung gewählten Scopes beschränkt. Weniger Scopes reduzieren die Auswirkungen eines verlorenen Tokens. Für Personen mit unterschiedlichen Rechten müssen getrennte Tokens erstellt werden; ein gemeinsam genutzter Team-Token würde die persönliche Berechtigungsprüfung verfälschen.
+
+## Tokens verwalten und widerrufen
+
+Unter **Personal Access Tokens** sehen Sie Ihre aktiven Tokens mit Name, Scopes, Erstellungsdatum, Ablauf und letzter Verwendung. Sie können einen eigenen Token widerrufen. Der Widerruf ist endgültig; abhängige Anwendungen benötigen anschließend einen neuen Token.
+
+Die technische API-Referenz nennt diese Pfade:
+
+| Methode und Pfad | Aufgabe |
+| --- | --- |
+| `POST /api/v1/personal-access-tokens` | Eigenes PAT erstellen |
+| `GET /api/v1/personal-access-tokens` | Eigene aktive Tokens auflisten |
+| `DELETE /api/v1/personal-access-tokens/{tokenId}` | Eigenes PAT widerrufen |
+| `GET /api/v1/personal-access-tokens/scopes` | Verfügbare Scopes abrufen |
+| `GET /api/v1/personal-access-tokens/admin` | Alle aktiven Tokens der Organisation administrativ auflisten |
+| `DELETE /api/v1/personal-access-tokens/admin/{tokenId}` | Ein PAT administrativ widerrufen |
+
+Die Admin-Endpunkte setzen Organisationsadministrationsrechte voraus und sollten nur für genehmigte Verwaltung oder Sicherheitsvorfälle genutzt werden. Die Liste ist paginiert; der Rohwert eines fremden Tokens wird nicht angezeigt. Prüfen Sie die tatsächliche Freigabe dieser API im Novaplan Enterprise Workspace.

@@ -45,6 +45,7 @@
               "de/user-management/teams",
               "de/developer/getting-started",
               "de/developer/oauth2",
+              "de/developer/personal-access-tokens",
               "de/developer/api-reference"
             ]
           },
@@ -123,6 +124,11 @@
               "de/mcp/cursor",
               "de/mcp/gemini-cli",
               "de/mcp/claude-code",
+              "de/mcp/tools",
+              "de/mcp/omnigent",
+              "de/mcp/claude-desktop",
+              "de/mcp/local-server",
+              "de/mcp/qm",
               "de/integrations/slackBot"
             ]
           },

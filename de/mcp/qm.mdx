@@ -1,0 +1,54 @@
+---
+title: "Novaplan AI mit QM verwenden"
+description: "QM-Agenten über eine benutzergebundene CLI mit Unternehmenswissen verbinden."
+---
+
+[QM](https://github.com/yc-software/qm) bindet Novaplan AI derzeit über eine **CLI in der Agenten-Sandbox** ein, nicht als zusätzlichen MCP-Client. Jede Person benötigt ein eigenes Novaplan-Zugriffstoken, damit Antworten ihren persönlichen Berechtigungen folgen. Diese Integration verwendet momentan technische Paket-, Datei- und Befehlsnamen aus der zugrunde liegenden Implementierung.
+
+<Warning>
+  Das Paket `@pipeshub-ai/mcp`, der Befehl `pipeshub` und die `PIPESHUB_*`-Variablen sind funktionale Kennungen. Für sie liegt noch kein verifizierter Novaplan-Ersatz vor. Verwenden Sie die QM-Integration erst nach Freigabe der Paketversion und des Ablaufs für Ihren Enterprise Workspace. Ein kosmetisch umbenannter Befehl würde nicht funktionieren.
+</Warning>
+
+## Voraussetzungen
+
+- Ein erreichbarer Novaplan AI Workspace mit indexierten Daten und öffentlicher HTTPS-Adresse. Die QM-Agenten laufen in einer entfernten Sandbox; `localhost` Ihres Laptops ist dort nicht erreichbar.
+- Ein bestehendes QM-Setup mit Zugriff auf die Agenten-Sandbox und einem eingerichteten Modell.
+- Für jede Person ein eigenes [Personal Access Token](/de/developer/personal-access-tokens). Teilen Sie kein Token im Team.
+
+Falls QM noch nicht eingerichtet ist, folgen Sie seiner projektspezifischen Installationsanleitung. Die [englische QM-Integrationsreferenz](/mcp/qm) enthält ein Beispiel für eine QM-Docker-Umgebung mit Fly Sprites. Das ist eine Bereitstellung von **QM**, nicht von Novaplan AI.
+
+## CLI-Integration vorbereiten
+
+Nach Freigabe durch Novaplan installieren Sie die geprüfte Version des dokumentierten Pakets und rufen die Einrichtungsroutine im QM-Verzeichnis auf:
+
+```bash
+npm install -g @pipeshub-ai/mcp
+pipeshub init-qm .
+```
+
+Die bisherige technische Anleitung verlangt mindestens Version 2.3.2. Prüfen Sie die tatsächlich freigegebene Version, bevor Sie den Befehl in einer produktiven QM-Umgebung ausführen. Die Routine legt Dateien unter `sandbox/tools/pipeshub/` an. Für `egress` tragen Sie ausschließlich den von Novaplan bestätigten Hostnamen ein, ohne `https://` und ohne Pfad. Danach können Sie die QM-Konfiguration prüfen und den Dienst neu laden.
+
+## Persönliche Zugangsdaten in QM
+
+Jede Person legt **zwei persönliche Keychain-Einträge** an. In der derzeit dokumentierten CLI müssen Service und Variablennamen exakt so lauten:
+
+| Service | Variable | Wert |
+| --- | --- | --- |
+| `pipeshub` | `PIPESHUB_TOKEN` | Eigenes PAT als reiner Wert |
+| `pipeshub` | `PIPESHUB_BASE_URL` | Öffentliche HTTPS-Origin des Workspaces ohne `/mcp` |
+
+Der automatisch angebotene MCP-Paste-Block verwendet andere Variablennamen und gehört nicht in diese QM-Keychain. Geben Sie ein PAT niemals in einem Chat ein und speichern Sie es nicht in `sandbox.secretEnv`, weil dieser Bereich für die gesamte Organisation gelten kann. Bei einem gemeinsam genutzten Workspace muss jede Person mit ihrer eigenen Identität arbeiten.
+
+## Verbindung prüfen
+
+Die vorhandene CLI bietet nach Freigabe beispielsweise diese Prüfungen:
+
+```bash
+pipeshub auth status --json
+pipeshub search "ein bekannter Dokumenttitel" --json
+pipeshub ask "Was steht in diesem Dokument?" --json
+```
+
+Eine Antwort ohne `recordId` oder `webUrl` ist **unbelegt**. Der Agent darf keine Quelle erfinden. Wenn das Werkzeug `semantic:read` verlangt, prüfen Sie, ob es versehentlich die API für den Suchverlauf statt der dokumentierten CLI-Suche verwendet; erweitern Sie den Token nicht allein aufgrund dieser Fehlermeldung.
+
+Bei `401` prüfen Sie Ablauf, Widerruf und Scopes des persönlichen Tokens. Entfernen Sie den `phpat_`-Präfix nicht aufgrund einer Vermutung. Wenn der Agent die Workspace-Adresse nicht erreicht, prüfen Sie die QM-Sandbox und deren `egress`-Freigabe. [Novaplan Support](/de/contact-us) kann die Kompatibilität des Pakets und den bereitgestellten Endpunkt bestätigen.

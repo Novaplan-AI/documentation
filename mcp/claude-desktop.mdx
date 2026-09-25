@@ -10,7 +10,7 @@ Claude Desktop can talk to the Novaplan AI MCP server, but there's one important
   **Claude Desktop does not support local HTTP MCP transport.** Unlike a server-side tool, it won't connect to a plain `http://localhost:.../mcp` endpoint. To connect Novaplan AI you have two options, and which one you pick depends on how Novaplan AI is hosted:
 
   1. **Add it as a custom connector** — works only when Novaplan AI is reachable over **public HTTPS** (a real domain with a valid SSL certificate), exactly like [Claude.ai (Web)](/mcp/claude-ai).
-  2. **Run a local stdio bridge** — works for **localhost / self-hosted** instances with no public domain, using the `@pipeshub-ai/mcp` npm package.
+  2. **Run a local stdio bridge** — for a workspace reachable only on an internal network, using the `@pipeshub-ai/mcp` npm package and a personal access token. Confirm package suitability with Novaplan before using this route.
 </Warning>
 
 <Tip>
@@ -21,12 +21,12 @@ Claude Desktop can talk to the Novaplan AI MCP server, but there's one important
 
 | Your situation | Use this |
 |---|---|
-| Novaplan AI is hosted on a public domain with valid SSL (e.g. `https://your-workspace.example.com`) | [Custom connector](#option-1-custom-connector-hosted-pipeshub) |
-| Novaplan AI runs locally or on an internal host without a public HTTPS domain (e.g. `http://localhost:3000`) | [Local stdio bridge](#option-2-local-stdio-bridge) |
+| Your workspace has a public HTTPS address (e.g. `https://your-workspace.example.com`) | [Custom connector](#option-1-custom-connector-hosted-novaplan-ai) |
+| Your workspace is available only on an internal network | [Local stdio bridge](#option-2-local-stdio-bridge), subject to Novaplan verification |
 
 ---
 
-<div id="option-1-custom-connector-hosted-pipeshub" />
+<div id="option-1-custom-connector-hosted-novaplan-ai" />
 
 ## Option 1: Custom connector (hosted Novaplan AI)
 
@@ -83,23 +83,23 @@ https://claude.ai/api/mcp/auth_callback
 Register this as an allowed redirect URI in your Novaplan AI OAuth app.
 
 <Note>
-  A custom connector needs Novaplan AI to be reachable from the public internet over HTTPS. If you only have a `localhost` instance, the connector flow won't work — use [Option 2](#option-2-local-stdio-bridge) instead.
+  A custom connector needs the workspace to be reachable from the public internet over HTTPS. If it is internal-only, ask Novaplan whether the local bridge is approved for your environment.
 </Note>
 
 ---
 
 ## Option 2: Local stdio bridge
 
-When Novaplan AI runs on `localhost` or an internal host without a public HTTPS domain, run the MCP server locally as a **stdio process**. Claude Desktop launches the `@pipeshub-ai/mcp` bridge, which then talks to your Novaplan AI instance over HTTP on your behalf.
+For an internal-only workspace, Claude Desktop can launch a local **stdio process** that connects to its remote API. The existing bridge package is `@pipeshub-ai/mcp`; Novaplan must confirm that this package is supported for the Enterprise workspace before customers use it.
 
 ### Prerequisites
 
 - Node.js 20+ installed
-- Your Novaplan AI instance URL (e.g. `http://localhost:3000/api/v1`)
-- An OAuth app configured for the **Client Credentials** grant (see below)
+- The workspace URL supplied by Novaplan
+- A personal access token for the person using Claude Desktop
 
 <Warning>
-  For this route, your OAuth app **must have the Client Credentials grant enabled**. When you [create the OAuth app](/mcp/overview#step-1-create-an-oauth-app), choose **Client Credentials** as the grant type so the bridge can exchange your Client ID and Secret for a token directly — no browser redirect is involved. (The redirect URI used by the connector flow does **not** apply here.)
+  Do not use a **Client Credentials** token for permissioned company search. That grant has no user identity. Use the person's token and confirm with Novaplan that the bridge is supported. Do not store the token in a shared or committed config file.
 </Warning>
 
 ### Configuration
@@ -112,27 +112,23 @@ Open Claude Desktop's config file (`claude_desktop_config.json`) and add the Nov
 ```json
 {
   "mcpServers": {
-    "pipeshub": {
+    "novaplan": {
       "command": "npx",
       "args": [
         "-y",
         "@pipeshub-ai/mcp",
         "start",
         "--server-url",
-        "http://localhost:3000/api/v1",
-        "--client-id",
-        "YOUR_CLIENT_ID",
-        "--client-secret",
-        "YOUR_CLIENT_SECRET",
-        "--token-url",
-        "/api/v1/oauth2/token"
+        "NOVAPLAN_WORKSPACE_URL",
+        "--bearer-auth",
+        "YOUR_BEARER_TOKEN"
       ]
     }
   }
 }
 ```
 
-Replace `http://localhost:3000` with your actual instance host, and `YOUR_CLIENT_ID` / `YOUR_CLIENT_SECRET` with the credentials from your OAuth app.
+Replace the placeholders with the approved workspace origin and the person's token. Use a local secret-management method for the token rather than committing this example with real credentials.
 
 ### Apply the changes
 
@@ -148,14 +144,14 @@ Save the file and **fully quit and reopen Claude Desktop** (a window reload isn'
 
 <AccordionGroup>
   <Accordion title="The custom connector won't connect / shows an error">
-    Custom connectors require a **public HTTPS** endpoint with a valid SSL certificate. Claude Desktop can't reach `http://localhost`, self-signed certificates, or private hostnames through the connector flow. Either put Novaplan AI behind a real domain with valid SSL, or switch to the [local stdio bridge](#option-2-local-stdio-bridge).
+    Custom connectors require a **public HTTPS** endpoint with a valid SSL certificate. Claude Desktop cannot reach private hostnames through this connector flow. Ask Novaplan for the approved workspace endpoint or whether the [local stdio bridge](#option-2-local-stdio-bridge) is supported.
   </Accordion>
   <Accordion title="The stdio server doesn't start">
     - Make sure Node.js 20+ is installed and `npx` is on your `PATH`.
-    - Confirm your instance is reachable: `curl http://localhost:3000/api/v1` should respond (not a connection refused error).
+    - Confirm your approved workspace endpoint is reachable from the computer running Claude Desktop.
     - After editing `claude_desktop_config.json`, fully quit and relaunch Claude Desktop.
   </Accordion>
   <Accordion title="Authentication fails on the stdio bridge">
-    Verify the OAuth app has the **Client Credentials** grant enabled, and that the `--token-url` points to your instance's token endpoint (`NOVAPLAN_WORKSPACE_URL/api/v1/oauth2/token`). Double-check the Client ID and Secret are correct and the app is active.
+    Verify the personal token is valid, belongs to the intended user, has the required scopes, and is passed to `--bearer-auth`. If the package is not supported in your Enterprise workspace, contact Novaplan Support.
   </Accordion>
 </AccordionGroup>

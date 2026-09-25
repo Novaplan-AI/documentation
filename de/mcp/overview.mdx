@@ -10,24 +10,24 @@ Novaplan AI stellt unter `/mcp` einen **entfernten MCP-Endpunkt** über **Stream
 Damit können Clients wie **Cursor**, **Claude Code**, **Gemini CLI**, **Claude.ai**, **LibreChat** und **Omnigent** indexierte Dokumente Ihrer Organisation durchsuchen, Fragen dazu stellen, Personen und Gruppen finden sowie Dateien herunterladen.
 
 <Note>
-  Die einzelnen verfügbaren Werkzeuge, Argumente und Einsatzfälle stehen in der [Werkzeugreferenz (Englisch)](/mcp/tools). Die [Anleitung für Coding-Agenten (Englisch)](/for-agents) bietet einen Einstieg für Entwicklungsumgebungen.
+  Die einzelnen verfügbaren Werkzeuge, Argumente und Einsatzfälle stehen in der [Werkzeugreferenz](/de/mcp/tools). Die [Anleitung für Coding-Agenten](/de/for-agents) bietet einen Einstieg für Entwicklungsumgebungen.
 </Note>
 
 <Note>
-  **[QM (Englisch)](/mcp/qm) ist kein MCP-Client.** Die Integration verwendet eine CLI im Agenten-Sandbox-Prozess. Die bestehende technische Anleitung enthält den dazugehörigen Befehl.
+  **[QM](/de/mcp/qm) ist kein MCP-Client.** Die Integration verwendet eine CLI im Agenten-Sandbox-Prozess. Die bestehende technische Anleitung enthält den dazugehörigen Befehl.
 </Note>
 
 ## Voraussetzungen
 
 - Zugang zu einem bestehenden Novaplan AI Workspace und seiner Adresse. Falls der Zugang noch nicht eingerichtet ist, wenden Sie sich an [Novaplan Support](/de/contact-us).
-- Entweder eine OAuth-Anwendung oder ein [persönliches Zugriffstoken (Englisch)](/developer/personal-access-tokens), abhängig vom Client.
+- Entweder eine OAuth-Anwendung oder ein [persönliches Zugriffstoken](/de/developer/personal-access-tokens), abhängig vom Client.
 
 Novaplan übernimmt den Großteil der Einrichtung. Die folgenden Schritte bleiben als Referenz für Administratoren und Integrationsverantwortliche verfügbar; stimmen Sie Änderungen an der Zugriffsverwaltung mit dem Novaplan-Team ab.
 
 <Note>
   Die meisten unten genannten Client-Anleitungen verwenden **OAuth** und benötigen eine OAuth-Anwendung. **Omnigent** kann sich stattdessen mit einem persönlichen Zugriffstoken im `Authorization`-Header verbinden.
 
-  Für eigene Werkzeuge können Sie unter **Developer Settings > Personal Access Tokens** ein Token erstellen und es als `Bearer`-Token verwenden: direkt am `/mcp`-Endpunkt, mit `--bearer-auth` in der [lokalen Stdio-Brücke (Englisch)](/mcp/local-server) oder in einem Client mit konfigurierbarem `Authorization`-Header.
+  Für eigene Werkzeuge können Sie unter **Developer Settings > Personal Access Tokens** ein Token erstellen und es als `Bearer`-Token verwenden: direkt am `/mcp`-Endpunkt, mit `--bearer-auth` in der [lokalen Stdio-Brücke](/de/mcp/local-server) oder in einem Client mit konfigurierbarem `Authorization`-Header.
 </Note>
 
 ## Schritt 1: OAuth-Anwendung erstellen
@@ -94,11 +94,11 @@ Wählen Sie die Anleitung für Ihren Client. Einige Einzelanleitungen sind berei
 | [Claude Code](/de/mcp/claude-code) | Entferntes HTTP-MCP mit festen OAuth-Zugangsdaten. |
 | [Gemini CLI](/de/mcp/gemini-cli) | Entferntes MCP mit OAuth-Erkennung. |
 | [Claude.ai](/de/mcp/claude-ai) | Custom Connector in der Web-Oberfläche. |
-| [Claude Desktop](/mcp/claude-desktop) | Gehosteter Custom Connector oder lokale Stdio-Brücke. |
+| [Claude Desktop](/de/mcp/claude-desktop) | Gehosteter Custom Connector oder lokale Stdio-Brücke. |
 | [LibreChat](/de/mcp/librechat) | Entferntes MCP über die Custom-Connectors-Oberfläche. |
 | [Omnigent](/mcp/omnigent) | Verbindung über persönliches Zugriffstoken. |
-| [Local Server (Stdio)](/mcp/local-server) | Lokale Stdio-Brücke. |
-| [QM](/mcp/qm) | CLI in der Agenten-Sandbox; keine MCP-Verbindung. |
+| [Local Server (Stdio)](/de/mcp/local-server) | Lokale Stdio-Brücke. |
+| [QM](/de/mcp/qm) | CLI in der Agenten-Sandbox; keine MCP-Verbindung. |
 
 ## Funktionsweise
 

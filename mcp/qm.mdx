@@ -6,7 +6,7 @@ icon: "terminal"
 
 When this is done, anyone in your [QM](https://github.com/yc-software/qm) org can ask the agent about company documents. Answers are limited to what that person's Novaplan AI account can see.
 
-If you **already run QM**, start at [Connect Novaplan AI](#connect-pipeshub). Standing up QM is the long part. The integration itself is short.
+If you **already run QM**, start at [Connect Novaplan AI](#connect-novaplan-ai). Standing up QM is the long part. The integration itself is short.
 
 <Warning>
   This is **not** an MCP attachment. QM is an MCP *server* to its own harness — it cannot add Novaplan AI as an MCP client the way Cursor or Claude Code can. The integration is a `pipeshub` CLI inside the agent sandbox.
@@ -56,7 +56,7 @@ npx qm up
   `qm setup` writes empty placeholders for values you skip. If you later append the real value, the key can appear twice. Search `.env` for duplicates before debugging anything else. The first `qm up` can take 10–40 minutes (large image pulls). When it finishes it prints URLs.
 </Note>
 
-<div id="connect-pipeshub" />
+<div id="connect-novaplan-ai" />
 
 ## Connect Novaplan AI
 
@@ -73,7 +73,7 @@ If you already ran `init-qm` from 2.3.1, delete `sandbox/Dockerfile`. Sprites ne
 
 Re-running is safe: existing files are kept. Do not re-run 2.3.1 after deleting the file, or it will write it again. Confirm `pipeshub --version` is 2.3.2 or later before `init-qm`.
 
-Set `egress` in `sandbox/tools/pipeshub/tool.json` to your Novaplan AI hostname only — for example `pipeshub.your-company.com` or `your-subdomain.trycloudflare.com`. No scheme, no path.
+Set `egress` in `sandbox/tools/pipeshub/tool.json` to your approved Novaplan AI hostname only — for example `workspace.example.com`. No scheme, no path. The directory name is part of the current CLI package's functional configuration.
 
 Then:
 

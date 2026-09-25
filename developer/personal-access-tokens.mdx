@@ -65,7 +65,7 @@ PIPESHUB_MCP_TOKEN=phpat_eyJhbGciOiJIUzI1NiIs...
 <Tip>
   The `phpat_` prefix is intentional and display-only — it makes personal access tokens easy to recognize in logs, config files, and secret-scanning tools, unlike a bare JWT. It's stripped automatically before the token is verified, so nothing else about how you use the token changes.
 
-  If a `phpat_` token returns 401, your instance predates the prefix-stripping fix — upgrade Novaplan AI. Until you can, store the token without the `phpat_` prefix and add it back afterwards.
+  If a `phpat_` token returns 401, contact Novaplan Support to verify the deployed version and token handling. Do not remove or alter the token prefix based on an example.
 </Tip>
 
 `PIPESHUB_MCP_TOKEN` is the same value you'll pass as `--bearer-auth` or in an `Authorization: Bearer` header below — the paste block just saves you from copying it twice.
