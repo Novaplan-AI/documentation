@@ -17,14 +17,14 @@ description: "Modelle aus Azure AI Foundry mit Novaplan AI verbinden."
 
 | Modelltyp | Beispiel für den Endpoint |
 | --- | --- |
-| Claude | `https://<your-resource-name>.inference.ai.azure.com/anthropic` |
-| OpenAI, DeepSeek und weitere | `https://<your-resource-name>.cognitiveservices.azure.com/openai/v1/` |
+| Claude über die Anthropic Messages API | Beispielsweise `https://<resource-name>.services.ai.azure.com/anthropic` |
+| OpenAI-kompatible Bereitstellung | Ein `/openai/v1/`-Endpoint der Ressource, zum Beispiel unter `services.ai.azure.com` oder `openai.azure.com` |
 
-Verwenden Sie die Adresse Ihrer **tatsächlichen Bereitstellung**. Ein Endpoint für einen anderen Modelltyp kann zu fehlgeschlagenen Aufrufen führen.
+Verwenden Sie die Adresse Ihrer **tatsächlichen Bereitstellung** gemäß der [aktuellen Microsoft-Anleitung zu Foundry-Endpunkten](https://learn.microsoft.com/en-us/azure/foundry/how-to/develop/sdk-overview). Ein Endpoint für einen anderen Modelltyp kann zu fehlgeschlagenen Aufrufen führen. Ältere Novaplan-Formulare können noch `inference.ai.azure.com/anthropic` oder `cognitiveservices.azure.com/openai/v1/` als Platzhalter zeigen; stimmen Sie den tatsächlich akzeptierten Wert mit Novaplan ab.
 
 ### API Key und Model Name
 
-Kopieren Sie im Azure-Portal unter **Keys and Endpoint** entweder **Key 1** oder **Key 2**. Bewahren Sie ihn geschützt auf. Unter **Model Name** tragen Sie den genauen Namen Ihres bereitgestellten Modells ein. Beispiele sind `gpt-5.1`, `claude-sonnet-4-5` und `DeepSeek-V3.1`. Prüfen Sie den [Azure-AI-Modellkatalog](https://ai.azure.com/explore/models) und die Bereitstellungen Ihres Kontos auf aktuelle IDs und Verfügbarkeit.
+Kopieren Sie im Azure-Portal unter **Keys and Endpoint** entweder **Key 1** oder **Key 2**. Bewahren Sie ihn geschützt auf. Unter **Model Name** tragen Sie den genauen **Bereitstellungsnamen** ein; er muss nicht mit der Modell-ID im Katalog übereinstimmen. Prüfen Sie den [Azure-AI-Modellkatalog](https://ai.azure.com/explore/models), Region, API-Typ und die Bereitstellungen Ihres Kontos. Bei Claude muss Novaplan zusätzlich prüfen, dass die Integration die Anthropic Messages API verwendet.
 
 ## Optionale Einstellungen
 

@@ -9,7 +9,7 @@ description: "Configure Novaplan AI to use Azure AI Foundry models"
 
 *The Azure AI configuration screen in Novaplan AI where you'll enter your Endpoint URL, API Key, Model Name, and optional settings*
 
-Novaplan AI allows you to integrate with Azure AI Foundry's diverse range of language models to enable AI features in your workspace. Azure AI Foundry provides access to models from multiple providers including GPT-4o, DeepSeek R1, Cohere, Phi, Mistral, and Claude.
+Novaplan AI can connect to a model deployment in Microsoft Foundry. Available model families, endpoints, billing, and regions depend on your Foundry resource and deployment. Novaplan helps you test the connection from your managed workspace.
 
 ## Required Fields
 
@@ -17,10 +17,7 @@ Novaplan AI allows you to integrate with Azure AI Foundry's diverse range of lan
 
 The Endpoint URL is required to connect to your Azure AI Foundry deployment. The URL format varies depending on the model type you're using.
 
-**Endpoint formats by model type:**
-
-- **For Claude models:** `https://<your-resource-name>.inference.ai.azure.com/anthropic`
-- **For other models (OpenAI, DeepSeek, etc.):** `https://<your-resource-name>.cognitiveservices.azure.com/openai/v1/`
+**Endpoint formats depend on the deployed model and resource.** Microsoft's current [Foundry endpoint guide](https://learn.microsoft.com/en-us/azure/foundry/how-to/develop/sdk-overview) shows `https://<resource-name>.services.ai.azure.com/anthropic` for Claude deployments using the Anthropic Messages API and an `/openai/v1/` endpoint for OpenAI-compatible deployments. The latter may be under a `services.ai.azure.com` or `openai.azure.com` resource hostname. Copy your deployment's actual endpoint rather than substituting an example hostname.
 
 **How to obtain your Endpoint:**
 1. Log in to the [Azure Portal](https://portal.azure.com)
@@ -28,7 +25,7 @@ The Endpoint URL is required to connect to your Azure AI Foundry deployment. The
 3. Go to the model deployments section
 4. Select your deployed model and copy the endpoint URL
 
-**Note:** Ensure you use the correct endpoint format for your chosen model type.
+**Note:** An older Novaplan form may still show `inference.ai.azure.com/anthropic` or `cognitiveservices.azure.com/openai/v1/` as a placeholder. Treat those as examples, not the address of your deployment. Confirm the value accepted by your Enterprise workspace with Novaplan.
 
 ### API Key *
 
@@ -43,17 +40,12 @@ The API Key authenticates your requests to your Azure AI service.
 
 ### Model Name *
 
-The Model Name field specifies which model you want to use with Novaplan AI.
-
-**Popular Azure AI Foundry models include:**
-- `gpt-5.1` - OpenAI's latest model for complex tasks
-- `claude-sonnet-4-5` - Anthropic's Claude model for balanced performance
-- `DeepSeek-V3.1` - DeepSeek's powerful reasoning model
+The Model Name field identifies the Foundry deployment to call. Use the exact name assigned to your deployment; it need not match the base model's catalog ID. For a Claude deployment, have Novaplan verify that its provider selection routes requests to the Anthropic Messages endpoint.
 
 **How to find available models:**
 1. Visit the [Azure AI Foundry model catalog](https://ai.azure.com/explore/models)
 2. Browse available models by capability or provider
-3. Use the exact model name as shown in your deployment
+3. Copy the exact deployment name, and check its region, API type, and enabled capabilities
 
 ## Optional Fields
 
@@ -67,17 +59,13 @@ Specify the maximum context length for your model (e.g., 128000 for 128K tokens)
 
 Enable this option if your model supports multimodal inputs (text + image). This allows Novaplan AI to process both text and images when interacting with the model.
 
-**Models with multimodal support include:**
-- GPT-4o and variants
-- Claude models (Sonnet, Opus)
+Confirm image-input support for your deployed model and the API path Novaplan uses before enabling the checkbox.
 
 ### Reasoning
 
 Enable this option if your model supports advanced reasoning capabilities. This is particularly useful for models designed for complex problem-solving tasks.
 
-**Models with reasoning support include:**
-- DeepSeek R1
-- OpenAI o1 series
+Confirm the selected deployment's reasoning controls and how the deployed Novaplan integration sends them before enabling the checkbox.
 
 ## Configuration Steps
 
@@ -113,7 +101,7 @@ As shown in the image above:
 - Ensure you're using the correct endpoint format for your model type (Claude vs. other models)
 - Verify your Azure subscription is active and has sufficient quota for the selected model
 - Check that the model name matches the exact name from your Azure AI deployment
-- Ensure your IP address is allowed if you've configured network access restrictions
+- Ensure access from the managed Novaplan workspace is allowed if your Foundry resource has network restrictions
 - For Claude models, verify you have access to the Anthropic models in Azure AI Foundry
 
 For additional support, refer to the [Azure AI Foundry documentation](https://learn.microsoft.com/en-us/azure/ai-studio/) or contact Novaplan AI support.
