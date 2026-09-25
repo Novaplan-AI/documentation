@@ -3,7 +3,7 @@ title: "Jira Cloud"
 description: "Jira-Projekte, Vorgänge, Kommentare und Anhänge mit Novaplan AI durchsuchen."
 ---
 
-Der Jira-Cloud-Konnektor synchronisiert Projekte, Vorgänge, Kommentare, Anhänge und die zugehörigen Berechtigungen mit Novaplan AI. Für selbst betriebenes Jira verwenden Sie stattdessen den [Jira-Data-Center-Konnektor](/de/connectors/jira/jira-data-center).
+Der Jira-Cloud-Team-Konnektor synchronisiert Projekte, Vorgänge, Kommentare, Anhänge und die zugehörigen Berechtigungen mit Novaplan AI. Die folgende Einrichtung beschreibt diese Team-Verbindung; die persönliche Jira-Cloud-Verbindung wird weiter unten erklärt. Für selbst betriebenes Jira verwenden Sie stattdessen den [Jira-Data-Center-Konnektor](/de/connectors/jira/jira-data-center).
 
 Novaplan richtet Ihren Workspace weitgehend für Sie ein. Die Atlassian-Anwendung, Authentifizierung und Projektauswahl stimmen Sie mit Novaplan und Ihrer Jira-Administration ab.
 
@@ -29,10 +29,10 @@ Jede betroffene Person öffnet in ihrem Atlassian-Konto **Account Settings → P
 
 | Methode | Geeignet für | Voraussetzungen |
 | --- | --- | --- |
-| **OAuth 2.0 (3LO)** | Mehrere Personen und produktive Nutzung mit individueller Zustimmung | Zugriff auf die Atlassian Developer Console und Registrierung einer OAuth-Anwendung |
-| **API Token** | Verbindung mit einem einzelnen Atlassian-Konto | API-Token eines Kontos mit Zugriff auf die benötigten Projekte |
+| **OAuth 2.0 (3LO)** | Gemeinsamer Team-Konnektor mit einer OAuth-Anwendung und einem dafür autorisierenden Atlassian-Konto | Zugriff auf die Atlassian Developer Console und Registrierung einer OAuth-Anwendung |
+| **API Token** | Gemeinsamer Team-Konnektor mit dem Token eines dafür vorgesehenen Atlassian-Kontos | API-Token eines Kontos mit Zugriff auf die benötigten Projekte |
 
-Beide Methoden synchronisieren dieselben Datentypen. Novaplan koordiniert mit Ihnen, welche Methode für den vorgesehenen Betrieb geeignet ist.
+Beide Methoden synchronisieren dieselben Datentypen über eine konfigurierte Team-Verbindung. Nicht jede Novaplan-AI-Nutzerin oder jeder Nutzer muss den Konnektor einzeln autorisieren; sichtbare Atlassian-E-Mail-Adressen und zugeordnete Quellberechtigungen bleiben für den Zugriff auf Suchergebnisse wichtig. Novaplan koordiniert mit Ihnen, welche Methode und welches Atlassian-Konto für den vorgesehenen Betrieb geeignet sind.
 
 ## OAuth 2.0 (3LO) einrichten
 
@@ -115,7 +115,15 @@ Synchronisierungsfilter begrenzen, was überhaupt aus Jira geladen wird. Indexie
 
 Klicken Sie auf **Save** und wählen Sie im Dialog **Start syncing now** oder **I'll do it later**. Den Fortschritt können Sie unter **Indexing Progress** prüfen.
 
-## Verhalten bei weiteren Läufen
+## Persönliche Jira-Cloud-Verbindung
+
+**Jira Cloud Personal** ist ein eigener Konnektor neben der oben beschriebenen Team-Verbindung. Er übernimmt Projekte und Vorgänge, die das für diese persönliche Verbindung verwendete Atlassian-Konto sehen darf, und ordnet die importierten Inhalte der einrichtenden Person zu. Er liest keine Jira-Berechtigungsschemata, Gruppen oder anderen Nutzerkonten für eine organisationsweite Rechtezuordnung.
+
+Wählen Sie **Jira Cloud Personal** im Katalog für persönliche Konnektoren. Die zugängliche Konfiguration bietet OAuth mit der Callback-Adresse aus dem eigenen Einrichtungsdialog oder einen API-Token mit **Base URL**, **Email** und **API Token**. Übernehmen Sie die Callback-Adresse der Team-Verbindung nicht ungeprüft. Für die Synchronisierung stehen **Scheduled** und **Manual** zur Verfügung; die registrierte Voreinstellung für geplante Läufe beträgt 60 Minuten. **Project Keys** sowie Datumsfilter begrenzen den Abruf. **Index Issues**, **Index Issue and comment Attachments** und **Enable Manual Indexing** steuern die Indexierung.
+
+Diese persönliche Verbindung dient der Suche der einrichtenden Person und ersetzt keine Team-Synchronisierung mit Quellberechtigungen. Prüfen Sie Verfügbarkeit und Verhalten in Ihrem Novaplan-AI-Workspace mit Novaplan, bevor Sie sensible Projekte verbinden.
+
+## Verhalten bei weiteren Läufen der Team-Verbindung
 
 Ein Lauf synchronisiert zunächst Nutzer und Gruppen, dann Projekte, Projektrollen, Vorgänge, Kommentare und Anhänge. Projekt- und vorgangsbezogene Rechte werden dabei übernommen. Der erste Lauf, ein geänderter Filter oder ein manuell gestarteter vollständiger Lauf führt eine umfassende Synchronisierung aus. Spätere Läufe verwenden einen gespeicherten Fortschrittspunkt und holen geänderte Vorgänge, beispielsweise über JQL mit `updated >= "last_sync_time"`.
 

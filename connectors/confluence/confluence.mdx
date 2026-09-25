@@ -105,8 +105,8 @@ This prerequisite applies to **both** authentication methods (OAuth and API Toke
 
 | Method | Best for |
 |--------|----------|
-| **OAuth 2.0 (3LO)** | Multi-user / org-wide rollouts, production — per-user refresh tokens, per-user consent, audit trail. Requires Atlassian Developer Console access. |
-| **API Token** | Single-account setups, quick POCs, or environments where you cannot register an OAuth app. Fastest path to sync. |
+| **OAuth 2.0 (3LO)** | A Team connector authorized with a designated Atlassian account through an OAuth app. Requires Atlassian Developer Console access and consent from the account that connects the instance. |
+| **API Token** | A Team connector authenticated with a token from a designated Atlassian account. No OAuth app registration is required. |
 
 <Tabs>
 
@@ -706,11 +706,11 @@ The Confluence connector syncs the following data from your Confluence Cloud wor
 
 | | OAuth 2.0 | API Token |
 |---|-----------|-----------|
-| **Best for** | Multi-user / org-wide rollouts, production | Single-account setups, quick POCs |
-| **Credentials model** | Per-user consent, rotating refresh tokens | Single token, long-lived until revoked |
+| **Best for** | A Team connection managed through an Atlassian OAuth app | A Team connection where an Atlassian API token is preferred |
+| **Credentials model** | The account authorizing this connector instance grants consent; the connector maintains its OAuth credentials | The token-owning account supplies one API token for the connector instance |
 | **Prerequisites** | Atlassian Developer Console admin access | Any Atlassian account |
 
-Choose **OAuth** for production and anything that needs per-user attribution. Choose **API Token** when you cannot register a developer-console app or just want to get syncing quickly. Both methods sync the same data.
+Both methods sync the same data through one configured Team connector instance. They do not require every Novaplan AI viewer to authorize the connector separately. Confluence email visibility and mapped source permissions still matter for what each viewer can find; agree on the authenticating account and method with Novaplan and your Atlassian administrator.
 
 </Accordion>
 

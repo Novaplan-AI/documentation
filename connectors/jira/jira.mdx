@@ -31,7 +31,7 @@ icon: "/logo/jira.png"
 Jira is the leading project management and issue tracking platform developed by Atlassian. It's widely used by software development teams, IT departments, and business teams to plan, track, and manage work through customizable workflows.
 
 <Info>
-  This page is for **Jira Cloud**, the version Atlassian hosts for you. If you run Jira on your own servers, use the [Jira Data Center connector](/connectors/jira/jira-data-center) instead.
+  This page is for **Jira Cloud**, the version Atlassian hosts for you. The setup and permission steps below describe the Team connector; a [separate Personal connection](#jira-cloud-personal-connection) is covered later. If you run Jira on your own servers, use the [Jira Data Center connector](/connectors/jira/jira-data-center) instead.
 </Info>
 
 ### Jira Data Structure
@@ -118,8 +118,8 @@ This prerequisite applies to **both** authentication methods (OAuth and API Toke
 
 | Method | Best for |
 |--------|----------|
-| **OAuth 2.0 (3LO)** | Multi-user / org-wide rollouts, production — per-user refresh tokens, per-user consent, audit trail. Requires Atlassian Developer Console access. |
-| **API Token** | Single-account setups, quick POCs, or environments where you cannot register an OAuth app. Fastest path to sync. |
+| **OAuth 2.0 (3LO)** | A Team connector authorized with a designated Atlassian account through an OAuth app. Requires Atlassian Developer Console access and consent from the account connecting the instance. |
+| **API Token** | A Team connector authenticated with a token from a designated Atlassian account. No OAuth app registration is required. |
 
 <Tabs>
 
@@ -573,9 +573,17 @@ Choose **Start syncing now** to kick off the initial sync immediately, or **I'll
 
 </Tabs>
 
-## Supported Features
+## Jira Cloud Personal connection
 
-The Jira connector syncs the following data from your Jira Cloud workspace:
+The **Jira Cloud Personal** connector is a separate option from the Team connector described above. It imports projects and issues visible to the account used for that personal connection and assigns the imported records to its creator. It does not read Jira permission schemes, groups, or other users to build Team access mappings.
+
+Select **Jira Cloud Personal** in the Personal connector catalog. Its accessible configuration supports either OAuth with the callback URL shown in that connector's own setup dialog, or an API token with **Base URL**, **Email**, and **API Token**. Do not reuse a Team callback URL without checking the Personal dialog. Choose **Scheduled** or **Manual** synchronization; the registered scheduled default is 60 minutes. **Project Keys** and date filters narrow what is fetched, while **Index Issues**, **Index Issue and comment Attachments**, and **Enable Manual Indexing** control indexing.
+
+The Personal connection is for the creator's search, not an organization-wide permissions sync. Confirm the available option and its behavior in your Novaplan AI workspace with Novaplan before connecting sensitive projects.
+
+## Supported features of the Team connector
+
+The Jira Team connector syncs the following data from your Jira Cloud workspace:
 
 - **Projects** — all accessible projects with their configurations and permission schemes
 - **Issues** — full issue content including summary, description, status, priority, and custom fields
@@ -758,11 +766,11 @@ After each successful sync:
 
 | | OAuth 2.0 | API Token |
 |---|-----------|-----------|
-| **Best for** | Multi-user / org-wide rollouts, production | Single-account setups, quick POCs |
-| **Credentials model** | Per-user consent, rotating refresh tokens | Single token, long-lived until revoked |
+| **Best for** | A Team connection managed through an Atlassian OAuth app | A Team connection where an Atlassian API token is preferred |
+| **Credentials model** | The account authorizing this connector instance grants consent; the connector maintains its OAuth credentials | The token-owning account supplies one API token for the connector instance |
 | **Prerequisites** | Atlassian Developer Console admin access | Any Atlassian account |
 
-Choose **OAuth** for production and anything that needs per-user attribution. Choose **API Token** when you cannot register a developer-console app or just want to get syncing quickly. Both methods sync the same data.
+Both methods sync the same data through one configured Team connector instance. They do not require every Novaplan AI viewer to authorize it separately. Jira email visibility and mapped source permissions still matter for what each viewer can find; agree on the authenticating account and method with Novaplan and your Atlassian administrator. For creator-only access, see the [Jira Cloud Personal connection](#jira-cloud-personal-connection) above.
 
 </Accordion>
 
