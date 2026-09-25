@@ -17,12 +17,53 @@ Toolsets können je nach Anbieter lesen, schreiben oder löschen. Autorisieren S
 
 ## Verfügbare Anwendungen
 
-Die Dokumentation umfasst Toolsets für Google Workspace (Gmail, Calendar, Drive), Microsoft 365 (Outlook, OneDrive, SharePoint, Teams), Atlassian Cloud und Data Center (Jira, Confluence), GitHub, ClickUp, Slack, Zoom, Salesforce sowie MariaDB und Redshift. Das konkrete Angebot Ihres Workspaces sehen Sie unter **Workspace settings → Actions**. Einige im Quellprojekt erwähnte Implementierungen sind noch nicht im Aktionskatalog verfügbar; verlassen Sie sich für die Einrichtung auf den angezeigten Katalog.
+Die folgenden Toolsets sind im zugänglichen Aktionskatalog beschrieben. Welche davon in Ihrem Workspace tatsächlich bereitstehen, sehen Sie unter **Workspace settings → Actions**. Die Zahl der Werkzeuge stammt aus diesem Katalog und kann sich mit der bereitgestellten Version ändern.
 
-Zusätzlich stehen Agenten eingebaute Fähigkeiten zur Verfügung, etwa Berechnungen und die Verwaltung erzeugter Artefakte. Bei angebundenem Wissen kommen Suchfunktionen hinzu. Für Bildgenerierung muss zuvor ein geeignetes Modell unter **Workspace → AI Models → Image Generation** eingerichtet sein.
+### Google Workspace
+
+| Toolset | Aktionen | Werkzeuge |
+| --- | --- | ---: |
+| [Gmail](/de/toolsets/google-workspace/gmail) | E-Mails lesen, senden und beantworten | 7 |
+| [Calendar](/de/toolsets/google-workspace/calendar) | Termine anlegen und verwalten | 7 |
+| [Drive](/de/toolsets/google-workspace/drive) | Dateien finden, lesen und verwalten | 8 |
+
+### Microsoft 365
+
+| Toolset | Aktionen | Werkzeuge |
+| --- | --- | ---: |
+| [Outlook](/de/toolsets/microsoft-365/outlook) | E-Mails und Kalender verwalten | 19 |
+| [OneDrive](/de/toolsets/microsoft-365/onedrive) | Dateien finden, lesen und verwalten | 21 |
+| [SharePoint](/de/toolsets/microsoft-365/sharepoint) | Websites, Listen und Dokumente bearbeiten | 19 |
+| [Teams](/de/toolsets/microsoft-365/teams) | Kanäle, Chats und Besprechungen verwalten | 34 |
+
+### Atlassian
+
+| Toolset | Aktionen | Werkzeuge |
+| --- | --- | ---: |
+| [Jira](/de/toolsets/jira/jira) | Vorgänge, Kommentare und Statuswechsel | 15 |
+| [Jira Data Center](/de/toolsets/jira/jira-data-center) | Aktionen in selbst betriebenem Jira | 13 |
+| [Confluence](/de/toolsets/confluence/confluence) | Seiten, Kommentare und Anhänge | 16 |
+| [Confluence Data Center](/de/toolsets/confluence/confluence-data-center) | Aktionen in selbst betriebenem Confluence | 15 |
+
+### Weitere Anwendungen und Datenbanken
+
+| Toolset | Aktionen | Werkzeuge |
+| --- | --- | ---: |
+| [GitHub](/de/toolsets/github/github) | Repositories, Issues und Pull Requests | 23 |
+| [ClickUp](/de/toolsets/clickup/clickup) | Aufgaben, Dokumente und Checklisten | 26 |
+| [Slack](/de/toolsets/slack/slack) | Nachrichten, Kanäle und Threads | 37 |
+| [Zoom](/de/toolsets/zoom/zoom) | Besprechungen und Kontakte | 13 |
+| [Salesforce](/de/toolsets/salesforce/salesforce) | Datensätze, Cases und SOQL-Abfragen | 30 |
+| Lumos | Zugriffsanfragen und App-Berechtigungen | 26 |
+| [MariaDB](/de/toolsets/mariadb/mariadb) | Tabellen abfragen und Schemas prüfen | 5 |
+| [Redshift](/de/toolsets/redshift/redshift) | Tabellen abfragen und Schemas prüfen | 8 |
+
+Das sind **19 Katalog-Toolsets mit 342 Werkzeugen** in der zugänglichen Implementierung. Für Lumos ist noch keine eigene Anleitung verfügbar. Wenn Sie diese Aktion einrichten möchten, wenden Sie sich an [Novaplan Support](/de/contact-us). Weitere Implementierungen, etwa Notion, Linear, GitLab, Dropbox, Box, S3 und Zendesk, sind im zugänglichen Quellkatalog nicht als aktiv registrierte Toolsets enthalten. Ihre tatsächliche Verfügbarkeit muss im Workspace geprüft werden.
+
+Zusätzlich stehen Agenten eingebaute Fähigkeiten zur Verfügung, die nicht unter **Actions** eingerichtet werden: **Artifact Manager** (6 Werkzeuge), **Internal Tools** für strukturierte Rückfragen (1), **Calculator** für Berechnungen und Arbeitstage (5) sowie **Image Generator** (1). Bei angebundenem Wissen kommt **Knowledge Graph** mit 4 Such- und Strukturwerkzeugen hinzu. Für Bildgenerierung muss zuvor ein geeignetes Modell unter **Workspace → AI Models → Image Generation** eingerichtet sein.
 
 <Warning>
-  Wenn Codeausführung für Ihren Workspace aktiviert ist, können Agenten über `run_code`, `install_packages` und `read_sandbox_file` Code und Dateien in einer isolierten Umgebung verwenden. Diese Werkzeuge gehören zu den eingebauten Agentenfähigkeiten; die Repository-Einträge `coding_sandbox` und `database_sandbox` werden laut technischer Quellanleitung nicht zusätzlich als Toolsets an Agenten angehängt. Klären Sie mit Novaplan, ob diese Funktion für Ihre Agenten und Daten zugelassen sein soll und wie sie in Ihrer bereitgestellten Version konfiguriert wird.
+  Wenn Codeausführung für Ihren Workspace aktiviert ist, können Agenten über `run_code`, `install_packages` und `read_sandbox_file` Code und Dateien in einer isolierten Umgebung verwenden. In der zugänglichen Implementierung ist sie standardmäßig aktiviert; prüfen Sie mit Novaplan, ob das auch für Ihren bereitgestellten Workspace gilt. Diese Werkzeuge gehören zu den eingebauten Agentenfähigkeiten; die Repository-Einträge `coding_sandbox` und `database_sandbox` werden laut technischer Quellanleitung nicht zusätzlich als Toolsets an Agenten angehängt. Klären Sie mit Novaplan, ob diese Funktion für Ihre Agenten und Daten zugelassen sein soll.
 </Warning>
 
 ## Toolset einrichten
