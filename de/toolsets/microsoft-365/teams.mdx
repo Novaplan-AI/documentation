@@ -28,6 +28,22 @@ Das Microsoft-Teams-Toolset gibt Agenten über Microsoft Graph Live-Zugriff auf 
 
 Die englische Quellanleitung listet unter anderem `Team.ReadBasic.All`, `Channel.ReadBasic.All`, `ChannelMessage.Read.All`, `ChannelMessage.Send`, `Chat.ReadWrite`, `Chat.Create`, `Calendars.ReadWrite`, `OnlineMeetings.Read`, `OnlineMeetingTranscript.Read.All`, `OnlineMeetingArtifact.Read.All`, `TeamMember.ReadWrite.All`, `ChannelMember.ReadWrite.All`, `Group.ReadWrite.All`, `User.Read`, `User.ReadBasic.All` und `offline_access`. Sie nennt außerdem `Channel.Create` und `Channel.Delete.All`. Die tatsächlich nötigen und verfügbaren Scopes müssen mit der bereitgestellten Novaplan-Version und Ihrer Microsoft-Administration abgeglichen werden; insbesondere sollte ein Löschrecht nur erteilt werden, wenn eine entsprechende Aktion vorgesehen und freigegeben ist.
 
+### Delegierte Microsoft-Graph-Berechtigungen nach Funktion
+
+| Funktion | In der Integrationsanleitung genannte Berechtigungen |
+| --- | --- |
+| Teams und Kanäle lesen | `Team.ReadBasic.All`, `Channel.ReadBasic.All` |
+| Kanäle erstellen und gegebenenfalls löschen | `Channel.Create`, `Channel.Delete.All` |
+| Kanalnachrichten lesen und senden | `ChannelMessage.Read.All`, `ChannelMessage.Send` |
+| Team- und Kanalmitglieder verwalten | `TeamMember.ReadWrite.All`, `ChannelMember.ReadWrite.All` |
+| Gruppen und Teams erstellen oder verwalten | `Group.ReadWrite.All` |
+| Chats lesen, senden und erstellen | `Chat.ReadWrite`, `Chat.Create` |
+| Personen und Sitzungen | `User.Read`, `User.ReadBasic.All`, `offline_access` |
+| Kalender lesen und Termine ändern | `Calendars.Read`, `Calendars.Read.Shared`, `Calendars.ReadBasic`, `Calendars.ReadWrite` |
+| Meetings, Transkripte und Artefakte lesen | `OnlineMeetings.Read`, `OnlineMeetingTranscript.Read.All`, `OnlineMeetingArtifact.Read.All` |
+
+Die Tabelle ist eine Referenz der dokumentierten Integration, kein Satz von Rechten, der pauschal erteilt werden sollte. Die Tool-Liste auf dieser Seite enthält **keine Löschaktion für Kanäle**; klären Sie deshalb `Channel.Delete.All` gesondert, bevor Sie es freigeben. Prüfen Sie unter **API permissions** den Status jeder Berechtigung und erteilen Sie **Grant admin consent** nur, wenn Ihre Organisation und die freigegebenen Funktionen dies erfordern. Die [Microsoft-Graph-Berechtigungsreferenz](https://learn.microsoft.com/en-us/graph/permissions-reference) beschreibt die einzelnen Rechte.
+
 ## Gemeinsame Aktion anlegen und Redirect URI registrieren
 
 1. Öffnen Sie als Workspace-Administration **Workspace → Actions**. Gibt es noch keine Teams-Instanz, wählen Sie bei **Microsoft Teams** **Setup**. Bei einer vorhandenen Instanz öffnen Sie den Typ und wählen **Add instance**.

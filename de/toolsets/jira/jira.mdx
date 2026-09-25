@@ -30,9 +30,21 @@ Mit dem Jira-Toolset können Agenten live in Jira Cloud arbeiten: Vorgänge und 
 1. Öffnen Sie die [Atlassian Developer Console](https://developer.atlassian.com/console/myapps/) und erstellen Sie eine **OAuth 2.0 integration** mit **Resource-level** als Zugriffstyp. Bei **Account-level** funktioniert die in der Quellanleitung beschriebene Site-Auswahl nicht.
 2. Öffnen Sie in Novaplan AI **Workspace Settings → Actions**, wählen Sie bei **Jira** **+ Setup** und kopieren Sie die dort angezeigte **Redirect URI**.
 3. Öffnen Sie in der Atlassian-App **Authorization → OAuth 2.0 (3LO)**. Hinterlegen Sie die exakt kopierte URI als **Callback URL**. Schon ein anderer Schrägstrich oder Host kann die Anmeldung verhindern.
-4. Wählen Sie unter **Permissions** die für Ihre freigegebenen Aktionen nötigen Rechte. Die Quellanleitung nennt für die User Identity API `read:account` und für Jira die klassischen Scopes `read:jira-work`, `write:jira-work`, `read:jira-user`. Sie nennt zusätzlich granulare Lese-Scopes für Benutzer, Gruppen, Avatare, Audit Logs und Rollen. Prüfen Sie diese mit Ihrer Atlassian-Administration und gewähren Sie nur die benötigten Rechte.
+4. Wählen Sie unter **Permissions** die für Ihre freigegebenen Aktionen nötigen Rechte für **User Identity API** und **Jira API**. Die Liste aus der Integrationsanleitung steht unten. Prüfen Sie diese mit Ihrer Atlassian-Administration und gewähren Sie nur die benötigten Rechte.
 5. Kopieren Sie unter **Settings → Authentication details** die **Client ID** und das **Secret**. Tragen Sie beide in der Jira-Instanz unter **Workspace Settings → Actions** ein, vergeben Sie einen **Instance Name** und wählen Sie **Create**.
 6. Jede Person öffnet **Your actions → Jira**, wählt **Authenticate with OAuth**, wählt die richtige Jira-Site und bestätigt die Berechtigungen. Verwenden Sie laut Quellanleitung dieselbe E-Mail-Adresse wie für das Novaplan-Konto.
+
+Client ID und Client Secret gehören zur gemeinsamen Atlassian-App. Persönliche OAuth-Tokens werden erst ausgestellt, wenn sich jede Person selbst anmeldet. Eine Atlassian-App kann auch für das [Confluence-Toolset](/de/toolsets/confluence/confluence) verwendet werden, sofern die nötigen Berechtigungen für beide APIs hinzugefügt wurden.
+
+#### Berechtigungsliste aus der Integrationsanleitung
+
+| API | Scopes |
+| --- | --- |
+| User Identity | `read:account` |
+| Jira, klassische Scopes | `read:jira-work`, `write:jira-work`, `read:jira-user` |
+| Jira, granulare Scopes | `read:user:jira`, `read:group:jira`, `read:avatar:jira`, `read:audit-log:jira`, `read:application-role:jira`, `read:project-role:jira` |
+
+Die Liste beschreibt die dokumentierten Funktionen. Ob einzelne granulare Rechte für Ihre konkrete App nötig sind, hängt von den freigegebenen Aktionen ab; prüfen Sie dies vor der Freigabe. Das Schreibrecht `write:jira-work` ist für das Erstellen oder Ändern von Vorgängen und Kommentaren relevant.
 
 ### API Token einrichten
 
@@ -43,5 +55,7 @@ Mit dem Jira-Toolset können Agenten live in Jira Cloud arbeiten: Vorgänge und 
 ## In einem Agenten verwenden
 
 Fügen Sie die Jira-Aktion im **Agent Builder** als Tool hinzu. Nennen Sie beim Erstellen eines Vorgangs Projektkürzel, Titel und Vorgangstyp. Geben Sie bei Suchen möglichst einen Zeitraum und eindeutige JQL-Kriterien an. Für Statusänderungen oder Zuweisungen nennen Sie den konkreten Vorgangsschlüssel und die gewünschte Person beziehungsweise den Zielstatus.
+
+Bei einer Zuweisung kann der Agent eine Person anhand ihres Namens oder ihrer E-Mail-Adresse suchen und anschließend die passende Atlassian-Konto-ID verwenden. Prüfen Sie vor der Änderung, dass die gefundene Person und der Zielvorgang stimmen. Der [Jira-Konnektor](/de/connectors/jira/jira) synchronisiert Vorgänge für die spätere Suche; das Toolset greift live auf Jira zu und kann Inhalte verändern.
 
 Wenn die Verbindung fehlschlägt, prüfen Sie je nach Methode Callback URL, Atlassian-Site, Scope-Freigaben, abgelaufenes Secret oder die Kombination aus E-Mail-Adresse und API Token. [Novaplan Support](/de/contact-us) hilft bei weiteren Fragen.
