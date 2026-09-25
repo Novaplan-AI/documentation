@@ -362,21 +362,11 @@ The Google Drive connector uses OAuth 2.0 for authentication. This requires user
 1. Navigate to **APIs & Services > Credentials** in the Cloud Console
 2. Click **Create Credentials** and select **OAuth client ID**
 3. Select **Web application** as the application type
-4. Set the **Authorized redirect URI** to:
-   ```
-   http://your-frontend-dns/connectors/oauth/callback/Drive
-   ```
-   or for HTTPS:
-   ```
-   https://your-frontend-dns/connectors/oauth/callback/Drive
-   ```
+4. Set the **Authorized redirect URI** to the exact HTTPS callback shown in your Novaplan AI workspace. For the Drive personal connector, its path is `/connectors/oauth/callback/Drive`; a workspace-specific example is `https://your-workspace.example.com/connectors/oauth/callback/Drive`.
 5. Click **Create** and note your **Client ID** and **Client Secret**
 
 <Info>
-  Redirect URI must match exactly your frontend URL. For example: if your app is
-  running on https://f7f0-240.ngrok-free.app then redirect URI should be
-  https://f7f0-240.ngrok-free.app/connectors/oauth/callback/Drive
-  in Google Cloud Console.
+  The redirect URI registered in Google must exactly match the callback supplied by the deployed workspace. Do not register a development tunnel, a local address, or a callback copied from an old screenshot for a customer workspace.
 </Info>
 
 ### Step 5: Configure OAuth Scopes
