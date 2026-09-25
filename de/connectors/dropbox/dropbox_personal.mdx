@@ -24,7 +24,7 @@ Aktivieren Sie unter **Permissions → Individual Scopes** die folgenden Berecht
 | `account_info.read` | Konto-ID und E-Mail-Adresse zuordnen |
 | `files.content.read` | Dateiinhalt abrufen |
 | `files.metadata.read` | Dateinamen, Typen und Änderungen erkennen |
-| `sharing.read` | Freigabelinks erkennen |
+| `sharing.read` | Vom Konnektor angefordert; die Verarbeitung von Freigaberechten muss im produktiven Workspace geprüft werden |
 | `sharing.write` | Vorschaulinks erstellen |
 
 **Team Scopes** werden für diese persönliche Verbindung nicht benötigt. Prüfen Sie den Umfang der Freigabe mit Ihrer Administration.
@@ -70,7 +70,7 @@ Dateien außerhalb der Synchronisierungsfilter werden nicht abgerufen. Ordner bl
 
 ### Indexierung
 
-Indexierungsfilter bestimmen, welche synchronisierten Dateien durchsuchbar werden. Bei **Manual Indexing** werden Dateien zunächst nur synchronisiert. Unter **All Records** können Sie sie später gezielt indexieren. **Index Shared Items** bezieht geteilte Dateien ein; deaktivieren Sie die Option, wenn nur Dateien aus dem eigenen Bereich indexiert werden sollen.
+Indexierungsfilter bestimmen, welche synchronisierten Dateien durchsuchbar werden. Bei **Manual Indexing** werden Dateien zunächst nur synchronisiert. Unter **All Records** können Sie sie später gezielt indexieren. **Index Shared Items** soll die Indexierung geteilter Elemente steuern. Der zugängliche Code des persönlichen Konnektors prüft zwar `is_shared`, befüllt dieses Merkmal aber nicht erkennbar aus Dropbox-Freigabedaten. Verlassen Sie sich zum Ausschluss geteilter Inhalte nicht allein auf diese Einstellung, bis Novaplan das Verhalten im produktiven Workspace geprüft hat.
 
 ## Technischer Ablauf
 
@@ -78,7 +78,13 @@ Die Verbindung verwendet den Dropbox **User Client**. Zu Beginn ruft sie über `
 
 Beim ersten Lauf verwendet der Konnektor `files/list_folder`. Er speichert danach einen Dropbox-Cursor (`dropbox_cursor_sync_point`). Weitere Läufe verwenden `/files/list_folder/continue`, um hinzugefügte, geänderte und gelöschte Dateien zu erkennen. Neue Datensätze werden im dokumentierten Ablauf in Batches von 100 verarbeitet; Inhalts- oder Metadatenänderungen und Löschungen werden gesondert übernommen.
 
-Der Konnektor erkennt über `sharing.read` Freigabelinks, importiert bei der persönlichen Verbindung jedoch keine vollständige Liste externer Nutzer. Das persönliche Konto bleibt Eigentümer seiner synchronisierten Dateien und Ordner.
+Die autorisierte Person erhält **OWNER**-Rechte auf die persönliche Record Group. Der zugängliche Konnektorcode weist ihr für einzelne Dateien und Ordner **WRITE** zu; nur bei einem Fehler beim Erstellen der Berechtigung greift ein **OWNER**-Fallback. Der Code versucht, Vorschaulinks zu erstellen oder vorhandene Links zu verwenden, importiert aber nicht erkennbar die externen Nutzer von Dropbox-Freigabelinks und setzt `is_shared` nicht erkennbar aus diesen Quelldaten.
+
+### Technische Methoden und Aktualisierungen
+
+Der `DropboxIndividualConnector` erbt von `BaseConnector`. `init` richtet die Verbindung ein und `_get_current_user_info` liest das autorisierte Konto. `run_sync` verarbeitet nacheinander die Person, ihren persönlichen Bereich und die Dateien und Ordner. `_run_sync_with_cursor` wählt anhand des gespeicherten Stands zwischen vollständigem und inkrementellem Lauf; `_process_dropbox_items_generator` verarbeitet die Dropbox-Einträge schrittweise.
+
+Für jeden Eintrag prüft `get_record_by_external_id`, ob er bereits bekannt ist. Neue Einträge gehen in Batches an `on_new_records`. Bei Änderungen oder Löschungen verwendet der Konnektor `on_record_metadata_update`, `on_record_content_update` oder `on_record_deleted`. Für Dateien ruft er einen temporären Downloadlink ab; für die Vorschau versucht er, einen Dropbox-Freigabelink zu erstellen oder einen vorhandenen Link zu verwenden. `get_signed_url` und `stream_record` dienen später dem Dateizugriff. Diese Methodennamen beschreiben den zugänglichen Quellcode und sind keine öffentliche Novaplan-AI-API.
 
 ## Fehlerbehebung
 

@@ -84,7 +84,7 @@ This guide will walk you through creating a Dropbox application to connect your 
    - `account_info.read` (Required to identify your user ID and email)
    - `files.content.read` (Required to download file content)
    - `files.metadata.read` (Required to track file names, types, and updates)
-   - `sharing.read` (Required to detect shared link permissions)
+   - `sharing.read` (Requested by the connector; shared-link permission handling should be verified in your deployed workspace)
    - `sharing.write` (Required to create preview links)
 
    <Note>
@@ -231,7 +231,7 @@ This can allow you to explicitly control which files and folders are indexed for
 
 ### Index Shared Items
 
-When enabled, files shared with others are indexed alongside personal files. Disable this to exclude shared content and index only files originating from a user's own drive.
+This setting is intended to control indexing of shared items. The accessible Personal connector code checks an `is_shared` flag but does not visibly populate that flag from Dropbox sharing data. Do not rely on this setting alone to exclude shared content until Novaplan has verified it in your deployed workspace.
 
 <div style={{ textAlign: "center" }}>
      <img
@@ -330,8 +330,8 @@ For each entry, the system determines the specific metadata type and handles it 
 ### Simplified Model
 Unlike the Teams connector which maps complex organizational roles (e.g., Editor, Viewer, Commenter), the Personal connector uses a simplified permission model.
 
-1. **Default Ownership:** Since this connector syncs a private drive, the authenticated user is automatically assigned **OWNER** permissions for every file and folder.
-2. **Shared Links:** The connector uses `sharing.read` to detect if a file has shared links. While it does not import the list of external users, it ensures the file metadata reflects that it is shared.
+1. **Personal drive ownership:** The authenticated user receives **OWNER** permission on the personal Record Group. The accessible connector code assigns that user **WRITE** permission on individual files and folders, with an **OWNER** fallback if permission construction fails.
+2. **Shared links and external access:** The accessible Personal implementation attempts to create or reuse preview links, but it does not visibly import Dropbox's external shared-link users or set the record's `is_shared` flag from source sharing data. Confirm the deployed behavior before treating the shared-item index filter as an access boundary.
 
 </Accordion>
 
