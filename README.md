@@ -1,6 +1,6 @@
 # Novaplan AI documentation
 
-Mintlify documentation for Novaplan AI, adapted from the PipesHub documentation repository. The site configuration is in `docs.json`; guide content is in `.mdx` files.
+Mintlify documentation for Novaplan AI. The site configuration is in `docs.json`; guide content is in `.mdx` files. The Git repository retains an `upstream` remote for selectively reviewing source-documentation updates.
 
 ## Local review
 
@@ -20,7 +20,7 @@ Use the preview URL printed by the CLI. It may select another port if the reques
 - Customer access is invitation-based. Do not add platform installation, self-registration, or open-source contribution instructions.
 - Existing-workspace support: `support@novaplan.ai`. The website contact form is for sales and demo enquiries.
 - Keep working API paths, package names, scopes, environment variables, and third-party product names intact.
-- Skip guides that are missing upstream until PipesHub supplies them. Review and rebrand them before adding them here.
+- Skip guides that are missing upstream until the source repository supplies them. Review and rebrand them before adding them here.
 - Keep internal audit reports, Enterprise artifacts, credentials, and deferred review material outside this public repository.
 
 ## Languages
@@ -29,7 +29,7 @@ The existing root-level guide paths are English. German translations live under 
 
 ## Upstream updates
 
-Compare incoming changes with the upstream PipesHub documentation and apply selected updates. Review each update for product applicability, instructions, links, screenshots, and branding. Do not overwrite Novaplan configuration with upstream defaults. Preserve any upstream license or attribution notices supplied with imported material.
+Compare incoming changes with the upstream documentation and apply selected updates. Review each update for product applicability, instructions, links, screenshots, and branding. Do not overwrite Novaplan configuration with upstream defaults. Preserve any license or attribution notices supplied with imported material.
 
 ## Publication
 
