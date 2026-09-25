@@ -48,7 +48,7 @@ Prüfen Sie vorab, ob das für **Authorize** verwendete ServiceNow-Konto Zugriff
 
 ## Synchronisierung festlegen
 
-Wählen Sie unter **Configure Records** eine **Sync strategy**, zum Beispiel **Scheduled** oder **Manual**. Bei einem Zeitplan legen Sie das **Sync interval** fest; die Quellanleitung verwendet eine Stunde als Beispiel. Speichern Sie mit **Save Configuration** und wählen Sie anschließend **Start Syncing Now** oder **I'll do it later**. Prüfen Sie den Status auf der ServiceNow-Instanzkarte.
+Wählen Sie unter **Configure Records** eine **Sync strategy**, zum Beispiel **Scheduled** oder **Manual**. Bei einem Zeitplan legen Sie das **Sync interval** fest; die Quellanleitung verwendet eine Stunde als Beispiel. Speichern Sie mit **Save Configuration** und wählen Sie anschließend **Start Syncing Now** oder **I'll do it later**. Prüfen Sie auf der ServiceNow-Instanzkarte, ob **Sync Enabled** aktiv ist; bei **Sync Paused** läuft weder der Zeitplan noch ein erwarteter Folgelauf. Starten Sie einen manuellen Lauf über die Sync-Aktion auf der Karte und kontrollieren Sie anschließend Synchronisierungs- und Indexierungsstatus.
 
 Die erste Synchronisierung liest Benutzer, Gruppen, Wissensdatenbanken, Kategorien und Artikel im eingerichteten Umfang. Spätere Läufe können Änderungen anhand von Feldern wie `sys_updated_on` erkennen. Die Dauer hängt von Anzahl der Artikel, Kategorien, Benutzer und Anhänge ab. Prüfen Sie nach dem ersten Lauf die Sichtbarkeit mit geeigneten Testkonten; die Quellanleitung beschreibt die Beachtung von ServiceNow-ACLs und Wissensdatenbankrechten, deren tatsächliche Wirkung von Ihrer Instanzkonfiguration abhängt.
 
