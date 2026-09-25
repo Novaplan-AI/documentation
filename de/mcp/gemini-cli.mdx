@@ -13,10 +13,12 @@ Bearbeiten Sie `~/.gemini/settings.json` und ersetzen Sie die Platzhalter:
 {
   "mcpServers": {
     "novaplan": {
-      "url": "NOVAPLAN_WORKSPACE_URL/mcp",
+      "httpUrl": "NOVAPLAN_WORKSPACE_URL/mcp",
       "oauth": {
+        "enabled": true,
         "clientId": "YOUR_CLIENT_ID",
-        "clientSecret": "YOUR_CLIENT_SECRET",
+        "clientSecret": "$NOVAPLAN_CLIENT_SECRET",
+        "redirectUri": "http://localhost:7777/oauth/callback",
         "scopes": [
           "openid", "profile", "email", "offline_access",
           "semantic:write", "conversation:write", "conversation:chat",
@@ -28,12 +30,16 @@ Bearbeiten Sie `~/.gemini/settings.json` und ersetzen Sie die Platzhalter:
 }
 ```
 
-Der lokale Servername `novaplan` kann frei gewählt werden; verwenden Sie ihn dann auch in den CLI-Befehlen. Passen Sie die Scopes an die Berechtigungen Ihrer OAuth-Anwendung an. Gemini CLI kann die Autorisierungs- und Token-Endpunkte über die Metadaten unter `/.well-known/oauth-protected-resource/mcp` erkennen.
+Der lokale Servername `novaplan` kann frei gewählt werden; verwenden Sie ihn dann auch in den CLI-Befehlen. `httpUrl` wählt Streamable HTTP. Mit `url` würde Gemini CLI dagegen SSE verwenden, was für den Novaplan-Endpunkt `/mcp` nicht passt. Passen Sie die Scopes an die benötigten Werkzeuge und Berechtigungen Ihrer OAuth-Anwendung an. Setzen Sie `NOVAPLAN_CLIENT_SECRET` in Ihrer geschützten lokalen Umgebung, bevor Sie Gemini CLI starten. Gemini ersetzt `$NOVAPLAN_CLIENT_SECRET` beim Lesen der Einstellungen durch dessen Wert; das eigentliche Secret gehört nicht in eine geteilte oder eingecheckte Datei. Gemini CLI kann die Autorisierungs- und Token-Endpunkte über die Metadaten von Novaplan AI erkennen.
 
-Alternativ können Sie zuerst `gemini mcp add --transport http novaplan NOVAPLAN_WORKSPACE_URL/mcp` ausführen und danach den `oauth`-Block in der Einstellungsdatei ergänzen.
+Alternativ können Sie zuerst `gemini mcp add --scope user --transport http novaplan NOVAPLAN_WORKSPACE_URL/mcp` ausführen und danach den `oauth`-Block in `~/.gemini/settings.json` ergänzen. Ohne `--scope user` legt der CLI-Befehl den Eintrag standardmäßig im Projekt ab.
 
 ## Anmelden und prüfen
 
-Registrieren Sie in der Novaplan-OAuth-Anwendung die Redirect URI `http://localhost:7777/oauth/callback`, sofern Sie den Standardwert von Gemini CLI verwenden. Öffnen Sie Gemini CLI und führen Sie `/mcp auth novaplan` aus. Ein Browserfenster führt Sie zur persönlichen Novaplan-Anmeldung. Mit `gemini mcp list` prüfen Sie anschließend die konfigurierte Verbindung.
+Registrieren Sie in der Novaplan-OAuth-Anwendung die Redirect-URI `http://localhost:7777/oauth/callback`, die im Beispiel ausdrücklich mit `redirectUri` festgelegt ist. Ohne diese Einstellung wählt Gemini CLI einen zufälligen lokalen Port. Öffnen Sie Gemini CLI und führen Sie `/mcp auth novaplan` aus. Ein Browserfenster führt Sie zur persönlichen Novaplan-Anmeldung. Mit `gemini mcp list` prüfen Sie anschließend die konfigurierte Verbindung.
 
 Das OAuth-Verfahren benötigt einen lokalen Browser. In einer Umgebung ohne Browser oder bei einer entfernten SSH-Sitzung muss die Anmeldung gesondert ermöglicht werden. Bewahren Sie ein Client Secret außerhalb eines gemeinsam genutzten oder eingecheckten Konfigurationsfiles auf.
+
+<Warning>
+  Aktuelle Gemini-CLI-Versionen prüfen bei bekanntem OAuth-Issuer den Parameter `iss` in der Rückleitung. Wenn die Anmeldung mit **Missing issuer parameter in response** scheitert, wenden Sie sich an [Novaplan Support](/de/contact-us). Deaktivieren Sie die Issuer-Prüfung nicht. Die Kompatibilität muss mit dem bereitgestellten Enterprise-OAuth-Server getestet werden.
+</Warning>

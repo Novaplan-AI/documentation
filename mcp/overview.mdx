@@ -62,7 +62,7 @@ Add all the redirect URIs for the clients you plan to use:
 | **Claude Code** | `http://localhost:<PORT>/callback` (e.g., `http://localhost:8080/callback`) |
 | **Claude.ai (Web)** | `https://claude.ai/api/mcp/auth_callback` |
 | **Claude Desktop** (custom connector) | `https://claude.ai/api/mcp/auth_callback` |
-| **Gemini CLI** | `http://localhost:7777/oauth/callback` |
+| **Gemini CLI** | `http://localhost:7777/oauth/callback` when explicitly set as `redirectUri`; otherwise Gemini CLI selects a random port |
 | **LibreChat** | `http://localhost:3080/api/mcp/<server-identifier>/oauth/callback` |
 
 <Warning>
@@ -171,7 +171,7 @@ This returns all OAuth endpoints automatically:
     - **Cursor Web / Agents**: `https://www.cursor.com/agents/mcp/oauth/callback`
     - **Claude Code**: `http://localhost:<callbackPort>/callback`
     - **Claude.ai**: `https://claude.ai/api/mcp/auth_callback`
-    - **Gemini CLI**: `http://localhost:7777/oauth/callback`
+    - **Gemini CLI**: `http://localhost:7777/oauth/callback` if explicitly configured as `redirectUri`; otherwise check the selected local port
     - **LibreChat**: `http://localhost:3080/api/mcp/<server-identifier>/oauth/callback`
 
     Also make sure the OAuth app is **active** (not suspended) in Novaplan AI.
