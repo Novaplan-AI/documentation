@@ -11,7 +11,7 @@ Wenn ein Client den entfernten MCP-Endpunkt nicht direkt verwenden kann, kommt e
 
 ## Voraussetzungen
 
-- Node.js und `npx` auf dem Computer, auf dem der MCP-Client läuft.
+- Node.js **20 oder neuer** und `npx` auf dem Computer, auf dem der MCP-Client läuft.
 - Die von Novaplan bereitgestellte Workspace-Adresse `NOVAPLAN_WORKSPACE_URL`.
 - Ein eigenes [persönliches Zugriffstoken](/de/developer/personal-access-tokens), dessen Gültigkeit und Scopes zum gewünschten Zugriff passen.
 
@@ -38,7 +38,19 @@ Für Clients mit einer `mcpServers`-Konfiguration sieht der technische Aufruf so
 
 `novaplan` ist ein frei wählbarer lokaler Servername; der Paketname und die CLI-Argumente müssen zum tatsächlich verwendeten Paket passen. Für Cursor liegt eine solche Konfiguration in `.cursor/mcp.json`; in VS Code öffnen Sie **MCP: Open User Configuration**, in Windsurf die rohe MCP-Konfiguration. Claude Desktop hat eine [eigene Anleitung](/de/mcp/claude-desktop).
 
-Für Claude Code oder Gemini CLI kann die Stdio-Konfiguration über die jeweilige MCP-CLI ergänzt werden. Die [englische Stdio-Referenz](/mcp/local-server) zeigt die jeweiligen Befehle. Prüfen Sie vor einer Übernahme in eine Teamkonfiguration, wie Ihr Client Geheimnisse sicher bereitstellt.
+Für Claude Code oder Gemini CLI kann die Stdio-Konfiguration über die jeweilige MCP-CLI ergänzt werden:
+
+```bash
+claude mcp add novaplan -- npx -y @pipeshub-ai/mcp start \
+  --server-url NOVAPLAN_WORKSPACE_URL \
+  --bearer-auth YOUR_BEARER_TOKEN
+
+gemini mcp add novaplan -- npx -y @pipeshub-ai/mcp start \
+  --server-url NOVAPLAN_WORKSPACE_URL \
+  --bearer-auth YOUR_BEARER_TOKEN
+```
+
+Ersetzen Sie die Platzhalter durch die freigegebene Workspace-Adresse und Ihr eigenes Token. Prüfen Sie vor einer Übernahme in eine Teamkonfiguration, wie Ihr Client Geheimnisse sicher bereitstellt. Alle unterstützten CLI-Argumente zeigt `npx @pipeshub-ai/mcp --help`.
 
 ## Fehlerbehebung
 
