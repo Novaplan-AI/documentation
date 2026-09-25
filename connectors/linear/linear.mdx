@@ -390,7 +390,7 @@ The connector syncs data in the following order:
 4. **Attachments** → Sync external links attached to issues
 5. **Documents** → Sync Linear documents linked to issues
 6. **Projects** → Sync projects with milestones, updates, and related content
-7. **Deletions** → Detect and remove deleted/archived issues and projects
+7. **Deletions** → Check for trashed issues and projects and remove their indexed records
 
 ### Full Sync vs Incremental Sync
 
@@ -411,7 +411,7 @@ The connector syncs data in the following order:
 
 **Attachments & Documents**: Synced separately to capture additions even when parent issue wasn't modified
 
-**Deletions**: Automatically detects trashed/archived content and removes from index along with related records
+**Deletions**: The accessible connector checks for items marked `trashed` on later syncs and removes their records and related content. Archiving alone is not the removal condition in that path; verify the deployed behavior before relying on it for retention or access changes.
 
 </Accordion>
 
@@ -434,7 +434,7 @@ The connector syncs data in the following order:
   
   **Tips to speed up initial sync:**
   - Use **team filters** to sync only the teams you need
-  - Use **date filters** to exclude old/archived content
+  - Use **date filters** to limit older content
   - Disable indexing filters for content types you don't need (e.g., attachments, files)
 </Accordion>
 
