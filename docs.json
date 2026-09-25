@@ -128,7 +128,12 @@
                   "de/ai-models/embedding/openai",
                   "de/ai-models/embedding/gemini",
                   "de/ai-models/embedding/azure-openai",
-                  "de/ai-models/embedding/azure-ai"
+                  "de/ai-models/embedding/azure-ai",
+                  "de/ai-models/embedding/cohere",
+                  "de/ai-models/embedding/mistral",
+                  "de/ai-models/embedding/jina",
+                  "de/ai-models/embedding/voyage",
+                  "de/ai-models/embedding/together"
                 ]
               }
             ]

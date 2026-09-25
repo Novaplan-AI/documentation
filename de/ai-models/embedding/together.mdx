@@ -1,0 +1,29 @@
+---
+title: "Together AI Embeddings"
+description: "Embedding-Modelle über Together AI mit Novaplan AI verbinden."
+---
+
+# Together AI Embeddings konfigurieren
+
+![Konfigurationsansicht für Together AI Embeddings](/images/ai-models/embedding/Together_EmbeddingConfig.png)
+
+Novaplan AI kann Embedding-Modelle über Together AI für semantische Suche und Dokumentabruf verwenden. Novaplan unterstützt Sie bei der Einrichtung. Sie benötigen einen Together-API-Schlüssel und die vollständige Modell-ID aus dem Katalog.
+
+## Erforderliche Angaben
+
+**API Key:** Melden Sie sich auf der [Together AI Platform](https://api.together.xyz/) an, öffnen Sie **API Keys** in den Kontoeinstellungen, erstellen Sie mit **Create API Key** einen Schlüssel und kopieren Sie ihn. Bewahren Sie ihn geschützt auf.
+
+**Model Name:** Geben Sie die exakte ID aus dem [Together-Modellkatalog](https://api.together.xyz/models) ein, beispielsweise `togethercomputer/m2-bert-80M-32k-retrieval`. Prüfen Sie die aktuelle Verfügbarkeit und die Kontextlänge des gewählten Modells.
+
+## Option: Endpoint URL
+
+Ohne Eintrag unter **Endpoint URL** verwendet Novaplan AI den regulären Together-Endpoint `https://api.together.xyz/v1/`. Nur bei einem eigenen Proxy, Gateway oder dedizierten Endpoint tragen Sie eine abweichende Basisadresse ein.
+
+## Modell hinzufügen
+
+1. Klicken Sie auf der Together-Embedding-Anbieterkarte auf **Configure**.
+2. Geben Sie **API Key** und **Model Name** ein.
+3. Tragen Sie bei Bedarf eine andere **Endpoint URL** ein; sonst lassen Sie das Feld leer.
+4. Klicken Sie auf **Add Model**, um die Angaben zu speichern und prüfen zu lassen.
+
+API Key und Model Name sind erforderlich; Endpoint URL ist optional. Nutzung zählt zu Kontingent, Guthaben und gegebenenfalls zur Abrechnung Ihres Together-Kontos. Bei Fehlern prüfen Sie Schlüssel, Modell-ID, Kontostatus und API-Limits. Weitere Informationen bietet die [Together-Dokumentation](https://docs.together.ai/); [Novaplan Support](/de/contact-us) hilft bei der Einrichtung.
