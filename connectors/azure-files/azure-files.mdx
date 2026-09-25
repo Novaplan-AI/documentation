@@ -395,8 +395,8 @@ Usually this means the Azure access keys were changed.
   Not directly. The easiest workaround is to filter by **file extensions** or split content into separate shares.
 </Accordion>
 
-<Accordion title="Is the connection string encrypted?">
-  Yes. Novaplan AI stores it as a secret — it's not visible in logs or to other users.
+<Accordion title="How should I protect the connection string?">
+  Treat the connection string as a storage-account secret and enter it only in the connector's credential field. Ask Novaplan to confirm the deployed workspace's encryption, access-control, and logging arrangements before connecting sensitive storage; this guide does not verify those controls.
 </Accordion>
 
 <Accordion title="What's the difference between Azure Files and Azure Blob?">

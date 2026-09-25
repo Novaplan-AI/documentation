@@ -31,7 +31,7 @@ Upload the JSON key file you created above. Novaplan AI validates the file befor
 - it is missing `type`, `project_id`, or `private_key`, or
 - its `type` field is not `service_account` — which usually means an OAuth client secret was uploaded by mistake.
 
-The key is stored encrypted and is used only to authenticate requests to Vertex AI.
+Treat the JSON file as a long-lived private key: upload it only through the provider's credential field, limit the service account's permissions, and rotate the key if it is exposed. Confirm the deployed workspace's credential-storage and access controls with Novaplan before connecting sensitive workloads.
 
 ### Model Name *
 

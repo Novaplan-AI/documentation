@@ -26,6 +26,8 @@ Novaplan AI benötigt für Vertex AI eine **Service-Account-JSON-Schlüsseldatei
 
 Novaplan AI weist eine Datei zurück, die kein gültiges JSON ist, der `type`, `project_id` oder `private_key` fehlen oder deren `type` nicht `service_account` ist. Ein OAuth-Client-Secret ist kein Ersatz für einen Dienstkontoschlüssel. Prüfen Sie die [aktuelle Vertex-AI-Modellreferenz](https://cloud.google.com/vertex-ai/generative-ai/docs/learn/models) und die Verfügbarkeit des Modells in Ihrer Region.
 
+Behandeln Sie die JSON-Datei als langlebigen privaten Schlüssel: Laden Sie sie nur über das vorgesehene Zugangsdatenfeld hoch, begrenzen Sie die Rechte des Dienstkontos und rotieren Sie den Schlüssel bei Offenlegung. Lassen Sie sich von Novaplan die Speicherung und Zugriffskontrollen des bereitgestellten Workspaces bestätigen, bevor Sie sensible Workloads anbinden.
+
 ## Optionale Einstellungen
 
 - **Region:** Zielregion für die Modellaufrufe, beispielsweise `europe-west4`; Standard ist `us-central1`. Nicht jedes Modell ist in jeder Region verfügbar.
