@@ -240,7 +240,7 @@ Here you can see:
 
 You can close the panel and come back any time — the sync keeps running in the background.
 
-That's it! 🎉 Your Azure Blob files are now searchable in Novaplan AI.
+After synchronization and indexing finish, supported file contents become searchable in Novaplan AI. Check the Overview panel for progress and failures.
 
 </div>
 
@@ -345,7 +345,7 @@ They still show up in results by filename.
 <Accordion title="Sync is very slow">
 
 - Add filters (container names, file extensions, date range) to sync only what you need.
-- Very large accounts (millions of files) will always take several hours on the first run. Later syncs are fast.
+- Large accounts can make both the initial and later runs slow because the connector lists selected objects before processing eligible changes. Duration depends on object count, size, service limits, filters, and indexing capacity; check the Overview panel for actual progress.
 
 </Accordion>
 

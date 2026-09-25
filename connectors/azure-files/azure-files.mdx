@@ -244,7 +244,7 @@ Here you can see:
 
 You can close the panel and come back any time — the sync keeps running in the background.
 
-That's it! 🎉 Your Azure file shares are now searchable in Novaplan AI.
+After synchronization and indexing finish, supported file contents become searchable in Novaplan AI. Check the Overview panel for progress and failures.
 
 </div>
 
@@ -349,7 +349,7 @@ They still show up in results by filename.
 <Accordion title="Sync is very slow">
 
 - Add filters (share names, file extensions, date range) to sync only what you need.
-- Very large shares (millions of files) will always take several hours on the first run. Later syncs are fast.
+- Large shares can make both the initial and later runs slow because the connector lists selected files before processing eligible changes. Duration depends on file count, size, service limits, filters, and indexing capacity; check the Overview panel for actual progress.
 
 </Accordion>
 
