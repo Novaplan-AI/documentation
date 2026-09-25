@@ -47,6 +47,7 @@
               "de/connectors/overview",
               "de/connectors/box/box",
               "de/connectors/confluence/confluence",
+              "de/connectors/confluence/confluence-data-center",
               "de/connectors/dropbox/dropbox_personal",
               "de/connectors/dropbox/dropbox_teams",
               "de/connectors/google-workspace/drive/drive",
@@ -54,6 +55,7 @@
               "de/connectors/github/github",
               "de/connectors/gitlab/gitlab",
               "de/connectors/jira/jira",
+              "de/connectors/jira/jira-data-center",
               "de/connectors/rss/rss",
               "de/connectors/salesforce/salesforce",
               "de/connectors/slack/slack",
@@ -76,6 +78,7 @@
               "de/connectors/servicenow/servicenow",
               "de/connectors/nextcloud/nextcloud",
               "de/connectors/linear/linear",
+              "de/connectors/local-fs/local-fs",
               "de/connectors/mariadb/mariadb",
               "de/connectors/postgres/postgres"
             ]
@@ -187,6 +190,7 @@
           {
             "group": "Toolsets",
             "pages": [
+              "de/toolsets/overview",
               "de/toolsets/google-workspace/drive",
               "de/toolsets/google-workspace/gmail",
               "de/toolsets/google-workspace/calendar"

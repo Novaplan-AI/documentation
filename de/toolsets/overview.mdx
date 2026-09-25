@@ -1,0 +1,47 @@
+---
+title: "Toolsets im Überblick"
+description: "Aktionen für Agenten mit externen Anwendungen verbinden."
+---
+
+## Was sind Toolsets?
+
+**Toolsets** stellen Agenten Aktionen in verbundenen Anwendungen bereit: Daten lesen, Nachrichten versenden, Vorgänge anlegen oder Inhalte aktualisieren. Ein [Konnektor](/de/connectors/overview) synchronisiert dagegen Daten in die Novaplan-AI-Suche. Wenn ein Agent erst Wissen suchen und anschließend handeln soll, können Sie im Agent Builder **Knowledge**-Knoten für die Suche und **Tools**-Knoten für Aktionen mit dem Agent Core verbinden.
+
+| | Konnektor | Toolset |
+| --- | --- | --- |
+| Zweck | Daten für Suche und Kontext synchronisieren | Aktionen über die API einer Anwendung ausführen |
+| Zeitpunkt | Geplante oder manuelle Synchronisierung | Beim Aufruf einer Aktion durch den Agenten |
+| Beispiel | E-Mails in der Wissenssuche finden | Eine neue E-Mail versenden |
+
+Toolsets können je nach Anbieter lesen, schreiben oder löschen. Autorisieren Sie nur die Rechte, die für den vorgesehenen Agenten und Anwendungsfall nötig sind. Novaplan unterstützt Sie bei der Einrichtung und der Prüfung sensibler Aktionen.
+
+## Verfügbare Anwendungen
+
+Die Dokumentation umfasst Toolsets für Google Workspace (Gmail, Calendar, Drive), Microsoft 365 (Outlook, OneDrive, SharePoint, Teams), Atlassian Cloud und Data Center (Jira, Confluence), GitHub, ClickUp, Slack, Zoom, Salesforce sowie MariaDB und Redshift. Das konkrete Angebot Ihres Workspaces sehen Sie unter **Workspace settings → Actions**. Einige im Quellprojekt erwähnte Implementierungen sind noch nicht im Aktionskatalog verfügbar; verlassen Sie sich für die Einrichtung auf den angezeigten Katalog.
+
+Zusätzlich stehen Agenten eingebaute Fähigkeiten zur Verfügung, etwa Berechnungen und die Verwaltung erzeugter Artefakte. Bei angebundenem Wissen kommen Suchfunktionen hinzu. Für Bildgenerierung muss zuvor ein geeignetes Modell unter **Workspace → AI Models → Image Generation** eingerichtet sein.
+
+<Warning>
+  Wenn Codeausführung für Ihren Workspace aktiviert ist, können Agenten Code in einer isolierten Umgebung ausführen. Klären Sie mit Novaplan, ob diese Funktion für Ihre Agenten und Daten zugelassen sein soll und wie sie in Ihrer bereitgestellten Version konfiguriert wird. Die ursprüngliche technische Dokumentation verwendet dafür einen noch zu verifizierenden produktinternen Konfigurationsnamen.
+</Warning>
+
+## Toolset einrichten
+
+1. Öffnen Sie **Workspace settings → Actions**. Teamweit verwaltete Toolsets benötigen die entsprechenden Administrationsrechte. Persönliche Verbindungen finden Sie unter **Your Actions**.
+2. Suchen Sie die Anwendung. Für Team-Aktionen können Sie nach **All**, **Configured** und **Not configured** filtern; für persönliche Aktionen nach **All**, **Authenticated** und **Not authenticated**.
+3. Wählen Sie **Configure** und folgen Sie den anwendungsspezifischen Schritten. Je nach Toolset benötigen Sie OAuth-Zugangsdaten oder eine andere Anmeldemethode.
+4. Bei OAuth kopieren Sie die im Konfigurationsdialog angezeigte **Redirect URI** in die zugelassene Callback-Liste der externen Anwendung. Beide Werte müssen exakt übereinstimmen.
+5. Schließen Sie **Authenticate** und gegebenenfalls die Freigabe im Anbieterfenster ab. Prüfen Sie anschließend den Status **Authenticated**.
+
+Die notwendigen Berechtigungen hängen von den tatsächlich genutzten Aktionen ab. Ein Toolset für E-Mails kann beispielsweise Leserechte und Senderechte benötigen; ein Toolset für Vorgänge kann Erstellen, Aktualisieren oder Löschen anbieten. Die Einzelanleitungen beschreiben die jeweiligen Zugangsdaten und Rechte. Bei Datenbank-Toolsets kann ein Administrator die Instanz anlegen, während Benutzer ihre eigenen Zugangsdaten hinterlegen.
+
+## Im Agent Builder verwenden
+
+1. Öffnen Sie einen Agenten im **Agent Builder**.
+2. Suchen Sie im Bereich **Tools** das authentifizierte Toolset.
+3. Fügen Sie es dem Ablauf hinzu und verbinden Sie es mit dem Agent Core.
+4. Testen Sie den Agenten mit einem Konto, das die vorgesehenen Rechte besitzt. Prüfen Sie bei schreibenden Aktionen die Auswirkungen in der Zielanwendung.
+
+Ist ein Toolset nicht nutzbar, prüfen Sie unter **Actions** den Authentifizierungsstatus. Über den Konfigurationsdialog können Sie Zugangsdaten aktualisieren, bei Ablauf erneut authentifizieren oder eine nicht mehr benötigte Verbindung entfernen. Nicht authentifizierte Toolsets lassen sich nicht als ausführbare Aktionen verwenden.
+
+Weitere Schritte finden Sie unter [Agent einrichten](/de/agent-guide/setup-guide) und in den jeweiligen Toolset-Anleitungen. Bei Fragen zur Freigabe von Aktionen wenden Sie sich an [Novaplan Support](/de/contact-us).

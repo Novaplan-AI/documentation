@@ -1,0 +1,76 @@
+---
+title: "Confluence Data Center"
+description: "Bereichs- und Seiteninhalte aus Confluence Data Center synchronisieren."
+---
+
+## Überblick
+
+Dieser Konnektor verbindet eine selbst betriebene **Confluence-Data-Center-Instanz** mit Novaplan AI. Für von Atlassian gehostete Instanzen verwenden Sie den [Confluence-Cloud-Konnektor](/de/connectors/confluence/confluence). Die beiden Varianten haben unterschiedliche Anmeldeverfahren und APIs.
+
+Synchronisiert werden Bereiche, Seiten, Blogbeiträge, Kommentare, Anhänge, Benutzer und Gruppen. Bereichsrechte sowie Lesebeschränkungen für Seiten und Blogbeiträge werden berücksichtigt. Ordner gehören laut Quellanleitung nur zur Cloud-Variante und werden hier nicht als eigene Elemente synchronisiert.
+
+<Warning>
+  Der Konnektor benötigt **Confluence Data Center 9.1 oder neuer**. Frühere Versionen stellen Bereichsberechtigungen nicht über den benötigten REST-Endpunkt bereit. Der Konnektor bricht dann ab, damit Inhalte nicht ohne verlässliche Rechte indexiert werden.
+</Warning>
+
+## Voraussetzungen und Berechtigungen
+
+Ihre Confluence-Instanz muss aus der Novaplan-Umgebung über HTTPS erreichbar sein. Verwenden Sie ihre Stammadresse, zum Beispiel `https://confluence.example.com`, ohne abschließenden Schrägstrich. Läuft Confluence unter einem Basispfad, nehmen Sie diesen auf, etwa `https://example.com/confluence`; eine einzelne Seiten-URL wie `/display/SPACE` ist keine **Base URL**.
+
+Das Konnektorkonto sollte alle betroffenen Bereiche, die Benutzerliste und das Audit-Log lesen können. Die Quellanleitung empfiehlt dafür ein Confluence-Administratorkonto. Ein **Personal Access Token** übernimmt genau dessen Rechte. Stimmen Sie Umfang und Schutz dieses Zugangs mit Ihrer Confluence-Administration ab.
+
+Confluence Data Center steuert die Sichtbarkeit von E-Mail-Adressen global unter **Administration → General Configuration → Security Configuration → User email visibility**. Wenn Adressen für den Konnektor nicht sichtbar sind, können Benutzer beim ersten Lauf fehlen und Berechtigungen später zugeordnet werden. Die Quellanleitung nennt **Public** als mögliche Einstellung; diese macht Adressen für angemeldete Confluence-Benutzer sichtbar und ist daher eine Entscheidung Ihrer Administration und Datenschutzverantwortlichen.
+
+## Anmeldemethode wählen
+
+| Methode | Verwendung |
+| --- | --- |
+| **Personal Access Token** | Bevorzugt; Token sind ab Confluence 7.9 verfügbar und können separat widerrufen werden. |
+| **Basic Authentication** | Falls Token in Ihrer Instanz nicht verfügbar oder deaktiviert sind; benötigt Benutzername und Passwort. |
+
+OAuth-Anwendungen aus der Atlassian Developer Console sind für Confluence Cloud bestimmt und funktionieren mit diesem Data-Center-Konnektor nicht. Beide hier angebotenen Methoden synchronisieren dieselben Daten.
+
+### Personal Access Token erstellen
+
+1. Melden Sie sich mit dem gewählten Konnektorkonto in Confluence an.
+2. Öffnen Sie über das Profilbild **Settings → Personal Access Tokens** und wählen Sie **Create token**.
+3. Benennen Sie es beispielsweise `Novaplan AI Confluence Connector`. Setzen Sie ein Ablaufdatum gemäß Ihrer Richtlinie oder deaktivieren Sie **Automatic expiry** nur, falls dies zugelassen ist.
+4. Wählen Sie **Create** und kopieren Sie das Token sofort. Es wird nur einmal angezeigt; nach Verlust müssen Sie es widerrufen und neu erstellen.
+
+### Verbindung in Novaplan AI einrichten
+
+1. Öffnen Sie **Workspace Settings → Connectors**, suchen Sie **Confluence Data Center** und wählen Sie **+ Setup**.
+2. Wählen Sie auf **Authenticate Instance** unter **Authentication method** entweder **Personal Access Token** oder **Basic Authentication**.
+3. Geben Sie die **Base URL** und das Token ein. Für **Basic Authentication** geben Sie stattdessen den Confluence-**Username** und das **Password** ein; verwenden Sie den Benutzernamen, nicht automatisch die E-Mail-Adresse.
+4. Wählen Sie **Next**. Nach Prüfung der Zugangsdaten gelangen Sie zu **Configure Records**.
+
+Wenn Token oder Passwort später geändert werden, aktualisieren Sie **Authenticate Instance**. Data-Center-Zugangsdaten werden nicht automatisch erneuert.
+
+## Inhalte und Synchronisierung auswählen
+
+Unter **Configure Records** wählen Sie **Scheduled** oder **Manual**. Der voreingestellte **Sync Interval** beträgt 60 Minuten. Eine Echtzeit-Synchronisierung ist für diesen Konnektor nicht vorgesehen.
+
+| Synchronisierungsfilter | Bedeutung |
+| --- | --- |
+| **Space Name** | Mit `In` ausgewählte Bereiche einschließen oder mit `Not In` ausschließen. |
+| **Page Name** | Einzelne Seiten auswählen; untergeordnete Seiten werden mit einbezogen. |
+| **Blogpost Name** | Einzelne Blogbeiträge auswählen. |
+| **Modified Date** und **Created Date** | Mit `Is After`, `Is Before` oder `Is Between` nach Datum eingrenzen. |
+
+Die Auswahllisten werden aus Ihrer Instanz geladen. Durch Synchronisierungsfilter ausgeschlossene Inhalte werden nicht heruntergeladen. Die getrennten Indexierungsoptionen **Index Pages**, **Index Page Attachments**, **Index Page Comments**, **Index Blogposts**, **Index Blogpost Attachments** und **Index Blogpost Comments** steuern, welche synchronisierten Inhalte in der KI-Suche erscheinen; laut Quellanleitung sind sie zunächst aktiviert.
+
+Speichern Sie mit **Save** und wählen Sie **Start syncing now** oder **I'll do it later**. Den Fortschritt sehen Sie unter **Indexing Progress**. Der erste Lauf liest alle zugänglichen Inhalte im gewählten Umfang. Spätere Läufe verwenden Änderungszeiten; ein zusätzlicher Audit-Log-Durchlauf erkennt Rechteänderungen, die den Änderungszeitpunkt einer Seite nicht verändern.
+
+## Sichtbarkeit prüfen und Fehler beheben
+
+Bereichsrechte werden über `GET /rest/api/space/{spaceKey}/permissions` gelesen. Für Seiten und Blogbeiträge zählen wirksame **Lesebeschränkungen**; eine reine Bearbeitungsbeschränkung nimmt niemandem das Leserecht. Öffentlich lesbare Bereiche werden entsprechend als öffentlich behandelt. Prüfen Sie nach der Einrichtung mit Testkonten, ob die Sichtbarkeit in Novaplan AI der Confluence-Instanz entspricht.
+
+| Problem | Prüfen Sie |
+| --- | --- |
+| Versionsfehler bei Bereichen | Confluence Data Center 9.1 oder neuer erforderlich. |
+| Token oder Basic Authentication schlägt fehl | Tokenablauf, Leerzeichen, Confluence-Benutzername und mögliche CAPTCHA-Sperre. |
+| Verbindung oder Zertifikat scheitert | HTTPS-Erreichbarkeit aus Novaplan, Firewall/VPN und Vertrauensstellung interner Zertifikate. |
+| Benutzer oder Ergebnisse fehlen | E-Mail-Sichtbarkeit, Bereichsrechte, Seitenbeschränkungen, Filter und abgeschlossene Indexierung. |
+| Änderungen an Rechten erscheinen nicht | Audit-Log-Zugriff und erneuten Synchronisierungslauf prüfen. |
+
+Für agentengesteuerte Änderungen an Confluence-Seiten gibt es ein getrenntes [Confluence-Data-Center-Toolset](/toolsets/confluence/confluence-data-center). Dieser Konnektor dient der Synchronisierung und Suche. Bei Einrichtungsfragen hilft [Novaplan Support](/de/contact-us).
