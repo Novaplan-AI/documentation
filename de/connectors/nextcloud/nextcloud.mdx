@@ -1,0 +1,64 @@
+---
+title: "Nextcloud"
+description: "Dateien und Ordner Ihres persönlichen Nextcloud-Kontos synchronisieren."
+---
+
+## Überblick
+
+Der Nextcloud-Konnektor verbindet ein **persönliches** Nextcloud-Konto mit Novaplan AI. Jede Person richtet ihre eigene Verbindung ein. Dateien und Ordner werden über die Nextcloud-**WebDAV-API** gelesen; ein eigens erzeugtes **App Password** dient zur Anmeldung.
+
+Der erste Lauf liest die Ordnerstruktur vollständig. Danach nutzt der Konnektor die Nextcloud-**Activity API** und einen gespeicherten Änderungsstand, um neue, geänderte, gelöschte oder wiederhergestellte Dateien zu erkennen. Eine Echtzeit- oder Webhook-Synchronisierung beschreibt die Quellanleitung nicht; verwenden Sie geplante oder manuelle Läufe.
+
+## App Password in Nextcloud erstellen
+
+1. Melden Sie sich bei Ihrer Nextcloud-Instanz an und öffnen Sie über das Profilbild **Personal settings**.
+2. Wählen Sie **Security** und suchen Sie **Devices & sessions**.
+3. Tragen Sie unter **App name** einen Namen wie `Novaplan AI Connector` ein und wählen Sie **Create new app password**.
+4. Bestätigen Sie gegebenenfalls mit Ihrem regulären Nextcloud-Passwort.
+5. Kopieren Sie das neu angezeigte App Password sofort. Es wird nur einmal gezeigt.
+
+Halten Sie außerdem die **Base URL** Ihrer Instanz, etwa `https://cloud.example.com`, und Ihren Nextcloud-Benutzernamen bereit. Nutzen Sie das App Password für die Verbindung, nicht Ihr reguläres Passwort. Widerrufen Sie ungenutzte App Passwords in den Nextcloud-Sicherheitseinstellungen.
+
+## Persönliche Verbindung einrichten
+
+1. Öffnen Sie in Novaplan AI **Workspace Settings → Connectors → Personal**.
+2. Suchen Sie **Nextcloud** und wählen Sie **Setup**.
+3. Geben Sie auf **Authenticate** einen **Instance Name**, die **Base URL** ohne abschließenden Schrägstrich, Ihren **Username** und das **App Password / Token** ein.
+4. Wählen Sie **Save**. Novaplan AI prüft die Verbindung vor dem Speichern.
+
+<Warning>
+  Laut Quellanleitung muss die E-Mail-Adresse Ihres Nextcloud-Kontos mit der E-Mail-Adresse Ihres Novaplan-AI-Kontos übereinstimmen. Andernfalls kann die Berechtigungszuordnung fehlschlagen und synchronisierte Dateien erscheinen nicht in der Suche.
+</Warning>
+
+## Synchronisierung und Filter
+
+Öffnen Sie nach der Anmeldung **Configure** für diese Instanz. Wählen Sie **Scheduled** oder **Manual**. Für geplante Läufe liegt das voreingestellte **Sync Interval** bei 60 Minuten. Die **Batch Size** beträgt standardmäßig 100 Elemente; ein kleinerer Wert kann bei sehr großen Bibliotheken den Speicherbedarf reduzieren.
+
+| Synchronisierungsfilter | Wirkung |
+| --- | --- |
+| **Modified Date** | Dateien und Ordner nach Änderungsdatum eingrenzen; Voreinstellungen für 7, 14, 30, 90, 180 oder 365 Tage oder ein eigener Zeitraum. |
+| **Created Date** | Nach Erstellungsdatum eingrenzen. |
+| **File Extensions** | Dateitypen wie `pdf` oder `docx` ein- oder ausschließen. Ordner werden trotz dieses Filters durchlaufen, damit die Hierarchie erhalten bleibt. |
+
+Datumsfilter bieten unter anderem die Operatoren `is_after`, `is_before` und `is_between`. Synchronisierungsfilter wirken beim Abruf; ausgeschlossene Inhalte werden nicht aus Nextcloud geladen. Davon zu unterscheiden sind Indexierungsfilter, die erst nach dem Abruf festlegen, was in der Suche erscheint.
+
+Speichern Sie mit **Save Configuration**. Im abschließenden Dialog können Sie **Start syncing now** oder **I'll do it later** wählen. Prüfen Sie danach den Fortschritt und die Suchergebnisse. Die erste Synchronisierung kann je nach Dateianzahl dauern; spätere Läufe verarbeiten Änderungen über die Activity API.
+
+## Dateien und Berechtigungen
+
+Für die persönliche Verbindung wird die angemeldete Person als Eigentümerin oder Eigentümer der synchronisierten Inhalte zugeordnet. Der Konnektor kann Nextcloud-Freigaben über die OCS Share API erkennen und Quellberechtigungen auf Lese-, Schreib- oder Eigentümerrechte abbilden. Prüfen Sie bei freigegebenen Dateien die tatsächliche Sichtbarkeit in Ihrem Workspace mit passenden Testkonten.
+
+Dateiinhalte werden bei Bedarf über authentifizierte WebDAV-Anfragen abgerufen. Ordner selbst sind keine herunterladbaren Dateien. Beim Wechsel des App Passwords muss auch die Konnektorverbindung aktualisiert werden.
+
+## Probleme beheben
+
+| Problem | Prüfen Sie |
+| --- | --- |
+| `401` oder ungültige Anmeldung | Benutzername, aktuelles App Password und dessen Widerrufsstatus |
+| `404` oder Verbindungstest schlägt fehl | Vollständige HTTPS-**Base URL** ohne abschließenden Schrägstrich, Proxy und Firewall |
+| Synchronisierung ist langsam | Dateianzahl, **Batch Size**, Datums- und Dateitypfilter |
+| Hoher Speicherbedarf | **Batch Size** von 100 auf etwa 50 oder weniger reduzieren und Datenumfang eingrenzen |
+| Dateien unter **All Records**, aber nicht in der Suche | Indexierungsfilter und Abschluss der Indexierung |
+| Ergebnisse für Ihr Konto fehlen | E-Mail-Zuordnung zwischen Nextcloud und Novaplan AI sowie Verbindungsstatus |
+
+Bei Fragen zur Kontozuordnung oder zu fehlenden Dateien wenden Sie sich an [Novaplan Support](/de/contact-us).
