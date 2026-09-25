@@ -1,0 +1,39 @@
+---
+title: "Whisper (lokal)"
+description: "Lokal ausgeführte Whisper-Transkription in Novaplan AI konfigurieren."
+---
+
+# Whisper (lokal) konfigurieren
+
+![Konfigurationsansicht für lokales Whisper](/images/ai-models/stt/Whisper_STTConfig.png)
+
+Novaplan AI kann Whisper mit der Bibliothek `faster-whisper` innerhalb seiner Backend-Umgebung ausführen. Dabei wird Audio nicht für die Transkription an eine externe Modell-API gesendet; ein API-Schlüssel ist nicht nötig. Novaplan verwaltet die erforderlichen Backend-Ressourcen mit Ihnen.
+
+Beim ersten Einsatz werden Modellgewichte von Hugging Face heruntergeladen. Dafür braucht die Backend-Umgebung anfänglich Netzwerkzugang zu `huggingface.co`, ausreichend Speicherplatz und das installierte Paket `faster-whisper`.
+
+## Modell wählen
+
+**Model** ist das einzige Pflichtfeld. Größere Modelle können genauer sein, benötigen aber mehr Arbeitsspeicher und Rechenzeit.
+
+| Modell | Ungefähre Parameterzahl | Einordnung |
+| --- | ---: | --- |
+| `tiny` | 39 Mio. | Sehr schnell, geringere Genauigkeit |
+| `base` | 74 Mio. | Standard; ausgewogen für viele Aufgaben |
+| `small` | 244 Mio. | Höhere Genauigkeit bei moderatem Bedarf |
+| `medium` | 769 Mio. | Höhere Genauigkeit, langsamer |
+| `large-v2` | 1,55 Mrd. | Hoher Ressourcenbedarf |
+| `large-v3` | 1,55 Mrd. | Hoher Ressourcenbedarf und etwa 3 GB Modell-Download |
+| `distil-large-v3` | 756 Mio. | Auf Geschwindigkeit ausgelegte große Variante |
+
+## Optionale Einstellungen
+
+- **Device:** **Auto** wählt nach Verfügbarkeit GPU oder CPU. **CPU** erzwingt den Prozessor, **CUDA** eine kompatible NVIDIA-GPU.
+- **Compute Type:** `int8` spart Speicher auf der CPU; `int8_float16` und `float16` sind GPU-Optionen; `float32` benötigt mehr Speicher.
+- **Model Cache Directory:** Optionaler Speicherpfad für heruntergeladene Gewichte in der Backend-Umgebung, beispielsweise `/data/whisper-models`.
+- **Model Friendly Name:** Anzeigename für diese Konfiguration.
+
+1. Klicken Sie im Tab **STT** auf **Whisper (Local) → Configure**.
+2. Wählen Sie **Model** und passen Sie bei Bedarf **Device**, **Compute Type** und Cache-Pfad an.
+3. Klicken Sie auf **Add Model**. Der erste Start kann wegen des Modell-Downloads länger dauern.
+
+Bei einem fehlgeschlagenen Health Check muss Novaplan die Installation von `faster-whisper`, Netzverbindung, Schreibrechte im Cache und verfügbare CPU-, RAM- oder GPU-Ressourcen prüfen. Weitere Informationen bietet die [faster-whisper-Dokumentation](https://github.com/SYSTRAN/faster-whisper); [Novaplan Support](/de/contact-us) hilft bei der Einrichtung.

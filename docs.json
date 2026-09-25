@@ -163,6 +163,17 @@
                   "de/ai-models/tts/openrouter",
                   "de/ai-models/tts/litellm-proxy"
                 ]
+              },
+              {
+                "group": "Sprache-zu-Text",
+                "pages": [
+                  "de/ai-models/stt/openai",
+                  "de/ai-models/stt/gemini",
+                  "de/ai-models/stt/whisper",
+                  "de/ai-models/stt/wispr-flow",
+                  "de/ai-models/stt/openrouter",
+                  "de/ai-models/stt/litellm-proxy"
+                ]
               }
             ]
           },

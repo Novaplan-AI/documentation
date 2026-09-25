@@ -1,0 +1,29 @@
+---
+title: "Wispr Flow"
+description: "Wispr-Flow-Transkription in Novaplan AI konfigurieren."
+---
+
+# Wispr Flow konfigurieren
+
+![Konfigurationsansicht für Wispr Flow](/images/ai-models/stt/WisprFlow_STTConfig.png)
+
+Novaplan AI kann Wispr Flow für Diktate und Spracheingaben in Agents und Workflows nutzen. Der Dienst verarbeitet Audio über seine gehostete API. Novaplan unterstützt Sie bei der Einrichtung; für die Audio-Umwandlung muss `ffmpeg` in der Novaplan-Backend-Umgebung verfügbar sein.
+
+## API Key und Modell
+
+**API Key** ist das einzige Pflichtfeld. Fordern Sie den Schlüssel beim [Wispr-Flow-Enterprise-Team](mailto:enterprise@wisprflow.ai) an und bewahren Sie ihn geschützt auf. Das Modell **`flow-v1`** wird automatisch gewählt; eine manuelle Modell-ID ist nicht erforderlich.
+
+## Optionale Einstellungen
+
+| Feld | Verwendung |
+| --- | --- |
+| **Default Language** | Bevorzugte Sprache oder **Auto-detect** für wechselnde Sprachen. Unterstützt werden unter anderem Deutsch, Englisch, Spanisch, Französisch, Italienisch, Portugiesisch, Niederländisch, Polnisch, Russisch, Japanisch, Koreanisch, Chinesisch, Hindi und Arabisch. |
+| **App Type** | **AI prompt/chat** für Spracheingaben in Chats (Standard), **Email** für E-Mail-Diktate oder **Other** für allgemeine Transkription. |
+| **API Endpoint** | Nur bei einer von Wispr bereitgestellten eigenen oder regionalen Adresse ändern; Standard ist `https://platform-api.wisprflow.ai`. |
+| **Model Friendly Name** | Anzeigename für die Konfiguration. |
+
+1. Klicken Sie im Tab **STT** auf **Wispr Flow → Configure**.
+2. Geben Sie den **API Key** ein und wählen Sie bei Bedarf Sprache, **App Type**, Endpoint und Anzeigenamen.
+3. Klicken Sie auf **Add Model**.
+
+API-Nutzung wird über Ihr Wispr-Flow-Konto abgerechnet. Bei Authentifizierungsfehlern prüfen Sie den Schlüssel und dessen Freigabe. Bei stummer oder fehlgeschlagener Audioverarbeitung wenden Sie sich an Novaplan Support, damit `ffmpeg` im Backend geprüft wird. Bei unpassender Formatierung wählen Sie einen anderen **App Type**. [Novaplan Support](/de/contact-us) hilft bei der Einrichtung.
