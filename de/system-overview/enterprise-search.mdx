@@ -1,0 +1,51 @@
+---
+title: "Enterprise Search: API-Referenz"
+description: "Suche, Gespräche, Quellenangaben und Agenten über die Novaplan AI API."
+---
+
+Enterprise Search verbindet semantische Suche mit Gesprächen und Agenten. Antworten können Quellenangaben auf indexierte Dokumente enthalten. Die Sichtbarkeit von Suchtreffern hängt von der Identität der anmeldenden Person und den für den Workspace geltenden Berechtigungen ab.
+
+<Warning>
+  Verwenden Sie für Such- und Gesprächsanfragen eine **benutzergebundene** Authentifizierung. Ein `client_credentials`-Token stellt keine Person dar und darf nicht für Antworten verwendet werden, die persönliche Quellberechtigungen beachten müssen. Prüfen Sie vor produktiver Nutzung, welche der technischen Endpunkte für externe Anwendungen freigegeben sind.
+</Warning>
+
+## Zugriff und Datenmodell
+
+Die Pfade beginnen mit `/api/v1` und erwarten in der Regel `Authorization: Bearer <token>`. Gespräche enthalten Nachrichten und gegebenenfalls Quellenverweise. Agentengespräche beziehen sich zusätzlich auf einen konfigurierten Agenten. Suchobjekte speichern Anfrage, Treffer und Metadaten. Interne Aufrufe können technische Scopes wie `CONVERSATION_CREATE` oder `FETCH_CONFIG` verlangen; solche Aufrufe sind keine allgemeine Kunden-API.
+
+## Gespräche
+
+| Methode und Pfad | Aufgabe |
+| --- | --- |
+| `POST /api/v1/conversations/create` | Gespräch beginnen |
+| `POST /api/v1/conversations/stream` | Neue Antwort als Stream erhalten |
+| `POST /api/v1/conversations/:conversationId/messages` | Nachricht hinzufügen |
+| `POST /api/v1/conversations/:conversationId/messages/stream` | Nachricht mit Streaming-Antwort senden |
+| `GET /api/v1/conversations` | Eigene Gespräche auflisten |
+| `GET /api/v1/conversations/:conversationId` | Gespräch lesen |
+| `DELETE /api/v1/conversations/:conversationId` | Gespräch löschen |
+| `POST /api/v1/conversations/:conversationId/share` und `/unshare` | Gespräch freigeben oder Freigabe aufheben |
+| `PATCH /api/v1/conversations/:conversationId/title` | Titel ändern |
+| `PATCH /api/v1/conversations/:conversationId/archive` und `/unarchive` | Archivierung ändern |
+| `POST /api/v1/conversations/:conversationId/message/:messageId/feedback` | Feedback zu einer Antwort geben |
+
+Die Referenz enthält außerdem Endpunkte zum Regenerieren von Antworten, zum Anzeigen archivierter Gespräche und für interne Gesprächsoperationen.
+
+## Agenten und Vorlagen
+
+Agentengespräche liegen unter `/api/v1/agent/:agentKey/conversations` und unterstützen Erstellen, Nachrichten, Streaming, Listen, Lesen und Löschen. Agenten werden unter `/api/v1/agent/create`, `/api/v1/agent/:agentKey` und `/api/v1/agent/` verwaltet. Die technische Referenz enthält außerdem Vorlagen unter `/api/v1/agent/template`, eine Werkzeugliste unter `/api/v1/agent/tools/list` sowie Freigabe- und Berechtigungsendpunkte unter `/api/v1/agent/:agentKey/permissions`, `/share` und `/unshare`.
+
+Nutzen Sie für die Einrichtung in der Oberfläche den [Agenten-Leitfaden](/de/agent-guide/overview). Berechtigungsänderungen an Agenten sollten vor der Freigabe geprüft werden.
+
+## Semantische Suche
+
+| Methode und Pfad | Aufgabe |
+| --- | --- |
+| `POST /api/v1/search` | Semantische Suche über indexierte Inhalte ausführen |
+| `GET /api/v1/search` | Suchverlauf auflisten; führt keine neue Suche aus |
+| `GET /api/v1/search/:searchId` | Einen gespeicherten Suchlauf lesen |
+| `DELETE /api/v1/search/:searchId` | Gespeicherten Suchlauf löschen |
+| `PATCH /api/v1/search/:searchId/share` und `/unshare` | Freigabe ändern |
+| `PATCH /api/v1/search/:searchId/archive` und `/unarchive` | Archivierung ändern |
+
+Eine Antwort ohne Quellenangaben sollte als unbelegt behandelt werden. Für eine bestimmte Datei suchen Sie zunächst den passenden Datensatz und lesen anschließend seinen Inhalt über eine dafür freigegebene Schnittstelle. Bei Fragen zu API-Zugang und Quellberechtigungen hilft [Novaplan Support](/de/contact-us).

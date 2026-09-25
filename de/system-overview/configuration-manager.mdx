@@ -1,0 +1,32 @@
+---
+title: "Konfigurationsverwaltung: API-Referenz"
+description: "Technische Konfiguration für Speicher, Identität, KI-Modelle, Konnektoren und Workspace-Adressen."
+---
+
+Der Configuration Manager verwaltet Einstellungen, die mehrere Novaplan AI Dienste verwenden. Er speichert sensible Werte verschlüsselt in einem konfigurierten Key-Value-Backend; die Referenzkonfiguration verwendet Redis, etcd ist ebenfalls möglich. Novaplan richtet diese Infrastruktur für den Kunden-Workspace ein.
+
+<Warning>
+  Änderungen an Speicher, Identitätsanbietern, öffentlichen URLs und Modellzugängen können den Betrieb des gesamten Workspaces beeinflussen. Verwenden Sie die folgenden Administrationsendpunkte nur nach Freigabe durch Novaplan. Der Produktbereich Telemetrie bleibt **Coming Soon**; die Erwähnung interner Metrics-Endpunkte bedeutet keine zugesagte Kundenfunktion.
+</Warning>
+
+## Zugriff und Funktionen
+
+Die Pfade beginnen mit `/api/v1/configurationManager` und benötigen einen gültigen Bearer-Token mit passenden Berechtigungen. Vor dem Speichern können Konfigurationen geprüft werden. Bei Änderungen können andere Dienste über den verwalteten Event-Bus benachrichtigt werden. Secrets sollten nie in Dokumentation, Chats oder Logs erscheinen.
+
+| Bereich | Endpunkte der technischen Referenz |
+| --- | --- |
+| Speicher | `POST` und `GET /storageConfig` |
+| SMTP | `POST` und `GET /smtpConfig` |
+| Anmeldung | `POST` und `GET /authConfig/azureAd`, `/authConfig/microsoft`, `/authConfig/google`, `/authConfig/sso`, `/authConfig/oauth` |
+| KI-Modelle | `POST` und `GET /aiModelsConfig`; `GET /ai-models`, `/ai-models/{modelType}`, `/ai-models/available/{modelType}` |
+| Modellanbieter | `POST /ai-models/providers`; `PUT` und `DELETE /ai-models/providers/{modelType}/{modelKey}`; `PUT /ai-models/default/{modelType}/{modelKey}` |
+| Google Workspace | `POST` und `GET /connectors/googleWorkspaceOauthConfig`, `/connectors/googleWorkspaceCredentials` |
+| Weitere Konnektoren | `POST` und `GET /connectors/atlassian/config`, `/connectors/onedrive/config`, `/connectors/sharepoint/config` |
+| Öffentliche Adressen | `POST` und `GET /frontendPublicUrl`, `/connectorPublicUrl` |
+| Interne Metriksteuerung | `PUT /metricsCollection/toggle`, `GET /metricsCollection`, `PATCH /metricsCollection/pushInterval`, `PATCH /metricsCollection/serverUrl` |
+
+Die verfügbaren Felder unterscheiden sich nach Bereich und Anbieter. Beispielsweise kann eine Speicher-Konfiguration lokale Ablage, S3 oder Azure Blob beschreiben; eine Modellkonfiguration enthält Anbieter und Modellschlüssel. Die [Konnektor-Anleitungen](/de/connectors/overview), [Modell-Anleitungen](/de/ai-models/overview) und die [SMTP-Anleitung](/de/smtp) beschreiben die fachliche Einrichtung. Prüfen Sie bei öffentlichen URLs auch die [internen Dienste](/de/system-overview/internal-services).
+
+## Fehlerbehebung
+
+Bei einem Fehler prüfen Sie Token-Rechte, Pflichtfelder, Erreichbarkeit des angegebenen Dienstes und bestehende Konfiguration. Eine fehlgeschlagene Gesundheitsprüfung sollte nicht durch einen unbestätigten Beispielwert übergangen werden. [Novaplan Support](/de/contact-us) kann die tatsächlich freigegebenen Endpunkte und die serverseitigen Prüfungen Ihres Workspaces bestätigen.

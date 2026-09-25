@@ -25,6 +25,8 @@
               "de/system-overview/crawling-manager",
               "de/system-overview/authentication",
               "de/system-overview/connector-manager",
+              "de/system-overview/configuration-manager",
+              "de/system-overview/enterprise-search",
               "de/quickstart",
               "de/contact-us",
               "de/additional-resources/faq"

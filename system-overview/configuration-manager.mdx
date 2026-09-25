@@ -1,6 +1,6 @@
 # Configuration Manager API
 
-The Configuration Manager Service provides a centralized way to manage configuration settings across your organization's services. It securely stores various configuration parameters in a key-value store (ETCD by default) and provides APIs to manage these configurations.
+The Configuration Manager Service provides a centralized way to manage configuration settings across your organization's services. It stores configuration in the managed environment's key-value backend (Redis by default, with etcd supported) and provides APIs to manage these settings.
 
 ## Base URL
 
@@ -16,7 +16,7 @@ Authorization: Bearer YOUR_TOKEN
 
 ## Architecture Overview
 
-The Configuration Manager Service is built on a Node.js backend that leverages [ETCD](https://etcd.io/) (or other compatible key-value stores) for secure configuration storage. The service:
+The Configuration Manager Service runs in the Node.js API and uses the configured key-value backend for secure configuration storage. The service:
 
 - Securely encrypts sensitive configuration values using AES-256-GCM algorithm
 - Provides a RESTful API for managing configurations
