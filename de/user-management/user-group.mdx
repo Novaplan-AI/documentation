@@ -1,11 +1,11 @@
 ---
 title: "Benutzergruppen"
-description: "Mit Benutzergruppen Mitglieder organisieren und Zugriffsrechte verwalten."
+description: "Benutzergruppen erstellen, Mitgliedschaften verwalten und Ressourcenzugriff prüfen."
 ---
 
 ## Überblick
 
-Benutzergruppen helfen Administratoren, Workspace-Mitglieder für die Verwaltung von Berechtigungen zu organisieren. Ein Benutzer kann mehreren Gruppen angehören, und eine Gruppe kann mehrere Benutzer enthalten. Gruppenzugehörigkeiten lassen sich bereits bei der Einladung festlegen und später ändern.
+Benutzergruppen helfen Administratoren, Workspace-Mitglieder zu organisieren. Ein Benutzer kann mehreren Gruppen angehören, und eine Gruppe kann mehrere Benutzer enthalten. Gruppenzugehörigkeiten lassen sich bereits bei der Einladung festlegen und später ändern. Prüfen Sie, wie eine Ressource Gruppen verwendet, bevor Sie eine Mitgliedschaft als Zugriffsfreigabe ansehen.
 
 Novaplan übernimmt den Großteil der Einrichtung und Verwaltung. Diese Schritte bleiben als Referenz für Administratoren verfügbar. Stimmen Sie Änderungen mit dem Novaplan-Team ab.
 
@@ -18,7 +18,7 @@ Novaplan übernimmt den Großteil der Einrichtung und Verwaltung. Diese Schritte
 1. **Benutzer organisieren:** Ordnen Sie Mitglieder nach Team, Aufgabe oder Zugriffsbedarf.
 2. **Mehrere Benutzer pro Gruppe:** Eine Gruppe kann beliebig viele Mitglieder enthalten.
 3. **Mehrere Gruppen pro Benutzer:** Ein Benutzer kann beliebig vielen Gruppen angehören.
-4. **Berechtigungen übernehmen:** Benutzer übernehmen die Berechtigungen ihrer Gruppen.
+4. **Ressourcenzugriff:** Eine Gruppenzugehörigkeit kann relevant sein, wenn eine Ressource für diese Gruppe freigegeben ist. **Access Permissions** auf der Gruppenseite ist noch als *Coming Soon* gekennzeichnet; eine neue Gruppe allein gewährt nicht automatisch Zugriff.
 5. **Eigene Gruppen erstellen:** Eigene Gruppen ergänzen die vorhandenen Systemgruppen. Systemgruppen, etwa die Gruppe für alle Benutzer, können nicht gelöscht werden.
 
 ## Gruppen öffnen
@@ -45,12 +45,12 @@ Die Tabelle zeigt **Name**, **Description**, **Users** (Mitgliederzahl), **Creat
 </div>
 
 <Tip>
-  **Access Permissions** für Gruppen erscheint in der aktuellen Oberfläche als *Coming Soon*. Die Gruppenzugehörigkeit steuert bereits den Zugriff.
+  **Access Permissions** für Gruppen erscheint in der zugänglichen Oberfläche als *Coming Soon*. Testen Sie nach einer Änderung den Zugriff auf die vorgesehene Ressource mit einem Mitgliedskonto und einem Konto außerhalb der Gruppe.
 </Tip>
 
 ### Benutzer zu Gruppen hinzufügen
 
-**Bei der Einladung:** Auf der Seite **Users** können Sie im Einladungsbereich unter **Add to a User Group** eine oder mehrere Gruppen auswählen. Neue Benutzer übernehmen die Berechtigungen dieser Gruppen.
+**Bei der Einladung:** Auf der Seite **Users** können Sie im Einladungsbereich unter **Add to a User Group** eine oder mehrere Gruppen auswählen. Prüfen Sie nach dem Beitritt den tatsächlichen Zugriff der eingeladenen Person.
 
 <div style={{ textAlign: "center" }}>
   <img src="/images/account/users/bulk_invite.png" alt="Gruppen bei der Einladung eines Benutzers zuweisen" width="90%" />
@@ -87,7 +87,7 @@ Die Tabelle zeigt **Name**, **Description**, **Users** (Mitgliederzahl), **Creat
 3. Bestätigen Sie die Aktion.
 
 <Warning>
-  Das Löschen einer Gruppe kann nicht rückgängig gemacht werden. Die Mitglieder selbst bleiben erhalten, verlieren jedoch alle Berechtigungen, die sie über diese Gruppe erhalten haben. Systemgruppen können nicht gelöscht werden.
+  Das Löschen einer Gruppe kann nicht rückgängig gemacht werden. Ihre Mitglieder bleiben im Workspace, aber an die Gruppe gebundener Zugriff kann sich ändern. Prüfen Sie betroffene Ressourcen und Mitglieder vor dem Löschen. Systemgruppen können nicht gelöscht werden.
 </Warning>
 
 Gruppen können Sie bei der [Einladung von Benutzern](/de/user-management/user) zuweisen oder später über die Gruppendetails bearbeiten. Über die Filter auf der Seite **Users** finden Sie Mitglieder einer bestimmten Gruppe.
