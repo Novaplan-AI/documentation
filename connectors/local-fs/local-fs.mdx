@@ -1,6 +1,6 @@
 ---
 title: "Local FS"
-description: "Index a folder on your computer for search in Novaplan AI"
+description: "Index a folder accessible to the Novaplan AI connector for personal search"
 icon: "/logo/local-fs.svg"
 ---
 
@@ -31,7 +31,7 @@ icon: "/logo/local-fs.svg"
       <div className="text-xl font-semibold text-gray-900 dark:text-white">Local FS</div>
     </div>
     <p className="text-base text-gray-700 dark:text-gray-300 mt-0 mb-5">
-      Index files from a folder on your computer
+      Index files from a folder accessible to the connector
     </p>
     <div className="flex flex-wrap items-center gap-2">
       <span className="px-3 py-1.5 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-sm font-medium">
@@ -46,7 +46,7 @@ icon: "/logo/local-fs.svg"
 
 ## What is this?
 
-**Local FS** lets you point Novaplan AI at a **folder on your computer** so you can **search the files in it from Novaplan AI chat and the knowledge base** — just like any other connector.
+**Local FS** lets you search files from a folder that the **Novaplan AI connector process** can read. Novaplan manages your workspace, so confirm with [Novaplan AI support](/contact-us) that the folder is available to the connector before configuring a path.
 
 Three things to know up front:
 
@@ -58,31 +58,18 @@ Three things to know up front:
 
 | Word | Means |
 |------|-------|
-| **Folder** | A regular folder on your machine (or on the machine running Novaplan AI). |
+| **Folder** | A directory made available to the Novaplan AI connector process. |
 | **Instance** | One Local FS setup pointing at one folder. You can have several — one per folder. |
 | **Sync** | The moment Novaplan AI reads the folder and updates what it knows about your files. |
 
-### One thing to check first — *which* computer?
+### Check folder availability first
 
-The folder needs to be readable by the **machine running the Novaplan AI connector**, which isn't always the same as the laptop in front of you.
-
-| How you run Novaplan AI | What "the folder" means |
-|------|---------|
-| **Novaplan AI on your own laptop** | A normal folder path on your laptop, e.g. `/Users/you/Documents/notes`. |
-| **Novaplan AI Desktop app** | Same — a folder on your laptop. |
-| **Novaplan AI in Docker / Kubernetes** | A folder that has been **mounted into the container**, e.g. host `/data` mounted as `/data` → use `/data`. |
-
-If you're using Docker or a server deployment and you're not sure, ask whoever set Novaplan AI up. If it's just on your laptop, you're fine — pick any folder.
-
-<Info>
-  Quick check for Docker users: `docker compose exec <connectors-service> ls /path/you/will/use`. If that lists your files, you're good. If it says "No such file" or "Permission denied", the folder isn't mounted yet.
-</Info>
+The folder must be readable **from the connector process**, not merely from your browser or laptop. A path such as `C:\Users\...` on your device is not automatically available in a managed Novaplan AI workspace. Ask Novaplan to confirm the folder's availability and permissions before you enter its path. This guide does not describe deploying Novaplan AI.
 
 ### What you need before you start
 
 1. A Novaplan AI account where you can open **Workspace Settings** (profile menu at the bottom of the main sidebar) and see **Your Connectors** under the **Personal** section.
-2. A folder you want to make searchable.
-3. About 2 minutes. There's no cloud setup at all.
+2. A folder that Novaplan has confirmed the connector can read.
 
 ---
 
@@ -131,7 +118,7 @@ The first tab is **Authenticate Instance**. Local FS has no login, so you'll see
   />
 </div>
 
-1. In **Instance name**, type a short name you'll recognise later (for example `My laptop` or `Work notes`).
+1. In **Instance name**, type a short name you'll recognise later (for example `Work notes`).
 2. Click **Next →** at the bottom.
 
 <Info>
@@ -258,7 +245,7 @@ In the panel you can see:
 - **Sync** / **Full sync** — re-run a sync any time. **Full sync** rescans everything; **Sync** picks up only what's changed.
 - **Manage Configuration** — re-opens the two tabs from Steps 2–4 if you want to change the folder or filters later.
 
-That's it! 🎉 Once **Processing** and **Queued** drop to zero, your folder is fully searchable in Novaplan AI.
+Once **Processing** and **Queued** drop to zero, check **Completed** and **Failed** to see which files were indexed. Searchability depends on the file type and the parsers enabled for your workspace.
 
 </div>
 
@@ -270,16 +257,7 @@ That's it! 🎉 Once **Processing** and **Queued** drop to zero, your folder is 
 
 ### First sync (full scan)
 
-The first time, Novaplan AI walks **every file** in the folder you chose (and every subfolder, if you left that option on). Bigger folders take longer:
-
-| Number of files | Roughly how long |
-|-----------------|------------------|
-| Under 1,000 | A few minutes |
-| 1,000 – 10,000 | 10 – 30 minutes |
-| 10,000 – 100,000 | 30 minutes – 2 hours |
-| Over 100,000 | Several hours |
-
-Tip: filtering by file extension (e.g. PDFs only) makes the first sync dramatically faster.
+The first time, Novaplan AI walks the files in the configured folder and its subfolders, if enabled. Duration depends on folder size, file types, parsing, and workspace capacity. Filters can reduce the number of files to process.
 
 ### Later syncs (just what changed)
 
@@ -345,11 +323,7 @@ Password-protected PDFs and Office files can't be indexed unless they're unlocke
 
 <Accordion title="The connector says it can't find my folder">
 
-This almost always means the path is on **your laptop** but Novaplan AI is running **somewhere else** (Docker, a server, Kubernetes).
-
-- If you're using Docker: the folder must be **mounted** into the container. Test with `docker compose exec <connectors-service> ls /your/path`.
-- Check Windows vs Mac/Linux path style matches the OS the connector is running on (e.g. don't paste `C:\Users\...` into a Linux container).
-- Make sure the user the connector runs as has **read permission** on the folder.
+The folder path may exist on your laptop but not in the managed workspace, or the connector may lack read permission. Ask [Novaplan AI support](/contact-us) to verify the path and access from the connector process. Do not use a path from your device unless Novaplan has confirmed it is available there.
 
 </Accordion>
 
@@ -357,7 +331,7 @@ This almost always means the path is on **your laptop** but Novaplan AI is runni
 
 - The folder might genuinely be empty, or all the files might live in subfolders while **Include subfolders** is off.
 - Your filters might be excluding everything — open **Manage Configuration** and double-check.
-- Confirm the files exist where you think they do (`ls` on Mac/Linux, File Explorer on Windows) on the **machine running the connector**.
+- Ask Novaplan to confirm the files exist at the configured path from the connector process.
 
 </Accordion>
 
@@ -374,16 +348,13 @@ This almost always means the path is on **your laptop** but Novaplan AI is runni
 
 - Make sure **Sync Strategy** is set to **Scheduled** and **Sync Interval** has a value.
 - Confirm **Sync Enabled** on the instance card is on (not paused).
-- Check the connector process is running and healthy.
+- If the settings look correct, contact Novaplan AI support to check the managed connector process.
 
 </Accordion>
 
-<Accordion title="It worked locally but broke after a deploy">
+<Accordion title="The folder stopped working after a workspace change">
 
-If you moved Novaplan AI to a new server or container, the old folder path probably doesn't exist there.
-
-- Re-mount your folder in the new environment (or copy the files).
-- Open the instance, click **Manage Configuration**, update **Local folder** to the new path, and save.
+The folder may no longer be available at its previous path. Ask Novaplan to check the folder's availability and permissions in the current workspace. If the path has changed, update **Local folder** under **Manage Configuration** after Novaplan confirms the replacement.
 
 </Accordion>
 
@@ -412,7 +383,7 @@ If you moved Novaplan AI to a new server or container, the old folder path proba
 </Accordion>
 
 <Accordion title="Is the folder path stored anywhere sensitive?">
-  The path is saved in your Novaplan AI configuration. There are no credentials to leak — only the path string itself.
+  The path is saved in your Novaplan AI configuration. Treat it as workspace configuration information and avoid entering credentials in the path field.
 </Accordion>
 
 </AccordionGroup>
