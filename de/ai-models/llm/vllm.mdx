@@ -1,0 +1,41 @@
+---
+title: "vLLM"
+description: "Einen vLLM-Modellserver über seine OpenAI-kompatible API mit Novaplan AI verbinden."
+---
+
+# vLLM konfigurieren
+
+![Konfigurationsansicht für OpenAI-kompatible APIs](/images/ai-models/llm/OpenAICompatible_LLMConfig.png)
+
+vLLM kann Sprachmodelle über eine OpenAI-kompatible API bereitstellen. Novaplan AI verbindet sich mit einem vorhandenen, aus seiner Umgebung erreichbaren vLLM-Server. Ihre Modellserver-Administration betreibt diesen Dienst; Novaplan unterstützt Sie bei der Anbindung.
+
+## Voraussetzungen
+
+Sie benötigen einen laufenden vLLM-Server, seine erreichbare Basisadresse, den dort geladenen Modellnamen und bei aktivierter Authentifizierung dessen API-Schlüssel. Ein Administrationsbeispiel für einen Modellserver:
+
+```bash
+pip install "vllm>=0.8.5"
+vllm serve Qwen/Qwen3-8B --port 8000 --api-key your-secret-key
+```
+
+Die genaue Installation und die Modellkompatibilität hängen von Ihrer vLLM-Version und Ihrer Hardware ab. Prüfen Sie die [vLLM-Dokumentation](https://docs.vllm.ai/) und stimmen Sie Betrieb, GPU-Ressourcen und Netzfreigaben mit der zuständigen Administration ab.
+
+## Angaben in Novaplan AI
+
+| Feld | Bedeutung |
+| --- | --- |
+| **Provider Type** | **OpenAI API Compatible** |
+| **Endpoint URL** | Erreichbare Basisadresse mit `/v1/`, beispielsweise `https://vllm.example.com/v1/`. `http://localhost:8000/v1/` funktioniert nur, wenn Novaplan AI denselben lokalen Netzwerkraum nutzt. |
+| **API Key** | Schlüssel, der beim Start des vLLM-Servers mit `--api-key` festgelegt wurde. Das Formular verlangt einen Wert; wenn der Server keine Authentifizierung nutzt, akzeptiert er laut Ausgangskonfiguration einen Platzhalter wie `no-key`. Für produktive Verbindungen sollten Sie Authentifizierung einrichten. |
+| **Model Name** | Exakte ID des auf dem Server bereitgestellten Modells, beispielsweise `Qwen/Qwen3-8B`. |
+
+Eine Administration kann die angebotenen IDs am `/v1/models`-Endpoint des vLLM-Servers abfragen. **Multimodal** aktivieren Sie nur bei einem Modell mit Bildeingabe, **Reasoning** nur bei einem entsprechenden Reasoning-Modell.
+
+## Modell hinzufügen
+
+1. Wählen Sie **OpenAI API Compatible** als **Provider Type**.
+2. Geben Sie **Endpoint URL**, **API Key** und **Model Name** ein.
+3. Aktivieren Sie **Multimodal** und **Reasoning** nur passend zum Modell.
+4. Klicken Sie auf **Add Model**.
+
+Bei Verbindungsproblemen prüfen Sie den laufenden Dienst, `/v1/`, DNS, Firewall und die Erreichbarkeit aus der Novaplan-Umgebung. Bei Authentifizierungsfehlern muss der Schlüssel zum `--api-key` des Servers passen. Bei **Model not found** vergleichen Sie die ID mit `/v1/models`. Bei Speicher- oder Antwortzeitproblemen prüfen Sie GPU-Speicher, Modellgröße, Quantisierung und Kontextlimit. [Novaplan Support](/de/contact-us) hilft bei der Anbindung.

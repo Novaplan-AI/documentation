@@ -1,0 +1,34 @@
+---
+title: "DeepSeek"
+description: "DeepSeek-Modelle über eine OpenAI-kompatible API mit Novaplan AI verbinden."
+---
+
+# DeepSeek konfigurieren
+
+![Konfigurationsansicht für OpenAI-kompatible APIs](/images/ai-models/llm/OpenAICompatible_LLMConfig.png)
+
+Novaplan AI kann DeepSeek-Modelle über deren OpenAI-kompatible API verwenden. Novaplan unterstützt Sie bei der Einrichtung. Sie benötigen ein [DeepSeek-Konto](https://platform.deepseek.com), einen API-Schlüssel und ausreichendes Guthaben beziehungsweise eine passende Abrechnung.
+
+## Erforderliche Angaben
+
+| Feld | Wert |
+| --- | --- |
+| **Provider Type** | **OpenAI API Compatible** |
+| **Endpoint URL** | `https://api.deepseek.com/v1/` einschließlich `/v1/` |
+| **API Key** | Schlüssel aus dem Bereich **API Keys** Ihres DeepSeek-Kontos |
+| **Model Name** | Genaue Modell-ID, beispielsweise `deepseek-chat` oder `deepseek-reasoner` |
+
+Erstellen Sie den Schlüssel auf der DeepSeek Platform und kopieren Sie ihn direkt nach der Erstellung. Bewahren Sie ihn geschützt auf. `deepseek-chat` ist ein Beispiel für allgemeine Textaufgaben, `deepseek-reasoner` für Aufgaben mit erweitertem Schlussfolgern. Prüfen Sie die [aktuelle DeepSeek-Dokumentation](https://platform.deepseek.com/docs), da sich Modellnamen und Fähigkeiten ändern können.
+
+## Optionale Funktionen
+
+**Reasoning** aktivieren Sie für ein dafür vorgesehenes Modell wie `deepseek-reasoner`. Solche Aufrufe können länger dauern. **Multimodal** lassen Sie für reine Textmodelle ausgeschaltet; aktivieren Sie es nur, wenn die Dokumentation Ihres konkreten Modells Bildeingaben bestätigt.
+
+## Modell hinzufügen
+
+1. Wählen Sie **OpenAI API Compatible** als **Provider Type**.
+2. Geben Sie `https://api.deepseek.com/v1/` unter **Endpoint URL** sowie **API Key** und **Model Name** ein.
+3. Setzen Sie **Reasoning** oder **Multimodal** nur passend zum Modell.
+4. Klicken Sie auf **Add Model**.
+
+Endpoint URL, API Key und Model Name sind erforderlich. Nutzung zählt zu Kontingent und Abrechnung Ihres DeepSeek-Kontos. Bei Fehlern prüfen Sie HTTPS-Erreichbarkeit, den Schlüssel ohne zusätzliche Leerzeichen, Guthaben, die genaue Modell-ID und API-Limits. Weitere Informationen bietet die [DeepSeek-Dokumentation](https://platform.deepseek.com/docs); [Novaplan Support](/de/contact-us) hilft bei der Verbindung.

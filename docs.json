@@ -116,7 +116,10 @@
                   "de/ai-models/llm/openai-compatible",
                   "de/ai-models/llm/ollama",
                   "de/ai-models/llm/litellm-proxy",
-                  "de/ai-models/llm/lm-studio"
+                  "de/ai-models/llm/lm-studio",
+                  "de/ai-models/llm/deepseek",
+                  "de/ai-models/llm/openrouter",
+                  "de/ai-models/llm/vllm"
                 ]
               },
               {
