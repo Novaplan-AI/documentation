@@ -1,0 +1,46 @@
+---
+title: "Confluence-Cloud-Toolset"
+description: "Confluence-Seiten mit Agenten suchen, erstellen und bearbeiten."
+---
+
+## Überblick
+
+Das Confluence-Toolset gibt Agenten Live-Zugriff auf Inhalte in Confluence Cloud. Sie können Seiten und Spaces durchsuchen, Seiten erstellen oder ändern, Versionen abrufen und Kommentare hinzufügen. Eine Workspace-Administration richtet die gemeinsame Instanz unter **Workspace Settings → Actions** ein. Jede Person verbindet anschließend ihr eigenes Atlassian-Konto unter **Your actions**. Für die Suche in zuvor synchronisierten Inhalten verwenden Sie den [Confluence-Konnektor](/de/connectors/confluence/confluence).
+
+| Aufgabe | Verfügbare Tools |
+| --- | --- |
+| Seiten bearbeiten | `create_page`, `update_page`, `update_page_title`, `comment_on_page` |
+| Seiten lesen | `get_page_content`, `get_pages_in_space`, `get_child_pages`, `get_page_versions` |
+| Suche und Spaces | `search_pages`, `search_content`, `get_spaces`, `get_space` |
+
+<Warning>
+  Änderungen an Seiten und Kommentare sind für andere Confluence-Nutzende sichtbar. Prüfen Sie Ziel-Space, Seite und beabsichtigte Änderung vor einer schreibenden Agentenaktion.
+</Warning>
+
+## Authentifizierung wählen
+
+| Methode | Gemeinsame Einrichtung | Persönliche Anmeldung |
+| --- | --- | --- |
+| **OAuth 2.0 (3LO)** | Atlassian-App mit Client ID und Client Secret | Jede Person bestätigt den OAuth-Zugriff |
+| **API Token** | Atlassian Site URL | Jede Person hinterlegt eigene E-Mail-Adresse und eigenen API Token |
+
+### OAuth 2.0 einrichten
+
+1. Öffnen Sie die [Atlassian Developer Console](https://developer.atlassian.com/console/myapps/). Sie können eine vorhandene OAuth-App für Jira und Confluence gemeinsam verwenden, sofern die nötigen API-Berechtigungen eingerichtet sind. Bei einer neuen App wählen Sie **OAuth 2.0 integration** und **Resource-level** als Zugriffstyp.
+2. Öffnen Sie **Workspace Settings → Actions → Confluence → + Setup** in Novaplan AI und kopieren Sie die angezeigte **Redirect URI**.
+3. Hinterlegen Sie diese URI in der Atlassian-App unter **Authorization → OAuth 2.0 (3LO)** als **Callback URL**. Der Wert muss exakt übereinstimmen.
+4. Wählen Sie unter **Permissions** die benötigten Berechtigungen. Die Quellanleitung nennt für die User Identity API `read:account` und für Confluence unter anderem `read:confluence-content.all`, `write:confluence-content`, `read:confluence-space.summary` und `search:confluence`. Sie listet weitere klassische und granulare Scopes, auch für Kommentare, Gruppen und Audit Logs. Prüfen Sie mit Ihrer Atlassian-Administration, welche davon für die tatsächlich freigegebenen Aktionen nötig sind.
+5. Kopieren Sie unter **Settings → Authentication details** die **Client ID** und das **Secret**. Tragen Sie beide zusammen mit einem **Instance Name** in der Confluence-Instanz unter **Workspace Settings → Actions** ein und wählen Sie **Create**.
+6. Jede Person öffnet **Your actions → Confluence**, wählt **Authenticate with OAuth**, wählt die richtige Confluence-Site und bestätigt die Berechtigungen. Laut Quellanleitung sollte dabei dieselbe E-Mail-Adresse wie für das Novaplan-Konto verwendet werden.
+
+### API Token einrichten
+
+1. Jede Person erstellt unter [Atlassian API Tokens](https://id.atlassian.com/manage-profile/security/api-tokens) einen eigenen Token und kopiert ihn sofort; der Wert wird nur einmal angezeigt.
+2. Die Workspace-Administration öffnet **Workspace Settings → Actions → Confluence → + Setup**, wählt **API Token** und trägt nur einen **Instance Name** sowie die **Atlassian Site URL** ohne abschließenden Schrägstrich ein. Anschließend wählt sie **Create**.
+3. Jede Person öffnet **Your actions → Confluence**, trägt ihre Atlassian-E-Mail-Adresse und den zugehörigen **API Token** ein und wählt **Save credentials**. Diese Zugangsdaten gelten nur für die jeweilige Person.
+
+## In einem Agenten verwenden
+
+Fügen Sie die Confluence-Aktion im **Agent Builder** als Tool hinzu. Nennen Sie beim Erstellen oder Ändern einer Seite den Ziel-Space, den Seitentitel und gegebenenfalls die übergeordnete Seite. Bei Suchanfragen helfen eindeutige Titel oder Begriffe; prüfen Sie vor Änderungen, ob der Agent die richtige Seite gefunden hat.
+
+Bei Anmeldeproblemen prüfen Sie Callback URL, ausgewählte Site, Berechtigungen, Secret-Ablauf und die persönliche Anmeldung. Bei Fragen hilft [Novaplan Support](/de/contact-us).

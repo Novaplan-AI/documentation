@@ -1,0 +1,38 @@
+---
+title: "Salesforce-Toolset"
+description: "Salesforce-Datensätze und Aktivitäten mit Agenten suchen und bearbeiten."
+---
+
+## Überblick
+
+Das Salesforce-Toolset gibt Agenten Live-Zugriff auf die Salesforce-Daten, für die die angemeldete Person berechtigt ist. Eine Workspace-Administration richtet die gemeinsame OAuth-App unter **Workspace → Actions** ein. Jede Person verbindet anschließend ihr eigenes Salesforce-Konto unter **Your Actions**. Für die Suche in synchronisierten Datensätzen verwenden Sie den [Salesforce-Konnektor](/de/connectors/salesforce/salesforce).
+
+| Bereich | Verfügbare Tools |
+| --- | --- |
+| Suche und Datensätze | `soql_query`, `sosl_search`, `get_record`, `create_record`, `update_record`, `describe_object`, `list_recent_records` |
+| Accounts, Kontakte, Leads | `search_accounts`, `create_account`, `search_contacts`, `create_contact`, `search_leads`, `create_lead` |
+| Opportunities und Cases | `search_opportunities`, `create_opportunity`, `search_cases`, `create_case` |
+| Produkte und Aktivitäten | `search_products`, `create_product`, `list_pricebooks`, `add_product_to_opportunity`, `search_tasks`, `create_task` |
+| Chatter und Profil | `get_record_chatter`, `post_chatter_comment`, `post_chatter_to_record`, `get_current_user` |
+
+<Warning>
+  Generische Datensatzaktionen können Standard- und benutzerdefinierte Objekte ändern. Prüfen Sie Objekt, Datensatz-ID und Feldwerte vor einer schreibenden Aktion. Der Salesforce-Scope `api` eröffnet breiten API-Zugriff innerhalb der Rechte des angemeldeten Kontos.
+</Warning>
+
+## Salesforce-App und gemeinsame Instanz einrichten
+
+1. Öffnen Sie in Salesforce **Setup → App Manager → New External Client App**. Vergeben Sie einen Namen und eine administrative Kontaktadresse.
+2. Öffnen Sie in Novaplan AI **Workspace → Actions → Salesforce → + Setup** und kopieren Sie die angezeigte **Redirect URI**.
+3. Aktivieren Sie in der Salesforce-App unter **API (Enable OAuth Settings)** OAuth und tragen Sie die exakt kopierte URI als **Callback URL** ein.
+4. Wählen Sie die für die Integration benötigten OAuth-Scopes. Die vorhandene Integrationsanleitung nennt `api`, `refresh_token` beziehungsweise `offline_access` und Identitätsrechte. Prüfen Sie den breiten `api`-Zugriff mit Ihrer Salesforce-Administration und beschränken Sie die Rechte der anmeldenden Person entsprechend.
+5. Aktivieren Sie unter **Flow Enablement** den **Authorization Code and Credentials Flow**. Die Integrationsanleitung nennt unter **Security** außerdem Secret-Anforderungen für Web Server und Refresh Token Flow sowie PKCE. Stimmen Sie diese Einstellungen mit Ihrer Salesforce-Sicherheitskonfiguration ab und speichern Sie die App.
+6. Kopieren Sie unter **OAuth Settings → Consumer Key and Secret** den **Consumer Key** als **Client ID** und den **Consumer Secret** als **Client Secret**. Bewahren Sie das Secret sicher auf.
+7. Kopieren Sie aus der Browseradresse Ihre **Salesforce Instance URL** ohne zusätzlichen Seitenpfad. Tragen Sie URL, Client ID, Client Secret und einen **Instance name** in der Salesforce-Aktion von Novaplan AI ein. Prüfen Sie die Callback URL und wählen Sie **Create**.
+
+## Persönlich verbinden und verwenden
+
+1. Öffnen Sie **Your Actions → Salesforce** und wählen Sie **Authenticate with OAuth**.
+2. Melden Sie sich bei Salesforce an und prüfen Sie die angeforderten Berechtigungen.
+3. Fügen Sie die Salesforce-Aktion im **Agent Builder** als Tool hinzu.
+
+Nennen Sie bei Änderungen den Objekttyp und möglichst die Datensatz-ID. Für Opportunities, Cases und Tasks sollten Sie auch Status, verantwortliche Person und betroffenen Account eindeutig angeben. Wenn die Anmeldung fehlschlägt, prüfen Sie Callback URL, Instance URL, App-Freigabe, Secret und Salesforce-Berechtigungen. Bei Fragen hilft [Novaplan Support](/de/contact-us).

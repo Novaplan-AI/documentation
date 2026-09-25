@@ -1,0 +1,38 @@
+---
+title: "Slack-Toolset"
+description: "Slack-Nachrichten, Kanäle und Reaktionen mit Agenten verwalten."
+---
+
+## Überblick
+
+Mit dem Slack-Toolset können Agenten live in Slack suchen und Aktionen im Namen der angemeldeten Person ausführen. Eine Workspace-Administration konfiguriert die gemeinsame Slack-App unter **Workspace Settings → Actions**. Jede Person verbindet sich anschließend unter **Your actions**. Der [Slack-Konnektor](/de/connectors/slack/slack) dient der Synchronisierung von Inhalten für die Suche.
+
+| Bereich | Verfügbare Tools |
+| --- | --- |
+| Nachrichten senden und ändern | `send_message`, `send_direct_message`, `send_message_with_mentions`, `send_message_to_multiple_channels`, `reply_to_message`, `update_message`, `delete_message`, `schedule_message`, `get_scheduled_messages` |
+| Lesen und suchen | `get_channel_history`, `get_unread_messages`, `get_thread_replies`, `get_message_permalink`, `search_all`, `search_messages` |
+| Kanäle und Personen | `fetch_channels`, `get_user_conversations`, `get_user_channels`, `get_channel_info`, `get_channel_members`, `get_channel_members_by_id`, `get_user_info`, `get_users_list`, `resolve_user`, `get_user_groups`, `get_user_group_info` |
+| Weitere Aktionen | `set_user_status`, `add_reaction`, `remove_reaction`, `get_reactions`, `pin_message`, `unpin_message`, `get_pinned_messages`, `check_token_info` |
+
+<Warning>
+  Das Toolset kann Nachrichten auch in mehreren Kanälen versenden oder löschen. Prüfen Sie Empfänger, Kanal und Nachrichtentext vor einer schreibenden Aktion.
+</Warning>
+
+## Slack-App und gemeinsame Instanz einrichten
+
+1. Öffnen Sie [Slack Apps](https://api.slack.com/apps), wählen Sie **Create New App** und erstellen Sie eine App für den gewünschten Slack-Workspace. Falls Installationen eingeschränkt sind, muss eine Workspace-Administration die App genehmigen.
+2. Öffnen Sie in Novaplan AI **Workspace Settings → Actions → Slack → + Setup** oder **Configure** und kopieren Sie die **Redirect URI**.
+3. Öffnen Sie in der Slack-App **OAuth & Permissions → Redirect URLs**, fügen Sie die URI hinzu und speichern Sie sie. Protokoll, Host, Pfad und abschließender Schrägstrich müssen exakt übereinstimmen.
+4. Fügen Sie unter **Bot Token Scopes** die Rechte für die tatsächlich benötigten Aktionen hinzu. Die Integrationsanleitung nennt für Nachrichten `chat:write`, für öffentliche und private Kanäle unter anderem `channels:read`, `channels:history`, `groups:read`, `groups:history`, für Direktnachrichten `im:read`, `im:history`, `mpim:read`, `mpim:history` sowie Rechte für Benutzer, Dateien, Reaktionen und angeheftete Nachrichten. Schreibrechte für Kanäle, Dateien und Pins sollten Sie nur für freigegebene Aktionen gewähren.
+5. Fügen Sie unter **User Token Scopes** `search:read` für die Slack-Suche und, falls Statusänderungen erlaubt sind, `users.profile:write` hinzu. Diese Scopes gehören nicht in den Bereich **Bot Token Scopes**.
+6. Kopieren Sie unter **Basic Information → App Credentials** die **Client ID** und das **Client Secret**. Hinterlegen Sie beide in der Slack-Aktion unter **Workspace Settings → Actions** und speichern Sie die Instanz. Bewahren Sie das Secret sicher auf.
+
+Wenn Sie Scopes später ändern, müssen bereits angemeldete Personen den Zugriff erneut autorisieren.
+
+## Persönlich verbinden und verwenden
+
+1. Öffnen Sie **Your actions → Slack** und wählen Sie **Authenticate with OAuth**.
+2. Wählen Sie im Slack-Fenster den richtigen Workspace, prüfen Sie die Berechtigungen und wählen Sie **Allow**. Nutzen Sie laut Integrationsanleitung dieselbe E-Mail-Adresse wie für Ihr Novaplan-Konto.
+3. Fügen Sie die Slack-Aktion im **Agent Builder** als Tool hinzu.
+
+Nennen Sie bei Nachrichten den Zielkanal oder die empfangende Person eindeutig. Wenn die Anmeldung scheitert, prüfen Sie Redirect URL, Client-Zugangsdaten, App-Freigabe und die persönlichen Berechtigungen. Bei Fragen hilft [Novaplan Support](/de/contact-us).

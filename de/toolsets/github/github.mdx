@@ -1,0 +1,37 @@
+---
+title: "GitHub-Toolset"
+description: "Repositories, Issues und Pull Requests mit Agenten lesen und bearbeiten."
+---
+
+## Überblick
+
+Das GitHub-Toolset gibt Agenten Live-Zugriff auf Repositories, Issues und Pull Requests der angemeldeten Person. Eine Workspace-Administration verbindet eine GitHub-OAuth-App unter **Workspace Settings → Actions**. Jede Person meldet sich danach unter **Your actions** selbst an. Für die Suche in bereits synchronisierten Repository-Inhalten verwenden Sie den [GitHub-Konnektor](/de/connectors/github/github).
+
+| Bereich | Verfügbare Tools |
+| --- | --- |
+| Repositories | `create_repository`, `get_repository`, `list_repositories`, `search_repositories`, `get_owner` |
+| Issues und Kommentare | `create_issue`, `get_issue`, `list_issues`, `update_issue`, `close_issue`, `list_issue_comments`, `get_issue_comment`, `create_issue_comment` |
+| Pull Requests | `create_pull_request`, `get_pull_request`, `list_pull_requests`, `merge_pull_request`, `get_pull_request_commits`, `get_pull_request_file_changes` |
+| Reviews | `list_pull_request_comments`, `create_pull_request_review_comment`, `get_pull_request_reviews`, `create_pull_request_review` |
+
+<Warning>
+  Das Toolset kann Pull Requests zusammenführen, Issues schließen und Inhalte in Repositories schreiben. Lassen Sie den Agenten Repository, Branch und geplante Änderung vor solchen Aktionen eindeutig benennen.
+</Warning>
+
+## GitHub-OAuth-App einrichten
+
+1. Öffnen Sie bei GitHub **Settings → Developer settings → OAuth Apps → New OAuth App**. Für eine App im Namen einer Organisation benötigen Sie entsprechende Administrationsrechte.
+2. Öffnen Sie in Novaplan AI **Workspace Settings → Actions → GitHub → + Setup** oder **Configure** und kopieren Sie die **Redirect URI**.
+3. Vergeben Sie in GitHub einen **Application name** und eine **Homepage URL**. Fügen Sie die kopierte URI als **Authorization callback URL** ein. Eine GitHub-OAuth-App unterstützt nur eine Callback-URL; verwenden Sie für verschiedene Novaplan-Umgebungen getrennte Apps.
+4. Kopieren Sie nach dem Erstellen die **Client ID**. Erzeugen Sie unter **Client secrets** ein neues Secret und kopieren Sie es sofort.
+5. Tragen Sie beide Werte in der GitHub-Aktion unter **Workspace Settings → Actions** ein und speichern Sie die Instanz.
+
+Die Integration fordert beim OAuth-Dialog unter anderem `repo`, `public_repo`, `read:org`, `read:user` und `user:email` an. Diese Scopes werden nicht auf der GitHub-App-Seite konfiguriert. `repo` umfasst auch private Repositories und erlaubt weitreichende Schreibaktionen. Prüfen Sie die Freigabe mit Ihrer GitHub-Organisation; bei eingeschränktem OAuth-App-Zugriff kann eine Genehmigung durch Organisationsverantwortliche nötig sein.
+
+## Persönlich verbinden und verwenden
+
+1. Öffnen Sie **Your actions → GitHub** und wählen Sie **Authenticate with OAuth**.
+2. Prüfen Sie im GitHub-Dialog die angeforderten Berechtigungen und wählen Sie **Authorize**.
+3. Fügen Sie die GitHub-Aktion im **Agent Builder** als Tool hinzu.
+
+Geben Sie bei Issues Repository und Vorgangsnummer an. Bei Pull Requests nennen Sie Quell- und Zielbranch ausdrücklich; prüfen Sie vor dem Zusammenführen die Änderungen und den gewählten Merge-Modus. Wenn der Zugriff auf ein Organisations-Repository fehlt, prüfen Sie persönliche Rechte und die OAuth-App-Freigabe. Bei Fragen hilft [Novaplan Support](/de/contact-us).

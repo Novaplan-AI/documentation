@@ -1,0 +1,47 @@
+---
+title: "Jira-Cloud-Toolset"
+description: "Jira-Vorgänge mit Agenten suchen, erstellen und bearbeiten."
+---
+
+## Überblick
+
+Mit dem Jira-Toolset können Agenten live in Jira Cloud arbeiten: Vorgänge und Projekte abrufen, mit JQL suchen, Vorgänge erstellen oder ändern und Kommentare hinzufügen. Eine Workspace-Administration richtet die gemeinsame Instanz unter **Workspace Settings → Actions** ein. Jede Person verbindet danach ihr eigenes Atlassian-Konto unter **Your actions**. Für die Suche in bereits synchronisierten Daten verwenden Sie den [Jira-Konnektor](/de/connectors/jira/jira).
+
+| Aufgabe | Verfügbare Tools |
+| --- | --- |
+| Vorgänge | `create_issue`, `update_issue`, `get_issue`, `get_issues`, `search_issues` |
+| Kommentare | `add_comment`, `get_comments` |
+| Projekte und Personen | `get_projects`, `get_project`, `get_project_metadata`, `search_users`, `get_current_user` |
+| Hilfsfunktionen | `validate_connection`, `convert_text_to_adf` |
+
+<Warning>
+  Das Toolset kann Vorgänge und Kommentare im Namen der angemeldeten Person ändern. Prüfen Sie Projekt, Vorgangsschlüssel und beabsichtigte Änderung, bevor Sie eine schreibende Agentenaktion ausführen lassen.
+</Warning>
+
+## Authentifizierung wählen
+
+| Methode | Gemeinsame Einrichtung | Persönliche Anmeldung |
+| --- | --- | --- |
+| **OAuth 2.0 (3LO)** | Atlassian-App mit Client ID und Client Secret | Jede Person bestätigt den OAuth-Zugriff |
+| **API Token** | Atlassian Site URL | Jede Person hinterlegt ihre eigene E-Mail-Adresse und ihren eigenen API Token |
+
+### OAuth 2.0 einrichten
+
+1. Öffnen Sie die [Atlassian Developer Console](https://developer.atlassian.com/console/myapps/) und erstellen Sie eine **OAuth 2.0 integration** mit **Resource-level** als Zugriffstyp. Bei **Account-level** funktioniert die in der Quellanleitung beschriebene Site-Auswahl nicht.
+2. Öffnen Sie in Novaplan AI **Workspace Settings → Actions**, wählen Sie bei **Jira** **+ Setup** und kopieren Sie die dort angezeigte **Redirect URI**.
+3. Öffnen Sie in der Atlassian-App **Authorization → OAuth 2.0 (3LO)**. Hinterlegen Sie die exakt kopierte URI als **Callback URL**. Schon ein anderer Schrägstrich oder Host kann die Anmeldung verhindern.
+4. Wählen Sie unter **Permissions** die für Ihre freigegebenen Aktionen nötigen Rechte. Die Quellanleitung nennt für die User Identity API `read:account` und für Jira die klassischen Scopes `read:jira-work`, `write:jira-work`, `read:jira-user`. Sie nennt zusätzlich granulare Lese-Scopes für Benutzer, Gruppen, Avatare, Audit Logs und Rollen. Prüfen Sie diese mit Ihrer Atlassian-Administration und gewähren Sie nur die benötigten Rechte.
+5. Kopieren Sie unter **Settings → Authentication details** die **Client ID** und das **Secret**. Tragen Sie beide in der Jira-Instanz unter **Workspace Settings → Actions** ein, vergeben Sie einen **Instance Name** und wählen Sie **Create**.
+6. Jede Person öffnet **Your actions → Jira**, wählt **Authenticate with OAuth**, wählt die richtige Jira-Site und bestätigt die Berechtigungen. Verwenden Sie laut Quellanleitung dieselbe E-Mail-Adresse wie für das Novaplan-Konto.
+
+### API Token einrichten
+
+1. Jede Person erstellt unter [Atlassian API Tokens](https://id.atlassian.com/manage-profile/security/api-tokens) einen eigenen Token und kopiert ihn sofort; Atlassian zeigt ihn nur einmal an.
+2. Die Workspace-Administration öffnet **Workspace Settings → Actions → Jira → + Setup**, wählt **API Token**, trägt einen **Instance Name** sowie die **Atlassian Site URL** ohne abschließenden Schrägstrich ein und wählt **Create**. Persönliche Zugangsdaten gehören nicht in diese gemeinsame Konfiguration.
+3. Jede Person öffnet **Your actions → Jira**, trägt die E-Mail-Adresse des Atlassian-Kontos und den dazugehörigen **API Token** ein und wählt **Save credentials**. Andere Personen wiederholen diesen Schritt mit ihren eigenen Zugangsdaten.
+
+## In einem Agenten verwenden
+
+Fügen Sie die Jira-Aktion im **Agent Builder** als Tool hinzu. Nennen Sie beim Erstellen eines Vorgangs Projektkürzel, Titel und Vorgangstyp. Geben Sie bei Suchen möglichst einen Zeitraum und eindeutige JQL-Kriterien an. Für Statusänderungen oder Zuweisungen nennen Sie den konkreten Vorgangsschlüssel und die gewünschte Person beziehungsweise den Zielstatus.
+
+Wenn die Verbindung fehlschlägt, prüfen Sie je nach Methode Callback URL, Atlassian-Site, Scope-Freigaben, abgelaufenes Secret oder die Kombination aus E-Mail-Adresse und API Token. [Novaplan Support](/de/contact-us) hilft bei weiteren Fragen.

@@ -1,0 +1,38 @@
+---
+title: "Zoom-Toolset"
+description: "Zoom-Meetings, Kontakte und Transkripte mit Agenten verwenden."
+---
+
+## Überblick
+
+Das Zoom-Toolset erlaubt Agenten Live-Aktionen mit Meetings, Kontakten, Transkripten und Zoom Docs. Eine Workspace-Administration konfiguriert eine Zoom-App unter **Workspace Settings → Actions**. Nutzende verbinden danach ihre eigenen Konten unter **Your actions**. Für die Suche in synchronisierten Meeting-Inhalten verwenden Sie den [Zoom-Konnektor](/de/connectors/zoom/zoom).
+
+| Bereich | Verfügbare Tools |
+| --- | --- |
+| Meetings | `list_meetings`, `list_upcoming_meetings`, `list_recurring_meetings_ending_in_range`, `get_meeting`, `create_meeting`, `update_meeting`, `delete_meeting`, `get_meeting_invitation` |
+| Transkripte | `get_meeting_transcript` |
+| Kontakte und Profil | `list_contacts`, `get_contact`, `get_my_profile` |
+| Zoom Docs | `list_folder_children` |
+
+<Warning>
+  Das Toolset kann Meetings erstellen, verschieben oder löschen. Prüfen Sie bei wiederkehrenden Meetings, ob die Änderung eine einzelne Instanz oder die ganze Serie betrifft. Meeting-Transkripte können vertrauliche Inhalte enthalten.
+</Warning>
+
+## Zoom-App und gemeinsame Instanz einrichten
+
+1. Öffnen Sie den [Zoom App Marketplace](https://marketplace.zoom.us/) und wählen Sie **Develop → Build App → General App**.
+2. Wählen Sie **User-managed** und lassen Sie die App privat. Die Wahl zwischen einer benutzerverwalteten und einer Account-Level-App ist nach dem Erstellen nicht änderbar; für die persönliche Anmeldung ist die benutzerverwaltete Variante vorgesehen.
+3. Öffnen Sie in Novaplan AI **Workspace Settings → Actions → Zoom → + Setup** oder **Configure** und kopieren Sie die **Redirect URI**.
+4. Hinterlegen Sie diese URI in Zoom unter **Basic Information → OAuth Information** sowohl als **OAuth Redirect URL** als auch in der **OAuth Allow List**. Die URL muss exakt übereinstimmen.
+5. Fügen Sie unter **Scopes** die benötigten granularen Zoom-Rechte hinzu. Für Meetings nennt die Integrationsanleitung `meeting:read:meeting`, `meeting:write:meeting`, `meeting:update:meeting`, `meeting:delete:meeting` und Rechte zum Auflisten und Lesen von Einladungen. Für Transkripte nennt sie `cloud_recording:read:recording` und `cloud_recording:read:meeting_transcript`; für Kontakte `contact:read:list_contacts`, für Zoom Docs `docs:read:list_children`. Stimmen Sie insbesondere Lösch- und Transkriptzugriffe mit Ihrer Zoom-Administration ab.
+6. Kopieren Sie unter **Basic Information → App Credentials** die **Client ID** und das **Client Secret**. Hinterlegen Sie beide in der Zoom-Aktion von Novaplan AI und speichern Sie die Instanz.
+
+Wenn Sie die Scopes später ändern, müssen bereits angemeldete Personen die App erneut autorisieren.
+
+## Persönlich verbinden und verwenden
+
+1. Öffnen Sie **Your actions → Zoom** und wählen Sie **Authenticate with OAuth**.
+2. Prüfen Sie im Zoom-Fenster die Berechtigungen und wählen Sie **Allow**.
+3. Fügen Sie die Zoom-Aktion im **Agent Builder** als Tool hinzu.
+
+Geben Sie beim Planen Zeitzone, Datum, Dauer und Teilnehmende an. Für Transkripte muss das Meeting aufgezeichnet worden sein und die angemeldete Person Zugriff haben. Bei Anmeldeproblemen prüfen Sie Redirect URL, Allow List, Scopes und persönliche Freigabe. [Novaplan Support](/de/contact-us) hilft bei weiteren Fragen.
