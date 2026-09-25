@@ -5,6 +5,8 @@ description: "Wissensdatenbanken, Ordner, Datensätze und Indexierung in Novapla
 
 Die Wissensdatenbank verwaltet Dateien und Datensätze, die für Suche und Antworten indexiert werden. Einträge können direkt hochgeladen oder über Konnektoren synchronisiert werden. Der [Schnelleinstieg](/de/quickstart) erklärt den Einstieg in den Workspace; diese Seite beschreibt technische Endpunkte und administrative Vorgänge.
 
+Die technische Referenz beschreibt Metadaten in den konfigurierten Datendiensten, Dateiinhalt im Speicherdienst und eine asynchrone Weitergabe an die Indexierung über den für den Workspace eingerichteten Nachrichtenbroker. Ein **Record** enthält unter anderem Name, Typ, Quelle, Speicherverweis und Indexierungsstatus. Ein **File Record** ergänzt Format, MIME-Typ, Größe und Integritätsinformationen. Eine Wissensdatenbank gruppiert Records mit eigenen Berechtigungen.
+
 <Warning>
   Lese- und Schreibzugriff auf Datensätze hängen von der angemeldeten Person und den Workspace-Berechtigungen ab. Verwenden Sie keinen Anwendungs-Token ohne Benutzeridentität, um persönliche Dateiberechtigungen zu umgehen. Lösch-, Reindexierungs- und Resynchronisationsaufrufe können viele Inhalte betreffen und benötigen eine gesonderte Freigabe.
 </Warning>
@@ -27,6 +29,10 @@ Alle Pfade beginnen mit `/api/v1/kb` und erwarten eine zulässige Authentifizier
 | `DELETE /record/:recordId` | Datensatz löschen |
 | `GET /stream/record/:recordId` | Datensatzinhalt als Stream abrufen |
 
+Zum Anlegen erwartet `POST /api/v1/kb/` ein `kbName` mit **1 bis 255 Zeichen** und liefert laut Referenz bei Erfolg **`201 Created`** mit Kennung, Namen, Organisations-ID, Zeitstempeln und Berechtigung der aufrufenden Person. `GET /api/v1/kb/` unterstützt `page` (Standard **1**), `limit` (Standard **20**, maximal **100**), `search` (höchstens **100 Zeichen**), `permissions`, `sortBy` (`createdAt`, `updatedAt` oder `name`) und `sortOrder` (`asc` oder `desc`). Die Antwort enthält eine Liste `knowledgeBases` und ein `pagination`-Objekt mit Gesamtzahl und Seitenzahl.
+
+Für einzelne Wissensdatenbanken und Records verwenden Sie die Pfad-IDs `kbId` beziehungsweise `recordId`. Die lesende Antwort kann Metadaten, Berechtigungen, Dateiinformationen und den Indexierungsstatus enthalten. Ändern und Löschen setzt die entsprechende Berechtigung voraus; `DELETE /:kbId` kann einen ganzen Inhaltsbereich betreffen.
+
 ## Upload, Ordner und Indexierung
 
 | Methode und Pfad | Aufgabe |
@@ -41,4 +47,33 @@ Alle Pfade beginnen mit `/api/v1/kb` und erwarten eine zulässige Authentifizier
 | `POST /reindex-all/connector` | Inhalte eines Konnektors erneut indexieren |
 | `POST /resync/connector` | Konnektor-Synchronisierung erneut anstoßen |
 
+Uploads verwenden `multipart/form-data`. Das Feld `files` enthält eine oder mehrere Dateien; `file_paths` und `last_modified` müssen jeweils zu diesen Dateien passen. `isVersioned` ist optional und laut Referenz standardmäßig `true`. Als Referenzgrenzen nennt die Quellanleitung **1.000 Dateien pro Request** und **30 MB pro Datei**. Prüfen Sie die Grenzwerte der bereitgestellten Enterprise-Version vor großen Uploads. Dateipfade müssen eindeutig sein und dürfen keine ungültigen Zeichen oder Traversal-Sequenzen enthalten.
+
+```text
+POST /api/v1/kb/:kbId/upload
+Content-Type: multipart/form-data
+
+files=<Datei(en)>
+file_paths=<zugehörige Pfade>
+last_modified=<Zeitstempel in Millisekunden>
+isVersioned=true
+```
+
+Ein erfolgreicher Upload liefert laut Referenz **`201 Created`** mit Zahlen für angelegte Records und Ordner sowie Kennungen der neuen Einträge. Bei einem Upload in einen bestehenden Ordner kommt `folderId` im Pfad hinzu. Nach einem Upload speichert der Dienst zuerst Datei und Metadaten; erst danach verarbeitet die Indexierung den Inhalt.
+
+Die administrativen Konnektoraufrufe benötigen zusätzliche Rechte. `GET /stats/:connector` liefert unter anderem `totalRecords`, `indexedRecords`, `failedRecords`, den letzten Synchronisierungszeitpunkt und Indexierungsstatus-Zähler. `POST /reindex-all/connector` erwartet `connector` und optional `orgId` und stößt die erneute Indexierung fehlgeschlagener Records an. `POST /resync/connector` verwendet dieselben Felder sowie optional `fullResync` (Standard `false`) und startet eine neue Quellsynchronisierung; die Antwort kann eine `syncId` enthalten.
+
 Nach einem Upload verarbeitet Indexing den Inhalt für die Suche. Das kann zeitversetzt geschehen; ein erfolgreicher Upload bedeutet nicht zwangsläufig, dass die Datei sofort in Suchtreffern erscheint. Bei fehlenden Inhalten prüfen Sie Zugriffsrechte, Synchronisationsstatus und Indexierungsfehler. Für serverseitige Diagnose hilft [Novaplan Support](/de/contact-us).
+
+## Fehler und Sicherheitsgrenzen
+
+| Status | Typische Bedeutung |
+| --- | --- |
+| `400` oder `422` | Ungültige Felder, Pfade, MIME-Typen oder doppelte `file_paths`. |
+| `401` | Fehlende oder ungültige Authentifizierung. |
+| `403` | Die Person darf die Wissensdatenbank oder den administrativen Vorgang nicht ausführen. |
+| `404` | Wissensdatenbank, Ordner oder Record wurde nicht gefunden. |
+| `413` | Dateigröße überschreitet die geltende Grenze. |
+| `500` | Fehler im Dienst oder einem benötigten Backend. |
+
+Die Referenz beschreibt strukturierte Fehler mit `error.code`, `error.message` und gegebenenfalls `error.details` sowie einer Request-ID. Hochgeladene Dateitypen und Pfade werden validiert, nutzerbezogene Zugriffe müssen an Organisation und Berechtigungen gebunden bleiben, und Datei-Streams können zeitlich begrenzte signierte URLs verwenden. Verwenden Sie für einen fehlgeschlagenen Indexierungsauftrag nicht automatisch einen vollständigen Resync der Quelle; prüfen Sie zuerst den betroffenen Record und die Fehlermeldung.
