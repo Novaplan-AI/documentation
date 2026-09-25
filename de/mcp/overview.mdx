@@ -58,17 +58,17 @@ Tragen Sie die URIs der Clients ein, die Sie verwenden möchten:
 | **LibreChat** | `http://localhost:3080/api/mcp/<server-identifier>/oauth/callback` |
 
 <Warning>
-  Die in `MCP_SCOPES` konfigurierten Berechtigungen müssen zu den Scopes der OAuth-Anwendung passen. Andernfalls schlägt die Autorisierung fehl. Novaplan kann die serverseitige Konfiguration mit Ihnen abstimmen.
+  Die OAuth-Anwendung muss die vom Client tatsächlich angeforderten Scopes erlauben. Ein angeforderter Scope außerhalb der erlaubten Menge führt zu einem Autorisierungsfehler. Novaplan verwaltet die serverseitigen `MCP_SCOPES`-Standardwerte; wenn der Client eine freigegebene Teilmenge anfordert, muss die Anwendung nicht jeden bekannt gegebenen Scope erlauben.
 </Warning>
 
 ### Standard-Scopes anpassen
 
 Novaplan AI gibt über `/.well-known/oauth-protected-resource/mcp` standardmäßig Scopes für die automatische Erkennung bekannt. Novaplan kann diese serverseitigen Standardwerte mit `MCP_SCOPES` prüfen und anpassen. Claude Code kann zusätzlich mit `oauth.scopes` eine freigegebene Teilmenge anfordern; allein die Bekanntgabe eines Scopes bedeutet nicht, dass die OAuth-Anwendung alle katalogisierten Scopes erlauben muss.
 
-Der dokumentierte Beispielwert für Chat-, Such- und Verzeichnisabläufe lautet:
+Der zugängliche Quellcode und die Enterprise-Deployment-Vorlage verwenden den folgenden Standardkatalog. Das ist **keine** Empfehlung, jeder OAuth-Anwendung sämtliche Scopes zu gewähren. Prüfen Sie die vom Client angeforderten Scopes und die tatsächlich benötigten Werkzeuge:
 
 ```bash
-MCP_SCOPES=openid,profile,email,offline_access,semantic:write,conversation:write,conversation:chat,kb:read,team:read,user:read,config:read
+MCP_SCOPES=openid,profile,email,offline_access,semantic:write,conversation:write,conversation:chat,kb:read,team:read,user:read,config:read,agent:read,agent:execute,connector:read
 ```
 
 ## Platzhalter in den Beispielen

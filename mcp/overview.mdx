@@ -65,17 +65,17 @@ Add all the redirect URIs for the clients you plan to use:
 | **LibreChat** | `http://localhost:3080/api/mcp/<server-identifier>/oauth/callback` |
 
 <Warning>
-  The scopes in `MCP_SCOPES` must match the scopes granted to your OAuth app — a mismatch will result in an authorization error. Novaplan manages the server-side configuration.
+  The OAuth app must allow the scopes the client actually requests. A requested scope outside the app's allowed set causes an authorization error. Novaplan manages the server-side `MCP_SCOPES` defaults; the app does not need every advertised scope when the client requests an approved subset.
 </Warning>
 
 ### Customizing Default Scopes
 
 By default, Novaplan AI exposes scopes in its `/.well-known/oauth-protected-resource/mcp` discovery endpoint. Novaplan can review the server-side `MCP_SCOPES` configuration when those advertised defaults need to change. Claude Code can also pin an approved subset on the client with `oauth.scopes`; it does not require the OAuth app to allow every scope in the server's catalog merely because that scope is advertised.
 
-The recommended `MCP_SCOPES` value covers the common chat, search, and directory workflows:
+The accessible source and Enterprise deployment template use this default scope catalog. It is **not** a recommendation to grant every scope to every OAuth app; review the client's requested scopes and the tools it needs:
 
 ```bash
-MCP_SCOPES=openid,profile,email,offline_access,semantic:write,conversation:write,conversation:chat,kb:read,team:read,user:read,config:read
+MCP_SCOPES=openid,profile,email,offline_access,semantic:write,conversation:write,conversation:chat,kb:read,team:read,user:read,config:read,agent:read,agent:execute,connector:read
 ```
 
 ## Placeholders
