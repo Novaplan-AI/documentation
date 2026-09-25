@@ -3,7 +3,7 @@
 The Connector Manager Service provides centralized management of authentication tokens and connector configurations for third-party integrations. This service handles OAuth flows, token lifecycle management, and connector configurations for various external services like Google Workspace, OneDrive, SharePoint, Confluence, and more.
 
 <Warning>
-  This is an internal API reference. Example redirect URIs containing `localhost` come from source-development fixtures and are not valid callback addresses for a managed Novaplan workspace. Copy the exact redirect URI shown in the workspace's connector setup screen, and confirm the deployed API schema with Novaplan before sending administrative requests.
+  This internal endpoint catalog is a **legacy source reference**, not a verified contract for the deployed Novaplan Enterprise API. The accessible Node route currently uses `GET/PUT /api/v1/connectors/:connectorId/config`, while the accordion below describes `/api/v1/connectors/config/:connectorName`; its update validator also makes `baseUrl` optional, contrary to the table below. OAuth callback, schema, filter, and toggle paths have similar differences. Do not automate calls from the examples until Novaplan confirms the deployed routes and fields. `localhost` redirect URIs below are development fixtures; copy the exact redirect URI shown in your workspace instead.
 </Warning>
 
 ## Base URL

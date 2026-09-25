@@ -5,6 +5,10 @@ description: "Konnektor-Konfiguration, OAuth-Verbindungen und Token-Lebenszyklus
 
 Der Connector Manager verwaltet Konnektor-Instanzen, Einstellungen und die OAuth-Verbindung zu externen Anwendungen. Die eigentliche Datenabholung erfolgt durch weitere Konnektordienste. Novaplan richtet den Kunden-Workspace und die benötigten Integrationen ein; diese Seite ist eine technische Referenz für freigegebene administrative Abläufe.
 
+<Warning>
+  Die Endpunktliste unten ist eine **ältere Quellreferenz** und kein geprüfter Vertrag für die bereitgestellte Novaplan-Enterprise-API. In der zugänglichen Node-Route lautet der Konfigurationspfad `GET/PUT /api/v1/connectors/:connectorId/config`; die ältere Referenz nennt dagegen `/api/v1/connectors/config/:connectorName`. Dort wird `baseUrl` als Pflichtfeld gezeigt, während der zugängliche Validator es optional behandelt. Auch OAuth-Callback-, Schema-, Filter- und Toggle-Pfade weichen ab. Automatisieren Sie diese Beispiele erst nach Prüfung der bereitgestellten Routen und Felder mit Novaplan.
+</Warning>
+
 ## Komponenten und Zugriff
 
 Der Dienst speichert Konnektor-Metadaten, verschlüsselt sensible Konfiguration und informiert andere Dienste über Änderungen. Der verwaltete Workspace kann Redis oder etcd als Konfigurationsspeicher sowie Redis Streams oder Kafka als Event-Bus verwenden. Die konkrete Auswahl ist keine Einstellung, die Nutzende für eine Verbindung treffen müssen.
