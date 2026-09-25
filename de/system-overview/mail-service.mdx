@@ -46,7 +46,18 @@ Ein Beispiel ohne echte Zugangsdaten:
 }
 ```
 
-Die optionale Liste `attachments` wird an Nodemailer weitergegeben. Prüfen Sie das erforderliche Format und die Kodierung für Binärdateien im bereitgestellten Dienst. Für Kopien verwenden Sie `sendCcTo`; der geprüfte Request-Typ enthält kein BCC-Feld. Der SMTP-Absender stammt aus der Konfiguration `fromEmail`, nicht aus `fromEmailDomain`. Der Vorlagentyp bestimmt, welche Felder in `templateData` benötigt werden: `otp` für den Einmalcode, `resetLink` für die Passwortzurücksetzung und `inviteLink` für Einladungen.
+Die optionale Liste `attachments` wird an Nodemailer weitergegeben. Für einen als Base64-Zeichenfolge übertragenen Anhang geben Sie laut [Nodemailer-Referenz](https://nodemailer.com/message/attachments) `encoding: "base64"` an. Dieses Beispiel enthält den Text „Hello“ als `note.txt`:
+
+```json
+{
+  "filename": "note.txt",
+  "content": "SGVsbG8=",
+  "encoding": "base64",
+  "contentType": "text/plain"
+}
+```
+
+Prüfen Sie, ob der bereitgestellte Enterprise-Endpunkt dieses Anhangsformat akzeptiert. Für Kopien verwenden Sie `sendCcTo`; der geprüfte Request-Typ enthält kein BCC-Feld. Der SMTP-Absender stammt aus der Konfiguration `fromEmail`, nicht aus `fromEmailDomain`. Der Vorlagentyp bestimmt, welche Felder in `templateData` benötigt werden: `otp` für den Einmalcode, `resetLink` für die Passwortzurücksetzung und `inviteLink` für Einladungen.
 
 Bei Erfolg antwortet der Endpunkt laut technischer Referenz mit **`200 OK`** und einem Ergebnis wie diesem:
 

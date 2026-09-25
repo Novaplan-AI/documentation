@@ -117,13 +117,16 @@ The `templateData` object should contain template-specific variables. Common fie
   "sendCcTo": ["admin@example.com"],
   "attachments": [
     {
-      "filename": "document.pdf",
-      "content": "base64-encoded-content",
-      "contentType": "application/pdf"
+      "filename": "note.txt",
+      "content": "SGVsbG8=",
+      "encoding": "base64",
+      "contentType": "text/plain"
     }
   ]
 }
 ```
+
+For a base64-encoded attachment string, set `encoding` to `base64` so Nodemailer decodes it into file content. See the [Nodemailer attachment reference](https://nodemailer.com/message/attachments). Confirm the deployed Enterprise route accepts this attachment shape before integrating with the internal mail service.
 </Tab>
 
 <Tab title="Response">
@@ -192,7 +195,7 @@ Upon successful email sending, a record is automatically created in MongoDB with
 }
 ```
 
-**Status:** `403 Forbidden**
+**Status:** `403 Forbidden`
 ```json
 {
   "error": {
