@@ -1,5 +1,9 @@
 # Authentication Service
 
+<Warning>
+  This is a source-derived reference to internal authentication endpoints, not a verified contract for the deployed Novaplan Enterprise API. Administrative and service-to-service routes are not general customer integration endpoints. Confirm the deployed routes, request fields, scopes, and enabled authentication methods with Novaplan before building against these examples. For customer integrations, use the [OAuth application guide](/developer/oauth2).
+</Warning>
+
 The Authentication Service provides secure user authentication and authorization capabilities across your organization's ecosystem. It manages user identity verification, session handling, and supports multiple authentication methods including password, one-time passwords (OTP), OAuth providers (Google, Microsoft), Azure AD, OAuth, and SAML SSO.
 
 ## Base URL
@@ -449,6 +453,8 @@ Password reset, change, and recovery operations.
 <Accordion title="POST /userAccount/password/forgot - Forgot Password">
 Initiate password reset process via email.
 
+The endpoint returns the same generic success response whether the email belongs to an account or not. A successful response does not confirm that an account exists or that an email was delivered. If CAPTCHA is enabled, the request may also require `cf-turnstile-response`.
+
 <Tabs>
 <Tab title="Request">
 **Endpoint:** `POST /api/v1/userAccount/password/forgot`
@@ -471,7 +477,7 @@ Initiate password reset process via email.
 
 ```json
 {
-  "data": "password reset mail sent"
+  "data": "If an account exists for this email, a password reset link has been sent."
 }
 ```
 </Tab>
