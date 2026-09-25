@@ -46,10 +46,51 @@ Ein Beispiel ohne echte Zugangsdaten:
 }
 ```
 
-Nach erfolgreichem Versand wird ein Datensatz mit Betreff, Empfängern, Vorlagentyp und Zeitstempel gespeichert. Typische Fehler betreffen eine fehlende SMTP-Konfiguration, eine unbekannte Vorlage, ungültige Empfängerangaben oder einen Token ohne passenden Scope.
+Die optionale Liste `attachments` enthält Objekte mit `filename`, Base64-kodiertem `content` und `contentType`. Für Kopien verwenden Sie `sendCcTo`. Der Vorlagentyp bestimmt, welche Felder in `templateData` benötigt werden: `otp` für den Einmalcode, `resetLink` für die Passwortzurücksetzung und `inviteLink` für Einladungen.
+
+Bei Erfolg antwortet der Endpunkt laut technischer Referenz mit **`200 OK`** und einem Ergebnis wie diesem:
+
+```json
+{
+  "data": {
+    "status": true,
+    "data": "Email sent"
+  }
+}
+```
+
+Nach erfolgreichem Versand wird in MongoDB ein Datensatz mit Betreff, Absender, Empfänger- und CC-Liste, Vorlagentyp und Zeitstempeln gespeichert. Die Antwort bestätigt den Versandversuch über den konfigurierten SMTP-Anbieter; sie ist keine Zustellbestätigung des empfangenden Postfachs.
+
+| HTTP-Status | Antwort aus der Referenz | Mögliche Ursache |
+| --- | --- | --- |
+| `400` | `Unknown Template` | `emailTemplateType` ist kein unterstützter Vorlagentyp. |
+| `400` | `Smtp not configured properly` | Erforderliche SMTP-Angaben fehlen oder sind ungültig. |
+| `401` | `Authorization header not found` | Der Bearer-Header fehlt. |
+| `403` | `Invalid token scope` | Dem Token fehlt `SEND_MAIL`. |
+| `404` | `Smtp Configuration not set` | Es wurde keine SMTP-Konfiguration geladen. |
+| `500` | `Error sending mail` | Versand über den SMTP-Anbieter ist fehlgeschlagen. |
 
 ## SMTP-Konfiguration neu laden
 
 **`POST /api/v1/mail/updateSmtpConfig`** lädt die zuvor im Configuration Manager gespeicherten SMTP-Einstellungen neu. Laut Referenz benötigt der Aufruf `FETCH_CONFIG` und keinen Request-Body. Die Konfiguration umfasst Host, Port, Standard-Absenderadresse und gegebenenfalls SMTP-Benutzername und -Passwort. Ein Passwort wird in der Antwort nicht zurückgegeben.
 
 Der Dienst prüft vor einem Versand, ob die notwendigen SMTP-Felder vorhanden sind. Vorlagen werden verarbeitet und anschließend über den konfigurierten SMTP-Anbieter verschickt. Bei Zustellfehlern prüfen Sie zuerst die Workspace-Konfiguration und den SMTP-Anbieter; [Novaplan Support](/de/contact-us) kann die serverseitigen Protokolle prüfen.
+
+Die SMTP-Konfiguration umfasst `host`, `port` (in der Referenz standardmäßig **587**), `fromEmail` sowie optional `username` und `password`. Der Endpunkt zum Neuladen antwortet bei Erfolg mit **`200 OK`**, einer Meldung und den nicht vertraulichen Einstellungen. Das Passwort wird nicht zurückgegeben. Bei fehlendem Bearer-Header, unzureichendem `FETCH_CONFIG`-Scope oder fehlendem Mail-Container nennt die Referenz `401`, `403` beziehungsweise `404`.
+
+## Datenmodelle
+
+| Modell | Wichtige Felder |
+| --- | --- |
+| `MailInfo` | `orgId`, `subject`, `from`, `to[]`, optional `cc[]`, `emailTemplateType`, `createdAt`, `updatedAt` |
+| `MailBody` | `emailTemplateType`, `sendEmailTo[]`, `subject`, `templateData`; optional `sendCcTo[]`, `attachments[]`, `productName`, `isAutoEmail`, `fromEmailDomain` |
+| `SmtpConfig` | `host`, `port`, `fromEmail`; optional `username` und `password` |
+| `MailConfig` | JWT-Schlüssel, MongoDB-Verbindungsdaten und die SMTP-Konfiguration |
+
+Die Vorlagentypen sind als technische Werte festgelegt: `loginWithOTP`, `resetPassword`, `accountCreation`, `appuserInvite` und `suspiciousLoginAttempt`. Ändern Sie diese Werte nicht für eine Übersetzung der sichtbaren E-Mail-Texte.
+
+## Verarbeitung und Sicherheit
+
+Vor dem Versand prüft der Dienst das JWT, den benötigten Scope und die SMTP-Konfiguration. Er wählt die passende Handlebars-Vorlage, setzt die Werte aus `templateData` ein und ergänzt Layout, wiederverwendbare Kopf- und Fußbereiche sowie responsives Styling. Danach setzt er Absender, Empfänger, Kopien und Anhänge, versendet die Nachricht über SMTP und speichert die Metadaten. Der Configuration Manager liefert geänderte SMTP-Einstellungen, ohne dass der Mail-Dienst neu gestartet werden muss.
+
+Fehler werden als strukturierte Antwort unter `error.message` zurückgegeben; einzelne Antworten können außerdem `code` und `details` enthalten. Geben Sie SMTP-Zugangsdaten, Token und Einmalcodes weder in öffentlichen Protokollen noch in Support-Nachrichten weiter. Bei einer fehlenden Konfiguration, ungültigen Vorlage, ungültiger Empfängeradresse oder einem SMTP-Fehler prüfen Sie den jeweiligen Schritt, bevor Sie den Versand erneut auslösen.

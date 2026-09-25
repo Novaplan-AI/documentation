@@ -15,6 +15,8 @@ Die technische Referenz nennt unter anderem `gmail`, `drive`, `onedrive`, `share
 
 Ein Zeitplan enthält `scheduleConfig` mit einem `scheduleType`, `isEnabled` und `timezone`. Unterstützte Typen sind `hourly`, `daily`, `weekly`, `monthly`, `custom` mit Cron-Ausdruck sowie `once` für einen einzelnen Zeitpunkt. Weitere optionale Werte sind `priority`, `maxRetries` und `timeout`.
 
+`isEnabled` ist laut technischer Referenz standardmäßig `true`, `timezone` standardmäßig `UTC`. Für die Auftragsoptionen gelten `priority` von **1 bis 10** (Standard **5**), `maxRetries` von **0 bis 10** (Standard **3**) und `timeout` von **1.000 bis 600.000 Millisekunden** (Standard **300.000**). Stimmen Sie Änderungen mit Novaplan ab, damit geplante Läufe nicht mit anderen Quellen konkurrieren.
+
 | Typ | Zusätzliche Angaben |
 | --- | --- |
 | `hourly` | Minute und optionales Stundenintervall |
@@ -23,6 +25,8 @@ Ein Zeitplan enthält `scheduleConfig` mit einem `scheduleType`, `isEnabled` und
 | `monthly` | Kalendertag, Stunde und Minute |
 | `custom` | `cronExpression` und optional eine Beschreibung |
 | `once` | `scheduledTime` als ISO-8601-Zeitpunkt in der Zukunft |
+
+Bei `hourly` liegt `minute` zwischen 0 und 59; `interval` kann 1 bis 24 Stunden betragen. `daily` benötigt `hour` (0–23) und `minute` (0–59). `weekly` benötigt mindestens einen Wert in `daysOfWeek` (0 für Sonntag bis 6 für Samstag) sowie Stunde und Minute. `monthly` verwendet `dayOfMonth` (1–31), Stunde und Minute. `custom` benötigt einen Cron-Ausdruck mit fünf Feldern; `once` einen zukünftigen ISO-8601-Zeitpunkt. Prüfen Sie bei Monatsläufen, ob der gewählte Kalendertag im jeweiligen Monat existiert.
 
 ## Endpunkte
 
@@ -38,6 +42,8 @@ Alle Pfade beginnen mit `/api/v1/crawlingManager`.
 | `POST /:connector/pause` | Zeitplan pausieren |
 | `POST /:connector/resume` | Pausierten Zeitplan fortsetzen |
 | `GET /stats` | Statistiken zu Aufträgen und Warteschlange abrufen |
+
+`POST /:connector/schedule` liefert bei erfolgreicher Erstellung laut Referenz **`201 Created`** mit `jobId`, `connector`, `scheduleConfig` und `scheduledAt`. `GET /:connector/schedule` liefert **`200 OK`** mit dem Jobstatus, darunter `id`, `name`, `progress`, `attemptsMade`, Zeitstempel, `failedReason` und `state`; wenn kein Zeitplan existiert, nennt die Referenz **`404 Not Found`**. `GET /schedule/all` gibt die Zeitpläne der Organisation zurück. Das Pausieren und Fortsetzen betrifft den Zeitplan für den angegebenen Konnektortyp; `DELETE /schedule/all` entfernt alle Zeitpläne der Organisation und sollte nur nach Prüfung des gesamten Umfangs verwendet werden.
 
 Ein Beispiel für den Body von `POST /:connector/schedule`:
 
@@ -57,3 +63,31 @@ Ein Beispiel für den Body von `POST /:connector/schedule`:
 ```
 
 Statuswerte können `waiting`, `active`, `completed`, `failed`, `delayed` oder `paused` sein. Bei Fehlern prüfen Sie zuerst, ob der Zeitplan gültig ist, der Zeitpunkt in der Zukunft liegt, der Konnektor existiert und der Token die erforderlichen Administrationsrechte besitzt. Für die operative Fehlersuche hilft [Novaplan Support](/de/contact-us).
+
+## Warteschlange und Lebenszyklus
+
+`GET /stats` liefert Zähler für `waiting`, `active`, `completed`, `failed`, `delayed`, `paused`, `repeatable` und `total`. Eine Antwort kann beispielsweise so aussehen:
+
+```json
+{
+  "success": true,
+  "data": {
+    "waiting": 5,
+    "active": 2,
+    "completed": 120,
+    "failed": 3,
+    "delayed": 1,
+    "paused": 2,
+    "repeatable": 8,
+    "total": 141
+  }
+}
+```
+
+Die technische Referenz beschreibt höchstens **fünf gleichzeitig laufende Jobs pro Warteschlange**, Wiederholungen mit exponentiellem Backoff ab fünf Sekunden, Erkennung blockierter Jobs nach 30 Sekunden und die Aufbewahrung der letzten zehn erfolgreichen und zehn fehlgeschlagenen Jobs pro Konnektortyp. Beim Aktualisieren eines Zeitplans wird ein Job entfernt und neu angelegt, statt an Ort und Stelle geändert zu werden.
+
+<Warning>
+  Ein pausierter Job wird laut Referenz aus der Warteschlange entfernt; seine Konfiguration bleibt nur im Arbeitsspeicher des Dienstes. Nach einem Neustart kann sie verloren sein. Prüfen Sie den Zeitplan danach erneut, bevor Sie von einer dauerhaft pausierten oder fortgesetzten Synchronisierung ausgehen.
+</Warning>
+
+Nach Abschluss eines Jobs veröffentlicht die Plattform ein Synchronisierungsereignis. Für die meisten Konnektoren gibt es einen spezifischen Ereignistyp, etwa `SyncDriveEvent` oder `SyncJiraEvent`; Confluence und Slack verwenden in der Quellanleitung als Fallback `ReindexAllRecordEvent`. Fehlermeldungen verwenden typischerweise `success: false`, `message` und gegebenenfalls `error.code` sowie `error.details`. `401` und `403` betreffen Anmeldung beziehungsweise Administrationsrechte; `400` eine ungültige Zeitplan-Konfiguration und `500` einen internen Fehler.
