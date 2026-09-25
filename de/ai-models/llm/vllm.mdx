@@ -29,7 +29,7 @@ Die genaue Installation und die Modellkompatibilität hängen von Ihrer vLLM-Ver
 | **API Key** | Schlüssel, der beim Start des vLLM-Servers mit `--api-key` festgelegt wurde. Das Formular verlangt einen Wert; wenn der Server keine Authentifizierung nutzt, akzeptiert er laut Ausgangskonfiguration einen Platzhalter wie `no-key`. Für produktive Verbindungen sollten Sie Authentifizierung einrichten. |
 | **Model Name** | Exakte ID des auf dem Server bereitgestellten Modells, beispielsweise `Qwen/Qwen3-8B`. |
 
-Eine Administration kann die angebotenen IDs am `/v1/models`-Endpoint des vLLM-Servers abfragen. **Multimodal** aktivieren Sie nur bei einem Modell mit Bildeingabe, **Reasoning** nur bei einem entsprechenden Reasoning-Modell.
+Eine Administration kann die angebotenen IDs am `/v1/models`-Endpoint des vLLM-Servers abfragen. **Multimodal** aktivieren Sie nur bei einem Modell mit Bildeingabe, **Reasoning** nur bei einem entsprechenden Reasoning-Modell. Das oben als Serverbeispiel verwendete `Qwen/Qwen3-8B` ist ein Textmodell; aktivieren Sie für dieses Beispiel **Multimodal** nicht allein aufgrund des Modellnamens. Prüfen Sie die Modellkarte und die [Liste der von vLLM unterstützten Modelle](https://docs.vllm.ai/en/latest/models/supported_models.html).
 
 ## Modell hinzufügen
 

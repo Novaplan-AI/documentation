@@ -98,8 +98,7 @@ Enable this checkbox if your vLLM server is running a model that supports multim
 - The model was specifically trained for multimodal understanding
 - You need to process documents with images or visual content
 
-**Example multimodal models for vLLM:**
-- `Qwen/Qwen3-8B`
+**Model choice:** Use a vision-language model supported by your installed vLLM version. The `Qwen/Qwen3-8B` server example above is a text-generation model; do not enable **Multimodal** for that example solely because it belongs to the Qwen family. Consult the selected model's card and the [vLLM supported-model list](https://docs.vllm.ai/en/latest/models/supported_models.html).
 
 **Note:** Standard text-only models do not support multimodal capabilities. Verify your model's documentation before enabling this feature.
 
