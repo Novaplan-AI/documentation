@@ -56,6 +56,27 @@ Beim ersten Lauf wird der gewählte Umfang vollständig gelesen. Folgeläufe lis
 | Container fehlen | Es handelt sich um Blob-Container, nicht um Azure-Dateifreigaben; außerdem Firewall und Zugang prüfen. |
 | Null Dateien | Containerinhalt, aktive Synchronisierung und Filter. |
 | Einzelne Dateien fehlen in der Suche | **Failed**/**Processing**, Dateityp, Passwortschutz und Abschluss der Indexierung. |
+| Lauf ist sehr langsam | Anzahl und Größe der Blobs, Container-, Endungs- und Datumsfilter sowie Fortschritt unter **Overview**. Auch Folgeläufe listen ausgewählte Blobs erneut. |
 | Verbindung funktionierte zuvor | Mögliche Rotation des Azure-Schlüssels; unter **Manage Configuration** aktualisieren. |
+
+## Häufige Fragen
+
+<AccordionGroup>
+  <Accordion title="Kann ich mehrere Storage Accounts verbinden?">
+    Ja. Wählen Sie auf der Azure-Blob-Instanzseite **+ Add Another Instance** und richten Sie für den weiteren Storage Account eine eigene Instanz mit dessen Connection String ein.
+  </Accordion>
+  <Accordion title="Verändert Novaplan AI Dateien in Azure?">
+    Der dokumentierte Konnektor liest Blobs. Er lädt keine Quelldateien hoch und verschiebt, benennt oder löscht sie nicht. Seine Synchronisierung verändert jedoch die indexierten Datensätze in Novaplan AI.
+  </Accordion>
+  <Accordion title="Was geschieht nach dem Löschen einer Datei in Azure?">
+    Gehen Sie nicht davon aus, dass der nächste Lauf einen bereits indexierten Datensatz sofort entfernt. Prüfen Sie besonders bei sensiblen Dateien, ob der Eintrag aus Novaplan AI verschwunden ist. Wenn er weiterhin erscheint, wenden Sie sich an [Novaplan Support](/de/contact-us).
+  </Accordion>
+  <Accordion title="Kann ich nur einen Unterordner eines Containers auswählen?">
+    Nicht direkt. Der dokumentierte Filter wählt ganze Blob-Container aus. Dateiendungen und Datumsbereiche können den Umfang zusätzlich eingrenzen. Für eine klare Quellgrenze trennen Sie Inhalte in geeignete Container.
+  </Accordion>
+  <Accordion title="Wie schütze ich die Connection String?">
+    Behandeln Sie sie als Storage-Account-Geheimnis und geben Sie sie nur im vorgesehenen Zugangsdatenfeld ein. Lassen Sie Verschlüsselung, Zugriffsrechte und Protokollierung des bereitgestellten Workspaces von Novaplan bestätigen, bevor Sie sensible Container anbinden. Diese Anleitung verifiziert diese Kontrollen nicht.
+  </Accordion>
+</AccordionGroup>
 
 Bei Fragen zur sicheren Bereitstellung der Connection String oder zu den Filtern wenden Sie sich an [Novaplan Support](/de/contact-us).

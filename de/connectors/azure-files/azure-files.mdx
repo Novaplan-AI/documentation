@@ -55,6 +55,30 @@ Beim ersten Lauf wird der ausgewählte Datenbestand vollständig gelesen. Späte
 | Shares fehlen in der Auswahl | Account enthält **File shares** statt Blob-Containern; außerdem Netzwerkzugriff prüfen. |
 | Lauf zeigt null Dateien | Freigabeinhalt, Filter, aktivierte Synchronisierung. |
 | Datei erscheint nicht in der Suche | Indexierungsstatus, **Failed**, unterstützter Dateityp und Passwortschutz. |
+| Lauf ist sehr langsam | Anzahl und Größe der Dateien, Share-, Endungs- und Datumsfilter sowie Fortschritt unter **Overview**. Auch Folgeläufe listen ausgewählte Dateien erneut. |
 | Verbindung stoppt nach Schlüsselwechsel | Connection String unter **Manage Configuration** aktualisieren. |
+
+## Häufige Fragen
+
+<AccordionGroup>
+  <Accordion title="Kann ich mehrere Storage Accounts verbinden?">
+    Ja. Wählen Sie auf der Azure-Files-Instanzseite **+ Add Another Instance** und richten Sie für den weiteren Storage Account eine getrennte Instanz mit dessen Connection String ein.
+  </Accordion>
+  <Accordion title="Verändert Novaplan AI Dateien in Azure?">
+    Der dokumentierte Konnektor liest Dateien. Er lädt keine Dateien hoch und verschiebt, benennt oder löscht keine Quelldateien. Seine Synchronisierung verändert jedoch die indexierten Datensätze in Novaplan AI.
+  </Accordion>
+  <Accordion title="Was geschieht nach dem Löschen einer Datei in Azure?">
+    Gehen Sie nicht davon aus, dass der nächste Lauf einen bereits indexierten Datensatz sofort entfernt. Prüfen Sie besonders bei sensiblen Dateien, ob der Eintrag aus Novaplan AI verschwunden ist. Wenn er weiterhin erscheint, wenden Sie sich an [Novaplan Support](/de/contact-us).
+  </Accordion>
+  <Accordion title="Kann ich nur einen Unterordner einer Freigabe auswählen?">
+    Nicht direkt. Der dokumentierte Filter wählt ganze File Shares aus. Dateiendungen und Datumsbereiche können den Umfang zusätzlich eingrenzen. Für eine klare Quellgrenze trennen Sie Inhalte in geeignete Freigaben.
+  </Accordion>
+  <Accordion title="Wie schütze ich die Connection String?">
+    Behandeln Sie sie als Storage-Account-Geheimnis und geben Sie sie nur im vorgesehenen Zugangsdatenfeld ein. Lassen Sie Verschlüsselung, Zugriffsrechte und Protokollierung des bereitgestellten Workspaces von Novaplan bestätigen, bevor Sie sensible Freigaben anbinden. Diese Anleitung verifiziert diese Kontrollen nicht.
+  </Accordion>
+  <Accordion title="Was ist der Unterschied zwischen Azure Files und Azure Blob?">
+    Beide Dienste können denselben Storage Account verwenden. **Azure Blob** speichert Objekte in Containern und bildet Ordner über Präfixe nach. **Azure Files** bietet Dateifreigaben mit echten Verzeichnissen, die häufig als Netzlaufwerk eingebunden werden. Wählen Sie den Konnektor entsprechend dem tatsächlichen Speicherort Ihrer Dateien.
+  </Accordion>
+</AccordionGroup>
 
 Wenn Ihre Dateifreigaben nicht aus der Novaplan-Umgebung erreichbar sind oder Sie Hilfe bei der Eingrenzung benötigen, wenden Sie sich an [Novaplan Support](/de/contact-us).
