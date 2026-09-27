@@ -48,9 +48,15 @@ Wählen Sie unter **Configure Records** zuerst **Scheduled** oder **Manual**. Da
 | **Modified Date** | Nach Änderungsdatum filtern: `Is After`, `Is Before` oder `Is Between`. |
 | **Created Date** | Nach Erstellungsdatum mit denselben Operatoren filtern. |
 
-Durch Synchronisierungsfilter ausgeschlossene Daten werden nicht heruntergeladen. Die separaten Indexierungsoptionen **Index Tickets**, **Index Attachments** und **Index Knowledge Base** steuern, welche synchronisierten Inhalte in der KI-Suche erscheinen; alle drei sind laut Quellanleitung standardmäßig aktiviert.
+Die Gruppen- und Datumsfilter begrenzen die abgerufenen **Tickets**. Der zugängliche Konnektor lädt Benutzer, Gruppen und Rollen bei jedem Lauf und synchronisiert Wissensdatenbankantworten getrennt; diese Ticketfilter verhindern deren Abruf nicht. Die separaten Indexierungsoptionen **Index Tickets**, **Index Attachments** und **Index Knowledge Base** steuern, welche synchronisierten Inhalte in der KI-Suche erscheinen, nicht welche Daten von Zammad abgerufen werden. Alle drei Optionen sind laut Quellanleitung standardmäßig aktiviert. Prüfen Sie den Umfang mit Ihrer Administration, bevor vertrauliche Inhalte verbunden werden.
 
-Speichern Sie mit **Save**. Im abschließenden Dialog können Sie **Start syncing now** oder **I'll do it later** wählen. Unter **Indexing Progress** sehen Sie den Stand. Der erste Lauf liest die vorhandenen Daten; spätere Läufe erkennen Änderungen über `updated_at`. Die Verarbeitung erfolgt in der Reihenfolge Benutzer, Gruppen, Rollen, Tickets und Wissensdatenbank.
+Speichern Sie mit **Save**. Im abschließenden Dialog können Sie **Start syncing now** oder **I'll do it later** wählen. Unter **Indexing Progress** sehen Sie den Stand. Der erste Lauf liest die vorhandenen Daten. Spätere Läufe verwenden für Tickets und Wissensdatenbank `updated_at`-Fortschrittspunkte, laden aber weiterhin Benutzer, Gruppen und Rollen für die Berechtigungszuordnung. Die Verarbeitung erfolgt in der Reihenfolge Benutzer, Gruppen, Rollen, Tickets und Wissensdatenbank.
+
+### Technischer Ablauf der zugänglichen Quellversion
+
+Der Konnektor legt aus Zammad-Gruppen sowohl Benutzergruppen für Berechtigungen als auch Datensatzgruppen an. Anschließend verarbeitet er Tickets je Gruppe mit Status, Priorität, zuständiger und anfragender Person, Artikeln und Anhängen. Für die Wissensdatenbank werden Kategorien, Antworten, Übersetzungen und deren Anhänge verarbeitet. Interne und öffentliche Ticketartikel behalten ihre Kennzeichnung.
+
+Ohne gespeicherten Fortschrittspunkt werden die passenden vorhandenen Tickets und Wissensdatenbankinhalte geladen. Bei weiteren Läufen begrenzen gruppenbezogene Ticket- und Wissensdatenbank-Fortschrittspunkte die Inhaltsabfragen anhand von `updated_at`. Daraus folgt **nicht**, dass auch Benutzer, Gruppen und Rollen nur inkrementell gelesen werden. Ob eine manuell ausgelöste **Full sync**-Aktion diese Fortschrittspunkte im betriebenen Enterprise-Workspace zurücksetzt, muss dort geprüft werden. Diese Angaben beschreiben den zugänglichen Quellcode und sind kein zugesicherter öffentlicher API-Vertrag.
 
 ## Berechtigungen prüfen
 
