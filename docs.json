@@ -26,18 +26,8 @@
             "group": "Systemübersicht",
             "pages": [
               "de/system-overview",
-              {
-                "group": "Externe Dienste",
-                "pages": [
-                  "de/system-overview/external-services"
-                ]
-              },
-              {
-                "group": "Interne Dienste",
-                "pages": [
-                  "de/system-overview/internal-services"
-                ]
-              }
+              "de/system-overview/external-services",
+              "de/system-overview/internal-services"
             ]
           },
           {
@@ -238,8 +228,7 @@
             "group": "Agenten",
             "pages": [
               "de/agent-guide/overview",
-              "de/agent-guide/setup-guide",
-              "de/for-agents"
+              "de/agent-guide/setup-guide"
             ]
           },
           {
@@ -290,6 +279,7 @@
             "group": "MCP-Server",
             "pages": [
               "de/mcp/overview",
+              "de/for-agents",
               "de/mcp/qm",
               "de/mcp/cursor",
               "de/mcp/claude-code",
@@ -357,18 +347,8 @@
             "group": "System Overview",
             "pages": [
               "system-overview",
-              {
-                "group": "External Services",
-                "pages": [
-                  "system-overview/external-services"
-                ]
-              },
-              {
-                "group": "Internal Services",
-                "pages": [
-                  "system-overview/internal-services"
-                ]
-              }
+              "system-overview/external-services",
+              "system-overview/internal-services"
             ]
           },
           {
@@ -569,8 +549,7 @@
             "group": "Agents",
             "pages": [
               "agent-guide/overview",
-              "agent-guide/setup-guide",
-              "for-agents"
+              "agent-guide/setup-guide"
             ]
           },
           {
@@ -621,6 +600,7 @@
             "group": "MCP Server",
             "pages": [
               "mcp/overview",
+              "for-agents",
               "mcp/qm",
               "mcp/cursor",
               "mcp/claude-code",
