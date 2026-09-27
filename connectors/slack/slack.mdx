@@ -512,7 +512,7 @@ How often a scheduled sync runs (default: 60 minutes).
 
 ## Sync Filters
 
-Sync filters control which conversations are fetched from Slack. Anything excluded here is never fetched, so it never becomes a record.
+Sync filters narrow the conversations and message history processed by the connector. The accessible Team connector reads workspace users and user groups for permission mapping; the Individual connector also reads workspace user information for mentions and names. Channel discovery can return channel metadata before the channel ID filter is applied. An excluded channel therefore does not guarantee that no information about other workspace members or channels is read. Confirm the connected app's Slack scopes if this distinction matters for sensitive data.
 
 ### Channel
 

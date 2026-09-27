@@ -651,7 +651,7 @@ Yes. On the **Configure Records** tab:
   and their subgroups, or `Not In` to exclude them
 - Use the **Repositories** filter the same way to target individual projects
 
-Narrowing scope here also speeds up sync, because excluded projects are never fetched at all.
+Narrowing scope can reduce the issue, merge-request, and code work performed for excluded projects. The connector and live pickers may still query GitLab group, project, or member metadata to resolve the selection. Do not treat these filters as a guarantee that excluded projects are never discovered.
 Both fields are live pickers that query your GitLab instance as you type.
 
 </Accordion>

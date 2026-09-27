@@ -273,7 +273,7 @@ Filters let you control exactly what Novaplan AI syncs and indexes from your Sha
 
 ### Sync Filters
  
-These filters run before any data is pulled from SharePoint. Content that doesn't pass a sync filter is never fetched, saving time and API quota, also helps exclude unwanted content. 
+These filters narrow the sites, libraries, files, and pages processed for search. The accessible connector first reads Microsoft 365 users and groups for permission mapping and discovers SharePoint sites before applying the site filter. Do not use the content filters as a guarantee that no other tenant metadata is read. Check the application's granted Microsoft permissions if source-level isolation is required.
  
 | Filter | Default | What it does |
 |---|---|---|

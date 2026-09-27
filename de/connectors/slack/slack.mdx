@@ -143,7 +143,7 @@ Die Callback-Adresse muss exakt übereinstimmen, einschließlich Schema, Host, P
 - **Channel Types:** Teamverbindungen unterstützen öffentliche und private Kanäle; persönliche Verbindungen zusätzlich **Direct Messages** und **Group Direct Messages**.
 - **Sync Messages From:** Legt den Zeitraum des ersten Laufs fest. Die Voreinstellung ist **Last 30 Days**; alternativ können Sie etwa **Is After** mit einem Datum wählen. Spätere Läufe sind inkrementell.
 
-Synchronisierungsfilter schließen Inhalte bereits beim Abruf aus. Ein längerer Anfangszeitraum verlängert den ersten Lauf. Stimmen Sie den Umfang mit Ihrer Administration und Novaplan ab.
+Synchronisierungsfilter begrenzen die verarbeiteten Konversationen und Nachrichtenverläufe. Der zugängliche Team-Konnektor liest Nutzer und Nutzergruppen für Berechtigungszuordnungen; der Individual-Konnektor liest ebenfalls Nutzerinformationen für Erwähnungen und Namen. Die Kanalsuche kann Kanalmetadaten liefern, bevor der Kanal-ID-Filter angewendet wird. Ein ausgeschlossener Kanal garantiert daher nicht, dass keinerlei Informationen über andere Mitglieder oder Kanäle gelesen werden. Ein längerer Anfangszeitraum verlängert den ersten Lauf. Stimmen Sie den Umfang und die Slack-Berechtigungen mit Ihrer Administration und Novaplan ab.
 
 ### Indexierung
 

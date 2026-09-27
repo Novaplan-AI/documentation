@@ -70,7 +70,7 @@ Laden Sie `certificate.crt` in der Entra-App unter **Certificates & secrets → 
 - **Scheduled:** Synchronisiert automatisch im gewählten **Sync Interval**; die Voreinstellung beträgt 60 Minuten.
 - **Manual:** Synchronisiert nur nach manuellem Start durch eine Administration.
 
-Synchronisierungsfilter greifen vor dem Abruf. Nicht ausgewählte Inhalte werden nicht aus SharePoint geholt.
+Synchronisierungsfilter begrenzen die Websites, Bibliotheken, Dateien und Seiten, die für die Suche verarbeitet werden. Der zugängliche Konnektor liest zuvor Microsoft-365-Nutzer und -Gruppen für die Berechtigungszuordnung und entdeckt SharePoint-Websites, bevor der Website-Filter angewendet wird. Die Inhaltsfilter garantieren daher nicht, dass keine weiteren Mandantenmetadaten gelesen werden. Wenn eine Zugriffsschranke bereits an der Quelle nötig ist, prüfen Sie die der Anwendung gewährten Microsoft-Berechtigungen.
 
 | Filter | Ohne Einschränkung | Wirkung |
 | --- | --- | --- |
