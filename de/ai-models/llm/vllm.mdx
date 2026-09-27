@@ -42,4 +42,16 @@ Eine Administration kann die angebotenen IDs am `/v1/models`-Endpoint des vLLM-S
 3. Aktivieren Sie **Multimodal** und **Reasoning** nur passend zum Modell.
 4. Klicken Sie auf **Add Model**.
 
-Bei Verbindungsproblemen prüfen Sie den laufenden Dienst, `/v1/`, DNS, Firewall und die Erreichbarkeit aus der Novaplan-Umgebung. Bei Authentifizierungsfehlern muss der Schlüssel zum `--api-key` des Servers passen. Bei **Model not found** vergleichen Sie die ID mit `/v1/models`. Bei Speicher- oder Antwortzeitproblemen prüfen Sie GPU-Speicher, Modellgröße, Quantisierung und Kontextlimit. [Novaplan Support](/de/contact-us) hilft bei der Anbindung.
+## Leistung und Fehlerbehebung
+
+Die Leistung hängt vom gewählten Modell, der verfügbaren GPU-Hardware und den Einstellungen des vLLM-Servers ab. vLLM verarbeitet Anfragen unter anderem mit kontinuierlichem Batching. Bei größeren Modellen kann die Modellserver-Administration Tensor-Parallelität über mehrere GPUs prüfen. Quantisierte Modellvarianten können Speicher sparen; das unterstützte Format hängt vom Modell und der installierten vLLM-Version ab. Ein zu großes Kontextlimit (`--max-model-len`) kann Speicherfehler auslösen. Ändern Sie diese Servereinstellungen nur nach einem Test mit Ihrer Modellserver-Administration.
+
+| Problem | Prüfen Sie |
+| --- | --- |
+| Keine Verbindung | Läuft der Server? Antworten `/health` und `/v1/models` aus dem vorgesehenen Netzwerk? Stimmen DNS, Port, Firewall, TLS und die freigegebene Route aus dem Novaplan-Workspace? |
+| `401` oder Authentifizierungsfehler | Entspricht der in Novaplan eingetragene Schlüssel dem `--api-key` des Servers? Prüfen Sie die vLLM-Protokolle. |
+| Modell nicht gefunden | Steht die konfigurierte **Model Name**-ID exakt in der Antwort von `/v1/models`? Wurde der Server nach einem Modellwechsel neu gestartet? |
+| Langsame Antworten oder Speichermangel | Prüfen Sie GPU-Auslastung, Modellgröße, Kontextlimit, Quantisierung und gegebenenfalls Tensor-Parallelität. |
+| Server startet nicht | Prüfen Sie GPU-Treiber, verfügbaren Speicher, Modellkompatibilität und die Fehlermeldung im Serverprotokoll. |
+
+Die Befehle und Optionen finden Sie in der [aktuellen vLLM-CLI-Referenz](https://docs.vllm.ai/en/latest/cli/serve/). [Novaplan Support](/de/contact-us) hilft bei der Verbindung zum verwalteten Workspace; den Betrieb des Modellservers stimmen Sie mit dessen Administration ab.
