@@ -647,13 +647,12 @@ The connector respects AWS IAM permissions and Novaplan AI access controls:
   If you rotate or change AWS access keys, you must update the configuration in Novaplan AI immediately. The connector will fail to sync until new credentials are provided.
 </Warning>
 
-## AWS S3 Compatibility
+## Amazon S3 Compatibility
 
-This connector is designed for **Amazon S3** and uses the AWS S3 API. It supports:
+This setup is for **Amazon S3**. The S3 connector asks for AWS access keys and does not expose a custom endpoint URL in its setup. It supports:
 
 - **All AWS S3 Regions**: Works with buckets in any AWS region worldwide
 - **Standard S3 Storage Classes**: Standard, Standard-IA, One Zone-IA, Intelligent-Tiering
-- **S3-Compatible Services**: Should work with MinIO and other S3-compatible storage (with proper endpoint configuration)
 
 **Not Supported:**
 - S3 Glacier and Glacier Deep Archive (requires restore process)
@@ -661,7 +660,7 @@ This connector is designed for **Amazon S3** and uses the AWS S3 API. It support
 - Requester Pays buckets (not currently supported)
 
 <Info>
-  The connector uses the standard S3 API and should work with S3-compatible services like MinIO, but is primarily tested and optimized for AWS S3.
+  For MinIO, select the separate **MinIO** connector if it is available in your workspace. Its setup requires an endpoint URL in addition to credentials; these Amazon S3 instructions do not configure that endpoint. Ask [Novaplan Support](/contact-us) for the appropriate setup until the MinIO guide is published.
 </Info>
 
 ## FAQ
