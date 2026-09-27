@@ -17,6 +17,6 @@ Der Proxy muss erreichbar sein und mindestens ein Bildmodell in seiner `model_li
 | --- | --- |
 | **Endpoint URL** | Erreichbare Adresse des Proxys. Die Voreinstellung lautet `http://host.docker.internal:4000`. Verwenden Sie für andere Netzwerke die tatsächlich erreichbare Adresse. |
 | **API Key** | `master_key` oder ein gültiger virtueller Schlüssel des LiteLLM Proxys. |
-| **Model Name** | Exakter `model_name` des Bildmodells in der Proxy-Konfiguration, beispielsweise `dall-e-3` oder `gpt-image-1`. |
+| **Model Name** | Exakter `model_name` eines aktuell im Proxy verfügbaren Bildmodells. Ein Alias wie `company-image-model` ist nur ein Beispiel; prüfen Sie auch die Verfügbarkeit des dahinterliegenden Modells. |
 
 Ein **Model Friendly Name** ist optional. `host.docker.internal` funktioniert nur in einer entsprechend eingerichteten Containerumgebung; `localhost` bezeichnet nicht automatisch den Proxy-Server. Bei Verbindungs-, Schlüssel- oder Modellfehlern prüfen Sie Proxy-Status, Endpoint, Schlüssel und `model_name`. [Novaplan Support](/de/contact-us) hilft bei der Anbindung.

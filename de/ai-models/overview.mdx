@@ -157,7 +157,7 @@ Falls ein Health-Check fehlschlägt, prüfen Sie Schlüssel, Modellnamen, Azure-
 
 ## Modelle zur Bildgenerierung
 
-Modelle zur Bildgenerierung ermöglichen es geeigneten Agenten und Workflows, Bilder aus Textanweisungen zu erstellen. Dafür muss mindestens ein entsprechendes Modell im Workspace konfiguriert sein. Die Referenz nennt **OpenAI** mit DALL-E- beziehungsweise GPT-Image-Modellen und **Gemini** mit Imagen- beziehungsweise Gemini-Image-Modellen als Beispiele; weitere Anbieter sind in den [einzelnen Anleitungen](/de/ai-models/image-generation/openai) dokumentiert.
+Modelle zur Bildgenerierung ermöglichen es geeigneten Agenten und Workflows, Bilder aus Textanweisungen zu erstellen. Dafür muss mindestens ein entsprechendes Modell im Workspace konfiguriert sein. Der zugängliche Anbieterkatalog enthält **OpenAI**, **Gemini**, **OpenRouter** und **LiteLLM Proxy**. Prüfen Sie, welche Optionen Ihr bereitgestellter Workspace tatsächlich anzeigt.
 
 Öffnen Sie **Workspace Settings → AI Models → Image Generation**. Nur Administratoren und Owner können diese Einstellungen öffnen.
 
@@ -171,17 +171,19 @@ Modelle zur Bildgenerierung ermöglichen es geeigneten Agenten und Workflows, Bi
     Klicken Sie bei der gewünschten Anbieterkarte auf **Configure**.
   </Step>
   <Step title="Modell eintragen">
-    Geben Sie **API Key** und den exakten **Model Name** ein. Optional können Sie einen **Model Friendly Name** für die Anzeige festlegen.
+    Geben Sie die für den Anbieter angezeigten Pflichtfelder ein. Für LiteLLM Proxy wird zusätzlich eine erreichbare **Endpoint URL** benötigt. Optional können Sie einen **Model Friendly Name** festlegen.
   </Step>
   <Step title="Speichern und prüfen">
     Klicken Sie auf **Add Model**. Novaplan AI prüft die Zugangsdaten. Das erste hinzugefügte Bildmodell wird automatisch zum Standard.
   </Step>
 </Steps>
 
-| Anbieter | Pflichtfelder | Beispiel für Modellnamen |
+| Anbieter | Pflichtfelder | Modellauswahl |
 | --- | --- | --- |
-| **OpenAI** | API Key, Model Name | `gpt-image-1`, `dall-e-3` |
-| **Gemini** | API Key, Model Name | `gemini-2.5-flash-image`, `imagen-4.0-generate-001` |
+| [**OpenAI**](/de/ai-models/image-generation/openai) | API Key, Model Name | Aktuell verfügbares Modell aus dem OpenAI-Katalog; das alte Beispiel `dall-e-3` funktioniert nicht mehr |
+| [**Gemini**](/de/ai-models/image-generation/gemini) | API Key, Model Name | Modell, das für Ihr Google-Konto verfügbar ist |
+| [**OpenRouter**](/de/ai-models/image-generation/openrouter) | API Key, Model Name | Aktuelle Kennung im Format `provider/model` |
+| [**LiteLLM Proxy**](/de/ai-models/image-generation/litellm-proxy) | Endpoint URL, API Key, Model Name | Im Proxy konfigurierter `model_name` |
 
 OpenAI-Schlüssel erhalten Sie unter [platform.openai.com/api-keys](https://platform.openai.com/api-keys), Gemini-Schlüssel unter [aistudio.google.com/app/apikey](https://aistudio.google.com/app/apikey). Für Imagen kann ein Google Cloud Projekt mit aktivierter Vertex AI API oder ein passender Zugang über Google AI Studio nötig sein.
 
@@ -189,7 +191,7 @@ Unter **Configured** können Sie ein Bildmodell mit **Edit** ändern, mit **Set 
 
 ## Text-to-Speech-Modelle (TTS)
 
-TTS-Modelle wandeln KI-Antworten in gesprochene Audioausgabe um. Für Sprachfunktionen muss mindestens ein TTS-Modell konfiguriert sein. Die Referenz beschreibt **OpenAI** und **Gemini**; weitere Anbieter finden Sie in den [einzelnen Anleitungen](/de/ai-models/tts/openai).
+TTS-Modelle wandeln KI-Antworten in gesprochene Audioausgabe um. Für Sprachfunktionen muss mindestens ein TTS-Modell konfiguriert sein. Der zugängliche Katalog enthält **OpenAI**, **Gemini**, **OpenRouter** und **LiteLLM Proxy**. Prüfen Sie die Verfügbarkeit und möglichen Stimmen im bereitgestellten Workspace und beim gewählten Modell.
 
 Öffnen Sie **Workspace Settings → AI Models → TTS**. Nur Administratoren und Owner können diese Einstellungen öffnen.
 
@@ -200,7 +202,7 @@ TTS-Modelle wandeln KI-Antworten in gesprochene Audioausgabe um. Für Sprachfunk
     Öffnen Sie **Workspace Settings → AI Models** und wählen Sie **TTS**.
   </Step>
   <Step title="Anbieter konfigurieren">
-    Klicken Sie auf **Configure**. Tragen Sie **API Key** und den exakten **Model Name** ein.
+    Klicken Sie auf **Configure** und tragen Sie die angezeigten Pflichtfelder ein. LiteLLM Proxy benötigt zusätzlich eine erreichbare **Endpoint URL**.
   </Step>
   <Step title="Optionen auswählen">
     Wählen Sie bei Bedarf **Voice**, **Audio Format** und einen **Model Friendly Name**.
@@ -212,8 +214,10 @@ TTS-Modelle wandeln KI-Antworten in gesprochene Audioausgabe um. Für Sprachfunk
 
 | Anbieter | Pflichtfelder | Beispiel für Modellnamen | Standardstimme | Standardformat |
 | --- | --- | --- | --- | --- |
-| **OpenAI** | API Key, Model Name | `tts-1`, `tts-1-hd`, `gpt-4o-mini-tts` | Alloy | MP3 |
-| **Gemini** | API Key, Model Name | `gemini-3.1-flash-tts-preview`, `gemini-2.5-flash-preview-tts`, `gemini-2.5-pro-preview-tts` | Kore | WAV |
+| [**OpenAI**](/de/ai-models/tts/openai) | API Key, Model Name | `tts-1`, `tts-1-hd`, `gpt-4o-mini-tts` | Alloy | MP3 |
+| [**Gemini**](/de/ai-models/tts/gemini) | API Key, Model Name | `gemini-3.1-flash-tts-preview`, `gemini-2.5-flash-preview-tts`, `gemini-2.5-pro-preview-tts` | Kore | WAV |
+| [**OpenRouter**](/de/ai-models/tts/openrouter) | API Key, Model Name | Aktuelle Kennung im Format `provider/model` | Modellabhängig | Modellabhängig |
+| [**LiteLLM Proxy**](/de/ai-models/tts/litellm-proxy) | Endpoint URL, API Key, Model Name | Im Proxy konfigurierter `model_name` | Modellabhängig | Modellabhängig |
 
 **Stimmen und Formate:** OpenAI nennt Alloy, Echo, Fable, Onyx, Nova und Shimmer; als Formate sind MP3, Opus, AAC, FLAC und WAV dokumentiert. Für Gemini werden 30 vorgefertigte Stimmen genannt: Zephyr, Puck, Charon, Kore, Fenrir, Leda, Orus, Aoede, Callirrhoe, Autonoe, Enceladus, Iapetus, Umbriel, Algieba, Despina, Erinome, Algenib, Rasalgethi, Laomedeia, Achernar, Alnilam, Schedar, Gacrux, Pulcherrima, Achird, Zubenelgenubi, Vindemiatrix, Sadachbia, Sadaltager und Sulafat. WAV und PCM benötigen keine serverseitige Umwandlung; für MP3, Opus, AAC und FLAC ist **ffmpeg** im von Novaplan betriebenen Backend erforderlich. Bei Problemen hilft [Novaplan Support](/de/contact-us).
 
@@ -221,7 +225,7 @@ Unter **Configured** können Sie Stimmen, Formate und Zugangsdaten mit **Edit** 
 
 ## Speech-to-Text-Modelle (STT)
 
-STT-Modelle wandeln gesprochene Sprache in Text um. Für Spracheingaben muss mindestens ein STT-Modell eingerichtet sein. Die Referenz beschreibt **OpenAI** und **Gemini** als Cloud-APIs, **Whisper** als Modell mit `faster-whisper` im von Novaplan betriebenen Backend und **Wispr Flow** als spezialisierten Dienst. Weitere Anbieter sind in den [einzelnen Anleitungen](/de/ai-models/stt/openai) aufgeführt.
+STT-Modelle wandeln gesprochene Sprache in Text um. Für Spracheingaben muss mindestens ein STT-Modell eingerichtet sein. Der zugängliche Katalog enthält sechs Optionen: **OpenAI**, **Gemini**, **OpenRouter**, **LiteLLM Proxy**, **Whisper** mit `faster-whisper` im von Novaplan betriebenen Backend und **Wispr Flow**. Prüfen Sie die tatsächliche Verfügbarkeit im bereitgestellten Workspace.
 
 Öffnen Sie **Workspace Settings → AI Models → STT**. Nur Administratoren und Owner können diese Einstellungen öffnen.
 
@@ -232,7 +236,7 @@ STT-Modelle wandeln gesprochene Sprache in Text um. Für Spracheingaben muss min
     Öffnen Sie **Workspace Settings → AI Models** und wählen Sie **STT**.
   </Step>
   <Step title="Anbieter konfigurieren">
-    Klicken Sie auf **Configure**. Tragen Sie die erforderlichen Felder ein: bei Cloud-Anbietern **API Key** und **Model Name**, bei lokalem Whisper die Modellgröße.
+    Klicken Sie auf **Configure** und tragen Sie die für den Anbieter angezeigten Pflichtfelder ein, darunter für LiteLLM Proxy eine erreichbare **Endpoint URL** oder für lokales Whisper die Modellgröße.
   </Step>
   <Step title="Optionen auswählen">
     Je nach Anbieter können Sprache, Gerät, Rechenformat, Anwendungstyp und **Model Friendly Name** eingestellt werden.
@@ -244,10 +248,12 @@ STT-Modelle wandeln gesprochene Sprache in Text um. Für Spracheingaben muss min
 
 | Anbieter | Pflichtfelder | Beispiel für Modellnamen oder Größen |
 | --- | --- | --- |
-| **OpenAI** | API Key, Model Name | `whisper-1`, `gpt-4o-transcribe`, `gpt-4o-mini-transcribe` |
-| **Gemini** | API Key, Model Name | `gemini-2.5-flash`, `gemini-2.5-pro`, `gemini-3-flash-preview` |
-| **Whisper (lokal)** | Modellgröße | `tiny`, `base`, `small`, `medium`, `large-v2`, `large-v3`, `distil-large-v3` |
-| **Wispr Flow** | API Key | `flow-v1` wird automatisch gewählt. |
+| [**OpenAI**](/de/ai-models/stt/openai) | API Key, Model Name | `whisper-1`, `gpt-4o-transcribe`, `gpt-4o-mini-transcribe` |
+| [**Gemini**](/de/ai-models/stt/gemini) | API Key, Model Name | `gemini-2.5-flash`, `gemini-2.5-pro`, `gemini-3-flash-preview` |
+| [**OpenRouter**](/de/ai-models/stt/openrouter) | API Key, Model Name | Aktuelle Kennung im Format `provider/model` |
+| [**LiteLLM Proxy**](/de/ai-models/stt/litellm-proxy) | Endpoint URL, API Key, Model Name | Im Proxy konfigurierter `model_name` |
+| [**Whisper (lokal)**](/de/ai-models/stt/whisper) | Modellgröße | `tiny`, `base`, `small`, `medium`, `large-v2`, `large-v3`, `distil-large-v3` |
+| [**Wispr Flow**](/de/ai-models/stt/wispr-flow) | API Key | `flow-v1` wird automatisch gewählt. |
 
 **Weitere technische Hinweise:** Whisper benötigt keinen API-Schlüssel für einen externen Transkriptionsdienst. Beim ersten Start werden Modellgewichte von Hugging Face geladen; Novaplan stellt dafür den Backend-Zugriff bereit. Optional sind **Device** (`Auto`, `CPU`, `CUDA`), **Compute Type** (`int8`, `float16`, `float32`) und ein Verzeichnis für den Modell-Cache. Für Wispr Flow benötigen Sie einen aktiven Schlüssel; Novaplan stellt `ffmpeg` auf dem Backend bereit. Optional sind **Default Language**, **App Type** und ein abweichender API-Endpoint. Zugang erhalten Sie bei [enterprise@wisprflow.ai](mailto:enterprise@wisprflow.ai).
 

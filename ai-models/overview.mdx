@@ -206,7 +206,7 @@ If the health check fails when saving, double-check:
 
 Image generation models allow AI agents and workflows in Novaplan AI to generate images from text prompts. Once configured, these models are available to agents that support image creation tasks. At least one image generation model must be configured before image generation features are available in your workspace.
 
-Currently two providers are supported: **OpenAI** (DALL-E / GPT-Image models) and **Gemini** (Imagen / Gemini Image models).
+The accessible provider catalog includes **OpenAI**, **Gemini**, **OpenRouter**, and **LiteLLM Proxy** for image generation. Check which options your managed workspace actually exposes before choosing a model.
 
 ### How to navigate to this page
 
@@ -229,7 +229,7 @@ Only workspace **admins** and **owners** can access the AI Models settings page.
     Click **Configure** on the provider card you want to use.
   </Step>
   <Step title="Fill in the required fields">
-    Enter your **API Key** and the **Model Name** (exact model identifier string). See the [provider reference](#image-generation-provider-reference) below.
+    Enter the required fields shown for that provider. A LiteLLM Proxy connection also needs its reachable **Endpoint URL**. See the [provider reference](#image-generation-provider-reference) below.
   </Step>
   <Step title="Set an optional friendly name">
     Optionally set a **Model Friendly Name** — a human-readable label displayed in the UI.
@@ -244,10 +244,12 @@ Only workspace **admins** and **owners** can access the AI Models settings page.
 
 ### Image generation provider reference
 
-| Provider | Required fields | Example model names |
+| Provider | Required fields | Model selection |
 |---|---|---|
-| **OpenAI** | API Key, Model Name | `gpt-image-1`, `dall-e-3` |
-| **Gemini** | API Key, Model Name | `gemini-2.5-flash-image`, `imagen-4.0-generate-001` |
+| [**OpenAI**](/ai-models/image-generation/openai) | API Key, Model Name | Select a currently available model from OpenAI's catalog; the old `dall-e-3` example is no longer usable |
+| [**Gemini**](/ai-models/image-generation/gemini) | API Key, Model Name | Use a model available to your Google account |
+| [**OpenRouter**](/ai-models/image-generation/openrouter) | API Key, Model Name | Use its current `provider/model` identifier |
+| [**LiteLLM Proxy**](/ai-models/image-generation/litellm-proxy) | Endpoint URL, API Key, Model Name | Use a configured proxy `model_name` |
 
 > **OpenAI:** Get your API key at [platform.openai.com/api-keys](https://platform.openai.com/api-keys).
 >
@@ -266,7 +268,7 @@ After saving, your model appears under the **Configured** tab. Each row has the 
 <Note>
 If the health check fails when saving, double-check:
 - The API key is correct and has not expired.
-- The model name exactly matches what the provider API expects (e.g. `dall-e-3`, not `DALL-E-3`).
+- The model name exactly matches a currently available model in the provider account or proxy configuration; a legacy placeholder in the workspace may be outdated.
 - For Gemini Imagen models, confirm your API key has access to image generation — not all Google AI Studio keys have Imagen enabled by default.
 </Note>
 
@@ -274,7 +276,7 @@ If the health check fails when saving, double-check:
 
 Text to Speech models convert AI text responses into spoken audio, enabling voice output in AI workflows and agents. Once configured, these models are available wherever Novaplan AI produces audio output. At least one TTS model must be configured before voice features are available in your workspace.
 
-Currently two providers are supported: **OpenAI** (tts-1, tts-1-hd, gpt-4o-mini-tts) and **Gemini** (gemini-2.5-flash-preview-tts and related models).
+The accessible provider catalog includes **OpenAI**, **Gemini**, **OpenRouter**, and **LiteLLM Proxy** for TTS. Check availability and supported voices in your managed workspace and chosen model.
 
 ### How to navigate to this page
 
@@ -297,7 +299,7 @@ Only workspace **admins** and **owners** can access the AI Models settings page.
     Click **Configure** on the provider card you want to use.
   </Step>
   <Step title="Fill in the required fields">
-    Enter your **API Key** and the **Model Name** (exact model identifier string). See the [provider reference](#tts-provider-reference) below.
+    Enter the required fields shown for that provider. LiteLLM Proxy also needs its reachable **Endpoint URL**. See the [provider reference](#tts-provider-reference) below.
   </Step>
   <Step title="Choose optional settings">
     - **Voice** — select a default voice for audio output.
@@ -316,8 +318,10 @@ Only workspace **admins** and **owners** can access the AI Models settings page.
 
 | Provider | Required fields | Example model names | Default voice | Default format |
 |---|---|---|---|---|
-| **OpenAI** | API Key, Model Name | `tts-1`, `tts-1-hd`, `gpt-4o-mini-tts` | Alloy | MP3 |
-| **Gemini** | API Key, Model Name | `gemini-3.1-flash-tts-preview`, `gemini-2.5-flash-preview-tts`, `gemini-2.5-pro-preview-tts` | Kore | WAV |
+| [**OpenAI**](/ai-models/tts/openai) | API Key, Model Name | `tts-1`, `tts-1-hd`, `gpt-4o-mini-tts` | Alloy | MP3 |
+| [**Gemini**](/ai-models/tts/gemini) | API Key, Model Name | `gemini-3.1-flash-tts-preview`, `gemini-2.5-flash-preview-tts`, `gemini-2.5-pro-preview-tts` | Kore | WAV |
+| [**OpenRouter**](/ai-models/tts/openrouter) | API Key, Model Name | Current `provider/model` identifier | Model-dependent | Model-dependent |
+| [**LiteLLM Proxy**](/ai-models/tts/litellm-proxy) | Endpoint URL, API Key, Model Name | Configured proxy `model_name` | Model-dependent | Model-dependent |
 
 > **OpenAI voices:** Alloy, Echo, Fable, Onyx, Nova, Shimmer. Get your API key at [platform.openai.com/api-keys](https://platform.openai.com/api-keys).
 >
@@ -348,7 +352,7 @@ If the health check fails when saving, double-check:
 
 Speech to Text models transcribe spoken audio into text, enabling voice input in AI workflows and agents. Once configured, these models power voice-driven interactions across your Novaplan AI workspace.
 
-Four providers are supported: **OpenAI** and **Gemini** (cloud APIs), **Whisper** (open-source inference through `faster-whisper` on the Novaplan-managed backend), and **Wispr Flow** (hosted specialist transcription service). At least one STT model must be configured before voice input features are available.
+The accessible catalog has six STT options: **OpenAI**, **Gemini**, **OpenRouter**, **LiteLLM Proxy**, **Whisper** (inference through `faster-whisper` on the Novaplan-managed backend), and **Wispr Flow**. Check which are available in your deployed workspace. At least one STT model must be configured before voice input features are available.
 
 ### How to navigate to this page
 
@@ -371,7 +375,7 @@ Only workspace **admins** and **owners** can access the AI Models settings page.
     Click **Configure** on the provider card you want to use.
   </Step>
   <Step title="Fill in the required fields">
-    Enter the required fields for your provider (API Key and Model Name for cloud providers, or select a Model size for Whisper local). See the [provider reference](#stt-provider-reference) below.
+    Enter the fields shown for your provider (including the reachable Endpoint URL for LiteLLM Proxy, or a Model size for local Whisper). See the [provider reference](#stt-provider-reference) below.
   </Step>
   <Step title="Adjust optional settings">
     Configure any optional settings such as language, device, compute type, or app type depending on your provider.
@@ -391,10 +395,12 @@ Only workspace **admins** and **owners** can access the AI Models settings page.
 
 | Provider | Required fields | Example model names / sizes |
 |---|---|---|
-| **OpenAI** | API Key, Model Name | `whisper-1`, `gpt-4o-transcribe`, `gpt-4o-mini-transcribe` |
-| **Gemini** | API Key, Model Name | `gemini-2.5-flash`, `gemini-2.5-pro`, `gemini-3-flash-preview` |
-| **Whisper (local)** | Model size (dropdown) | tiny, base, small, medium, large-v2, large-v3, distil-large-v3 |
-| **Wispr Flow** | API Key | flow-v1 (selected automatically) |
+| [**OpenAI**](/ai-models/stt/openai) | API Key, Model Name | `whisper-1`, `gpt-4o-transcribe`, `gpt-4o-mini-transcribe` |
+| [**Gemini**](/ai-models/stt/gemini) | API Key, Model Name | `gemini-2.5-flash`, `gemini-2.5-pro`, `gemini-3-flash-preview` |
+| [**OpenRouter**](/ai-models/stt/openrouter) | API Key, Model Name | Current `provider/model` identifier |
+| [**LiteLLM Proxy**](/ai-models/stt/litellm-proxy) | Endpoint URL, API Key, Model Name | Configured proxy `model_name` |
+| [**Whisper (local)**](/ai-models/stt/whisper) | Model size (dropdown) | tiny, base, small, medium, large-v2, large-v3, distil-large-v3 |
+| [**Wispr Flow**](/ai-models/stt/wispr-flow) | API Key | flow-v1 (selected automatically) |
 
 > **OpenAI:** Get your API key at [platform.openai.com/api-keys](https://platform.openai.com/api-keys).
 >
