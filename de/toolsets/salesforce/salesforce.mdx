@@ -7,13 +7,33 @@ description: "Salesforce-Datensätze und Aktivitäten mit Agenten suchen und bea
 
 Das Salesforce-Toolset gibt Agenten Live-Zugriff auf die Salesforce-Daten, für die die angemeldete Person berechtigt ist. Eine Workspace-Administration richtet die gemeinsame OAuth-App unter **Workspace → Actions** ein. Jede Person verbindet anschließend ihr eigenes Salesforce-Konto unter **Your Actions**. Für die Suche in synchronisierten Datensätzen verwenden Sie den [Salesforce-Konnektor](/de/connectors/salesforce/salesforce).
 
-| Bereich | Verfügbare Tools |
-| --- | --- |
-| Suche und Datensätze | `soql_query`, `sosl_search`, `get_record`, `create_record`, `update_record`, `describe_object`, `list_recent_records`, `upload_file_to_salesforce`, `attach_file_to_record` |
-| Accounts, Kontakte, Leads | `search_accounts`, `create_account`, `search_contacts`, `create_contact`, `search_leads`, `create_lead` |
-| Opportunities und Cases | `search_opportunities`, `create_opportunity`, `search_cases`, `create_case` |
-| Produkte und Aktivitäten | `search_products`, `create_product`, `list_pricebooks`, `create_pricebook_entry`, `add_product_to_opportunity`, `search_tasks`, `create_task` |
-| Chatter und Profil | `get_record_chatter`, `post_chatter_comment`, `post_chatter_to_record`, `get_current_user` |
+Das Toolset bietet SOQL-Abfragen und SOSL-Volltextsuche, allgemeine Datensatzaktionen sowie Werkzeuge für Accounts, Kontakte, Leads, Opportunities, Cases, Produkte, Aufgaben und Chatter. Aktionen werden über OAuth im Namen der angemeldeten Person ausgeführt.
+
+### Verfügbare Werkzeuge
+
+| Bereich | Werkzeug | Funktion |
+| --- | --- | --- |
+| Suche | `soql_query` | Eine strukturierte SOQL-Abfrage ausführen. |
+| Suche | `sosl_search` | Objektübergreifend per SOSL nach Text suchen. |
+| Datensätze | `get_record` | Einen Datensatz anhand seiner ID abrufen. |
+| Datensätze | `create_record` | Einen Standard- oder benutzerdefinierten Datensatz erstellen. |
+| Datensätze | `update_record` | Felder eines vorhandenen Datensatzes anhand seiner ID ändern. |
+| Datensätze | `describe_object` | Felder, Auswahllisten und Beziehungen eines Objekts ermitteln. |
+| Datensätze | `list_recent_records` | Zuletzt angezeigte Datensätze eines Objekttyps auflisten. |
+| Dateien | `upload_file_to_salesforce` | Eine Workspace-Datei zu Salesforce Files hochladen und gegebenenfalls mit einem Datensatz verknüpfen. |
+| Dateien | `attach_file_to_record` | Eine vorhandene Salesforce-Datei mit einem Datensatz verknüpfen. |
+| Accounts | `search_accounts`, `create_account` | Accounts nach Name oder Branche suchen beziehungsweise erstellen. |
+| Kontakte | `search_contacts`, `create_contact` | Kontakte nach Name, E-Mail-Adresse oder Account suchen beziehungsweise erstellen. |
+| Leads | `search_leads`, `create_lead` | Leads nach Name, Unternehmen oder Status suchen beziehungsweise erstellen. |
+| Opportunities | `search_opportunities`, `create_opportunity` | Verkaufschancen nach Name, Phase oder Account suchen beziehungsweise erstellen. |
+| Cases | `search_cases`, `create_case` | Supportfälle nach Betreff, Status, Priorität oder Account suchen beziehungsweise erstellen. |
+| Produkte | `search_products`, `create_product` | Produkte nach Name, Code oder Familie suchen beziehungsweise erstellen. |
+| Preislisten | `list_pricebooks`, `create_pricebook_entry` | Preislisten auflisten oder einen Produktpreis darin festlegen. |
+| Opportunities | `add_product_to_opportunity` | Einer Verkaufschance eine Produktposition hinzufügen. |
+| Aufgaben | `search_tasks`, `create_task` | Aufgaben nach Betreff, Status, Priorität, Eigentümer oder verknüpftem Datensatz suchen beziehungsweise erstellen. |
+| Chatter | `get_record_chatter` | Beiträge, Kommentare und Aktivitäten eines Datensatzes abrufen. |
+| Chatter | `post_chatter_comment`, `post_chatter_to_record` | Einen Beitrag kommentieren oder einen neuen Beitrag zu einem Datensatz veröffentlichen. |
+| Profil | `get_current_user` | Profil und Organisationsangaben der angemeldeten Person abrufen. |
 
 <Warning>
   Generische Datensatzaktionen können Standard- und benutzerdefinierte Objekte ändern. Prüfen Sie Objekt, Datensatz-ID und Feldwerte vor einer schreibenden Aktion. Der Salesforce-Scope `api` eröffnet breiten API-Zugriff innerhalb der Rechte des angemeldeten Kontos.
@@ -23,18 +43,36 @@ Das Salesforce-Toolset gibt Agenten Live-Zugriff auf die Salesforce-Daten, für 
 
 ## Salesforce-App und gemeinsame Instanz einrichten
 
-1. Öffnen Sie in Salesforce **Setup → App Manager → New External Client App**. Vergeben Sie einen Namen und eine administrative Kontaktadresse.
+1. Öffnen Sie in Salesforce über das Zahnrad **Setup**. Suchen Sie nach **App Manager** und wählen Sie **New External Client App**. Tragen Sie einen Namen, beispielsweise `Novaplan AI Salesforce Toolset`, und eine administrative Kontaktadresse ein. Der **API Name** wird aus dem Namen vorbelegt.
 2. Öffnen Sie in Novaplan AI **Workspace → Actions → Salesforce → + Setup** und kopieren Sie die angezeigte **Redirect URI**.
 3. Aktivieren Sie in der Salesforce-App unter **API (Enable OAuth Settings)** OAuth und tragen Sie die exakt kopierte URI als **Callback URL** ein.
 4. Wählen Sie die für die Integration benötigten OAuth-Scopes. Die Quellanleitung nennt im Salesforce-Dialog **Manage user data via APIs (`api`)**, **Perform requests at any time (`refresh_token`, `offline_access`)** und **Access the identity URL service (`id`, `profile`, `email`, `address`, `phone`)**. `api` ermöglicht umfangreiche REST-API-Aufrufe innerhalb der Rechte des angemeldeten Kontos; `refresh_token` beziehungsweise `offline_access` erlaubt die Erneuerung der Anmeldung ohne erneute Interaktion. Lassen Sie die Auswahl von Ihrer Salesforce-Administration prüfen und beschränken Sie die Rechte der anmeldenden Person entsprechend.
-5. Aktivieren Sie unter **Flow Enablement** den **Authorization Code and Credentials Flow**. Die Integrationsanleitung nennt unter **Security** außerdem Secret-Anforderungen für Web Server und Refresh Token Flow sowie PKCE. Stimmen Sie diese Einstellungen mit Ihrer Salesforce-Sicherheitskonfiguration ab und speichern Sie die App.
-6. Kopieren Sie unter **OAuth Settings → Consumer Key and Secret** den **Consumer Key** als **Client ID** und den **Consumer Secret** als **Client Secret**. Bewahren Sie das Secret sicher auf.
-7. Kopieren Sie aus der Browseradresse Ihre **Salesforce Instance URL** ohne zusätzlichen Seitenpfad. Tragen Sie URL, Client ID, Client Secret und einen **Instance name** in der Salesforce-Aktion von Novaplan AI ein. Prüfen Sie die Callback URL und wählen Sie **Create**.
+5. Aktivieren Sie unter **Flow Enablement** den **Authorization Code and Credentials Flow**. Die Integrationsanleitung nennt unter **Security** außerdem **Require secret for Web Server Flow**, **Require secret for Refresh Token Flow** und **Require Proof Key for Code Exchange (PKCE) extension for Supported Authorization Flows**. Stimmen Sie diese Einstellungen mit Ihrer Salesforce-Sicherheitskonfiguration ab und speichern Sie die App.
+6. Öffnen Sie nach dem Speichern **OAuth Settings → Consumer Key and Secret**. Der **Consumer Key** ist die **Client ID**, der **Consumer Secret** das **Client Secret** in Novaplan AI. Kopieren Sie beide Werte sicher, bevor Sie die Seite verlassen; ein nicht mehr angezeigtes Secret muss zurückgesetzt werden.
+7. Kopieren Sie aus der Browseradresse die Basisadresse Ihrer Salesforce-Instanz, beispielsweise `https://yourcompany.my.salesforce.com`, ohne zusätzlichen Seitenpfad. Tragen Sie unter **Workspace → Actions → Salesforce → + Setup** einen **Instance name**, die **Salesforce Instance URL**, **Client ID** und **Client Secret** ein. Prüfen Sie, ob die angezeigte **Redirect URI** der Callback URL in Salesforce entspricht, und wählen Sie **Create**.
 
 ## Persönlich verbinden und verwenden
 
-1. Öffnen Sie **Your Actions → Salesforce** und wählen Sie **Authenticate with OAuth**.
-2. Melden Sie sich bei Salesforce an und prüfen Sie die angeforderten Berechtigungen.
-3. Fügen Sie die Salesforce-Aktion im **Agent Builder** als Tool hinzu.
+1. Öffnen Sie in der Seitenleiste unter **Personal → Your Actions** Ihre Salesforce-Instanz und wählen Sie **Authenticate with OAuth**.
+2. Melden Sie sich im geöffneten Salesforce-Fenster an und prüfen Sie die angeforderten Berechtigungen.
+3. Öffnen Sie auf **Home** über **+** neben **Agents** den Agent Builder. Geben Sie dem Agenten einen Namen, ziehen Sie das Salesforce-Toolset aus der Palette auf die Arbeitsfläche und verbinden Sie es mit dem **Agent**-Knoten sowie den vorgesehenen Modell- und Chat-Knoten. Erstellen Sie den Agenten nach Prüfung seiner Werkzeuge.
 
 Nennen Sie bei Änderungen den Objekttyp und möglichst die Datensatz-ID. Für Opportunities, Cases und Tasks sollten Sie auch Status, verantwortliche Person und betroffenen Account eindeutig angeben. Wenn die Anmeldung fehlschlägt, prüfen Sie Callback URL, Instance URL, App-Freigabe, Secret und Salesforce-Berechtigungen. Bei Fragen hilft [Novaplan Support](/de/contact-us).
+
+## Häufige Frage: Konnektor oder Toolset?
+
+| | Salesforce-Konnektor | Salesforce-Toolset |
+| --- | --- | --- |
+| Zweck | Datensätze für die Suche synchronisieren und indexieren. | Agenten Live-Aktionen im CRM erlauben. |
+| Datenfluss | Salesforce-Inhalte werden für die Suche in Novaplan AI übernommen. | Der Agent liest oder ändert Datensätze über die Salesforce-API. |
+| Anmeldung | OAuth für die lesende Synchronisierung. | Persönliche OAuth-Anmeldung mit den freigegebenen API-Rechten. |
+
+Verwenden Sie den Konnektor für die Suche in bereits synchronisierten Datensätzen. Verwenden Sie das Toolset, wenn ein Agent beispielsweise einen Lead anlegen, eine Opportunity aktualisieren oder einen Chatter-Beitrag veröffentlichen soll.
+
+## Beispiele für Agentenanfragen
+
+- „Zeige offene Opportunities in der Phase ‚Qualification‘.“
+- „Lege einen Lead für Jane Doe von TechCorp mit der E-Mail-Adresse jane@techcorp.com an.“
+- „Veröffentliche beim Chatter-Feed der Opportunity ‚Acme Enterprise‘ den Hinweis ‚Angebot versendet; juristische Prüfung läuft‘.“
+
+Prüfen Sie bei schreibenden Anfragen die vorgeschlagenen Felder und den Zieldatensatz, bevor die Aktion ausgeführt wird.
