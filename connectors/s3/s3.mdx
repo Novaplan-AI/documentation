@@ -713,14 +713,7 @@ This setup is for **Amazon S3**. The S3 connector asks for AWS access keys and d
 </Accordion>
 
 <Accordion title="Can I sync S3 Glacier files?">
-  **No**, the connector does not directly support S3 Glacier or Glacier Deep Archive storage classes. These storage classes require a restore process before files can be accessed.
-  
-  If you need to sync Glacier files:
-  1. Restore the files to Standard storage class in S3
-  2. Wait for restoration to complete
-  3. The connector will then sync the restored files
-  
-  Consider using S3 Intelligent-Tiering or Standard-IA for frequently accessed files that need to be searchable.
+  The documented connector does not directly support S3 Glacier Flexible Retrieval or Glacier Deep Archive objects. [AWS restoration](https://docs.aws.amazon.com/AmazonS3/latest/userguide/restoring-objects.html) makes a temporary copy readable after the restore completes; it does not change the archived object's storage class. Do not assume the connector will ingest that temporary copy. Confirm the deployed connector's behavior with Novaplan, or have your AWS administrator create a permanent copy in a supported storage class and test it with a limited sync.
 </Accordion>
 
 <Accordion title="What happens if I delete a file in S3?">
@@ -745,7 +738,7 @@ This setup is for **Amazon S3**. The S3 connector asks for AWS access keys and d
   2. **Use File Extension Filters**: Filter to specific file types
   3. **Use Date Filters**: Sync only recently modified files
   
-  Folder-level filtering within a bucket is not currently supported, but may be added in future releases.
+  Folder-level filtering within a bucket is not available in the documented connector. Use a separate bucket or another approved data layout when a narrower source boundary is required.
 </Accordion>
 
 </AccordionGroup>

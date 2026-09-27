@@ -97,4 +97,33 @@ Diese Anleitung gilt für **Amazon S3**. Im S3-Konfigurationsdialog lässt sich 
 | Einzelne Dateien fehlen in der Suche | **Failed**/**Unsupported**, Indexierung, Dateityp, Verschlüsselung und Speicherklasse. |
 | Lauf ist sehr langsam | Anzahl der Objekte, Bucket- und Dateitypfilter, Abrufkosten und Synchronisierungsintervall. |
 
+## Häufige Fragen
+
+<AccordionGroup>
+  <Accordion title="Wie lange dauert die erste Synchronisierung?">
+    Das hängt von Anzahl, Größe und Typ der Objekte, den AWS-Grenzen, den Filtern und der Indexierungskapazität Ihres Workspaces ab. Beginnen Sie mit einem begrenzten Bucket oder Dateitypfilter und verfolgen Sie den Lauf unter **Overview**. Novaplan unterstützt Sie bei der Planung größerer Importe.
+  </Accordion>
+  <Accordion title="Kann ich mehrere AWS-Konten verbinden?">
+    Eine Konnektor-Instanz verwendet die Zugangsdaten eines AWS-Kontos. Legen Sie für weitere Konten jeweils einen geeigneten IAM-Zugang und eine eigene S3-Instanz in Novaplan AI an. So lassen sich Buckets und Filter pro Konto getrennt verwalten.
+  </Accordion>
+  <Accordion title="Welche Dateitypen sind durchsuchbar?">
+    Unterstützte Dokumente wie PDF, DOCX, XLSX, PPTX, ODT und RTF sowie Text- und Codeformate können inhaltlich indexiert werden. DRM-freie EPUB-Dateien sind nach der aktuellen Quellreferenz per Text durchsuchbar, aber nicht in der Vorschau verfügbar. Die Inhaltsauswertung von Bildern hängt von den aktivierten Workspace-Funktionen ab. Videos, Audio, Archive, unbekannte Binärdateien und passwortgeschützte Dateien sind nicht zuverlässig inhaltlich durchsuchbar. Prüfen Sie **Unsupported** und den Indexierungsstatus für konkrete Dateien.
+  </Accordion>
+  <Accordion title="Wie funktioniert ein Folgelauf?">
+    Nach dem ersten Lauf speichert der Konnektor pro Bucket einen Synchronisierungsstand. Er listet die ausgewählten Buckets erneut, vergleicht die Änderungszeiten der Objekte mit diesem Stand und verarbeitet passende neue oder geänderte Objekte. Große Buckets können deshalb auch bei wenigen Änderungen Zeit benötigen. Prüfen Sie den tatsächlichen Lauf unter **Overview** und kontrollieren Sie gelöschte Quelldateien gesondert.
+  </Accordion>
+  <Accordion title="Kann ich archivierte Glacier-Objekte synchronisieren?">
+    Der dokumentierte Konnektor unterstützt S3 Glacier Flexible Retrieval und Glacier Deep Archive nicht direkt. Eine [AWS-Wiederherstellung](https://docs.aws.amazon.com/AmazonS3/latest/userguide/restoring-objects.html) macht eine temporäre Kopie nach Abschluss des Vorgangs lesbar; die Speicherklasse des archivierten Objekts ändert sich dadurch nicht. Gehen Sie nicht davon aus, dass der Konnektor diese temporäre Kopie indexiert. Lassen Sie das Verhalten der bereitgestellten Version von Novaplan bestätigen oder eine dauerhafte Kopie in einer unterstützten Speicherklasse mit einem begrenzten Lauf testen.
+  </Accordion>
+  <Accordion title="Was passiert, wenn ich eine Datei in S3 lösche?">
+    Eine Quelllöschung ist kein bestätigter sofortiger Widerruf der Suchbarkeit. Prüfen Sie besonders bei sensiblen Inhalten, ob der bereits indexierte Eintrag aus Novaplan AI verschwunden ist. Wenn er weiterhin erscheint, wenden Sie sich an [Novaplan Support](/de/contact-us). Klären Sie Lösch- und Versionierungsverhalten der Enterprise-Version vorab.
+  </Accordion>
+  <Accordion title="Welche Verschlüsselung wird unterstützt?">
+    SSE-S3 kann der IAM-Zugang mit normalen S3-Rechten lesen. Für SSE-KMS sind zusätzliche Berechtigungen am passenden KMS-Schlüssel erforderlich. Kundenseitig gelieferte Schlüssel (SSE-C) und vor dem Upload clientseitig verschlüsselte Inhalte werden in der Quellanleitung nicht als durchsuchbar unterstützt. Prüfen Sie die konkrete Bucket-Konfiguration mit Ihrer AWS-Administration.
+  </Accordion>
+  <Accordion title="Kann ich nur einen Ordner innerhalb eines Buckets auswählen?">
+    Der dokumentierte Konnektor bietet keinen Filter für einzelne Präfix-„Ordner“. Sie können Buckets, Dateiendungen und Datumsbereiche filtern. Wenn Inhalte zwingend voneinander getrennt werden müssen, verwenden Sie eine passende Bucket-Struktur und einen entsprechend begrenzten IAM-Zugang.
+  </Accordion>
+</AccordionGroup>
+
 Bei Fragen zu IAM-Richtlinien, Freigaben oder fehlenden Dateien wenden Sie sich an [Novaplan Support](/de/contact-us) und Ihre AWS-Administration.
