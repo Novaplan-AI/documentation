@@ -261,7 +261,7 @@ Once a toolset is configured, it becomes available in the Agent Builder:
 
 OAuth 2.0 is the recommended authentication method for most toolsets. It provides:
 
-- **Secure token-based access** - No passwords stored
+- **Provider authorization** - Users sign in with the external provider; the toolset receives OAuth tokens rather than the user's provider password
 - **Automatic token refresh** - Tokens are refreshed automatically
 - **Scope review** - Check the actual permissions requested by the toolset before granting access
 - **User authorization** - Users explicitly grant access
@@ -275,10 +275,9 @@ OAuth 2.0 is the recommended authentication method for most toolsets. It provide
 
 Basic Auth is used by toolsets like MariaDB. It works as follows:
 
-- **Per-user credentials** - Each user enters their own username and password
-- **Secure credential handling** - Credentials are stored securely and scoped to the authenticated user
+- **Per-user credentials** - Each user enters their own database username and password in the personal authentication flow; do not share one database login
 - **Admin and user separation** - Admin creates the shared toolset instance; users authenticate their own accounts
-- **No credential sharing** - One user's credentials are not visible to other users
+- **Storage and access controls** - Confirm how the deployed workspace protects personal credentials with Novaplan before connecting sensitive data
 
 **Requirements:**
 - Admin creates the toolset instance (host, port, database)
