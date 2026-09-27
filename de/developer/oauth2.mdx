@@ -132,3 +132,21 @@ Für einen Sicherheitsvorfall können Administrierende **Revoke all tokens** ver
 - Bei `403 Forbidden` prüfen Sie sowohl den Scope des Access Tokens als auch die Berechtigung der angemeldeten Person in der Organisation. Ein zusätzlicher Scope ersetzt keine fehlende Quellberechtigung.
 
 Die Quellanleitung nennt höchstens zehn registrierte Redirect-URIs pro Anwendung. Prüfen Sie diese und die unterstützten PKCE-Verfahren gegen die tatsächlich bereitgestellte Novaplan-Version, bevor Sie eine produktive Integration freigeben.
+
+## Häufige Fragen
+
+### Wer kann OAuth-Anwendungen anlegen?
+
+Die Verwaltung von OAuth-Anwendungen ist laut Quellreferenz auf Organisationsadministrierende beschränkt. Andere Personen können einer vorbereiteten Anwendung beim persönlichen Autorisierungsablauf Zugriff gewähren.
+
+### Was geschieht beim Erneuern eines Client Secrets?
+
+Das bisherige Secret wird sofort ungültig. Aktualisieren Sie alle betroffenen Integrationen mit dem neuen Wert; bis dahin schlagen deren Authentifizierungsanfragen fehl.
+
+### Wie viele Anwendungen und Redirect-URIs sind möglich?
+
+Die Quellreferenz nennt keine feste Obergrenze für die Anzahl der OAuth-Anwendungen einer Organisation, aber höchstens zehn registrierte Redirect-URIs pro Anwendung. Prüfen Sie beides gegen den bereitgestellten Enterprise Workspace.
+
+### Wird PKCE unterstützt?
+
+Ja. Für öffentliche Clients ohne sicher verwahrbares Client Secret ist PKCE erforderlich. Die zugängliche Implementierung nennt `S256` und `plain`; verwenden Sie nach Möglichkeit `S256` und bestätigen Sie die tatsächlich unterstützten Verfahren im bereitgestellten Workspace.

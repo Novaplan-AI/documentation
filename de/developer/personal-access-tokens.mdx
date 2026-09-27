@@ -67,3 +67,25 @@ Beim Erstellen über `POST /api/v1/personal-access-tokens` beschreibt die englis
 `name` ist erforderlich; `scopes` und `expiryDays` sind optional. Für `expiryDays` werden `30`, `90`, `365` oder `"never"` genannt. Ohne Wert gilt 30 Tage. Ohne `scopes` greift laut Referenz die vollständige serverseitig konfigurierte MCP-Scope-Auswahl, weshalb eine explizite Minimal-Auswahl vorzuziehen ist. Beide `DELETE`-Endpunkte können optional einen Grund wie `{ "reason": "rotated" }` erhalten.
 
 Die eigene Tokenliste antwortet als `{ "tokens": [...] }`. Die administrative Liste verwendet dagegen `{ "data": [...], "pagination": { ... } }` und ergänzt pro Eintrag Angaben zur besitzenden Person. `ownerDeleted: true` kennzeichnet dort ein gelöschtes Konto. Die Liste ist seitenweise abrufbar; die Quellanleitung nennt maximal 100 Einträge pro Seite. Ein gelöschtes Benutzerkonto kann mit seinem PAT nicht weiter authentifizieren; die Admin-Ansicht dient auch der Prüfung und Bereinigung.
+
+## Häufige Fragen
+
+### Welche Scopes kann ein PAT erhalten?
+
+Ohne ausdrückliche Auswahl verwendet die zugängliche Implementierung den vollständig konfigurierten `MCP_SCOPES`-Satz des Workspaces. Wählen Sie beim Erstellen eine kleinere, zum Anwendungsfall passende Teilmenge. Die [MCP-Übersicht](/de/mcp/overview#standard-scopes-anpassen) erklärt die serverseitigen Standardwerte.
+
+### Was unterscheidet ein PAT von einem Sitzungstoken?
+
+Ein Sitzungstoken entsteht bei der Anmeldung und ist für die Browser-Sitzung gedacht; die Quellreferenz nennt eine Gültigkeit von 24 Stunden. Ein PAT erstellen Sie bewusst für eine Integration, mit eigenem Ablaufdatum und unabhängigem Widerruf. Prüfen Sie die tatsächlichen Laufzeiten im bereitgestellten Workspace.
+
+### Kann ich Tokens anderer Personen sehen?
+
+Normale Mitglieder sehen und widerrufen nur ihre eigenen PATs. Organisationsadministrierende können über die Admin-API Metadaten aktiver Tokens auflisten und Tokens widerrufen, aber keine Rohwerte auslesen.
+
+### Was geschieht nach dem Entfernen meines Kontos?
+
+PATs eines gelöschten Benutzerkontos werden bei der Authentifizierung abgewiesen. Die Admin-Liste kann solche Einträge für die Nachkontrolle mit `ownerDeleted: true` kennzeichnen.
+
+### Gibt es eine feste Obergrenze für PATs?
+
+Die Quellreferenz nennt keine feste Obergrenze für das Erstellen. Die persönliche Listenansicht zeigt jedoch höchstens 100 der zuletzt aktiven Tokens; die administrative API ist paginiert. Verlassen Sie sich bei einer Inventur nicht allein auf die erste Listenseite.
