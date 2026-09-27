@@ -9,6 +9,10 @@ Der Azure-Files-Konnektor liest Dateien und Ordner aus **Azure File Shares** ein
 
 Klären Sie mit Novaplan und Ihrer Azure-Administration, welche Freigaben und Dateitypen benötigt werden. Eine Team-Verbindung kann Inhalte in Novaplan AI einem größeren Personenkreis zugänglich machen als eine persönliche Verbindung. Die Azure-Quellrechte werden dadurch nicht geändert; individuelle Azure-Rechte einzelner Workspace-Mitglieder werden auch nicht automatisch auf die importierten Dateien übertragen. Prüfen Sie die Sichtbarkeit mit einem zweiten Testkonto.
 
+<Warning>
+  Kann der zugängliche Konnektor die Person, die eine persönliche Verbindung erstellt hat, nicht zuordnen, vergibt er für Freigaben und Dateien stattdessen Leserechte auf Organisationsebene. Prüfen Sie vor der Synchronisierung vertraulicher Inhalte die Zuordnung und danach den Zugriff mit einem zweiten Workspace-Konto. Bestätigen Sie das Verhalten in der bereitgestellten Enterprise-Version.
+</Warning>
+
 ## Connection String vorbereiten
 
 1. Melden Sie sich im [Azure Portal](https://portal.azure.com) an und öffnen Sie **Storage accounts**.
@@ -25,7 +29,7 @@ Der gleiche Storage Account kann sowohl Blob-Container als auch File Shares enth
 
 ## Konnektor einrichten
 
-1. Öffnen Sie in Novaplan AI **Workspace → Connectors** und wählen Sie **Azure Files → Setup**.
+1. Öffnen Sie in Novaplan AI **Workspace Settings → Connectors** für eine Teamverbindung oder unter **Personal** den Bereich **Your Connectors** für eine persönliche Verbindung. Wählen Sie **Azure Files → Setup**.
 2. Tragen Sie unter **Authenticate Instance** einen **Instance name** und die kopierte **Connection String** ein.
 3. Wählen Sie **Next** und unter **Configure Records** eine **Sync Strategy**: **Scheduled** oder **Manual**. Für **Sync Interval** kann **1 Hour** ein Anfangswert sein.
 4. Legen Sie unter **Indexing & sync filters** bei Bedarf fest, welche Inhalte gelesen werden.

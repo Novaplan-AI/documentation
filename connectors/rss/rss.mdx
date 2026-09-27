@@ -44,8 +44,12 @@ You can add **multiple feeds** in one connector by listing several URLs (comma- 
 
 In Novaplan AI, add an RSS connector instance with either **personal** or **team** scope:
 
-- **Personal** — Go to **Workspace Settings > Your Connectors > RSS > Setup**. Records are visible only to you.
+- **Personal** — Go to **Workspace Settings > Your Connectors > RSS > Setup**. Records are intended to be visible only to the person who created the connection, subject to the fallback below.
 - **Team** — Go to **Workspace Settings > Connectors > RSS > Setup**. Records are visible to everyone in your organization. Admins only.
+
+<Warning>
+  The accessible connector grants organization-wide read access if a Personal connection's creator cannot be resolved while assigning record permissions. Before using a Personal RSS feed for sensitive content, confirm the creator mapping and check the resulting record access with a second workspace account. Verify this behavior in the deployed Enterprise build.
+</Warning>
 
 <div className="text-center">
   <img

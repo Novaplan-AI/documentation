@@ -9,6 +9,10 @@ Der S3-Konnektor liest Objekte aus ausgewählten Amazon-S3-Buckets und macht unt
 
 Die IAM-Berechtigungen begrenzen, welche Buckets und Objekte der Konnektor lesen kann. Die Auswahl **Personal** oder **Team** steuert zusätzlich, wer synchronisierte Inhalte in Novaplan AI sehen kann; individuelle AWS-Rechte der späteren Workspace-Nutzenden werden nicht automatisch übernommen. Eine Team-Verbindung kann deshalb alle eingelesenen Objekte für berechtigte Workspace-Mitglieder sichtbar machen. Prüfen Sie Bucket-Auswahl und Zugriffsmodell mit Ihrer AWS-Administration und einem zweiten Testkonto, bevor Sie sie aktivieren.
 
+<Warning>
+  In der zugänglichen Implementierung erhält die Person, die eine persönliche S3-Verbindung erstellt hat, Eigentümerrechte an Bucket- und Objektdatensätzen, sofern sie zugeordnet werden kann. Schlägt diese Zuordnung fehl, vergibt der Konnektor stattdessen Leserechte auf Organisationsebene. Prüfen Sie vor der Synchronisierung sensibler Buckets die Zuordnung und danach den Zugriff mit einem zweiten Workspace-Konto. Bestätigen Sie das Verhalten in der bereitgestellten Enterprise-Version.
+</Warning>
+
 ## IAM-Zugang vorbereiten
 
 1. Öffnen Sie die [AWS Management Console](https://console.aws.amazon.com) und wechseln Sie zu **IAM → Users → Create user**.
@@ -56,7 +60,7 @@ Unter **IAM → Policies → Create policy** können Sie die geprüfte JSON-Rich
 
 ## Konnektor einrichten
 
-1. Öffnen Sie in Novaplan AI **Workspace → Connectors**, suchen Sie **S3** und wählen Sie **+ Setup**.
+1. Öffnen Sie in Novaplan AI **Workspace Settings → Connectors** für eine Teamverbindung oder unter **Personal** den Bereich **Your Connectors** für eine persönliche Verbindung. Suchen Sie **S3** und wählen Sie **+ Setup**.
 2. Geben Sie unter **Authenticate Instance** einen **Instance name**, die **Access Key ID** in **Access Key** und den geheimen Schlüssel in **Secret Key** ein.
 3. Wählen Sie **Next** und unter **Configure Records** **Scheduled** oder **Manual**. Ein geplanter Lauf kann beispielsweise alle **1 Hour** stattfinden; bei großen, selten veränderten Buckets kann ein längeres Intervall sinnvoll sein.
 4. Begrenzen Sie die Synchronisierung unter **Indexing & sync filters → + Add filter**.

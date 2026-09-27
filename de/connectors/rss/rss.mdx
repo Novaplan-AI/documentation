@@ -20,6 +20,10 @@ Novaplan übernimmt den Großteil der Einrichtung. Die folgenden Schritte dienen
 - **Persönlich:** **Workspace Settings → Personal → Your Connectors → RSS → Setup**. Die importierten Inhalte sollen nur für Sie sichtbar sein.
 - **Team:** **Workspace Settings → Workspace → Connectors → RSS → Setup**. Die importierten Inhalte sind für die Organisation lesbar; die Einrichtung erfordert Administratorrechte.
 
+<Warning>
+  Kann der zugängliche Konnektor die Person, die eine persönliche Verbindung erstellt hat, bei der Rechtevergabe nicht ermitteln, vergibt er stattdessen Leserechte auf Organisationsebene. Prüfen Sie vor der Synchronisierung vertraulicher Feeds die Zuordnung und anschließend den tatsächlichen Zugriff mit einem zweiten Workspace-Konto. Bestätigen Sie das Verhalten in der bereitgestellten Enterprise-Version.
+</Warning>
+
 <img src="/images/connectors/rss/rss-authenticate-instance.png" alt="RSS-Konfiguration im Reiter Authenticate Instance" />
 
 Für RSS ist keine Anmeldung beim Anbieter erforderlich. Geben Sie einen **Instance name** ein und wählen Sie **Next**.
@@ -51,10 +55,6 @@ Wählen Sie **Save Configuration**. Im Bestätigungsfenster können Sie mit **St
 ## Was synchronisiert wird
 
 Der Konnektor lädt jeden konfigurierten Feed, verarbeitet höchstens die festgelegte Anzahl neuerer Einträge und übernimmt deren Beschreibung. Mit **Fetch Full Content** versucht er außerdem, den Text der verlinkten Artikel zu extrahieren. Die Daten entsprechen dem Stand der letzten erfolgreichen Synchronisierung und werden nicht in Echtzeit aktualisiert.
-
-<Warning>
-  Ein persönlicher RSS-Konnektor sollte nur Inhalte für die Person freigeben, die ihn erstellt hat. Kann der Konnektor diese Person bei der Verarbeitung nicht ermitteln, vergibt die zugrunde liegende Implementierung stattdessen Leserechte auf Organisationsebene. Prüfen Sie die Berechtigungen nach dem ersten Lauf, insbesondere wenn Feeds vertrauliche Inhalte enthalten.
-</Warning>
 
 Nur öffentliche Feeds werden unterstützt. Seiten mit Anmeldung oder Cookies können nicht zuverlässig abgerufen werden. Manche Anbieter blockieren automatisierte Abrufe oder liefern nur kurze Zusammenfassungen; auch bei aktivierter Volltextoption ist deshalb nicht jeder Artikel vollständig verfügbar.
 

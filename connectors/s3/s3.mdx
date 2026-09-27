@@ -30,7 +30,11 @@ icon: "/logo/s3.png"
 
 Amazon S3 (Simple Storage Service) is a scalable object storage service designed to store and retrieve any amount of data from anywhere on the web. It provides industry-leading scalability, data availability, security, and performance.
 
-The S3 connector enables you to sync files and folders from your S3 buckets into Novaplan AI, making your cloud storage content searchable through AI-powered search and accessible across your organization.
+The S3 connector syncs files and folders from your S3 buckets into Novaplan AI for search. The connection's Personal or Team scope determines who should be able to see the imported records.
+
+<Warning>
+  In the accessible connector source, a Personal connection assigns ownership to its creator when that user can be resolved. If the creator cannot be resolved, bucket and object records instead receive organization-wide read access. Before syncing sensitive buckets, verify the creator mapping and test the resulting access with a second workspace account. Confirm this behavior in the deployed Enterprise build.
+</Warning>
 
 ### S3 Data Structure
 
@@ -196,8 +200,8 @@ The S3 connector uses **AWS Access Key ID and Secret Access Key** for authentica
 
 ### Step 4: Open S3 in Novaplan AI
 
-1. Open the Novaplan AI app.
-2. In the left sidebar, click **Connectors** (under **Workspace**).
+1. Open **Workspace Settings** in Novaplan AI.
+2. For a Team connection, open **Connectors**. For a Personal connection, open **Your Connectors** under **Personal**.
 3. Find the **S3** tile.
 4. Click **+ Setup** on the tile.
 
@@ -454,7 +458,7 @@ The connector respects AWS IAM permissions and Novaplan AI access controls:
 - **IAM-Based Access**: Only syncs buckets and objects the IAM user has permission to access
 - **Bucket Policies**: The connector's AWS identity can import only objects it is allowed to read; each Novaplan AI viewer's separate AWS permissions are not reproduced
 - **Novaplan AI Scope**:
-  - **Personal Scope**: Intended for the connector creator; verify access with a second workspace account
+  - **Personal Scope**: Intended for the connector creator; if creator mapping fails, the accessible source grants organization-wide read access. Verify access with a second workspace account before syncing sensitive buckets.
   - **Team Scope**: All organization users have read access to synced content
 - **Permission Inheritance**: Files inherit permissions from their parent bucket (Record Group)
 - **Access Control**: AWS IAM and bucket policies limit what the connector's IAM identity can ingest. The selected Personal or Team scope governs who can see that ingested content in Novaplan AI. Verify this scope before syncing sensitive buckets; individual Novaplan AI users do not authenticate to S3 through this connector.

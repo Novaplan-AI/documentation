@@ -100,8 +100,8 @@ You now have the connection string in your clipboard. Don't close the tab yet �
 
 ### Step 2 — Open Azure Files in Novaplan AI
 
-1. In Novaplan AI, look at the left sidebar.
-2. Under **Workspace**, click **Connectors**.
+1. Open **Workspace Settings** in Novaplan AI.
+2. For a Team connection, open **Connectors**. For a Personal connection, open **Your Connectors** under **Personal**.
 3. In the list, find **Azure Files**.
 4. Click **Setup** on its tile.
 
@@ -277,6 +277,10 @@ When you set up the connector you picked a scope:
 
 - **Personal** — intended for the connection creator; verify access with a second account.
 - **Team** — imported records are available across your Novaplan AI workspace.
+
+<Warning>
+  The accessible connector assigns organization-wide read access to share and file records if a Personal connection's creator cannot be resolved. Before syncing sensitive content, verify the creator mapping and test access with a second workspace account. Confirm this behavior in the deployed Enterprise build.
+</Warning>
 
 This only controls Novaplan AI. It does **not** change access in Azure.
 
