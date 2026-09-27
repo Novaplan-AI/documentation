@@ -229,7 +229,7 @@ On the **Configure Records** tab, control how the connector syncs and what gets 
   **Scheduled sync** runs automatically at the specified intervals. **Manual sync** requires you to trigger synchronization on-demand.
 </Note>
 
-**Sync filters** — determine which content is downloaded from Linear. Data excluded by sync filters is never downloaded.
+**Sync filters** — narrow the issues and projects retrieved from selected teams and date ranges. The accessible connector still fetches workspace users for identity and permission mapping, and the team picker fetches team options. Do not treat the content filters as a guarantee that no other source metadata is read.
 
 <div className="text-center">
   <img
@@ -258,7 +258,7 @@ Available sync filters:
 
 4. **Created Date** — filter by creation date. Same operators.
 
-**Indexing filters** — control what synced data gets processed for AI search. All data is synced, but only enabled content types are indexed.
+**Indexing filters** — control which synchronized content types are processed for AI search. Disabling indexing does not by itself prevent the connector from fetching that source data.
 
 - **Index Issues** (default: enabled) — include issue content and comments in search
 - **Index Issue Attachments** (default: enabled) — include external link attachments in search
