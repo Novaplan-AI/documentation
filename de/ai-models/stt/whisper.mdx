@@ -7,7 +7,7 @@ description: "Lokal ausgeführte Whisper-Transkription in Novaplan AI konfigurie
 
 ![Konfigurationsansicht für lokales Whisper](/images/ai-models/stt/Whisper_STTConfig.png)
 
-Novaplan AI kann Whisper mit der Bibliothek `faster-whisper` innerhalb seiner Backend-Umgebung ausführen. Dabei wird Audio nicht für die Transkription an eine externe Modell-API gesendet; ein API-Schlüssel ist nicht nötig. Novaplan verwaltet die erforderlichen Backend-Ressourcen mit Ihnen.
+Novaplan AI kann Whisper mit der Bibliothek `faster-whisper` innerhalb seiner verwalteten Backend-Umgebung ausführen. **„Lokal“ bezieht sich auf dieses Backend, nicht auf Ihren Computer.** Dabei wird Audio nicht für die Transkription an eine externe Modell-API gesendet; ein API-Schlüssel ist nicht nötig. Novaplan verwaltet die erforderlichen Backend-Ressourcen mit Ihnen.
 
 Beim ersten Einsatz werden Modellgewichte von Hugging Face heruntergeladen. Dafür braucht die Backend-Umgebung anfänglich Netzwerkzugang zu `huggingface.co`, ausreichend Speicherplatz und das installierte Paket `faster-whisper`.
 
