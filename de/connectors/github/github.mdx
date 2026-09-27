@@ -128,4 +128,24 @@ Fortschrittspunkte werden je Repository und Datentyp gespeichert: Issues und Pul
 
 Die Dauer des ersten Laufs hängt von der Anzahl und Größe der Repositories ab. Prüfen Sie unter **Workspace Settings → Connectors** den aktuellen Status, bevor Sie einen fehlenden Suchtreffer als Fehler behandeln.
 
+## Häufige Fragen
+
+<AccordionGroup>
+  <Accordion title="Warum liefert die Suche keine Ergebnisse?">
+    Prüfen Sie die lesbare GitHub-E-Mail und Repository-Rolle der betroffenen Person sowie deren Zuordnung zum Novaplan-AI-Konto. Das Konto, das die gemeinsame Verbindung autorisiert, muss das Repository lesen können, braucht aber nicht dieselbe E-Mail-Adresse wie jeder spätere Nutzer. Prüfen Sie außerdem unter **Workspace Settings → Connectors**, ob Synchronisierung und Indexierung abgeschlossen sind.
+  </Accordion>
+  <Accordion title="Wie lange dauert die erste Synchronisierung?">
+    Das hängt von Umfang und Größe der Repositories, Issues, Pull Requests, Quelldateien und Anhänge, den GitHub-API-Grenzen, Filtern und der Indexierungskapazität Ihres Workspaces ab. Verfolgen Sie den tatsächlichen Lauf unter **Indexing Progress**. Eine feste Verarbeitungsrate für Ihren Enterprise Workspace ist nicht bestätigt.
+  </Accordion>
+  <Accordion title="Warum erscheinen nach der Autorisierung keine Issues?">
+    Prüfen Sie, ob das autorisierende GitHub-Konto die gewünschten Repositories lesen kann und die OAuth-App die benötigten Scopes besitzt. Kontrollieren Sie dann die E-Mail-Zuordnung und Repository-Rolle der betroffenen Person. Ein erfolgreicher OAuth-Ablauf bedeutet noch nicht, dass die erste Indexierung abgeschlossen ist.
+  </Accordion>
+  <Accordion title="Kann ich nur bestimmte Organisationen oder Repositories synchronisieren?">
+    Ja. Unter **Configure Records** begrenzen **Github Organizations** und **Repositories** mit `In` die Auswahl; `Not In` schließt ausgewählte Einträge aus. Die Auswahllisten suchen während der Eingabe bei GitHub. Ein enger Umfang reduziert den Abruf von Issues, Pull Requests und Code aus nicht ausgewählten Repositories.
+  </Accordion>
+  <Accordion title="Von welchem Branch wird der Quellcode synchronisiert?">
+    Dateidatensätze stammen vom **Standardbranch**. Änderungen anderer Branches können über Pull-Request-Diffs auffindbar sein. Wenn **Index Code Files** deaktiviert ist, bleiben synchronisierte Dateien über Namen und Pfade auffindbar, ihre Inhalte werden aber nicht indexiert. Um ein Repository ganz auszuschließen, verwenden Sie den Synchronisierungsfilter **Repositories**.
+  </Accordion>
+</AccordionGroup>
+
 Wenn Sie Hilfe benötigen, schreiben Sie an [support@novaplan.ai](mailto:support@novaplan.ai). Weitere technische Informationen bieten die [GitHub-Dokumentation zu OAuth-Apps](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app) und die [GitHub REST API](https://docs.github.com/en/rest).
