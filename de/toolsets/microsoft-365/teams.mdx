@@ -5,7 +5,7 @@ description: "Teams-Nachrichten, Chats, Meetings und Mitgliedschaften mit Agente
 
 ## Überblick
 
-Das Microsoft-Teams-Toolset gibt Agenten über Microsoft Graph Live-Zugriff auf Kanäle, Chats, Kalender und Besprechungsdaten. Administrierende richten die gemeinsame Aktion unter **Workspace → Actions** ein. Jede Person meldet sich anschließend unter **Your actions** mit ihrer eigenen Microsoft-Identität an. Für die Suche in zuvor synchronisierten Inhalten verwenden Sie den [Teams-Konnektor](/de/connectors/microsoft-365/teams).
+Das Microsoft-Teams-Toolset gibt Agenten über Microsoft Graph Live-Zugriff auf Kanäle, Chats, Kalender und Besprechungsdaten. Administrierende richten die gemeinsame Aktion unter **Workspace Settings → Actions** ein. Jede Person meldet sich anschließend unter **Your actions** mit ihrer eigenen Microsoft-Identität an. Für die Suche in zuvor synchronisierten Inhalten verwenden Sie den [Teams-Konnektor](/de/connectors/microsoft-365/teams).
 
 | Bereich | Beispiele verfügbarer Tools |
 | --- | --- |
@@ -46,7 +46,7 @@ Die Tabelle ist eine Referenz der dokumentierten Integration, kein Satz von Rech
 
 ## Gemeinsame Aktion anlegen und Redirect URI registrieren
 
-1. Öffnen Sie als Workspace-Administration **Workspace → Actions**. Gibt es noch keine Teams-Instanz, wählen Sie bei **Microsoft Teams** **Setup**. Bei einer vorhandenen Instanz öffnen Sie den Typ und wählen **Add instance**.
+1. Öffnen Sie als Workspace-Administration **Workspace Settings → Actions**. Gibt es noch keine Teams-Instanz, wählen Sie bei **Microsoft Teams** **Setup**. Bei einer vorhandenen Instanz öffnen Sie den Typ und wählen **Add instance**.
 2. Tragen Sie **Instance name**, **Client ID**, **Client secret** und gegebenenfalls **Tenant ID** ein und wählen Sie **Create**.
 3. Öffnen Sie danach für diese Instanz **Manage action configuration** und kopieren Sie die angezeigte **Redirect URI**. Sie wird laut Quellanleitung erst nach dem Anlegen der Instanz angezeigt.
 4. Öffnen Sie die Entra-App unter **Authentication**, fügen Sie eine **Web**-Plattform hinzu und tragen Sie die exakt kopierte URI ein. Schema, Host, Pfad und abschließender Schrägstrich müssen übereinstimmen.
@@ -55,7 +55,7 @@ Verwenden Sie ausschließlich den Wert aus Ihrem Novaplan-Workspace. Beispiel-Ho
 
 ## Persönlich anmelden und Agenten verwenden
 
-1. Nach dem Registrieren der Redirect URI öffnet die Workspace-Administration die gemeinsame Teams-Instanz unter **Workspace → Actions** und schließt dort **Authenticate** mit Microsoft ab. Prüfen Sie, ob die Instanz anschließend als authentifiziert angezeigt wird.
+1. Nach dem Registrieren der Redirect URI öffnet die Workspace-Administration die gemeinsame Teams-Instanz unter **Workspace Settings → Actions** und schließt dort **Authenticate** mit Microsoft ab. Prüfen Sie, ob die Instanz anschließend als authentifiziert angezeigt wird.
 2. Jede Person, die die Aktion im Agenten verwenden soll, öffnet **Your actions → Microsoft Teams** und wählt für die benötigte Instanz **Authenticate**.
 3. Melden Sie sich mit der eigenen Microsoft-Identität an und prüfen Sie die angeforderten Berechtigungen.
 4. Nach erfolgreicher Anmeldung fügen Sie die Teams-Aktion im **Agent Builder** unter **Tools** hinzu.

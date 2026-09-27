@@ -30,7 +30,7 @@ icon: "/logo/teams.png"
 
 The Microsoft Teams **action** lets AI agents work with your organization through **Microsoft Graph**: post and read channel messages, manage chats, search conversations, manage teams and channels, and work with calendar events, online meetings, transcripts, and attendance.
 
-Administrators enable the integration under **Workspace → Actions** in the web app. Each user completes sign-in under **Your actions** so agents run with that user’s Microsoft identity and permissions.
+Administrators enable the integration under **Workspace Settings → Actions** in the web app. Each user completes sign-in under **Your actions** so agents run with that user’s Microsoft identity and permissions.
 
 ### Key Capabilities
 
@@ -194,7 +194,7 @@ These align with the agent OAuth scope configuration for the Microsoft Teams act
 
 ### Step 5: Create the Microsoft Teams action in Novaplan AI
 
-These steps require a **workspace administrator**. Open **Workspace → Actions** (or `/workspace/actions/team`). Use the path that matches whether your organization already has a Microsoft Teams **org instance**.
+These steps require a **workspace administrator**. Open **Workspace Settings → Actions** (or `/workspace/actions/team`). Use the path that matches whether your organization already has a Microsoft Teams **org instance**.
 
 #### Case A — Organization does not have a Microsoft Teams instance yet
 
@@ -274,7 +274,7 @@ The **Action configuration** drawer does not show the redirect URL; you copy it 
 ### Step 7: Sign in and authorize
 
 **Administrators (org instance)**  
-On **Workspace → Actions**, open Microsoft Teams, select your instance, and use **Authenticate** to complete the Microsoft sign-in and consent flow. After redirect back to Novaplan AI, the instance should show as authenticated.
+On **Workspace Settings → Actions**, open Microsoft Teams, select your instance, and use **Authenticate** to complete the Microsoft sign-in and consent flow. After redirect back to Novaplan AI, the instance should show as authenticated.
 
 **End users**  
 Each person who should use Microsoft Teams in agents opens **Your actions** in the workspace sidebar (`/workspace/actions/personal`), finds Microsoft Teams, and completes **Authenticate** for the organization instance they need.
