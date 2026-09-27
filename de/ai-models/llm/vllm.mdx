@@ -27,9 +27,13 @@ Die genaue Installation und die Modellkompatibilität hängen von Ihrer vLLM-Ver
 | **Provider Type** | **OpenAI API Compatible** |
 | **Endpoint URL** | Erreichbare Basisadresse mit `/v1/`, beispielsweise `https://vllm.example.com/v1/`. `http://localhost:8000/v1/` funktioniert nur, wenn Novaplan AI denselben lokalen Netzwerkraum nutzt. |
 | **API Key** | Schlüssel, der beim Start des vLLM-Servers mit `--api-key` festgelegt wurde. Das Formular verlangt einen Wert; wenn der Server keine Authentifizierung nutzt, akzeptiert er laut Ausgangskonfiguration einen Platzhalter wie `no-key`. Für produktive Verbindungen sollten Sie Authentifizierung einrichten. |
-| **Model Name** | Exakte ID des auf dem Server bereitgestellten Modells, beispielsweise `Qwen/Qwen3-8B`. |
+| **Model Name** | Exakte Modell-ID, die die vLLM-API bereitstellt, beispielsweise `Qwen/Qwen3-8B`. Mit `--served-model-name` kann sie vom Namen im Startbefehl abweichen. Prüfen Sie `/v1/models`. |
 
 Eine Administration kann die angebotenen IDs am `/v1/models`-Endpoint des vLLM-Servers abfragen. **Multimodal** aktivieren Sie nur bei einem Modell mit Bildeingabe, **Reasoning** nur bei einem entsprechenden Reasoning-Modell. Das oben als Serverbeispiel verwendete `Qwen/Qwen3-8B` ist ein Textmodell; aktivieren Sie für dieses Beispiel **Multimodal** nicht allein aufgrund des Modellnamens. Prüfen Sie die Modellkarte und die [Liste der von vLLM unterstützten Modelle](https://docs.vllm.ai/en/latest/models/supported_models.html).
+
+<Warning>
+  Schützen Sie den Modellserver zusätzlich über den freigegebenen Netzwerkzugang. Laut [vLLM-CLI-Referenz](https://docs.vllm.ai/en/latest/cli/serve/) schützt `--api-key` nur bestimmte API-Pfade und nicht alle Endpunkte desselben Servers, beispielsweise nicht `/invocations`. Stimmen Sie zusätzliche Zugriffskontrollen mit Ihrer Modellserver-Administration und Novaplan ab.
+</Warning>
 
 ## Modell hinzufügen
 

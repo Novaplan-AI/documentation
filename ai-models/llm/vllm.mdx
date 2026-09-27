@@ -69,11 +69,11 @@ The API Key field is used to authenticate requests to your vLLM server.
 - If your vLLM server was started **with** `--api-key`, enter that key here
 - If your vLLM server was started **without** authentication, you can enter any placeholder value (e.g., `no-key` or `dummy`)
 
-**Security Note:** For production deployments, always configure API key authentication on your vLLM server and use strong, unique keys.
+**Security Note:** Use a strong, unique API key for the OpenAI-compatible endpoints, and restrict network access to the server. The [vLLM CLI reference](https://docs.vllm.ai/en/latest/cli/serve/) warns that `--api-key` does not authenticate every endpoint on the server, including `/invocations`; it is not a complete server access control. Coordinate the network path and any additional protection with Novaplan and your model-server administrator.
 
 ### Model Name *
 
-The Model Name must match the model identifier used when starting your vLLM server.
+The Model Name must match the identifier exposed by your vLLM server's API. This is usually the model used at startup, but a server configured with `--served-model-name` can expose a different name.
 
 **Examples:**
 - `Qwen/Qwen3-8B`
@@ -85,7 +85,7 @@ You can query your vLLM server to list available models:
 curl http://localhost:8000/v1/models
 ```
 
-**Important:** The model name must exactly match what was specified when starting the vLLM server.
+**Important:** Use an ID returned by `/v1/models`; do not guess from the startup command alone.
 
 ## Optional Features
 
