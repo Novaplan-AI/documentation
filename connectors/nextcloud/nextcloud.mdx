@@ -452,14 +452,14 @@ The connector provides authenticated file downloads:
 ### Monitoring
 
 - **Monitor First Sync:** The initial full sync may take time depending on your file count
-- **Test Connection:** Always test the connection after configuration changes
+- **Verify Connection:** After changing credentials or the Base URL, turn on the connector and confirm that authentication and a sync succeed; saving alone does not validate the app password
 - **Check Logs:** Regularly review sync logs for errors or warnings
 
 ### Security
 
 - **Use App Passwords:** Always use generated app passwords rather than your main Nextcloud password
 - **Revoke Unused Tokens:** Regularly review and revoke unused app passwords in Nextcloud Security settings
-- **Secure Transmission:** All API calls use HTTPS for encrypted communication
+- **Secure Transmission:** Use an `https://` Base URL with a valid certificate. The connector uses the URL you provide; an `http://` address does not encrypt traffic in transit
 
 </Accordion>
 
