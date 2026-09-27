@@ -48,4 +48,29 @@ Nennen Sie beim Erstellen einer Seite den **Bereichsschlüssel**, den Titel, den
 
 Confluence Data Center verwendet für Seiteninhalte das **Confluence Storage Format (XHTML)**. Klartext kann vom Toolset dafür aufbereitet werden. Prüfen Sie erzeugte Seiten und Kommentare vor einer schreibenden Aktion.
 
+## Häufige Fragen
+
+### Funktioniert eine OAuth-App aus der Atlassian Developer Console?
+
+Nein. Das hier beschriebene Confluence-Data-Center-Toolset unterstützt **Personal Access Token** und **Basic Authentication**. Für eine von Atlassian gehostete Instanz verwenden Sie das [Confluence-Cloud-Toolset](/de/toolsets/confluence/confluence).
+
+### Wann verwende ich ein Token und wann Basic Authentication?
+
+Ein persönliches Token ist die bevorzugte Methode, wenn Ihre Instanz es unterstützt; die Quellanleitung nennt Confluence 7.9 oder neuer. Es lässt sich separat widerrufen. Für ältere Instanzen oder deaktivierte Token-Erstellung kann jede Person ihren Confluence-Benutzernamen und ihr Passwort verwenden. Die Administration trägt bei beiden Methoden nur Instanzname und Base URL für die gemeinsame Verbindung ein.
+
+### Warum muss jede Person eigene Zugangsdaten angeben?
+
+Der Agent führt Confluence-Aktionen mit dem Konto der angemeldeten Person aus. Er kann nur Seiten lesen oder bearbeiten, für die dieses Konto berechtigt ist, und Confluence ordnet die Änderung dieser Identität zu. Die gemeinsame Instanz enthält keine persönlichen Zugangsdaten.
+
+### Was unterscheidet den Konnektor vom Toolset?
+
+Der [Confluence-Data-Center-Konnektor](/de/connectors/confluence/confluence-data-center) synchronisiert Seiten und Bereiche für die Suche in Novaplan AI. Das Toolset liest und bearbeitet Inhalte bei einer konkreten Agentenaktion direkt in Confluence. Nutzen Sie den Konnektor, um vorhandene Dokumentation zu finden, und das Toolset, um beispielsweise eine Seite anzulegen oder zu aktualisieren.
+
+## Beispiele für Agentenanfragen
+
+- **Seite erstellen:** „Erstelle im Bereich `ENG` eine Seite über den Freigabeprozess.“ Nennen Sie eine Elternseite, wenn die neue Seite darunter eingeordnet werden soll. Persönliche Bereichsschlüssel können wie `~jdoe` aussehen.
+- **Seite ändern:** „Aktualisiere den Titel dieser Seite und verschiebe sie unter die Seite ‚Teamhandbuch‘.“ Nicht genannte Inhalte sollen unverändert bleiben; prüfen Sie die vorgeschlagene Änderung.
+- **Suchen:** „Finde Seiten über den Freigabeprozess.“ Der Agent kann Seitentitel oder den Volltext durchsuchen. Für einen bestimmten Bereich können Sie dessen Schlüssel nennen.
+- **Kommentieren:** „Antworte auf diesen Kommentar auf der Seite ‚Teamhandbuch‘.“ Geben Sie den betroffenen Kommentar oder Thread an, damit die Antwort am richtigen Ort erscheint.
+
 Bei Anmelde- oder Berechtigungsproblemen hilft [Novaplan Support](/de/contact-us).
