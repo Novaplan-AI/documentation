@@ -50,7 +50,7 @@ icon: "/logo/local-fs.svg"
 
 Three things to know up front:
 
-- Novaplan AI only **reads** the folder. It doesn't move, rename, copy, or delete anything.
+- The connector does not move, rename, or delete files in the source folder. Synchronization creates records in Novaplan AI and can upload file bytes to workspace storage for processing; do not treat it as a metadata-only scan.
 - There's **no login**. No password, no API key, no cloud account. You just give it a folder path.
 - It's a **personal** connector — you set it up under **Workspace Settings → Your Connectors**, and the files you index are searchable by **you** inside Novaplan AI. It is not shared with the rest of your team.
 
@@ -242,7 +242,7 @@ In the panel you can see:
 - **Processing** — files being read right now.
 - **Queued** / **Not Started** — files waiting their turn.
 - **Failed** — files Novaplan AI couldn't read (usually a permission issue, or a corrupt/protected file).
-- **Sync** / **Full sync** — re-run a sync any time. **Full sync** rescans everything; **Sync** picks up only what's changed.
+- **Sync** / **Full sync** — request another synchronization. The accessible backend sync scans the selected folder again and may rebuild records; do not assume **Sync** processes only changed files. Confirm the behavior of these controls in your deployed workspace.
 - **Manage Configuration** — re-opens the two tabs from Steps 2–4 if you want to change the folder or filters later.
 
 Once **Processing** and **Queued** drop to zero, check **Completed** and **Failed** to see which files were indexed. Searchability depends on the file type and the parsers enabled for your workspace.
@@ -259,15 +259,15 @@ Once **Processing** and **Queued** drop to zero, check **Completed** and **Faile
 
 The first time, Novaplan AI walks the files in the configured folder and its subfolders, if enabled. Duration depends on folder size, file types, parsing, and workspace capacity. Filters can reduce the number of files to process.
 
-### Later syncs (just what changed)
+### Later syncs
 
-After the first sync, Novaplan AI only looks at **what's different** since last time:
+Later syncs update search records to reflect changes in the source folder:
 
 - New files — added to search.
 - Edited files — re-indexed.
 - Deleted files — removed from search.
 
-These are usually quick.
+The accessible backend path scans the folder again and resets its records before rebuilding them. Another event-based path can apply individual file changes. Duration therefore depends on the deployed sync path, folder size, file types, and indexing work; do not assume later runs are quick.
 
 ### Who can see the synced files?
 
@@ -367,7 +367,7 @@ The folder may no longer be available at its previous path. Ask Novaplan to chec
 <AccordionGroup type="single" collapsible>
 
 <Accordion title="Does Novaplan AI modify or delete my files?">
-  No. The connector only **reads** files to build search records. It never writes back to your folder.
+  It does not write back to the source folder. It reads files to build search records, and some sync paths upload file bytes into Novaplan AI storage for processing. Ask Novaplan to confirm storage and retention controls for your workspace before connecting sensitive files.
 </Accordion>
 
 <Accordion title="Can I share the indexed files with my team?">

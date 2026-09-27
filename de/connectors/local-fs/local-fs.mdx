@@ -5,7 +5,7 @@ description: "Einen für Novaplan AI erreichbaren Ordner als persönliche Wissen
 
 ## Überblick
 
-Der Konnektor **Local FS** liest Dateien aus einem Ordner, auf den der **Novaplan-AI-Konnektorprozess** zugreifen kann. Die Inhalte werden für die Suche indexiert; Dateien im Quellordner werden nicht verschoben, umbenannt oder gelöscht. Local FS ist als **persönlicher** Konnektor angelegt: Synchronisierte Inhalte gehören zur einrichtenden Person und werden nicht automatisch für das Team freigegeben.
+Der Konnektor **Local FS** liest Dateien aus einem Ordner, auf den der **Novaplan-AI-Konnektorprozess** zugreifen kann. Die Inhalte werden für die Suche indexiert; Dateien im Quellordner werden nicht verschoben, umbenannt oder gelöscht. Bei manchen Synchronisierungswegen werden Dateiinhalte zur Verarbeitung in den Novaplan-AI-Speicher hochgeladen. Behandeln Sie die Verbindung daher nicht als reine Metadatenabfrage. Local FS ist als **persönlicher** Konnektor angelegt: Synchronisierte Inhalte gehören zur einrichtenden Person und werden nicht automatisch für das Team freigegeben.
 
 <Warning>
   Ein Pfad auf Ihrem Laptop ist nicht automatisch aus dem verwalteten Novaplan-Workspace erreichbar. Der Ordner muss auf der Maschine beziehungsweise im Dateisystem des Konnektorprozesses verfügbar sein. Lassen Sie Novaplan Support die Erreichbarkeit und Freigabe prüfen, bevor Sie einen Pfad konfigurieren. Dieser Leitfaden enthält keine Anleitung zur Bereitstellung von Novaplan AI.
@@ -38,7 +38,7 @@ Speichern Sie mit **Save Configuration**. Aktivieren Sie auf der Instanzkarte **
 
 ## Fortschritt und Suchbarkeit
 
-Im **Overview**-Bereich der Instanz sehen Sie **Total**, **Completed**, **Processing**, **Queued / Not Started** und **Failed**. **Full sync** liest den gesamten Ordner erneut; **Sync** verarbeitet nach dem ersten Lauf Änderungen. Neue Dateien erscheinen nach der Indexierung in der Suche, geänderte Dateien werden erneut verarbeitet und gelöschte Dateien beim nächsten Lauf aus der Suche entfernt.
+Im **Overview**-Bereich der Instanz sehen Sie **Total**, **Completed**, **Processing**, **Queued / Not Started** und **Failed**. **Sync** und **Full sync** lösen einen weiteren Lauf aus. Der zugängliche Backend-Lauf scannt den ausgewählten Ordner erneut und baut Datensätze gegebenenfalls neu auf; ein anderer ereignisbasierter Weg kann einzelne Dateiänderungen verarbeiten. Gehen Sie deshalb nicht davon aus, dass **Sync** immer nur geänderte Dateien liest oder spätere Läufe schnell sind. Neue Dateien erscheinen nach der Indexierung in der Suche, geänderte Dateien werden erneut verarbeitet und gelöschte Dateien beim nächsten Lauf aus der Suche entfernt.
 
 Textbasierte Dokumente wie PDF, DOCX, PPTX, XLSX, ODT, RTF, TXT, MD, CSV, JSON, XML, HTML und gängige Quellcode-Dateien können inhaltlich durchsuchbar sein. Bilder, Audio, Video, Archive und andere Binärdateien erscheinen laut Quellanleitung nur mit Dateiname und Metadaten. Passwortgeschützte Dokumente lassen sich ohne Entsperrung nicht inhaltlich indexieren. Die tatsächliche Verarbeitung hängt außerdem von den im Workspace aktivierten Parsern ab.
 
@@ -53,3 +53,25 @@ Textbasierte Dokumente wie PDF, DOCX, PPTX, XLSX, ODT, RTF, TXT, MD, CSV, JSON, 
 | Pfad funktioniert nach Umzug nicht mehr | Novaplan Support muss den Pfad und die Bereitstellung in der aktuellen Umgebung prüfen. |
 
 Für gemeinsam genutzte Inhalte ist ein Team-Konnektor wie Google Drive, OneDrive, S3 oder Azure Blob meist passender. Wenn Sie einen lokalen Ordner anbinden möchten, wenden Sie sich an [Novaplan Support](/de/contact-us), damit die technische Erreichbarkeit vorab geklärt wird.
+
+## Häufige Fragen
+
+### Verändert Novaplan AI die Quelldateien?
+
+Der Konnektor schreibt nicht in den Quellordner. Er liest Dateien für die Suche und kann Dateiinhalte zur Verarbeitung in den Novaplan-AI-Speicher übertragen. Klären Sie Speicher- und Aufbewahrungsregeln für vertrauliche Dateien vor der Verbindung mit Novaplan.
+
+### Kann ich die indexierten Dateien mit meinem Team teilen?
+
+Local FS ist als persönlicher Konnektor registriert; nur Ihr Novaplan-AI-Konto kann die von Ihrer Instanz indexierten Dateien durchsuchen. Für teamweite Inhalte verwenden Sie einen geeigneten Team-Konnektor.
+
+### Was geschieht, wenn eine Quelldatei gelöscht wird?
+
+Beim nächsten erfolgreichen Abgleich wird ihr Suchdatensatz entfernt. Prüfen Sie den Laufstatus, bevor Sie sich auf die Entfernung in der Suche verlassen.
+
+### Kann ich mehrere Ordner anbinden?
+
+Ja. Legen Sie über **+ Add Another Instance** für jeden Ordner eine eigene Instanz mit Namen, Pfad, Filtern und Synchronisierungseinstellungen an. Die Pfade müssen für den Konnektor erreichbar sein.
+
+### Wird der Ordnerpfad gespeichert?
+
+Der Pfad wird als Workspace-Konfiguration gespeichert. Tragen Sie keine Zugangsdaten in das Pfadfeld ein.
