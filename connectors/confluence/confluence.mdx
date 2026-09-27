@@ -50,6 +50,10 @@ Confluence is Atlassian's team workspace and documentation platform, widely used
 
 ## Configuration Guide
 
+<Warning>
+  The accessible Confluence Cloud connector registers **Index Page Comments** and **Index Blogpost Comments**, but its reviewed sync path does not read those two indexing settings. Do not rely on either toggle to exclude comments until Novaplan verifies its behavior in the deployed Enterprise version. If comments must be excluded, agree on a verified source or connector scope before syncing sensitive spaces.
+</Warning>
+
 The Confluence connector supports **two authentication methods**. Both sync the same data — pick whichever fits your rollout.
 
 <span id="prerequisite-email-visibility"></span>
@@ -406,7 +410,7 @@ On the **Configure Records** tab, control how the connector syncs and what gets 
   **Scheduled sync** runs automatically at the specified intervals. **Manual sync** requires you to trigger synchronization on-demand.
 </Note>
 
-**Sync filters** — determine which content is downloaded from Confluence. Data excluded by sync filters is never downloaded.
+**Sync filters** — narrow the spaces, pages, and blog posts processed by this Team connection. The accessible connector still reads Confluence users and groups for identity and permission mapping. Do not treat these content filters as a guarantee that no other source metadata is read.
 
 <div className="text-center">
   <img
@@ -436,7 +440,7 @@ Available sync filters:
 
 5. **Created Date** — filter by creation date. Same operators.
 
-**Indexing filters** — control what synced data gets processed for AI search. All data is synced, but only enabled content types are indexed.
+**Indexing filters** — are intended to control which synchronized pages, blog posts, comments, and attachments are processed for AI search. Turning indexing off does not by itself prevent source retrieval. Verify the comment controls as described in the warning above.
 
 - **Pages:** Index Pages / Index Page Attachments / Index Page Comments (all default: enabled)
 - **Blog posts:** Index Blogposts / Index Blogpost Attachments / Index Blogpost Comments (all default: enabled)
@@ -539,7 +543,7 @@ On the **Configure Records** tab, control how the connector syncs and what gets 
   />
 </div>
 
-**Sync filters** — determine which content is downloaded from Confluence. Data excluded by sync filters is never downloaded.
+**Sync filters** — narrow the spaces, pages, and blog posts processed by this Team connection. The accessible connector still reads Confluence users and groups for identity and permission mapping. Do not treat these content filters as a guarantee that no other source metadata is read.
 
 <div className="text-center">
   <img

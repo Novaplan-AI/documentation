@@ -268,7 +268,7 @@ On the **Configure Records** tab, you choose how often the connector syncs and w
   **Scheduled sync** runs on its own at the interval you set. **Manual sync** runs only when you start it. Real-time sync is not available for Jira Data Center.
 </Note>
 
-**Sync filters** — these decide what gets downloaded from Jira. Anything a sync filter excludes is never downloaded.
+**Sync filters** — narrow the projects and issues processed by this Team connection. The accessible Jira Data Center connector still reads users and groups for identity and permission mapping and loads project options for the picker. Do not treat these content filters as a guarantee that no other source metadata is read.
 
 <div className="text-center">
   <img
@@ -290,7 +290,7 @@ Available sync filters:
   Leave **Project keys** empty to sync every project your account can see. The list is loaded from your instance, so you can type to search it.
 </Info>
 
-**Indexing filters** — these decide what gets prepared for AI search. Everything is synced, but only what you enable here is indexed.
+**Indexing filters** — decide which synchronized issue and attachment records are prepared for AI search. Disabling indexing does not by itself prevent source retrieval.
 
 - **Index issues** (default: on) — include issue descriptions and comments in search
 - **Index issue and comment attachments** (default: on) — include attachments in search

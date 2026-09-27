@@ -130,7 +130,11 @@ Diese Einstellungen gelten für beide Authentifizierungsmethoden.
 - **Blogpost IDs:** Bestimmte Blogbeiträge auswählen oder ausschließen. Die ID kann hinter `/blog/YYYY/MM/DD/` in der URL stehen.
 - **Modified Date / Created Date:** Inhalte nach Änderungs- oder Erstellungsdatum begrenzen, etwa mit **Is After**, **Is Before** oder **Is Between**.
 
-Synchronisierungsfilter begrenzen, was aus Confluence geladen wird. Indexierungsfilter bestimmen, welche geladenen Inhalte in der Suche erscheinen. Für Seiten gibt es **Index Pages**, **Index Page Attachments** und **Index Page Comments**; für Beiträge **Index Blogposts**, **Index Blogpost Attachments** und **Index Blogpost Comments**. Laut Quellleitfaden sind alle sechs Optionen zunächst aktiviert.
+Synchronisierungsfilter begrenzen die verarbeiteten Bereiche, Seiten und Blogbeiträge. Der zugängliche Team-Konnektor liest dennoch Confluence-Nutzer und Gruppen für Identitäts- und Berechtigungszuordnungen; Inhaltsfilter garantieren deshalb nicht, dass keine weiteren Quellmetadaten gelesen werden. Indexierungsfilter sollen bestimmen, welche synchronisierten Inhalte in der Suche erscheinen; deaktivierte Indexierung verhindert für sich genommen nicht den Abruf der Quelldatensätze. Für Seiten gibt es **Index Pages**, **Index Page Attachments** und **Index Page Comments**; für Beiträge **Index Blogposts**, **Index Blogpost Attachments** und **Index Blogpost Comments**. Laut Quellleitfaden sind alle sechs Optionen zunächst aktiviert. Beachten Sie bei den Kommentarschaltern die folgende Warnung.
+
+<Warning>
+  Der zugängliche Confluence-Cloud-Konnektor registriert **Index Page Comments** und **Index Blogpost Comments**, liest diese beiden Einstellungen im geprüften Synchronisationspfad aber nicht aus. Verlassen Sie sich nicht darauf, dass die Schalter Kommentare ausschließen, bevor Novaplan das Verhalten der betriebenen Enterprise-Version bestätigt. Wenn Kommentare ausgeschlossen werden müssen, stimmen Sie vor der Synchronisierung vertraulicher Bereiche einen geprüften Quell- oder Konnektorumfang ab.
+</Warning>
 
 Beispiele: Mit **Space Keys → In → ENG** wählen Sie einen Bereich; mit **Page IDs → In** eine Dokumentationsstruktur. Deaktivieren Sie **Index Page Attachments**, wenn Seiten, aber keine Anhänge durchsuchbar sein sollen.
 

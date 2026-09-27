@@ -57,7 +57,7 @@ Unter **Configure Records** wählen Sie **Scheduled** oder **Manual**. Der vorei
 | **Blogpost Name** | Einzelne Blogbeiträge auswählen. |
 | **Modified Date** und **Created Date** | Mit `Is After`, `Is Before` oder `Is Between` nach Datum eingrenzen. |
 
-Die Auswahllisten werden aus Ihrer Instanz geladen. Durch Synchronisierungsfilter ausgeschlossene Inhalte werden nicht heruntergeladen. Die getrennten Indexierungsoptionen **Index Pages**, **Index Page Attachments**, **Index Page Comments**, **Index Blogposts**, **Index Blogpost Attachments** und **Index Blogpost Comments** steuern, welche synchronisierten Inhalte in der KI-Suche erscheinen; laut Quellanleitung sind sie zunächst aktiviert.
+Die Auswahllisten werden aus Ihrer Instanz geladen. Synchronisierungsfilter begrenzen die verarbeiteten Bereiche, Seiten und Blogbeiträge. Der zugängliche Data-Center-Konnektor liest dennoch Nutzer und Gruppen für Identitäts- und Berechtigungszuordnungen; Inhaltsfilter garantieren deshalb nicht, dass keine weiteren Quellmetadaten gelesen werden. Die getrennten Indexierungsoptionen **Index Pages**, **Index Page Attachments**, **Index Page Comments**, **Index Blogposts**, **Index Blogpost Attachments** und **Index Blogpost Comments** steuern, welche synchronisierten Inhalte in der KI-Suche erscheinen, nicht allein den Abruf aus Confluence; laut Quellanleitung sind sie zunächst aktiviert.
 
 Speichern Sie mit **Save** und wählen Sie **Start syncing now** oder **I'll do it later**. Den Fortschritt sehen Sie unter **Indexing Progress**. Der erste Lauf liest alle zugänglichen Inhalte im gewählten Umfang. Spätere Läufe verwenden Änderungszeiten; ein zusätzlicher Audit-Log-Durchlauf erkennt Rechteänderungen, die den Änderungszeitpunkt einer Seite nicht verändern.
 

@@ -403,7 +403,7 @@ On the **Configure Records** tab, control how the connector syncs and what gets 
   **Scheduled sync** runs automatically at the specified intervals. **Manual sync** requires you to trigger synchronization on-demand.
 </Note>
 
-**Sync filters** — determine which content is downloaded from Jira. Data excluded by sync filters is never downloaded.
+**Sync filters** — narrow the projects and issues processed by this Team connection. The accessible connector still reads Jira users and groups for identity and permission mapping and fetches project options for the picker. Do not treat these content filters as a guarantee that no other source metadata is read.
 
 <div className="text-center">
   <img
@@ -425,7 +425,7 @@ Available sync filters:
   The project list is dynamically fetched from your Jira workspace. Type to search and filter; select multiple projects as needed.
 </Info>
 
-**Indexing filters** — control what synced data gets processed for AI search. All data is synced, but only enabled content types are indexed.
+**Indexing filters** — control which synchronized issue and attachment records are processed for AI search. Turning indexing off does not by itself prevent the connector from fetching those source records.
 
 - **Index Issues** (default: enabled) — include issue content (description + comments) in search
 - **Index Issue and Comment Attachments** (default: enabled) — include attachments in search
@@ -531,7 +531,7 @@ On the **Configure Records** tab, control how the connector syncs and what gets 
   />
 </div>
 
-**Sync filters** — determine which content is downloaded from Jira. Data excluded by sync filters is never downloaded.
+**Sync filters** — narrow the projects and issues processed by this Team connection. The accessible connector still reads Jira users and groups for identity and permission mapping and fetches project options for the picker. Do not treat these content filters as a guarantee that no other source metadata is read.
 
 <div className="text-center">
   <img
