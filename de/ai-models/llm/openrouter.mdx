@@ -1,34 +1,29 @@
 ---
 title: "OpenRouter"
-description: "Modelle über OpenRouter mit Novaplan AI verbinden."
+description: "Ein OpenRouter-Sprachmodell in Novaplan AI konfigurieren."
 ---
 
 # OpenRouter konfigurieren
 
-![Konfigurationsansicht für OpenAI-kompatible APIs](/images/ai-models/llm/OpenAICompatible_LLMConfig.png)
+OpenRouter bietet über ein Konto Zugriff auf Sprachmodelle verschiedener Anbieter. Die verfügbare Novaplan-AI-Anbieterkonfiguration enthält eine eigene Option **OpenRouter**. Novaplan kann die Verbindung im verwalteten Workspace einrichten.
 
-OpenRouter bietet Zugang zu Modellen verschiedener Anbieter über eine OpenAI-kompatible API. Novaplan AI kann diese Verbindung für Sprachmodelle verwenden; Novaplan unterstützt Sie bei der Einrichtung. Sie benötigen ein [OpenRouter-Konto](https://openrouter.ai), einen API-Schlüssel und ein ausgewähltes Modell.
+## Vorbereitung
 
-## Erforderliche Angaben
+Erstellen Sie ein Konto bei [OpenRouter](https://openrouter.ai/) und einen API-Schlüssel. Wählen Sie ein Modell aus dem [aktuellen Modellkatalog](https://openrouter.ai/models). Verfügbarkeit, Funktionen und Preise hängen vom Modell und Ihrem Konto ab. Schützen Sie den Schlüssel und klären Sie die erforderliche Abrechnung oder das Guthaben bei OpenRouter.
 
-| Feld | Wert |
-| --- | --- |
-| **Provider Type** | **OpenAI API Compatible** |
-| **Endpoint URL** | `https://openrouter.ai/api/v1/` einschließlich `/v1/` |
-| **API Key** | OpenRouter-Schlüssel aus dem Dashboard; er beginnt üblicherweise mit `sk-or-v1-`. |
-| **Model Name** | Exakte ID aus dem [OpenRouter-Modellkatalog](https://openrouter.ai/models) im Format `anbieter/modellname`, beispielsweise `openai/gpt-4o-mini`. |
+## Sprachmodell hinzufügen
 
-Erstellen Sie den Schlüssel im Dashboard unter **API Keys**, bewahren Sie ihn geschützt auf und prüfen Sie das erforderliche Guthaben. Nutzen Sie die vollständige Modell-ID aus dem aktuellen Katalog; eine Kurzbezeichnung wie `gpt-4o-mini` ohne Anbieterpräfix reicht nicht aus. Preise, Quoten und Verfügbarkeit unterscheiden sich je nach Modell und zugrunde liegendem Anbieter.
+1. Öffnen Sie **AI Models**, fügen Sie ein Sprachmodell hinzu und wählen Sie **OpenRouter** als Anbieter, falls diese Option in Ihrem Workspace verfügbar ist.
+2. Tragen Sie den OpenRouter-**API Key** ein.
+3. Übernehmen Sie die genaue **Model Name**-ID aus dem Katalog im Format `anbieter/modell`. Verwenden Sie nicht nur den verkürzten Anzeigenamen.
+4. Optional können Sie einen **Model Friendly Name** und die unterstützte **Context Length** angeben.
+5. Aktivieren Sie **Is Multimodal** nur, wenn das gewählte Modell die benötigte Bildeingabe unterstützt. **Is Reasoning** gilt nur für Modelle mit entsprechender Funktion. Prüfen Sie beides im aktuellen Katalogeintrag.
+6. Speichern und testen Sie das Modell im Workspace, bevor Sie es für Agenten oder Kundendaten verwenden.
 
-## Optionale Funktionen
+Für die eigene OpenRouter-Konfiguration sind **API Key** und **Model Name** erforderlich. Eine Endpoint URL wird dort nicht eingegeben. Falls Ihr bereitgestellter Workspace nur **OpenAI API Compatible** anbietet, lassen Sie die unterstützte Einrichtung von [Novaplan Support](/de/contact-us) bestätigen.
 
-Aktivieren Sie **Multimodal** nur für Modelle mit Bild- und Texteingabe. **Reasoning** ist für dafür vorgesehene Modelle gedacht. Prüfen Sie beide Fähigkeiten auf der jeweiligen Modellseite, bevor Sie die Optionen setzen; sie gelten nicht für den gesamten OpenRouter-Katalog.
+## Fehlerbehebung
 
-## Modell hinzufügen
+Bei Authentifizierungsfehlern prüfen Sie den Schlüssel im OpenRouter-Konto und die Erreichbarkeit von OpenRouter aus dem verwalteten Novaplan-Dienst. Wird das Modell nicht gefunden, übernehmen Sie seine aktuelle vollständige ID aus dem Katalog und prüfen den Kontozugang. Bei Rate-Limits, nicht verfügbaren Modellen oder Abrechnungsfehlern kontrollieren Sie den Modell- und Kontostatus bei OpenRouter. [Novaplan Support](/de/contact-us) hilft beim Verbindungstest.
 
-1. Wählen Sie **OpenAI API Compatible** als **Provider Type**.
-2. Tragen Sie `https://openrouter.ai/api/v1/`, Ihren **API Key** und die vollständige **Model Name**-ID ein.
-3. Setzen Sie **Multimodal** und **Reasoning** nur passend zum gewählten Modell.
-4. Klicken Sie auf **Add Model**.
-
-Endpoint URL, API Key und Model Name sind erforderlich. Bei Fehlern prüfen Sie HTTPS-Erreichbarkeit, Schlüssel und Guthaben, den exakten Modellnamen, Modellverfügbarkeit und Rate-Limits im OpenRouter-Dashboard. Weitere Informationen bietet die [OpenRouter-Dokumentation](https://openrouter.ai/docs); [Novaplan Support](/de/contact-us) hilft bei der Anbindung.
+Für Embeddings siehe [OpenRouter-Embedding-Konfiguration](/de/ai-models/embedding/openrouter).

@@ -66,7 +66,11 @@ The table below lists LLM providers, their configuration fields, and example mod
 | **Fireworks** | API Key, Model Name | — | `accounts/fireworks/models/kimi-k2-instruct` |
 | **Together** | API Key, Model Name | Endpoint URL | `deepseek-ai/DeepSeek-V3` |
 | **OpenAI Compatible** | Endpoint URL, API Key, Model Name | — | `deepseek-ai/DeepSeek-V3` |
+| [**OpenRouter**](/ai-models/llm/openrouter) | API Key, Model Name | — | Current `provider/model` ID |
+| [**LiteLLM Proxy**](/ai-models/llm/litellm-proxy) | Endpoint URL, API Key, Model Name | — | Configured proxy `model_name` |
 | **Ollama** | Model Name | API Key, Endpoint URL | `gemma4:latest`, `hf.co/unsloth/gpt-oss-20b-GGUF:F16` |
+| [**LM Studio**](/ai-models/llm/lm-studio) | Endpoint URL, Model Name | API Key | Model ID served by LM Studio |
+| [**Vertex AI**](/ai-models/llm/vertex-ai) | GCP Project ID, Service Account JSON, Model Name | Region | Model available to your Google Cloud project |
 | **Amazon Bedrock** | AWS Region, Model Name, Provider | AWS Access Key ID, AWS Secret Access Key | `us.anthropic.claude-sonnet-4-20250514-v1:0` |
 
 > **Azure OpenAI — Deployment Name:** This is the name you assigned when deploying the model in Azure AI Studio, not the model ID itself.
@@ -155,7 +159,11 @@ Only workspace **admins** and **owners** can access the AI Models settings page.
 | **Mistral** | API Key, Model Name | — | `mistral-embed` |
 | **Together** | API Key, Model Name | Endpoint URL | `togethercomputer/m2-bert-80M-32k-retrieval` |
 | **OpenAI Compatible** | Endpoint URL, API Key, Model Name | — | `text-embedding-3-small` |
+| [**OpenRouter**](/ai-models/embedding/openrouter) | API Key, Model Name | Dimensions | Current `provider/model` ID |
+| [**LiteLLM Proxy**](/ai-models/embedding/litellm-proxy) | Endpoint URL, API Key, Model Name | Dimensions | Configured proxy `model_name` |
 | **Ollama** | Model Name | Endpoint URL | `mxbai-embed-large` |
+| [**LM Studio**](/ai-models/embedding/lm-studio) | Endpoint URL, Model Name | API Key, Dimensions | Model ID served by LM Studio |
+| [**Vertex AI**](/ai-models/embedding/vertex-ai) | GCP Project ID, Service Account JSON, Model Name | Region, Dimensions | Model available to your Google Cloud project |
 | **Sentence Transformers** | Model Name | — | `all-MiniLM-L6-v2` |
 | **HuggingFace** | Model Name | — | `sentence-transformers/all-MiniLM-L6-v2` |
 | **Jina AI** | API Key, Model Name | — | `jina-embeddings-v3` |

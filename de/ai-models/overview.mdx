@@ -61,7 +61,11 @@ Die Modellkennungen sind Beispiele. Verwenden Sie die Kennung, die der jeweilige
 | **Fireworks** | API Key, Model Name | — | `accounts/fireworks/models/kimi-k2-instruct` |
 | **Together** | API Key, Model Name | Endpoint URL | `deepseek-ai/DeepSeek-V3` |
 | **OpenAI Compatible** | Endpoint URL, API Key, Model Name | — | `deepseek-ai/DeepSeek-V3` |
+| [**OpenRouter**](/de/ai-models/llm/openrouter) | API Key, Model Name | — | Aktuelle ID im Format `provider/model` |
+| [**LiteLLM Proxy**](/de/ai-models/llm/litellm-proxy) | Endpoint URL, API Key, Model Name | — | Im Proxy konfigurierter `model_name` |
 | **Ollama** | Model Name | API Key, Endpoint URL | `gemma4:latest`, `hf.co/unsloth/gpt-oss-20b-GGUF:F16` |
+| [**LM Studio**](/de/ai-models/llm/lm-studio) | Endpoint URL, Model Name | API Key | Von LM Studio bereitgestellte Modell-ID |
+| [**Vertex AI**](/de/ai-models/llm/vertex-ai) | GCP Project ID, Service Account JSON, Model Name | Region | Für Ihr Google-Cloud-Projekt verfügbares Modell |
 | **Amazon Bedrock** | AWS Region, Model Name, Provider | AWS Access Key ID, AWS Secret Access Key | `us.anthropic.claude-sonnet-4-20250514-v1:0` |
 
 **Hinweise zu einzelnen Anbietern:**
@@ -125,7 +129,11 @@ Das integrierte **BAAI/bge-large-en-v1.5** ist laut dieser Referenz als Systemst
 | **Mistral** | API Key, Model Name | — | `mistral-embed` |
 | **Together** | API Key, Model Name | Endpoint URL | `togethercomputer/m2-bert-80M-32k-retrieval` |
 | **OpenAI Compatible** | Endpoint URL, API Key, Model Name | — | `text-embedding-3-small` |
+| [**OpenRouter**](/de/ai-models/embedding/openrouter) | API Key, Model Name | Dimensions | Aktuelle ID im Format `provider/model` |
+| [**LiteLLM Proxy**](/de/ai-models/embedding/litellm-proxy) | Endpoint URL, API Key, Model Name | Dimensions | Im Proxy konfigurierter `model_name` |
 | **Ollama** | Model Name | Endpoint URL | `mxbai-embed-large` |
+| [**LM Studio**](/de/ai-models/embedding/lm-studio) | Endpoint URL, Model Name | API Key, Dimensions | Von LM Studio bereitgestellte Modell-ID |
+| [**Vertex AI**](/de/ai-models/embedding/vertex-ai) | GCP Project ID, Service Account JSON, Model Name | Region, Dimensions | Für Ihr Google-Cloud-Projekt verfügbares Modell |
 | **Sentence Transformers** | Model Name | — | `all-MiniLM-L6-v2` |
 | **HuggingFace** | Model Name | — | `sentence-transformers/all-MiniLM-L6-v2` |
 | **Jina AI** | API Key, Model Name | — | `jina-embeddings-v3` |
