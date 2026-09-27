@@ -36,7 +36,7 @@ Bei öffentlichen Teams sind Inhalte für Mitglieder der Linear-Organisation sic
 3. Melden Sie sich bei Linear an, prüfen Sie Workspace und angeforderten Lesezugriff und wählen Sie **Authorize**.
 4. Nach erfolgreicher Authentifizierung zeigt der Konnektor **Authenticated** an. Gehen Sie mit **Next** zu **Configure Records**.
 
-Autorisieren Sie den gemeinsamen Konnektor mit einem Linear-Konto, das die benötigten Teams lesen darf. Die E-Mail-Adressen und Mitgliedschaften der späteren Nutzenden werden getrennt ihren Novaplan-AI-Konten zugeordnet. Wird das Client Secret neu erzeugt oder die Callback URL geändert, aktualisieren Sie die Konfiguration und autorisieren Sie erneut.
+Autorisieren Sie den gemeinsamen Konnektor mit einem Linear-Konto, das die benötigten Teams lesen darf. Die E-Mail-Adressen und Mitgliedschaften der späteren Nutzenden werden getrennt ihren Novaplan-AI-Konten zugeordnet. [Linear verwendet ablaufende Zugriffstokens und Refresh-Tokens](https://linear.app/developers/oauth-2-0-authentication). Schlägt die Erneuerung fehl oder wird der Zugriff widerrufen, kann eine erneute Autorisierung nötig sein. Wird das Client Secret neu erzeugt oder die Callback URL geändert, aktualisieren Sie die Konfiguration und prüfen Sie die Verbindung erneut.
 
 ## Synchronisierung und Filter
 
@@ -69,5 +69,6 @@ Der Konnektor synchronisiert zuerst Nutzer und Teams samt Mitgliedschaften und R
 | Kommentare oder Anhänge fehlen | **Index Issues** beziehungsweise **Index Issue Attachments** sowie Quellrechte |
 | Dateien fehlen | **Index Issue and Comment Files** und Herkunft der Datei vom Linear-Uploaddienst |
 | Datensätze vorhanden, aber keine Suchtreffer | Indexierungsstatus und aktivierte Indexierungsoptionen |
+| Nur bestimmte Personen sehen keine Treffer | E-Mail-Zuordnung zwischen Linear und Novaplan AI, Mitgliedschaft im privaten Team und Rechte des autorisierenden Kontos |
 
-Bei ungeklärten Berechtigungs- oder Synchronisierungsfehlern wenden Sie sich an [Novaplan Support](/de/contact-us).
+Die erste Synchronisierung dauert je nach Zahl der Teams, Issues, Projekte und Anhänge sowie der Antwortzeit der Linear-API unterschiedlich lang. Team- und Datumsfilter können den Umfang begrenzen; ein deaktivierter Indexierungsfilter allein verringert die Quellabfragen nicht zwangsläufig. Prüfen Sie bei fehlenden Treffern zuerst, ob die Datensätze unter **All Records** vorhanden sind, ob ihre Indexierung abgeschlossen ist und ob die betroffene Person Zugriff auf das Linear-Team hat. Bei ungeklärten Berechtigungs- oder Synchronisierungsfehlern wenden Sie sich an [Novaplan Support](/de/contact-us).

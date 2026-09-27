@@ -58,7 +58,7 @@ The connector indexes the following content for AI-powered search:
 
 ## Configuration Guide
 
-The Linear connector uses **OAuth 2.0** for authentication. Linear's OAuth apps return refresh tokens that auto-refresh, so a single authorization keeps syncing indefinitely.
+The Linear connector uses **OAuth 2.0** for authentication. [Linear issues access and refresh tokens](https://linear.app/developers/oauth-2-0-authentication); access tokens expire and the connector must refresh them to keep syncing. If refresh fails or access is revoked, the connection may need to be authorized again. Confirm token handling in the deployed Novaplan AI workspace.
 
 #### Step 1: Access Linear API settings
 
@@ -133,7 +133,7 @@ Before creating the OAuth application in Linear, copy the Redirect URL from Nova
 </Warning>
 
 <Info>
-  OAuth 2.0 applications created from October 1, 2025 onwards have refresh tokens enabled by default. Access tokens last 24 hours and are automatically refreshed.
+  Linear's current OAuth documentation says its applications use refresh tokens and access tokens last 24 hours. The connector is expected to refresh an expired access token, but a failed refresh or revoked authorization still needs attention. See [Linear's OAuth guide](https://linear.app/developers/oauth-2-0-authentication) and check the connector status if synchronization stops.
 </Info>
 
 #### Step 4: Copy Client ID and Client Secret
