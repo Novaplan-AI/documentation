@@ -7,7 +7,7 @@ description: "Configure Novaplan AI to use different Ollama models"
 
 ![Ollama Configuration Interface](/images/ai-models/llm/Ollama_LLMConfig.png)
 
-*The Ollama configuration screen in Novaplan AI where you'll configure your local Ollama instance connection*
+*The Ollama configuration screen in Novaplan AI where you'll configure the model server connection*
 
 Novaplan AI can connect to an Ollama service operated by your organization or Novaplan. Coordinate the model server, network access, and data handling with Novaplan before adding it to a managed workspace.
 
@@ -82,15 +82,15 @@ As shown in the image above:
 4. (Optional) Enter an API Key if your Ollama instance requires authentication
 5. (Optional) Check "Multimodal" if your model supports text + image processing
 6. (Optional) Check "Reasoning" if your model has enhanced reasoning capabilities
-7. Click **Add Model** to save and validate your credentials
+7. Click **Add Model**, then test a request from the managed workspace
 
 > Model Name is the only required field. The endpoint defaults to `http://host.docker.internal:11434` if left blank. No API key is required for a standard local Ollama installation.
 
 ## Prerequisites
 
-Before configuring Ollama in Novaplan AI, ensure you have:
+Before configuring Ollama in Novaplan AI, coordinate with the model-server operator to ensure:
 
-1. **Ollama installed** on your machine or server
+1. **Ollama installed** on the agreed model server
    - Download from [ollama.com](https://ollama.com/)
    - Follow installation instructions for your operating system
 
@@ -111,20 +111,20 @@ Before configuring Ollama in Novaplan AI, ensure you have:
 
 ### Advantages of Ollama
 - **Data location:** Processing occurs on the Ollama server your organization or Novaplan provides; confirm its location and access controls before use
-- **Cost-effective:** No API usage fees or quotas
-- **Customizable:** Full control over model selection and configuration
+- **Cost planning:** A self-hosted Ollama server does not charge per local API request, but its compute, storage, network, and Novaplan service costs still matter. Hosted Ollama or a gateway can have separate charges and limits.
+- **Customizable:** The model-server operator controls the models and server configuration
 - **Network-dependent:** The managed workspace must maintain access to the Ollama server
-- **No rate limits:** Process as many requests as your hardware can handle
+- **Capacity-dependent:** Throughput can be limited by hardware, server settings, a gateway, or workspace policy
 
 ### System Requirements
-- Sufficient RAM (varies by model - typically 8GB minimum, 16GB+ recommended)
+- Sufficient RAM or GPU memory for the selected model; check its published requirements
 - Modern CPU or GPU for optimal performance
-- Adequate disk space for model storage (models range from 2GB to 40GB+)
+- Adequate disk space for the selected model and its variants
 
 ### Performance Tips
 - Use GPU acceleration when available for faster inference
 - Choose smaller models for quicker responses if your use case allows
-- Consider quantized models (e.g., `llama2:7b-q4` vs `llama2:7b`) for lower memory usage
+- Consider a smaller or quantized model if memory or response time is constrained
 
 ## Troubleshooting
 
@@ -152,4 +152,4 @@ Visit the [Ollama Model Library](https://ollama.com/library) to browse all avail
 - Embedding models
 - Quantized variants for efficiency
 
-For additional support, refer to the [Ollama documentation](https://github.com/ollama/ollama/tree/main/docs) or contact Novaplan AI support.
+For additional support, refer to the [Ollama documentation](https://docs.ollama.com/api/introduction) or [contact Novaplan Support](/contact-us).

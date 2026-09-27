@@ -9,7 +9,7 @@ description: "Configure Novaplan AI to use OpenAI-compatible API providers"
 
 *The OpenAI API Compatible configuration screen in Novaplan AI where you'll enter your endpoint URL, API Key, and Model Name*
 
-Novaplan AI allows you to integrate with any LLM provider that supports the OpenAI API format, giving you flexibility to use various AI services including DeepSeek, OpenRouter, vLLM, and other compatible providers.
+Novaplan AI can connect to an LLM provider with a compatible OpenAI-style chat API, including services such as Together AI, DeepSeek, OpenRouter, or an approved model server. Providers differ in supported endpoints and parameters; confirm the chosen model and connection from the managed workspace.
 
 ## Required Fields
 
@@ -18,7 +18,7 @@ Novaplan AI allows you to integrate with any LLM provider that supports the Open
 The Endpoint URL is the base API endpoint for your OpenAI-compatible service.
 
 **Common endpoint examples:**
-- Together AI: `https://api.together.xyz/v1/`
+- Together AI: [`https://api.together.ai/v1`](https://docs.together.ai/docs/inference/openai-compatibility)
 - OpenRouter: `https://openrouter.ai/api/v1/`
 
 **Important:** Enter the base path documented by the selected provider. Many providers use `/v1/`, but this is not universal: DeepSeek currently documents `https://api.deepseek.com` without that suffix. Novaplan AI appends the paths needed for its requests. Confirm the value from the managed workspace before relying on the connection.
@@ -41,9 +41,11 @@ The Model Name field defines which specific model you want to use from your prov
 
 **Example model names by provider:**
 
-**Together AI / compatible providers:**
-- `deepseek-ai/DeepSeek-V3`
-- `meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8`
+**Together AI examples:**
+- `MiniMaxAI/MiniMax-M3`
+- `openai/gpt-oss-120b`
+
+These are examples from [Together AI's current documentation](https://docs.together.ai/docs/inference/openai-compatibility). Choose a model ID that is available to your account at setup time.
 
 **How to choose a model:**
 - Check your provider's model catalog for available options
@@ -91,7 +93,7 @@ As shown in the image above:
 
 ## Supported Providers
 
-Novaplan AI's OpenAI-compatible configuration works with any provider that implements the OpenAI API specification. Some popular providers include:
+The configuration can work with providers that implement the chat endpoints and parameters Novaplan AI uses. Check the provider's documentation and test the connection before relying on it. Examples to evaluate include:
 
 - **Together AI** - Access to various open-source models with fast inference
 - **Groq** - Ultra-fast inference with open-source models
