@@ -63,4 +63,33 @@ Die Quellanleitung beschreibt Standard, Nearline, Coldline und Archive als grund
 | Inhalte fehlen in der Suche | **Processing**, **Unsupported**, Dateityp und Indexierungsabschluss. |
 | Verbindung stoppt nach Schlüsselrotation | Neuen JSON-Schlüssel unter **Manage Configuration → Authenticate Instance** hochladen. |
 
+## Häufige Fragen
+
+<AccordionGroup>
+  <Accordion title="Wie lange dauert die erste Synchronisierung?">
+    Die Dauer hängt von Anzahl, Größe und Typ der Objekte, API-Grenzen und Indexierungskapazität Ihres Workspaces ab. Beginnen Sie mit einem begrenzten Bucket oder Dateitypfilter und verfolgen Sie den Fortschritt unter **Overview**. Novaplan unterstützt Sie bei der Planung größerer Importe.
+  </Accordion>
+  <Accordion title="Kann ich mehrere Google-Cloud-Projekte verbinden?">
+    Eine GCS-Instanz verwendet den Schlüssel eines Dienstkontos für ein Projekt. Für ein weiteres Projekt legen Sie über **+ Add Another Instance** eine getrennte Instanz mit der passenden JSON-Datei an. Jede Instanz hat eigene Filter und einen eigenen Schalter für die Synchronisierung. Prüfen Sie projektübergreifende Zugriffsrechte mit Ihrer Google-Cloud-Administration.
+  </Accordion>
+  <Accordion title="Welche Dateitypen sind inhaltlich durchsuchbar?">
+    Unterstützte Dokumente wie PDF, DOCX, XLSX, PPTX, ODT und RTF, Textdateien und Quellcode können indexiert werden. DRM-freie EPUB-Dateien sind nach der aktuellen Quellreferenz per Text durchsuchbar, jedoch nicht in der Vorschau verfügbar. Ob Bilder inhaltlich ausgewertet werden, hängt von den aktivierten Workspace-Funktionen ab. SVG, Video, Audio, Archive und passwortgeschützte oder verschlüsselte Inhalte können als **Unsupported** erscheinen. Prüfen Sie den Status einer konkreten Datei nach dem Lauf.
+  </Accordion>
+  <Accordion title="Woran erkennt ein Folgelauf neue Objekte?">
+    Der Konnektor speichert einen Synchronisierungsstand und vergleicht die `updated`-Werte der Objekte mit diesem Stand. Er listet die ausgewählten Buckets erneut und verarbeitet die für den Lauf passenden neuen oder geänderten Objekte. Bei großen Buckets kann auch ein Folgelauf Zeit benötigen.
+  </Accordion>
+  <Accordion title="Werden Archive- und Coldline-Objekte gelesen?">
+    Die Quellanleitung beschreibt beide Speicherklassen als grundsätzlich lesbar. Abrufe können länger dauern und zusätzliche Google-Cloud-Kosten verursachen. Prüfen Sie Speicherklasse, Berechtigungen und Gebühren vor einem großen Import; für häufig benötigte Inhalte können Standard oder Nearline geeigneter sein.
+  </Accordion>
+  <Accordion title="Was geschieht nach dem Löschen eines Objekts in GCS?">
+    Gehen Sie nicht davon aus, dass eine Quelllöschung sofort einen bereits indexierten Datensatz oder ein Suchergebnis entfernt. Prüfen Sie besonders bei sensiblen Dateien, ob der Inhalt in Novaplan AI verschwunden ist. Wenn er weiterhin erscheint, wenden Sie sich an [Novaplan Support](/de/contact-us). Klären Sie das Löschverhalten der Enterprise-Version, bevor Sie Quelllöschung als Zugriffssperre verwenden.
+  </Accordion>
+  <Accordion title="Welche Verschlüsselung wird unterstützt?">
+    Google-verwaltete Verschlüsselung funktioniert laut Quellanleitung ohne zusätzliche Schlüsselkonfiguration. Bei kundenseitig verwalteten Schlüsseln (CMEK) braucht das Dienstkonto die erforderliche KMS-Entschlüsselungsberechtigung. Kundenseitig bereitgestellte Schlüssel (CSEK) werden dort nicht unterstützt. Prüfen Sie die konkrete Bucket-Einrichtung mit Ihrer Administration.
+  </Accordion>
+  <Accordion title="Kann ich nur einen Ordner innerhalb eines Buckets auswählen?">
+    Ein Filter für einzelne Präfix-„Ordner“ ist im dokumentierten Konnektor nicht verfügbar. Sie können Buckets, Dateiendungen und Datumsbereiche auswählen. Wenn Sie eine strengere Quellgrenze benötigen, trennen Sie Inhalte in geeignete Buckets und beschränken Sie die Rechte des Dienstkontos entsprechend.
+  </Accordion>
+</AccordionGroup>
+
 Bei Zugriffs- oder Kostenfragen unterstützt Sie [Novaplan Support](/de/contact-us) gemeinsam mit Ihrer Google-Cloud-Administration.
