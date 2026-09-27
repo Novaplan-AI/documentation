@@ -5,33 +5,100 @@ description: "Repositories, Issues und Pull Requests mit Agenten lesen und bearb
 
 ## Überblick
 
-Das GitHub-Toolset gibt Agenten Live-Zugriff auf Repositories, Issues und Pull Requests der angemeldeten Person. Eine Workspace-Administration verbindet eine GitHub-OAuth-App unter **Workspace Settings → Actions**. Jede Person meldet sich danach unter **Your actions** selbst an. Für die Suche in bereits synchronisierten Repository-Inhalten verwenden Sie den [GitHub-Konnektor](/de/connectors/github/github).
+Mit dem GitHub-Toolset können Agenten über das GitHub-Konto einer angemeldeten Person Repositories verwalten, Issues bearbeiten, Pull Requests erstellen und prüfen sowie Kommentare veröffentlichen. Eine Workspace-Administration richtet die GitHub-OAuth-App unter **Workspace Settings → Actions** ein. Danach autorisiert jede Person ihren eigenen Zugriff unter **Your actions**. Welche Aktionen tatsächlich möglich sind, bestimmen die erteilten GitHub-Berechtigungen und die Rechte dieser Person im jeweiligen Repository.
 
-| Bereich | Verfügbare Tools |
-| --- | --- |
-| Repositories | `create_repository`, `get_repository`, `list_repositories`, `search_repositories`, `get_owner` |
-| Issues und Kommentare | `create_issue`, `get_issue`, `list_issues`, `update_issue`, `close_issue`, `list_issue_comments`, `get_issue_comment`, `create_issue_comment` |
-| Pull Requests | `create_pull_request`, `get_pull_request`, `list_pull_requests`, `merge_pull_request`, `get_pull_request_commits`, `get_pull_request_file_changes` |
-| Reviews | `list_pull_request_comments`, `create_pull_request_review_comment`, `get_pull_request_reviews`, `create_pull_request_review` |
+Für die Suche in bereits synchronisierten Repository-Inhalten verwenden Sie den [GitHub-Konnektor](/de/connectors/github/github). Das Toolset führt dagegen Aktionen direkt über die GitHub-API aus.
 
 <Warning>
-  Das Toolset kann Pull Requests zusammenführen, Issues schließen und Inhalte in Repositories schreiben. Lassen Sie den Agenten Repository, Branch und geplante Änderung vor solchen Aktionen eindeutig benennen.
+  Das Toolset kann Repositories erstellen, Issues schließen, Pull Requests zusammenführen und Inhalte schreiben. Lassen Sie den Agenten Repository, Branch und geplante Änderung vor solchen Aktionen eindeutig benennen und prüfen Sie die GitHub-Freigaben.
 </Warning>
+
+## Verfügbare Werkzeuge
+
+| Bereich | Werkzeug | Funktion |
+| --- | --- | --- |
+| Repositories | `create_repository` | Repository erstellen; standardmäßig privat |
+| Repositories | `get_repository` | Beschreibung, Standardbranch und weitere Repository-Daten abrufen |
+| Repositories | `list_repositories` | Repositories einer Person oder Organisation seitenweise auflisten |
+| Repositories | `search_repositories` | Nach Stichwort, Sprache oder Sternen suchen |
+| Repositories | `get_owner` | Profil einer Person oder Organisation abrufen |
+| Issues | `create_issue` | Issue mit Titel, Text, Zuständigen und Labels anlegen |
+| Issues | `get_issue` | Issue anhand seiner Nummer abrufen |
+| Issues | `list_issues` | Issues nach Status, Label oder zuständiger Person filtern |
+| Issues | `update_issue` | Titel, Text, Status, Zuständige oder Labels ändern |
+| Issues | `close_issue` | Issue schließen |
+| Kommentare | `list_issue_comments` | Kommentare zu einem Issue auflisten |
+| Kommentare | `get_issue_comment` | Einzelnen Kommentar anhand seiner ID abrufen |
+| Kommentare | `create_issue_comment` | Kommentar zu einem Issue veröffentlichen |
+| Pull Requests | `create_pull_request` | Pull Request zwischen Quell- und Zielbranch erstellen, auch als Entwurf |
+| Pull Requests | `get_pull_request` | Pull Request und Unterhaltung abrufen |
+| Pull Requests | `list_pull_requests` | Pull Requests nach Status oder Branch filtern |
+| Pull Requests | `merge_pull_request` | Mit Merge, Squash oder Rebase zusammenführen |
+| Pull Requests | `get_pull_request_commits` | Commits und letzten Commit-Hash abrufen |
+| Pull Requests | `get_pull_request_file_changes` | Dateiänderungen mit Kontextzeilen abrufen |
+| Reviews | `list_pull_request_comments` | Kommentare an Dateien und Zeilen auflisten |
+| Reviews | `create_pull_request_review_comment` | Kommentar an einer bestimmten Datei und Zeile hinterlassen |
+| Reviews | `get_pull_request_reviews` | Reviews und ihren Status abrufen |
+| Reviews | `create_pull_request_review` | Review mit Zustimmung, Änderungswunsch oder Kommentar abgeben |
 
 ## GitHub-OAuth-App einrichten
 
-1. Öffnen Sie bei GitHub **Settings → Developer settings → OAuth Apps → New OAuth App**. Für eine App im Namen einer Organisation benötigen Sie entsprechende Administrationsrechte.
-2. Öffnen Sie in Novaplan AI **Workspace Settings → Actions → GitHub → + Setup** oder **Configure** und kopieren Sie die **Redirect URI**.
-3. Vergeben Sie in GitHub einen **Application name** und eine **Homepage URL**. Fügen Sie die kopierte URI als **Authorization callback URL** ein. Eine GitHub-OAuth-App unterstützt nur eine Callback-URL; verwenden Sie für verschiedene Novaplan-Umgebungen getrennte Apps.
-4. Kopieren Sie nach dem Erstellen die **Client ID**. Erzeugen Sie unter **Client secrets** ein neues Secret und kopieren Sie es sofort.
-5. Tragen Sie beide Werte in der GitHub-Aktion unter **Workspace Settings → Actions** ein und speichern Sie die Instanz.
+1. Melden Sie sich bei GitHub an und öffnen Sie über Ihr Profil **Settings → Developer settings → OAuth Apps → New OAuth App**. Für eine OAuth-App einer Organisation öffnen Sie deren **Settings → Developer settings → OAuth Apps**; dafür benötigen Sie Organisations-Administrationsrechte.
+2. Öffnen Sie in Novaplan AI **Workspace Settings → Actions**, suchen Sie **GitHub** und wählen Sie **+ Setup** oder **Configure**. Kopieren Sie die dort angezeigte **Redirect URI**.
+3. Geben Sie in GitHub einen **Application name** ein, beispielsweise `Novaplan AI GitHub Toolset`. Als **Homepage URL** tragen Sie die URL Ihres Novaplan-AI-Workspaces ein. Eine Beschreibung ist optional. Fügen Sie die kopierte Redirect URI als **Authorization callback URL** ein und wählen Sie **Register application**.
+4. Kopieren Sie auf der GitHub-App-Seite die **Client ID**. Wählen Sie unter **Client secrets** die Option **Generate a new client secret** und kopieren Sie den Wert sofort. Ein Secret wird nach dem Erstellen nicht erneut angezeigt; bei Verlust müssen Sie ein neues erzeugen.
+5. Gehen Sie in Novaplan AI zurück zu **Workspace Settings → Actions → GitHub**. Prüfen Sie, dass die angezeigte Redirect URI exakt mit der GitHub-Callback-URL übereinstimmt. Tragen Sie **Client ID** und **Client Secret** ein und speichern Sie die Instanz.
 
-Die Integration fordert beim OAuth-Dialog unter anderem `repo`, `public_repo`, `read:org`, `read:user` und `user:email` an. Diese Scopes werden nicht auf der GitHub-App-Seite konfiguriert. `repo` umfasst auch private Repositories und erlaubt weitreichende Schreibaktionen. Prüfen Sie die Freigabe mit Ihrer GitHub-Organisation; bei eingeschränktem OAuth-App-Zugriff kann eine Genehmigung durch Organisationsverantwortliche nötig sein.
+Eine GitHub-OAuth-App unterstützt nur **eine** Callback-URL. Wenn Sie mehrere Novaplan-AI-Umgebungen verbinden, benötigen Sie für jede Umgebung eine eigene OAuth-App.
 
-## Persönlich verbinden und verwenden
+### Angeforderte GitHub-Berechtigungen
 
-1. Öffnen Sie **Your actions → GitHub** und wählen Sie **Authenticate with OAuth**.
-2. Prüfen Sie im GitHub-Dialog die angeforderten Berechtigungen und wählen Sie **Authorize**.
-3. Fügen Sie die GitHub-Aktion im **Agent Builder** als Tool hinzu.
+Der OAuth-Dialog fordert die folgenden Scopes an. Sie tragen diese Scopes nicht in den GitHub-App-Einstellungen ein; die Integration fordert sie bei der Autorisierung an.
 
-Geben Sie bei Issues Repository und Vorgangsnummer an. Bei Pull Requests nennen Sie Quell- und Zielbranch ausdrücklich; prüfen Sie vor dem Zusammenführen die Änderungen und den gewählten Merge-Modus. Wenn der Zugriff auf ein Organisations-Repository fehlt, prüfen Sie persönliche Rechte und die OAuth-App-Freigabe. Bei Fragen hilft [Novaplan Support](/de/contact-us).
+| Scope | Zweck |
+| --- | --- |
+| `repo` | Weitreichender Lese- und Schreibzugriff auf Repositories, Issues und Pull Requests, einschließlich privater Repositories |
+| `public_repo` | Lese- und Schreibzugriff auf öffentliche Repositories |
+| `read:org` | Organisationsmitgliedschaften und Teams lesen |
+| `read:user` | Profil der angemeldeten Person lesen |
+| `user:email` | E-Mail-Adressen der angemeldeten Person lesen |
+
+Prüfen Sie die tatsächlich angezeigten Berechtigungen vor der Freigabe. Wenn Ihre GitHub-Organisation den Zugriff durch OAuth-Apps einschränkt, muss gegebenenfalls eine verantwortliche Person die App für Organisations-Repositories genehmigen.
+
+## Persönlich verbinden
+
+Die OAuth-Autorisierung ist sowohl über die gemeinsame Instanz unter **Workspace Settings → Actions** als auch über **Your actions** im persönlichen Bereich möglich. Für Aktionen im Namen einer Person muss deren GitHub-Zugriff autorisiert sein.
+
+1. Öffnen Sie die GitHub-Kachel unter **Your actions** und wählen Sie **Authenticate with OAuth**.
+2. Prüfen Sie im GitHub-Fenster die angeforderten Scopes und wählen Sie **Authorize**, wenn die Freigabe zu Ihrem Anwendungsfall passt.
+3. Kontrollieren Sie, ob die GitHub-Kachel anschließend **Authenticated** anzeigt.
+
+Wenn Sie keine Organisations-Repositories sehen, prüfen Sie sowohl die eigenen Rechte im Repository als auch die OAuth-App-Richtlinie der GitHub-Organisation. Eine erfolgreich abgeschlossene persönliche Autorisierung ersetzt keine erforderliche Organisationsfreigabe.
+
+## Im Agenten verwenden
+
+1. Öffnen Sie einen Agenten im **Agent Builder** oder erstellen Sie auf **Home** unter **Agents** einen neuen Agenten.
+2. Fügen Sie das GitHub-Toolset aus **Tools** hinzu und verbinden Sie es mit dem **Agent Core**.
+3. Testen Sie Leseaktionen mit dem vorgesehenen GitHub-Konto. Prüfen Sie bei Schreibaktionen Repository, Branch, Inhalt und Auswirkungen in GitHub.
+
+Beispielanfragen an einen Agenten:
+
+- „Erstelle im Repository `acme/widgets` ein Issue mit dem Titel ‚Login liefert Fehler 500‘ und weise es Alice zu.“
+- „Prüfe Pull Request #57 und gib ein Review mit Kommentar ab.“
+- „Kommentiere in Pull Request #88 die Zeile 42 von `src/auth.py`.“
+
+Bei Pull Requests sollten Sie Quell- und Zielbranch ausdrücklich angeben und vor dem Zusammenführen den Diff und den gewählten Merge-Modus prüfen.
+
+## Häufige Fragen
+
+### Worin unterscheiden sich GitHub-Konnektor und GitHub-Toolset?
+
+Der [GitHub-Konnektor](/de/connectors/github/github) synchronisiert Repository-Daten für die Suche in Novaplan AI. Das Toolset liest und verändert GitHub-Daten bei einer konkreten Agentenaktion über die API. Verwenden Sie den Konnektor zum Auffinden früherer Issues oder Pull Requests und das Toolset zum Erstellen von Issues, Kommentieren von Reviews oder Zusammenführen eines Pull Requests.
+
+### Brauche ich eine GitHub OAuth App oder eine GitHub App?
+
+Diese Toolset-Anleitung beschreibt eine **GitHub OAuth App**, über die Personen den Zugriff in ihrem Namen autorisieren. Eine **GitHub App** ist ein anderer Integrationstyp mit einem eigenen Installations- und Berechtigungsmodell. Prüfen Sie vor dem Erstellen, welchen Typ der Konfigurationsdialog Ihres bereitgestellten Novaplan-AI-Workspaces verlangt.
+
+### Die Organisation blockiert die OAuth-App. Was kann ich tun?
+
+Bitten Sie eine verantwortliche Person der GitHub-Organisation, die App gemäß der Organisationsrichtlinie unter **Organization Settings → Third-party access → OAuth app policy** zu prüfen und gegebenenfalls freizugeben. Kontrollieren Sie danach die Autorisierung und die persönlichen Repository-Rechte erneut. Bei Fragen hilft [Novaplan Support](/de/contact-us).
