@@ -42,13 +42,13 @@ Dieser Abschnitt dient Ihrer Google-Workspace-Administration und dem Novaplan-Te
 1. Melden Sie sich als Superadministrator in der [Google Admin-Konsole](https://admin.google.com/) an.
 2. Öffnen Sie **Security → Access and data control → API controls → Manage Domain Wide Delegation**.
 3. Wählen Sie **Add new** und tragen Sie die Client-ID des Dienstkontos ein.
-4. Fügen Sie die folgenden OAuth-Berechtigungen als kommaseparierte Liste hinzu und klicken Sie auf **Authorize**:
+4. Prüfen Sie die folgende übernommene Scope-Liste mit Novaplan und Ihrer Google-Workspace-Administration, bevor Sie das Dienstkonto autorisieren. Die für den betriebenen Konnektor tatsächlich benötigten Scopes sind noch nicht bestätigt. Tragen Sie nur die bestätigten Scopes als kommaseparierte Liste ein und klicken Sie dann auf **Authorize**:
 
 ```text
 https://www.googleapis.com/auth/admin.directory.group.readonly,https://www.googleapis.com/auth/admin.reports.audit.readonly,https://www.googleapis.com/auth/admin.directory.user.readonly,https://www.googleapis.com/auth/admin.directory.domain.readonly,https://www.googleapis.com/auth/admin.directory.orgunit,https://www.googleapis.com/auth/drive.readonly,https://www.googleapis.com/auth/drive.metadata.readonly,https://www.googleapis.com/auth/drive.metadata,https://www.googleapis.com/auth/documents.readonly,https://www.googleapis.com/auth/spreadsheets.readonly,https://www.googleapis.com/auth/presentations.readonly,https://www.googleapis.com/auth/drive.file,https://www.googleapis.com/auth/drive
 ```
 
-Die Berechtigungen umfassen Lesezugriff auf Drive-Dateien, Metadaten sowie Docs, Sheets und Slides. `drive.file` betrifft durch die Anwendung erstellte Dateien; `drive` erlaubt weitergehenden Zugriff auf Drive-Dateien. Die `admin.*`-Berechtigungen dienen der domainweiten Einrichtung. Geben Sie nur die Berechtigungen frei, die Sie mit Novaplan für Ihre konkrete Verbindung geprüft haben. Das Dienstkonto und die betroffenen Nutzerkonten müssen zur vorgesehenen Domain gehören.
+Die übernommene Liste enthält Berechtigungen mit unterschiedlicher Reichweite: `drive.readonly` erlaubt das Ansehen und Herunterladen zugänglicher Drive-Dateien, während `drive` die Verwaltung aller zugänglichen Drive-Dateien erlaubt. Auch `drive.file` und `drive.metadata` sind nicht bloß Leseberechtigungen. Die Docs-, Sheets- und Slides-Scopes betreffen deren Inhalte; die `admin.*`-Scopes betreffen die domainweite Einrichtung. Geben Sie nicht pauschal die gesamte Liste frei. Vergleichen Sie die tatsächliche Anfrage mit [Googles Beschreibung der Drive-Scopes](https://developers.google.com/workspace/drive/api/guides/api-specific-auth) und lassen Sie Novaplan und Ihre Administration die erforderlichen Berechtigungen prüfen. Das Dienstkonto und die betroffenen Nutzerkonten müssen zur vorgesehenen Domain gehören.
 
 ### 5. Dienstkontoschlüssel bereitstellen
 
@@ -86,20 +86,13 @@ Bei dieser Variante erteilt die Person Novaplan AI per OAuth 2.0 Zugriff auf ihr
 5. Tragen Sie als autorisierte Weiterleitungsadresse die tatsächliche Novaplan-Workspace-Adresse mit `/connectors/oauth/callback/Drive` ein. Beispiel: `https://your-workspace.example.com/connectors/oauth/callback/Drive`. Die Adresse muss exakt mit der bereitgestellten Workspace-Adresse übereinstimmen.
 6. Bewahren Sie **Client ID** und **Client Secret** sicher auf.
 
-Für die OAuth-Freigabe werden die folgenden Scopes verwendet:
+Die zugängliche Registrierung des persönlichen Drive-Konnektors fordert diesen Scope an:
 
 ```text
 https://www.googleapis.com/auth/drive.readonly
-https://www.googleapis.com/auth/drive.metadata.readonly
-https://www.googleapis.com/auth/drive.metadata
-https://www.googleapis.com/auth/documents.readonly
-https://www.googleapis.com/auth/spreadsheets.readonly
-https://www.googleapis.com/auth/presentations.readonly
-https://www.googleapis.com/auth/drive.file
-https://www.googleapis.com/auth/drive
 ```
 
-Prüfen Sie mit Ihrer Administration, ob diese Berechtigungen für Ihre Anwendungsfreigabe zulässig sind.
+Dieser Scope erlaubt das Ansehen und Herunterladen zugänglicher Drive-Dateien, nicht deren Verwaltung. Vergleichen Sie die Freigabe im betriebenen Workspace mit Novaplan, bevor Sie weitere Berechtigungen genehmigen.
 
 ### 2. Google Drive verbinden
 
@@ -111,7 +104,7 @@ Prüfen Sie mit Ihrer Administration, ob diese Berechtigungen für Ihre Anwendun
 6. Starten Sie die Synchronisierung mit **Start syncing now** oder wählen Sie **I'll do it later**.
 
 <Warning>
-  Verwenden Sie bei der Autorisierung dieselbe E-Mail-Adresse wie für Ihr Novaplan-AI-Konto. Unterschiedliche Adressen können zu Berechtigungsproblemen bei synchronisierten Inhalten führen.
+  Prüfen Sie, welches Google-Konto Sie autorisieren. Der zugängliche persönliche Konnektor vergibt Datensatzberechtigungen anhand der von Drive gelieferten Google-Adresse. Falls sie von Ihrer Novaplan-AI-Kontoadresse abweicht, lassen Sie die Kontenzuordnung und den Zugriff vor der Nutzung der Suche durch Ihre Administration prüfen.
 </Warning>
 
 ## Konnektoreinstellungen
@@ -142,4 +135,6 @@ Der **Konnektor** synchronisiert und indexiert Dateien, damit Sie sie suchen und
 
 ### Warum liefert die Suche keine Ergebnisse?
 
-Prüfen Sie, ob bei einer persönlichen Verbindung die Google-E-Mail-Adresse mit Ihrem Novaplan-AI-Konto übereinstimmt. Sehen Sie unter **All Records** nach, ob Dateien synchronisiert wurden, und kontrollieren Sie Synchronisierungsfilter, Indexierungsstatus und Abschluss des ersten Laufs. Den Synchronisierungsstatus finden Sie unter **Settings → Connectors**. Wenn die Ursache unklar bleibt, schreiben Sie an [support@novaplan.ai](mailto:support@novaplan.ai).
+Prüfen Sie bei einer persönlichen Verbindung, welches Google-Konto den Zugriff autorisiert hat. Bei einer unternehmensweiten Verbindung sind Dienstkonto und domainweite Delegation getrennt von der Google-Identität und den Dateiberechtigungen der einzelnen Nutzer. Lassen Sie die Administration die Zuordnung und den Zugriff der betroffenen Person prüfen; autorisieren Sie das gemeinsame Dienstkonto nicht erneut als diese Person.
+
+Sehen Sie unter **All Records** nach, ob Dateien synchronisiert wurden, und kontrollieren Sie Synchronisierungsfilter, Indexierungsstatus und Abschluss des ersten Laufs. Den Synchronisierungsstatus finden Sie unter **Settings → Connectors**. Wenn die Ursache unklar bleibt, schreiben Sie an [support@novaplan.ai](mailto:support@novaplan.ai).
