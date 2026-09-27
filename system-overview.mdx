@@ -23,7 +23,7 @@ A person using the web app, an application using the REST API, and an agent call
     The Node.js API verifies your session or token, applies your permissions, and forwards the question to the **Query** service.
   </Step>
   <Step title="Query finds sources and writes a cited answer">
-    Query looks up related records in the **knowledge graph** and similar text in **Qdrant**, then calls the **language model you configured**. You get an answer with citations that point back to the original documents.
+    Query looks up related records in the **knowledge graph** and similar text in the configured **vector store** (Qdrant in the reference architecture), then calls the workspace's **language model**. You get an answer with citations that point back to the original documents.
   </Step>
 </Steps>
 
@@ -31,7 +31,7 @@ That path only works after your company data is already in those stores. In the 
 
 1. **Connectors** pull data from Slack, Drive, Jira, Confluence, and your other sources.
 2. They publish new or changed records onto the **event bus**.
-3. **Indexing** parses the files, turns the text into vectors, and writes the knowledge graph and Qdrant.
+3. **Indexing** parses the files, turns the text into vectors, and writes to the knowledge graph and configured vector store.
 
 The event bus can use **Redis Streams** or **Kafka**, depending on the managed environment. Novaplan configures this infrastructure.
 
@@ -139,7 +139,7 @@ Each box along the bottom of the diagram holds a different kind of state. The ta
 
 You point Novaplan AI at models you already use.
 
-- An **embedding model** turns parsed text into vectors for Qdrant. The local embedding server is the default for this.
+- An **embedding model** turns parsed text into vectors for the configured vector store. The reference architecture can use a local embedding server; a managed workspace may use another provider.
 - A **language model (LLM)** writes the cited answer. You can use any provider, or a local model through Ollama.
 
 The AI models box on the left of the diagram is those two models.
