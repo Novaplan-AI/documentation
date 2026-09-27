@@ -69,10 +69,29 @@ Zusätzlich stehen Agenten eingebaute Fähigkeiten zur Verfügung, die nicht unt
 ## Toolset einrichten
 
 1. Öffnen Sie **Workspace settings → Actions**. Teamweit verwaltete Toolsets benötigen die entsprechenden Administrationsrechte. Persönliche Verbindungen finden Sie unter **Your Actions**.
+
+<div className="text-center">
+  <img src="/images/toolsets/navigate-to-toolsets.png" alt="Navigation zu Actions in den Workspace-Einstellungen" className="block mx-auto w-11/12" />
+</div>
+
 2. Suchen Sie die Anwendung. Für Team-Aktionen können Sie nach **All**, **Configured** und **Not configured** filtern; für persönliche Aktionen nach **All**, **Authenticated** und **Not authenticated**.
+
+<div className="text-center">
+  <img src="/images/toolsets/toolsets-page.png" alt="Aktionskatalog und Filter für Toolsets" className="block mx-auto w-11/12" />
+</div>
+
 3. Wählen Sie **Configure** und folgen Sie den anwendungsspezifischen Schritten. Je nach Toolset benötigen Sie OAuth-Zugangsdaten oder eine andere Anmeldemethode.
+
+<div className="text-center">
+  <img src="/images/toolsets/config-dialog.png" alt="Konfigurationsdialog eines Toolsets" className="block mx-auto w-11/12" />
+</div>
+
 4. Bei OAuth kopieren Sie die im Konfigurationsdialog angezeigte **Redirect URI** in die zugelassene Callback-Liste der externen Anwendung. Beide Werte müssen exakt übereinstimmen.
 5. Schließen Sie **Authenticate** und gegebenenfalls die Freigabe im Anbieterfenster ab. Prüfen Sie anschließend den Status **Authenticated**.
+
+<div className="text-center">
+  <img src="/images/toolsets/authenticated-toolset.png" alt="Authentifiziertes Toolset im Aktionskatalog" className="block mx-auto w-11/12" />
+</div>
 
 Die notwendigen Berechtigungen hängen von den tatsächlich genutzten Aktionen ab. Ein Toolset für E-Mails kann beispielsweise Leserechte und Senderechte benötigen; ein Toolset für Vorgänge kann Erstellen, Aktualisieren oder Löschen anbieten. Die Einzelanleitungen beschreiben die jeweiligen Zugangsdaten und Rechte. Bei Datenbank-Toolsets kann ein Administrator die Instanz anlegen, während Benutzer ihre eigenen Zugangsdaten hinterlegen.
 
@@ -89,6 +108,14 @@ Bei Toolsets mit Benutzername und Passwort, beispielsweise MariaDB, erstellt die
 3. Fügen Sie es dem Ablauf hinzu und verbinden Sie es mit dem Agent Core.
 4. Testen Sie den Agenten mit einem Konto, das die vorgesehenen Rechte besitzt. Prüfen Sie bei schreibenden Aktionen die Auswirkungen in der Zielanwendung.
 
+<div className="text-center">
+  <img src="/images/toolsets/toolset-in-agent-builder.png" alt="Toolset im Agent Builder verwenden" className="block mx-auto w-11/12" />
+</div>
+
 Ist ein Toolset nicht nutzbar, prüfen Sie unter **Actions** den Authentifizierungsstatus. Über den Konfigurationsdialog können Sie Zugangsdaten aktualisieren, bei Ablauf erneut authentifizieren oder eine nicht mehr benötigte Verbindung entfernen. Nicht authentifizierte Toolsets lassen sich nicht als ausführbare Aktionen verwenden.
+
+<div className="text-center">
+  <img src="/images/toolsets/manage-toolset.png" alt="Konfiguration und erneute Anmeldung eines Toolsets verwalten" className="block mx-auto w-11/12" />
+</div>
 
 Weitere Schritte finden Sie unter [Agent einrichten](/de/agent-guide/setup-guide) und in den jeweiligen Toolset-Anleitungen. Bei Fragen zur Freigabe von Aktionen wenden Sie sich an [Novaplan Support](/de/contact-us).
