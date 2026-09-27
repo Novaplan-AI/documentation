@@ -100,4 +100,27 @@ Bei einem GitLab-Administrator- oder EE-Auditor-Konto versucht der Konnektor, al
 | **Selbst betriebene Instanz liefert nichts** | Basisadresse ohne Pfad und abschließenden Schrägstrich, Erreichbarkeit der Instanz und OAuth-App auf dieser Instanz. |
 | **EE-Auditor sieht keine Projekte** | GitLab kann für Auditoren bei Listing-Endpunkten keine Ergebnisse liefern. Der Konnektor versucht eine Abfrage nach Mitgliedschaft, deren Umfang kleiner ist. Für instanzweite Abdeckung verwenden Sie ein Administratorkonto. |
 
+## Häufige Fragen
+
+<AccordionGroup>
+  <Accordion title="Warum liefert die Suche keine Ergebnisse?">
+    Prüfen Sie die öffentliche GitLab-Profil-E-Mail und Projektmitgliedschaft der betroffenen Person. Die E-Mail muss ihrem Novaplan-AI-Konto zugeordnet werden können. Prüfen Sie außerdem unter **Workspace Settings → Connectors**, ob die Synchronisierung und Indexierung abgeschlossen sind. Das Konto, das die gemeinsame Verbindung autorisiert hat, muss das Projekt lesen können, muss aber nicht die E-Mail jedes späteren Nutzers teilen.
+  </Accordion>
+  <Accordion title="Wie lange dauert die erste Synchronisierung?">
+    Das hängt von Anzahl und Umfang der Projekte, Vorgänge, Merge Requests, Quelldateien und Anhänge, den GitLab-API-Grenzen, Filtern und der Indexierungskapazität Ihres Workspaces ab. Verfolgen Sie den tatsächlichen Lauf unter **Indexing Progress**. Für große Importe kann Novaplan die Planung unterstützen; eine feste Verarbeitungsrate für Ihren Enterprise Workspace ist nicht bestätigt.
+  </Accordion>
+  <Accordion title="Warum sehe ich nach der Anmeldung noch keine Datensätze?">
+    Prüfen Sie die OAuth-Scopes `read_user`, `read_repository` und `read_api`, den Quellzugriff des autorisierenden Kontos und die Gruppen- sowie Repository-Filter. Prüfen Sie anschließend die öffentliche GitLab-E-Mail und Mitgliedschaft der betroffenen Person. Ein erfolgreicher OAuth-Ablauf bedeutet noch nicht, dass die erste Indexierung abgeschlossen ist.
+  </Accordion>
+  <Accordion title="Kann ich nur bestimmte Gruppen oder Projekte synchronisieren?">
+    Ja. Verwenden Sie unter **Configure Records** die Filter **GitLab Groups** und **Repositories** mit `In` zum Einschließen oder `Not In` zum Ausschließen. Gruppenfilter umfassen auch Untergruppen. Die Auswahllisten fragen GitLab während der Eingabe ab; der Konnektor kann weiterhin Gruppen-, Projekt- oder Mitgliedsmetadaten lesen, um die Auswahl aufzulösen.
+  </Accordion>
+  <Accordion title="Werden alle Branches synchronisiert?">
+    Nein. Quelldateien stammen vom **Standardbranch** jedes Projekts. Diffs und Review-Kommentare von Merge Requests können Änderungen anderer Branches dennoch auffindbar machen; die eigenständigen Dateidatensätze zeigen den Standardbranch.
+  </Accordion>
+  <Accordion title="Funktioniert eine selbst betriebene GitLab-Instanz?">
+    Ja. Tragen Sie deren Basisadresse ohne Pfad als **GitLab Instance URL** ein und erstellen Sie die OAuth-Anwendung auf genau dieser Instanz. Für GitLab.com kann das Feld leer bleiben oder `https://gitlab.com` enthalten.
+  </Accordion>
+</AccordionGroup>
+
 Novaplan unterstützt Sie bei der Einrichtung über [Support](/de/contact-us) oder unter [support@novaplan.ai](mailto:support@novaplan.ai).

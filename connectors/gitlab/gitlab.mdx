@@ -626,17 +626,7 @@ Common causes:
 </Accordion>
 
 <Accordion title="How long does the initial sync take?">
-  The initial sync duration depends on how much content your GitLab projects hold. A record is a
-  single item — a work item, a merge request, a code file, or an attachment.
-
-  | Approx record count | Estimated time |
-  |---------------------|----------------|
-  | Up to 10,000 | Under 10 minutes |
-  | 10,000 to 50,000 | 10 to 30 minutes |
-  | 50,000 to 100,000 | 30 to 60 minutes |
-  | Over 100,000 | Roughly 1 hour per 100,000 records |
-
-  As a rule of thumb, the connector syncs about **100,000 records per hour**.
+  The duration depends on the number of projects, work items, merge requests, code files, attachments, GitLab API limits, filters, and your workspace's indexing capacity. Use **Indexing Progress** to monitor the actual run. Novaplan Support can help plan a large initial import; no fixed records-per-hour rate has been verified for your Enterprise workspace.
 
 </Accordion>
 
@@ -680,6 +670,6 @@ on that instance rather than on gitlab.com. Leave the field blank for GitLab.com
 <div className="text-center mt-12 p-6 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl">
   <h3 className="text-lg font-semibold mb-2">Need Help Getting Started?</h3>
   <p className="text-gray-600 dark:text-gray-400">
-    Connect your GitLab account to Novaplan AI in just a few minutes. Follow the step-by-step guide above to enable project code, work items and merge-requests search across all your GitLab content.
+    Connect your GitLab account to Novaplan AI with the approved source access and filters above. Search results reflect the content synced from in-scope projects and each viewer's permissions.
   </p>
 </div>
