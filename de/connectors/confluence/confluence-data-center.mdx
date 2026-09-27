@@ -75,4 +75,27 @@ Anhänge und Kommentare einer eingeschränkten Seite übernehmen deren Sichtbark
 | Benutzer oder Ergebnisse fehlen | E-Mail-Sichtbarkeit, Bereichsrechte, Seitenbeschränkungen, Filter und abgeschlossene Indexierung. |
 | Änderungen an Rechten erscheinen nicht | Audit-Log-Zugriff und erneuten Synchronisierungslauf prüfen. |
 
+## Häufige Fragen
+
+<AccordionGroup>
+  <Accordion title="Kann ich eine OAuth-Anwendung für diesen Konnektor verwenden?">
+    Nein. Der Confluence-Data-Center-Konnektor verwendet ein **Personal Access Token** oder **Basic Authentication**. OAuth-Anwendungen aus der Atlassian Developer Console gehören zum Confluence-Cloud-Ablauf.
+  </Accordion>
+  <Accordion title="Soll ich ein Token oder Basic Authentication verwenden?">
+    Bevorzugen Sie ein separat widerrufbares Personal Access Token, wenn Ihre Instanz es unterstützt (ab Confluence 7.9). Für ältere Instanzen oder deaktivierte Tokens verwenden Sie Benutzernamen und Passwort. Beide Methoden synchronisieren dieselben Inhalte; sichern und rotieren Sie die Zugangsdaten gemäß Ihrer Richtlinie.
+  </Accordion>
+  <Accordion title="Wie unterscheidet sich Data Center von Confluence Cloud?">
+    Atlassian betreibt Confluence Cloud; Data Center läuft in Ihrer eigenen Umgebung. Die Konnektoren verwenden unterschiedliche Anmeldeverfahren und REST-APIs. Der Cloud-Konnektor kann Ordner synchronisieren, der Data-Center-Konnektor nicht. Wählen Sie die Variante, die zu Ihrer Confluence-Instanz passt.
+  </Accordion>
+  <Accordion title="Warum wird Confluence Data Center 9.1 oder neuer benötigt?">
+    Erst ab dieser Version liefert der benötigte REST-Endpunkt Bereichsberechtigungen. Ohne diese Informationen kann der Konnektor die Sichtbarkeit nicht zuverlässig bestimmen und bricht ab, statt Inhalte ohne geprüfte Rechte zu indexieren. Die technische Grundlage ist [CONFSERVER-78176](https://jira.atlassian.com/browse/CONFSERVER-78176).
+  </Accordion>
+  <Accordion title="Kann ich bestimmte Bereiche oder Seiten auswählen?">
+    Unter **Configure Records** wählen Sie mit **Space Name** und `In` gewünschte Bereiche oder schließen mit `Not In` Bereiche aus. Mit **Page Name** und `In` können Sie einzelne Seiten auswählen; deren untergeordnete Seiten gehören ebenfalls zum ausgewählten Baum. Datumsfilter begrenzen den Umfang zusätzlich.
+  </Accordion>
+  <Accordion title="Warum liefert die Suche keine Seiten?">
+    Prüfen Sie zuerst unter **Workspace Settings → Connectors**, ob die Synchronisierung abgeschlossen ist und die erwarteten Seiten unter **All Records** erscheinen. Prüfen Sie dann Bereichsrechte, Seitenbeschränkungen, **Space Name**- und **Page Name**-Filter sowie **Index Pages**. Verborgene E-Mail-Adressen können die Benutzerzuordnung verzögern. Lassen Sie die globale Sichtbarkeitseinstellung nur nach Datenschutzprüfung durch Ihre Confluence-Administration ändern und testen Sie den nächsten Lauf.
+  </Accordion>
+</AccordionGroup>
+
 Für agentengesteuerte Änderungen an Confluence-Seiten gibt es ein getrenntes [Confluence-Data-Center-Toolset](/de/toolsets/confluence/confluence-data-center). Dieser Konnektor dient der Synchronisierung und Suche. Bei Einrichtungsfragen hilft [Novaplan Support](/de/contact-us).

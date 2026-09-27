@@ -495,7 +495,7 @@ Yes. Use the **Page Name** filter with the `In` operator and pick the pages you 
 Check these in order:
 
 1. **The sync has not finished.** Go to **Workspace Settings → Connectors** and check the sync status, then look in **All Records** for the pages you expect.
-2. **Email addresses are hidden.** If Confluence hides email addresses, you may not have been synced as a user yet. Ask a Confluence administrator to make them visible, then wait for the next sync.
+2. **User mapping is incomplete.** If Confluence hides email addresses, some users may not map on the first sync. Ask your Confluence administrator to review the global email-visibility setting with your privacy policy before changing it, then test again after the next sync.
 3. **Your filters are too narrow.** Check the **Space Name**, **Page Name**, and date filters on the **Configure Records** tab.
 4. **Indexing is off.** Check that **Index Pages** and the related toggles are turned on.
 
@@ -508,6 +508,6 @@ Check these in order:
 <div className="text-center mt-12 p-6 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl">
   <h3 className="text-lg font-semibold mb-2">Ready to Get Started?</h3>
   <p className="text-gray-600 dark:text-gray-400">
-    Connect your self-hosted Confluence Data Center instance to Novaplan AI in a few minutes. Follow the steps above to search every space and page across your Confluence content.
+    Connect your Confluence Data Center instance to Novaplan AI using the approved account and filters above. Search results reflect the content that was synced and each user's permissions.
   </p>
 </div>
