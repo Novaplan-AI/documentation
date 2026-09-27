@@ -76,6 +76,12 @@ Zusätzlich stehen Agenten eingebaute Fähigkeiten zur Verfügung, die nicht unt
 
 Die notwendigen Berechtigungen hängen von den tatsächlich genutzten Aktionen ab. Ein Toolset für E-Mails kann beispielsweise Leserechte und Senderechte benötigen; ein Toolset für Vorgänge kann Erstellen, Aktualisieren oder Löschen anbieten. Die Einzelanleitungen beschreiben die jeweiligen Zugangsdaten und Rechte. Bei Datenbank-Toolsets kann ein Administrator die Instanz anlegen, während Benutzer ihre eigenen Zugangsdaten hinterlegen.
 
+### Anmeldemethoden und persönliche Zugangsdaten
+
+Bei **OAuth 2.0** richtet die Workspace-Administration gegebenenfalls eine Anwendung beim Anbieter ein, hinterlegt deren Client ID und Client Secret und kopiert die **Redirect URI** aus Novaplan AI als zugelassene Callback-URL zum Anbieter. Anschließend bestätigt jede berechtigte Person den Zugriff mit ihrem eigenen Konto. Prüfen Sie die angeforderten Lese-, Schreib- und Löschrechte im Zustimmungsdialog; der Umfang unterscheidet sich je nach Toolset. OAuth-Tokens können von der Integration erneuert werden, sofern der Anbieter und die Workspace-Konfiguration das zulassen.
+
+Bei Toolsets mit Benutzername und Passwort, beispielsweise MariaDB, erstellt die Administration die gemeinsame Instanz mit Host, Port und Datenbank. Jede Person hinterlegt danach ihre **eigenen** Datenbank-Zugangsdaten unter **Your actions**. Verwenden Sie kein gemeinsam genutztes Datenbankkonto, und klären Sie mit Novaplan vor der Anbindung sensibler Daten, wie persönliche Zugangsdaten im bereitgestellten Workspace geschützt werden.
+
 ## Im Agent Builder verwenden
 
 1. Öffnen Sie einen Agenten im **Agent Builder**.
