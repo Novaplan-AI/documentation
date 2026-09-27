@@ -430,12 +430,12 @@ The connector syncs data in the following order:
   - **Network latency**: Connection speed to Linear's API
   - **Content complexity**: Issues with many comments and attachments take longer
   
-  The connector fetches data in batches of 50 items per API request for optimal performance. Each team is processed sequentially with per-team checkpoints, allowing sync to resume from the last successful point if interrupted.
+  The accessible connector processes issues in batches of 50 and projects in batches of 10. Per-team checkpoints help an interrupted sync resume from its last successful stage. Confirm actual throughput in your deployed workspace.
   
   **Tips to speed up initial sync:**
   - Use **team filters** to sync only the teams you need
   - Use **date filters** to limit older content
-  - Disable indexing filters for content types you don't need (e.g., attachments, files)
+  - Use indexing filters to keep unneeded content out of search. Disabling an indexing option by itself does not guarantee fewer source API calls.
 </Accordion>
 
 <Accordion title="What OAuth scopes does the connector require?">
@@ -485,6 +485,6 @@ There are three common causes:
 <div className="text-center mt-12 p-6 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl">
   <h3 className="text-lg font-semibold mb-2">Ready to Get Started?</h3>
   <p className="text-gray-600 dark:text-gray-400">
-    Connect your Linear workspace to Novaplan AI in just a few minutes. Follow the step-by-step guide above to enable organization-wide issue tracking search across all your Linear content.
+    Connect Linear to Novaplan AI using the approved account and filters above. Search results reflect the synced teams and each viewer's permissions.
   </p>
 </div>
