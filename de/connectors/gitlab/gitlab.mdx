@@ -83,7 +83,9 @@ Nicht jede Datei des Standardbranches wird zum Datensatz. Der zugängliche Quell
 
 Die Dateizahl in Novaplan AI kann deshalb geringer sein als im Repository. Ein Lauf, der mehr als die Hälfte der bisher erfassten Projektdateien löschen würde, wird als Schutz vor unvollständigen GitLab-Antworten nicht übernommen. Bei einem fehlgeschlagenen Lauf bleibt der zuletzt erfolgreiche Synchronisierungsstand erhalten.
 
-Vorgänge und Merge Requests behalten ihre Beschreibungen, Kommentare und zugehörigen Anhänge als zusammengehörige Inhalte. Bei Merge Requests kommen Commits, Dateiänderungen mit Diffs und Review-Kommentare hinzu. Ein Synchronisierungsstand wird erst nach erfolgreichem Abschluss des jeweiligen Schritts gespeichert; ein fehlgeschlagener Schritt kann beim nächsten Lauf wiederholt werden.
+Vorgänge und Merge Requests behalten ihre Beschreibungen, Kommentare und zugehörigen Anhänge als zusammengehörige Inhalte. Bei Merge Requests kommen Commits, Dateiänderungen mit Diffs und Review-Kommentare hinzu. Scheitert das Speichern einer Datensatzgruppe, endet der betroffene Schritt ohne neuen Fortschrittspunkt und wird beim nächsten Lauf erneut abgefragt. Kann ein einzelner Vorgang oder Merge Request beispielsweise wegen nicht lesbarer Kommentare nicht verarbeitet werden, laufen die übrigen Inhalte des Projekts weiter. Der Fortschrittspunkt bleibt unmittelbar vor dem frühesten fehlgeschlagenen Eintrag, damit dieser erneut gelesen wird.
+
+Der OAuth-Token wird normalerweise vor Ablauf erneuert. Antwortet GitLab dennoch mit **401 Unauthorized**, erneuert der Konnektor ihn einmal und wiederholt die Anfrage. Gleichzeitig auftretende 401-Antworten teilen sich diese Erneuerung. Andere HTTP-Statuscodes lösen keine Erneuerung aus.
 
 Bei einem GitLab-Administrator- oder EE-Auditor-Konto versucht der Konnektor, alle für dieses Konto lesbaren Gruppen und Projekte aufzulisten. Liefert ein Auditor wegen Einschränkungen der GitLab-Listing-Endpunkte keine Ergebnisse, versucht der Konnektor stattdessen eine auf Mitgliedschaften begrenzte Abfrage. Für eine erwartete instanzweite Abdeckung prüfen Sie diesen Fall mit einem Administratorkonto.
 

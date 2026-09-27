@@ -417,6 +417,9 @@ Each sync runs these steps in order:
 - **Page and blog restrictions** are read as effective view restrictions. Only real read restrictions change who can see a page. A restriction that only limits editing still lets people read the page based on the space permissions
 - **Public spaces** — if a space allows anonymous read access, it is treated as public and per-user permissions are skipped
 - **Unknown users** — permissions for users whose email is not known yet are held on a placeholder and moved to the real user once that user syncs
+- **Attachments and comments** of a restricted page inherit its visibility. When an audit-log event changes the page restriction, the stored attachments and comments follow.
+- **Unknown groups** — a restriction naming a group that has not synced remains restricted; its members gain access after the group syncs and the page is read again.
+- **Failed reads** — temporary failures reading space permissions, group membership, or page restrictions preserve the stored access. A page with unreadable restrictions is skipped while the rest of its space continues syncing; the checkpoint stays in place so the next sync retries that window. A failed read does not make the page visible to the whole space.
 
 ### How Data Center differs from Confluence Cloud
 

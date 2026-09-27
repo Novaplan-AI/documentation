@@ -625,9 +625,15 @@ Slack rate-limits its API per method. The connector paces its own calls to stay 
 
 - The Redirect URL in Slack must match the one in Novaplan AI exactly, including scheme, host, port, and path.
 
-**`invalid_auth` / `token_revoked`**
+**`invalid_auth` / `token_revoked` / `token_expired`**
 
-- The token was regenerated or the app was uninstalled. For the team connector, paste the new **Bot User OAuth Token**. For the individual connector, re-run authorization from the **Authorize** tab.
+- For a Slack sign-in on the Individual connector, an expired token is normally renewed and the request retried once. If the error persists, reconnect from **Authorize**.
+- A pasted Workspace bot token or Individual user token cannot be refreshed by the connector. If its Slack app has token rotation enabled, the access token expires after about 12 hours. Use an app without rotation for a pasted token, or use Slack sign-in on the Individual connector.
+- For `token_revoked` or `invalid_auth` on a pasted token, check whether the app was reinstalled or the token regenerated, then paste a valid access token.
+
+**Token format and rotation**
+
+Bot access tokens start with `xoxb-` or `xoxe.xoxb-`; user access tokens start with `xoxp-` or `xoxe.xoxp-`. A token starting with `xoxe-` alone is a refresh token, not an access token to paste. Slack sign-in stores the rotating refresh token and renews it automatically. If Slack refuses the saved sign-in after an app reinstall or revocation, authorize again. A pasted token has no refresh token, so it cannot renew itself.
 
 **Only a bot token was found (Individual)**
 

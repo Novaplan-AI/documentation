@@ -684,6 +684,7 @@ The Confluence connector syncs the following data from your Confluence Cloud wor
 ### Incremental sync
 - Uses timestamp-based synchronization to detect changes
 - Only syncs new or modified content since last sync
+- Reads every attachment of a page or blog post. If a temporary error interrupts the attachment list, the connector keeps the attachments already read and retries that time window on the next sync. If the first list request fails permanently, it uses attachments included in the search results.
 - Efficiently handles additions, updates, and deletions
 - Reduces API calls and sync duration
 
@@ -692,6 +693,9 @@ The Confluence connector syncs the following data from your Confluence Cloud wor
 - Each user sees only content they have access to in Confluence
 - Respects space permissions and page restrictions
 - Maintains Confluence's access control model
+- Attachments, comments, and replies inherit a restricted page's visibility. Changes to the page restriction also update their stored visibility.
+- A restriction for a group that has not yet synced remains restricted. Group members gain access after the group syncs and the page is read again.
+- Temporary failures reading space permissions, group membership, or page restrictions preserve the access already stored and are retried on a later sync. A failed restriction read does not open the page to its whole space.
 
 </Accordion>
 

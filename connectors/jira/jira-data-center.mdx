@@ -93,7 +93,9 @@ The connector reads a few admin-only APIs to work out who is allowed to see what
 |----------|-------|----------------------------------|
 | `GET /rest/api/2/applicationrole` | Jira administrator | The connector cannot expand application roles into their groups. Projects that grant access that way fall back to giving access only to the person who set up the connector. |
 | `GET /rest/api/2/project/{key}/permissionscheme` and its grants | Project or Jira administrator | The connector cannot read who has access to that project. The same fallback applies. |
-| `GET /rest/auditing/1.0/events` | Jira administrator | The connector cannot tell which issues were deleted, so deleted issues may stay in the index until a full resync. |
+| `GET /rest/auditing/1.0/events` | Jira administrator | Deleted issues remain indexed while access is denied. The deletion checkpoint stays in place; when audit-log access returns, the connector replays the missed deletion events. |
+
+Temporary failures reading project permissions or group members preserve the access already stored, and issues continue to sync. The next run retries the read; it does not broaden access or remove existing access because of that failure.
 
 <Warning>
   A non-admin account can still sync issues, but **some permissions will be missing**. Content may end up visible only to the person who set up the connector. Use a Jira administrator account for production.
@@ -388,6 +390,9 @@ The Jira Data Center connector syncs:
 - On Jira 10 and later, the bulk user list can be restricted, and the fallback search may not return everyone
 - Give the account Browse Users permission, or ask a Jira administrator to set **User email visibility** to **Public** in General Configuration
 
+**Project roles include a group beyond the first 1,000 groups:**
+- Jira Data Center's group list cannot page beyond the first 1,000 groups. Affected role memberships retain their previous state until the group can be included; people who join may not gain access, and people who leave may keep their previous access. Review this limit if your instance has more than 1,000 groups.
+
 **Deleted issues still show up in search:**
 - Deleted issues are found through the audit log, which needs Jira administrator access
 - Check that the account is a Jira administrator and that auditing is turned on
@@ -461,6 +466,8 @@ For each project, the connector:
 ### Checkpoints
 
 After each successful sync, the connector saves the latest issue update time as a checkpoint and saves the filter settings so it can tell when they change. It also keeps a checkpoint per project, so a failed sync can pick up where it stopped instead of starting over. Deleted-issue tracking uses its own separate checkpoint.
+
+If one issue fails to process, other issues in its project continue. The checkpoint waits so the next run retries that issue. After five consecutive failed syncs for the same issue, the connector logs it and proceeds; a later change to the issue brings it back into scope. If Jira continues to rate-limit issue search after three retries, that project waits until the next sync.
 
 </Accordion>
 

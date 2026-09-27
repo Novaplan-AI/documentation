@@ -708,6 +708,8 @@ The connector automatically determines whether to perform a full or incremental 
 2. **Group sync** — fetches all groups and their member lists
 3. **Membership mapping** — creates user-to-group relationships for permission resolution
 
+If reading a group's members or a project's permission scheme fails temporarily, the connector preserves the stored access and continues syncing the project's issues. Project roles that include the affected group also retain their stored state until a later sync succeeds. A group removed from Jira becomes empty.
+
 ### Project synchronization
 
 1. **Project fetch** — retrieves projects (filtered by project keys if configured)

@@ -65,6 +65,8 @@ Speichern Sie mit **Save** und wählen Sie **Start syncing now** oder **I'll do 
 
 Bereichsrechte werden über `GET /rest/api/space/{spaceKey}/permissions` gelesen. Für Seiten und Blogbeiträge zählen wirksame **Lesebeschränkungen**; eine reine Bearbeitungsbeschränkung nimmt niemandem das Leserecht. Öffentlich lesbare Bereiche werden entsprechend als öffentlich behandelt. Prüfen Sie nach der Einrichtung mit Testkonten, ob die Sichtbarkeit in Novaplan AI der Confluence-Instanz entspricht.
 
+Anhänge und Kommentare einer eingeschränkten Seite übernehmen deren Sichtbarkeit. Ändert ein Audit-Log-Ereignis die Seiteneinschränkung, werden die gespeicherten Anhänge und Kommentare entsprechend angepasst. Eine Einschränkung auf eine noch nicht synchronisierte Gruppe bleibt bestehen; deren Mitglieder erhalten Zugriff, nachdem die Gruppe synchronisiert und die Seite erneut gelesen wurde. Schlagen Abfragen von Bereichsrechten, Gruppenmitgliedschaften oder Seiteneinschränkungen vorübergehend fehl, bleiben die gespeicherten Rechte erhalten. Eine Seite mit nicht lesbaren Einschränkungen wird für diesen Lauf übersprungen; der übrige Bereich wird weiter synchronisiert und das Zeitfenster beim nächsten Lauf erneut gelesen. Der Fehler gibt die Seite nicht für den gesamten Bereich frei.
+
 | Problem | Prüfen Sie |
 | --- | --- |
 | Versionsfehler bei Bereichen | Confluence Data Center 9.1 oder neuer erforderlich. |

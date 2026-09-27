@@ -4,7 +4,7 @@ description: "Dokumente über den Google Drive Konnektor synchronisieren."
 ---
 
 <Note>
-  Google Docs ist derzeit kein eigenständiger Konnektor. In Drive gespeicherte Google-Dokumente werden über den [Google Drive Konnektor](/de/connectors/google-workspace/drive/drive) synchronisiert. Wenn Sie nur Dokumente importieren möchten, verwenden Sie dort den Filter **File Extensions**.
+  Google Docs ist derzeit kein eigenständiger Konnektor. In Drive gespeicherte Google-Dokumente werden über den [Google Drive Konnektor](/de/connectors/google-workspace/drive/drive) synchronisiert. Wenn Sie nur Dokumente importieren möchten, verwenden Sie dort den Filter **Sync Files with Extensions**.
 </Note>
 
 ## Google-Dokumente synchronisieren
@@ -13,16 +13,16 @@ Novaplan übernimmt den Großteil der Einrichtung. Wenn Sie die Auswahl nachvoll
 
 1. Richten Sie den [Google Drive Konnektor](/de/connectors/google-workspace/drive/drive) für Ihre Organisation oder Ihr persönliches Konto ein.
 2. Öffnen Sie nach der Authentifizierung der Drive-Instanz **Configure Records**.
-3. Fügen Sie unter **Sync Filters** den Filter **File Extensions** hinzu.
+3. Fügen Sie unter **Sync Filters** den Filter **Sync Files with Extensions** hinzu.
 
-<img src="/images/connectors/googleWorkspace/common/sheet1.png" alt="Filter File Extensions für Google Drive hinzufügen" />
+<img src="/images/connectors/googleWorkspace/common/sheet1.png" alt="Filter Sync Files with Extensions für Google Drive hinzufügen" />
 
 4. Wählen Sie als Operator **In**.
 5. Wählen Sie die Dokumenttypen `Google Docs`, `docx` und `doc`.
 
 <img src="/images/connectors/googleWorkspace/common/docs2.png" alt="Dokumenttypen im Dateiendungsfilter auswählen" />
 
-Trotz der Bezeichnung **File Extensions** gleicht der Drive-Konnektor native Google Docs über ihren Google-Dateityp und Word-Dateien über die Endung ab. **In** synchronisiert nur die ausgewählten Typen. Ohne diesen Filter synchronisiert Drive alle unterstützten Dateitypen, einschließlich Dokumenten.
+Der Filter **Sync Files with Extensions** gleicht native Google Docs über ihren Google-Dateityp und Word-Dateien über die Endung ab. **In** synchronisiert nur die ausgewählten Typen. Ohne diesen Filter synchronisiert Drive alle unterstützten Dateitypen, einschließlich Dokumenten.
 
 | Dokumenttyp | Filterwert |
 | --- | --- |

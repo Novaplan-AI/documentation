@@ -162,11 +162,13 @@ Slack liefert Nachrichten im Verlauf nach Erstellungszeit. Spätere Änderungen 
 - **Privater Kanal fehlt / `not_in_channel`:** Laden Sie den Bot im privaten Kanal mit `/invite @your-app-name` ein und starten Sie die Synchronisierung erneut.
 - **`missing_scope`:** Ergänzen Sie den fehlenden Scope unter **OAuth & Permissions** und installieren Sie die App erneut. Neue Scopes gelten erst danach.
 - **`bad_redirect_uri` oder `redirect_uri_mismatch`:** Vergleichen Sie die Slack-Weiterleitungsadresse Zeichen für Zeichen mit der Adresse in Novaplan AI.
-- **`invalid_auth` oder `token_revoked`:** Aktualisieren Sie bei der Teamverbindung den Bot-Token. Bei der persönlichen Verbindung autorisieren Sie die App erneut.
+- **`invalid_auth`, `token_revoked` oder `token_expired`:** Bei einer persönlichen Verbindung mit Slack-Anmeldung wird ein abgelaufener Token normalerweise erneuert und die Anfrage einmal wiederholt. Bleibt der Fehler, autorisieren Sie unter **Authorize** erneut. Ein eingefügter Team-Bot- oder persönlicher Nutzer-Token kann vom Konnektor nicht erneuert werden. Prüfen Sie bei Widerruf oder ungültiger Authentifizierung, ob die App neu installiert oder der Token ersetzt wurde.
 - **Nur Bot-Token bei persönlicher Verbindung:** Die persönliche Verbindung braucht einen Nutzer-Token (`xoxp-…`). Prüfen Sie die **User Token Scopes** und autorisieren Sie erneut.
 - **Nutzer fehlen:** Slack-Mitglieder ohne E-Mail-Adresse im Profil können nicht per E-Mail zugeordnet werden. Bots werden für Erwähnungen erfasst, nicht als Nutzer angelegt.
 - **Ältere Nachrichten fehlen:** Prüfen Sie **Sync Messages From** für den ersten Lauf.
 - **Datensätze sichtbar, aber nicht durchsuchbar:** Prüfen Sie **Enable Manual Indexing** und die passenden Indexierungsfilter. Kontrollieren Sie auch, ob der erste Lauf abgeschlossen ist.
+
+**Token-Rotation:** Bei aktivierter Slack-Token-Rotation läuft ein Zugriffstoken nach ungefähr zwölf Stunden ab. Eine persönliche Verbindung über Slack-Anmeldung speichert auch den Refresh-Token und erneuert ihn automatisch. Ein manuell eingefügter Token enthält keinen Refresh-Token; die Synchronisierung endet daher nach dessen Ablauf. Verwenden Sie für eingefügte Tokens eine Slack-App ohne Token-Rotation oder verbinden Sie die persönliche Instanz über Slack-Anmeldung. Bot-Zugriffstokens beginnen mit `xoxb-` oder `xoxe.xoxb-`, Nutzer-Zugriffstokens mit `xoxp-` oder `xoxe.xoxp-`. Ein Token, der nur mit `xoxe-` beginnt, ist ein Refresh-Token und eignet sich nicht zum Einfügen. Verweigert Slack nach einer Neuinstallation oder einem Widerruf die gespeicherte Anmeldung, autorisieren Sie die Verbindung erneut.
 
 ## Häufige Fragen
 

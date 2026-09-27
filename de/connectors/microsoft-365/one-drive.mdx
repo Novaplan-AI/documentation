@@ -92,4 +92,13 @@ Beim ersten Lauf werden die Dateien, Ordner und Berechtigungen im gewählten Ber
 
 Der Konnektor übernimmt Berechtigungsänderungen beim nächsten Lauf. Bei **Scheduled** richtet sich das nach dem gewählten Intervall; bei **Manual** starten Sie die Synchronisierung unter **Workspace Settings → Connectors** selbst.
 
+### Was geschieht bei Lesefehlern in Microsoft 365?
+
+- Kann die Freigabe einer bereits gespeicherten Datei nicht gelesen werden, behält sie zunächst ihre gespeicherten Zugriffe. Beim nächsten Änderungsereignis wird die Freigabe erneut geprüft.
+- Ein vorübergehender Fehler bei einer neuen Datei oder einem geänderten Ordner hält die Änderungsseite dieses Drives bis zu fünf Läufe zurück; Drives anderer Personen laufen weiter. Ein 403 oder 404 hält sie nicht zurück. Wird eine neue Datei ohne lesbare Freigabe übernommen, erhält sie zunächst keinen Zugriff und wird in späteren Läufen erneut geprüft.
+- Wird die Freigabe eines Ordners aufgehoben und lässt sich seine eigene Freigabe lesen, werden betroffene Unterdateien nach erneuter Prüfung angepasst; bei 403 oder 404 sofort. Ist die Ordnerfreigabe selbst nicht lesbar, bleiben die gespeicherten Zugriffe der Dateien bis zu einem späteren erfolgreichen Lauf bestehen.
+- Ein fehlgeschlagener Abruf der Gruppenmitglieder leert die Gruppe nicht. Erkennbare Entfernungen einzelner Mitglieder werden trotzdem übernommen. Unvollständige erste Gruppenläufe und fehlgeschlagene Gruppenlöschungen werden erneut versucht.
+
+Prüfen Sie die Synchronisierungsprotokolle und testen Sie den Entzug vertraulicher Freigaben, wenn Microsoft Graph Fehler meldet.
+
 Wenn Sie Hilfe benötigen, schreiben Sie an [support@novaplan.ai](mailto:support@novaplan.ai).

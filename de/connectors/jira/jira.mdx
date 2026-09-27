@@ -129,6 +129,8 @@ Diese persönliche Verbindung dient der Suche der einrichtenden Person und erset
 
 Ein Lauf synchronisiert zunächst Nutzer und Gruppen, dann Projekte, Projektrollen, Vorgänge, Kommentare und Anhänge. Projekt- und vorgangsbezogene Rechte werden dabei übernommen. Der erste Lauf, ein geänderter Filter oder ein manuell gestarteter vollständiger Lauf führt eine umfassende Synchronisierung aus. Spätere Läufe verwenden einen gespeicherten Fortschrittspunkt und holen geänderte Vorgänge, beispielsweise über JQL mit `updated >= "last_sync_time"`.
 
+Scheitert das Lesen von Gruppenmitgliedern oder einem Projekt-Berechtigungsschema vorübergehend, bleiben die gespeicherten Zugriffe und die zugehörigen Projektrollen erhalten; die Vorgänge des Projekts werden weiter synchronisiert. Ein späterer Lauf versucht die Abfrage erneut. Eine in Jira gelöschte Gruppe wird dagegen wie bisher geleert.
+
 Im zugänglichen Quellcode führt `run_sync` die folgenden Schritte aus:
 
 | Schritt | Interne Methode | Aufgabe |

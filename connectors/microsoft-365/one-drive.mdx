@@ -383,6 +383,17 @@ All subsequent syncs are incremental — only changes since the last run are fet
 
 </Accordion>
 
+<Accordion title="What happens when a Microsoft 365 read fails during synchronization?">
+
+- If sharing cannot be read for an existing file, its stored access remains. The connector retries when that file changes again.
+- Temporary failures reading a new file or changed folder hold that drive's page of changes for up to five runs; other users' drives continue. A 403 or 404 does not hold the page. A new file whose page moves on is saved without access and retried on later runs until sharing can be read.
+- If a folder stops being shared and its own sharing can be read, affected child files are updated after a temporary failure is retried, or immediately for a 403 or 404. If the folder's sharing itself cannot be read, its files retain their stored access and are retried on later runs.
+- A failed group-member read does not empty the group. Member removals are still applied when available. Incomplete initial group syncs and failed group deletions are retried; a temporary group-read failure can hold its page for up to five runs.
+
+Check sync logs and test sensitive sharing removals if Microsoft Graph reports errors.
+
+</Accordion>
+
 <Accordion title="A file's sharing settings changed in OneDrive. When will that reflect in Novaplan AI?">
 
 Permission changes are picked up automatically on the next sync cycle. The connector compares current permissions from the Microsoft Graph API against what's stored and updates accordingly. 

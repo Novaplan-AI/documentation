@@ -142,7 +142,9 @@ Klicken Sie auf **Save** und wählen Sie im Dialog **Start syncing now** oder **
 
 ## Verhalten bei weiteren Läufen
 
-Der erste Lauf erfasst zugängliche Bereiche, Seiten, Blogbeiträge, Kommentare und Anhänge. Seine Dauer hängt vom Umfang des Confluence-Workspaces ab. Spätere Läufe synchronisieren anhand von Zeitstempeln neue oder geänderte Inhalte. Bereichsrechte und Seiteneinschränkungen bestimmen, welche Inhalte Personen in Novaplan AI sehen dürfen.
+Der erste Lauf erfasst zugängliche Bereiche, Seiten, Blogbeiträge, Kommentare und Anhänge. Seine Dauer hängt vom Umfang des Confluence-Workspaces ab. Spätere Läufe synchronisieren anhand von Zeitstempeln neue oder geänderte Inhalte. Der Konnektor liest alle Anhänge einer Seite oder eines Blogbeitrags. Unterbricht ein vorübergehender Fehler die Anhangliste, bleiben bereits gelesene Anhänge erhalten und das Zeitfenster wird beim nächsten Lauf erneut gelesen. Scheitert die erste Anfrage dauerhaft, werden die in den Suchergebnissen enthaltenen Anhänge verwendet.
+
+Bereichsrechte und Seiteneinschränkungen bestimmen, welche Inhalte Personen in Novaplan AI sehen dürfen. Anhänge, Kommentare und Antworten übernehmen die Sichtbarkeit einer eingeschränkten Seite; Änderungen der Seiteneinschränkung gelten auch für die gespeicherten Inhalte. Eine Einschränkung auf eine noch nicht synchronisierte Gruppe bleibt bestehen. Deren Mitglieder erhalten Zugriff, nachdem die Gruppe synchronisiert und die Seite erneut gelesen wurde. Schlagen Abfragen von Bereichsrechten, Gruppenmitgliedschaften oder Seiteneinschränkungen vorübergehend fehl, bleiben die gespeicherten Rechte bestehen und die Abfrage wird bei einem späteren Lauf wiederholt. Ein solcher Fehler macht die Seite nicht für den gesamten Bereich sichtbar.
 
 ## Fehlerbehebung
 
