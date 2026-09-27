@@ -82,4 +82,27 @@ Der Konnektor nutzt Projekt-Berechtigungsschemata, Projektrollen, Anwendungsroll
 | Gelöschte Vorgänge bleiben sichtbar | Audit-Log-Zugriff und aktiviertes Jira-Auditing prüfen. |
 | Keine Suchtreffer | Synchronisierungsstatus, **Project keys**, Datumsfilter und **Index issues** prüfen. |
 
+## Häufige Fragen
+
+<AccordionGroup>
+  <Accordion title="Kann ich eine OAuth-Anwendung für diesen Konnektor verwenden?">
+    Nein. Der Jira-Data-Center-Konnektor verwendet ein **Personal Access Token** oder **Basic Authentication**. Eine OAuth-Anwendung aus der Atlassian Developer Console gehört zum Jira-Cloud-Ablauf und lässt sich hier nicht austauschen.
+  </Accordion>
+  <Accordion title="Soll ich ein Token oder Basic Authentication verwenden?">
+    Bevorzugen Sie ein separat widerrufbares Personal Access Token, wenn Ihre Jira-Instanz es unterstützt (ab Jira Core 8.14). Bei älteren Instanzen oder deaktivierten Tokens verwenden Sie Benutzernamen und Passwort. Beide Verfahren synchronisieren dieselben Inhalte. Sichern und rotieren Sie die gewählten Zugangsdaten gemäß Ihrer Richtlinie.
+  </Accordion>
+  <Accordion title="Wie unterscheidet sich Jira Data Center von Jira Cloud?">
+    Jira Cloud wird von Atlassian betrieben und verwendet für diesen Konnektor OAuth 2.0 oder ein API-Token sowie REST v3. Jira Data Center läuft in Ihrer eigenen Umgebung und verwendet Personal Access Tokens oder Basic Authentication sowie REST v2. Wählen Sie den Konnektor, der zu Ihrer Jira-Instanz passt.
+  </Accordion>
+  <Accordion title="Benötigt der Konnektor ein Jira-Administratorkonto?">
+    Für den produktiven Einsatz wird es dringend empfohlen. Ohne ausreichenden Zugriff auf Anwendungsrollen, Berechtigungsschemata, Benutzer und Audit-Ereignisse können Berechtigungen unvollständig sein oder gelöschte Vorgänge im Index verbleiben. Prüfen Sie die [Voraussetzungen und Rechte](#voraussetzungen-und-rechte) mit Ihrer Jira-Administration.
+  </Accordion>
+  <Accordion title="Kann ich nur bestimmte Projekte synchronisieren?">
+    Ja. Wählen Sie unter **Configure Records → Project keys** mit `In` die gewünschten Projekte oder schließen Sie mit `Not In` Projekte aus. Die Inhaltsfilter verhindern nicht zwangsläufig das Lesen weiterer Benutzer- und Gruppenmetadaten für die Berechtigungszuordnung.
+  </Accordion>
+  <Accordion title="Warum liefert die Suche keine Vorgänge?">
+    Prüfen Sie zuerst unter **Workspace Settings → Connectors**, ob die Synchronisierung abgeschlossen ist und die erwarteten Vorgänge unter **All Records** erscheinen. Prüfen Sie danach die Berechtigungszuordnung des verwendeten Jira-Kontos, die **Project keys**- und Datumsfilter sowie die Option **Index issues**. Ein Konto ohne ausreichende Administrationsrechte kann sichtbare Ergebnisse zu stark einschränken.
+  </Accordion>
+</AccordionGroup>
+
 Bei Fragen zur Berechtigungszuordnung oder zu fehlenden Vorgängen wenden Sie sich an [Novaplan Support](/de/contact-us).
