@@ -163,7 +163,7 @@ Admin consent is required for application permissions. Only Global Administrator
 
 ### Step 6: Configure Connector in Novaplan AI
 
-- Navigate to Settings → Connectors in Novaplan AI
+- Navigate to Workspace Settings → Connectors in Novaplan AI
 - Find the OneDrive connector and click "Configure"
 - Enter the following details:
   - **Application (Client) ID:** From Step 2
@@ -356,7 +356,7 @@ There are three common causes:
    - **Fix:** Verify sync filters in the connector settings and ensure indexing has completed. Check that the data matches your search query criteria.
 
 3. **Data not yet indexed** - The connector is still syncing or hasn't completed the initial indexing process.
-   - **Fix:** Go to **Settings > Connectors**, check the sync status, and wait for indexing to complete.
+   - **Fix:** Go to **Workspace Settings → Connectors**, check the sync status, and wait for indexing to complete.
 
 </Accordion>
 
@@ -367,7 +367,7 @@ Azure AD client secrets expire based on the duration set during creation. Once e
 1. Go to your app registration in the [Azure Portal](https://portal.azure.com)
 2. Navigate to **Certificates & secrets** → **New client secret**
 3. Set a new expiry and copy the secret **Value** immediately (it won't be shown again).
-4. Go to **Settings > Connectors** in Novaplan AI, open the OneDrive connector, and update the **Client Secret** field with the new value
+4. Go to **Workspace Settings → Connectors** in Novaplan AI, open the OneDrive connector, and update the **Client Secret** field with the new value
 
 <Note>
 To avoid disruption, set a calendar reminder before your secret's expiry date. The recommended duration is 24 months.
@@ -387,7 +387,7 @@ All subsequent syncs are incremental — only changes since the last run are fet
 
 Permission changes are picked up automatically on the next sync cycle. The connector compares current permissions from the Microsoft Graph API against what's stored and updates accordingly. 
 
-If your sync is set to **Scheduled**, the change will reflect within the configured sync interval. If set to **Manual**, trigger a sync from **Settings > Connectors** to pull the latest permissions immediately.
+If your sync is set to **Scheduled**, the change will reflect within the configured sync interval. If set to **Manual**, trigger a sync from **Workspace Settings → Connectors** to pull the latest permissions immediately.
 
 </Accordion>
 
