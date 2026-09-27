@@ -22,7 +22,7 @@ Before creating an agent, ensure you have:
 3. **Knowledge Sources** (optional) - Connectors or collections for document search
 
 <Warning>
-  Toolsets must be authenticated before they can be added to an agent. If you plan to use Jira, Slack, or other external toolsets, configure them first in **Settings > Toolsets**.
+  Toolsets must be authenticated before they can be added to an agent. An administrator configures shared toolsets under **Workspace Settings → Actions**; each user connects their account under **Your actions**. If you plan to use Jira, Slack, or another external toolset, complete the relevant setup first.
 </Warning>
 
 ---
@@ -250,14 +250,13 @@ The **Internal Retrieval** tool is a built-in utility that searches across all y
 <Accordion title="Toolset not appearing in sidebar">
 
 **Possible causes:**
-- The toolset is not configured in Settings > Toolsets
+- The shared toolset is not configured under **Workspace Settings → Actions**
 - The toolset is not authenticated (OAuth flow not completed)
 
 **Solution:**
-1. Go to **Settings > Toolsets**
-2. Find the toolset and click "Configure"
-3. Complete the authentication flow
-4. Return to the Agent Builder - the toolset should now appear
+1. Ask a workspace administrator to check the toolset under **Workspace Settings → Actions** and configure it if needed.
+2. Open **Your actions**, find the toolset, and complete your own authentication flow.
+3. Return to the Agent Builder; the toolset should now appear.
 
 </Accordion>
 
@@ -269,7 +268,7 @@ The **Internal Retrieval** tool is a built-in utility that searches across all y
 - System prompt causing issues
 
 **Solution:**
-1. Check that your LLM provider is properly configured with reasoning enabled in **Settings > AI Models**
+1. Check that your LLM provider is properly configured with reasoning enabled under **Workspace Settings → AI Models**.
 2. Re-authenticate any toolsets that may have expired tokens
 3. Simplify the system prompt and test again
 
@@ -283,7 +282,7 @@ The **Internal Retrieval** tool is a built-in utility that searches across all y
 - Indexing still in progress
 
 **Solution:**
-1. Check **Connector Settings** to verify connectors are synced
+1. Check **Workspace Settings → Connectors** (or **Your Connectors** for a personal source) to verify that connectors are synced.
 2. Verify collections have content
 3. Wait for indexing to complete if recently added
 

@@ -23,7 +23,7 @@ Bevor Sie einen Agenten erstellen, benötigen Sie:
 3. **Wissensquellen (optional):** Konnektoren oder Dokumentensammlungen für die Suche.
 
 <Warning>
-  Toolsets müssen authentifiziert sein, bevor Sie sie einem Agenten hinzufügen können. Wenn Sie Jira, Slack oder andere externe Toolsets verwenden möchten, richten Sie diese zuerst ein. Öffnen Sie dazu **Settings > Toolsets**. Weitere Einzelheiten finden Sie in der [Toolset-Referenz](/de/toolsets/overview).
+  Toolsets müssen authentifiziert sein, bevor Sie sie einem Agenten hinzufügen können. Eine Administration richtet gemeinsame Toolsets unter **Workspace Settings → Actions** ein; jede Person verbindet ihr Konto unter **Your actions**. Schließen Sie die Einrichtung für Jira, Slack oder andere externe Toolsets zuerst ab. Weitere Einzelheiten finden Sie in der [Toolset-Referenz](/de/toolsets/overview).
 </Warning>
 
 Die englischen Bezeichnungen in dieser Anleitung entsprechen den Beschriftungen in den abgebildeten Oberflächen.
@@ -201,22 +201,21 @@ Das integrierte Werkzeug **Internal Retrieval** durchsucht Ihre indexierten Inha
   <Accordion title="Ein Toolset fehlt in der Seitenleiste">
     **Mögliche Ursachen:** Das Toolset ist noch nicht eingerichtet oder die Authentifizierung wurde nicht abgeschlossen.
 
-    1. Öffnen Sie die Toolset-Einstellungen unter **Settings > Toolsets**.
-    2. Suchen Sie das Toolset und klicken Sie auf **Configure**.
-    3. Schließen Sie die Authentifizierung ab.
-    4. Kehren Sie zum Agent Builder zurück. Das Toolset sollte jetzt erscheinen.
+    1. Bitten Sie eine Workspace-Administration, das Toolset unter **Workspace Settings → Actions** zu prüfen und bei Bedarf einzurichten.
+    2. Öffnen Sie **Your actions**, suchen Sie das Toolset und schließen Sie Ihre persönliche Authentifizierung ab.
+    3. Kehren Sie zum Agent Builder zurück. Das Toolset sollte jetzt erscheinen.
   </Accordion>
   <Accordion title="Der Agent antwortet nicht oder die Anfrage läuft ab">
     **Mögliche Ursachen:** Das Reasoning-Modell ist nicht korrekt konfiguriert, Reasoning ist deaktiviert, die Toolset-Authentifizierung ist abgelaufen oder der System-Prompt verursacht Probleme.
 
-    1. Prüfen Sie unter **Settings > AI Models**, ob Ihr LLM-Anbieter korrekt eingerichtet und Reasoning aktiviert ist.
+    1. Prüfen Sie unter **Workspace Settings → AI Models**, ob Ihr LLM-Anbieter korrekt eingerichtet und Reasoning aktiviert ist.
     2. Authentifizieren Sie Toolsets mit abgelaufenen Zugangstokens erneut.
     3. Vereinfachen Sie den System-Prompt und testen Sie erneut.
   </Accordion>
   <Accordion title="Die Wissenssuche liefert keine Ergebnisse">
     **Mögliche Ursachen:** Die verbundenen Quellen enthalten noch keine indexierten Inhalte, Filter sind zu eng gesetzt oder die Indexierung läuft noch.
 
-    1. Prüfen Sie unter **Connector Settings**, ob die Konnektoren synchronisiert sind.
+    1. Prüfen Sie unter **Workspace Settings → Connectors** oder bei einer persönlichen Quelle unter **Your Connectors**, ob die Konnektoren synchronisiert sind.
     2. Prüfen Sie, ob die Sammlungen Inhalte enthalten.
     3. Warten Sie bei neu hinzugefügten Quellen, bis die Indexierung abgeschlossen ist.
   </Accordion>
