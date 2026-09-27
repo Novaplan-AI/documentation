@@ -7,12 +7,29 @@ description: "SharePoint-Websites, Seiten und Dateien über Microsoft Graph mit 
 
 Mit dem SharePoint-Toolset können Agenten SharePoint-Online-Websites, Seiten, Dokumentbibliotheken und OneNote-Inhalte über Microsoft Graph lesen und bearbeiten. Aktionen laufen mit **delegierten Berechtigungen** der angemeldeten Microsoft-Person. Der [SharePoint-Konnektor](/de/connectors/microsoft-365/sharepoint) synchronisiert Inhalte dagegen für die Novaplan-AI-Suche.
 
-| Bereich | Verfügbare Tools |
-| --- | --- |
-| Websites | `get_sites`, `get_site` |
-| Seiten | `get_pages`, `get_page`, `search_pages`, `create_page`, `update_page` |
-| Dateien und Drives | `list_drives`, `list_files`, `search_files`, `get_file_metadata`, `get_file_content`, `create_folder`, `create_word_document`, `move_item` |
-| OneNote | `find_notebook`, `list_notebook_pages`, `get_notebook_page_content`, `create_onenote_notebook` |
+### Verfügbare Werkzeuge
+
+| Bereich | Werkzeug | Funktion |
+| --- | --- | --- |
+| Websites | `get_sites` | Für die angemeldete Person zugängliche SharePoint-Websites auflisten. |
+| Websites | `get_site` | Angaben zu einer Website anhand ihrer ID oder ihres Pfads abrufen. |
+| Seiten | `get_pages` | Seiten einer Website auflisten. |
+| Seiten | `get_page` | Inhalt einer bestimmten Seite lesen. |
+| Seiten | `search_pages` | Seiten einer Website nach einem Begriff durchsuchen. |
+| Seiten | `create_page` | Eine Seite mit Titel und Inhalt erstellen. |
+| Seiten | `update_page` | Titel oder Inhalt einer bestehenden Seite ändern. |
+| Dateien und Drives | `list_drives` | Dokumentbibliotheken einer Website auflisten. |
+| Dateien und Drives | `list_files` | Dateien und Ordner in einer Bibliothek oder einem Ordner auflisten. |
+| Dateien und Drives | `search_files` | Dateien nach einem Begriff suchen. |
+| Dateien und Drives | `get_file_metadata` | Metadaten wie Name, Größe, Zeitstempel und Eigentümer abrufen. |
+| Dateien und Drives | `get_file_content` | Dateiinhalt lesen. |
+| Dateien und Drives | `create_folder` | Einen Ordner in einer Dokumentbibliothek erstellen. |
+| Dateien und Drives | `create_word_document` | Ein Word-Dokument (`.docx`) mit dem angegebenen Inhalt erstellen. |
+| Dateien und Drives | `move_item` | Eine Datei oder einen Ordner verschieben. |
+| OneNote | `find_notebook` | Ein Notizbuch anhand seines Namens suchen. |
+| OneNote | `list_notebook_pages` | Seiten eines Notizbuchs auflisten. |
+| OneNote | `get_notebook_page_content` | Inhalt einer OneNote-Seite lesen. |
+| OneNote | `create_onenote_notebook` | Ein neues Notizbuch erstellen. |
 
 <Warning>
   Das Toolset kann Seiten und Dateien erstellen oder ändern. Prüfen Sie Zielwebsite, Dokumentbibliothek und Inhalt vor schreibenden Agentenaktionen. Delegierte Microsoft-Graph-Rechte können tenantweit formuliert sein, werden aber zusätzlich durch die Rechte der angemeldeten Person begrenzt.
@@ -20,15 +37,15 @@ Mit dem SharePoint-Toolset können Agenten SharePoint-Online-Websites, Seiten, D
 
 ## Microsoft-Entra-Anwendung vorbereiten
 
-1. Öffnen Sie [Azure Portal](https://portal.azure.com) und wählen Sie **Microsoft Entra ID → App registrations → New registration**.
-2. Vergeben Sie einen Namen und wählen Sie die passenden **Supported account types**.
+1. Öffnen Sie das [Azure-Portal](https://portal.azure.com). Wählen Sie auf der Startseite **App registrations** unter **Azure services** oder öffnen Sie **Microsoft Entra ID → App registrations**. Klicken Sie auf **+ New registration**.
+2. Vergeben Sie einen Namen, beispielsweise `Novaplan AI SharePoint Toolset`, und wählen Sie die zu Ihrer Organisation passenden **Supported account types**. Eine organisationsübergreifende Auswahl ist nur sinnvoll, wenn der Zugriff tatsächlich für mehrere Mandanten vorgesehen ist.
 3. Kopieren Sie aus dem Novaplan-Dialog unter **Workspace Settings → Actions → SharePoint → Configure** die **Redirect URI**. Tragen Sie genau diesen Wert in Entra als **Web**-Redirect-URI ein.
-4. Kopieren Sie **Application (client) ID** und **Directory (tenant) ID**. Verwenden Sie nicht die **Object ID** als Client ID.
-5. Erstellen Sie unter **Certificates & secrets** einen **Client secret** mit geeigneter Laufzeit und kopieren Sie dessen Wert sofort. Er ist später nicht erneut abrufbar.
+4. Klicken Sie auf **Register**. Kopieren Sie auf der **Overview**-Seite **Application (client) ID** und **Directory (tenant) ID**. Verwenden Sie nicht die **Object ID** als Client ID.
+5. Öffnen Sie **Certificates & secrets → Client secrets → + New client secret**. Vergeben Sie eine Beschreibung, wählen Sie eine geeignete Laufzeit und klicken Sie auf **Add**. Kopieren Sie den **Wert** des Secrets sofort und übergeben Sie ihn nur über den vereinbarten sicheren Weg an Novaplan; er ist später nicht erneut abrufbar. Falls er verloren geht, erstellen Sie ein neues Secret.
 
 ## Microsoft-Graph-Rechte und Zustimmung
 
-Die englische Quellanleitung nennt unter **Delegated permissions** folgende Rechte:
+Öffnen Sie in der Anwendungsregistrierung **API permissions → + Add a permission → Microsoft Graph → Delegated permissions**. Die englische Quellanleitung nennt folgende Rechte:
 
 | Berechtigung | Verwendung |
 | --- | --- |
@@ -37,15 +54,41 @@ Die englische Quellanleitung nennt unter **Delegated permissions** folgende Rech
 | `Notes.ReadWrite.All` | OneNote-Inhalte lesen und bearbeiten. |
 | `User.Read`, `offline_access` | Benutzerprofil und erneuerbare Anmeldung. |
 
-Diese `*.All`-Scopes benötigen laut Quellanleitung eine **Grant admin consent**-Freigabe auf Tenant-Ebene. Lassen Sie Ihre Microsoft-Administration die beantragten Rechte und den Einsatz des Agenten prüfen. Eine persönliche OAuth-Anmeldung ist anschließend weiterhin erforderlich.
+Die `*.All`-Scopes benötigen laut Quellanleitung eine **Grant admin consent**-Freigabe auf Tenant-Ebene. Lassen Sie Ihre Microsoft-Administration die beantragten Rechte und den Einsatz des Agenten prüfen. Klicken Sie nach der Freigabe auf **Grant admin consent for** Ihre Organisation und kontrollieren Sie den Zustimmungsstatus der Rechte. Das Toolset verwendet delegierte Berechtigungen: Auch nach der administrativen Zustimmung ist eine persönliche OAuth-Anmeldung erforderlich, und die Aktionen laufen mit den Rechten dieser Person.
 
 ## In Novaplan AI verbinden
 
 1. Öffnen Sie **Workspace Settings → Actions → SharePoint** und hinterlegen Sie **Client ID**, **Client Secret** und **Tenant ID**.
 2. Vergleichen Sie die angezeigte **Redirect URI** Zeichen für Zeichen mit dem Entra-Eintrag und speichern Sie.
-3. Administrierende Personen können die Instanz unter **Actions** authentifizieren; Benutzerinnen und Benutzer melden sich für ihre Nutzung unter **Your actions** mit **Authenticate with OAuth** an.
-4. Fügen Sie das authentifizierte SharePoint-Toolset im **Agent Builder** unter **Tools** hinzu.
+3. Administrierende Personen können die gemeinsame Instanz unter **Workspace Settings → Actions** authentifizieren; Benutzerinnen und Benutzer melden sich für ihre persönliche Instanz unter **Your actions** in der Seitenleiste an. Klicken Sie auf der SharePoint-Kachel auf **Authenticate with OAuth**, melden Sie sich im Microsoft-Fenster an und bestätigen Sie die angeforderten Rechte. Prüfen Sie danach, ob die Kachel **Authenticated** anzeigt.
+4. Öffnen Sie auf **Home** den Agent Builder über **+** neben **Agents**. Geben Sie dem Agenten einen Namen, ziehen Sie das SharePoint-Toolset auf die Arbeitsfläche und verbinden Sie es mit **Agent Core** sowie den vorgesehenen Modell- und Ein-/Ausgabeknoten. Erstellen Sie den Agenten erst nach Prüfung seiner Werkzeuge und Zugriffsrechte.
 
 Sie können einen Agenten beispielsweise nach Ihren Websites, einer Datei in einer Dokumentbibliothek oder einer bestimmten Seite fragen. Bei `create_page`, `update_page`, `create_word_document` und `move_item` sollten Ziel und Inhalt eindeutig sein und vor Ausführung geprüft werden.
 
 Wenn OAuth oder eine Aktion scheitert, prüfen Sie **Redirect URI**, Secret-Ablauf, Admin-Zustimmung, delegierte Scopes und persönliche SharePoint-Berechtigungen. Bei Fragen wenden Sie sich an [Novaplan Support](/de/contact-us).
+
+## Häufige Fragen
+
+### Worin unterscheiden sich SharePoint-Konnektor und SharePoint-Toolset?
+
+| | SharePoint-Konnektor | SharePoint-Toolset |
+| --- | --- | --- |
+| Zweck | Websites, Seiten und Dateien für die Suche synchronisieren und indexieren. | Agenten erlauben, SharePoint über Microsoft Graph zu lesen und zu bearbeiten. |
+| Berechtigung | Anwendungsberechtigungen mit administrativer Zustimmung. | Delegierte Berechtigungen der angemeldeten Person. |
+| Datenfluss | Inhalte werden für die Suche nach Novaplan AI übernommen. | Aktionen lesen oder ändern Inhalte direkt in SharePoint. |
+
+Nutzen Sie den Konnektor, um bereits indexierte Inhalte zu durchsuchen. Nutzen Sie das Toolset, wenn ein Agent beispielsweise eine Seite erstellen, ein Dokument verschieben oder ein OneNote-Notizbuch anlegen soll. Klären Sie Schreibrechte gesondert.
+
+### Warum ist trotz persönlicher Anmeldung eine Admin-Zustimmung nötig?
+
+Die oben genannten Microsoft-Graph-Scopes mit `*.All` sind weit gefasst. Die Microsoft-Administration muss sie für den Mandanten freigeben. Danach meldet sich jede Person weiterhin selbst über OAuth an; die delegierten Aktionen bleiben auf ihre eigenen SharePoint-Berechtigungen begrenzt.
+
+## Beispiele für Agentenanfragen
+
+- „Liste die SharePoint-Websites auf, auf die ich Zugriff habe.“
+- „Suche in SharePoint nach der Budgetdatei für das vierte Quartal.“
+- „Zeige mir den Inhalt der Onboarding-Seite auf der HR-Website.“
+- „Erstelle auf der Engineering-Website eine Seite mit dem Titel ‚Release Notes‘ und folgendem Inhalt: …“
+- „Erstelle ein OneNote-Notizbuch namens ‚Sprintplanung‘.“
+
+Bei einer schreibenden Anfrage sollten Sie den Zielort und den vorgeschlagenen Inhalt prüfen, bevor der Agent die Aktion ausführt.
