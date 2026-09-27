@@ -18,6 +18,10 @@ Novaplan richtet Ihren Workspace weitgehend für Sie ein. Die Zoom-App und ihre 
 | **AI Companion Transcripts** | Zeitgestempelte Transkripte, sofern für das Meeting verfügbar |
 | **Permissions** | Host als **Owner**; alternative Hosts, Teilnehmende und Eingeladene mit **Read** |
 
+<Note>
+  Der Konnektor verwendet die Meeting-Report-API. Laut [Zooms API-Referenz](https://developers.zoom.us/docs/api/meetings/) erscheinen in diesem Report nur Meetings mit mindestens zwei unterschiedlichen Teilnehmenden. Ein Meeting mit nur einer Person kann daher selbst innerhalb des Synchronisierungszeitraums fehlen. Transkripttext ist nur verfügbar, wenn Zoom ein AI-Companion-Transkript bereitstellt.
+</Note>
+
 ## Voraussetzung: Admin-managed App
 
 Der Konnektor benötigt eine **Admin-managed** Zoom-App und eine Autorisierung durch eine Zoom-Administration. Eine Freigabe deckt das Zoom-Konto ab. Das Zoom-Toolset verwendet dagegen eine **User-managed** App und wird pro Person autorisiert. Die Wahl zwischen beiden App-Typen kann nach der Erstellung nicht geändert werden.
@@ -78,12 +82,27 @@ Pro Meeting werden Details, Teilnehmende und gegebenenfalls ein Link zur Cloud-A
 
 Die Report API begrenzt die Anfragerate. Bei vielen Meetings kann der erste Lauf deshalb länger dauern. Der Konnektor verarbeitet Anfragen begrenzt parallel und wartet bei Drosselung, bevor er fortsetzt.
 
+### Technischer Ablauf der zugänglichen Quellversion
+
+Diese Endpunkte und Fortschrittspunkte beschreiben den zugänglichen Konnektorquellcode. Prüfen Sie sie gegen die betriebene Enterprise-Version; sie sind kein öffentlich zugesicherter Novaplan-API-Vertrag.
+
+| Schritt | Quellcode-Verhalten |
+| --- | --- |
+| Aktive Nutzer | `GET /v2/users?status=active` liefert die Konten für den Lauf. |
+| Meeting-Verlauf je Nutzer | `GET /v2/report/users/{userId}/meetings` liefert Meetings in Abschnitten von höchstens 30 Tagen. Der Fortschritt wird je Nutzer unter `zoom_report_last_sync/{user_id}` gespeichert. |
+| Meetingdetails | `GET /v2/meetings/{meetingId}` ergänzt die Reportdaten. |
+| Aufzeichnungen | `GET /v2/meetings/{meetingId}/recordings` liefert, falls vorhanden, einen Freigabelink; Mediendateien werden nicht importiert. |
+| Teilnehmende | `GET /v2/report/meetings/{meetingId}/participants` liefert die Teilnahmeinformationen und gehört zur Heavy-Kategorie der Zoom-API-Limits. |
+| Transkript | Der Konnektor ruft verfügbare AI-Companion-Transkripte beim Öffnen eines Datensatzes von Zoom ab, statt alle Transkripte vorab zu speichern. |
+
+Der erste Lauf beginnt frühestens beim späteren Datum aus Nutzererstellung und **heute minus 180 Tage**. Weitere Läufe beginnen einen Tag vor dem je Nutzer gespeicherten Fortschrittspunkt, um Übergänge erneut zu prüfen. Die tatsächliche Laufzeit hängt von der Anzahl der Meetings, Zooms aktuellen [API-Limits](https://developers.zoom.us/docs/api/rest/rate-limits/) und der Indexierung ab.
+
 ## Fehlerbehebung
 
 - **Zugangsdaten ungültig:** Vergleichen Sie **Client ID** und **Client Secret** ohne zusätzliche Leerzeichen und prüfen Sie den App-Status im Zoom Marketplace.
 - **Weiterleitung schlägt fehl:** Vergleichen Sie die **Redirect URL** in Novaplan AI mit **OAuth Redirect URL** und **OAuth Allow List** in Zoom.
 - **Scopes fehlen:** Prüfen Sie den App-Typ **Admin-managed** und alle sechs Admin-Scopes. Nach Änderungen an Secret, Scopes oder Redirect URL müssen Sie in Novaplan AI erneut autorisieren.
-- **Keine Meetings:** Prüfen Sie, ob die autorisierende Person Zoom-Administrator ist und Zugriff auf die Nutzer des Kontos hat. Die Report APIs können einen Zoom-Tarif ab Pro erfordern. Der erste Lauf berücksichtigt nur die letzten 180 Tage.
+- **Keine Meetings:** Prüfen Sie, ob die autorisierende Person Zoom-Administrator ist und Zugriff auf die Nutzer des Kontos hat. Die Report APIs können einen Zoom-Tarif ab Pro erfordern. Der erste Lauf berücksichtigt nur die letzten 180 Tage; der Meeting-Report schließt außerdem Meetings mit weniger als zwei unterschiedlichen Teilnehmenden aus.
 - **Transkripte fehlen:** Nur Meetings mit verfügbarem AI-Companion-Transkript können entsprechende Inhalte liefern. Prüfen Sie `cloud_recording:read:meeting_transcript:admin`. Zoom-Fehler `3322` bedeutet laut Quellleitfaden, dass kein Transkript vorhanden ist.
 - **Synchronisierung dauert lange:** Bei vielen Meetings und Teilnehmenden können Zoom-API-Limits den ersten Lauf verlängern. Prüfen Sie den Fortschritt, bevor Sie die Verbindung neu starten.
 

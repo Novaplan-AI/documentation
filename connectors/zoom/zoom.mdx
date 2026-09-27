@@ -28,7 +28,7 @@ icon: "/logo/zoom.png"
 
 ## Overview
 
-Zoom is the video conferencing and online meeting platform used by teams for calls, webinars, and collaborative sessions. The Zoom connector brings your organization's meeting history — who attended, recording links, and AI Companion transcripts — into Novaplan AI, so everything said in a meeting is searchable alongside your other knowledge sources.
+Zoom is the video conferencing and online meeting platform used by teams for calls, webinars, and collaborative sessions. The Zoom connector brings supported meeting history — who attended, recording links, and available AI Companion transcripts — into Novaplan AI for search alongside your other knowledge sources.
 
 ### What Gets Synced
 
@@ -40,6 +40,10 @@ Zoom is the video conferencing and online meeting platform used by teams for cal
 | **Cloud Recording Link** | Zoom share URL to the recording (when available) — recording video/audio files are **not** downloaded |
 | **AI Companion Transcripts** | Timestamped transcripts from Zoom AI Companion |
 | **Permissions** | Host = **Owner**; alt-hosts, participants, invitees = **Read** |
+
+<Note>
+  The connector uses Zoom's meeting-report endpoint. [Zoom's API reference](https://developers.zoom.us/docs/api/meetings/) says this report includes meetings with at least two unique participants. A meeting with only one participant may therefore be absent even when it is within the 180-day sync window. Transcript text is available only when Zoom provides an AI Companion transcript.
+</Note>
 
 ---
 
@@ -310,6 +314,7 @@ The Zoom connector syncs the following from your Zoom account:
 **No meetings appear after sync:**
 - Confirm the authorizing admin can see the account's users (e.g., via Zoom Admin → User Management)
 - If users show up but no meetings, check that **Report API** access is enabled for your plan — Report APIs require Pro or higher
+- The meeting-report endpoint excludes meetings with fewer than two unique participants; check a meeting that had at least two participants before diagnosing the connection.
 - Initial sync only covers the **last 180 days**; older meetings are intentionally excluded
 
 **Transcripts missing:**
@@ -318,7 +323,7 @@ The Zoom connector syncs the following from your Zoom account:
 - If transcripts fail with Zoom error `3322`, the meeting simply has no transcript — this is expected, not an error
 
 **Sync stuck or slow:**
-- The Report API `GET /v2/report/meetings/{id}/participants` is a Heavy-rate endpoint (~10–20 req/s). For accounts with thousands of meetings, the initial 180-day backfill can take an hour or more.
+- The Report API `GET /v2/report/meetings/{id}/participants` is a Heavy-rate endpoint. Actual limits and first-sync duration depend on the Zoom account, workload, and current API policy.
 - The connector processes meetings with a concurrency cap to stay under rate limits — this is intentional.
 
 <Warning>
@@ -330,6 +335,8 @@ The Zoom connector syncs the following from your Zoom account:
 </AccordionGroup>
 
 ## Data Sync Behavior
+
+The endpoint and checkpoint details below describe the accessible connector source. Confirm them against the deployed Enterprise version before using them as an operational contract.
 
 <AccordionGroup>
 
@@ -359,7 +366,7 @@ Every sync runs in this order:
 
 ### Rate-limit awareness
 
-- `GET /v2/report/meetings/{id}/participants` is Zoom's rate-limit bottleneck (Heavy-rate tier, ~10–20 req/s).
+- `GET /v2/report/meetings/{id}/participants` is a Heavy-rate endpoint; check [Zoom's current API limits](https://developers.zoom.us/docs/api/rest/rate-limits/) for the connected account.
 - The connector processes meetings with a concurrency cap to stay safely under the limit.
 - Throttled responses trigger exponential backoff; long-running syncs will continue across scheduled intervals.
 
