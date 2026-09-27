@@ -374,7 +374,7 @@ Every sync runs in this order:
 
 - Transcripts are **not pre-cached** — they are fetched live when the record is opened in Novaplan AI.
 - Zoom error `3322` means the meeting has no transcript (expected for meetings without AI Companion).
-- Zoom errors `3001`/`3301` mean the meeting/transcript expired — silently skipped.
+- Zoom error `3001` means the meeting was not found or has expired. Error `3301` means no recording exists for that meeting ([Zoom API reference](https://developers.zoom.us/docs/api/meetings/)). The connector does not return transcript text for either response; check the meeting and its recording in Zoom before treating this as an authorization problem.
 
 </Accordion>
 
