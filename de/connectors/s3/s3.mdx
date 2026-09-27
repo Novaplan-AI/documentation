@@ -81,7 +81,7 @@ Beim ersten Lauf liest der Konnektor Bucket- und Objektlisten vollständig. Er e
 
 ## Dateitypen und besondere Speicherklassen
 
-Dokumente, Textdateien und Quellcode können inhaltlich indexiert werden. Bei Bildern hängt die Inhaltsauswertung von den im Workspace aktivierten Verarbeitungsfunktionen ab. Videos, Audio, Archive, unbekannte Binärdateien und passwortgeschützte Dateien sind nicht zuverlässig inhaltlich durchsuchbar und können als **Unsupported** erscheinen.
+Dokumente, Textdateien und Quellcode können inhaltlich indexiert werden. Dazu zählen laut aktueller Upstream-Referenz EPUB-E-Books ohne Kopierschutz (DRM); ihr Text ist durchsuchbar, eine Vorschau ist nicht verfügbar. Bei Bildern hängt die Inhaltsauswertung von den im Workspace aktivierten Verarbeitungsfunktionen ab. Videos, Audio, Archive, unbekannte Binärdateien und passwortgeschützte Dateien sind nicht zuverlässig inhaltlich durchsuchbar und können als **Unsupported** erscheinen.
 
 Die Quellanleitung nennt Standard, Standard-IA, One Zone-IA und Intelligent-Tiering als unterstützte Speicherklassen. Glacier und Glacier Deep Archive benötigen vor dem Lesen einen Restore; **Requester Pays** und kundenseitig bereitgestellte Verschlüsselungsschlüssel (**SSE-C**) werden dort nicht unterstützt. Für **SSE-KMS** braucht der IAM-Zugang zusätzlich passende KMS-Rechte. Lassen Sie diese Punkte vor einer produktiven Verbindung prüfen.
 

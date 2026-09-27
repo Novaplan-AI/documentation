@@ -7,7 +7,7 @@ description: "Dateien und Ordner Ihres persönlichen Nextcloud-Kontos synchronis
 
 Der Nextcloud-Konnektor verbindet ein **persönliches** Nextcloud-Konto mit Novaplan AI. Jede Person richtet ihre eigene Verbindung ein. Dateien und Ordner werden über die Nextcloud-**WebDAV-API** gelesen; ein eigens erzeugtes **App Password** dient zur Anmeldung.
 
-Der erste Lauf liest die Ordnerstruktur vollständig. Danach nutzt der Konnektor die Nextcloud-**Activity API** und einen gespeicherten Änderungsstand, um neue, geänderte, gelöschte oder wiederhergestellte Dateien zu erkennen. Eine Echtzeit- oder Webhook-Synchronisierung beschreibt die Quellanleitung nicht; verwenden Sie geplante oder manuelle Läufe.
+Der erste Lauf liest die Ordnerstruktur vollständig. Danach nutzt der Konnektor die Nextcloud-**Activity API** und einen gespeicherten Änderungsstand, um neue, geänderte, gelöschte oder wiederhergestellte Dateien zu erkennen. Wenn der erste Lauf das Laufwerk oder einzelne Dateien nicht vollständig lesen und speichern kann, wird kein Änderungsstand gespeichert; der nächste Lauf beginnt erneut vollständig. Bereits übernommene Dateien bleiben dabei erhalten. Eine Echtzeit- oder Webhook-Synchronisierung beschreibt die Quellanleitung nicht; verwenden Sie geplante oder manuelle Läufe.
 
 ## App Password in Nextcloud erstellen
 
@@ -24,7 +24,7 @@ Halten Sie außerdem die **Base URL** Ihrer Instanz, etwa `https://cloud.example
 1. Öffnen Sie in Novaplan AI **Workspace Settings** und dort unter **Personal** den Bereich **Your Connectors**.
 2. Suchen Sie **Nextcloud** und wählen Sie **Setup**.
 3. Geben Sie auf **Authenticate** einen **Instance Name**, die **Base URL** ohne abschließenden Schrägstrich, Ihren **Username** und das **App Password / Token** ein.
-4. Wählen Sie **Save**. Novaplan AI prüft die Verbindung vor dem Speichern.
+4. Wählen Sie **Save**. Beim aktuellen Upstream-Konnektor werden die Daten dabei nur gespeichert; Nextcloud wird erst beim Aktivieren der Verbindung kontaktiert und das App Password dann geprüft. Bei einer Ablehnung erstellen Sie ein neues App Password, schalten die Verbindung aus, ersetzen das Passwort in den Einstellungen, speichern und aktivieren sie erneut. Prüfen Sie den Ablauf im bereitgestellten Enterprise Workspace.
 
 <Warning>
   Laut Quellanleitung muss die E-Mail-Adresse Ihres Nextcloud-Kontos mit der E-Mail-Adresse Ihres Novaplan-AI-Kontos übereinstimmen. Andernfalls kann die Berechtigungszuordnung fehlschlagen und synchronisierte Dateien erscheinen nicht in der Suche.
@@ -54,7 +54,7 @@ Dateiinhalte werden bei Bedarf über authentifizierte WebDAV-Anfragen abgerufen.
 
 `run_sync` prüft den gespeicherten Activity-Cursor und wählt dann `_run_full_sync_internal` oder `_run_incremental_sync_internal`. Der vollständige Lauf erfasst über WebDAV die persönliche Ordnerstruktur, verarbeitet Einträge mit `_process_nextcloud_items_generator` in Batches und speichert anschließend die letzte Activity-ID. Fehlt bei einem späteren Lauf ein verwendbarer Cursor, beginnt die Verbindung erneut mit einem vollständigen Lauf.
 
-Der inkrementelle Lauf fragt die Activity API seit dieser ID ab. Ereignisse wie `file_created`, `file_changed`, `file_renamed` und `file_restored` führen zum erneuten Abruf der betroffenen Einträge; `file_deleted` und `file_trashed` lösen die Entfernung über `_process_deletions` und `on_record_deleted` aus. Danach speichert die Verbindung die höchste verarbeitete Activity-ID. `stream_record` liefert Dateiinhalte bei Bedarf über den authentifizierten WebDAV-Zugang. Die Methodennamen sind interne Implementierungsdetails und keine öffentliche Novaplan-AI-API.
+Der inkrementelle Lauf fragt die Activity API seit dieser ID ab. Ereignisse wie `file_created`, `file_changed`, `file_renamed` und `file_restored` führen zum erneuten Abruf der betroffenen Einträge; `file_deleted` und `file_trashed` lösen die Entfernung über `_process_deletions` und `on_record_deleted` aus. Bei Fehlern hält der aktuelle Upstream-Konnektor den Änderungsstand zunächst zurück und wiederholt die betroffene Seite bei späteren Läufen. Nach fünf fehlgeschlagenen Versuchen kann er den Änderungsstand weiterführen; fehlgeschlagene Löschungen bleiben in einer eigenen Wiederholungsliste. Bis zur erfolgreichen Entfernung kann eine Datei in Novaplan AI weiterhin suchbar sein. Prüfen Sie sensible Löschungen deshalb direkt im Workspace. `stream_record` liefert Dateiinhalte bei Bedarf über den authentifizierten WebDAV-Zugang. Die Methodennamen sind interne Implementierungsdetails und keine öffentliche Novaplan-AI-API.
 
 ## Probleme beheben
 

@@ -289,7 +289,7 @@ You can create an OAuth app and authorize the toolset on any ClickUp plan. Howev
 ## Usage Tips
 
 **Example: Create a task**  
-Ask your agent to "create a task in the Marketing list called Launch checklist" — it will pick the right list and file the task. You can also specify assignees, priority, due date, and description in the same sentence.
+Ask your agent to "create a task in the Marketing list called Launch checklist" — it will pick the right list and file the task. You can also specify assignees, priority, due date, and description in the same sentence. The current upstream toolset accepts ClickUp's four priority levels: **Urgent**, **High**, **Normal**, and **Low**. An unsupported priority stops the create or update request rather than being silently ignored; confirm the deployed behavior before automating task writes.
 
 **Example: Update a task**  
 Ask to "move task abc123 to In Progress" or "set the due date on task xyz789 to next Friday". The agent updates status, priority, dates, and assignees in place.

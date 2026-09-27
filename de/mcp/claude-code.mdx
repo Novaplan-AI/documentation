@@ -3,13 +3,40 @@ title: "Claude Code"
 description: "Claude Code mit dem entfernten Novaplan AI MCP-Server verbinden."
 ---
 
-Claude Code kann sich über HTTP und OAuth mit `NOVAPLAN_WORKSPACE_URL/mcp` verbinden. Erstellen Sie dafür eine Novaplan-OAuth-Anwendung und sichern Sie **Client ID** und **Client Secret**. Der [MCP-Überblick](/de/mcp/overview#schritt-1-oauth-anwendung-erstellen) beschreibt die Einrichtung.
+Claude Code kann sich mit dem entfernten MCP-Endpunkt `NOVAPLAN_WORKSPACE_URL/mcp` verbinden: mit einem **persönlichen Zugriffstoken** für den eigenen Client oder mit einer **OAuth-Anwendung** für gemeinsam verwaltete Einrichtungen. Für diese direkte Verbindung wird keine lokale Stdio-Brücke benötigt. Deren `/api/v1`-Basis-URL gilt hier nicht.
+
+## Mit persönlichem Zugriffstoken verbinden
+
+1. Erstellen Sie unter **Developer Settings → Personal Access Tokens** ein Token für Ihr eigenes Konto mit den benötigten Scopes. Übernehmen Sie die MCP-URL und den Token aus dem einmal angezeigten Paste-Block in einen lokalen Secret-Speicher oder in die Umgebungsvariablen `PIPESHUB_MCP_URL` und `PIPESHUB_MCP_TOKEN`. Diese Namen sind technische Kennungen des derzeitigen Token-Ablaufs. Die URL endet bereits auf `/mcp`.
+2. Legen Sie im Projekt eine `.mcp.json` mit Variablenreferenzen statt einem echten Tokenwert an:
+
+```json
+{
+  "mcpServers": {
+    "novaplan": {
+      "type": "http",
+      "url": "${PIPESHUB_MCP_URL}",
+      "headers": {
+        "Authorization": "Bearer ${PIPESHUB_MCP_TOKEN}"
+      }
+    }
+  }
+}
+```
+
+3. Prüfen Sie die Verbindung mit `claude mcp list` und einer zulässigen Testabfrage. Claude Code [ersetzt Umgebungsvariablen in entfernten Server-URLs und Headern](https://code.claude.com/docs/en/mcp#environment-variable-expansion-in-mcpjson). Beide Variablen müssen beim Start von Claude Code verfügbar sein.
+
+Für einen entfernten Workspace muss die MCP-URL **HTTPS** verwenden, da der Token bei jeder Anfrage als Bearer-Header gesendet wird. Speichern Sie den Token niemals direkt in einer eingecheckten Projektdatei. Widerrufen Sie einen offengelegten Token unter **Personal Access Tokens**. Lassen Sie die Verfügbarkeit von PAT und MCP in Ihrem verwalteten Workspace von Novaplan bestätigen.
+
+## Mit OAuth-Anwendung verbinden
+
+Für eine gemeinsam oder administrativ verwaltete Einrichtung erstellen Sie eine Novaplan-OAuth-Anwendung und sichern **Client ID** und **Client Secret**. Der [MCP-Überblick](/de/mcp/overview#schritt-1-oauth-anwendung-erstellen) beschreibt die Einrichtung.
 
 <Note>
   Claude Code kann mit `oauth.scopes` eine freigegebene Teilmenge der OAuth-Scopes anfordern. Ohne diese Einstellung verwendet eine aktuelle Claude-Code-Version die Scopes aus der Authentifizierungsantwort oder den Metadaten der geschützten Ressource, sofern dort Scopes angegeben sind. Die Novaplan-OAuth-Anwendung muss die tatsächlich angeforderten Scopes erlauben. Wenn die serverseitig bekannt gegebenen Standardwerte angepasst werden müssen, stimmen Sie dies mit Novaplan ab.
 </Note>
 
-## Verbindung mit der CLI hinzufügen
+### Verbindung mit der CLI hinzufügen
 
 ```bash
 claude mcp add --transport http \
@@ -23,7 +50,7 @@ Der Name `novaplan` ist ein lokaler Alias. `--client-secret` ohne Wert fordert b
 
 Hinterlegen Sie in der Novaplan-OAuth-Anwendung die Redirect URI für den gewählten Callback-Port, beispielsweise `http://localhost:8080/callback`.
 
-## Alternative: JSON und Projektkonfiguration
+### Alternative: JSON und Projektkonfiguration
 
 Sie können dieselbe Verbindung mit `claude mcp add-json` hinzufügen. Das Secret wird separat abgefragt:
 
@@ -42,6 +69,6 @@ Wenn die Konfiguration für ein Projekt freigegeben werden soll, führen Sie den
 
 Für einen engeren Scope-Satz tragen Sie in der JSON-Konfiguration unter `oauth.scopes` eine einzelne, durch Leerzeichen getrennte Zeichenfolge der für die benötigten Werkzeuge freigegebenen Scopes ein und melden sich erneut an. Das aktuelle Format steht in der [Claude-Code-Dokumentation](https://code.claude.com/docs/en/mcp#restrict-oauth-scopes).
 
-## Anmelden und prüfen
+### Anmelden und prüfen
 
 Öffnen Sie in Claude Code `/mcp` und folgen Sie der Browseranmeldung. Mit `claude mcp list` oder `claude mcp get novaplan` prüfen Sie den Servereintrag. Bei einem Anmeldefehler vergleichen Sie Callback-Port, Redirect URI, Client ID sowie die angeforderten und in der OAuth-Anwendung erlaubten Scopes.

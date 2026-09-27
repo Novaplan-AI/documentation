@@ -26,6 +26,12 @@ An authorized workspace administrator can open **Workspace Settings → Authenti
 
 An identity-provider integration requires the redirect URI and other values shown in your workspace. Use the exact values from the deployed Novaplan AI configuration rather than copying an address from a screenshot.
 
+## How sign-in protects accounts
+
+The current source implementation limits sign-in to methods enabled for the organization and requires the same account throughout a multi-step sign-in. The authentication settings page saves enabled methods as alternatives in one step. A policy with multiple sequential steps can be configured through the API, but SAML cannot be one of several sequential steps in the current upstream implementation. Confirm the effective policy in your deployed workspace with Novaplan before changing it.
+
+After five incorrect password or one-time-code attempts, the accessible backend locks the account for 24 hours and emails its owner. It unlocks automatically after that period. If a person is sure their credentials are correct but cannot sign in, ask them to check for the lock notice and contact their workspace administrator or [Novaplan Support](/contact-us). Do not send passwords or codes in a support request. The exact error text and account-recovery controls may differ in the Enterprise build; verify them before using this as an operational procedure.
+
 ## If sign-in fails
 
 1. Confirm that you are using the email address that received the invitation and the method configured for your workspace.

@@ -65,8 +65,8 @@ The native shape is **remote MCP** over Streamable HTTP. No npm process is requi
 
 1. An accessible Novaplan AI workspace at `NOVAPLAN_WORKSPACE_URL` (origin only, no `/mcp`). Use the workspace address provided by Novaplan.
 2. Auth as the **user**, not the app. Do **not** use `client_credentials` — that grant has no user identity, so permission filters collapse.
-   - The **IDE guides below use OAuth.** Create an [OAuth app](/mcp/overview#step-1-create-an-oauth-app), then follow the client page.
-   - A [personal access token](/developer/personal-access-tokens) is `Authorization: Bearer`. Use it only with a client that accepts a custom header, or with the [stdio bridge](/mcp/local-server). Cursor's `auth` object and Claude Code's `claude mcp add --client-id` are OAuth, not PAT.
+   - For your own **Claude Code** client, use a [personal access token](/developer/personal-access-tokens) as a bearer header. Its MCP URL already ends in `/mcp`; follow [Connect Claude Code](/mcp/claude-code) for an environment-backed configuration.
+   - Other client guides generally use OAuth. For a shared or administrator-managed connection, create an [OAuth app](/mcp/overview#step-1-create-an-oauth-app) and follow the client page. Cursor's `auth` object and Claude Code's `--client-id` are OAuth paths, not PATs.
 3. Client config — pick one:
 
 | Client | Guide |
@@ -97,7 +97,9 @@ The native shape is **remote MCP** over Streamable HTTP. No npm process is requi
 }
 ```
 
-**Claude Code** (`claude mcp add` — not Cursor's `auth` JSON):
+**Claude Code with your PAT:** use a project `.mcp.json` with `type: "http"`, the `PIPESHUB_MCP_URL` from the token paste block, and an `Authorization` header referencing `PIPESHUB_MCP_TOKEN` from the environment. The [Claude Code guide](/mcp/claude-code) has the full example. Do not put the literal token in the file.
+
+**Claude Code with an OAuth app** (`claude mcp add` — for shared or administrator-managed setups):
 
 ```bash
 claude mcp add --transport http \
@@ -107,7 +109,7 @@ claude mcp add --transport http \
   novaplan NOVAPLAN_WORKSPACE_URL/mcp
 ```
 
-Project-scoped `.mcp.json` uses `type: "http"` and an `oauth` object. See [Connect Claude Code](/mcp/claude-code).
+For OAuth, a project-scoped `.mcp.json` uses `type: "http"` and an `oauth` object. See [Connect Claude Code](/mcp/claude-code).
 
 The tools exposed by the MCP connection support chat, search, document reading, downloads, directory lookup, source discovery, and configured agents. Their exact names are determined by the deployed server. Verify them in your client before writing tool-specific instructions.
 

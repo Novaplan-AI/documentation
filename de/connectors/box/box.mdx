@@ -70,7 +70,7 @@ Jede aktive Person erhält eine `RecordGroup` für ihren Stammordner **All Files
 
 ### Dateien, Ereignisse und Rechte
 
-Für einen vollständigen Lauf durchläuft der Konnektor die Ordnerstruktur der aktiven Personen. Über den Box-**As-User**-Kontext liest er Inhalte und Zusammenarbeit im passenden Quellkontext. Metadaten und Berechtigungen neuer oder geänderter Elemente werden paketweise verarbeitet; die voreingestellte **Batch Size** beträgt 100. Für spätere Läufe verwendet der Konnektor Ereignisse wie `FILE.UPLOADED`, `FILE.MOVED`, `FILE.DELETED`, `FOLDER.CREATED`, `FOLDER.MOVED` und `COLLABORATION.CREATED` beziehungsweise `COLLABORATION.REMOVED`. Danach speichert er die neue `stream_position`. Prüfen Sie nach einem wichtigen Entzug oder einer Löschung, ob die Änderung in Novaplan AI angekommen ist.
+Für einen vollständigen Lauf durchläuft der Konnektor die Ordnerstruktur der aktiven Personen. Über den Box-**As-User**-Kontext liest er Inhalte und Zusammenarbeit im passenden Quellkontext. Metadaten und Berechtigungen neuer oder geänderter Elemente werden paketweise verarbeitet; die voreingestellte **Batch Size** beträgt 100. Für spätere Läufe verwendet der Konnektor Ereignisse wie `FILE.UPLOADED`, `FILE.MOVED`, `FILE.DELETED`, `FOLDER.CREATED`, `FOLDER.MOVED` und `COLLABORATION.CREATED` beziehungsweise `COLLABORATION.REMOVED`. Danach speichert er die neue `stream_position`. Ein fehlgeschlagener Ereignisblock wird beim aktuellen Upstream-Konnektor bis zu fünfmal versucht. Danach kann der Stand mit einem Fehler im Protokoll weitergeführt werden. Eine nicht angewendete Löschung kann weiterhin in Novaplan AI suchbar sein; auch ein späterer vollständiger Lauf entfernt einen bereits aus Box verschwundenen Datensatz nicht zwangsläufig. Prüfen Sie wichtige Entzüge und Löschungen im Workspace und melden Sie verbleibende Einträge an [Novaplan Support](/de/contact-us).
 
 Die zugängliche Implementierung ordnet Box-Zusammenarbeitsrollen für Dateien und Ordner so zu:
 
@@ -82,12 +82,15 @@ Die zugängliche Implementierung ordnet Box-Zusammenarbeitsrollen für Dateien u
 
 Organisationweite und öffentliche Links können einen größeren Personenkreis berechtigen als eine direkte Zusammenarbeit. Die technische Quelle verwendet dafür `ORGANIZATION_ACCESS_GROUP` und `PUBLIC_ACCESS_GROUP`. Prüfen Sie Freigabelinks vor der ersten Synchronisierung und nach Änderungen besonders sorgfältig.
 
+Freigaben verschieben Dateien nicht aus dem Bereich ihrer besitzenden Person. Innerhalb des Box-Enterprise-Bereichs werden sie für andere unter **Shared with me** sichtbar. Ein extern besessener Ordner kann laut aktuellem Upstream-Konnektor bei einem vollständigen Lauf importiert werden, wenn er in den Ordnern einer Person erscheint. Andere extern besessene Freigaben, insbesondere einzelne Dateien, werden möglicherweise gar nicht übernommen. Prüfen Sie die tatsächlich erwarteten Inhalte im Enterprise Workspace. Wenn Box Gruppenmitglieder zeitweise nicht liefert, bleiben die bisher gespeicherten Zuordnungen bestehen, bis ein späterer Lauf sie aktualisiert.
+
 ## Fehler beheben
 
 | Problem | Prüfen Sie |
 | --- | --- |
 | **Access Token kann nicht abgerufen werden** | Client ID, Client Secret und Enterprise ID; Status der App in der Box Admin Console und Enterprise-Konto. |
 | **Insufficient permissions oder Access denied** | Alle erforderlichen Scopes, **Perform actions as users**, **App + Enterprise Access** und erneute Autorisierung nach Scope-Änderungen. |
+| **403 beim Auflisten von Nutzenden oder Gruppen** | **Manage users** beziehungsweise **Manage groups** in der Box-App prüfen und sie danach administrativ erneut autorisieren. Ohne Nutzerliste kann die Dateisynchronisierung aussetzen. Die aktuelle Upstream-Implementierung kann nach Behebung eine Ereignislücke von bis zu 14 Tagen nachholen; bei längerer Lücke folgt ein vollständiger Lauf, der bereits gelöschte Quelldateien nicht zwingend aus Novaplan AI entfernt. Prüfen Sie sensible Einträge und wenden Sie sich bei Resten an Novaplan Support. |
 | **Personen sehen keine synchronisierten Inhalte** | E-Mail-Zuordnung der betroffenen Person, ihre Box-Mitgliedschaft sowie Zusammenarbeit und Gruppenrechte am jeweiligen Inhalt. |
 | **Dateien fehlen oder Suche liefert keine Treffer** | Sync Filters, Indexing Filters, aktive Box-Nutzer, Box-Adminrichtlinien sowie Abschluss von Synchronisierung und Indexierung. |
 | **Synchronisierung ist langsam oder wird begrenzt** | Umfang der Dateifilter, Batch Size, Box-Rate-Limits und längeres Sync Interval. |

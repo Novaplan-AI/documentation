@@ -486,7 +486,13 @@ Sync settings allow you to control how the connector syncs data from Google Driv
 In what interval the connector will sync data (default: 60 minutes).
 
 ### Sync Filters
-Sync filters control which files are fetched from Google Drive. Files that don't match are skipped entirely. Folders are always synced regardless of these settings to preserve directory structure.
+Sync filters control which files are fetched from Google Drive. Files that don't match are skipped entirely. **Created Date**, **Modified Date**, and **Sync Files with Extensions** still let folders through to preserve directory structure. **Folder IDs** is the exception: it selects only the listed folders and their descendants.
+
+### Folder IDs
+
+Enter the IDs of the folders you want to sync; a folder's ID is the last part of its Google Drive URL (`drive.google.com/drive/folders/<FOLDER_ID>`). Content outside these folders is skipped. Before each run, the current upstream connector checks that the connected account can read the selected folders. A known permission refusal or a deleted folder is left out. Rate limits, network failures, and most unexplained errors stop the affected sync instead of silently dropping content.
+
+For an unexplained HTTP 403 that persists, the current upstream connector retries on runs 1–4 and may leave the folder out on the fifth run so other content can progress. The saved **Folder IDs** setting remains unchanged, and the folder is checked again on later runs. A full sync may be needed to bring back older content after access is restored. For a folder shared with a user rather than selected under **Folder IDs**, the recovery path differs: after the fifth failed run it is not revisited by incremental sync and needs a full sync. Check logs for skipped folders and verify expected files in Novaplan AI. Confirm this behavior in the deployed Enterprise build before treating the filter as a strict source-access boundary.
 
 ### Created Date
 
@@ -498,9 +504,9 @@ For example, set `Last 365 Days` to fetch only files created in the last year.
 
 Same as Created Date but filters by the file's last modified timestamp. Use `Last 30 Days` or `Is After` to limit sync to recently updated files.
 
-### File Extensions
+### Sync Files with Extensions
 
-Filters files support 2 options: `In` (only sync listed extensions) or `Not In` (sync everything except listed extensions). After selecting your desired option, you can select your desired extensions from a list of supported extensions.
+This filter supports `In` (only sync listed types) or `Not In` (sync everything except listed types). Choose **google docs**, **google sheets**, or **google slides** for Google's native formats, and extensions such as `.pdf` or `.docx` for uploaded files. Folders pass through this filter.
 
 <Note>
 Unsupported extensions are excluded under `In` and allowed through under `Not In`.

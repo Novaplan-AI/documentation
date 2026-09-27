@@ -98,6 +98,10 @@ Prüfen Sie die angezeigte ACS URL und SP Entity ID im tatsächlich bereitgestel
   Die geprüfte Workspace-Oberfläche kann mehrere Anmeldemethoden gleichzeitig aktivieren. Testen Sie SAML mit einem eingeladenen Konto, bevor Sie **Password** oder **One-Time Password** deaktivieren, und stimmen Sie mit Novaplan einen Wiederherstellungsweg für Administratoren ab. Die Oberfläche warnt, wenn beide Methoden zugunsten externer Anmeldung abgeschaltet werden. Bei dem von Novaplan verwendeten Einladungsverfahren schalten Sie **Just-in-Time Provisioning** aus und testen, dass nicht eingeladene Personen keinen Zugriff erhalten.
 </Warning>
 
+<Note>
+  SAML kann zusammen mit Passwort oder Einmalcode als **Alternative innerhalb eines Anmeldeschritts** angeboten werden. Die aktuelle Upstream-Implementierung unterstützt SAML nicht als einen von mehreren **aufeinanderfolgenden Schritten**, etwa SAML mit einem zusätzlichen E-Mail-Code. Lassen Sie eine mehrstufige Richtlinie im bereitgestellten Enterprise Workspace von Novaplan prüfen, bevor Sie sie aktivieren.
+</Note>
+
 ## Mit SAML anmelden
 
 1. Öffnen Sie die Novaplan AI Anmeldeseite.
@@ -113,5 +117,6 @@ Prüfen Sie die angezeigte ACS URL und SP Entity ID im tatsächlich bereitgestel
 | Anmeldung schlägt nach Eingabe der IdP-Zugangsdaten fehl | Prüfen Sie **SSO Entry Point** und **X.509 Certificate**. |
 | „JIT Disabled“ bei der ersten Anmeldung | Laden Sie die Person zuerst ein oder prüfen Sie mit Novaplan, ob automatische Benutzeranlage vorgesehen ist. |
 | Rückleitung zur Anmeldeseite mit Fehler | Prüfen Sie, ob **Email Attribute Key** zum E-Mail-Attribut Ihres IdP passt. |
+| Direkter API-Aufruf kann SAML nicht abschließen | SAML benötigt Browserweiterleitungen. Senden Sie SAML-Zugangsdaten nicht an `POST /api/v1/userAccount/authenticate`; prüfen Sie die Anmelderoute im bereitgestellten Workspace. |
 
 Bei Fragen hilft [Novaplan Support](/de/contact-us).

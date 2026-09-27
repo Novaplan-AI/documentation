@@ -130,6 +130,10 @@ Novaplan normally creates the workspace and invites users. For invitation-based 
   The reviewed workspace UI can enable several sign-in methods. Test SAML with an invited account before disabling Password or One-Time Password, and agree with Novaplan on an administrator recovery path. The UI warns when all password and email-code methods are switched off in favor of external sign-in.
 </Warning>
 
+<Note>
+  SAML can appear alongside Password or One-Time Password as **alternative methods in one sign-in step**. The current upstream implementation does not support SAML as one of several **sequential steps** (for example, SAML followed by an email code). Ask Novaplan to verify any multi-step policy in the deployed Enterprise workspace before enabling it.
+</Note>
+
 ---
 
 ## Logging In with SAML SSO
@@ -152,3 +156,4 @@ Once SAML SSO is enabled, users can log in as follows:
 | Login fails after entering IdP credentials | Verify the SSO Entry Point URL and X.509 Certificate are correct in the configuration panel |
 | "JIT Disabled" error on first login | For invitation-based access, ask your admin or Novaplan to invite the user and confirm that their IdP email matches the invited account. Enable Just-in-Time Provisioning only if automatic account creation is part of your approved access policy. |
 | Login redirects back to login page with an error | Ensure the Email Attribute Key matches the attribute name your IdP uses for email |
+| A direct API authentication request cannot complete SAML | SAML requires browser redirects; use the workspace's SAML sign-in route rather than posting SAML credentials to `POST /api/v1/userAccount/authenticate`. Confirm the route in the deployed workspace. |

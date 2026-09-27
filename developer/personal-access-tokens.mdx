@@ -87,11 +87,11 @@ curl -X POST https://your-workspace.example.com/mcp \
   -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
 ```
 
-For the local stdio MCP server, or any MCP client that takes a bearer token (see [Local Server (Stdio)](/mcp/local-server)), pass the PAT as `YOUR_BEARER_TOKEN`:
+For the local stdio MCP server (see [Local Server (Stdio)](/mcp/local-server)), pass the PAT as `YOUR_BEARER_TOKEN` and set `NOVAPLAN_API_URL` to your workspace URL followed by `/api/v1`:
 
 ```bash
 npx -y @pipeshub-ai/mcp start \
-  --server-url NOVAPLAN_WORKSPACE_URL \
+  --server-url NOVAPLAN_API_URL \
   --bearer-auth phpat_YOUR_TOKEN
 ```
 

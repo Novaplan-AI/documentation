@@ -19,7 +19,7 @@ Hinterlegen Sie in der Novaplan-OAuth-Anwendung die Redirect URI `https://claude
 
 Die bestehende technische Brücke verwendet das npm-Paket `@pipeshub-ai/mcp`. Dieser Paketname ist eine **funktionale Kennung**, für die kein bestätigtes Novaplan-Paket vorliegt. Verwenden Sie diese Variante erst, wenn Novaplan sie für Ihren Enterprise Workspace freigegeben hat.
 
-Sie benötigen Node.js **20 oder neuer**, die von Novaplan bereitgestellte Workspace-Adresse und ein persönliches Zugriffstoken der Person, die Claude Desktop verwendet. Der Computer muss den internen Workspace erreichen können.
+Sie benötigen Node.js **20 oder neuer**, die von Novaplan bereitgestellte Workspace-Adresse mit `/api/v1` für die lokale Brücke und ein persönliches Zugriffstoken der Person, die Claude Desktop verwendet. Der Computer muss den internen Workspace erreichen können.
 
 <Warning>
   Suchen und Antworten mit persönlichen Quellberechtigungen benötigen eine **benutzergebundene** Anmeldung. Ein OAuth-`client_credentials`-Token besitzt keine Benutzeridentität und ist dafür nicht geeignet. Nutzen Sie bei der geprüften Brücke ein persönliches Zugriffstoken mit `--bearer-auth`; geben Sie es niemals in einer gemeinsam genutzten Konfiguration oder einem Repository weiter.
@@ -34,7 +34,7 @@ Sie benötigen Node.js **20 oder neuer**, die von Novaplan bereitgestellte Works
       "command": "npx",
       "args": [
         "-y", "@pipeshub-ai/mcp", "start",
-        "--server-url", "NOVAPLAN_WORKSPACE_URL",
+        "--server-url", "NOVAPLAN_API_URL",
         "--bearer-auth", "YOUR_BEARER_TOKEN"
       ]
     }
@@ -42,6 +42,6 @@ Sie benötigen Node.js **20 oder neuer**, die von Novaplan bereitgestellte Works
 }
 ```
 
-`novaplan` ist nur der lokale Servername; der Paketname muss dem tatsächlich installierten Paket entsprechen. Ersetzen Sie die Platzhalter durch den freigegebenen Workspace-Ursprung und das persönliche Token. Speichern Sie echte Tokens über eine geeignete lokale Geheimnisverwaltung und niemals im Repository. Nach dem Bearbeiten muss Claude Desktop vollständig beendet und erneut geöffnet werden; ein bloßes Neuladen des Fensters reicht nicht. Die [Stdio-Referenz](/de/mcp/local-server) enthält weitere Client-Beispiele.
+`novaplan` ist nur der lokale Servername; der Paketname muss dem tatsächlich installierten Paket entsprechen. `NOVAPLAN_API_URL` ist die freigegebene Workspace-Adresse gefolgt von `/api/v1`, beispielsweise `https://your-workspace.example.com/api/v1`. Der gehostete Custom Connector verwendet stattdessen `NOVAPLAN_WORKSPACE_URL/mcp`. Speichern Sie echte Tokens über eine geeignete lokale Geheimnisverwaltung und niemals im Repository. Nach dem Bearbeiten muss Claude Desktop vollständig beendet und erneut geöffnet werden; ein bloßes Neuladen des Fensters reicht nicht. Die [Stdio-Referenz](/de/mcp/local-server) enthält weitere Client-Beispiele.
 
 Bei Verbindungsfehlern prüfen Sie zuerst die Erreichbarkeit der Workspace-Adresse und die OAuth-Redirect-URI beziehungsweise das persönliche Token. Wenn die Brücke nicht startet, prüfen Sie Node.js und `npx`. Für die Bestätigung der unterstützten Paketversion und des Zugriffs hilft [Novaplan Support](/de/contact-us).

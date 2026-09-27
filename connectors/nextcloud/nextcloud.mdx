@@ -48,7 +48,7 @@ This connector uses the **Nextcloud WebDAV API** for file operations. WebDAV (We
 A **cursor** (activity ID) is used to track changes between syncs.
 
 1. When you first sync, the connector fetches all files and folders using WebDAV PROPFIND.
-2. After the sync completes, the connector saves the latest activity ID as a cursor.
+2. After a successful full sync, the connector saves the latest activity ID as a cursor. If it cannot list the drive or read and save an item, it does not save a cursor and the next run repeats the full sync. Items already synchronized remain available.
 3. Instead of re-downloading the entire file list to check for changes, the connector queries the Activity API with this cursor.
 4. The API returns only the files and folders that have been added, modified, or deleted since the last sync.
 
@@ -129,7 +129,7 @@ On the **Authenticate** tab, enter:
   **Email must match.** Use a Nextcloud account whose email matches the email on your Novaplan AI account. A mismatch breaks permission resolution and you will not see your synced records in search.
 </Warning>
 
-Click **Save** to store the credentials. Novaplan AI validates the connection against Nextcloud before persisting.
+Click **Save** to store the credentials. In the current upstream connector, saving does **not** contact Nextcloud. The app password is checked when you turn the connector on. If Nextcloud rejects it, create a new app password, turn the connector off, replace the password in its settings, save, and turn it on again. Confirm this sequence in the deployed Enterprise workspace.
 
 </Accordion>
 
@@ -303,7 +303,7 @@ Nextcloud uses the **Activity API** to track changes:
    - Re-processes permissions
    - Updates database records
 
-4. **Deletion Handling:** Processes deletion events by marking records as deleted in the database.
+4. **Deletion Handling:** Removes deleted or trashed files and the contents of deleted folders; restored items can return on a later sync. A failed deletion may remain searchable until it is successfully applied. The current upstream connector retries a held change for up to five syncs, then advances the cursor and keeps failed deletions in a separate retry list. Check sensitive removals in Novaplan AI instead of assuming that deleting the source immediately removes its search result.
 
 5. **Activity Cursor Update:** After processing all events, saves the latest activity ID for the next incremental sync cycle.
 

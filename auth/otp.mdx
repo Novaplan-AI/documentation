@@ -13,6 +13,8 @@ One-Time Password (OTP) sign-in sends a single-use code to your email address:
 3. Enter the code on the sign-in page.
 4. After the code is verified, you can access your workspace.
 
+The current implementation gives each code a **10-minute** validity period. A wrong or expired code requires you to check the most recent email or request a new one. Five incorrect code or password attempts can lock the account for 24 hours; see [How sign-in protects accounts](/auth#how-sign-in-protects-accounts). For security, a request for a code does not confirm whether the email address belongs to an account. Verify the exact messages and resend behavior in your deployed workspace.
+
 If the code does not arrive, check your spam folder and then contact your workspace administrator or [Novaplan Support](/contact-us).
 
 ## For administrators

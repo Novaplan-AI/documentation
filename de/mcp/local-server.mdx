@@ -12,10 +12,12 @@ Wenn ein Client den entfernten MCP-Endpunkt nicht direkt verwenden kann, kommt e
 ## Voraussetzungen
 
 - Node.js **20 oder neuer** und `npx` auf dem Computer, auf dem der MCP-Client läuft.
-- Die von Novaplan bereitgestellte Workspace-Adresse `NOVAPLAN_WORKSPACE_URL`.
+- Die von Novaplan bereitgestellte Workspace-Adresse mit `/api/v1` als API-Basis-URL für diese Brücke (`NOVAPLAN_API_URL`).
 - Ein eigenes [persönliches Zugriffstoken](/de/developer/personal-access-tokens), dessen Gültigkeit und Scopes zum gewünschten Zugriff passen.
 
 Das lokale Paket wird als Stdio-Prozess vom jeweiligen Client gestartet. Für einen HTTPS-Workspace mit einem Client, der entfernte MCP-Server unterstützt, verwenden Sie bevorzugt die [direkte Verbindung](/de/mcp/overview).
+
+`NOVAPLAN_API_URL` steht in den folgenden `--server-url`-Beispielen für `https://your-workspace.example.com/api/v1`. Ein direkt verbundener HTTP-MCP-Client verwendet dagegen `NOVAPLAN_WORKSPACE_URL/mcp` **ohne** `/api/v1`. Lassen Sie Paket und Endpunkt vor der Nutzung im verwalteten Workspace von Novaplan bestätigen.
 
 ## Konfigurationsmuster
 
@@ -28,7 +30,7 @@ Für Clients mit einer `mcpServers`-Konfiguration sieht der technische Aufruf so
       "command": "npx",
       "args": [
         "-y", "@pipeshub-ai/mcp", "start",
-        "--server-url", "NOVAPLAN_WORKSPACE_URL",
+        "--server-url", "NOVAPLAN_API_URL",
         "--bearer-auth", "YOUR_BEARER_TOKEN"
       ]
     }
@@ -42,16 +44,16 @@ Für Claude Code oder Gemini CLI kann die Stdio-Konfiguration über die jeweilig
 
 ```bash
 claude mcp add novaplan -- npx -y @pipeshub-ai/mcp start \
-  --server-url NOVAPLAN_WORKSPACE_URL \
+  --server-url NOVAPLAN_API_URL \
   --bearer-auth YOUR_BEARER_TOKEN
 
 gemini mcp add novaplan -- npx -y @pipeshub-ai/mcp start \
-  --server-url NOVAPLAN_WORKSPACE_URL \
+  --server-url NOVAPLAN_API_URL \
   --bearer-auth YOUR_BEARER_TOKEN
 ```
 
-Ersetzen Sie die Platzhalter durch die freigegebene Workspace-Adresse und Ihr eigenes Token. Prüfen Sie vor einer Übernahme in eine Teamkonfiguration, wie Ihr Client Geheimnisse sicher bereitstellt. Alle unterstützten CLI-Argumente zeigt `npx @pipeshub-ai/mcp --help`.
+Ersetzen Sie die Platzhalter durch die freigegebene API-Basis-URL mit `/api/v1` und Ihr eigenes Token. Prüfen Sie vor einer Übernahme in eine Teamkonfiguration, wie Ihr Client Geheimnisse sicher bereitstellt. Alle unterstützten CLI-Argumente zeigt `npx @pipeshub-ai/mcp --help`.
 
 ## Fehlerbehebung
 
-Wenn die Brücke nicht startet, prüfen Sie Node.js, `npx`, Paketverfügbarkeit und die Erreichbarkeit der Workspace-Adresse. Bei `401` prüfen Sie Ablauf und Scopes des persönlichen Tokens. Bei Fragen zur Unterstützung des Pakets oder zum Enterprise-Endpunkt hilft [Novaplan Support](/de/contact-us).
+Wenn die Brücke nicht startet, prüfen Sie Node.js, `npx`, Paketverfügbarkeit und die Erreichbarkeit der API-Basis-URL. Bei `401` prüfen Sie Ablauf und Scopes des persönlichen Tokens. Bei Fragen zur Unterstützung des Pakets oder zum Enterprise-Endpunkt hilft [Novaplan Support](/de/contact-us).

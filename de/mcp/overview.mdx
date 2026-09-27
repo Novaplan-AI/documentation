@@ -25,7 +25,7 @@ Damit können Clients wie **Cursor**, **Claude Code**, **Gemini CLI**, **Claude.
 Novaplan übernimmt den Großteil der Einrichtung. Die folgenden Schritte bleiben als Referenz für Administratoren und Integrationsverantwortliche verfügbar; stimmen Sie Änderungen an der Zugriffsverwaltung mit dem Novaplan-Team ab.
 
 <Note>
-  Die meisten unten genannten Client-Anleitungen verwenden **OAuth** und benötigen eine OAuth-Anwendung. **Omnigent** kann sich stattdessen mit einem persönlichen Zugriffstoken im `Authorization`-Header verbinden.
+  Die meisten unten genannten Client-Anleitungen verwenden **OAuth** und benötigen eine OAuth-Anwendung. **Claude Code** und **Omnigent** können sich stattdessen mit einem persönlichen Zugriffstoken im `Authorization`-Header verbinden. Claude Code unterstützt weiterhin eine OAuth-Anwendung für gemeinsam verwaltete Einrichtungen.
 
   Für eigene Werkzeuge können Sie unter **Developer Settings > Personal Access Tokens** ein Token erstellen und es als `Bearer`-Token verwenden: direkt am `/mcp`-Endpunkt, mit `--bearer-auth` in der [lokalen Stdio-Brücke](/de/mcp/local-server) oder in einem Client mit konfigurierbarem `Authorization`-Header.
 </Note>
@@ -92,7 +92,7 @@ Wählen Sie die Anleitung für Ihren Client:
 | Client | Verbindung |
 | --- | --- |
 | [Cursor](/de/mcp/cursor) | Entferntes MCP mit dem `auth`-Objekt in `mcp.json`. |
-| [Claude Code](/de/mcp/claude-code) | Entferntes HTTP-MCP mit festen OAuth-Zugangsdaten. |
+| [Claude Code](/de/mcp/claude-code) | Entferntes HTTP-MCP mit persönlichem Zugriffstoken oder OAuth-Anwendung. |
 | [Gemini CLI](/de/mcp/gemini-cli) | Entferntes MCP mit OAuth-Erkennung. |
 | [Claude.ai](/de/mcp/claude-ai) | Custom Connector in der Web-Oberfläche. |
 | [Claude Desktop](/de/mcp/claude-desktop) | Gehosteter Custom Connector oder lokale Stdio-Brücke. |

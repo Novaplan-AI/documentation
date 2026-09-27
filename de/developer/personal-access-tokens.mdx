@@ -20,7 +20,7 @@ Jedes Organisationsmitglied kann ein eigenes PAT erstellen, ohne dass eine Admin
 
 ## Token verwenden
 
-Ein freigegebener API- oder MCP-Client sendet das PAT im Header `Authorization: Bearer <TOKEN>`. Der entfernte MCP-Endpunkt liegt unter `NOVAPLAN_WORKSPACE_URL/mcp`. Clients mit eigenem Header können den Token direkt verwenden; eine geprüfte [lokale Stdio-Brücke](/de/mcp/local-server) kann ihn über `--bearer-auth` erhalten.
+Ein freigegebener API- oder MCP-Client sendet das PAT im Header `Authorization: Bearer <TOKEN>`. Der entfernte MCP-Endpunkt liegt unter `NOVAPLAN_WORKSPACE_URL/mcp`. Clients mit eigenem Header können den Token direkt verwenden; eine geprüfte [lokale Stdio-Brücke](/de/mcp/local-server) kann ihn über `--bearer-auth` erhalten. Für deren `--server-url` ist dagegen die Workspace-Adresse mit `/api/v1` als `NOVAPLAN_API_URL` erforderlich.
 
 Ein Beispiel für einen Aufruf der MCP-Werkzeugliste mit Platzhaltern:
 

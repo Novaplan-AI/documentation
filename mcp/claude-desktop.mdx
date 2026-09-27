@@ -83,7 +83,7 @@ For an internal-only workspace, Claude Desktop can launch a local **stdio proces
 ### Prerequisites
 
 - Node.js 20+ installed
-- The workspace URL supplied by Novaplan
+- The workspace URL supplied by Novaplan, with `/api/v1` added for the local bridge
 - A personal access token for the person using Claude Desktop
 
 <Warning>
@@ -107,7 +107,7 @@ Open Claude Desktop's config file (`claude_desktop_config.json`) and add the Nov
         "@pipeshub-ai/mcp",
         "start",
         "--server-url",
-        "NOVAPLAN_WORKSPACE_URL",
+        "NOVAPLAN_API_URL",
         "--bearer-auth",
         "YOUR_BEARER_TOKEN"
       ]
@@ -116,7 +116,7 @@ Open Claude Desktop's config file (`claude_desktop_config.json`) and add the Nov
 }
 ```
 
-Replace the placeholders with the approved workspace origin and the person's token. Use a local secret-management method for the token rather than committing this example with real credentials.
+Replace `NOVAPLAN_API_URL` with the approved workspace URL followed by `/api/v1` (for example, `https://your-workspace.example.com/api/v1`) and use the person's token. This differs from the hosted custom connector, which connects directly to `NOVAPLAN_WORKSPACE_URL/mcp`. Use a local secret-management method for the token rather than committing this example with real credentials.
 
 ### Apply the changes
 

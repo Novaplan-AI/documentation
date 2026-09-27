@@ -378,7 +378,7 @@ Once a cursor is established, incremental sync processes only new events:
 
 3. **Update State:** Saves the new cursor position for next sync cycle.
 
-4. **Reconciliation:** Periodically validates that all Box groups exist in the database and removes orphaned entries.
+4. **Reconciliation:** Periodically validates Box groups and removes orphaned entries only after a complete group listing. If a group member list cannot be read, the current upstream connector retains the previously stored members and retries later rather than emptying the group.
 
 ---
 
@@ -473,9 +473,9 @@ Box uses a **global Enterprise Event Stream** with a single `stream_position` cu
    - Re-processes permissions
    - Updates database records
 
-6. **Deletion Handling:** Processes deletion events by marking records as deleted in the database.
+6. **Deletion Handling:** Deleted or trashed files and folders are removed on an incremental sync, and deleting a folder also removes its indexed contents. A failed delete holds the event cursor for up to five attempts. After the fifth failure, the batch can advance with an error while the item remains in Novaplan AI. A later full sync does not necessarily remove a record whose source item is already gone. Verify sensitive deletions in the workspace and escalate a persistent record to [Novaplan Support](/contact-us).
 
-7. **Stream Position Update:** After processing all events, saves the new `stream_position` cursor for the next incremental sync cycle. This single cursor tracks the state of the entire enterprise event stream, not individual folders.
+7. **Stream Position Update:** After processing events, saves the new `stream_position` cursor for the next incremental sync cycle. This single cursor tracks the enterprise event stream. A failed event batch is retried on later runs, up to the current upstream limit of five attempts; check sync logs for batches passed over with an error.
 
 ---
 
@@ -492,6 +492,8 @@ Box permissions are managed through **collaborations** - explicit grants that gi
 3. **Group Memberships:** Users inherit permissions through group collaborations.
 
 4. **Public/Company Links:** Shared links can grant broader access.
+
+Items owned inside the Box enterprise stay in their owner's folder hierarchy when shared; recipients see them under **Shared with me**. In the current upstream connector, a folder owned outside the enterprise can be imported through a full sync when it appears in a colleague's folders. Other externally owned shares, including a single shared file, may not be imported at all. Check expected shared content in the deployed workspace rather than assuming every Box share is searchable.
 
 ### Sync Process
 
@@ -578,6 +580,8 @@ The connector automatically determines the optimal sync approach:
 - Verify "Perform actions as users" is enabled
 - Check that App Access Level is set to "App + Enterprise Access"
 - Re-authorize the application if scopes were changed
+
+If sync logs say Box refused to list users or groups with **403**, verify the **Manage users** and **Manage groups** scopes respectively, then ask a Box administrator to re-authorize the app. Missing **Manage users** can stop file synchronization. The current upstream connector can replay a gap of up to 14 days from Box's event stream after access is restored; beyond that it falls back to a full sync. A full sync may not remove records for items deleted during the gap, so check sensitive content and ask Novaplan Support to resolve stale records.
 
 ### Sync Issues
 

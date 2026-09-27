@@ -114,9 +114,12 @@ Dieser Scope erlaubt das Ansehen und Herunterladen zugänglicher Drive-Dateien, 
 - **Scheduled:** Synchronisiert automatisch im gewählten Intervall; die Voreinstellung beträgt 60 Minuten.
 - **Manual:** Synchronisiert nur, wenn ein Administrator den Vorgang auslöst.
 - **Created Date / Modified Date:** Begrenzen die synchronisierten Dateien nach Erstellungs- oder Änderungsdatum, etwa auf die letzten 365 oder 30 Tage.
-- **File Extensions:** Mit **In** werden nur ausgewählte Dateiendungen synchronisiert; **Not In** schließt ausgewählte Endungen aus. Nicht unterstützte Endungen werden bei **In** ausgeschlossen und bei **Not In** nicht durch diesen Filter blockiert.
+- **Sync Files with Extensions:** Mit **In** werden nur ausgewählte Dateitypen synchronisiert; **Not In** schließt ausgewählte Typen aus. Für native Google-Dateien wählen Sie **google docs**, **google sheets** oder **google slides**; für hochgeladene Dateien Endungen wie `.pdf` oder `.docx`. Nicht unterstützte Endungen werden bei **In** ausgeschlossen und bei **Not In** nicht durch diesen Filter blockiert.
+- **Folder IDs:** Begrenzen die Synchronisierung auf die angegebenen Ordner und deren Unterordner. Die ID steht am Ende der Drive-Adresse `drive.google.com/drive/folders/<FOLDER_ID>`.
 
-Dateien, die einen Synchronisierungsfilter nicht erfüllen, werden nicht abgerufen. Ordner bleiben für die Verzeichnisstruktur in der Synchronisierung.
+Dateien, die einen Synchronisierungsfilter nicht erfüllen, werden nicht abgerufen. Ordner passieren Datums- und Dateitypfilter für die Verzeichnisstruktur; bei **Folder IDs** werden dagegen nur die ausgewählten Ordner samt Unterordnern berücksichtigt. Der aktuelle Upstream-Konnektor prüft vor jedem Lauf, ob die ausgewählten Ordner lesbar sind. Ein gelöschter Ordner oder eine bekannte Berechtigungsverweigerung wird ausgelassen; Rate-Limits, Netzwerkfehler und andere ungeklärte Fehler unterbrechen den betroffenen Lauf, statt Dateien stillschweigend wegzulassen.
+
+Bei einer wiederholten HTTP-403-Antwort ohne erkennbaren Grund versucht der Konnektor den Ordner in den Läufen 1 bis 4 erneut und kann ihn beim fünften Lauf auslassen, damit andere Inhalte weiterlaufen. Die gespeicherte **Folder IDs**-Auswahl bleibt bestehen, und der Ordner wird später erneut geprüft. Ein nur mit einer Person geteilter Ordner wird nach der fünften Ablehnung bei inkrementellen Läufen dagegen nicht erneut aufgenommen; nach Wiederherstellung des Zugriffs ist ein vollständiger Lauf nötig. Prüfen Sie Protokolle und Suchergebnisse auf ausgelassene Ordner. Das Verhalten muss im bereitgestellten Enterprise Workspace bestätigt werden, bevor der Filter als strikte Zugriffsschranke gilt.
 
 ### Indexierung
 

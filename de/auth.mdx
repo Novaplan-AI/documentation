@@ -38,6 +38,12 @@ Autorisierte Administratorinnen und Administratoren können Anmeldemethoden unte
   </Tab>
 </Tabs>
 
+## Schutz bei der Anmeldung
+
+Die aktuelle Quellimplementierung akzeptiert nur für die Organisation freigegebene Anmeldemethoden und verlangt bei mehreren nacheinander geschalteten Schritten dasselbe Konto. Die Einstellungsseite speichert aktivierte Methoden als Alternativen innerhalb eines Schritts. Mehrstufige Richtlinien können über die API eingerichtet werden; SAML kann in der aktuellen Upstream-Implementierung nicht einer von mehreren aufeinanderfolgenden Schritten sein. Prüfen Sie die tatsächlich aktive Richtlinie im bereitgestellten Workspace mit Novaplan, bevor Sie sie ändern.
+
+Nach fünf falschen Passwort- oder Einmalcode-Eingaben sperrt das zugängliche Backend das Konto für 24 Stunden und benachrichtigt die besitzende Person per E-Mail. Danach wird es automatisch wieder freigegeben. Falls sich jemand trotz vermeintlich korrekter Zugangsdaten nicht anmelden kann, sollte die Person nach dieser Benachrichtigung suchen und die Workspace-Administration oder [Novaplan Support](/de/contact-us) kontaktieren. Passwörter oder Codes gehören nicht in Support-Nachrichten. Wortlaut der Fehler und Wege zur Wiederherstellung müssen im Enterprise Workspace noch geprüft werden.
+
 ## Probleme bei der Anmeldung prüfen
 
 Wenn sich Benutzer nicht anmelden können:
