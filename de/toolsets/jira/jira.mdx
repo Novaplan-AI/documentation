@@ -36,7 +36,7 @@ Prüfen Sie vor dem Erstellen eines Vorgangs oder dem Wechsel des Vorgangstyps m
 3. Öffnen Sie in der Atlassian-App **Authorization → OAuth 2.0 (3LO)**. Hinterlegen Sie die exakt kopierte URI als **Callback URL**. Schon ein anderer Schrägstrich oder Host kann die Anmeldung verhindern.
 4. Wählen Sie unter **Permissions** die für Ihre freigegebenen Aktionen nötigen Rechte für **User Identity API** und **Jira API**. Die Liste aus der Integrationsanleitung steht unten. Prüfen Sie diese mit Ihrer Atlassian-Administration und gewähren Sie nur die benötigten Rechte.
 5. Kopieren Sie unter **Settings → Authentication details** die **Client ID** und das **Secret**. Tragen Sie beide in der Jira-Instanz unter **Workspace Settings → Actions** ein, vergeben Sie einen **Instance Name** und wählen Sie **Create**.
-6. Jede Person öffnet **Your actions → Jira**, wählt **Authenticate with OAuth**, wählt die richtige Jira-Site und bestätigt die Berechtigungen. Verwenden Sie laut Quellanleitung dieselbe E-Mail-Adresse wie für das Novaplan-Konto.
+6. Eine Workspace-Administration kann die gemeinsame Instanz direkt unter **Workspace Settings → Actions** authentifizieren. Alle anderen Personen öffnen **Your actions → Jira** im Bereich **Personal** und authentifizieren ihren eigenen Zugang. Wählen Sie **Authenticate with OAuth**, die richtige Jira-Site und bestätigen Sie die Berechtigungen. Verwenden Sie laut Quellanleitung dieselbe E-Mail-Adresse wie für das Novaplan-Konto.
 
 Client ID und Client Secret gehören zur gemeinsamen Atlassian-App. Persönliche OAuth-Tokens werden erst ausgestellt, wenn sich jede Person selbst anmeldet. Eine Atlassian-App kann auch für das [Confluence-Toolset](/de/toolsets/confluence/confluence) verwendet werden, sofern die nötigen Berechtigungen für beide APIs hinzugefügt wurden.
 
@@ -58,7 +58,7 @@ Die Liste beschreibt die dokumentierten Funktionen. Ob einzelne granulare Rechte
 
 ## In einem Agenten verwenden
 
-Fügen Sie die Jira-Aktion im **Agent Builder** als Tool hinzu. Nennen Sie beim Erstellen eines Vorgangs Projektkürzel, Titel und Vorgangstyp. Geben Sie bei Suchen möglichst einen Zeitraum und eindeutige JQL-Kriterien an. Für Statusänderungen oder Zuweisungen nennen Sie den konkreten Vorgangsschlüssel und die gewünschte Person beziehungsweise den Zielstatus.
+Öffnen Sie auf der Startseite **Agents → +**, erstellen Sie einen Agenten und ziehen Sie das Jira-Toolset auf die Arbeitsfläche. Verbinden Sie es mit **Agent Core** und speichern Sie den Agenten. Nennen Sie beim Erstellen eines Vorgangs Projektkürzel, Titel und Vorgangstyp. Geben Sie bei Suchen möglichst einen Zeitraum und eindeutige JQL-Kriterien an. Für Statusänderungen oder Zuweisungen nennen Sie den konkreten Vorgangsschlüssel und die gewünschte Person beziehungsweise den Zielstatus.
 
 Bei einer Zuweisung kann der Agent eine Person anhand ihres Namens oder ihrer E-Mail-Adresse suchen und anschließend die passende Atlassian-Konto-ID verwenden. Prüfen Sie vor der Änderung, dass die gefundene Person und der Zielvorgang stimmen. Der [Jira-Konnektor](/de/connectors/jira/jira) synchronisiert Vorgänge für die spätere Suche; das Toolset greift live auf Jira zu und kann Inhalte verändern.
 
