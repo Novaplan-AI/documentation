@@ -56,11 +56,14 @@ Dateiinhalte werden bei Bedarf über authentifizierte WebDAV-Anfragen abgerufen.
 
 Der inkrementelle Lauf fragt die Activity API seit dieser ID ab. Ereignisse wie `file_created`, `file_changed`, `file_renamed` und `file_restored` führen zum erneuten Abruf der betroffenen Einträge; `file_deleted` und `file_trashed` lösen die Entfernung über `_process_deletions` und `on_record_deleted` aus. Bei Fehlern hält der aktuelle Upstream-Konnektor den Änderungsstand zunächst zurück und wiederholt die betroffene Seite bei späteren Läufen. Nach fünf fehlgeschlagenen Versuchen kann er den Änderungsstand weiterführen; fehlgeschlagene Löschungen bleiben in einer eigenen Wiederholungsliste. Bis zur erfolgreichen Entfernung kann eine Datei in Novaplan AI weiterhin suchbar sein. Prüfen Sie sensible Löschungen deshalb direkt im Workspace. `stream_record` liefert Dateiinhalte bei Bedarf über den authentifizierten WebDAV-Zugang. Die Methodennamen sind interne Implementierungsdetails und keine öffentliche Novaplan-AI-API.
 
+Kann das Nextcloud-Profil nicht gelesen werden, speichert der aktuelle Upstream-Konnektor nichts und versucht es beim nächsten Lauf erneut. Ein lesbares Profil ohne E-Mail-Adresse wird dagegen mit einer Ersatzadresse nach dem Muster `{username}@nextcloud.local` zugeordnet. Bei HTTP 429, vorübergehenden Serverfehlern oder Verbindungsproblemen wiederholt der Konnektor eine Anfrage bis zu dreimal. Eine numerische `Retry-After`-Angabe wird bis zu 60 Sekunden beachtet; sonst steigt die zufällige Wartezeit mit den Versuchen. Diese Details müssen im bereitgestellten Enterprise Workspace bestätigt werden.
+
 ## Probleme beheben
 
 | Problem | Prüfen Sie |
 | --- | --- |
 | `401` oder ungültige Anmeldung | Benutzername, aktuelles App Password und dessen Widerrufsstatus |
+| App Password abgelaufen oder widerrufen | In Nextcloud unter **Personal settings → Security → Devices & sessions** ein neues App Password erstellen. Verbindung ausschalten, neues Passwort eintragen und speichern, danach wieder einschalten. **Save** allein prüft das Passwort nicht; zuvor synchronisierte Dateien und der Fortschrittspunkt bleiben beim Anmeldefehler zunächst bestehen. |
 | `404` oder Verbindungstest schlägt fehl | Vollständige HTTPS-**Base URL** ohne abschließenden Schrägstrich, Proxy und Firewall |
 | Synchronisierung ist langsam | Dateianzahl, **Batch Size**, Datums- und Dateitypfilter |
 | Hoher Speicherbedarf | **Batch Size** von 100 auf etwa 50 oder weniger reduzieren und Datenumfang eingrenzen |

@@ -84,6 +84,10 @@ Organisationweite und öffentliche Links können einen größeren Personenkreis 
 
 Freigaben verschieben Dateien nicht aus dem Bereich ihrer besitzenden Person. Innerhalb des Box-Enterprise-Bereichs werden sie für andere unter **Shared with me** sichtbar. Ein extern besessener Ordner kann laut aktuellem Upstream-Konnektor bei einem vollständigen Lauf importiert werden, wenn er in den Ordnern einer Person erscheint. Andere extern besessene Freigaben, insbesondere einzelne Dateien, werden möglicherweise gar nicht übernommen. Prüfen Sie die tatsächlich erwarteten Inhalte im Enterprise Workspace. Wenn Box Gruppenmitglieder zeitweise nicht liefert, bleiben die bisher gespeicherten Zuordnungen bestehen, bis ein späterer Lauf sie aktualisiert.
 
+Zusammenarbeitslisten werden seitenweise gelesen. Bei einem vorübergehenden Fehler bleiben die gespeicherten Zugriffe des betroffenen Eintrags zunächst erhalten. Eine spätere Seite mit 403 oder 404 gilt dagegen als endgültige Box-Antwort; bereits gelesene Seiten werden übernommen. Ein vollständiger Lauf spielt außerdem die Box-Freigabehistorie für **Shared with me** ab. Er verarbeitet höchstens 200 Historienseiten pro Lauf und setzt längere oder vorübergehend unterbrochene Durchläufe in einem späteren vollständigen Lauf fort. Nach 403 oder 404 kann ein Teil der Historie bis zu einem weiteren vollständigen Lauf fehlen. Prüfen Sie vertrauliche Freigabeänderungen direkt im Workspace.
+
+Ein unvollständiger vollständiger Lauf speichert keinen neuen Ereignis-Cursor und wird beim nächsten Mal wiederholt. Geplante, manuelle und durch Webhooks ausgelöste Läufe derselben Verbindung werden nicht gleichzeitig ausgeführt; zusätzliche Webhooks während eines Laufs werden zu einem Folgelauf zusammengefasst. Dieses Verhalten stammt aus dem aktuellen Upstream-Konnektor und muss für die Enterprise-Version geprüft werden.
+
 ## Fehler beheben
 
 | Problem | Prüfen Sie |

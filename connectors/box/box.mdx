@@ -519,6 +519,10 @@ Items owned inside the Box enterprise stay in their owner's folder hierarchy whe
    - Recursively removes permissions from all descendant files and folders
    - Ensures access control consistency
 
+The current upstream connector reads collaborator lists page by page. If a temporary error interrupts a list, the item retains its stored access until a later sync. A 403 or 404 on a later page is treated as Box's final answer and the pages already read are saved. Verify sensitive access changes in the deployed workspace.
+
+During a full sync, the connector also replays Box share history to populate **Shared with me**. It can read up to 200 history pages per sync and resumes a long replay on a later full sync. A temporary page failure pauses the replay for a later full sync. If Box refuses a history page with 403 or 404, the remaining history may wait for a later full sync rather than an incremental run.
+
 </Accordion>
 
 <Accordion title="File Filtering & Sync Optimization" icon="filter">
@@ -548,6 +552,9 @@ The connector automatically determines the optimal sync approach:
 1. **No Cursor:** Performs full sync
 2. **Has Cursor:** Performs incremental sync using event stream
 3. **Cursor Expired:** Falls back to full sync and establishes new cursor
+4. **Previous full sync incomplete:** Repeats the full sync instead of saving a cursor, so unread folders or files are retried. A 403 while listing users also leaves the full sync incomplete.
+
+Scheduled runs, manual runs, and webhooks do not start two syncs for this connector at once. Webhooks arriving during a run queue one follow-up run.
 
 </Accordion>
 

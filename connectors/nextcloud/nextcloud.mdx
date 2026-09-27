@@ -232,6 +232,8 @@ The sync begins by authenticating with the provided username and app password. T
 2. Retrieves user email from Nextcloud (if available)
 3. Uses username as the primary identifier
 
+If the profile cannot be read, the current upstream connector saves nothing and retries the sync later. A readable profile without an email is different: it uses `{username}@nextcloud.local` as a fallback owner address.
+
 ### Drive Creation
 
 Once the user is identified, the system creates a "Record Group":
@@ -339,6 +341,7 @@ The incremental sync uses Nextcloud's Activity API to efficiently detect changes
 * **Path Cache:** Maintains in-memory map of paths to record IDs
 * **Batch Processing:** Groups updates into configurable batch sizes
 * **Rate Limiting:** Respects API rate limits (50 requests/second default)
+* **Transient errors:** The current upstream connector retries HTTP 429, temporary server errors, and connection failures up to three times. It honors a numeric `Retry-After` of up to 60 seconds; otherwise it waits with increasing jitter, up to one, two, then four seconds.
 * **Concurrent Batches:** Processes up to 5 batches simultaneously
 
 </Accordion>
@@ -387,13 +390,14 @@ The connector provides authenticated file downloads:
 
 ### Invalid Credentials
 
-**Symptom:** Authentication fails with 401 error
+**Symptom:** Turning the connector on fails because Nextcloud rejects the app password, or a later sync stops after the password is revoked. Previously synced files and the saved position remain as they were.
 
 **Solutions:**
 1. Verify your username is correct
 2. Ensure you're using an **App Password**, not your main password
 3. Check that the app password hasn't been revoked in Nextcloud Security settings
 4. Verify the Base URL is correct (should not end with `/`)
+5. To replace a revoked or expired password, create a new one under **Personal settings → Security → Devices & sessions**, turn the connector off, enter and save the new password, then turn it back on. Saving alone does not validate it. Confirm the exact notification and recovery flow in the deployed Enterprise workspace.
 
 ### Base URL Incorrect
 
