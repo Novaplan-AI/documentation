@@ -446,7 +446,7 @@ The Gmail connector uses OAuth 2.0 for authentication. This requires users to gr
    </div>
 
 <Warning>
-  **Important:** Authorize using the same email address as your Novaplan AI account. Using a different email will cause permission issues on the Novaplan AI platform.
+  Check which Google account you authorize. The accessible connector assigns mailbox permissions using the Gmail address returned by Google. If that address differs from your Novaplan AI account address, ask an administrator to verify the account mapping and access before relying on search results.
 </Warning>
 
 <Info>
@@ -522,7 +522,7 @@ When disabled, file attachments on synced messages are not indexed for search by
 | **Data Flow** | One-way (import data into Novaplan AI) | Two-way (read and write via API) |
 | **When to Use** | Query/search email history and conversations | Send emails, manage messages, create drafts |
 
-**Example:** Use **Gmail Connector** to search past email conversations. Use **Gmail Toolset** to let agents send replies or forward messages.
+**Example:** Use **Gmail Connector** to search past email conversations. Use **Gmail Toolset** to let agents draft, send, or reply to messages. The listed toolset actions do not include a dedicated forwarding action.
 
 </Accordion>
 

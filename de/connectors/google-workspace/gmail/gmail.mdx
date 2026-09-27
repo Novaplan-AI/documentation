@@ -99,7 +99,7 @@ https://www.googleapis.com/auth/presentations.readonly
 6. Starten Sie die Synchronisierung mit **Start syncing now** oder wählen Sie **I'll do it later**.
 
 <Warning>
-  Verwenden Sie bei der Autorisierung dieselbe E-Mail-Adresse wie für Ihr Novaplan-AI-Konto. Unterschiedliche Adressen können zu Berechtigungsproblemen bei synchronisierten Inhalten führen.
+  Prüfen Sie, welches Google-Konto Sie autorisieren. Der zugängliche Konnektor vergibt Postfachberechtigungen anhand der von Google gelieferten Gmail-Adresse. Falls diese von Ihrer Novaplan-AI-Kontoadresse abweicht, lassen Sie die Kontenzuordnung und den Zugriff vor der Nutzung der Suche durch Ihre Administration prüfen.
 </Warning>
 
 ## Konnektoreinstellungen
@@ -128,4 +128,6 @@ Der **Konnektor** synchronisiert und indexiert E-Mails für die Suche. Das **[Gm
 
 ### Warum liefert die Suche keine Ergebnisse?
 
-Prüfen Sie bei einer persönlichen Verbindung, ob die Google-E-Mail-Adresse mit Ihrem Novaplan-AI-Konto übereinstimmt. Kontrollieren Sie unter **All Records**, ob Nachrichten synchronisiert wurden, und prüfen Sie Empfangsdatumfilter, Indexierungsstatus und den ersten Synchronisierungslauf. Den Laufstatus finden Sie unter **Settings → Connectors**. Wenn die Ursache unklar bleibt, schreiben Sie an [support@novaplan.ai](mailto:support@novaplan.ai).
+Prüfen Sie bei einer persönlichen Verbindung, welches Google-Konto das Postfach autorisiert hat. Bei einer unternehmensweiten Verbindung sind das delegierte Dienstkonto und die Zuordnung der einzelnen Postfachinhaber getrennte Dinge. Lassen Sie die Administration die Identitätszuordnung und den Zugriff der betroffenen Person prüfen; autorisieren Sie das gemeinsame Dienstkonto nicht erneut als diese Person.
+
+Kontrollieren Sie unter **All Records**, ob Nachrichten synchronisiert wurden, und prüfen Sie Empfangsdatumfilter und Indexierungsstatus. Wenn die erste Synchronisierung oder Indexierung noch läuft, warten Sie auf deren Abschluss. Den Laufstatus finden Sie unter **Settings → Connectors**. Wenn die Ursache unklar bleibt, schreiben Sie an [support@novaplan.ai](mailto:support@novaplan.ai).
