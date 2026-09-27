@@ -40,7 +40,7 @@ Nicht jede Anwendung benötigt alle diese Scopes. Besonders Schreib-, Lösch- un
 3. Novaplan AI leitet zur registrierten Redirect URI mit einem kurzlebigen Autorisierungscode und `state` zurück. Der Client vergleicht `state` mit dem ursprünglich gespeicherten Wert.
 4. Der Client tauscht den Code per `POST` an `NOVAPLAN_WORKSPACE_URL/api/v1/oauth2/token` gegen Tokens. Die `redirect_uri` muss mit dem Autorisierungsaufruf übereinstimmen. Vertrauliche Clients authentifizieren sich mit ihrem Secret; öffentliche Clients verwenden den zugehörigen PKCE-Code-Verifier.
 
-Bei `offline_access` kann ein Refresh Token ausgegeben werden. Bei jeder Erneuerung wird das bisherige Refresh Token durch ein neues ersetzt und ungültig. Speichern Sie daher immer den zuletzt erhaltenen Wert sicher. Tokens lassen sich über den Revocation-Endpunkt widerrufen.
+Bei `offline_access` kann ein Refresh Token ausgegeben werden. Die technische Quellanleitung nennt **30 Tage** als voreingestellte Gültigkeit, die pro Anwendung konfigurierbar ist; prüfen Sie den Wert im bereitgestellten Workspace. Bei jeder Erneuerung wird das bisherige Refresh Token durch ein neues ersetzt und ungültig. Speichern Sie daher immer den zuletzt erhaltenen Wert sicher. Tokens lassen sich über den Revocation-Endpunkt widerrufen.
 
 ### Token für einen vertraulichen Client abrufen
 
@@ -83,6 +83,21 @@ curl -X POST https://your-workspace.example.com/api/v1/oauth2/revoke \
 ```
 
 Für ein Refresh Token setzen Sie `token_type_hint=refresh_token`. Ein `client_credentials`-Token eignet sich nur für genehmigte Anwendungs-Scopes ohne persönliche Benutzeridentität und darf nicht für benutzergebundene Suche verwendet werden.
+
+### Token für eine Anwendung ohne Nutzeridentität
+
+Für einen ausdrücklich freigegebenen Server-zu-Server-Ablauf kann eine vertrauliche Anwendung einen Token mit `client_credentials` anfordern:
+
+```bash
+curl -X POST https://your-workspace.example.com/api/v1/oauth2/token \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -d "grant_type=client_credentials" \
+  -d "client_id=YOUR_CLIENT_ID" \
+  -d "client_secret=YOUR_CLIENT_SECRET" \
+  -d "scope=YOUR_APPLICATION_SCOPE"
+```
+
+Dieser Token steht für die **Anwendung**, nicht für eine angemeldete Person. Er ist daher ungeeignet für Suche, Chat oder Dokumentabrufe, bei denen individuelle Quellberechtigungen gelten müssen. Verwenden Sie für solche Anfragen den Authorization-Code-Ablauf oder ein benutzergebundenes Token.
 
 ## Endpunkte
 
