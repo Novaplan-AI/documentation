@@ -124,6 +124,19 @@ Open **Windsurf Settings > Cascade > Manage MCPs > View raw config**, then add:
 }
 ```
 
+## Retries and timeouts
+
+The current `@pipeshub-ai/mcp` bridge retries safe-to-repeat requests that receive 429, 502, 503, or 504, up to three attempts. It follows a `Retry-After` delay of at most 30 seconds; without one it uses a short increasing delay. It retries GET, HEAD, OPTIONS, PUT, and DELETE, but not POST searches or chat requests. Each attempt waits up to 60 seconds for the server to start responding. A response that has started streaming is not cut off by that limit.
+
+Set these environment variables in your MCP client's `env` block if the bridge needs different limits:
+
+| Variable | Default | Allowed values |
+| --- | --- | --- |
+| `PIPESHUB_MCP_MAX_ATTEMPTS` | `3` | Integer from 1 to 10; `1` disables retries |
+| `PIPESHUB_MCP_TIMEOUT_MS` | `60000` | Milliseconds up to 3,600,000; `0` disables the timeout |
+
+This is behavior of the technical package and still needs confirmation against the managed Enterprise workspace. A timeout or network error should prompt a check of `--server-url`, workspace health, and certificate trust.
+
 ## CLI Help
 
 For a full list of server arguments:

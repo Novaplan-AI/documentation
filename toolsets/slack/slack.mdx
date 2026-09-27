@@ -355,7 +355,15 @@ Authentication uses the same OAuth flow in either location:
 Ask your agent to "send a message to #marketing" with your content.
 
 **How do I send a direct message?**  
-Ask to "send a DM to John about the meeting" or "directly message sarah@company.com". The agent can send private messages to any user.
+Ask to "send a DM to John about the meeting" or "directly message sarah@company.com". Giving the recipient's email is the safest way to select the right person. An unknown email or only a partial name is not treated as a close match. If Slack blocks directory access, the agent reports that error instead of saying the person was not found.
+
+**Are long lists complete?**
+
+Listing tools read all pages returned by Slack. If a request fails partway, the agent reports an incomplete list instead of presenting it as complete.
+
+**Does Slack token rotation work?**
+
+Yes for this OAuth-connected toolset. A rotating sign-in is renewed before its roughly 12-hour expiry. If renewal is temporarily delayed, retry after a few minutes. If Slack rejects the saved sign-in, reconnect the toolset under **Settings → Toolsets**.
 
 **How do I reply to a message?**  
 Ask to "reply to that message in thread" or "respond to the latest message in #engineering". The agent can reply in threads to keep conversations organized.

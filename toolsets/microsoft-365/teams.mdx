@@ -316,8 +316,10 @@ Use a **connector** when you need retrieval over indexed data; use the **Microso
 ---
 
 <Info>
-  Channel message search scans recent messages per channel (bounded by the tool’s parameters). Ask for a specific team or channel when possible so results stay focused.
+  Channel message search scans recent messages per channel (bounded by the tool’s parameters). Ask for a specific team or channel when possible so results stay focused. If no channel can be read, the tool reports the error instead of saying there were no matches.
 </Info>
+
+If Microsoft Graph refuses directory access, people-lookup tools report that permission error rather than saying the person does not exist. User lists read all available pages up to the requested limit.
 
 ---
 
@@ -327,13 +329,13 @@ Use a **connector** when you need retrieval over indexed data; use the **Microso
 Ask the agent to send a message to the right team and channel. It can use `get_teams` and `get_channels` to resolve IDs, then `send_channel_message`.
 
 **How do I direct-message someone?**  
-Ask to “DM” or “chat with” a person by display name, email, or UPN. The Microsoft Teams action uses `send_user_message` and resolves the user when possible.
+Ask to “DM” or “chat with” a person by display name, email, or UPN. The Microsoft Teams action uses `send_user_message` and sends only when it finds an exact display-name, email, UPN, or ID match across the directory. For a partial match it returns possible people and asks for an email or ID; it does not send. Reading a chat uses the same matching.
 
 **How do I reply in a thread?**  
 Ask to reply to a specific message or thread in a channel. The agent uses `reply_to_message` with the parent message ID when it is known, or reads the thread with `get_channel_messages` / `get_thread_replies` first.
 
 **How do I find or schedule a meeting?**  
-Use natural language with a time range. The agent can call `get_meetings`, `search_calendar_events_in_range`, `create_event`, or `create_channel_meeting` depending on whether the meeting is personal or tied to a channel.
+Use natural language with a time range. The agent can call `get_meetings`, `search_calendar_events_in_range`, `create_event`, or `create_channel_meeting` depending on whether the meeting is personal or tied to a channel. For recurring meetings, specify a valid daily, weekly, monthly, or yearly pattern. An unsupported pattern is refused instead of becoming a daily meeting.
 
 **How do I get a meeting transcript or who attended?**  
 Ask for the transcript or attendance for a specific online meeting. The agent uses `get_my_meeting_transcripts`, `get_people_attended`, or `get_people_invited` as appropriate, often after resolving the meeting from calendar or join information.

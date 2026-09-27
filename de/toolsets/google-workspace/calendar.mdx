@@ -66,3 +66,7 @@ Novaplan übernimmt den Großteil der Einrichtung. Die Schritte bleiben als Refe
 | **Beispiel** | Frühere Besprechungen finden. | Einen Termin vereinbaren oder verschieben. |
 
 Nennen Sie einem entsprechend berechtigten Agenten Titel, Datum, Uhrzeit und Teilnehmende, wenn er einen Termin anlegen soll. Für Änderungen geben Sie an, welcher Termin gemeint ist und was sich ändern soll.
+
+Zum Verschieben eines Termins benötigt der Agent sowohl die neue Start- als auch die Endzeit. Fehlt eine davon, bleibt der Termin unverändert und der Agent fragt nach beiden. Geben Sie bei wichtigen Uhrzeiten die Zeitzone an, etwa „10:00 Europe/Berlin“. Ohne Zeitversatz gilt die zum Termin übermittelte Zeitzone, andernfalls UTC. Ungültige Zeitzonen und eine Endzeit vor der Startzeit werden abgelehnt. Ein ganztägiger Termin umfasst den gewünschten Kalendertag in seiner Zeitzone.
+
+Bei Fehlern meldet der Agent beispielsweise eine Begrenzung durch Google, eine abgelaufene Anmeldung oder fehlende Rechte. Wurde der Termin angelegt, aber der Besprechungslink konnte nicht mehr gelesen werden, wird die erfolgte Erstellung gemeldet, damit keine zweite Einladung versendet wird.

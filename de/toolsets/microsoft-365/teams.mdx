@@ -62,4 +62,8 @@ Verwenden Sie ausschließlich den Wert aus Ihrem Novaplan-Workspace. Beispiel-Ho
 
 Nennen Sie bei Nachrichten das Zielteam und den Kanal oder die adressierte Person eindeutig. Für Meeting-Suchen geben Sie einen Zeitraum an. Für Transkripte, Anwesenheit und Einladungen muss der Agent die richtige Besprechung identifizieren und die angemeldete Person Zugriff auf diese Daten haben. Bei privaten Kanälen sind Mitgliedschaft und zusätzliche Graph-Rechte zu prüfen.
 
+Eine Direktnachricht wird nur bei exakter Übereinstimmung mit Anzeigename, E-Mail-Adresse, Anmeldename (UPN) oder ID versendet. Bei einem Teiltreffer nennt der Agent mögliche Personen und bittet um E-Mail-Adresse oder ID, bevor er sendet. Kann Microsoft Graph das Verzeichnis nicht lesen, meldet das Tool den Berechtigungsfehler statt „Person nicht gefunden“. Bei der Suche nach Kanalnachrichten wird ein Fehler gemeldet, falls kein Kanal gelesen werden konnte, statt fälschlich „keine Treffer“ zu melden. Nutzerlisten lesen alle Seiten bis zur angeforderten Grenze.
+
+Für wiederkehrende Termine nennen Sie einen gültigen täglichen, wöchentlichen, monatlichen oder jährlichen Rhythmus. Ein von Microsoft nicht unterstütztes Muster wird abgelehnt und nicht stillschweigend als täglicher Termin erstellt.
+
 Wenn OAuth fehlschlägt, prüfen Sie **Redirect URI**, Secret-Ablauf, erteilte Scopes, Admin-Zustimmung und die persönliche Anmeldung. Bei Fragen hilft [Novaplan Support](/de/contact-us).

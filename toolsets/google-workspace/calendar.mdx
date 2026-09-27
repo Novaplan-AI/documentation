@@ -194,3 +194,13 @@ Ask your agent to "schedule a meeting" and provide the date, time, title, and at
 
 **How do I update an event?**  
 Ask to "move my 2pm meeting to 3pm" or "add sarah@example.com to the team meeting". The agent will find and update the event.
+
+To move an event, give both the new start and end times. With only one, the event remains unchanged and the agent asks for both.
+
+**Which time zone should I use?**
+
+Include the time zone when it matters, such as "10:00 Europe/Berlin". A time without an offset uses the time zone supplied with the event, or UTC if none is supplied. Invalid time zones and an end before the start are refused. A one-day all-day event covers the requested date in its time zone.
+
+**What if an action fails?**
+
+The agent reports whether Google is rate-limiting, sign-in needs renewal, or permission is missing. If creating an event succeeds but reading back its meeting link fails, the agent reports that the event exists so it is not created twice.

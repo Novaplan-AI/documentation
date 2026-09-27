@@ -109,5 +109,8 @@ Bei `401` prüfen Sie Ablauf, Widerruf und Scopes des persönlichen Tokens. Entf
 | `pipeshub: command not found` | Die CLI wurde auf dieser Sprite noch nicht installiert; führen Sie die einmalige Installation oben aus. |
 | `PIPESHUB_TOKEN` vorhanden, `PIPESHUB_BASE_URL` fehlt | Legen Sie den zweiten Keychain-Eintrag mit ausdrücklich gesetztem Variablennamen an. |
 | Verbindung zu `localhost` verweigert | Verwenden Sie die freigegebene öffentliche HTTPS-Origin des Workspaces. |
+| `could not reach …/mcp: fetch failed (…)` | Öffentlichen Endpunkt, DNS und Zertifikatsvertrauen prüfen; dies ist nicht zwingend ein Anmeldefehler. |
+| `PIPESHUB_BASE_URL is not a valid URL` mit tokenähnlichem Wert | Keychain-Einträge für Adresse und Token vertauscht; Workspace-Origin unter `PIPESHUB_BASE_URL`, PAT unter `PIPESHUB_TOKEN` ablegen. |
+| Weiterleitung von HTTP zu HTTPS | Die CLI folgt ihr nicht und sendet das Token nicht dorthin. Tragen Sie direkt die geprüfte HTTPS-Origin des Workspaces ein. |
 | `sources: []` und `401` mit `phpat_` | Paketversion, bereitgestellten MCP-Endpunkt und Tokenverarbeitung durch Novaplan prüfen lassen; Präfix nicht abschneiden. |
 | Ein nicht zugängliches Dokument erscheint im Ergebnis | Nutzung stoppen und den Berechtigungsfehler an Novaplan Support melden. |

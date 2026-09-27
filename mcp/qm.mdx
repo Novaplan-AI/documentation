@@ -137,7 +137,7 @@ If the CLI says it is not connected, have the agent run `pipeshub auth connect-h
 
 | Check | Expect |
 | --- | --- |
-| `pipeshub auth status --json` | Connected; your user and org; no token printed |
+| `pipeshub auth status --json` | Connected; your user and org; no token printed; a token echoed by an error response is redacted |
 | `pipeshub search "a term you know is indexed" --json` | `hits` with `recordId` / `webUrl`, or exit `6` if nothing matches |
 | `pipeshub ask "…" --json` | An answer **with citations**, or exit `6` if uncited |
 | A document you cannot access | Denial — not a leak |
@@ -149,6 +149,9 @@ If the CLI says it is not connected, have the agent run `pipeshub auth connect-h
 | Agent says it needs `semantic:read` | It called `GET /api/v1/search` (history) instead of the CLI | New chat. Tell it to use `pipeshub ask` / `search`. Do not widen the PAT |
 | `sources: []` and `ask` 401 with a `phpat_` token | The deployed version or token handling may differ from the package's expectations | Contact Novaplan Support to check compatibility. Keep the token intact — do not strip its prefix |
 | `localhost` / connection refused from the agent | The sandbox is not on your machine | Use public HTTPS; put that origin in the keychain |
+| `could not reach …/mcp: fetch failed (…)` | Network or certificate failure, not necessarily authentication | Check the public endpoint, DNS, and certificate trust |
+| `PIPESHUB_BASE_URL is not a valid URL` with a token-like value | URL and token keychain entries are swapped | Put the workspace origin under `PIPESHUB_BASE_URL` and the PAT under `PIPESHUB_TOKEN` |
+| The server redirected from HTTP to HTTPS | The CLI does not follow the redirect or send the token to it | Set the base URL directly to the verified HTTPS origin of your workspace |
 | `PIPESHUB_TOKEN` set, `PIPESHUB_BASE_URL` missing | `sandbox.env` does not reach Sprites | Second keychain entry (or org credential) for the URL |
 | `pipeshub: command not found` | Stock Sprite image, no first-run install | `npm install -g @pipeshub-ai/mcp` once on that Sprite |
 | `qm doctor` rejects a Resend *sending-only* key | [qm#353](https://github.com/yc-software/qm/issues/353) | Known false complaint; the key is the right kind |

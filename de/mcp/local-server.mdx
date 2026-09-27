@@ -54,6 +54,12 @@ gemini mcp add novaplan -- npx -y @pipeshub-ai/mcp start \
 
 Ersetzen Sie die Platzhalter durch die freigegebene API-Basis-URL mit `/api/v1` und Ihr eigenes Token. Prüfen Sie vor einer Übernahme in eine Teamkonfiguration, wie Ihr Client Geheimnisse sicher bereitstellt. Alle unterstützten CLI-Argumente zeigt `npx @pipeshub-ai/mcp --help`.
 
+## Wiederholungen und Zeitlimits
+
+Die aktuelle Brücke `@pipeshub-ai/mcp` wiederholt wiederholbare Anfragen bei 429, 502, 503 oder 504 bis zu insgesamt drei Versuchen. Eine `Retry-After`-Angabe wird bis zu 30 Sekunden beachtet; sonst gelten kurze, ansteigende Wartezeiten. Wiederholt werden GET, HEAD, OPTIONS, PUT und DELETE, nicht aber POST-Anfragen für Suche oder Chat. Pro Versuch wartet die Brücke höchstens 60 Sekunden auf den Beginn einer Antwort; eine bereits laufende Streaming-Antwort wird dadurch nicht beendet.
+
+Bei Bedarf setzen Sie im `env`-Block des MCP-Clients `PIPESHUB_MCP_MAX_ATTEMPTS` auf eine ganze Zahl von 1 bis 10 (`1` deaktiviert Wiederholungen) oder `PIPESHUB_MCP_TIMEOUT_MS` auf Millisekunden bis 3.600.000 (`0` deaktiviert das Zeitlimit). Diese Paketfunktion muss für den verwalteten Enterprise Workspace noch bestätigt werden.
+
 ## Fehlerbehebung
 
 Wenn die Brücke nicht startet, prüfen Sie Node.js, `npx`, Paketverfügbarkeit und die Erreichbarkeit der API-Basis-URL. Bei `401` prüfen Sie Ablauf und Scopes des persönlichen Tokens. Bei Fragen zur Unterstützung des Pakets oder zum Enterprise-Endpunkt hilft [Novaplan Support](/de/contact-us).
