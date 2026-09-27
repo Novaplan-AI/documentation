@@ -48,9 +48,9 @@ Bei einer Connection String müssen reservierte Zeichen im Passwort URL-kodiert 
 | **Schemas** | Gewünschte Schemas wie `public`. Ohne Auswahl werden alle Schemas berücksichtigt. | Alle Schemas |
 | **Tables** | Gewünschte Tabellen, etwa `public.account`. Ohne Auswahl werden alle Tabellen der gewählten Schemas berücksichtigt. | Alle Tabellen |
 | **Max rows per table** | Höchstzahl gelesener Zeilen pro Tabelle. | `1000` |
-| **Index tables** | Tabelleninhalte für die KI-Suche indexieren. Deaktiviert werden nur Schema-Metadaten indexiert. | Aktiviert |
+| **Index tables** | Steuert die automatische KI-Indexierung synchronisierter Tabellendatensätze; die Deaktivierung beschränkt nicht allein den Quellzugriff. | Aktiviert |
 
-Die Listen für **Schemas** und **Tables** werden nach dem Speichern der Zugangsdaten aus der Datenbank gefüllt. Sie können mehrere Schemas und darin konkrete, voll qualifizierte Tabellennamen auswählen. Von Filtern ausgeschlossene Daten werden nicht heruntergeladen. Verwenden Sie die Zeilengrenze für große Tabellen und begrenzen Sie die Auswahl auf benötigte Inhalte.
+Die Listen für **Schemas** und **Tables** werden nach dem Speichern der Zugangsdaten aus der Datenbank gefüllt. Sie können mehrere Schemas und darin konkrete, voll qualifizierte Tabellennamen auswählen. Die Filter begrenzen, welche Tabellen verarbeitet und wie viele Zeilen daraus gelesen werden. Der zugängliche Konnektor liest dennoch Schema- und Tabellennamen für die Auswahllisten und die Synchronisierung. Ein Ausschluss garantiert deshalb nicht, dass keine Datenbankmetadaten gelesen werden. Wenn eine Isolation bereits an der Quelle nötig ist, verwenden Sie ein Datenbankkonto mit Zugriff nur auf die vorgesehenen Daten.
 
 Wählen Sie danach **Scheduled** oder **Manual**. Bei geplanter Synchronisierung liegt das voreingestellte **Sync interval** bei 60 Minuten. Nach **Save** prüft der Konnektor die Verbindung und beginnt die erste Synchronisierung. Den Status verfolgen Sie unter **Indexing Progress**.
 
@@ -66,6 +66,6 @@ Prüfen Sie Host und Port, Erreichbarkeit aus der Novaplan-Umgebung, `pg_hba.con
 
 ### Wie begrenze ich große Datenbestände?
 
-Wählen Sie nur benötigte **Schemas** und **Tables**, reduzieren Sie **Max rows per table** oder deaktivieren Sie **Index tables**, wenn Sie ausschließlich Schema-Metadaten durchsuchen möchten.
+Wählen Sie nur benötigte **Schemas** und **Tables**, reduzieren Sie **Max rows per table** und deaktivieren Sie **Index tables**, wenn Tabellendatensätze nicht automatisch indexiert werden sollen. Begrenzen Sie für eine Zugriffsschranke an der Quelle zusätzlich die Rechte des Datenbankkontos.
 
 Bei Fragen zur Anbindung wenden Sie sich an [Novaplan Support](/de/contact-us).

@@ -198,7 +198,7 @@ postgresql://novaplan_reader:p%40ss%3Aword@db.example.com:5432/example_db
 
 <Accordion title="Step 4: Configure sync filters" icon="filter">
 
-Sync filters control what is pulled from PostgreSQL. Anything excluded by a filter is never downloaded.
+Sync filters select which schemas and tables are processed and limit the rows fetched from each selected table. The accessible connector still lists schema and table names to populate the selectors and run a sync. Excluding a table does not mean its name or other database metadata is never read. Use a database account with access only to the intended data when source-level isolation is required.
 
 <div className="text-center">
   <img
@@ -213,7 +213,7 @@ Sync filters control what is pulled from PostgreSQL. Anything excluded by a filt
 | **Schemas** | Pick the schemas to sync (e.g. `public`). Leave empty to sync all schemas. | All schemas |
 | **Tables** | Pick the tables to sync (e.g. `public.account`). Leave empty to sync all tables in the selected schemas. | All tables |
 | **Max rows per table** | Maximum number of rows to fetch from each table. | 1000 |
-| **Index tables** | When enabled, table content is indexed for AI search. When disabled, only schema metadata is indexed. | Enabled |
+| **Index tables** | Controls automatic AI indexing of synchronized table records; turning it off does not by itself restrict source access. | Enabled |
 
 <Info>
   Schemas and tables are dropdowns populated from your database after the credentials are saved — pick from the list rather than typing names by hand.
@@ -308,7 +308,7 @@ So `p@ss:word` becomes `p%40ss%3Aword` in the connection string.
 
 <Accordion title="How do I keep large tables from blowing up the sync?">
 
-Use **Max rows per table** in sync filters to cap how many rows are fetched per table, narrow the **Schemas** and **Tables** filters to just what you need, and disable **Index tables** if you only want schema metadata in search.
+Use **Max rows per table** to cap how many rows are fetched per selected table, narrow **Schemas** and **Tables** to the intended data, and turn off **Index tables** if table records should not be indexed automatically. For a source access boundary, also limit the database account's permissions.
 
 </Accordion>
 

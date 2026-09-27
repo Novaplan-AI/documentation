@@ -45,9 +45,9 @@ Ersetzen Sie Benutzernamen, Passwort und Datenbanknamen durch Ihre Werte. Das Ho
 | --- | --- | --- |
 | **Tables** | Nur die ausgewählten Tabellen synchronisieren. Ohne Auswahl werden alle Tabellen der Datenbank berücksichtigt. | Alle Tabellen |
 | **Max rows per table** | Höchstzahl gelesener Zeilen pro Tabelle. | `1000` |
-| **Index tables** | Tabelleninhalte für die KI-Suche indexieren. Ist die Option ausgeschaltet, werden nur Schemainformationen indexiert. | Aktiviert |
+| **Index tables** | Steuert die automatische KI-Indexierung synchronisierter Tabellendatensätze; die Deaktivierung beschränkt nicht allein den Quellzugriff. | Aktiviert |
 
-Ausgeschlossene Tabellen oder Zeilen werden nicht heruntergeladen. Begrenzen Sie bei großen oder sensiblen Tabellen sowohl die Tabellenauswahl als auch die Zeilenzahl. Stimmen Sie die Auswahl mit den für Datenzugriff und Datenschutz zuständigen Personen ab.
+Die Filter begrenzen, welche Tabellen verarbeitet und wie viele Zeilen daraus gelesen werden. Der zugängliche Konnektor liest dennoch Tabellennamen für die Auswahlliste und die Synchronisierung. Ein Ausschluss garantiert deshalb nicht, dass keine Datenbankmetadaten gelesen werden. Wenn eine Isolation bereits an der Quelle nötig ist, verwenden Sie ein Datenbankkonto mit Zugriff nur auf die vorgesehenen Daten. Stimmen Sie Tabellen- und Zeilenauswahl mit den für Datenzugriff und Datenschutz zuständigen Personen ab.
 
 Wählen Sie anschließend **Scheduled** oder **Manual**. Für geplante Synchronisierung beträgt das voreingestellte **Sync interval** 60 Minuten. Nach **Save** prüft der Konnektor die Verbindung und startet die erste Synchronisierung. Den Fortschritt sehen Sie unter **Indexing Progress**.
 
