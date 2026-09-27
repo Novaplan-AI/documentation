@@ -27,20 +27,6 @@
             "pages": [
               "de/system-overview",
               {
-                "group": "Novaplan AI Dienste",
-                "pages": [
-                  "de/system-overview/authentication",
-                  "de/system-overview/configuration-manager",
-                  "de/system-overview/connector-manager",
-                  "de/system-overview/crawling-manager",
-                  "de/system-overview/enterprise-search",
-                  "de/system-overview/knowledge-base",
-                  "de/system-overview/mail-service",
-                  "de/system-overview/storage",
-                  "de/system-overview/user-management"
-                ]
-              },
-              {
                 "group": "Externe Dienste",
                 "pages": [
                   "de/system-overview/external-services"
@@ -371,20 +357,6 @@
             "group": "System Overview",
             "pages": [
               "system-overview",
-              {
-                "group": "Novaplan AI Services",
-                "pages": [
-                  "system-overview/authentication",
-                  "system-overview/configuration-manager",
-                  "system-overview/connector-manager",
-                  "system-overview/crawling-manager",
-                  "system-overview/enterprise-search",
-                  "system-overview/knowledge-base",
-                  "system-overview/mail-service",
-                  "system-overview/storage",
-                  "system-overview/user-management"
-                ]
-              },
               {
                 "group": "External Services",
                 "pages": [
@@ -719,6 +691,96 @@
   },
   "redirects": [
     {
+      "source": "/system-overview/authentication",
+      "destination": "/developer/api-reference",
+      "permanent": true
+    },
+    {
+      "source": "/system-overview/configuration-manager",
+      "destination": "/developer/api-reference",
+      "permanent": true
+    },
+    {
+      "source": "/system-overview/connector-manager",
+      "destination": "/developer/api-reference",
+      "permanent": true
+    },
+    {
+      "source": "/system-overview/crawling-manager",
+      "destination": "/developer/api-reference",
+      "permanent": true
+    },
+    {
+      "source": "/system-overview/enterprise-search",
+      "destination": "/developer/api-reference",
+      "permanent": true
+    },
+    {
+      "source": "/system-overview/knowledge-base",
+      "destination": "/developer/api-reference",
+      "permanent": true
+    },
+    {
+      "source": "/system-overview/mail-service",
+      "destination": "/developer/api-reference",
+      "permanent": true
+    },
+    {
+      "source": "/system-overview/storage",
+      "destination": "/developer/api-reference",
+      "permanent": true
+    },
+    {
+      "source": "/system-overview/user-management",
+      "destination": "/developer/api-reference",
+      "permanent": true
+    },
+    {
+      "source": "/de/system-overview/authentication",
+      "destination": "/de/developer/api-reference",
+      "permanent": true
+    },
+    {
+      "source": "/de/system-overview/configuration-manager",
+      "destination": "/de/developer/api-reference",
+      "permanent": true
+    },
+    {
+      "source": "/de/system-overview/connector-manager",
+      "destination": "/de/developer/api-reference",
+      "permanent": true
+    },
+    {
+      "source": "/de/system-overview/crawling-manager",
+      "destination": "/de/developer/api-reference",
+      "permanent": true
+    },
+    {
+      "source": "/de/system-overview/enterprise-search",
+      "destination": "/de/developer/api-reference",
+      "permanent": true
+    },
+    {
+      "source": "/de/system-overview/knowledge-base",
+      "destination": "/de/developer/api-reference",
+      "permanent": true
+    },
+    {
+      "source": "/de/system-overview/mail-service",
+      "destination": "/de/developer/api-reference",
+      "permanent": true
+    },
+    {
+      "source": "/de/system-overview/storage",
+      "destination": "/de/developer/api-reference",
+      "permanent": true
+    },
+    {
+      "source": "/de/system-overview/user-management",
+      "destination": "/de/developer/api-reference",
+      "permanent": true
+    },
+    {
       "source": "/api-reference/introduction",
       "destination": "/developer/api-reference",
       "permanent": true
@@ -815,7 +877,7 @@
     },
     {
       "source": "/system-overview/connector-service",
-      "destination": "/system-overview/connector-manager",
+      "destination": "/system-overview",
       "permanent": true
     },
     {
