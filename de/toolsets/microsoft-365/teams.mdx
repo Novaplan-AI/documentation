@@ -67,4 +67,15 @@ Eine Direktnachricht wird nur bei exakter Übereinstimmung mit Anzeigename, E-Ma
 
 Für wiederkehrende Termine nennen Sie einen gültigen täglichen, wöchentlichen, monatlichen oder jährlichen Rhythmus. Ein von Microsoft nicht unterstütztes Muster wird abgelehnt und nicht stillschweigend als täglicher Termin erstellt.
 
+## Häufige Aufgaben mit Agenten
+
+- **Im Kanal schreiben:** Nennen Sie Team und Kanal sowie den Nachrichtentext. Der Agent kann mit `get_teams` und `get_channels` das Ziel prüfen und anschließend `send_channel_message` verwenden.
+- **Eine Direktnachricht senden:** Geben Sie den vollständigen Anzeigenamen oder besser die E-Mail-Adresse beziehungsweise UPN an. Bei mehrdeutigen Treffern darf der Agent erst nach einer Klärung mit `send_user_message` senden.
+- **Auf einen Thread antworten:** Bezeichnen Sie die Ausgangsnachricht. Mit `get_channel_messages` oder `get_thread_replies` lässt sich zuerst der Thread ermitteln; `reply_to_message` benötigt die passende Nachrichten-ID.
+- **Eine Besprechung planen:** Nennen Sie Zeitraum, Teilnehmende und gegebenenfalls den Kanal. Für persönliche Termine dienen `create_event` und für Kanalbesprechungen `create_channel_meeting`; vorhandene Meetings können zuvor mit `get_meetings` geprüft werden.
+- **Transkript oder Anwesenheit abfragen:** Benennen Sie die konkrete Onlinebesprechung. `get_my_meeting_transcripts`, `get_people_attended` und `get_people_invited` liefern nur Daten, für die die angemeldete Person berechtigt ist.
+- **Eine Person hinzufügen:** Nennen Sie E-Mail-Adresse oder ID sowie Team und gegebenenfalls privaten Kanal. Prüfen Sie mit `get_members` die vorhandene Mitgliedschaft, bevor Sie `add_member` verwenden.
+
+Der [Teams-Konnektor](/de/connectors/microsoft-365/teams) synchronisiert Inhalte für die Suche. Dieses Toolset liest und ändert Teams-Daten dagegen live im Rahmen der persönlichen Microsoft-Berechtigungen.
+
 Wenn OAuth fehlschlägt, prüfen Sie **Redirect URI**, Secret-Ablauf, erteilte Scopes, Admin-Zustimmung und die persönliche Anmeldung. Bei Fragen hilft [Novaplan Support](/de/contact-us).
