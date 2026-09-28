@@ -7,23 +7,76 @@ description: "Wispr-Flow-Transkription in Novaplan AI konfigurieren."
 
 ![Konfigurationsansicht für Wispr Flow](/images/ai-models/stt/WisprFlow_STTConfig.png)
 
-Novaplan AI kann Wispr Flow für Diktate und Spracheingaben in Agents und Workflows nutzen. Der Dienst verarbeitet Audio über seine gehostete API. Novaplan unterstützt Sie bei der Einrichtung; für die Audio-Umwandlung muss `ffmpeg` in der Novaplan-Backend-Umgebung verfügbar sein.
+*In der Wispr-Flow-Konfiguration geben Sie den API-Schlüssel und optionale Einstellungen ein.*
 
-## API Key und Modell
+Novaplan AI kann Wispr Flow als gehosteten Transkriptionsdienst für professionelle Spracheingaben integrieren. Das Modell `flow-v1` ist für Diktate und Eingaben an KI-Assistenten ausgelegt und formatiert den Text je nach Anwendungskontext.
 
-**API Key** ist das einzige Pflichtfeld. Fordern Sie den Schlüssel beim [Wispr-Flow-Enterprise-Team](mailto:enterprise@wisprflow.ai) an und bewahren Sie ihn geschützt auf. Das Modell **`flow-v1`** wird automatisch gewählt; eine manuelle Modell-ID ist nicht erforderlich.
+<Note>
+Für die Audio-Umwandlung benötigt Wispr Flow **ffmpeg** im von Novaplan verwalteten Backend. Novaplan prüft diese Abhängigkeit bei der Einrichtung. Einen API-Schlüssel erhalten Sie vom [Wispr-Flow-Enterprise-Team](mailto:enterprise@wisprflow.ai).
+</Note>
+
+## Pflichtfelder
+
+### API Key *
+
+Der Schlüssel authentifiziert Transkriptionsanfragen bei Wispr Flow. Fordern Sie ihn beim [Enterprise-Team](mailto:enterprise@wisprflow.ai) an. Behandeln Sie ihn als Geheimnis: Verwenden Sie den freigegebenen Einrichtungsweg des Workspaces und stimmen Sie Zugriff und Rotation mit Novaplan und Ihrer Anbieteradministration ab.
+
+### Modell
+
+Wispr Flow bietet derzeit das Modell **`flow-v1`** an. Es wird automatisch ausgewählt; Sie müssen keine Modell-ID eingeben.
 
 ## Optionale Einstellungen
 
-| Feld | Verwendung |
+### Default Language
+
+Bevorzugt eine bestimmte Sprache bei der Transkription. Lassen Sie **Auto-detect** ausgewählt, wenn Nutzende verschiedene Sprachen sprechen oder die Audiosprache wechselt.
+
+Unterstützt werden Auto-detect, Englisch, Spanisch, Französisch, Deutsch, Italienisch, Portugiesisch, Niederländisch, Polnisch, Russisch, Japanisch, Koreanisch, Chinesisch, Hindi und Arabisch.
+
+### App Type
+
+Steuert, wie Wispr Flow den transkribierten Text formatiert. Wählen Sie den Typ passend zur späteren Verwendung:
+
+| App Type | Geeignet für |
 | --- | --- |
-| **Default Language** | Bevorzugte Sprache oder **Auto-detect** für wechselnde Sprachen. Unterstützt werden unter anderem Deutsch, Englisch, Spanisch, Französisch, Italienisch, Portugiesisch, Niederländisch, Polnisch, Russisch, Japanisch, Koreanisch, Chinesisch, Hindi und Arabisch. |
-| **App Type** | **AI prompt/chat** für Spracheingaben in Chats (Standard), **Email** für E-Mail-Diktate oder **Other** für allgemeine Transkription. |
-| **API Endpoint** | Nur bei einer von Wispr bereitgestellten eigenen oder regionalen Adresse ändern; Standard ist `https://platform-api.wisprflow.ai`. |
-| **Model Friendly Name** | Anzeigename für die Konfiguration. |
+| **AI prompt/chat** (Standard) | Spracheingaben in KI-Chats und Prompt-Feldern; abgestimmt auf natürliche Formulierungen für Prompts. |
+| **Email** | E-Mail-Diktate; berücksichtigt Anrede, Grußformel und Zeichensetzung. |
+| **Other** | Allgemeine Transkription. |
 
-1. Klicken Sie im Tab **STT** auf **Wispr Flow → Configure**.
-2. Geben Sie den **API Key** ein und wählen Sie bei Bedarf Sprache, **App Type**, Endpoint und Anzeigenamen.
-3. Klicken Sie auf **Add Model**.
+### API Endpoint
 
-API-Nutzung wird über Ihr Wispr-Flow-Konto abgerechnet. Bei Authentifizierungsfehlern prüfen Sie den Schlüssel und dessen Freigabe. Bei stummer oder fehlgeschlagener Audioverarbeitung wenden Sie sich an Novaplan Support, damit `ffmpeg` im Backend geprüft wird. Bei unpassender Formatierung wählen Sie einen anderen **App Type**. [Novaplan Support](/de/contact-us) hilft bei der Einrichtung.
+Überschreibt die produktive Standardadresse von Wispr Flow. Lassen Sie das Feld leer, um `https://platform-api.wisprflow.ai` zu verwenden. Ändern Sie es nur, wenn Wispr Flow Ihnen einen eigenen oder regionalen Endpunkt bereitgestellt hat.
+
+### Model Friendly Name
+
+Ein lesbarer Anzeigename für diese Konfiguration in Novaplan AI. Er hilft, wenn mehrere Speech-to-Text-Modelle eingerichtet sind.
+
+## Konfiguration
+
+Wie in der Abbildung gezeigt:
+
+1. Klicken Sie im Tab **STT** bei **Wispr Flow** auf **Configure**.
+2. Geben Sie den **API Key** in das Pflichtfeld ein.
+3. Wählen Sie bei Bedarf eine **Default Language** oder lassen Sie **Auto-detect** ausgewählt.
+4. Wählen Sie bei Bedarf einen **App Type**; der Standard ist **AI prompt/chat**.
+5. Tragen Sie einen **API Endpoint** nur ein, wenn Wispr Flow Ihnen eine eigene Adresse gegeben hat.
+6. Vergeben Sie optional einen **Model Friendly Name**.
+7. Klicken Sie auf **Add Model**, um zu speichern und die Zugangsdaten prüfen zu lassen.
+
+Nur der API-Schlüssel ist verpflichtend. Alle anderen Einstellungen können Sie nach dem Speichern über **Edit** am eingerichteten Modell ändern.
+
+## Hinweise zum Betrieb
+
+- Novaplan muss `ffmpeg` im verwalteten Backend für die Audio-Umwandlung bereitstellen.
+- Die API-Nutzung wird über Ihr Wispr-Flow-Enterprise-Konto abgerechnet. Fragen Sie Ihren Kontakt bei Wispr Flow nach den Preisen.
+- Der passende **App Type** verbessert besonders bei E-Mail-Diktaten im Vergleich zu Chat-Eingaben die Formatierung.
+- Für mehrsprachige Teams ist **Auto-detect** ein sinnvoller Ausgangspunkt für verschiedene Sprecher.
+
+## Fehlerbehebung
+
+- Wenn der Health Check fehlschlägt, prüfen Sie, ob Ihr API-Schlüssel richtig und aktiv ist. Fragen Sie bei Bedarf [Wispr Flow](mailto:enterprise@wisprflow.ai).
+- Wenn die Audioausgabe stumm ist oder die Transkription ganz fehlschlägt, bitten Sie [Novaplan Support](/de/contact-us), `ffmpeg` im verwalteten Backend zu prüfen.
+- Bei unpassender Formatierung wechseln Sie den **App Type** passend zum Anwendungsfall.
+- Wenn Sie den **API Endpoint** überschrieben haben, prüfen Sie die Adresse. Eine falsche URL lässt alle Anfragen scheitern.
+
+Für den Zugang zum Anbieter wenden Sie sich an [Wispr Flow](mailto:enterprise@wisprflow.ai). Bei der Workspace-Einrichtung hilft [Novaplan Support](/de/contact-us).
