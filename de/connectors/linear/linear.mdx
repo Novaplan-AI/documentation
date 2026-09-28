@@ -15,6 +15,8 @@ Der Linear-Konnektor synchronisiert Teams, Issues, Projekte, Kommentare, verknü
 | Projekte | Beschreibung, Meilensteine, Updates, Kommentare, Links und Dokumente |
 | Benutzer und Teams | Profile, Mitgliedschaften und Zugriffsrechte |
 
+Linear ordnet Issues und Projekte Teams zu. Issues können Unter-Issues, Kommentarverläufe mit Autor und Zeitpunkt, verknüpfte Dokumente und Dateien enthalten. Projekte können zusätzlich Meilensteine, Updates und externe Links enthalten. Der Konnektor übernimmt Nutzerprofile mit Kennung, E-Mail-Adresse und Anzeigenamen für die Zuordnung von Identitäten und Rechten.
+
 Bei öffentlichen Teams sind Inhalte für Mitglieder der Linear-Organisation sichtbar; bei privaten Teams nur für deren Mitglieder. Prüfen Sie die Sichtbarkeit nach der ersten Synchronisierung mit geeigneten Konten.
 
 ## OAuth-Anwendung in Linear erstellen
@@ -123,3 +125,27 @@ Der Konnektor synchronisiert zuerst Nutzer und Teams samt Mitgliedschaften und R
 | Nur bestimmte Personen sehen keine Treffer | E-Mail-Zuordnung zwischen Linear und Novaplan AI, Mitgliedschaft im privaten Team und Rechte des autorisierenden Kontos |
 
 Die erste Synchronisierung dauert je nach Zahl der Teams, Issues, Projekte und Anhänge sowie der Antwortzeit der Linear-API unterschiedlich lang. Team- und Datumsfilter können den Umfang begrenzen; ein deaktivierter Indexierungsfilter allein verringert die Quellabfragen nicht zwangsläufig. Prüfen Sie bei fehlenden Treffern zuerst, ob die Datensätze unter **All Records** vorhanden sind, ob ihre Indexierung abgeschlossen ist und ob die betroffene Person Zugriff auf das Linear-Team hat. Bei ungeklärten Berechtigungs- oder Synchronisierungsfehlern wenden Sie sich an [Novaplan Support](/de/contact-us).
+
+## Häufige Fragen
+
+<AccordionGroup>
+  <Accordion title="Welche OAuth-Berechtigung benötigt der Konnektor?">
+    Die dokumentierte Linear-Anwendung verwendet `read`. Der Konnektor liest Teams und deren Inhalte, erstellt, ändert oder löscht aber keine Daten in Linear. Prüfen Sie die angeforderten Berechtigungen im tatsächlichen Freigabedialog Ihres Workspaces.
+  </Accordion>
+  <Accordion title="Gibt es eine Synchronisierung in Echtzeit?">
+    Der dokumentierte Konnektor verwendet geplante Abfragen statt Webhooks in Echtzeit. Änderungen werden beim nächsten Lauf erfasst; das Standardintervall beträgt 60 Minuten. Sie können einen manuellen Lauf starten.
+  </Accordion>
+  <Accordion title="Kann ich einzelne Projekte auswählen?">
+    Ein eigener Projektfilter ist nicht dokumentiert. Sie können Teams sowie Erstellungs- und Änderungsdaten filtern. Da Projekte zu Teams gehören, begrenzt ein Teamfilter auch die zugehörigen Projekte.
+  </Accordion>
+  <Accordion title="Warum fehlen Suchtreffer, obwohl Datensätze vorhanden sind?">
+    Prüfen Sie zunächst unter **All Records**, ob die Datensätze synchronisiert wurden. Kontrollieren Sie dann Indexierungsstatus und Indexierungsoptionen. Wenn nur einzelne Personen keine Treffer erhalten, prüfen Sie die E-Mail-Zuordnung und ihre Mitgliedschaft in privaten Linear-Teams.
+  </Accordion>
+</AccordionGroup>
+
+## Weiterführende Links
+
+- [Linear API-Einstellungen](https://linear.app/settings/api)
+- [Linear OAuth 2.0](https://linear.app/developers/oauth-2-0-authentication)
+- [Linear GraphQL API](https://linear.app/developers/graphql)
+- [Linear API-Referenz](https://studio.apollographql.com/public/Linear-API/schema/reference?variant=current)
