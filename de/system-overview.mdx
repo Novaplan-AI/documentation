@@ -1,53 +1,145 @@
 ---
 title: "Systemüberblick"
-description: "Wie Weboberfläche, API, MCP, Suche, Konnektoren und Datenspeicher in Novaplan AI zusammenspielen."
-mode: wide
+description: "Wie Weboberfläche, REST- und SDK-Clients, MCP, API, Python-Dienste und Datenspeicher in Novaplan AI zusammenspielen."
 icon: "network-wired"
+mode: wide
 ---
 
-Novaplan AI ist eine von Novaplan verwaltete Workplace-AI-Plattform. Die Weboberfläche dient Suche, Chat und Administration. Die API authentifiziert Nutzende, prüft Berechtigungen und verwaltet Inhalte. Weitere Dienste verbinden Unternehmensanwendungen, indexieren Dokumente und beantworten Fragen mit Quellenangaben.
+Novaplan AI ist eine Workplace-AI-Plattform, die überwiegend vom Novaplan-Team verwaltet wird. Sie besteht aus drei Teilen:
 
-Für Kunden ist die freigegebene Workspace-Adresse maßgeblich. Novaplan richtet die Infrastruktur ein. Die folgenden Komponenten erklären die Funktionsweise; sie sind keine Bereitstellungsanleitung.
+1. Einer **Weboberfläche** für Suche, Chat und Administration im Browser.
+2. Einer **API**, die Nutzende authentifiziert, Berechtigungen durchsetzt und Wissensdatenbanken sowie Dateien verwaltet.
+3. **Python-Diensten**, die Daten aus Unternehmensanwendungen synchronisieren, Dokumente durchsuchbar machen und Antworten mit Quellenangaben zurückgeben.
 
-## Weg einer Anfrage
+Ob jemand die Weboberfläche nutzt, eine Anwendung die REST-API aufruft oder ein Agent MCP verwendet: Der Zugriff richtet sich nach der authentifizierten Identität und den von Novaplan AI durchgesetzten Berechtigungen. Welche synchronisierten Inhalte sichtbar sind, hängt außerdem vom jeweiligen Konnektor und der Workspace-Konfiguration ab.
 
-1. Eine Person stellt eine Frage in der Weboberfläche, über die REST-API oder über einen mit `/mcp` verbundenen Agenten.
-2. Die API prüft Identität und Berechtigungen und leitet die Anfrage an den Query-Dienst weiter.
-3. Query findet passende Inhalte im Wissensgraphen und im Vektorspeicher. Ein Sprachmodell formuliert die Antwort und verweist mit Quellenangaben auf die zugrunde liegenden Dokumente.
+## Weg einer Anfrage durch das System
 
-Welche Inhalte sichtbar sind, hängt von der angemeldeten Identität, der Konnektor-Konfiguration und den Berechtigungen im Workspace ab. Prüfen Sie die Zugriffsregeln der jeweiligen Datenquelle, bevor Sie Freigaben annehmen.
+<Steps>
+  <Step title="Sie fragen im Browser, über eine API oder über einen Agenten">
+    Die Weboberfläche, ein REST- oder SDK-Client beziehungsweise ein MCP-Client sendet Ihre Frage über HTTP an die **Node.js-API**. Chat und Suche können Antworten über Server-Sent Events (SSE) streamen. Dabei bleibt die Verbindung offen, sodass die Antwort während ihrer Erstellung erscheint.
+  </Step>
+  <Step title="Die API prüft Ihre Identität">
+    Die Node.js-API prüft Ihre Sitzung oder Ihr Token, wendet Ihre Berechtigungen an und leitet die Frage an den **Query**-Dienst weiter.
+  </Step>
+  <Step title="Query findet Quellen und formuliert eine belegte Antwort">
+    Query sucht zusammengehörige Datensätze im **Wissensgraphen** und ähnliche Textstellen im konfigurierten **Vektorspeicher** (Qdrant in der Referenzarchitektur). Anschließend ruft der Dienst das **Sprachmodell** des Workspaces auf. Die Antwort enthält Quellenangaben, die auf die ursprünglichen Dokumente verweisen.
+  </Step>
+</Steps>
 
-Im Hintergrund synchronisieren **Konnektoren** Daten aus angebundenen Anwendungen. Ein **Event-Bus** übergibt neue oder geänderte Datensätze an **Indexing**. Dieser Dienst verarbeitet Dateien, bildet Vektoren und aktualisiert den Wissensgraphen. Die verwaltete Umgebung kann hierfür Redis Streams oder Kafka als Transport verwenden.
+Dieser Ablauf setzt voraus, dass Unternehmensdaten bereits in den Speichern liegen. Im Hintergrund füllt Novaplan AI sie so:
 
-## Architektur
+1. **Konnektoren** holen Daten aus Slack, Drive, Jira, Confluence und weiteren Quellen.
+2. Sie veröffentlichen neue oder geänderte Datensätze auf dem **Event-Bus**.
+3. **Indexing** verarbeitet die Dateien, wandelt Text in Vektoren um und schreibt in den Wissensgraphen und den konfigurierten Vektorspeicher.
 
-<Frame caption="Referenzarchitektur von Novaplan AI">
+Der Event-Bus kann je nach verwalteter Umgebung **Redis Streams** oder **Kafka** verwenden. Novaplan konfiguriert diese Infrastruktur.
+
+Das folgende Diagramm zeigt den Ablauf von oben nach unten: Zuerst die Zugriffswege auf Novaplan AI, dann API und Event-Bus, danach Query, Indexing und Connectors und schließlich die Datenspeicher.
+
+## Architekturdiagramm
+
+<Frame caption="Klicken Sie auf die Abbildung, um sie in voller Größe zu öffnen.">
   <a href="/images/system-architecture/architecture-diagram.svg" target="_blank">
-    <img src="/images/system-architecture/architecture-diagram.svg" alt="Novaplan AI: Weboberfläche und API, Verarbeitungsdienste und Datenspeicher" width="1200" height="980" className="w-full h-auto" />
+    <img
+      src="/images/system-architecture/architecture-diagram.svg"
+      alt="Novaplan AI-Architektur: Zugriffswege, Anwendungsdienste und Datenspeicher"
+      width="1200"
+      height="980"
+      className="w-full h-auto"
+    />
   </a>
 </Frame>
 
-### Weboberfläche, API und MCP
+Die folgenden Abschnitte entsprechen der Reihenfolge im Diagramm.
 
-Die Weboberfläche ist eine Next.js-Anwendung. REST-Clients und Agenten verwenden die freigegebenen API- beziehungsweise MCP-Endpunkte des Workspaces. Die Node.js-API übernimmt unter anderem Anmeldung, Berechtigungen, Wissensdatenbanken, Dateiübertragung und MCP. Der [Entwicklerzugang](/de/developer/api-reference) erklärt die Integrationswege; [Novaplan Support](/de/contact-us) bestätigt unterstützte Routen, Zugriffsrechte und SDKs für Ihren Workspace.
+<div id="who-talks-to-novaplan-ai" />
 
-### Verarbeitung
+## Zugriffswege auf Novaplan AI
 
-**Connectors** verbinden Quellen wie Slack, Google Drive, Jira und Confluence. **Indexing** zerlegt Inhalte in durchsuchbare Abschnitte und schreibt sie in den Graph- und Vektorspeicher. **Query** ruft passende Inhalte ab und verwendet ein konfiguriertes Sprachmodell für Antworten. Ein separater Parser kann komplexe PDFs, Tabellen und OCR-Inhalte verarbeiten. Welche zusätzlichen Dienste in einem Workspace aktiv sind, hängt von seiner verwalteten Konfiguration ab.
+### Weboberfläche
 
-### Datenspeicher
+Nutzende greifen im Browser auf Novaplan AI zu. Die [Next.js](https://nextjs.org/)-Anwendung bietet Suche, Chat und Administration.
 
-| Bereich | Aufgabe | Technologien der Referenzarchitektur |
+### REST- und SDK-Clients
+
+Eigene Anwendungen können freigegebene HTTP-Schnittstellen verwenden. Der [Leitfaden zum API-Zugang](/de/developer/api-reference) hilft bei der Wahl eines Integrationswegs. Fragen Sie [Novaplan Support](/de/contact-us), welche Routen, SDK-Optionen und Berechtigungen für Ihren Workspace unterstützt werden.
+
+### Agenten und MCP
+
+Agenten verbinden sich über Streamable HTTP mit `/mcp`. Die Einrichtung beschreibt der [MCP-Überblick](/de/mcp/overview). Ein Agent meldet sich mit einem persönlichen Zugriffstoken an und erhält dieselben Datensätze, die die zugehörige Person nach eigener Anmeldung sehen würde.
+
+### Node.js-API
+
+Die API ist ein mit Express erstellter Node.js-Prozess. Weboberfläche, REST- und SDK-Clients sowie MCP-Clients kommunizieren mit diesem Prozess. Er verwaltet Konten, Berechtigungen, Wissensdatenbanken, Datei-Uploads, Authentifizierung, persönliche Zugriffstoken und MCP.
+
+Novaplan betreibt die Laufzeitumgebung und stellt Weboberfläche, API und MCP-Endpunkt unter der freigegebenen Workspace-Adresse bereit. Kunden benötigen keine lokalen Dienst-Ports, um diese Schnittstellen zu verwenden.
+
+Für Aufgaben im Workspace helfen die Anleitungen zu [Benutzern](/de/user-management/user), [Konnektoren](/de/connectors/overview) und [MCP](/de/mcp/overview). Der detaillierte Katalog der Dienst-APIs bleibt zurückgestellt, bis die Schnittstellen der bereitgestellten Enterprise-Version geprüft sind.
+
+## Verarbeitung im Hintergrund
+
+### Module im API-Prozess
+
+Auth, Storage, Mail, Config, Notifications, Crawling und der Connector Manager laufen **innerhalb desselben Express-Prozesses**.
+
+| Modul | Aufgabe |
+| --- | --- |
+| Auth | Meldet Personen per Passwort, Einmalcode, Google, Microsoft oder SAML an. |
+| Storage | Speichert Dateiinhalte auf lokalem Speicher, S3 oder Azure Blob. |
+| Config | Hält verschlüsselte Einstellungen vor, die andere Dienste lesen. |
+| Mail | Versendet E-Mails, etwa Einladungen und Einmalcodes. |
+| Notifications | Versendet Benachrichtigungen in der Anwendung und per E-Mail. |
+| Crawling | Plant die Ausführung von Konnektoren. |
+| Connector Manager | Speichert verschlüsselte Konnektor-Konfigurationen und leitet OAuth-Weiterleitungen des Browsers (`/oauth/authorize` und `/oauth/callback`) an den Python-Dienst für Konnektoren weiter. |
+
+### Event-Bus
+
+Konnektoren veröffentlichen Datensätze auf dem Event-Bus; Indexing verarbeitet sie. Novaplan wählt den Transport für die verwaltete Umgebung:
+
+- **Redis Streams** kann Konnektor-Ereignisse an Indexing übergeben.
+- **Kafka** ist eine alternative Ereignisplattform für größere Umgebungen.
+
+Redis kann in beiden Varianten zusätzlich für Caching und verschlüsselte Konfiguration verwendet werden.
+
+### Query, Indexing und Connectors
+
+**Query**, **Indexing** und **Connectors** sind Python-FastAPI-Dienste.
+
+**Connectors** kommuniziert mit Slack, Drive, Jira, Confluence und weiteren Unternehmensanwendungen. Der Dienst schließt OAuth-Vorgänge mit den jeweiligen Anbietern ab, erneuert Token und veröffentlicht neue oder geänderte Datensätze auf dem Event-Bus. Der Connector Manager in der API speichert die verschlüsselte Konfiguration und leitet OAuth-Weiterleitungen des Browsers an diesen Python-Dienst weiter. Der [Konnektoren-Überblick](/de/connectors/overview) enthält die Liste der dokumentierten Quellen.
+
+**Indexing** übernimmt diese Datensätze vom Event-Bus. Es verarbeitet Dateien, teilt sie in Abschnitte, erzeugt Texteinbettungen und schreibt in Vektorspeicher und Wissensgraph. **Docling** ist der aufwendigere Parser für PDFs, Tabellen und OCR. Je nach verwalteter Konfiguration können zusätzlich separate Parsing- und Extraction-Dienste eingesetzt werden.
+
+**Query** beantwortet Fragen. Der Dienst liest Wissensgraph und Vektorspeicher und ruft dann das Sprachmodell auf. Über den Event-Bus erhält er auch Konfigurationsänderungen.
+
+### Embedding-Server
+
+Indexing und Query benötigen **Vektoren**: Zahlenfolgen, die die Bedeutung eines Textabschnitts repräsentieren. So lassen sich später ähnliche Passagen finden.
+
+Die verwaltete Umgebung kann einen eigenen Embedding-Server mit der OpenAI-kompatiblen API `/v1/embeddings` oder einen konfigurierten Cloud-Anbieter verwenden. Der Kasten ist im Diagramm gestrichelt, weil Query und Indexing diesen Dienst bei Verwendung direkt über HTTP aufrufen.
+
+## Datenspeicher
+
+Jeder Kasten am unteren Rand des Diagramms hält einen anderen Zustandstyp. Die Tabelle zeigt die Technologien der Referenzarchitektur; die tatsächliche Novaplan-Umgebung kann einen anderen unterstützten Backend-Dienst verwenden. Hinweise zu den Anbietern stehen unter [Externe Dienste](/de/system-overview/external-services).
+
+| Speicher | Inhalt | Standard der Referenzarchitektur |
 | --- | --- | --- |
-| Wissensgraph | Datensätze, Personen und ihre Beziehungen | Neo4j oder ArangoDB |
-| Vektorsuche | Semantisch ähnliche Textabschnitte finden | Qdrant; weitere unterstützte Backends können konfiguriert sein |
-| Anwendungsdaten | Sitzungen und Metadaten | MongoDB |
-| Dateiinhalt | Hochgeladene und synchronisierte Dateien | Lokaler Speicher, S3 oder Azure Blob |
-| Cache und Konfiguration | Häufig genutzte Daten und verschlüsselte Einstellungen | Redis; optional etcd für Konfiguration |
-| Event-Bus | Änderungen von Konnektoren an Indexing übergeben | Redis Streams oder Kafka |
+| **Graph** | Datensätze, Personen und ihre Beziehungen im Wissensgraphen. | Neo4j (`DATA_STORE=neo4j`); ArangoDB ist eine weitere Option. Die Dienste verwenden eine Graph-Abstraktion, sodass die Funktionen mit beiden Backends arbeiten. |
+| **Vektoren** | Eingebettete Textabschnitte für Ähnlichkeitssuchen. | Qdrant (`VECTOR_DB_TYPE=qdrant`). |
+| **Dokumente** | Sitzungen, Dateimetadaten und weiterer Anwendungszustand. | MongoDB. |
+| **Dateien** | Inhalt hochgeladener und durch Konnektoren abgeholter Dateien. | Lokaler Speicher, S3 oder Azure Blob. Siehe [Externe Dienste](/de/system-overview/external-services). |
+| **Redis** | Cache, verschlüsselte Konfiguration und Redis Streams, falls Redis als Event-Bus dient. | Wird je nach Konfiguration eingesetzt. |
+| **etcd** | Alternativer Speicher für verschlüsselte Konfiguration. | Optionale verwaltete Konfiguration. |
 
-Diese Tabelle beschreibt unterstützte Komponenten, nicht die konkrete Ausstattung Ihres Workspaces. Weitere technische Einzelheiten stehen in den [externen Diensten](/de/system-overview/external-services). Die detaillierte Dienst-API-Referenz folgt nach Prüfung des bereitgestellten Enterprise-Vertrags.
+## Eingebundene Modelle
 
-## Modelle und Unternehmenssysteme
+Novaplan AI wird mit Modellen verbunden, die Sie bereits verwenden.
 
-Ein **Embedding-Modell** bildet Text als Vektoren ab, damit semantisch ähnliche Passagen gefunden werden. Ein **Sprachmodell** erstellt Antworten auf Basis der gefundenen Inhalte. Die verwendeten Modelle werden für den Workspace konfiguriert. Identitätsanbieter, E-Mail-Dienste und weitere Unternehmensanwendungen werden als separate Integrationen angebunden.
+- Ein **Embedding-Modell** wandelt verarbeiteten Text in Vektoren für den konfigurierten Vektorspeicher um. Die Referenzarchitektur kann einen lokalen Embedding-Server verwenden; ein verwalteter Workspace kann einen anderen Anbieter einsetzen.
+- Ein **Sprachmodell (LLM)** formuliert die Antwort mit Quellenangaben. Sie können einen beliebigen Anbieter oder ein lokales Modell über Ollama verwenden.
+
+Der Kasten für KI-Modelle links im Diagramm steht für diese beiden Modellarten.
+
+## Identität und weitere Unternehmenssysteme
+
+Rechts im Diagramm stehen Identitätsanbieter wie Azure AD und Okta, ein SMTP-Server für E-Mails und die mehr als 50 Anwendungen, die Konnektoren synchronisieren können. Diese Verbindungen registrieren Sie in Novaplan AI. Auth nutzt die Identitätsanbieter, Mail verwendet SMTP und Connectors synchronisiert die Unternehmensanwendungen.
