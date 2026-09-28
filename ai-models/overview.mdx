@@ -81,7 +81,7 @@ The table below lists LLM providers, their configuration fields, and example mod
 >
 > **Ollama:** A standard Ollama service does not require an API key. The application default is `http://host.docker.internal:11434`, but use it only if Novaplan confirms that the managed workspace can reach the service through that hostname.
 >
-> **Amazon Bedrock:** If Novaplan AI is running on an EC2 instance with an appropriate IAM role attached, you can leave the AWS Access Key ID and Secret Access Key blank.
+> **Amazon Bedrock:** Leave the AWS key fields blank only when Novaplan has configured an approved AWS credential source for the managed backend, such as a workload role. Credentials on your own computer are not used automatically.
 
 ## Managing configured models
 
@@ -180,7 +180,7 @@ Only workspace **admins** and **owners** can access the AI Models settings page.
 >
 > **Sentence Transformers / HuggingFace:** Run locally inside Novaplan AI. No external API or API key needed.
 >
-> **Amazon Bedrock:** Leave AWS keys blank when running Novaplan AI on EC2 with an appropriate IAM role. Provider dropdown: Cohere, Amazon (Titan), Other.
+> **Amazon Bedrock:** Leave AWS key fields blank only when Novaplan has configured an approved AWS credential source for the managed backend. Provider dropdown: Cohere, Amazon (Titan), Other.
 
 ### Managing configured embedding models
 

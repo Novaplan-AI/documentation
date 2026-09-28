@@ -74,7 +74,7 @@ Die Modellkennungen sind Beispiele. Verwenden Sie die Kennung, die der jeweilige
 - **Azure AI:** Übernehmen Sie die Endpoint-URL und den Bereitstellungsnamen aus Foundry. Die Claude Messages API verwendet häufig `https://<resource>.services.ai.azure.com/anthropic`; OpenAI-kompatible Bereitstellungen nutzen einen ressourcenspezifischen `/openai/v1/`-Endpoint. Prüfen Sie die [Azure-AI-Anleitung](/de/ai-models/llm/azure-ai) und die Unterstützung des API-Formats durch Novaplan.
 - **OpenAI Compatible:** Nutzen Sie diese Option für Dienste mit kompatiblem OpenAI-API-Format.
 - **Ollama:** Eine lokale Ollama-Instanz benötigt keinen API-Schlüssel. In der technischen Referenz wird `http://host.docker.internal:11434` als Standard-Endpoint genannt. Novaplan muss prüfen, ob der Server aus der betriebenen Umgebung erreichbar ist.
-- **Amazon Bedrock:** Auf einer EC2-Instanz mit geeigneter IAM-Rolle können AWS-Zugangsschlüssel leer bleiben.
+- **Amazon Bedrock:** Lassen Sie die AWS-Schlüsselfelder nur leer, wenn Novaplan für das verwaltete Backend eine freigegebene AWS-Anmeldequelle eingerichtet hat, etwa eine Workload-Rolle. Anmeldedaten auf Ihrem eigenen Computer werden nicht automatisch verwendet.
 
 ### Konfigurierte LLMs verwalten
 
@@ -147,7 +147,7 @@ Das integrierte **BAAI/bge-large-en-v1.5** ist laut dieser Referenz als Systemst
 - **OpenAI Compatible:** Für Anbieter mit OpenAI-kompatibler Embeddings-API.
 - **Ollama:** Eine lokale Instanz benötigt keinen API-Schlüssel. Die technische Referenz nennt `http://host.docker.internal:11434` als Standard-Endpoint.
 - **Sentence Transformers / HuggingFace:** Laufen laut Referenz lokal in der betriebenen Umgebung und benötigen keine externe API.
-- **Amazon Bedrock:** Auf EC2 mit geeigneter IAM-Rolle können AWS-Schlüssel leer bleiben. Der Provider-Wähler bietet Cohere, Amazon (Titan) und Other.
+- **Amazon Bedrock:** Lassen Sie die AWS-Schlüsselfelder nur leer, wenn Novaplan für das verwaltete Backend eine freigegebene AWS-Anmeldequelle eingerichtet hat. Der Provider-Wähler bietet Cohere, Amazon (Titan) und Other.
 
 ### Konfigurierte Embedding-Modelle verwalten
 
