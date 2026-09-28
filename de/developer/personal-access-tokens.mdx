@@ -10,7 +10,7 @@ Jedes Organisationsmitglied kann ein eigenes PAT erstellen, ohne dass eine Admin
 
 ## Token erstellen
 
-1. Melden Sie sich in Ihrem Novaplan AI Workspace an und öffnen Sie **Workspace-settings → Developer Settings → Personal Access Tokens**.
+1. Melden Sie sich in Ihrem Novaplan AI Workspace an und öffnen Sie **Workspace Settings → Developer Settings → Personal Access Tokens**.
 2. Wählen Sie **New token** und geben Sie einen aussagekräftigen Namen ein.
 3. Legen Sie ein Ablaufdatum und die benötigten Scopes fest. Die technische Referenz nennt 30, 90 und 365 Tage sowie **Never**; ohne Auswahl gilt dort 30 Tage. **Never** hat keine automatische zeitliche Begrenzung. Verwenden Sie die kürzeste für Ihren Anwendungsfall passende Laufzeit. Der Name darf 1 bis 100 Zeichen lang sein. Wenn Sie keine Scopes auswählen, kann der Server seinen vollständigen konfigurierten MCP-Scope-Satz verwenden; wählen Sie deshalb ausdrücklich nur die nötigen Rechte.
 4. Kopieren Sie den Token sofort in einen geschützten Secret-Speicher. Der Rohwert wird nur beim Erstellen angezeigt. Wenn er verloren geht, widerrufen Sie ihn und erstellen einen neuen.

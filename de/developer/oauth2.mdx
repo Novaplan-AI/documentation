@@ -8,7 +8,7 @@ Novaplan AI stellt einen OAuth-2.0-Autorisierungsserver bereit. Eine Workspace-A
 
 ## Anwendung anlegen
 
-1. Melden Sie sich als Administration an und öffnen Sie **Workspace-settings → Developer Settings → OAuth 2.0 Apps**.
+1. Melden Sie sich als Administration an und öffnen Sie **Workspace Settings → Developer Settings → OAuth 2.0 Apps**.
 2. Wählen Sie **New OAuth application** und vergeben Sie einen **Application Name**. Optional können Sie eine Beschreibung sowie Homepage-, Datenschutz- und Nutzungsbedingungen-URLs eintragen. Diese Angaben helfen Nutzenden, die Anwendung im Einwilligungsdialog zu erkennen.
 3. Wählen Sie den passenden Grant-Typ. **Authorization Code** ist für Anwendungen mit persönlicher Anmeldung vorgesehen. Öffentliche Clients wie mobile Apps und Single-Page-Apps benötigen dabei **PKCE**. **Refresh Token** ermöglicht erneute Tokens nach erteilter `offline_access`-Berechtigung.
 4. Tragen Sie die Redirect-URIs der Clients ein. Die URI im Autorisierungsaufruf muss exakt einem registrierten Wert entsprechen. HTTPS ist erforderlich; `localhost` und `127.0.0.1` können für lokale Clients zulässig sein.
