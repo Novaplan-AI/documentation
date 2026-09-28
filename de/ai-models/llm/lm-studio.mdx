@@ -1,0 +1,32 @@
+---
+title: "LM Studio"
+description: "Über LM Studio bereitgestellte Modelle mit Novaplan AI verbinden."
+---
+
+# LM Studio konfigurieren
+
+LM Studio kann heruntergeladene Modelle auf einer eigenen Maschine über eine OpenAI-kompatible API bereitstellen. Novaplan AI verbindet sich mit einem für den Workspace erreichbaren LM-Studio-Server. Die Modellmaschine und ihr Netzwerkzugang werden von Ihrer Administration betrieben; Novaplan unterstützt Sie bei der Anbindung.
+
+## Vorbereitungen
+
+1. Installieren Sie [LM Studio](https://lmstudio.ai/) auf der Maschine, die das Modell ausführt.
+2. Laden Sie auf dem Tab **Discover** ein Modell herunter.
+3. Öffnen Sie **Developer** (in älteren Versionen **Local Server**), laden Sie das Modell und starten Sie den API-Server.
+4. Notieren Sie die Adresse und den Modellnamen aus der Serveransicht. LM Studio verwendet häufig Port `1234`.
+
+Die Maschine benötigt genug Arbeitsspeicher für das gewählte Modell. Ein quantisiertes Modell mit acht Milliarden Parametern kann grob 8 GB freien RAM benötigen; der tatsächliche Bedarf hängt von Modell und Quantisierung ab.
+
+## Angaben in Novaplan AI
+
+| Feld | Verwendung |
+| --- | --- |
+| **Endpoint URL** | Erforderlich. Erreichbare Serveradresse mit `/v1`, beispielsweise `http://host.docker.internal:1234/v1`. |
+| **Model Name** | Erforderlich. Exakte Modell-ID aus der LM-Studio-Serveransicht, beispielsweise `lmstudio-community/Meta-Llama-3.1-8B-Instruct-GGUF`. |
+| **API Key** | Optional. LM Studio selbst prüft üblicherweise keinen Schlüssel; tragen Sie nur einen ein, wenn ein vorgeschalteter Proxy ihn verlangt. |
+| **Model Friendly Name** | Optionaler Anzeigename; ohne Wert wird der Modellname verwendet. |
+| **Context Length** | Dokumentiertes Kontextlimit des Modells; ohne Wert nutzt Novaplan AI einen konservativen Standard. |
+| **Is Multimodal** / **Is Reasoning** | In der Ausgangskonfiguration aktiviert; passen Sie beide Optionen an die Modellfähigkeiten an. |
+
+`host.docker.internal` kann in einer Containerumgebung eine lokale Modellmaschine erreichbar machen. Auf einem anderen Rechner verwenden Sie dessen tatsächliche Netzwerkadresse und aktivieren in LM Studio gegebenenfalls **Serve on Local Network**. `localhost` aus der Novaplan-Umgebung ist nicht automatisch Ihr Desktop. Die Modell-IDs lassen sich auf dem LM-Studio-Server über `/v1/models` prüfen.
+
+Bei **Connection refused** prüfen Sie den gestarteten Server, die Adresse und den Netzwerkzugang. Beim ersten Aufruf kann das Laden eines großen Modells länger dauern; laden Sie es vorab im Tab **Developer**. Bei **Model not found** kopieren Sie die exakte ID aus der Serveransicht. [Novaplan Support](/de/contact-us) hilft bei der Anbindung.

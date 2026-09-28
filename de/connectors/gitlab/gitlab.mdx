@@ -1,0 +1,127 @@
+---
+title: "GitLab"
+description: "GitLab-Projekte, Vorgänge, Merge Requests und Quellcode mit Novaplan AI durchsuchen."
+icon: "/logo/gitlab.png"
+---
+
+Der GitLab-Konnektor übernimmt Gruppen, Projekte, Vorgänge, Merge Requests und Dateien des Standardbranches in Novaplan AI. Die Suche berücksichtigt die aus GitLab übernommenen Projektberechtigungen. Novaplan richtet Ihren Workspace weitgehend für Sie ein; die GitLab-OAuth-App, den Zugriff und den Umfang der Synchronisierung stimmen Sie mit Ihrer GitLab-Administration und Novaplan ab.
+
+## Welche Inhalte werden übernommen?
+
+| Bereich | Inhalt |
+| --- | --- |
+| **Gruppen und Projekte** | Gruppen, Untergruppen und Projekte, auf die das verbundene Konto Zugriff hat |
+| **Work items** | Issues, Aufgaben und Incidents samt Beschreibung, Status, Labels, Kommentaren und Anhängen |
+| **Merge requests** | Beschreibung, Commits, geänderte Dateien mit Diffs und Review-Kommentare |
+| **Code repository** | Ordner und Quelldateien auf dem Standardbranch eines Projekts |
+| **Personen und Rechte** | GitLab-Mitglieder und ihre Zugriffsrollen für die einzelnen Projektbereiche |
+
+Novaplan AI gliedert jedes Projekt in **Work items**, **Merge requests** und **Code repository**. Dadurch kann eine Person mit der GitLab-Rolle **Guest** Vorgänge sehen, ohne Zugriff auf Merge Requests oder Quellcode zu erhalten. Andere Branches werden nicht als eigenständiger Codebereich synchronisiert; Änderungen daraus können über Merge-Request-Diffs auffindbar sein.
+
+## Voraussetzung: E-Mail-Zuordnung
+
+Novaplan AI ordnet GitLab-Mitglieder über ihre **öffentliche Profil-E-Mail-Adresse** zu. Diese muss mit der Adresse ihres Novaplan-AI-Kontos übereinstimmen. Ist sie verborgen oder abweichend, erhält die Person trotz GitLab-Zugriff keine Berechtigung für die synchronisierten Inhalte.
+
+Jede betroffene Person öffnet in GitLab **Edit profile → Profile → Public email**, wählt die passende Adresse und speichert die Änderung. Diese Einstellung ist personenbezogen; eine Administration kann sie nicht stellvertretend für alle ändern. Die Adresse wird dadurch im GitLab-Profil öffentlich sichtbar. Klären Sie die damit verbundene Datenschutzentscheidung vor der Aktivierung mit Ihrer Organisation.
+
+## GitLab-OAuth-App erstellen
+
+1. Öffnen Sie für GitLab.com die [GitLab-Anwendungen](https://gitlab.com/-/user_settings/applications). Bei einer selbst betriebenen Instanz verwenden Sie stattdessen `https://your-host/-/user_settings/applications` auf **dieser** Instanz.
+2. Wählen Sie **Add new application** und vergeben Sie einen Namen, beispielsweise `Novaplan AI GitLab Connector`.
+3. Öffnen Sie in Novaplan AI **Workspace settings → Connectors → GitLab → Setup** und kopieren Sie die dort angezeigte **Redirect URL**. Fügen Sie sie in GitLab als **Redirect URI** ein. Die Adressen müssen exakt übereinstimmen.
+4. Wählen Sie die Scopes `read_user`, `read_repository` und `read_api` und speichern Sie mit **Save application**.
+5. Kopieren Sie die **Application ID** und das **Secret**. Bewahren Sie das Secret geschützt auf.
+
+Die App für eine selbst betriebene GitLab-Instanz muss auf derselben Instanz angelegt werden. Eine App auf GitLab.com kann nicht für den OAuth-Callback einer anderen Instanz verwendet werden.
+
+## Verbindung in Novaplan AI autorisieren
+
+1. Öffnen Sie **Workspace settings → Connectors → GitLab → Setup** und prüfen Sie, ob die **Redirect URI** mit der GitLab-App übereinstimmt.
+2. Tragen Sie **Application (Client) ID** und **Client Secret** ein. Für GitLab.com kann **GitLab Instance URL** leer bleiben oder `https://gitlab.com` enthalten. Bei einer selbst betriebenen Instanz tragen Sie deren Basisadresse ein, beispielsweise `https://gitlab.example.com`, ohne Pfad oder abschließenden Schrägstrich.
+3. Klicken Sie auf **Next** und dann auf **Authenticate GitLab to Proceed**. Melden Sie sich mit einem Konto an, das auf die gewünschten Projekte zugreifen darf, prüfen Sie die angeforderten Rechte und wählen Sie **Authorize**.
+4. Kehren Sie nach der erfolgreichen Weiterleitung zu Novaplan AI zurück und öffnen Sie **Continue to configuration**.
+
+Wenn Client-ID, Secret oder Callback-Adresse später geändert werden, aktualisieren Sie die Konfiguration in Novaplan AI und autorisieren die Verbindung erneut.
+
+## Umfang und Synchronisierung festlegen
+
+Unter **Sync Settings** wählen Sie **Scheduled** oder **Manual**. Die geplante Synchronisierung verwendet standardmäßig ein Intervall von 60 Minuten; bei manueller Synchronisierung starten Sie die Läufe selbst.
+
+| Sync filter | Wirkung |
+| --- | --- |
+| **GitLab Groups** | Beschränkt Projekte auf ausgewählte Gruppen und ihre Untergruppen; verwendet Namespace-Pfade wie `my-org/engineering` |
+| **Repositories** | Beschränkt auf Projekte anhand von `path_with_namespace`, beispielsweise `my-org/my-repo` |
+| **Modified Date** | Begrenzt Vorgänge und Merge Requests auf den Änderungszeitraum |
+| **Created Date** | Begrenzt Vorgänge und Merge Requests auf den Erstellungszeitraum |
+
+**GitLab Groups** und **Repositories** bieten **In** für ausschließlich ausgewählte Einträge und **Not In** zum Ausschließen ausgewählter Einträge. Beim Tippen fragt Novaplan AI die GitLab-Instanz nach passenden Werten. Der Konnektor kann für die Auswahl außerdem Gruppen-, Projekt- oder Mitgliedsmetadaten abfragen, bevor ausgeschlossene Projekte bei Vorgängen, Merge Requests und Code übersprungen werden. Die Filter garantieren daher nicht, dass ausgeschlossene Projekte nie entdeckt werden. Die Datumsfilter gelten **nicht** für Quelldateien; diese stammen aus dem aktuellen Stand des Standardbranches.
+
+Unter **Indexing Filters** sind **Index Issues**, **Index Merge Requests** und **Index Code Files** standardmäßig aktiviert. **Enable Manual Indexing** ist standardmäßig deaktiviert. Wenn Sie **Index Code Files** ausschalten, bleiben synchronisierte Dateien über Namen und Pfade auffindbar, ihre Inhalte werden aber nicht für die Suche indexiert. Speichern Sie mit **Save Configuration** und verfolgen Sie den ersten Lauf unter **Indexing Progress**.
+
+## Berechtigungen und technische Grenzen
+
+| GitLab-Rolle | Zugriffsstufe | Work items | Merge requests | Code repository |
+| --- | ---: | :---: | :---: | :---: |
+| Guest | 10 | Ja | — | — |
+| Reporter | 20 | Ja | Ja | Ja |
+| Developer | 30 | Ja | Ja | Ja |
+| Maintainer | 40 | Ja | Ja | Ja |
+| Owner | 50 | Ja | Ja | Ja |
+
+Ohne zuordenbare E-Mail erhält ein Mitglied keinen Zugriff über Novaplan AI. Kann der Konnektor Mitglieder eines Projekts nicht abrufen, erhält ersatzweise **nur die Person, die den Konnektor erstellt hat**, Zugriff; er gibt die Daten niemals pauschal für alle frei.
+
+Projekte werden anhand ihrer numerischen GitLab-ID zugeordnet. Ein umbenanntes oder verschobenes Projekt behält daher seine Datensätze und Synchronisierungsstände. Für Code verfolgt der Konnektor den Commit-Stand des Standardbranches. Beim ersten Lauf erfasst er den Repository-Baum; danach vergleicht er den gespeicherten Commit mit dem aktuellen Stand. Umbenannte Dateien können ihren Datensatz behalten, statt als Löschung und Neuanlage zu erscheinen.
+
+Nicht jede Datei des Standardbranches wird zum Datensatz. Der zugängliche Quellcode schließt unter anderem Folgendes aus:
+
+| Kategorie | Beispiele |
+| --- | --- |
+| Abhängigkeiten | `node_modules`, `vendor`, `third_party`, `site-packages`, `venv` |
+| Builds und Caches | `dist`, `build`, `target`, `out`, `.next`, `__pycache__`, `.pytest_cache`, `coverage` |
+| Lockdateien | `package-lock.json`, `yarn.lock`, `poetry.lock`, `Cargo.lock`, `Gemfile.lock` |
+| Abgeleitete Dateien | `*.min.js`, `*.min.css`, `*.map`, `*.snap`, `*.pb.go`, `*_pb2.py`, `*.generated.*`, `generated/` |
+| Dateien mit führendem Punkt und Metadaten | `.git`, `.idea`, `.vscode`, `.gradle` und andere Dotfiles |
+
+Die Dateizahl in Novaplan AI kann deshalb geringer sein als im Repository. Ein Lauf, der mehr als die Hälfte der bisher erfassten Projektdateien löschen würde, wird als Schutz vor unvollständigen GitLab-Antworten nicht übernommen. Bei einem fehlgeschlagenen Lauf bleibt der zuletzt erfolgreiche Synchronisierungsstand erhalten.
+
+Vorgänge und Merge Requests behalten ihre Beschreibungen, Kommentare und zugehörigen Anhänge als zusammengehörige Inhalte. Bei Merge Requests kommen Commits, Dateiänderungen mit Diffs und Review-Kommentare hinzu. Scheitert das Speichern einer Datensatzgruppe, endet der betroffene Schritt ohne neuen Fortschrittspunkt und wird beim nächsten Lauf erneut abgefragt. Kann ein einzelner Vorgang oder Merge Request beispielsweise wegen nicht lesbarer Kommentare nicht verarbeitet werden, laufen die übrigen Inhalte des Projekts weiter. Der Fortschrittspunkt bleibt unmittelbar vor dem frühesten fehlgeschlagenen Eintrag, damit dieser erneut gelesen wird.
+
+Der OAuth-Token wird normalerweise vor Ablauf erneuert. Antwortet GitLab dennoch mit **401 Unauthorized**, erneuert der Konnektor ihn einmal und wiederholt die Anfrage. Gleichzeitig auftretende 401-Antworten teilen sich diese Erneuerung. Andere HTTP-Statuscodes lösen keine Erneuerung aus.
+
+Bei einem GitLab-Administrator- oder EE-Auditor-Konto versucht der Konnektor, alle für dieses Konto lesbaren Gruppen und Projekte aufzulisten. Liefert ein Auditor wegen Einschränkungen der GitLab-Listing-Endpunkte keine Ergebnisse, versucht der Konnektor stattdessen eine auf Mitgliedschaften begrenzte Abfrage. Für eine erwartete instanzweite Abdeckung prüfen Sie diesen Fall mit einem Administratorkonto.
+
+## Fehler beheben
+
+| Problem | Prüfen Sie |
+| --- | --- |
+| **OAuth-Autorisierung oder Callback schlägt fehl** | Application ID, Secret und exakte Redirect URI, einschließlich Protokoll und Schrägstrich. Prüfen Sie, ob die App auf der richtigen GitLab-Instanz angelegt wurde. |
+| **Keine Projekte werden synchronisiert** | Verbindungsstatus, Projektzugriff des autorisierenden Kontos sowie Gruppen- und Repository-Filter. |
+| **Keine Quelldateien erscheinen** | `read_repository`, **Index Code Files** und den Standardbranch. Sehr große Dateien können als Datensätze erscheinen, ohne dass ihr Inhalt indexiert wird. |
+| **Eine Person sieht trotz GitLab-Zugriff keine Daten** | Öffentliche GitLab-Profil-E-Mail, Übereinstimmung mit dem Novaplan-AI-Konto und GitLab-Rolle. Guest sieht nur Work items. |
+| **Selbst betriebene Instanz liefert nichts** | Basisadresse ohne Pfad und abschließenden Schrägstrich, Erreichbarkeit der Instanz und OAuth-App auf dieser Instanz. |
+| **EE-Auditor sieht keine Projekte** | GitLab kann für Auditoren bei Listing-Endpunkten keine Ergebnisse liefern. Der Konnektor versucht eine Abfrage nach Mitgliedschaft, deren Umfang kleiner ist. Für instanzweite Abdeckung verwenden Sie ein Administratorkonto. |
+
+## Häufige Fragen
+
+<AccordionGroup>
+  <Accordion title="Warum liefert die Suche keine Ergebnisse?">
+    Prüfen Sie die öffentliche GitLab-Profil-E-Mail und Projektmitgliedschaft der betroffenen Person. Die E-Mail muss ihrem Novaplan-AI-Konto zugeordnet werden können. Prüfen Sie außerdem unter **Workspace Settings → Connectors**, ob die Synchronisierung und Indexierung abgeschlossen sind. Das Konto, das die gemeinsame Verbindung autorisiert hat, muss das Projekt lesen können, muss aber nicht die E-Mail jedes späteren Nutzers teilen.
+  </Accordion>
+  <Accordion title="Wie lange dauert die erste Synchronisierung?">
+    Das hängt von Anzahl und Umfang der Projekte, Vorgänge, Merge Requests, Quelldateien und Anhänge, den GitLab-API-Grenzen, Filtern und der Indexierungskapazität Ihres Workspaces ab. Verfolgen Sie den tatsächlichen Lauf unter **Indexing Progress**. Für große Importe kann Novaplan die Planung unterstützen; eine feste Verarbeitungsrate für Ihren Enterprise Workspace ist nicht bestätigt.
+  </Accordion>
+  <Accordion title="Warum sehe ich nach der Anmeldung noch keine Datensätze?">
+    Prüfen Sie die OAuth-Scopes `read_user`, `read_repository` und `read_api`, den Quellzugriff des autorisierenden Kontos und die Gruppen- sowie Repository-Filter. Prüfen Sie anschließend die öffentliche GitLab-E-Mail und Mitgliedschaft der betroffenen Person. Ein erfolgreicher OAuth-Ablauf bedeutet noch nicht, dass die erste Indexierung abgeschlossen ist.
+  </Accordion>
+  <Accordion title="Kann ich nur bestimmte Gruppen oder Projekte synchronisieren?">
+    Ja. Verwenden Sie unter **Configure Records** die Filter **GitLab Groups** und **Repositories** mit `In` zum Einschließen oder `Not In` zum Ausschließen. Gruppenfilter umfassen auch Untergruppen. Die Auswahllisten fragen GitLab während der Eingabe ab; der Konnektor kann weiterhin Gruppen-, Projekt- oder Mitgliedsmetadaten lesen, um die Auswahl aufzulösen.
+  </Accordion>
+  <Accordion title="Werden alle Branches synchronisiert?">
+    Nein. Quelldateien stammen vom **Standardbranch** jedes Projekts. Diffs und Review-Kommentare von Merge Requests können Änderungen anderer Branches dennoch auffindbar machen; die eigenständigen Dateidatensätze zeigen den Standardbranch.
+  </Accordion>
+  <Accordion title="Funktioniert eine selbst betriebene GitLab-Instanz?">
+    Ja. Tragen Sie deren Basisadresse ohne Pfad als **GitLab Instance URL** ein und erstellen Sie die OAuth-Anwendung auf genau dieser Instanz. Für GitLab.com kann das Feld leer bleiben oder `https://gitlab.com` enthalten.
+  </Accordion>
+</AccordionGroup>
+
+Novaplan unterstützt Sie bei der Einrichtung über [Support](/de/contact-us) oder unter [support@novaplan.ai](mailto:support@novaplan.ai).

@@ -89,7 +89,7 @@ The user generating the token must have a role assigned that includes the **"Acc
   />
 
 4. **Enter Details:**
-   - **Name:** Enter a descriptive name for the token (e.g., "Pipeshub-Integration").
+   - **Name:** Enter a descriptive name for the token (e.g., "Novaplan-AI-Integration").
    - **Expiry Date (Optional):** Set an expiration date if you want the token to automatically become invalid after a certain time for security purposes.
 
 5. **Save and Copy:** Click "Save".
@@ -105,7 +105,7 @@ The user generating the token must have a role assigned that includes the **"Acc
 
 </Accordion>
 
-<Accordion title="Connect BookStack to PipesHub" icon="plug">
+<Accordion title="Connect BookStack to Novaplan AI" icon="plug">
 
 The integration requires three pieces of information:
 
@@ -117,7 +117,7 @@ The integration requires three pieces of information:
 
 #### Step 1: Access and Configure Connector
 
-- Go to **Connector Settings** in the PipesHub dashboard.
+- Open **Workspace Settings → Connectors** in Novaplan AI.
 - Select the **BookStack Connector**.
 - Click the **Configure Setting** button.
 
@@ -128,16 +128,19 @@ The integration requires three pieces of information:
 - Paste the **BookStack Token Secret**.
 
 <Warning>
-  **Important:** Use API credentials generated from a BookStack account that has the same email address as your PipesHub account. Using a different email will cause permission issues on the PipesHub platform.
+  Use an approved BookStack account that can read the intended content and audit log. Its email does not have to match the Novaplan AI administrator configuring this shared connector. Search visibility is mapped from the synced BookStack users, roles, and content permissions.
 </Warning>
 
 #### Step 3: Set Sync Strategy
-  - Set your sync strategy as **Manual** or **Webhooks** (to be implemented)
+
+- Choose **Scheduled** or **Manual**. The accessible connector definition defaults scheduled runs to a 60-minute interval; Manual runs start only when an administrator triggers them.
+- If needed, use **Book Name** to limit synchronization to selected books. The available configuration also includes created-date and modified-date filters and an **Enable Manual Indexing** option. Review the selected scope before the first run.
+- Webhook synchronization is not implemented in the accessible connector.
 
 #### Step 4: Activate Connection
 
 - Click **Enable App** button.
-- The BookStack Connector is now active and will start syncing the shelves, books, chapters, and pages.
+- If you selected **Scheduled**, the connector can begin syncing shelves, books, chapters, and pages. If you selected **Manual**, trigger the first sync from the connector page. Check synchronization and indexing status before expecting search results.
 
 </Accordion>
 
@@ -156,7 +159,7 @@ The integration requires three pieces of information:
 </Accordion>
 
 <Accordion title="Does the API Token expire?">
-  It depends on how you created it. During token creation, the "Expiry Date" field is optional. If you left it blank, the token will expire in 100 years. If you set a date, you will need to generate a new token and update the connector settings in PipesHub before that date.
+  It depends on how you created it. During token creation, the "Expiry Date" field is optional. If you left it blank, the token will expire in 100 years. If you set a date, you will need to generate a new token and update the connector settings in Novaplan AI before that date.
 </Accordion>
 
 <Accordion title="What permissions are required?">
@@ -166,25 +169,25 @@ The integration requires three pieces of information:
 </Accordion>
 
 <Accordion title="How often does the connector sync data?">
-  The connector can be configured to sync data on a schedule or manually. Webhooks are planned for future implementation to enable real-time synchronization.
+  The connector can be configured to sync data on a schedule or manually. The documented connector does not provide a webhook sync option.
 </Accordion>
 
 <Accordion title="Facing issues not mentioned here?">
-  If you're experiencing issues not covered in this documentation, please check the docker logs for bookstack to see if it's failing from there, otherwise feel free to reach out to our support team for assistance on our [discord](https://discord.com/invite/K5RskzJBm2). 
+  If you're experiencing issues not covered in this documentation, please check the docker logs for bookstack to see if it's failing from there, otherwise feel free to reach out to [Novaplan AI support](mailto:support@novaplan.ai).
 </Accordion>
 
 <Accordion title="Queries not returning results. What could be wrong?">
 
 There are three common causes:
 
-1. **Email mismatch** - The email used during connector authentication doesn't match your PipesHub account email. This causes permission issues preventing you from accessing synced data.
-   - **Fix:** Reconfigure the connector and authenticate using the same email as your PipesHub account.
+1. **Viewer identity or BookStack access does not match** - A viewer's BookStack email, role, or content permission may not map to their Novaplan AI account.
+   - **Fix:** Ask your administrator to check the affected viewer's email and BookStack permissions. The API-token owner can be a different account.
 
 2. **Records show in "All Records" but not in search** - Documents display in the All Records section but don't appear in search query results.
    - **Fix:** Verify sync filters in the connector settings and ensure indexing has completed. Check that the data matches your search query criteria.
 
 3. **Data not yet indexed** - The connector is still syncing or hasn't completed the initial indexing process.
-   - **Fix:** Go to **Settings > Connectors**, check the sync status, and wait for indexing to complete.
+   - **Fix:** Go to **Workspace Settings → Connectors**, check the sync status, and wait for indexing to complete.
 
 </Accordion>
 

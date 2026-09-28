@@ -1,0 +1,66 @@
+---
+title: "Lokale MCP-Stdio-Brücke"
+description: "Einen MCP-Client über eine geprüfte lokale Brücke mit dem Novaplan AI Workspace verbinden."
+icon: "laptop-code"
+---
+
+Wenn ein Client den entfernten MCP-Endpunkt nicht direkt verwenden kann, kommt eine lokale Stdio-Brücke infrage. Die bestehende technische Implementierung verwendet das npm-Paket `@pipeshub-ai/mcp`. Der Paketname ist eine funktionale Kennung; ein Novaplan-Ersatzpaket ist noch nicht bestätigt. Nutzen Sie die Brücke erst, nachdem Novaplan ihre Eignung für Ihren Enterprise Workspace geprüft hat.
+
+<Warning>
+  Für Suche mit den persönlichen Zugriffsrechten in Novaplan AI muss die Brücke mit einem **benutzergebundenen** Token arbeiten. `client_credentials` besitzt keine Benutzeridentität. Speichern Sie ein persönliches Zugriffstoken nicht in einer gemeinsam genutzten oder eingecheckten Konfigurationsdatei.
+</Warning>
+
+## Voraussetzungen
+
+- Node.js **20 oder neuer** und `npx` auf dem Computer, auf dem der MCP-Client läuft.
+- Die von Novaplan bereitgestellte Workspace-Adresse mit `/api/v1` als API-Basis-URL für diese Brücke (`NOVAPLAN_API_URL`).
+- Ein eigenes [persönliches Zugriffstoken](/de/developer/personal-access-tokens), dessen Gültigkeit und Scopes zum gewünschten Zugriff passen.
+
+Das lokale Paket wird als Stdio-Prozess vom jeweiligen Client gestartet. Für einen HTTPS-Workspace mit einem Client, der entfernte MCP-Server unterstützt, verwenden Sie bevorzugt die [direkte Verbindung](/de/mcp/overview).
+
+`NOVAPLAN_API_URL` steht in den folgenden `--server-url`-Beispielen für `https://your-workspace.example.com/api/v1`. Ein direkt verbundener HTTP-MCP-Client verwendet dagegen `NOVAPLAN_WORKSPACE_URL/mcp` **ohne** `/api/v1`. Lassen Sie Paket und Endpunkt vor der Nutzung im verwalteten Workspace von Novaplan bestätigen.
+
+## Konfigurationsmuster
+
+Für Clients mit einer `mcpServers`-Konfiguration sieht der technische Aufruf so aus:
+
+```json
+{
+  "mcpServers": {
+    "novaplan": {
+      "command": "npx",
+      "args": [
+        "-y", "@pipeshub-ai/mcp", "start",
+        "--server-url", "NOVAPLAN_API_URL",
+        "--bearer-auth", "YOUR_BEARER_TOKEN"
+      ]
+    }
+  }
+}
+```
+
+`novaplan` ist ein frei wählbarer lokaler Servername; der Paketname und die CLI-Argumente müssen zum tatsächlich verwendeten Paket passen. Für Cursor liegt eine solche Konfiguration in `.cursor/mcp.json`; in VS Code öffnen Sie **MCP: Open User Configuration**, in Windsurf die rohe MCP-Konfiguration. Claude Desktop hat eine [eigene Anleitung](/de/mcp/claude-desktop).
+
+Für Claude Code oder Gemini CLI kann die Stdio-Konfiguration über die jeweilige MCP-CLI ergänzt werden:
+
+```bash
+claude mcp add novaplan -- npx -y @pipeshub-ai/mcp start \
+  --server-url NOVAPLAN_API_URL \
+  --bearer-auth YOUR_BEARER_TOKEN
+
+gemini mcp add novaplan -- npx -y @pipeshub-ai/mcp start \
+  --server-url NOVAPLAN_API_URL \
+  --bearer-auth YOUR_BEARER_TOKEN
+```
+
+Ersetzen Sie die Platzhalter durch die freigegebene API-Basis-URL mit `/api/v1` und Ihr eigenes Token. Prüfen Sie vor einer Übernahme in eine Teamkonfiguration, wie Ihr Client Geheimnisse sicher bereitstellt. Alle unterstützten CLI-Argumente zeigt `npx @pipeshub-ai/mcp --help`.
+
+## Wiederholungen und Zeitlimits
+
+Die aktuelle Brücke `@pipeshub-ai/mcp` wiederholt wiederholbare Anfragen bei 429, 502, 503 oder 504 bis zu insgesamt drei Versuchen. Eine `Retry-After`-Angabe wird bis zu 30 Sekunden beachtet; sonst gelten kurze, ansteigende Wartezeiten. Wiederholt werden GET, HEAD, OPTIONS, PUT und DELETE, nicht aber POST-Anfragen für Suche oder Chat. Pro Versuch wartet die Brücke höchstens 60 Sekunden auf den Beginn einer Antwort; eine bereits laufende Streaming-Antwort wird dadurch nicht beendet.
+
+Bei Bedarf setzen Sie im `env`-Block des MCP-Clients `PIPESHUB_MCP_MAX_ATTEMPTS` auf eine ganze Zahl von 1 bis 10 (`1` deaktiviert Wiederholungen) oder `PIPESHUB_MCP_TIMEOUT_MS` auf Millisekunden bis 3.600.000 (`0` deaktiviert das Zeitlimit). Diese Paketfunktion muss für den verwalteten Enterprise Workspace noch bestätigt werden.
+
+## Fehlerbehebung
+
+Wenn die Brücke nicht startet, prüfen Sie Node.js, `npx`, Paketverfügbarkeit und die Erreichbarkeit der API-Basis-URL. Bei `401` prüfen Sie Ablauf und Scopes des persönlichen Tokens. Bei Fragen zur Unterstützung des Pakets oder zum Enterprise-Endpunkt hilft [Novaplan Support](/de/contact-us).

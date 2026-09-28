@@ -1,17 +1,17 @@
 ---
 title: "System Overview"
-description: "How PipesHub is put together: the web app, REST and SDK clients, MCP, the API, the Python services, and the data stores."
+description: "How Novaplan AI is put together: the web app, REST and SDK clients, MCP, the API, the Python services, and the data stores."
 icon: "network-wired"
 mode: wide
 ---
 
-PipesHub is a workplace AI platform that you run yourself. It is made of three parts:
+Novaplan AI is a workplace AI platform managed primarily by the Novaplan team. It is made of three parts:
 
 1. A **web app** that people use in the browser for search, chat, and administration.
 2. An **API** that authenticates users, enforces permissions, and manages knowledge bases and files.
 3. **Python services** that sync data from your company apps, turn documents into searchable pieces, and return answers with citations.
 
-A person using the web app, an application using the REST API or an SDK, and an agent calling MCP see the same records. If you could not open a file in Slack, none of them can see it either.
+A person using the web app, an application using the REST API, and an agent calling MCP receive access according to their authenticated identity and the permissions enforced by Novaplan AI. The exact visibility of each synchronized source depends on its connector and workspace configuration.
 
 ## Follow a question through the system
 
@@ -23,19 +23,19 @@ A person using the web app, an application using the REST API or an SDK, and an 
     The Node.js API verifies your session or token, applies your permissions, and forwards the question to the **Query** service.
   </Step>
   <Step title="Query finds sources and writes a cited answer">
-    Query looks up related records in the **knowledge graph** and similar text in **Qdrant**, then calls the **language model you configured**. You get an answer with citations that point back to the original documents.
+    Query looks up related records in the **knowledge graph** and similar text in the configured **vector store** (Qdrant in the reference architecture), then calls the workspace's **language model**. You get an answer with citations that point back to the original documents.
   </Step>
 </Steps>
 
-That path only works after your company data is already in those stores. In the background, PipesHub fills them as follows:
+That path only works after your company data is already in those stores. In the background, Novaplan AI fills them as follows:
 
 1. **Connectors** pull data from Slack, Drive, Jira, Confluence, and your other sources.
 2. They publish new or changed records onto the **event bus**.
-3. **Indexing** parses the files, turns the text into vectors, and writes the knowledge graph and Qdrant.
+3. **Indexing** parses the files, turns the text into vectors, and writes to the knowledge graph and configured vector store.
 
-On a local machine, the event bus is **Redis Streams**. In a larger deployment, it is **Kafka**. The work the services do is the same in both cases; only the transport changes.
+The event bus can use **Redis Streams** or **Kafka**, depending on the managed environment. Novaplan configures this infrastructure.
 
-The diagram below shows that flow. Read it from top to bottom: who talks to PipesHub, then the API and the event bus, then Query, Indexing, and Connectors, then the data stores.
+The diagram below shows that flow. Read it from top to bottom: who talks to Novaplan AI, then the API and the event bus, then Query, Indexing, and Connectors, then the data stores.
 
 ## Architecture diagram
 
@@ -43,7 +43,7 @@ The diagram below shows that flow. Read it from top to bottom: who talks to Pipe
   <a href="/images/system-architecture/architecture-diagram.svg" target="_blank">
     <img
       src="/images/system-architecture/architecture-diagram.svg"
-      alt="PipesHub architecture: presentation, application, and data tiers"
+      alt="Novaplan AI architecture: presentation, application, and data tiers"
       width="1200"
       height="980"
       className="w-full h-auto"
@@ -53,15 +53,17 @@ The diagram below shows that flow. Read it from top to bottom: who talks to Pipe
 
 The sections below follow the same order as the diagram.
 
-## Who talks to PipesHub
+<div id="who-talks-to-novaplan-ai" />
+
+## Who talks to Novaplan AI
 
 ### Web app
 
-People use PipesHub in the browser. The interface is a [Next.js](https://nextjs.org/) application for search, chat, and administration.
+People use Novaplan AI in the browser. The interface is a [Next.js](https://nextjs.org/) application for search, chat, and administration.
 
 ### REST and SDK clients
 
-Your own applications talk to the HTTP API. Use the REST endpoints directly, or the [Python](https://github.com/pipeshub-ai/pipeshub-sdk-python), [TypeScript](https://github.com/pipeshub-ai/pipeshub-sdk-typescript), and [Go](https://github.com/pipeshub-ai/pipeshub-sdk-go) SDKs. The [API reference](/developer/api-reference) lists the routes.
+Your own applications can use approved HTTP interfaces. The [developer API access guide](/developer/api-reference) explains how to choose an integration path. Contact [Novaplan Support](/contact-us) to confirm supported routes, SDK options, and permissions for your workspace.
 
 ### Agents and MCP
 
@@ -71,13 +73,9 @@ Agents connect at `/mcp` using Streamable HTTP. Setup is in the [MCP overview](/
 
 The API is a Node.js process built with Express. The web app, REST and SDK clients, and MCP clients all talk to this process. It handles accounts, permissions, knowledge bases, file uploads, user authentication, personal access tokens, and MCP.
 
-On a default Docker install, this is the only Node process. It listens on port 3000 and serves the built Next.js files, `/api`, and `/mcp`. If you run from source during development, the Next.js dev server is typically on port 3001 and Express is on port 3000. Helm exposes this combined Node service on port 3001.
+Novaplan manages the runtime and exposes the web app, API, and MCP endpoint through the approved workspace address. Customers do not need local service ports to use these interfaces.
 
-If you need the HTTP reference for a specific area:
-
-- [User management](/system-overview/user-management)
-- [Knowledge base](/system-overview/knowledge-base)
-- [Enterprise search](/system-overview/enterprise-search)
+For customer-facing tasks, see [user management](/user-management/user), [connectors](/connectors/overview), and the [MCP overview](/mcp/overview). The detailed service API catalog is deferred until the deployed Enterprise contract is verified.
 
 ## How work is done
 
@@ -87,22 +85,22 @@ Auth, Storage, Mail, Config, Notifications, Crawling, and the connector manager 
 
 | Module | What it does |
 | --- | --- |
-| [Auth](/system-overview/authentication) | Signs people in with password, OTP, Google, Microsoft, or SAML. |
-| [Storage](/system-overview/storage) | Stores file bytes on disk, S3, or Azure Blob. |
-| [Config](/system-overview/configuration-manager) | Holds encrypted settings that the other services read. |
-| [Mail](/system-overview/mail-service) | Sends outbound email such as invites and one-time codes. |
+| Auth | Signs people in with password, OTP, Google, Microsoft, or SAML. |
+| Storage | Stores file bytes on disk, S3, or Azure Blob. |
+| Config | Holds encrypted settings that the other services read. |
+| Mail | Sends outbound email such as invites and one-time codes. |
 | Notifications | Sends in-app and email alerts. |
-| [Crawling](/system-overview/crawling-manager) | Schedules when connectors run. |
-| [Connector manager](/system-overview/connector-manager) | Stores encrypted connector configuration and forwards the browser's OAuth redirects (`/oauth/authorize` and `/oauth/callback`) to the Python connectors service. |
+| Crawling | Schedules when connectors run. |
+| Connector manager | Stores encrypted connector configuration and forwards the browser's OAuth redirects (`/oauth/authorize` and `/oauth/callback`) to the Python connectors service. |
 
 ### Event bus
 
-Connectors publish records onto the event bus, and Indexing consumes them. You choose the transport to match the size of the deployment:
+Connectors publish records onto the event bus, and Indexing consumes them. Novaplan selects the transport for the managed environment:
 
-- On a **local machine**, the event bus is Redis Streams (`MESSAGE_BROKER=redis`).
-- In a **larger deployment**, the event bus is Kafka (`MESSAGE_BROKER=kafka`).
+- **Redis Streams** can carry connector events to indexing.
+- **Kafka** is an alternative event bus for larger environments.
 
-Redis still runs in both cases. It is the cache, and by default it is also the encrypted configuration store.
+Redis can provide caching and encrypted configuration in either setup.
 
 ### Query, Indexing, and Connectors
 
@@ -110,7 +108,7 @@ Redis still runs in both cases. It is the cache, and by default it is also the e
 
 **Connectors** talk to Slack, Drive, Jira, Confluence, and the rest of your company apps. They complete OAuth with those providers, refresh the tokens, and publish new or changed records onto the event bus. The connector manager in the API stores the encrypted configuration and forwards the browser OAuth redirects to this Python service. See the [connectors overview](/connectors/overview) for the full list.
 
-**Indexing** consumes those records from the event bus. It parses files, splits them into chunks, embeds the text, and writes Qdrant and the knowledge graph. **Docling** is the heavier parser for PDFs, tables, and OCR. Two additional processes, Parsing and Extraction, start only if you set `USE_PARSING_SERVICE=true`.
+**Indexing** consumes those records from the event bus. It parses files, splits them into chunks, embeds the text, and writes to the vector store and knowledge graph. **Docling** is the heavier parser for PDFs, tables, and OCR. Separate Parsing and Extraction services may also be used, depending on the managed configuration.
 
 **Query** answers questions. It reads the knowledge graph and the vector store, then calls your language model. On the event bus it listens for configuration updates.
 
@@ -118,30 +116,30 @@ Redis still runs in both cases. It is the cache, and by default it is also the e
 
 Indexing and Query need **vectors**: lists of numbers that represent the meaning of a piece of text, so similar passages can be found later.
 
-On a default install they call a **local embedding server** over HTTP. The server speaks the OpenAI-compatible `/v1/embeddings` API. The box is dashed in the diagram because Query and Indexing call this server directly over HTTP. If you configure a cloud embedding provider, you can skip this process.
+The managed environment may use a dedicated embedding server over the OpenAI-compatible `/v1/embeddings` API or a configured cloud embedding provider. The box is dashed in the diagram because Query and Indexing call this service directly over HTTP when it is used.
 
 ## Where data lives
 
-Each box along the bottom of the diagram holds a different kind of state. The table below matches a default install. Vendor notes and links are on [external services](/system-overview/external-services).
+Each box along the bottom of the diagram holds a different kind of state. The table shows the technologies described by the reference architecture; the actual Novaplan environment may use a different supported backend. Vendor notes and links are on [external services](/system-overview/external-services).
 
 | Store | What it holds | Default |
 | --- | --- | --- |
 | **Graph** | Records, people, and the relationships between them (the knowledge graph). | Neo4j (`DATA_STORE=neo4j`). ArangoDB is the other option. The same features work on either; services go through a graph abstraction. |
 | **Vectors** | Embedded chunks used for similarity search. | Qdrant (`VECTOR_DB_TYPE=qdrant`). |
 | **Documents** | Sessions, file metadata, and other application state. | MongoDB. |
-| **Files** | The bytes of uploaded files and files pulled in by connectors. | Local disk, S3, or Azure Blob. See [storage](/system-overview/storage). |
-| **Redis** | Cache, the default encrypted configuration store, and Redis Streams when Redis is the event bus. | Always running. |
-| **etcd** | An alternative store for encrypted configuration. | Started when you set `KV_STORE_TYPE=etcd` (Compose profile `kv-etcd`). |
+| **Files** | The bytes of uploaded files and files pulled in by connectors. | Local disk, S3, or Azure Blob. See [external services](/system-overview/external-services). |
+| **Redis** | Cache, encrypted configuration, and Redis Streams when Redis is the event bus. | Used where configured. |
+| **etcd** | An alternative store for encrypted configuration. | Optional managed configuration. |
 
 ## Models you bring
 
-You point PipesHub at models you already use.
+You point Novaplan AI at models you already use.
 
-- An **embedding model** turns parsed text into vectors for Qdrant. The local embedding server is the default for this.
+- An **embedding model** turns parsed text into vectors for the configured vector store. The reference architecture can use a local embedding server; a managed workspace may use another provider.
 - A **language model (LLM)** writes the cited answer. You can use any provider, or a local model through Ollama.
 
 The AI models box on the left of the diagram is those two models.
 
 ## Identity and other company systems
 
-The right side of the diagram shows identity providers such as Azure AD and Okta, an SMTP server for email, and the 50+ apps that connectors sync. You register those connections in PipesHub. Auth uses the identity providers, Mail uses SMTP, and Connectors sync the company apps.
+The right side of the diagram shows identity providers such as Azure AD and Okta, an SMTP server for email, and the 50+ apps that connectors sync. You register those connections in Novaplan AI. Auth uses the identity providers, Mail uses SMTP, and Connectors sync the company apps.

@@ -1,15 +1,15 @@
 ---
 title: Anthropic
-description: "Configure PipesHub Workplace AI to use different Anthropic Claude models"
+description: "Configure Novaplan AI to use different Anthropic Claude models"
 ---
 
 # Anthropic Configuration
 
 ![Anthropic Configuration Interface](/images/ai-models/llm/Anthropic_LLMConfig.png)
 
-*The Anthropic configuration screen in PipesHub where you'll enter your API Key and Model Name*
+*The Anthropic configuration screen in Novaplan AI where you'll enter your API Key and Model Name*
 
-PipesHub allows you to integrate with Anthropic's Claude models to enable powerful AI features in your workspace, providing sophisticated natural language understanding and generation capabilities.
+Novaplan AI allows you to integrate with Anthropic's Claude models to enable powerful AI features in your workspace, providing sophisticated natural language understanding and generation capabilities.
 
 ## Required Fields
 
@@ -23,22 +23,20 @@ The Anthropic API Key is required to authenticate your requests to Anthropic's s
 3. Create a new API key
 4. Copy the key immediately (it will only be shown once)
 
-**Security Note:** Your API key should be kept secure and never shared publicly. PipesHub securely stores your API key and uses it only for authenticating requests to Anthropic.
+**Security note:** Treat this API key as a secret. Use the approved workspace setup flow, and coordinate access and rotation with Novaplan and your provider administrator.
 
 ### Model Name *
 
-The Model Name field defines which Anthropic Claude model you want to use with PipesHub.
+The Model Name field defines which Anthropic Claude model you want to use with Novaplan AI.
 
-**Popular Anthropic models include:**
-- `claude-opus-4-7` - Most intelligent and capable Claude model, best for complex tasks
-- `claude-sonnet-4-6` - Balanced performance and speed for a wide range of use cases
-- `claude-haiku-4-6` - Fastest model with the lowest latency
+**Current Claude API examples include:**
+- `claude-opus-5-5` - A starting point for demanding knowledge work
+- `claude-sonnet-5` - A balance of speed and capability
+- `claude-haiku-4-5` - A lower-latency option
 
 **How to choose a model:**
-- For complex reasoning and advanced features, select `claude-opus-4-7`
-- For balanced performance, select `claude-sonnet-4-6`
-- For routine tasks and lower latency, select `claude-haiku-4-6`
-- Check Anthropic's [model documentation](https://docs.anthropic.com/claude/docs/models-overview) for the most up-to-date options
+- Compare the available models in Anthropic's [current model overview](https://platform.claude.com/docs/en/models/overview) and choose an ID enabled for your API key.
+- Confirm the selected model and its features work with your Novaplan AI workspace before relying on it for production workflows. Anthropic may change model availability and pricing.
 
 ## Configuration Steps
 
@@ -54,7 +52,7 @@ As shown in the image above:
 ## Usage Considerations
 
 - API usage will count against your Anthropic account's quota and billing
-- Different models have different pricing - check Anthropic's pricing page for details
+- Different models have different pricing - check Anthropic's [current pricing](https://platform.claude.com/docs/en/about-claude/pricing) for details
 - Model capabilities vary - more powerful models may provide better results but at higher cost
 - Claude models excel at:
   - Nuanced content generation
@@ -69,4 +67,4 @@ As shown in the image above:
 - Check that the model name is spelled correctly and matches Anthropic's naming conventions
 - Verify that your account has access to the model you've selected
 
-For additional support, refer to the [Anthropic documentation](https://docs.anthropic.com/) or contact PipesHub support.
+For additional support, refer to the [Anthropic documentation](https://platform.claude.com/docs/en/) or [Novaplan AI support](/contact-us).

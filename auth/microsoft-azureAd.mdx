@@ -1,71 +1,24 @@
 ---
-title: "Microsoft/Azure AD"
-description: "Configure how users authenticate and access the application through Microsoft/Azure AD"
+title: "Microsoft sign-in"
+description: "Configure Microsoft Entra ID sign-in for a managed Novaplan AI workspace."
 icon: "microsoft"
 ---
 
-## Microsoft Authentication
+Microsoft sign-in lets invited users authenticate with their organization's Microsoft account. Novaplan AI normally prepares the workspace and coordinates identity-provider changes with your Microsoft Entra administrator.
 
-Allow users to sign in with their Microsoft accounts using OAuth 2.0.
+## Register the application
 
-### How It Works
+1. In the [Microsoft Entra admin center](https://entra.microsoft.com/), open **App registrations** and create or select the application approved for Novaplan AI. Choose the supported account type your organization intends to allow.
+2. In Novaplan AI, an authorized administrator opens **Workspace Settings → Authentication → Microsoft** and copies the displayed **Redirect URI**.
+3. In the Microsoft application registration, add that exact address as a **Single-page application** redirect URI. The accessible Novaplan AI sign-in flow exchanges the authorization code in the browser with PKCE; Microsoft's [redirect URI guide](https://learn.microsoft.com/en-us/entra/identity-platform/how-to-add-redirect-uri) describes the SPA platform choice. Use the deployed workspace's HTTPS address rather than an example URL.
+4. Copy the **Application (client) ID** and **Directory (tenant) ID** from the registration into the Novaplan AI Microsoft settings and save. The current workspace form does not ask for a client secret.
 
-1. User clicks "Sign in with Microsoft"
-2. User is redirected to Microsoft's authentication page
-3. After authenticating with Microsoft, user is returned to the application
-4. The system validates the authentication token from Microsoft
-5. Upon successful validation, access is granted
+<Warning>
+  The accessible configuration supports just-in-time (JIT) user creation and defaults it to enabled. For a workspace where Novaplan creates accounts and invites users, confirm that JIT is disabled before enabling Microsoft sign-in. Test with an invited account and an uninvited test account. Confirm the actual switch and behavior in the deployed Enterprise workspace.
+</Warning>
 
-### Configuration
+## Check sign-in
 
-To enable Microsoft authentication:
+Ask an invited test user to select **Sign in with Microsoft**. If the flow fails, check the exact Redirect URI, client and tenant IDs, account-type choice, Microsoft app assignment or consent, and the email address on the invitation. Keep a working administrator sign-in method during the change.
 
-1. Register your application in the [Microsoft Azure Portal](https://portal.azure.com/):
-
-   - Sign in to the Azure portal
-   - Navigate to **Azure Active Directory** → **App registrations**
-   - Click **New registration**
-   - Enter a name for your application (e.g., "PipesHub login")
-   - Select the appropriate **Supported account types** based on your needs:
-     - **Single tenant**: Accounts in this organizational directory only
-     - **Multitenant**: Accounts in any organizational directory
-   - Under **Redirect URI**, select **Single-page application (SPA)** and enter your callback URL (e.g., `https://your-app-url/auth/microsoft/callback`)
-   - Click **Register**
-
-   <div style={{ textAlign: "center" }}>
-     <img
-       src="/images/auth/microsoft/entra_app.png"
-       alt="Azure AD App Registration"
-       width="90%"
-     />
-   </div>
-
-   <Warning>
-     The Redirect URI in your Azure App Registration must match exactly with your application's callback URL (`your-app-url/auth/microsoft/callback`)
-     <Info>
-       For example - if your app is running on `https://play.pipeshub.com`, then the Redirect URI should be `https://play.pipeshub.com/auth/microsoft/callback` in Azure Portal.
-     </Info>
-   </Warning>
-
-2. After registration, note down the following from the **Overview** page:
-   - **Application (Client) ID**
-   - **Directory (Tenant) ID**
-
-3. In PipesHub:
-   - Navigate to **Authentication Settings**
-   - Toggle on **Microsoft**
-   - Enter the **Application (Client) ID** from your Azure app registration
-   - Enter the **Directory (Tenant) ID** from your Azure app registration
-   - Click **Save**
-
-   <div style={{ textAlign: "center" }}>
-     <img
-       src="/images/auth/microsoft/pipeshub_microsoft_setup.png"
-       alt="PipesHub Microsoft Configuration Dialog"
-       width="90%"
-     />
-   </div>
-
-<Info>
-  Microsoft authentication works well for organizations using Microsoft 365 or with an existing Microsoft identity infrastructure.
-</Info>
+For account-access help, contact your workspace administrator or [Novaplan AI support](mailto:support@novaplan.ai).

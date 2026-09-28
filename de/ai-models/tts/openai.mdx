@@ -1,0 +1,29 @@
+---
+title: "OpenAI Text-zu-Sprache"
+description: "OpenAI-Sprachausgabe in Novaplan AI konfigurieren."
+---
+
+# OpenAI Text-zu-Sprache konfigurieren
+
+![Konfigurationsansicht für OpenAI Sprachausgabe](/images/ai-models/tts/OpenAI_TTSConfig.png)
+
+Novaplan AI kann Antworten von Agents und Workflows mit OpenAI-Modellen in gesprochene Audiodateien umwandeln. Novaplan unterstützt Sie bei der Einrichtung.
+
+## Erforderliche Angaben
+
+**API Key:** Erstellen Sie in Ihrem [OpenAI-Konto](https://platform.openai.com/api-keys) unter **API Keys** einen geheimen Schlüssel, kopieren Sie ihn direkt nach der Erstellung und bewahren Sie ihn geschützt auf.
+
+**Model Name:** Geben Sie die genaue ID eines verfügbaren Text-zu-Sprache-Modells ein. Beispiele sind `tts-1` für geringe Latenz, `tts-1-hd` für höhere Audioqualität und `gpt-4o-mini-tts`. Prüfen Sie die [aktuelle OpenAI-Dokumentation](https://platform.openai.com/docs/guides/text-to-speech) und den Zugang Ihres Kontos.
+
+## Stimme und Audioformat
+
+**Voice** ist optional und standardmäßig **Alloy**. Weitere Stimmen sind **Echo**, **Fable**, **Onyx**, **Nova** und **Shimmer**. Die tatsächlich angebotenen Stimmen können vom Modell abhängen.
+
+**Audio Format** ist optional und standardmäßig **MP3**. Weitere Optionen sind **Opus**, **AAC**, **FLAC** und **WAV**. MP3 ist breit kompatibel, FLAC verlustfrei und WAV unkomprimiert.
+
+1. Klicken Sie auf der OpenAI-Karte für Sprachausgabe auf **Configure**.
+2. Geben Sie **API Key** und **Model Name** ein.
+3. Wählen Sie bei Bedarf **Voice** und **Audio Format** und vergeben Sie einen **Model Friendly Name**.
+4. Klicken Sie auf **Add Model**.
+
+API Key und Model Name sind erforderlich. TTS-Aufrufe zählen zu Kontingent und Abrechnung Ihres OpenAI-Kontos. Bei Fehlern prüfen Sie Schlüssel, genaue Modell-ID, Zugang zur Audio-API und Abrechnung. [Novaplan Support](/de/contact-us) hilft bei der Einrichtung.

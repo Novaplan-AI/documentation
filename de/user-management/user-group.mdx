@@ -1,0 +1,93 @@
+---
+title: "Benutzergruppen"
+description: "Benutzergruppen erstellen, Mitgliedschaften verwalten und Ressourcenzugriff prüfen."
+---
+
+## Überblick
+
+Benutzergruppen helfen Administratoren, Workspace-Mitglieder zu organisieren. Ein Benutzer kann mehreren Gruppen angehören, und eine Gruppe kann mehrere Benutzer enthalten. Gruppenzugehörigkeiten lassen sich bereits bei der Einladung festlegen und später ändern. Prüfen Sie, wie eine Ressource Gruppen verwendet, bevor Sie eine Mitgliedschaft als Zugriffsfreigabe ansehen.
+
+Novaplan übernimmt den Großteil der Einrichtung und Verwaltung. Diese Schritte bleiben als Referenz für Administratoren verfügbar. Stimmen Sie Änderungen mit dem Novaplan-Team ab.
+
+<div style={{ textAlign: "center" }}>
+  <img src="/images/account/groups/groups_view.png" alt="Gruppenübersicht mit Schaltfläche Create Group" width="90%" />
+</div>
+
+## Möglichkeiten mit Benutzergruppen
+
+1. **Benutzer organisieren:** Ordnen Sie Mitglieder nach Team, Aufgabe oder Zugriffsbedarf.
+2. **Mehrere Benutzer pro Gruppe:** Eine Gruppe kann beliebig viele Mitglieder enthalten.
+3. **Mehrere Gruppen pro Benutzer:** Ein Benutzer kann beliebig vielen Gruppen angehören.
+4. **Ressourcenzugriff:** Eine Gruppenzugehörigkeit kann relevant sein, wenn eine Ressource für diese Gruppe freigegeben ist. **Access Permissions** auf der Gruppenseite ist noch als *Coming Soon* gekennzeichnet; eine neue Gruppe allein gewährt nicht automatisch Zugriff.
+5. **Eigene Gruppen erstellen:** Eigene Gruppen ergänzen die vorhandenen Systemgruppen. Systemgruppen, etwa die Gruppe für alle Benutzer, können nicht gelöscht werden.
+
+## Gruppen öffnen
+
+1. Melden Sie sich mit einem Administratorkonto bei Novaplan AI an.
+2. Öffnen Sie das Benutzermenü und wählen Sie **Workspace Settings**.
+3. Öffnen Sie unter **People** den Bereich **Groups**.
+
+Die Tabelle zeigt **Name**, **Description**, **Users** (Mitgliederzahl), **Created By** und **Created On**. Suchen Sie Gruppen über das Suchfeld nach Namen oder filtern Sie nach **Created On**. Ein Klick auf eine Zeile öffnet rechts die Gruppendetails.
+
+## Gruppen verwalten
+
+### Gruppe erstellen
+
+1. Klicken Sie auf der Seite **Groups** oben rechts auf **Create Group**.
+2. Rechts öffnet sich der Bereich **Create Group**.
+3. Geben Sie einen **Group Name** ein, beispielsweise `Data Engineering`.
+4. Optional: Beschreiben Sie den Zweck unter **Group Description**.
+5. Optional: Suchen und wählen Sie unter **Add Users** Mitglieder aus.
+6. Klicken Sie auf **Create Group**.
+
+<div style={{ textAlign: "center" }}>
+  <img src="/images/account/groups/create_group.png" alt="Seitenbereich zum Erstellen einer Gruppe" width="90%" />
+</div>
+
+<Tip>
+  **Access Permissions** für Gruppen erscheint in der zugänglichen Oberfläche als *Coming Soon*. Testen Sie nach einer Änderung den Zugriff auf die vorgesehene Ressource mit einem Mitgliedskonto und einem Konto außerhalb der Gruppe.
+</Tip>
+
+### Benutzer zu Gruppen hinzufügen
+
+**Bei der Einladung:** Auf der Seite **Users** können Sie im Einladungsbereich unter **Add to a User Group** eine oder mehrere Gruppen auswählen. Prüfen Sie nach dem Beitritt den tatsächlichen Zugriff der eingeladenen Person.
+
+<div style={{ textAlign: "center" }}>
+  <img src="/images/account/users/bulk_invite.png" alt="Gruppen bei der Einladung eines Benutzers zuweisen" width="90%" />
+</div>
+
+**Über die Gruppendetails:**
+
+1. Öffnen Sie auf der Seite **Groups** die gewünschte Gruppe.
+2. Klicken Sie auf **Edit Group**.
+3. Suchen und wählen Sie unter **Add Users** die neuen Mitglieder.
+4. Klicken Sie auf **Save Edits**.
+
+<div style={{ textAlign: "center" }}>
+  <img src="/images/account/groups/add_user_group.png" alt="Bestehende Benutzer zu einer Gruppe hinzufügen" width="90%" />
+</div>
+
+### Benutzer aus einer Gruppe entfernen
+
+1. Öffnen Sie die Gruppendetails auf der Seite **Groups**.
+2. Klicken Sie auf **Edit Group**.
+3. Klicken Sie in der Liste **Users** neben den zu entfernenden Personen auf **Remove**. Mit **Undo** machen Sie eine vorgemerkte Entfernung vor dem Speichern rückgängig.
+4. Übernehmen Sie die Änderungen mit **Save Edits**.
+
+### Name oder Beschreibung ändern
+
+1. Öffnen Sie die Gruppendetails und klicken Sie auf **Edit Group**.
+2. Ändern Sie **Group Name** oder **Group Description**.
+3. Klicken Sie auf **Save Edits**.
+
+### Gruppe löschen
+
+1. Öffnen Sie die Gruppendetails.
+2. Klicken Sie unten auf **Delete Group** oder wählen Sie **Delete** im Aktionsmenü (**⋯**) der Zeile.
+3. Bestätigen Sie die Aktion.
+
+<Warning>
+  Das Löschen einer Gruppe kann nicht rückgängig gemacht werden. Ihre Mitglieder bleiben im Workspace, aber an die Gruppe gebundener Zugriff kann sich ändern. Prüfen Sie betroffene Ressourcen und Mitglieder vor dem Löschen. Systemgruppen können nicht gelöscht werden.
+</Warning>
+
+Gruppen können Sie bei der [Einladung von Benutzern](/de/user-management/user) zuweisen oder später über die Gruppendetails bearbeiten. Über die Filter auf der Seite **Users** finden Sie Mitglieder einer bestimmten Gruppe.

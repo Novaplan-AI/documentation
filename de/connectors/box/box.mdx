@@ -1,0 +1,103 @@
+---
+title: "Box"
+description: "Dateien und Ordner aus Box Enterprise mit Novaplan AI durchsuchen."
+icon: "/logo/box.png"
+---
+
+Der Box-Konnektor übernimmt Dateien, Ordner, Personen, Gruppen und Freigaben aus einer Box-Enterprise-Organisation in Novaplan AI. Er ist ein **Team-Konnektor**: Eine Administration richtet eine gemeinsame Verbindung für den Workspace ein. Novaplan unterstützt Sie dabei und übernimmt möglichst viel der Einrichtung.
+
+## Voraussetzungen und Umfang
+
+Für den organisationsweiten Zugriff benötigen Sie ein **Box-Enterprise-Konto** und eine Box-App mit **OAuth 2.0 Client Credentials Grant (CCG)**. Eine Box-Administration muss die App autorisieren. Ihre E-Mail-Adresse muss nicht mit dem Novaplan-AI-Administratorkonto übereinstimmen, das den gemeinsamen Konnektor konfiguriert. Die Suchberechtigungen werden für die einzelnen Box-Nutzenden und ihre Freigaben zugeordnet.
+
+Der Konnektor synchronisiert aktive Box-Nutzer, Gruppen und Mitgliedschaften, persönliche Stammordner sowie ihre Datei- und Ordnerstruktur. Er berücksichtigt direkte und geerbte Zusammenarbeit, Gruppenrechte sowie organisationsweite und öffentliche Freigabelinks. Wenn der Zugriff auf einen Ordner entzogen wird, werden die übernommenen Rechte auch für darunterliegende Elemente aktualisiert.
+
+Die Synchronisierung von **Box Notes-Inhalten** sowie Kommentaren zu Dateien und Ordnern ist noch in Vorbereitung. Verlassen Sie sich für diese Inhalte bis zur Bestätigung ihrer Verfügbarkeit nicht auf eine Synchronisierung.
+
+## Box-App anlegen
+
+1. Öffnen Sie als Box-Administration die [Box Developer Console](https://app.box.com/developers/console) und wählen Sie **Create New App**.
+2. Wählen Sie **Custom App** und als Authentifizierung **OAuth 2.0 with Client Credentials Grant**. Geben Sie der App einen eindeutigen Namen, beispielsweise `Novaplan AI Connector`, und klicken Sie auf **Create App**.
+3. Aktivieren Sie unter **Configuration → Application Scopes** die folgenden Rechte:
+
+   | Bereich | Berechtigung |
+   | --- | --- |
+   | Content Actions | **Read all files and folders stored in Box** und **Write all files and folders stored in Box** |
+   | Administrative Actions | **Manage users**, **Manage groups** und **Manage enterprise properties** |
+
+4. Aktivieren Sie unter **Advanced Features** die Option **Perform actions as users**. Wählen Sie bei **App Access Level** die Einstellung **App + Enterprise Access**.
+5. Kopieren Sie unter **OAuth 2.0 Credentials** die **Client ID** und das über **Fetch Client Secret** angezeigte **Client Secret**. Bewahren Sie das Secret geschützt auf.
+6. Öffnen Sie in der Box Admin Console **General Settings → App Info** und kopieren Sie die **Enterprise ID**.
+7. Gehen Sie in der [Box Admin Console](https://app.box.com/master/settings/apps) zu **Apps → Custom Apps**, suchen Sie die App und wählen Sie **Authorize**.
+
+Die angeforderten Schreib- und Administrationsrechte sind weitreichend. Stimmen Sie die Freigabe mit Ihrer Box-Sicherheitsadministration ab, bevor Sie die App aktivieren. Wenn Sie Scopes später ändern, muss die Box-App erneut autorisiert werden.
+
+## Verbindung in Novaplan AI einrichten
+
+1. Öffnen Sie **Workspace Settings → Connectors → Team → Box → Setup**. Die Einrichtung kann nur eine Organisationsadministration vornehmen.
+2. Geben Sie auf dem Tab **Authenticate** einen **Instance Name**, die **Application (Client) ID**, das **Client Secret** und die **Box Enterprise ID** ein.
+3. Klicken Sie auf **Save**. Novaplan AI prüft die Angaben, bevor die Verbindung gespeichert wird.
+4. Öffnen Sie anschließend den Tab **Configure** und legen Sie Strategie, Intervall und Filter fest.
+
+Wenn die Autorisierung fehlschlägt, prüfen Sie besonders, ob eine Box-Administration die richtige App mit den benötigten Rechten freigegeben hat und ob Client ID, Client Secret und Enterprise ID zu dieser App gehören.
+
+## Synchronisierung und Filter
+
+Unter **Sync Strategy** wählen Sie **Scheduled** oder **Manual**. Bei **Scheduled** beträgt das Standardintervall 60 Minuten; bei **Manual** startet eine Administration den Lauf selbst. **Batch Size** bestimmt die Anzahl der Elemente pro Verarbeitungspaket und ist standardmäßig 100.
+
+**Sync Filters** begrenzen bereits den Abruf aus Box. Ausgeschlossene Elemente gelangen nicht in Novaplan AI. **Indexing Filters** wirken erst nach dem Abruf und bestimmen, welche Inhalte für die Suche indexiert werden.
+
+| Filter | Standard | Wirkung |
+| --- | --- | --- |
+| **Modified Date** | Keine Einschränkung | Dateien und Ordner nach Änderungsdatum; Voreinstellungen oder eigener Zeitraum |
+| **Created Date** | Keine Einschränkung | Dateien und Ordner nach Erstellungsdatum |
+| **File Extensions** | Alle Dateitypen | Dateiendungen einschließen oder ausschließen, beispielsweise `pdf`, `docx` oder `xlsx`; Ordner werden für die Struktur weiter durchlaufen |
+| **Index Items Shared by Me** | Aktiv | Freigaben der verbundenen Personen für die Suche indexieren |
+| **Index Items Shared With Me** | Aktiv | Mit den verbundenen Personen geteilte Inhalte für die Suche indexieren |
+
+Speichern Sie mit **Save Configuration**. Danach können Sie **Start syncing now** wählen oder den ersten Lauf später starten. Prüfen Sie anschließend den Synchronisierungs- und Indexierungsstatus.
+
+## Was bei der Synchronisierung passiert
+
+Beim ersten Lauf werden Personen, Gruppen, Stammordner sowie Dateien und Ordner der Organisation erfasst. Spätere Läufe nutzen den **Box Enterprise Event Stream** und dessen gespeicherte `stream_position`, um Änderungen wie Uploads, Verschiebungen, Löschungen und neue Freigaben zu übernehmen. Ist kein gültiger Stand vorhanden, beginnt der betroffene Lauf erneut mit einer vollständigen Synchronisierung.
+
+Die Dateiberechtigungen stammen aus Box-Zusammenarbeit und Freigabelinks. Eine Datei kann über direkte Freigabe, einen übergeordneten Ordner, eine Gruppe oder einen öffentlichen beziehungsweise organisationsweiten Link zugänglich sein. Änderungen an solchen Rechten werden beim nächsten erfolgreichen Lauf übernommen. Gerade bei öffentlichen Links sollten Sie die Freigabeeinstellungen in Box selbst kontrollieren.
+
+### Benutzer, Gruppen und persönliche Bereiche
+
+`run_sync` verarbeitet Box-Nutzende und Profile, Gruppen samt Mitgliedschaften, persönliche Stammordner und danach die Datei- und Ordnerhierarchie. Die zugängliche Implementierung liest aktive Benutzer bei einem weiteren Lauf erneut vollständig; für Gruppen und Dateiänderungen verwendet sie gespeicherte Fortschrittspunkte. `user_sync_point`, `user_group_sync_point` und `box_cursor_sync_point` halten die jeweiligen Stände fest.
+
+Jede aktive Person erhält eine `RecordGroup` für ihren Stammordner **All Files** und einen internen Bereich **Shared with Me**. Für beide Bereiche erhält diese Person das Recht **OWNER**. Box-Gruppen und Mitgliedschaften werden separat übernommen, damit Gruppenfreigaben bei der Suche berücksichtigt werden können.
+
+### Dateien, Ereignisse und Rechte
+
+Für einen vollständigen Lauf durchläuft der Konnektor die Ordnerstruktur der aktiven Personen. Über den Box-**As-User**-Kontext liest er Inhalte und Zusammenarbeit im passenden Quellkontext. Metadaten und Berechtigungen neuer oder geänderter Elemente werden paketweise verarbeitet; die voreingestellte **Batch Size** beträgt 100. Für spätere Läufe verwendet der Konnektor Ereignisse wie `FILE.UPLOADED`, `FILE.MOVED`, `FILE.DELETED`, `FOLDER.CREATED`, `FOLDER.MOVED` und `COLLABORATION.CREATED` beziehungsweise `COLLABORATION.REMOVED`. Danach speichert er die neue `stream_position`. Ein fehlgeschlagener Ereignisblock wird beim aktuellen Upstream-Konnektor bis zu fünfmal versucht. Danach kann der Stand mit einem Fehler im Protokoll weitergeführt werden. Eine nicht angewendete Löschung kann weiterhin in Novaplan AI suchbar sein; auch ein späterer vollständiger Lauf entfernt einen bereits aus Box verschwundenen Datensatz nicht zwangsläufig. Prüfen Sie wichtige Entzüge und Löschungen im Workspace und melden Sie verbleibende Einträge an [Novaplan Support](/de/contact-us).
+
+Die zugängliche Implementierung ordnet Box-Zusammenarbeitsrollen für Dateien und Ordner so zu:
+
+| Box-Rolle | Recht im Konnektor |
+| --- | --- |
+| `owner` | **OWNER** |
+| `editor`, `co-owner` | **WRITE** |
+| `viewer`, `previewer`, `viewer uploader`, `previewer uploader` und sonstige Rollen ohne eigene Zuordnung | **READ** |
+
+Organisationweite und öffentliche Links können einen größeren Personenkreis berechtigen als eine direkte Zusammenarbeit. Die technische Quelle verwendet dafür `ORGANIZATION_ACCESS_GROUP` und `PUBLIC_ACCESS_GROUP`. Prüfen Sie Freigabelinks vor der ersten Synchronisierung und nach Änderungen besonders sorgfältig.
+
+Freigaben verschieben Dateien nicht aus dem Bereich ihrer besitzenden Person. Innerhalb des Box-Enterprise-Bereichs werden sie für andere unter **Shared with me** sichtbar. Ein extern besessener Ordner kann laut aktuellem Upstream-Konnektor bei einem vollständigen Lauf importiert werden, wenn er in den Ordnern einer Person erscheint. Andere extern besessene Freigaben, insbesondere einzelne Dateien, werden möglicherweise gar nicht übernommen. Prüfen Sie die tatsächlich erwarteten Inhalte im Enterprise Workspace. Wenn Box Gruppenmitglieder zeitweise nicht liefert, bleiben die bisher gespeicherten Zuordnungen bestehen, bis ein späterer Lauf sie aktualisiert.
+
+Zusammenarbeitslisten werden seitenweise gelesen. Bei einem vorübergehenden Fehler bleiben die gespeicherten Zugriffe des betroffenen Eintrags zunächst erhalten. Eine spätere Seite mit 403 oder 404 gilt dagegen als endgültige Box-Antwort; bereits gelesene Seiten werden übernommen. Ein vollständiger Lauf spielt außerdem die Box-Freigabehistorie für **Shared with me** ab. Er verarbeitet höchstens 200 Historienseiten pro Lauf und setzt längere oder vorübergehend unterbrochene Durchläufe in einem späteren vollständigen Lauf fort. Nach 403 oder 404 kann ein Teil der Historie bis zu einem weiteren vollständigen Lauf fehlen. Prüfen Sie vertrauliche Freigabeänderungen direkt im Workspace.
+
+Ein unvollständiger vollständiger Lauf speichert keinen neuen Ereignis-Cursor und wird beim nächsten Mal wiederholt. Geplante, manuelle und durch Webhooks ausgelöste Läufe derselben Verbindung werden nicht gleichzeitig ausgeführt; zusätzliche Webhooks während eines Laufs werden zu einem Folgelauf zusammengefasst. Dieses Verhalten stammt aus dem aktuellen Upstream-Konnektor und muss für die Enterprise-Version geprüft werden.
+
+## Fehler beheben
+
+| Problem | Prüfen Sie |
+| --- | --- |
+| **Access Token kann nicht abgerufen werden** | Client ID, Client Secret und Enterprise ID; Status der App in der Box Admin Console und Enterprise-Konto. |
+| **Insufficient permissions oder Access denied** | Alle erforderlichen Scopes, **Perform actions as users**, **App + Enterprise Access** und erneute Autorisierung nach Scope-Änderungen. |
+| **403 beim Auflisten von Nutzenden oder Gruppen** | **Manage users** beziehungsweise **Manage groups** in der Box-App prüfen und sie danach administrativ erneut autorisieren. Ohne Nutzerliste kann die Dateisynchronisierung aussetzen. Die aktuelle Upstream-Implementierung kann nach Behebung eine Ereignislücke von bis zu 14 Tagen nachholen; bei längerer Lücke folgt ein vollständiger Lauf, der bereits gelöschte Quelldateien nicht zwingend aus Novaplan AI entfernt. Prüfen Sie sensible Einträge und wenden Sie sich bei Resten an Novaplan Support. |
+| **Personen sehen keine synchronisierten Inhalte** | E-Mail-Zuordnung der betroffenen Person, ihre Box-Mitgliedschaft sowie Zusammenarbeit und Gruppenrechte am jeweiligen Inhalt. |
+| **Dateien fehlen oder Suche liefert keine Treffer** | Sync Filters, Indexing Filters, aktive Box-Nutzer, Box-Adminrichtlinien sowie Abschluss von Synchronisierung und Indexierung. |
+| **Synchronisierung ist langsam oder wird begrenzt** | Umfang der Dateifilter, Batch Size, Box-Rate-Limits und längeres Sync Interval. |
+
+Bei Fragen zur Einrichtung erreichen Sie [Novaplan Support](/de/contact-us) oder [support@novaplan.ai](mailto:support@novaplan.ai).

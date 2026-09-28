@@ -1,0 +1,34 @@
+---
+title: "LibreChat"
+description: "LibreChat über OAuth mit dem Novaplan AI MCP-Server verbinden."
+icon: "/logo/librechat.svg"
+---
+
+LibreChat kann den entfernten MCP-Endpunkt Ihres Novaplan AI Workspaces über die MCP-Einstellungen einbinden. Sie benötigen die Workspace-Adresse sowie **Client ID** und **Client Secret** einer Novaplan-OAuth-Anwendung. Die Voraussetzungen stehen im [MCP-Überblick](/de/mcp/overview#schritt-1-oauth-anwendung-erstellen).
+
+## Connector anlegen
+
+1. Melden Sie sich in Ihrer LibreChat-Instanz an und öffnen Sie die Einstellungen für **MCP Servers**.
+2. Wählen Sie **Add** und tragen Sie einen Namen wie `Novaplan AI` sowie `NOVAPLAN_WORKSPACE_URL/mcp` als **MCP Server URL** ein.
+3. Wählen Sie **Streamable HTTP** als Transport für den HTTPS-Endpunkt und **OAuth** als Authentifizierung.
+4. Tragen Sie die **Client ID** und das **Client Secret** Ihrer OAuth-Anwendung ein. Die Novaplan-Endpunkte lauten `NOVAPLAN_WORKSPACE_URL/api/v1/oauth2/authorize` für die Autorisierung und `NOVAPLAN_WORKSPACE_URL/api/v1/oauth2/token` für Tokens.
+5. Wählen Sie die benötigten Scopes. Der Basissatz `openid email` deckt nur die Anmeldung ab. Für Suche, Chat und weitere MCP-Werkzeuge müssen die entsprechenden Novaplan-Scopes in der OAuth-Anwendung freigegeben sein. Der [MCP-Überblick](/de/mcp/overview#standard-scopes-anpassen) zeigt den serverseitigen Standardkatalog, der nicht pauschal gewährt werden sollte.
+6. Prüfen Sie Serveradresse und Vertrauenshinweis und speichern Sie den Server mit **Create**. Ein OAuth-Server bleibt zunächst getrennt, bis sich ein Nutzer anmeldet.
+
+LibreChat erwartet im Feld **Scope** eine durch Leerzeichen getrennte Liste. Für die dokumentierten Such- und Chat-Werkzeuge kann Ihre Novaplan-Administration beispielsweise diese Auswahl prüfen:
+
+```text
+openid profile email offline_access semantic:write conversation:write conversation:chat kb:read team:read user:read config:read
+```
+
+Fordern Sie nur die Scopes an, die Ihre Anwendung benötigt und die für die OAuth-App freigegeben wurden. Die App darf weitere Scopes erlauben, ohne dass LibreChat sie in dieser Verbindung anfordert. `openid email` allein ermöglicht noch keinen Zugriff auf die Novaplan-Such- und Chat-Werkzeuge.
+
+## Redirect URI registrieren und anmelden
+
+Die Redirect-URI setzt sich aus der LibreChat-Basisadresse und dem beim Anlegen gewählten **Servernamen** zusammen. Kopieren Sie den tatsächlichen Wert aus Ihrer Instanz, wenn er dort angezeigt wird, oder bestätigen Sie ihn mit Ihrer LibreChat-Administration. Hinterlegen Sie ihn als erlaubte Redirect-URI in der Novaplan-OAuth-Anwendung, bevor Sie sich anmelden. Eine lokale Instanz verwendet häufig dieses Muster:
+
+```text
+http://localhost:3080/api/mcp/<server-name>/oauth/callback
+```
+
+Bei einer gehosteten Instanz gelten deren tatsächlicher Host und Port. Kehren Sie danach zu LibreChat zurück und wählen Sie beim Server **Authenticate/Connect** in den MCP-Einstellungen oder im Servermenü des Chats. Jede Person meldet sich einzeln an. Wenn die Anmeldung fehlschlägt, prüfen Sie die exakt registrierte Redirect-URI, die angeforderten Scopes und die Workspace-Adresse. Die aktuelle Callback-Struktur steht in der [LibreChat-MCP-Dokumentation](https://www.librechat.ai/docs/features/mcp#oauth-callback-url).

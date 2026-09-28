@@ -1,6 +1,6 @@
 ---
 title: Vertex AI
-description: "Configure PipesHub to generate embeddings with Google Cloud Vertex AI"
+description: "Configure Novaplan AI to generate embeddings with Google Cloud Vertex AI"
 ---
 
 # Vertex AI Embedding Configuration
@@ -19,7 +19,7 @@ The Google Cloud project that hosts Vertex AI. It must match the `project_id` in
 
 ### Service Account JSON *
 
-Upload the JSON key file. PipesHub checks that it is valid JSON, contains `type`, `project_id` and `private_key`, and has `"type": "service_account"`.
+Upload the JSON key file. Novaplan AI checks that it is valid JSON, contains `type`, `project_id` and `private_key`, and has `"type": "service_account"`.
 
 ### Model Name *
 
@@ -37,11 +37,11 @@ The Vertex AI region, for example `us-central1`.
 
 ### Model Friendly Name
 
-A label shown in the PipesHub interface so you can tell several configurations apart. If you leave it blank, the model name is used.
+A label shown in the Novaplan AI interface so you can tell several configurations apart. If you leave it blank, the model name is used.
 
 ### Dimensions
 
-The number of dimensions in the vectors this model produces. PipesHub uses it to size the vector collection.
+The number of dimensions in the vectors this model produces. Novaplan AI uses it to size the vector collection.
 
 <Warning>
 Changing the embedding model or its dimensions after documents are indexed means existing vectors no longer match new ones. Re-index your content after switching.

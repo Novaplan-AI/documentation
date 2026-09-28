@@ -1,0 +1,20 @@
+---
+title: "Hugging Face"
+description: "Hugging-Face-Embedding-Modelle in Novaplan AI konfigurieren."
+---
+
+# Hugging-Face-Embeddings konfigurieren
+
+![Konfigurationsansicht für Hugging-Face-Embeddings](/images/ai-models/embedding/HuggingFace_EmbeddingConfig.png)
+
+Novaplan AI kann geeignete Modelle aus dem Hugging Face Hub herunterladen und innerhalb seiner Umgebung für Embeddings ausführen. Dafür benötigen Sie keinen externen API-Schlüssel. Der erste Download erfordert allerdings Netzwerkzugang zum Modell-Repository; stimmen Sie Modellwahl und Betrieb mit Novaplan ab.
+
+## Model Name
+
+**Model Name** ist das einzige Pflichtfeld. Geben Sie den **vollständigen Repository-Namen** im Format `inhaber/modellname` ein. Ein Beispiel ist `sentence-transformers/all-MiniLM-L6-v2`; nur `all-MiniLM-L6-v2` reicht nicht aus. Suchen Sie im [Hugging Face Hub](https://huggingface.co/models?pipeline_tag=sentence-similarity) nach einem Modell für Sentence Embeddings beziehungsweise Feature Extraction und prüfen Sie seine Lizenz und Ressourcenanforderungen.
+
+1. Klicken Sie auf der Karte **HuggingFace** auf **Configure**.
+2. Tragen Sie die vollständige Repository-ID unter **Model Name** ein.
+3. Klicken Sie auf **Add Model**, um die Konfiguration prüfen zu lassen.
+
+Die Embedding-Aufrufe laufen nach dem Download innerhalb der Novaplan-AI-Umgebung. Bei Ladefehlern prüfen Sie die exakte Repository-ID, Erreichbarkeit von `huggingface.co` beim ersten Laden und verfügbare Speicherressourcen. Weitere Informationen bietet die [Hugging-Face-Dokumentation](https://huggingface.co/docs); [Novaplan Support](/de/contact-us) hilft bei der Einrichtung.

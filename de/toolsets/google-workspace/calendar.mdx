@@ -1,0 +1,73 @@
+---
+title: "Google Calendar Toolset"
+description: "Kalendertermine mit Agenten verwalten."
+icon: "/logo/gcalendar.png"
+---
+
+## Überblick
+
+Mit dem Google Calendar Toolset können Agenten Termine ansehen, erstellen, ändern und löschen, Kalender auflisten und Google Meet Links anlegen. Ein Kalender-Konnektor dient dagegen dazu, Ereignisse für die Suche zu importieren.
+
+| Tool | Funktion |
+| --- | --- |
+| `get_calendar_events` | Anstehende Termine abrufen. |
+| `create_calendar_event` | Termin erstellen. |
+| `update_calendar_event` | Termin ändern. |
+| `create_meet_link` | Google Meet Link erstellen und einem Termin hinzufügen. |
+| `delete_calendar_event` | Termin löschen. |
+| `get_calendar_list` | Kalender auflisten. |
+| `get_calendar_list_by_id` | Bestimmten Kalender abrufen. |
+
+Novaplan übernimmt den Großteil der Einrichtung. Die Schritte bleiben als Referenz für Administratoren verfügbar.
+
+## Einrichtung
+
+1. Öffnen Sie die [Google Cloud Console](https://console.cloud.google.com/) und wählen oder erstellen Sie ein Projekt.
+2. Aktivieren Sie unter **APIs & Services → Library** die **Google Calendar API**.
+
+<img src="/images/connectors/googleWorkspace/enterprise/apis.png" alt="Google Calendar API aktivieren" />
+
+3. Konfigurieren Sie unter **APIs & Services → OAuth consent screen** die Einwilligungsseite.
+4. Öffnen Sie in Novaplan AI **Workspace Settings → Actions → Calendar → + Setup** oder **Configure** und kopieren Sie die angezeigte **Redirect URI**.
+
+<img src="/images/toolsets/calendar/novaplan-config.png" alt="Redirect URI für das Google Calendar Toolset kopieren" />
+
+5. Erstellen Sie unter **APIs & Services → Credentials** eine **OAuth client ID** vom Typ **Web application**. Tragen Sie die kopierte Adresse unter **Authorized redirect URI** ein und kopieren Sie anschließend **Client ID** und **Client Secret**.
+
+<Warning>
+  Übernehmen Sie die Redirect URI exakt aus Ihrem Workspace. Eine abweichende Adresse verhindert die Authentifizierung.
+</Warning>
+
+6. Prüfen Sie auf der OAuth-Einwilligungsseite die von der zugänglichen Toolset-Implementierung angeforderten Berechtigungen:
+
+| Scope | Zweck laut vorhandener Anleitung |
+| --- | --- |
+| `https://www.googleapis.com/auth/calendar` | Kalenderzugriff. |
+| `https://www.googleapis.com/auth/calendar.events` | Termine verwalten. |
+| `https://www.googleapis.com/auth/gmail.send` | Von der Implementierung angeforderte Gmail-Sendeberechtigung. |
+
+<Warning>
+  Die zugänglichen Calendar-Tools versenden Einladungen über die Calendar API mit der Option `sendUpdates`; sie rufen die Gmail API nicht auf. Google nennt für das [Erstellen](https://developers.google.com/workspace/calendar/api/v3/reference/events/insert) und [Aktualisieren](https://developers.google.com/workspace/calendar/api/v3/reference/events/update) von Terminen Calendar-Scopes, nicht `gmail.send`. Die zugängliche Implementierung fordert `gmail.send` dennoch an. Lassen Sie Novaplan vor der Freigabe prüfen, ob das bereitgestellte Enterprise-Toolset diese zusätzliche Berechtigung benötigt oder die Anfrage entfernen kann.
+</Warning>
+
+7. Tragen Sie **Client ID** und **Client Secret** in Novaplan AI ein und wählen Sie **Authenticate**.
+
+<img src="/images/toolsets/calendar/enter-credentials.png" alt="OAuth-Zugangsdaten für Google Calendar eintragen" />
+
+8. Melden Sie sich im Google-Fenster an und bestätigen Sie die angeforderten Rechte mit **Allow**. Anschließend sollte das Toolset den Status **Authenticated** anzeigen.
+
+<img src="/images/connectors/googleWorkspace/individual/gmail_consent_screen.png" alt="Google-Einwilligungsseite für den Kalenderzugriff" />
+
+## Konnektor oder Toolset?
+
+| | Kalender-Konnektor | Calendar Toolset |
+| --- | --- | --- |
+| **Zweck** | Ereignisse für die Suche importieren. | Agentenaktionen im Kalender ermöglichen. |
+| **Datenfluss** | Import in Novaplan AI. | Lesen und Schreiben über die API. |
+| **Beispiel** | Frühere Besprechungen finden. | Einen Termin vereinbaren oder verschieben. |
+
+Nennen Sie einem entsprechend berechtigten Agenten Titel, Datum, Uhrzeit und Teilnehmende, wenn er einen Termin anlegen soll. Für Änderungen geben Sie an, welcher Termin gemeint ist und was sich ändern soll.
+
+Zum Verschieben eines Termins benötigt der Agent sowohl die neue Start- als auch die Endzeit. Fehlt eine davon, bleibt der Termin unverändert und der Agent fragt nach beiden. Geben Sie bei wichtigen Uhrzeiten die Zeitzone an, etwa „10:00 Europe/Berlin“. Ohne Zeitversatz gilt die zum Termin übermittelte Zeitzone, andernfalls UTC. Ungültige Zeitzonen und eine Endzeit vor der Startzeit werden abgelehnt. Ein ganztägiger Termin umfasst den gewünschten Kalendertag in seiner Zeitzone.
+
+Bei Fehlern meldet der Agent beispielsweise eine Begrenzung durch Google, eine abgelaufene Anmeldung oder fehlende Rechte. Wurde der Termin angelegt, aber der Besprechungslink konnte nicht mehr gelesen werden, wird die erfolgte Erstellung gemeldet, damit keine zweite Einladung versendet wird.

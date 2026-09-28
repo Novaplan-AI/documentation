@@ -1,0 +1,96 @@
+---
+title: "Dropbox Personal"
+description: "Dateien aus einem persönlichen Dropbox-Konto mit Novaplan AI synchronisieren."
+icon: "/logo/dropbox.png"
+---
+
+Der **Dropbox-Personal-Konnektor** synchronisiert Dateien und Ordner eines einzelnen Dropbox-Kontos. Er beginnt im persönlichen Stammverzeichnis und übernimmt keine Teamstruktur oder Dropbox-Gruppen. Für eine Organisationsverbindung verwenden Sie den [Dropbox-Teams-Konnektor](/de/connectors/dropbox/dropbox_teams).
+
+Novaplan richtet Ihren Workspace weitgehend für Sie ein. Eine Administration kann die OAuth-App vorbereiten; die betroffene Person autorisiert anschließend ihr Dropbox-Konto.
+
+## Dropbox-App vorbereiten
+
+### 1. App erstellen
+
+1. Öffnen Sie die [Dropbox App Console](https://www.dropbox.com/developers/apps) und klicken Sie auf **Create app**.
+2. Wählen Sie **Scoped access** und als Zugriffstyp **Full Dropbox**. Dadurch kann die App alle Dateien im autorisierten Konto lesen, nicht nur einen eigenen App-Ordner.
+3. Vergeben Sie einen eindeutigen Namen, beispielsweise `Novaplan AI Personal Connector`, und klicken Sie auf **Create app**.
+
+### 2. Berechtigungen festlegen
+
+Aktivieren Sie unter **Permissions → Individual Scopes** die folgenden Berechtigungen und speichern Sie mit **Submit**:
+
+| Scope | Zweck |
+| --- | --- |
+| `account_info.read` | Konto-ID und E-Mail-Adresse zuordnen |
+| `files.content.read` | Dateiinhalt abrufen |
+| `files.metadata.read` | Dateinamen, Typen und Änderungen erkennen |
+| `sharing.read` | Vom Konnektor angefordert; die Verarbeitung von Freigaberechten muss im produktiven Workspace geprüft werden |
+| `sharing.write` | Vorschaulinks erstellen |
+
+**Team Scopes** werden für diese persönliche Verbindung nicht benötigt. Prüfen Sie den Umfang der Freigabe mit Ihrer Administration.
+
+<Note>
+  Der Konnektor versucht während der Synchronisierung, für Dateien und Ordner Dropbox-Freigabelinks als Vorschauadresse zu erstellen. Dafür benötigt er `sharing.write`. Der zugängliche Quellcode fordert für neue Links die Dropbox-Zielgruppe `no_one` an und verwendet gegebenenfalls einen bereits vorhandenen Link. Prüfen Sie diese Berechtigung und Ihre Dropbox-Richtlinien für Freigabelinks mit Ihrer Administration.
+</Note>
+
+### 3. Weiterleitungsadresse und Zugangsdaten
+
+1. Öffnen Sie **Settings → OAuth 2 → Redirect URIs** und fügen Sie die Adresse Ihres Novaplan-Workspaces mit diesem Pfad hinzu:
+
+```text
+https://{your_workspace_domain}/connectors/oauth/callback/Dropbox%20Personal
+```
+
+Ersetzen Sie `{your_workspace_domain}` durch den tatsächlichen Hostnamen Ihres Workspaces, ohne `https://`. Der Pfad enthält `%20` und muss exakt mit der von Novaplan AI angezeigten Callback-Adresse übereinstimmen.
+
+2. Klicken Sie auf **Add**. Kopieren Sie anschließend unter **Settings** den **App key** und den **App secret**. Bewahren Sie das Secret geschützt auf.
+
+## Verbindung in Novaplan AI einrichten
+
+1. Öffnen Sie **Workspace Settings → Personal → Your Connectors** und wählen Sie bei **Dropbox** die Option **Setup**.
+2. Geben Sie einen **Instance Name** ein und wählen Sie gegebenenfalls eine bereits von Ihrer Administration hinterlegte OAuth-App. Falls Sie die App selbst einrichten dürfen, tragen Sie **App key** und **App secret** ein.
+3. Klicken Sie auf **Next** und unter **Authorize** auf **Authenticate Dropbox to Proceed**.
+4. Melden Sie sich bei Dropbox an und erteilen Sie die angezeigten Berechtigungen.
+5. Wählen Sie **Continue to configuration**, prüfen Sie die [Konnektoreinstellungen](#konnektoreinstellungen) und speichern Sie.
+
+<Warning>
+  Autorisieren Sie mit derselben E-Mail-Adresse wie für Ihr Novaplan-AI-Konto. Unterschiedliche Adressen können die Berechtigungszuordnung verhindern.
+</Warning>
+
+## Konnektoreinstellungen
+
+### Synchronisierung
+
+- **Scheduled:** Synchronisiert automatisch im gewählten Intervall; die Voreinstellung beträgt 60 Minuten.
+- **Manual:** Synchronisiert nur nach einem manuellen Start.
+- **Created Date / Modified Date:** Begrenzen Dateien nach Erstellungs- oder Änderungsdatum, beispielsweise mit **Last 365 Days**, **Last 30 Days**, **Is After**, **Is Before** oder **Is Between**.
+- **File Extensions:** Mit **In** werden nur ausgewählte Endungen synchronisiert; **Not In** schließt ausgewählte Endungen aus. Nicht unterstützte Endungen werden bei **In** ausgeschlossen und bei **Not In** nicht durch diesen Filter blockiert.
+
+Dateien außerhalb der Synchronisierungsfilter werden nicht abgerufen. Ordner bleiben für die Verzeichnisstruktur erhalten.
+
+### Indexierung
+
+Indexierungsfilter bestimmen, welche synchronisierten Dateien durchsuchbar werden. Bei **Manual Indexing** werden Dateien zunächst nur synchronisiert. Unter **All Records** können Sie sie später gezielt indexieren. **Index Shared Items** soll die Indexierung geteilter Elemente steuern. Der zugängliche Code des persönlichen Konnektors prüft zwar `is_shared`, befüllt dieses Merkmal aber nicht erkennbar aus Dropbox-Freigabedaten. Verlassen Sie sich zum Ausschluss geteilter Inhalte nicht allein auf diese Einstellung, bis Novaplan das Verhalten im produktiven Workspace geprüft hat.
+
+## Technischer Ablauf
+
+Die Verbindung verwendet den Dropbox **User Client**. Zu Beginn ruft sie über `users/get_current_account` die Konto-ID und E-Mail-Adresse ab und erstellt für die Person eine persönliche Record Group mit **OWNER**-Berechtigung. Dateien und Ordner werden rekursiv synchronisiert.
+
+Beim ersten Lauf verwendet der Konnektor `files/list_folder`. Er speichert danach einen Dropbox-Cursor (`dropbox_cursor_sync_point`). Weitere Läufe verwenden `/files/list_folder/continue`, um hinzugefügte, geänderte und gelöschte Dateien zu erkennen. Neue Datensätze werden im dokumentierten Ablauf in Batches von 100 verarbeitet; Inhalts- oder Metadatenänderungen und Löschungen werden gesondert übernommen.
+
+Die autorisierte Person erhält **OWNER**-Rechte auf die persönliche Record Group. Der zugängliche Konnektorcode weist ihr für einzelne Dateien und Ordner **WRITE** zu; nur bei einem Fehler beim Erstellen der Berechtigung greift ein **OWNER**-Fallback. Der Code versucht, Vorschaulinks zu erstellen oder vorhandene Links zu verwenden, importiert aber nicht erkennbar die externen Nutzer von Dropbox-Freigabelinks und setzt `is_shared` nicht erkennbar aus diesen Quelldaten.
+
+### Technische Methoden und Aktualisierungen
+
+Der `DropboxIndividualConnector` erbt von `BaseConnector`. `init` richtet die Verbindung ein und `_get_current_user_info` liest das autorisierte Konto. `run_sync` verarbeitet nacheinander die Person, ihren persönlichen Bereich und die Dateien und Ordner. `_run_sync_with_cursor` wählt anhand des gespeicherten Stands zwischen vollständigem und inkrementellem Lauf; `_process_dropbox_items_generator` verarbeitet die Dropbox-Einträge schrittweise.
+
+Für jeden Eintrag prüft `get_record_by_external_id`, ob er bereits bekannt ist. Neue Einträge gehen in Batches an `on_new_records`. Bei Änderungen oder Löschungen verwendet der Konnektor `on_record_metadata_update`, `on_record_content_update` oder `on_record_deleted`. Für Dateien ruft er einen temporären Downloadlink ab; für die Vorschau versucht er, einen Dropbox-Freigabelink zu erstellen oder einen vorhandenen Link zu verwenden. `get_signed_url` und `stream_record` dienen später dem Dateizugriff. Diese Methodennamen beschreiben den zugänglichen Quellcode und sind keine öffentliche Novaplan-AI-API.
+
+## Fehlerbehebung
+
+- **Keine Dateien sichtbar:** Prüfen Sie, ob das Dropbox-Konto dieselbe E-Mail-Adresse wie Ihr Novaplan-AI-Konto verwendet und die Autorisierung abgeschlossen ist.
+- **Datensätze unter All Records, aber nicht in der Suche:** Prüfen Sie Synchronisierungsfilter, **Manual Indexing**, **Index Shared Items** und den Abschluss der Indexierung.
+- **Erster Lauf noch aktiv:** Öffnen Sie **Workspace Settings → Your Connectors**, prüfen Sie den Status und warten Sie, bis die Indexierung abgeschlossen ist.
+
+Wenn Sie Hilfe benötigen, schreiben Sie an [support@novaplan.ai](mailto:support@novaplan.ai). Die [Dropbox-HTTP-API](https://www.dropbox.com/developers/documentation/http/documentation) enthält weitere technische Informationen.

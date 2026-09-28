@@ -117,14 +117,14 @@ On the **App registrations** page, click **+ New registration**.
 
 ### Step 3: Register the application
 
-1. **Name**: Enter a display name (for example, `PipesHub SharePoint Toolset`).
+1. **Name**: Enter a display name (for example, `Novaplan AI SharePoint Toolset`).
 2. **Supported account types**: Choose who can sign in — for example **Accounts in any organizational directory and personal Microsoft accounts** for the broadest support, or a single-tenant option if you only use your organization.
-3. **Redirect URI**: Get the Redirect URI from the PipesHub **Configure SharePoint** dialog in **Workspace Settings → Actions** (where SharePoint is set up — for example **+ Setup** / **Configure**). Set the platform to **Web** and paste the value.
+3. **Redirect URI**: Get the Redirect URI from the Novaplan AI **Configure SharePoint** dialog in **Workspace Settings → Actions** (where SharePoint is set up — for example **+ Setup** / **Configure**). Set the platform to **Web** and paste the value.
 
 <div style={{ textAlign: "center" }}>
   <img
     src="/images/toolsets/sharepoint/sharepoint_reg_page.png"
-    alt="PipesHub Configure SharePoint dialog showing Redirect URI"
+    alt="Novaplan AI Configure SharePoint dialog showing Redirect URI"
     style={{ display: 'block', margin: '0 auto' }}
     width="90%"
   />
@@ -136,8 +136,8 @@ On the **App registrations** page, click **+ New registration**.
 
 On the **Overview** page for your app, copy:
 
-- **Application (client) ID** — used as **Client ID** in PipesHub.
-- **Directory (tenant) ID** — used as **Tenant ID** in PipesHub.
+- **Application (client) ID** — used as **Client ID** in Novaplan AI.
+- **Directory (tenant) ID** — used as **Tenant ID** in Novaplan AI.
 
 <div style={{ textAlign: "center" }}>
   <img
@@ -212,9 +212,11 @@ The `*.All` scopes (e.g., `Sites.ReadWrite.All`) require **admin consent** at th
   />
 </div>
 
-### Step 8: Configure the SharePoint toolset in PipesHub
+<div id="step-8-configure-the-sharepoint-toolset-in-novaplan-ai" />
 
-1. In PipesHub, go to **Workspace Settings** → **Actions**.
+### Step 8: Configure the SharePoint toolset in Novaplan AI
+
+1. In Novaplan AI, go to **Workspace Settings** → **Actions**.
 2. Find **SharePoint** and open setup / configuration (**+ Setup** or **Configure**).
 3. Confirm the **Redirect URI** in the dialog matches the **Web** redirect URI you registered in Azure in **Step 3**.
 4. Enter **Client ID**, **Client Secret**, and **Tenant ID**, then create or save the instance.
@@ -279,7 +281,7 @@ Authentication uses the same OAuth flow in either location:
 |--------|---------------------|-------------------|
 | **Purpose** | Sync and index sites, files, and pages for search | Enable agents to perform actions in SharePoint |
 | **Auth Type** | Application permissions (admin-consent, runs as the app) | Delegated permissions (acts as the signed-in user) |
-| **Data Flow** | One-way (import data into PipesHub) | Two-way (read and write via API) |
+| **Data Flow** | One-way (import data into Novaplan AI) | Two-way (read and write via API) |
 | **When to Use** | Query/search past site content and documents | Create pages, upload files, manage OneNote |
 
 **Example:** Use the **SharePoint Connector** to search across all your indexed SharePoint content. Use the **SharePoint Toolset** to let agents create pages, upload files, or manage OneNote notebooks on behalf of the signed-in user.

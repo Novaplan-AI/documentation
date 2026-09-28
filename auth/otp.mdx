@@ -1,30 +1,30 @@
 ---
 title: "One-Time Password"
-description: "Configure how users authenticate and access the application thorugh OTP"
+description: "Sign in with a one-time code sent to your email address"
 icon: "shield"
 ---
 
-## One-Time Password (OTP)
+## Sign in with a one-time code
 
-Single-use codes sent via email for secure, passwordless authentication.
+One-Time Password (OTP) sign-in sends a single-use code to your email address:
 
-### How It Works
+1. Enter the email address used for your Novaplan AI workspace invitation.
+2. Check your inbox for the one-time code.
+3. Enter the code on the sign-in page.
+4. After the code is verified, you can access your workspace.
 
-1. User enters their email address
-2. System generates a one-time code and sends it to the user's email
-3. User inputs the code to verify their identity
-4. Upon validation, access is granted
+The current implementation gives each code a **10-minute** validity period. A wrong or expired code requires you to check the most recent email or request a new one. Five incorrect code or password attempts can lock the account for 24 hours; see [How sign-in protects accounts](/auth#how-sign-in-protects-accounts). For security, a request for a code does not confirm whether the email address belongs to an account. Verify the exact messages and resend behavior in your deployed workspace.
 
-### Configuration To enable OTP authentication:
+If the code does not arrive, check your spam folder and then contact your workspace administrator or [Novaplan Support](/contact-us).
 
-1. Navigate to Authentication Settings
-2. Toggle on "One-Time Password"
-3. Ensure SMTP settings are properly configured
+## For administrators
 
-### Requirements - Functional SMTP configuration - Valid email addresses for all users
+Novaplan manages most workspace setup. If configuring this method is part of your administrator role:
+
+1. Open **Workspace Settings → Authentication**.
+2. Enable **One-Time Password**.
+3. Confirm that workspace email delivery through SMTP works and users have valid email addresses.
 
 <Warning>
-  OTP authentication requires proper SMTP configuration to deliver verification
-  codes to users. For setting up Smtp, refer to [SMTP Configuration
-  Guide](/smtp)
+  Without working SMTP configuration, users cannot receive one-time codes. See the [SMTP guide](/smtp) for setup details.
 </Warning>

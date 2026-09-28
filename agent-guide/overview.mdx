@@ -1,14 +1,12 @@
 ---
 title: "Agents Overview"
 description: "Build intelligent AI agents with visual flow builder, toolsets, and collections"
-icon: "robot"
 ---
 
 <div className="not-prose mt-10">
   <div className="p-6 border border-gray-200 dark:border-gray-700 rounded-xl bg-blue-50 dark:bg-gray-800">
     <div className="flex items-center gap-3 mb-4">
-      <span className="text-4xl">🤖</span>
-      <div className="text-xl font-semibold text-gray-900 dark:text-white">PipesHub Agents</div>
+      <div className="text-xl font-semibold text-gray-900 dark:text-white">Novaplan AI Agents</div>
     </div>
     <p className="text-base text-gray-700 dark:text-gray-300 mt-0 mb-5">Create custom AI agents that can perform actions across your connected applications</p>
     <div className="flex flex-wrap items-center gap-2">
@@ -26,7 +24,7 @@ icon: "robot"
 
 Agents are customizable AI assistants that can interact with your connected applications, search collections, and perform actions on your behalf. Unlike the standard chatbot assistant, agents are purpose-built for specific workflows and can be configured with:
 
-- **Reasoning Models** - Choose the AI model with reasoning capabilities that powers your agent
+- **AI models** - Use the organization's default model or connect models to the agent; if you connect models, at least one must support reasoning
 - **Toolsets** - Connect to external services like Slack, Jira, Confluence, and more
 - **Knowledge sources** - Access indexed documents and collections
 - **Custom system prompts** - Define the agent's personality and behavior
@@ -42,7 +40,7 @@ Agents are customizable AI assistants that can interact with your connected appl
 Agents are built using a visual drag-and-drop flow builder powered by ReactFlow. You create agents by:
 
 1. Adding an **Agent Core** node that defines the agent's basic configuration
-2. Connecting **Reasoning Model** nodes (LLM with reasoning enabled) to power the agent's intelligence
+2. Optionally connecting **LLM Model** nodes; when models are connected, at least one must support reasoning
 3. Adding **Toolset** nodes to give the agent access to external applications
 4. Connecting **Collection** nodes for indexed document search
 5. Configuring edges to connect all components together
@@ -109,7 +107,7 @@ Agents can access your indexed knowledge sources:
 | Aspect | Connectors | Toolsets |
 |--------|-----------|----------|
 | **Purpose** | Sync and index data for search | Enable agents to perform actions |
-| **Data Flow** | One-way (import data into PipesHub) | Two-way (read and write via API) |
+| **Data Flow** | Import data into Novaplan AI | Read from an external API and, where permitted, perform actions through it |
 | **When to Use** | Query/search data | Perform actions on data |
 
 **Example:** Use a **Gmail Connector** to index and search your email history. Use a **Gmail Toolset** to send new emails through an agent.
@@ -128,22 +126,15 @@ Agents can access your indexed knowledge sources:
 
 <Accordion title="Can I use one OAuth app for both Connector and Toolset?">
 
-Yes! You can create a single OAuth app in the service's developer console and use it for both:
+Sometimes. Whether one OAuth app can serve both depends on the provider's rules, supported redirect URLs, and the permissions required by each integration. Check the connector and toolset setup screens before registering the app.
 
 **What you need to add in your OAuth app:**
 
-1. **Both redirect URLs:**
-   - Connector callback URL (e.g., `/connectors/oauth/callback/Gmail`)
-   - Toolset callback URL (e.g., `/api/oauth/callback/Gmail`)
+1. **Both redirect URLs:** Copy the full callback URL displayed for the connector and the full callback URL displayed for the toolset. Register both exactly as shown if the provider allows multiple callbacks on one app.
 
-2. **Both scope types:**
-   - Read-only scopes for the Connector (to index data)
-   - Read/write/delete scopes for the Toolset (to perform actions)
+2. **Required scopes:** Review the permissions in both setup guides and the provider consent screen. Connector scopes are not always read-only, and toolsets do not all require write or delete access. Approve only the scopes needed for the intended integration.
 
-**Benefits:**
-- Simpler setup - One OAuth app instead of two
-- Same Client ID and Client Secret for both configurations
-- Easier management in the service's developer console
+If the provider supports this arrangement and your administrator approves the combined permissions, the two integrations can share a Client ID and Client Secret. Otherwise, create separate OAuth apps. Novaplan can help confirm the callback and consent requirements.
 
 </Accordion>
 
@@ -152,7 +143,7 @@ Yes! You can create a single OAuth app in the service's developer console and us
 Follow this pattern:
 
 1. **Agent Core** (required) - The center of your agent
-2. **Reasoning Model** (required) - Connect at least one AI model
+2. **LLM Model** (optional) - With no model node, the agent uses the organization's default model at chat time. If you connect model nodes, at least one must support reasoning.
 3. **Toolset nodes** (optional) - For actions like sending emails, creating tickets
 4. **Collection nodes** (optional) - For searching indexed data from Connectors
 
@@ -174,7 +165,7 @@ This gives you control at any time during the conversation to specify where the 
 
 <Accordion title="Can I connect multiple Reasoning Models to one agent?">
 
-Yes! You can connect multiple Reasoning Model nodes to the Agent Core. 
+Yes. You can connect multiple model nodes to the Agent Core, provided at least one supports reasoning.
 
 When chatting with the agent, users can select which model to use for specific queries from the chat interface. This allows:
 

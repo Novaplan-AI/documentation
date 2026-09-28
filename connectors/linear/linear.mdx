@@ -58,7 +58,7 @@ The connector indexes the following content for AI-powered search:
 
 ## Configuration Guide
 
-The Linear connector uses **OAuth 2.0** for authentication. Linear's OAuth apps return refresh tokens that auto-refresh, so a single authorization keeps syncing indefinitely.
+The Linear connector uses **OAuth 2.0** for authentication. [Linear issues access and refresh tokens](https://linear.app/developers/oauth-2-0-authentication); access tokens expire and the connector must refresh them to keep syncing. If refresh fails or access is revoked, the connection may need to be authorized again. Confirm token handling in the deployed Novaplan AI workspace.
 
 #### Step 1: Access Linear API settings
 
@@ -77,17 +77,19 @@ The Linear connector uses **OAuth 2.0** for authentication. Linear's OAuth apps 
   It is recommended to create a dedicated Linear workspace for managing OAuth apps, since any admin on the workspace can see the application credentials.
 </Info>
 
-#### Step 2: Get the Redirect URL from PipesHub
+<div id="step-2-get-the-redirect-url-from-novaplan-ai" />
 
-Before creating the OAuth application in Linear, copy the Redirect URL from PipesHub.
+#### Step 2: Get the Redirect URL from Novaplan AI
 
-1. In PipesHub, go to **Workspace Settings** → **Connectors**, find **Linear**, and click **+ Setup** for a new instance.
+Before creating the OAuth application in Linear, copy the Redirect URL from Novaplan AI.
+
+1. In Novaplan AI, go to **Workspace Settings** → **Connectors**, find **Linear**, and click **+ Setup** for a new instance.
 2. The connector panel opens as a right-side drawer. On the **Authenticate Instance** tab, copy the **Redirect URL**.
 
 <div className="text-center">
   <img
     src="/images/connectors/linear/linear_config.png"
-    alt="PipesHub Linear Authenticate Instance tab — copy the Redirect URL"
+    alt="Novaplan AI Linear Authenticate Instance tab — copy the Redirect URL"
     className="block mx-auto w-11/12"
   />
 </div>
@@ -97,11 +99,11 @@ Before creating the OAuth application in Linear, copy the Redirect URL from Pipe
 1. Back on the Linear **API** page, find the **OAuth Applications** section.
 2. Click the **+** button to create a new application.
 3. Fill in the application details:
-   - **Application name:** a meaningful name (e.g., `PipesHub Linear Connector`)
+   - **Application name:** a meaningful name (e.g., `Novaplan AI Linear Connector`)
    - **Developer name:** your name or organization name
    - **Developer URL:** your website URL (e.g., `https://your-domain.com`)
    - **Description:** optional description of the application
-   - **Callback URLs:** paste the Redirect URL you copied from PipesHub (Step 2)
+   - **Callback URLs:** paste the Redirect URL you copied from Novaplan AI (Step 2)
 
 <div className="text-center">
   <img
@@ -127,19 +129,19 @@ Before creating the OAuth application in Linear, copy the Redirect URL from Pipe
 5. Click **Create** to create the application.
 
 <Warning>
-  The Callback URL must match exactly between Linear and PipesHub. Any mismatch — trailing slash, protocol, casing — will cause authentication to fail.
+  The Callback URL must match exactly between Linear and Novaplan AI. Any mismatch — trailing slash, protocol, casing — will cause authentication to fail.
 </Warning>
 
 <Info>
-  OAuth 2.0 applications created from October 1, 2025 onwards have refresh tokens enabled by default. Access tokens last 24 hours and are automatically refreshed.
+  Linear's current OAuth documentation says its applications use refresh tokens and access tokens last 24 hours. The connector is expected to refresh an expired access token, but a failed refresh or revoked authorization still needs attention. See [Linear's OAuth guide](https://linear.app/developers/oauth-2-0-authentication) and check the connector status if synchronization stops.
 </Info>
 
 #### Step 4: Copy Client ID and Client Secret
 
 After creating the application, you'll see the application settings page.
 
-1. Copy the **Client ID** — used as **Client ID** in PipesHub.
-2. Click to reveal and copy the **Client Secret** — used as **Client Secret** in PipesHub.
+1. Copy the **Client ID** — used as **Client ID** in Novaplan AI.
+2. Click to reveal and copy the **Client Secret** — used as **Client Secret** in Novaplan AI.
 
 <div className="text-center">
   <img
@@ -150,12 +152,12 @@ After creating the application, you'll see the application settings page.
 </div>
 
 <Warning>
-  Store the Client Secret securely. It can be regenerated if needed, but you'll have to update your PipesHub configuration with the new value and re-authorize.
+  Store the Client Secret securely. It can be regenerated if needed, but you'll have to update your Novaplan AI configuration with the new value and re-authorize.
 </Warning>
 
 #### Step 5: Authenticate Instance tab — enter credentials
 
-The connector drawer in PipesHub has three tabs: **Authenticate Instance**, **Authorize**, and **Configure Records**. Return to the **Authenticate Instance** tab.
+The connector drawer in Novaplan AI has three tabs: **Authenticate Instance**, **Authorize**, and **Configure Records**. Return to the **Authenticate Instance** tab.
 
 1. Confirm the **Redirect URL** matches the Callback URL you saved in Linear in Step 3.
 2. If your admin has pre-registered an OAuth app, pick it from the **OAuth app** dropdown. Otherwise leave it blank and enter credentials manually.
@@ -179,7 +181,7 @@ On the **Authorize** tab, all the OAuth authorization work happens. The tab show
 <div className="text-center">
   <img
     src="/images/connectors/linear/connector_authenticated.png"
-    alt="PipesHub Authorize tab with the Authenticate button"
+    alt="Novaplan AI Authorize tab with the Authenticate button"
     className="block mx-auto w-11/12"
   />
 </div>
@@ -195,11 +197,11 @@ On the **Authorize** tab, all the OAuth authorization work happens. The tab show
 </div>
 
 <Warning>
-  **Authorize using the same email as your PipesHub account.** Using a different email causes permission issues on the PipesHub platform.
+  Authorize the shared connector with a Linear account that can read the intended teams. Each viewer's Linear identity and private-team membership are mapped separately to their Novaplan AI account.
 </Warning>
 
 2. Click **Authorize** to grant access.
-3. The popup closes and returns you to PipesHub. The connector tile shows an **Authenticated** badge with a **Reauthenticate** option.
+3. The popup closes and returns you to Novaplan AI. The connector tile shows an **Authenticated** badge with a **Reauthenticate** option.
 4. Click **Next** to move to the **Configure Records** tab.
 
 <Info>
@@ -227,7 +229,7 @@ On the **Configure Records** tab, control how the connector syncs and what gets 
   **Scheduled sync** runs automatically at the specified intervals. **Manual sync** requires you to trigger synchronization on-demand.
 </Note>
 
-**Sync filters** — determine which content is downloaded from Linear. Data excluded by sync filters is never downloaded.
+**Sync filters** — narrow the issues and projects retrieved from selected teams and date ranges. The accessible connector still fetches workspace users for identity and permission mapping, and the team picker fetches team options. Do not treat the content filters as a guarantee that no other source metadata is read.
 
 <div className="text-center">
   <img
@@ -256,7 +258,7 @@ Available sync filters:
 
 4. **Created Date** — filter by creation date. Same operators.
 
-**Indexing filters** — control what synced data gets processed for AI search. All data is synced, but only enabled content types are indexed.
+**Indexing filters** — control which synchronized content types are processed for AI search. Disabling indexing does not by itself prevent the connector from fetching that source data.
 
 - **Index Issues** (default: enabled) — include issue content and comments in search
 - **Index Issue Attachments** (default: enabled) — include external link attachments in search
@@ -272,7 +274,7 @@ Available sync filters:
 - *Index issues but not attachments:* disable **Index Issue Attachments**
 - *Index everything except files:* disable **Index Issue and Comment Files**
 
-Click **Save** to save your configuration. PipesHub confirms the instance is ready with a final dialog — **"Instance is configured and ready to sync"** — offering two choices: **I'll do it later** or **Start syncing now**.
+Click **Save** to save your configuration. Novaplan AI confirms the instance is ready with a final dialog — **"Instance is configured and ready to sync"** — offering two choices: **I'll do it later** or **Start syncing now**.
 
 <div className="text-center">
   <img
@@ -306,8 +308,8 @@ Linear uses a team-based permission model:
 | **Private Teams** | Only team members can view team content |
 
 The connector preserves these permissions:
-- For **public teams**, content is visible to all organization users in PipesHub.
-- For **private teams**, content is only visible to team members in PipesHub.
+- For **public teams**, content is visible to all organization users in Novaplan AI.
+- For **private teams**, content is only visible to team members in Novaplan AI.
 
 ## Useful Links
 
@@ -328,10 +330,10 @@ The connector preserves these permissions:
 - Verify Client ID and Client Secret are correct
 - Ensure you copied the full values without extra spaces
 - Check that the OAuth app is active in Linear API settings
-- Regenerate the secret if necessary and update PipesHub
+- Regenerate the secret if necessary and update Novaplan AI
 
 **Callback URL mismatch error:**
-- Ensure the Redirect URI in PipesHub exactly matches the callback URL in Linear
+- Ensure the Redirect URI in Novaplan AI exactly matches the callback URL in Linear
 - Check for trailing slashes or protocol differences (http vs https)
 - Update both configurations to use the same URL
 
@@ -363,7 +365,7 @@ The connector preserves these permissions:
 - Check that "Index Issue and Comment Files" filter is enabled
 
 <Warning>
-  If you modify OAuth application settings in Linear (Client ID, Secret, or callback URL), you must update the configuration in PipesHub and re-authorize the connection.
+  If you modify OAuth application settings in Linear (Client ID, Secret, or callback URL), you must update the configuration in Novaplan AI and re-authorize the connection.
 </Warning>
 
 </Accordion>
@@ -388,7 +390,7 @@ The connector syncs data in the following order:
 4. **Attachments** → Sync external links attached to issues
 5. **Documents** → Sync Linear documents linked to issues
 6. **Projects** → Sync projects with milestones, updates, and related content
-7. **Deletions** → Detect and remove deleted/archived issues and projects
+7. **Deletions** → Check for trashed issues and projects and remove their indexed records
 
 ### Full Sync vs Incremental Sync
 
@@ -409,7 +411,7 @@ The connector syncs data in the following order:
 
 **Attachments & Documents**: Synced separately to capture additions even when parent issue wasn't modified
 
-**Deletions**: Automatically detects trashed/archived content and removes from index along with related records
+**Deletions**: The accessible connector checks for items marked `trashed` on later syncs and removes their records and related content. Archiving alone is not the removal condition in that path; verify the deployed behavior before relying on it for retention or access changes.
 
 </Accordion>
 
@@ -428,12 +430,12 @@ The connector syncs data in the following order:
   - **Network latency**: Connection speed to Linear's API
   - **Content complexity**: Issues with many comments and attachments take longer
   
-  The connector fetches data in batches of 50 items per API request for optimal performance. Each team is processed sequentially with per-team checkpoints, allowing sync to resume from the last successful point if interrupted.
+  The accessible connector processes issues in batches of 50 and projects in batches of 10. Per-team checkpoints help an interrupted sync resume from its last successful stage. Confirm actual throughput in your deployed workspace.
   
   **Tips to speed up initial sync:**
   - Use **team filters** to sync only the teams you need
-  - Use **date filters** to exclude old/archived content
-  - Disable indexing filters for content types you don't need (e.g., attachments, files)
+  - Use **date filters** to limit older content
+  - Use indexing filters to keep unneeded content out of search. Disabling an indexing option by itself does not guarantee fewer source API calls.
 </Accordion>
 
 <Accordion title="What OAuth scopes does the connector require?">
@@ -465,8 +467,8 @@ The connector syncs data in the following order:
 
 There are three common causes:
 
-1. **Email mismatch** - The email used during connector authentication doesn't match your PipesHub account email. This causes permission issues preventing you from accessing synced data.
-   - **Fix:** Reconfigure the connector and authenticate using the same email as your PipesHub account.
+1. **Viewer identity or team access does not match** - A viewer's Linear email or private-team membership may not map to their Novaplan AI account.
+   - **Fix:** Ask your administrator to check the affected viewer's email and Linear team membership, then confirm the account authorizing the connector can read that team.
 
 2. **Records show in "All Records" but not in search** - Documents display in the All Records section but don't appear in search query results.
    - **Fix:** Verify sync filters in the connector settings and ensure indexing has completed. Check that the data matches your search query criteria.
@@ -483,6 +485,6 @@ There are three common causes:
 <div className="text-center mt-12 p-6 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl">
   <h3 className="text-lg font-semibold mb-2">Ready to Get Started?</h3>
   <p className="text-gray-600 dark:text-gray-400">
-    Connect your Linear workspace to PipesHub in just a few minutes. Follow the step-by-step guide above to enable organization-wide issue tracking search across all your Linear content.
+    Connect Linear to Novaplan AI using the approved account and filters above. Search results reflect the synced teams and each viewer's permissions.
   </p>
 </div>

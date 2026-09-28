@@ -1,0 +1,35 @@
+---
+title: "Amazon Bedrock Embeddings"
+description: "Embedding-Modelle über Amazon Bedrock mit Novaplan AI verbinden."
+---
+
+# Amazon Bedrock Embeddings konfigurieren
+
+![Konfigurationsansicht für Amazon Bedrock Embeddings](/images/ai-models/embedding/Bedrock_EmbeddingConfig.png)
+
+Novaplan AI kann Embedding-Modelle über Amazon Bedrock für semantische Suche und Dokumentabruf verwenden. Novaplan unterstützt Sie bei der Einrichtung. Modellzugang, AWS-Region und IAM-Berechtigungen müssen zur gewählten Modell-ID passen.
+
+## Erforderliche Angaben
+
+| Feld | Bedeutung |
+| --- | --- |
+| **Region** | AWS-Region des Bedrock-Zugangs, beispielsweise `eu-west-1` oder `us-east-1`. Das Modell muss dort für Ihr Konto verfügbar sein. |
+| **Model Name** | Genaue Modell-ID aus der [Amazon-Bedrock-Konsole](https://console.aws.amazon.com/bedrock/). Ein Beispiel ist `cohere2.embed-multilingual-v3`. |
+| **Provider** | Anbieter des gewählten Embedding-Modells: **Cohere**, **Amazon (Titan)** oder **Other**. Bei **Other** ist zusätzlich ein **Custom Provider Name** erforderlich. |
+
+Prüfen Sie in der Bedrock-Konsole unter Modellzugang und Basismodellen die aktuelle ID sowie die Freigabe für Ihr AWS-Konto. Wählen Sie die Region auch unter Berücksichtigung von Latenz und Datenresidenz.
+
+## AWS-Anmeldung
+
+**AWS Access Key ID** und **AWS Secret Access Key** sind optionale Felder. Beide können leer bleiben, wenn Novaplan für den verwalteten Backend-Dienst eine geeignete AWS-Anmeldequelle eingerichtet hat, etwa eine Workload-Rolle. Der zugängliche Backend-Code verwendet dann die [Boto3-Anmeldekette](https://docs.aws.amazon.com/boto3/latest/guide/credentials.html). Eine AWS-Anmeldung auf Ihrem eigenen Computer steht dem Dienst nicht automatisch zur Verfügung. Ein dauerhaftes Zugangsschlüsselpaar verwenden Sie nur nach Abstimmung mit Ihrer AWS-Administration und Novaplan; klären Sie Berechtigungen, sichere Übergabe und Rotation. [AWS bevorzugt temporäre Zugangsdaten](https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html).
+
+Die verwendete AWS-Identität braucht für Modellaufrufe `bedrock:InvokeModel` und, falls der Aufrufpfad gestreamte Antworten verwendet, `bedrock:InvokeModelWithResponseStream`. Ein Inference Profile kann zusätzliche Rechte erfordern. Lassen Sie die AWS-Administration die Ressourcenberechtigungen auf die tatsächlich verwendeten Modelle oder Profile begrenzen. Siehe [AWS-Voraussetzungen für Modellaufrufe](https://docs.aws.amazon.com/bedrock/latest/userguide/inference-prereq.html).
+
+## Modell hinzufügen
+
+1. Klicken Sie auf der Amazon-Bedrock-Embedding-Anbieterkarte auf **Configure**.
+2. Geben Sie **Region** und **Model Name** ein und wählen Sie den passenden **Provider**.
+3. Ergänzen Sie bei **Other** den **Custom Provider Name** und bei Bedarf die beiden AWS-Zugangsschlüssel.
+4. Klicken Sie auf **Add Model**, um die Angaben zu speichern und prüfen zu lassen.
+
+Region, Model Name und Provider sind erforderlich. Bedrock-Nutzung zählt zu AWS-Kontingent und Abrechnung. Bei Fehlern prüfen Sie Region, Modellzugang, Modell-ID, IAM-Rechte und die gewählte Anmeldemethode. Weitere Informationen bietet die [Amazon-Bedrock-Dokumentation](https://docs.aws.amazon.com/bedrock/); [Novaplan Support](/de/contact-us) hilft bei der Einrichtung.

@@ -1,15 +1,15 @@
 ---
 title: OpenAI
-description: "Configure PipesHub to use OpenAI image generation models"
+description: "Configure Novaplan AI to use OpenAI image generation models"
 ---
 
 # OpenAI Image Generation Configuration
 
 ![OpenAI Image Generation Configuration Interface](/images/ai-models/image-generation/OpenAI_ImageGenConfig.png)
 
-*The OpenAI image generation configuration screen in PipesHub where you'll enter your API Key and Model Name*
+*The OpenAI image generation configuration screen in Novaplan AI where you'll enter your API Key and Model Name*
 
-PipesHub allows you to integrate with OpenAI's image generation models to enable AI-powered image creation in your workspace. Once configured, AI agents and workflows can generate images from text prompts using OpenAI's DALL-E and GPT-Image models.
+Novaplan AI can use an OpenAI image-generation model to create images from text prompts in agents and workflows. Choose a model that is currently available to your OpenAI account and compatible with your deployed Novaplan AI workspace.
 
 ## Required Fields
 
@@ -23,20 +23,13 @@ The API Key is required to authenticate your requests to OpenAI's image generati
 3. Create a new secret key
 4. Copy the key immediately (it will only be shown once)
 
-**Security Note:** Your API key should be kept secure and never shared publicly. PipesHub securely stores your API key and uses it only for authenticating requests to OpenAI.
+**Security note:** Treat this API key as a secret. Use the approved workspace setup flow, and coordinate access and rotation with Novaplan and your provider administrator.
 
 ### Model Name *
 
-The Model Name field defines which OpenAI image generation model you want to use with PipesHub.
+The Model Name field defines which OpenAI image generation model you want to use with Novaplan AI.
 
-**Available OpenAI image generation models:**
-- `gpt-image-1` - OpenAI's latest image generation model with high-quality, instruction-following image creation
-- `dall-e-3` - DALL-E 3, OpenAI's previous generation image model with strong prompt adherence
-
-**How to choose a model:**
-- For the best quality and most accurate prompt following, select `gpt-image-1`
-- For broad availability and proven reliability, select `dall-e-3`
-- Check OpenAI's [image generation documentation](https://platform.openai.com/docs/guides/images) for the most up-to-date options
+Copy the exact model ID from OpenAI's [current image-generation guide](https://developers.openai.com/api/docs/guides/image-generation), then confirm that the model works in your Novaplan AI workspace. Older setup screens may show `gpt-image-1` or `dall-e-3` as examples; a placeholder does not establish current availability. OpenAI [marks DALL·E 3 as deprecated and removed from its API](https://developers.openai.com/api/docs/models/dall-e-3), so do not choose `dall-e-3` for a new connection.
 
 ## Configuration Steps
 
@@ -60,7 +53,7 @@ As shown in the image above:
 
 - If you encounter authentication errors, verify your API key is correct and has not expired
 - Ensure your OpenAI account has billing set up
-- Check that the model name is spelled correctly and matches exactly (e.g. `dall-e-3`, not `DALL-E-3`)
+- Check that the model ID matches OpenAI's current catalog exactly and is supported by the deployed workspace
 - Verify your account has access to the image generation API (some API keys may have restrictions)
 
-For additional support, refer to the [OpenAI image generation documentation](https://platform.openai.com/docs/guides/images) or contact PipesHub support.
+For additional support, refer to the [OpenAI image generation documentation](https://developers.openai.com/api/docs/guides/image-generation) or [Novaplan Support](/contact-us).

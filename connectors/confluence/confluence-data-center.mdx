@@ -30,7 +30,7 @@ icon: "/logo/confluence.png"
 
 Confluence Data Center is the version of Confluence that you install and run on your own servers. Atlassian does not host it for you.
 
-The Confluence Data Center connector syncs spaces, pages, blog posts, comments, attachments, and users from your instance. It keeps space permissions and page restrictions, so each user in PipesHub only sees what they can already see in Confluence.
+The Confluence Data Center connector syncs spaces, pages, blog posts, comments, attachments, and users from your instance. It keeps space permissions and page restrictions, so each user in Novaplan AI only sees what they can already see in Confluence.
 
 <Info>
   If Atlassian hosts your Confluence for you, that is Confluence Cloud. Use the [Confluence Cloud connector](/connectors/confluence/confluence) instead. The two connectors are not interchangeable.
@@ -68,7 +68,7 @@ Check these before you start:
 
 | Requirement | Detail |
 |-------------|--------|
-| **Deployment** | Confluence Data Center that PipesHub can reach over HTTPS |
+| **Deployment** | Confluence Data Center that Novaplan AI can reach over HTTPS |
 | **Version** | **Confluence Data Center 9.1 or later.** See the warning below |
 | **Base URL** | The root URL of your instance, such as `https://confluence.yourcompany.com`. Not a page URL like `/display/SPACE` |
 | **PAT support** | Personal Access Tokens need Confluence 7.9 or later. On older versions, use Basic Authentication |
@@ -133,7 +133,7 @@ The setting has three options:
 </div>
 
 4. Click **Create token**.
-5. Give it a name you will recognise, such as `PipesHub Confluence Connector`.
+5. Give it a name you will recognise, such as `Novaplan AI Confluence Connector`.
 6. Set an expiry, or turn off **Automatic expiry** if your policy allows tokens that do not expire.
 7. Click **Create**.
 
@@ -165,13 +165,13 @@ The setting has three options:
 
 #### Step 2: Authenticate Instance tab — enter your credentials
 
-1. In PipesHub, go to **Workspace Settings** → **Connectors**, find **Confluence Data Center**, and click **+ Setup**.
+1. In Novaplan AI, go to **Workspace Settings** → **Connectors**, find **Confluence Data Center**, and click **+ Setup**.
 2. The connector panel opens as a drawer on the right.
 3. On the **Authenticate Instance** tab, select **Personal Access Token** in the **Authentication method** dropdown.
 4. Enter:
    - **Base URL** — the root URL of your Confluence, such as `https://confluence.yourcompany.com`, with no trailing slash
    - **Personal Access Token** — the token you copied in Step 1
-5. Click **Next**. PipesHub checks the credentials and moves you to the **Configure Records** tab.
+5. Click **Next**. Novaplan AI checks the credentials and moves you to the **Configure Records** tab.
 
 <div className="text-center">
   <img
@@ -198,13 +198,13 @@ Use this on instances that do not support Personal Access Tokens, or where an ad
 
 #### Step 2: Authenticate Instance tab — enter your credentials
 
-1. In PipesHub, go to **Workspace Settings** → **Connectors**, find **Confluence Data Center**, and click **+ Setup**.
+1. In Novaplan AI, go to **Workspace Settings** → **Connectors**, find **Confluence Data Center**, and click **+ Setup**.
 2. On the **Authenticate Instance** tab, select **Basic Authentication** in the **Authentication method** dropdown.
 3. Enter:
    - **Base URL** — the root URL of your Confluence, such as `https://confluence.yourcompany.com`, with no trailing slash
    - **Username** — the Confluence username of the account
    - **Password** — the account password
-4. Click **Next**. PipesHub checks the credentials and moves you to the **Configure Records** tab.
+4. Click **Next**. Novaplan AI checks the credentials and moves you to the **Configure Records** tab.
 
 <div className="text-center">
   <img
@@ -247,7 +247,7 @@ On the **Configure Records** tab, you choose how often the connector syncs and w
   **Scheduled sync** runs on its own at the interval you set. **Manual sync** runs only when you start it. Real-time sync is not available for Confluence Data Center.
 </Note>
 
-**Sync filters** — these decide what gets downloaded from Confluence. Anything a sync filter excludes is never downloaded.
+**Sync filters** — narrow the spaces, pages, and blog posts processed by this Team connection. The accessible Data Center connector still reads Confluence users and groups for identity and permission mapping. Do not treat these content filters as a guarantee that no other source metadata is read.
 
 <div className="text-center">
   <img
@@ -284,7 +284,7 @@ Available sync filters:
 - *Recent content only:* Modified Date → `Is After` → `2024-06-01`
 - *Pages but not attachments:* turn off **Index Page Attachments**
 
-Click **Save**. PipesHub shows a dialog saying **"Instance is configured and ready to sync"**, with two choices: **I'll do it later** or **Start syncing now**.
+Click **Save**. Novaplan AI shows a dialog saying **"Instance is configured and ready to sync"**, with two choices: **I'll do it later** or **Start syncing now**.
 
 <div className="text-center">
   <img
@@ -315,7 +315,7 @@ The Confluence Data Center connector syncs:
 </Warning>
 
 <Info>
-  **Want agents to act in Confluence?** This connector only syncs data into PipesHub. To let agents create and update pages, set up the [Confluence Data Center toolset](/toolsets/confluence/confluence-data-center) as well.
+  **Want agents to act in Confluence?** This connector only syncs data into Novaplan AI. To let agents create and update pages, set up the [Confluence Data Center toolset](/toolsets/confluence/confluence-data-center) as well.
 </Info>
 
 ## Useful Links
@@ -353,8 +353,8 @@ The Confluence Data Center connector syncs:
 - The account may be CAPTCHA-locked after failed sign-ins. Sign in once in a browser to clear it
 
 **Connection times out, or you see a certificate error:**
-- Check that PipesHub can reach the base URL through your firewall, VPN, or allowlist
-- If your instance uses a self-signed or internal certificate, PipesHub needs to trust that certificate
+- Check that Novaplan AI can reach the base URL through your firewall, VPN, or allowlist
+- If your instance uses a self-signed or internal certificate, Novaplan AI needs to trust that certificate
 
 **Some users are missing after a sync:**
 - Users are skipped when email addresses are hidden. Ask a Confluence administrator to make them visible, then sync again
@@ -417,6 +417,9 @@ Each sync runs these steps in order:
 - **Page and blog restrictions** are read as effective view restrictions. Only real read restrictions change who can see a page. A restriction that only limits editing still lets people read the page based on the space permissions
 - **Public spaces** — if a space allows anonymous read access, it is treated as public and per-user permissions are skipped
 - **Unknown users** — permissions for users whose email is not known yet are held on a placeholder and moved to the real user once that user syncs
+- **Attachments and comments** of a restricted page inherit its visibility. When an audit-log event changes the page restriction, the stored attachments and comments follow.
+- **Unknown groups** — a restriction naming a group that has not synced remains restricted; its members gain access after the group syncs and the page is read again.
+- **Failed reads** — temporary failures reading space permissions, group membership, or page restrictions preserve the stored access. A page with unreadable restrictions is skipped while the rest of its space continues syncing; the checkpoint stays in place so the next sync retries that window. A failed read does not make the page visible to the whole space.
 
 ### How Data Center differs from Confluence Cloud
 
@@ -491,8 +494,8 @@ Yes. Use the **Page Name** filter with the `In` operator and pick the pages you 
 
 Check these in order:
 
-1. **The sync has not finished.** Go to **Settings → Connectors** and check the sync status, then look in **All Records** for the pages you expect.
-2. **Email addresses are hidden.** If Confluence hides email addresses, you may not have been synced as a user yet. Ask a Confluence administrator to make them visible, then wait for the next sync.
+1. **The sync has not finished.** Go to **Workspace Settings → Connectors** and check the sync status, then look in **All Records** for the pages you expect.
+2. **User mapping is incomplete.** If Confluence hides email addresses, some users may not map on the first sync. Ask your Confluence administrator to review the global email-visibility setting with your privacy policy before changing it, then test again after the next sync.
 3. **Your filters are too narrow.** Check the **Space Name**, **Page Name**, and date filters on the **Configure Records** tab.
 4. **Indexing is off.** Check that **Index Pages** and the related toggles are turned on.
 
@@ -505,6 +508,6 @@ Check these in order:
 <div className="text-center mt-12 p-6 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl">
   <h3 className="text-lg font-semibold mb-2">Ready to Get Started?</h3>
   <p className="text-gray-600 dark:text-gray-400">
-    Connect your self-hosted Confluence Data Center instance to PipesHub in a few minutes. Follow the steps above to search every space and page across your Confluence content.
+    Connect your Confluence Data Center instance to Novaplan AI using the approved account and filters above. Search results reflect the content that was synced and each user's permissions.
   </p>
 </div>

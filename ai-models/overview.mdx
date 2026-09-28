@@ -1,9 +1,9 @@
 ---
 title: "AI Models Overview"
-description: "Connect PipesHub to LLM and embedding providers to power AI features across your workspace"
+description: "Connect Novaplan AI to LLM and embedding providers to power AI features across your workspace"
 ---
 
-The AI Models page is where workspace admins connect PipesHub to one or more AI providers. Once configured, these models power every AI feature in the platform — answering questions in chat, summarising documents, and running AI agents. You can connect as many providers as you need and switch between them at any time.
+The AI Models page is where workspace admins connect Novaplan AI to one or more AI providers. Once configured, these models power every AI feature in the platform — answering questions in chat, summarising documents, and running AI agents. You can connect as many providers as you need and switch between them at any time.
 
 You need at least one **LLMs** provider configured before any AI feature in your workspace will work. Embedding models are used for document search and are configured separately.
 
@@ -40,7 +40,7 @@ Only workspace **admins** and **owners** can access the AI Models settings page.
     - **Reasoning** toggle — enable for chain-of-thought / o-series style models. Off by default.
   </Step>
   <Step title="Save and validate">
-    Click **Add Model**. PipesHub runs a live health check to validate your credentials.
+    Click **Add Model**. Novaplan AI runs a live health check to validate your credentials.
   </Step>
   <Step title="First model becomes the default">
     If this is the first LLMs model you've added, it is automatically set as the default model used by all AI features.
@@ -49,35 +49,39 @@ Only workspace **admins** and **owners** can access the AI Models settings page.
 
 ## Provider reference
 
-The table below lists every supported LLMs provider, the fields you must fill in, and example model name strings.
+The table below lists LLM providers, their configuration fields, and example model names. Model access varies by provider account, and each model must be tested with your Novaplan AI workspace before production use.
 
 | Provider | Required fields | Optional fields | Example model names |
 |---|---|---|---|
-| **OpenAI** | API Key, Model Name | — | `gpt-5`, `gpt-5-mini`, `gpt-5-nano` |
-| **Anthropic** | API Key, Model Name | — | `claude-opus-4-7`, `claude-sonnet-4-6`, `claude-haiku-4-6` |
+| **OpenAI** | API Key, Model Name | — | `gpt-6-astra`, `gpt-6-sol`, `gpt-6-luna` |
+| **Anthropic** | API Key, Model Name | — | `claude-opus-5-5`, `claude-sonnet-5`, `claude-haiku-4-5` |
 | **Gemini** | API Key, Model Name | — | `gemini-3-flash-preview`, `gemini-3.1-pro-preview` |
 | **Azure OpenAI** | Endpoint URL, API Key, Deployment Name, Model Name | — | `gpt-5`, `gpt-5-mini`, `gpt-5-nano` |
-| **Azure AI** | Endpoint URL, API Key, Model Name | — | `gpt-5.1`, `claude-sonnet-4-5`, `DeepSeek-V3.1` |
+| **Azure AI** | Endpoint URL, API Key, Model Name | — | Your Foundry deployment name; see the [Azure AI guide](/ai-models/llm/azure-ai) |
 | **Cohere** | API Key, Model Name | — | `command-a-03-2025` |
 | **Mistral** | API Key, Model Name | — | `mistral-large-latest` |
 | **Groq** | API Key, Model Name | — | `meta-llama/llama-4-scout-17b-16e-instruct` |
-| **xAI** | API Key, Model Name | — | `grok-3-latest` |
+| **xAI** | API Key, Model Name | — | `grok-4.7` |
 | **MiniMax** | API Key, Model Name | — | `MiniMax-M2.7`, `MiniMax-M2.7-highspeed` |
 | **Fireworks** | API Key, Model Name | — | `accounts/fireworks/models/kimi-k2-instruct` |
 | **Together** | API Key, Model Name | Endpoint URL | `deepseek-ai/DeepSeek-V3` |
 | **OpenAI Compatible** | Endpoint URL, API Key, Model Name | — | `deepseek-ai/DeepSeek-V3` |
+| [**OpenRouter**](/ai-models/llm/openrouter) | API Key, Model Name | — | Current `provider/model` ID |
+| [**LiteLLM Proxy**](/ai-models/llm/litellm-proxy) | Endpoint URL, API Key, Model Name | — | Configured proxy `model_name` |
 | **Ollama** | Model Name | API Key, Endpoint URL | `gemma4:latest`, `hf.co/unsloth/gpt-oss-20b-GGUF:F16` |
+| [**LM Studio**](/ai-models/llm/lm-studio) | Endpoint URL, Model Name | API Key | Model ID served by LM Studio |
+| [**Vertex AI**](/ai-models/llm/vertex-ai) | GCP Project ID, Service Account JSON, Model Name | Region | Model available to your Google Cloud project |
 | **Amazon Bedrock** | AWS Region, Model Name, Provider | AWS Access Key ID, AWS Secret Access Key | `us.anthropic.claude-sonnet-4-20250514-v1:0` |
 
 > **Azure OpenAI — Deployment Name:** This is the name you assigned when deploying the model in Azure AI Studio, not the model ID itself.
 >
-> **Azure AI — Endpoint URL format:** Use `https://<resource>.inference.ai.azure.com/anthropic` for Claude models, or `https://<resource>.cognitiveservices.azure.com/openai/v1/` for OpenAI, DeepSeek, and other models.
+> **Azure AI — Endpoint URL format:** Copy the endpoint shown for your Foundry deployment. Claude's Messages API commonly uses `https://<resource>.services.ai.azure.com/anthropic`; OpenAI-compatible deployments use a resource-specific `/openai/v1/` endpoint. Check the [Azure AI guide](/ai-models/llm/azure-ai) and confirm that Novaplan supports the deployment's API format.
 >
 > **OpenAI Compatible:** Use this for any provider that speaks the OpenAI API format (e.g. `https://api.together.xyz/v1/`).
 >
-> **Ollama:** No API key is required for a local Ollama instance. The endpoint defaults to `http://host.docker.internal:11434`. Ensure the Ollama server is reachable from the PipesHub Docker network.
+> **Ollama:** A standard Ollama service does not require an API key. The application default is `http://host.docker.internal:11434`, but use it only if Novaplan confirms that the managed workspace can reach the service through that hostname.
 >
-> **Amazon Bedrock:** If PipesHub is running on an EC2 instance with an appropriate IAM role attached, you can leave the AWS Access Key ID and Secret Access Key blank.
+> **Amazon Bedrock:** Leave the AWS key fields blank only when Novaplan has configured an approved AWS credential source for the managed backend, such as a workload role. Credentials on your own computer are not used automatically.
 
 ## Managing configured models
 
@@ -93,15 +97,15 @@ After saving, your model appears under the **Configured** tab. Each row has the 
 If the health check fails when saving, double-check:
 - The API key is correct and has not expired.
 - For Azure providers, the endpoint URL matches the correct region and resource.
-- For Ollama, the server is running and the Docker internal hostname resolves correctly.
+- For Ollama, Novaplan has confirmed the endpoint is reachable from the managed workspace.
 - The model name string exactly matches what the provider API expects (check the provider's documentation for valid model IDs).
 </Note>
 
 ## Embedding models
 
-Embedding models convert documents and search queries into numerical vectors so PipesHub can find semantically similar content. They power document indexing, semantic search, and retrieval across your workspace. At least one embedding model must be configured before you can index documents or use search.
+Embedding models convert documents and search queries into numerical vectors so Novaplan AI can find semantically similar content. They power document indexing, semantic search, and retrieval across your workspace. At least one embedding model must be configured before you can index documents or use search.
 
-PipesHub ships with **BAAI/bge-large-en-v1.5** built-in as the system default — it works out of the box with no configuration required. Connect an external provider only if you need a different model.
+Novaplan AI ships with **BAAI/bge-large-en-v1.5** built-in as the system default — it works out of the box with no configuration required. Connect an external provider only if you need a different model.
 
 ### How to navigate to this page
 
@@ -135,7 +139,7 @@ Only workspace **admins** and **owners** can access the AI Models settings page.
     - **Multimodal** toggle — enable if this model can embed images as well as text (off by default).
   </Step>
   <Step title="Save and validate">
-    Click **Add Model**. PipesHub runs a live health check to validate your credentials.
+    Click **Add Model**. Novaplan AI runs a live health check to validate your credentials.
   </Step>
   <Step title="First model becomes the default">
     If this is the first embedding model you have added, it is automatically set as the default used for all document indexing and search.
@@ -155,7 +159,11 @@ Only workspace **admins** and **owners** can access the AI Models settings page.
 | **Mistral** | API Key, Model Name | — | `mistral-embed` |
 | **Together** | API Key, Model Name | Endpoint URL | `togethercomputer/m2-bert-80M-32k-retrieval` |
 | **OpenAI Compatible** | Endpoint URL, API Key, Model Name | — | `text-embedding-3-small` |
+| [**OpenRouter**](/ai-models/embedding/openrouter) | API Key, Model Name | Dimensions | Current `provider/model` ID |
+| [**LiteLLM Proxy**](/ai-models/embedding/litellm-proxy) | Endpoint URL, API Key, Model Name | Dimensions | Configured proxy `model_name` |
 | **Ollama** | Model Name | Endpoint URL | `mxbai-embed-large` |
+| [**LM Studio**](/ai-models/embedding/lm-studio) | Endpoint URL, Model Name | API Key, Dimensions | Model ID served by LM Studio |
+| [**Vertex AI**](/ai-models/embedding/vertex-ai) | GCP Project ID, Service Account JSON, Model Name | Region, Dimensions | Model available to your Google Cloud project |
 | **Sentence Transformers** | Model Name | — | `all-MiniLM-L6-v2` |
 | **HuggingFace** | Model Name | — | `sentence-transformers/all-MiniLM-L6-v2` |
 | **Jina AI** | API Key, Model Name | — | `jina-embeddings-v3` |
@@ -168,11 +176,11 @@ Only workspace **admins** and **owners** can access the AI Models settings page.
 >
 > **OpenAI Compatible:** Use this for any provider that speaks the OpenAI embeddings API format.
 >
-> **Ollama:** No API key required for a local instance. Endpoint defaults to `http://host.docker.internal:11434`.
+> **Ollama:** A standard Ollama service does not require an API key. Its application default is `http://host.docker.internal:11434`; Novaplan must confirm that the managed workspace can reach the actual model server.
 >
-> **Sentence Transformers / HuggingFace:** Run locally inside PipesHub. No external API or API key needed.
+> **Sentence Transformers / HuggingFace:** Run locally inside Novaplan AI. No external API or API key needed.
 >
-> **Amazon Bedrock:** Leave AWS keys blank when running PipesHub on EC2 with an appropriate IAM role. Provider dropdown: Cohere, Amazon (Titan), Other.
+> **Amazon Bedrock:** Leave AWS key fields blank only when Novaplan has configured an approved AWS credential source for the managed backend. Provider dropdown: Cohere, Amazon (Titan), Other.
 
 ### Managing configured embedding models
 
@@ -199,14 +207,14 @@ If the health check fails when saving, double-check:
 </Note>
 
 <Warning>
-  Keep your API keys secure. PipesHub stores these credentials securely, but you should never share them publicly or commit them to version control.
+  Treat provider API keys as secrets. Do not share them publicly or commit them to version control. Before adding a key for sensitive workloads, confirm with Novaplan who can access, rotate, and audit it in your managed workspace.
 </Warning>
 
 ## Image Generation models
 
-Image generation models allow AI agents and workflows in PipesHub to generate images from text prompts. Once configured, these models are available to agents that support image creation tasks. At least one image generation model must be configured before image generation features are available in your workspace.
+Image generation models allow AI agents and workflows in Novaplan AI to generate images from text prompts. Once configured, these models are available to agents that support image creation tasks. At least one image generation model must be configured before image generation features are available in your workspace.
 
-Currently two providers are supported: **OpenAI** (DALL-E / GPT-Image models) and **Gemini** (Imagen / Gemini Image models).
+The accessible provider catalog includes **OpenAI**, **Gemini**, **OpenRouter**, and **LiteLLM Proxy** for image generation. Check which options your managed workspace actually exposes before choosing a model.
 
 ### How to navigate to this page
 
@@ -229,13 +237,13 @@ Only workspace **admins** and **owners** can access the AI Models settings page.
     Click **Configure** on the provider card you want to use.
   </Step>
   <Step title="Fill in the required fields">
-    Enter your **API Key** and the **Model Name** (exact model identifier string). See the [provider reference](#image-generation-provider-reference) below.
+    Enter the required fields shown for that provider. A LiteLLM Proxy connection also needs its reachable **Endpoint URL**. See the [provider reference](#image-generation-provider-reference) below.
   </Step>
   <Step title="Set an optional friendly name">
     Optionally set a **Model Friendly Name** — a human-readable label displayed in the UI.
   </Step>
   <Step title="Save and validate">
-    Click **Add Model**. PipesHub runs a live health check to validate your credentials.
+    Click **Add Model**. Novaplan AI runs a live health check to validate your credentials.
   </Step>
   <Step title="First model becomes the default">
     If this is the first image generation model you have added, it is automatically set as the default used when image generation is triggered.
@@ -244,10 +252,12 @@ Only workspace **admins** and **owners** can access the AI Models settings page.
 
 ### Image generation provider reference
 
-| Provider | Required fields | Example model names |
+| Provider | Required fields | Model selection |
 |---|---|---|
-| **OpenAI** | API Key, Model Name | `gpt-image-1`, `dall-e-3` |
-| **Gemini** | API Key, Model Name | `gemini-2.5-flash-image`, `imagen-4.0-generate-001` |
+| [**OpenAI**](/ai-models/image-generation/openai) | API Key, Model Name | Select a currently available model from OpenAI's catalog; the old `dall-e-3` example is no longer usable |
+| [**Gemini**](/ai-models/image-generation/gemini) | API Key, Model Name | Use a model available to your Google account |
+| [**OpenRouter**](/ai-models/image-generation/openrouter) | API Key, Model Name | Use its current `provider/model` identifier |
+| [**LiteLLM Proxy**](/ai-models/image-generation/litellm-proxy) | Endpoint URL, API Key, Model Name | Use a configured proxy `model_name` |
 
 > **OpenAI:** Get your API key at [platform.openai.com/api-keys](https://platform.openai.com/api-keys).
 >
@@ -266,15 +276,15 @@ After saving, your model appears under the **Configured** tab. Each row has the 
 <Note>
 If the health check fails when saving, double-check:
 - The API key is correct and has not expired.
-- The model name exactly matches what the provider API expects (e.g. `dall-e-3`, not `DALL-E-3`).
+- The model name exactly matches a currently available model in the provider account or proxy configuration; a legacy placeholder in the workspace may be outdated.
 - For Gemini Imagen models, confirm your API key has access to image generation — not all Google AI Studio keys have Imagen enabled by default.
 </Note>
 
 ## Text to Speech (TTS) models
 
-Text to Speech models convert AI text responses into spoken audio, enabling voice output in AI workflows and agents. Once configured, these models are available wherever PipesHub produces audio output. At least one TTS model must be configured before voice features are available in your workspace.
+Text to Speech models convert AI text responses into spoken audio, enabling voice output in AI workflows and agents. Once configured, these models are available wherever Novaplan AI produces audio output. At least one TTS model must be configured before voice features are available in your workspace.
 
-Currently two providers are supported: **OpenAI** (tts-1, tts-1-hd, gpt-4o-mini-tts) and **Gemini** (gemini-2.5-flash-preview-tts and related models).
+The accessible provider catalog includes **OpenAI**, **Gemini**, **OpenRouter**, and **LiteLLM Proxy** for TTS. Check availability and supported voices in your managed workspace and chosen model.
 
 ### How to navigate to this page
 
@@ -297,7 +307,7 @@ Only workspace **admins** and **owners** can access the AI Models settings page.
     Click **Configure** on the provider card you want to use.
   </Step>
   <Step title="Fill in the required fields">
-    Enter your **API Key** and the **Model Name** (exact model identifier string). See the [provider reference](#tts-provider-reference) below.
+    Enter the required fields shown for that provider. LiteLLM Proxy also needs its reachable **Endpoint URL**. See the [provider reference](#tts-provider-reference) below.
   </Step>
   <Step title="Choose optional settings">
     - **Voice** — select a default voice for audio output.
@@ -305,7 +315,7 @@ Only workspace **admins** and **owners** can access the AI Models settings page.
     - **Model Friendly Name** — a custom display label for this configuration.
   </Step>
   <Step title="Save and validate">
-    Click **Add Model**. PipesHub validates your credentials with a live health check.
+    Click **Add Model**. Novaplan AI validates your credentials with a live health check.
   </Step>
   <Step title="First model becomes the default">
     If this is the first TTS model you have added, it is automatically set as the default used for all TTS output.
@@ -316,8 +326,10 @@ Only workspace **admins** and **owners** can access the AI Models settings page.
 
 | Provider | Required fields | Example model names | Default voice | Default format |
 |---|---|---|---|---|
-| **OpenAI** | API Key, Model Name | `tts-1`, `tts-1-hd`, `gpt-4o-mini-tts` | Alloy | MP3 |
-| **Gemini** | API Key, Model Name | `gemini-3.1-flash-tts-preview`, `gemini-2.5-flash-preview-tts`, `gemini-2.5-pro-preview-tts` | Kore | WAV |
+| [**OpenAI**](/ai-models/tts/openai) | API Key, Model Name | `tts-1`, `tts-1-hd`, `gpt-4o-mini-tts` | Alloy | MP3 |
+| [**Gemini**](/ai-models/tts/gemini) | API Key, Model Name | `gemini-3.1-flash-tts-preview`, `gemini-2.5-flash-preview-tts`, `gemini-2.5-pro-preview-tts` | Kore | WAV |
+| [**OpenRouter**](/ai-models/tts/openrouter) | API Key, Model Name | Current `provider/model` identifier | Model-dependent | Model-dependent |
+| [**LiteLLM Proxy**](/ai-models/tts/litellm-proxy) | Endpoint URL, API Key, Model Name | Configured proxy `model_name` | Model-dependent | Model-dependent |
 
 > **OpenAI voices:** Alloy, Echo, Fable, Onyx, Nova, Shimmer. Get your API key at [platform.openai.com/api-keys](https://platform.openai.com/api-keys).
 >
@@ -325,7 +337,7 @@ Only workspace **admins** and **owners** can access the AI Models settings page.
 >
 > **Gemini voices:** 30 prebuilt voices named after astronomical objects — Zephyr, Puck, Charon, Kore, Fenrir, Leda, Orus, Aoede, Callirrhoe, Autonoe, Enceladus, Iapetus, Umbriel, Algieba, Despina, Erinome, Algenib, Rasalgethi, Laomedeia, Achernar, Alnilam, Schedar, Gacrux, Pulcherrima, Achird, Zubenelgenubi, Vindemiatrix, Sadachbia, Sadaltager, Sulafat. Get your API key at [aistudio.google.com/app/apikey](https://aistudio.google.com/app/apikey).
 >
-> **Gemini audio formats:** WAV and PCM work without any extra dependencies. MP3, Opus, AAC, and FLAC require **ffmpeg** installed on the PipesHub backend host.
+> **Gemini audio formats:** WAV and PCM do not require server-side transcoding. MP3, Opus, AAC, and FLAC require **ffmpeg** on the Novaplan-managed backend; [Novaplan Support](/contact-us) can check its availability.
 
 ### Managing configured TTS models
 
@@ -341,14 +353,14 @@ After saving, your model appears under the **Configured** tab. Each row has the 
 If the health check fails when saving, double-check:
 - The API key is correct and has not expired.
 - The model name exactly matches what the provider API expects (e.g. `tts-1`, not `TTS-1`).
-- For Gemini compressed formats (MP3, Opus, AAC, FLAC), ensure ffmpeg is installed on the machine running the PipesHub backend. WAV and PCM work without any additional dependencies.
+- For Gemini compressed formats (MP3, Opus, AAC, FLAC), ask [Novaplan Support](/contact-us) to check ffmpeg on the managed backend. WAV and PCM do not require this transcoding dependency.
 </Note>
 
 ## Speech to Text (STT) models
 
-Speech to Text models transcribe spoken audio into text, enabling voice input in AI workflows and agents. Once configured, these models power voice-driven interactions across your PipesHub workspace.
+Speech to Text models transcribe spoken audio into text, enabling voice input in AI workflows and agents. Once configured, these models power voice-driven interactions across your Novaplan AI workspace.
 
-Four providers are supported: **OpenAI** and **Gemini** (cloud APIs), **Whisper** (self-hosted open-source via faster-whisper), and **Wispr Flow** (hosted specialist transcription service). At least one STT model must be configured before voice input features are available.
+The accessible catalog has six STT options: **OpenAI**, **Gemini**, **OpenRouter**, **LiteLLM Proxy**, **Whisper** (inference through `faster-whisper` on the Novaplan-managed backend), and **Wispr Flow**. Check which are available in your deployed workspace. At least one STT model must be configured before voice input features are available.
 
 ### How to navigate to this page
 
@@ -371,7 +383,7 @@ Only workspace **admins** and **owners** can access the AI Models settings page.
     Click **Configure** on the provider card you want to use.
   </Step>
   <Step title="Fill in the required fields">
-    Enter the required fields for your provider (API Key and Model Name for cloud providers, or select a Model size for Whisper local). See the [provider reference](#stt-provider-reference) below.
+    Enter the fields shown for your provider (including the reachable Endpoint URL for LiteLLM Proxy, or a Model size for local Whisper). See the [provider reference](#stt-provider-reference) below.
   </Step>
   <Step title="Adjust optional settings">
     Configure any optional settings such as language, device, compute type, or app type depending on your provider.
@@ -380,7 +392,7 @@ Only workspace **admins** and **owners** can access the AI Models settings page.
     Optionally set a **Model Friendly Name** — a custom label shown in the UI.
   </Step>
   <Step title="Save and validate">
-    Click **Add Model**. PipesHub validates your configuration with a live health check.
+    Click **Add Model**. Novaplan AI validates your configuration with a live health check.
   </Step>
   <Step title="First model becomes the default">
     If this is the first STT model you have added, it is automatically set as the default used for all speech transcription.
@@ -391,18 +403,20 @@ Only workspace **admins** and **owners** can access the AI Models settings page.
 
 | Provider | Required fields | Example model names / sizes |
 |---|---|---|
-| **OpenAI** | API Key, Model Name | `whisper-1`, `gpt-4o-transcribe`, `gpt-4o-mini-transcribe` |
-| **Gemini** | API Key, Model Name | `gemini-2.5-flash`, `gemini-2.5-pro`, `gemini-3-flash-preview` |
-| **Whisper (local)** | Model size (dropdown) | tiny, base, small, medium, large-v2, large-v3, distil-large-v3 |
-| **Wispr Flow** | API Key | flow-v1 (selected automatically) |
+| [**OpenAI**](/ai-models/stt/openai) | API Key, Model Name | `whisper-1`, `gpt-4o-transcribe`, `gpt-4o-mini-transcribe` |
+| [**Gemini**](/ai-models/stt/gemini) | API Key, Model Name | `gemini-2.5-flash`, `gemini-2.5-pro`, `gemini-3-flash-preview` |
+| [**OpenRouter**](/ai-models/stt/openrouter) | API Key, Model Name | Current `provider/model` identifier |
+| [**LiteLLM Proxy**](/ai-models/stt/litellm-proxy) | Endpoint URL, API Key, Model Name | Configured proxy `model_name` |
+| [**Whisper (local)**](/ai-models/stt/whisper) | Model size (dropdown) | tiny, base, small, medium, large-v2, large-v3, distil-large-v3 |
+| [**Wispr Flow**](/ai-models/stt/wispr-flow) | API Key | flow-v1 (selected automatically) |
 
 > **OpenAI:** Get your API key at [platform.openai.com/api-keys](https://platform.openai.com/api-keys).
 >
 > **Gemini:** Get your API key at [aistudio.google.com/app/apikey](https://aistudio.google.com/app/apikey).
 >
-> **Whisper (local):** No API key required. Runs on your own infrastructure using faster-whisper. Model weights are downloaded from HuggingFace on first use. Optional: Device (Auto/CPU/CUDA), Compute Type (int8/float16/float32), Model Cache Directory.
+> **Whisper (local):** No third-party transcription API key is required. `faster-whisper` runs on the Novaplan-managed backend, and model weights are downloaded from Hugging Face on first use. Optional: Device (Auto/CPU/CUDA), Compute Type (int8/float16/float32), Model Cache Directory.
 >
-> **Wispr Flow:** Contact [enterprise@wisprflow.ai](mailto:enterprise@wisprflow.ai) to obtain an API key. Requires ffmpeg on the backend host. Optional: Default Language, App Type, API Endpoint override.
+> **Wispr Flow:** Contact [enterprise@wisprflow.ai](mailto:enterprise@wisprflow.ai) to obtain an API key. Novaplan must have ffmpeg available on the managed backend. Optional: Default Language, App Type, API Endpoint override.
 
 ### Managing configured STT models
 
@@ -417,6 +431,6 @@ After saving, your model appears under the **Configured** tab. Each row has the 
 <Note>
 If the health check fails when saving, double-check:
 - For OpenAI and Gemini: the API key is correct and has not expired.
-- For Whisper (local): the faster-whisper package is installed on the backend host. On first use, model weights are downloaded — ensure internet access is available.
-- For Wispr Flow: ffmpeg must be installed on the backend host. Confirm your API key is active (contact [enterprise@wisprflow.ai](mailto:enterprise@wisprflow.ai) if unsure).
+- For Whisper (local): ask [Novaplan Support](/contact-us) to check `faster-whisper`, model downloads, and backend connectivity.
+- For Wispr Flow: confirm your API key is active (contact [enterprise@wisprflow.ai](mailto:enterprise@wisprflow.ai) if unsure). Ask [Novaplan Support](/contact-us) to check ffmpeg on the managed backend.
 </Note>

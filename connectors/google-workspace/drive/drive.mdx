@@ -44,7 +44,7 @@ Google Drive is Google's cloud storage service that provides access to files, fo
 
 ### Authentication
 
-The Google Drive connector uses OAuth 2.0 for authentication. This requires users to grant permission for the application to access their Google Drive data within the scopes specified.
+For this shared connection, a Google Workspace administrator authorizes a service account for domain-wide delegation. Individual viewers do not complete a separate OAuth consent flow for the Team connector; their Google identity and file permissions still determine which indexed content they may see.
 
 ## How to configure and enable the Google Drive Connector
 
@@ -136,14 +136,14 @@ The Google Drive connector uses OAuth 2.0 for authentication. This requires user
 2. Navigate to **Security > Access and data control > API controls**
 3. Click **Manage Domain Wide Delegation**
 4. Click **Add new** and paste the service account's client ID
-5. Add the following OAuth scopes required for Google Drive sync:
+5. Review the inherited scope list below with Novaplan and your Google Workspace administrator before authorizing the service account. It includes write-capable Drive permissions; the exact scopes needed by the deployed connector have not been confirmed:
 ```
 https://www.googleapis.com/auth/admin.directory.group.readonly,https://www.googleapis.com/auth/admin.reports.audit.readonly,https://www.googleapis.com/auth/admin.directory.user.readonly,https://www.googleapis.com/auth/admin.directory.domain.readonly,https://www.googleapis.com/auth/admin.directory.orgunit,https://www.googleapis.com/auth/drive.readonly,https://www.googleapis.com/auth/drive.metadata.readonly,https://www.googleapis.com/auth/drive.metadata,https://www.googleapis.com/auth/documents.readonly,https://www.googleapis.com/auth/spreadsheets.readonly,https://www.googleapis.com/auth/presentations.readonly,https://www.googleapis.com/auth/drive.file,https://www.googleapis.com/auth/drive
 ```
 
 <Info>
 
-  These scopes are required for Google Drive synchronization:
+  The inherited list contains these different levels of access:
   - `drive.readonly`: Read-only access to Drive files
   - `drive.metadata.readonly`: Read-only access to Drive file metadata
   - `drive.metadata`: Access to Drive file metadata
@@ -154,6 +154,10 @@ https://www.googleapis.com/auth/admin.directory.group.readonly,https://www.googl
   - `presentations.readonly`: Access to Google Slides files
   - Admin scopes: Required for domain-wide delegation
 </Info>
+
+<Warning>
+  Do not grant the full list solely because it appears in this guide. In particular, `drive` permits management of all accessible Drive files, while `drive.readonly` permits reading and downloading them. Compare the actual deployed request with [Google's Drive scope descriptions](https://developers.google.com/workspace/drive/api/guides/api-specific-auth) and approve only the scopes your administrator and Novaplan verify for this connection.
+</Warning>
 
 6. Click **Authorize**
 
@@ -231,7 +235,7 @@ https://www.googleapis.com/auth/admin.directory.group.readonly,https://www.googl
 
 4. After configuring connector settings, you can click on **Save Configuration**.
 
- Once PipesHub confirms the instance is ready, you can choose either **Start syncing now** or select the **I'll do it later** option.
+ Once Novaplan AI confirms the instance is ready, you can choose either **Start syncing now** or select the **I'll do it later** option.
    {" "}
    <div style={{ textAlign: "center" }}>
      <img
@@ -242,57 +246,9 @@ https://www.googleapis.com/auth/admin.directory.group.readonly,https://www.googl
    </div>
 
 
-### Enable Service Account Key Creation
+### If service account key creation is blocked
 
-If you encounter an error while creating the service account key due to organization policy constraints, follow these steps:
-
-#### 1. Switch to the Organization Context
-
-At the top of the Google Cloud Console (where the project name is shown), click the drop-down to see a list of organizations and projects.
-
-Select your organization rather than a specific project.
-
-If you don't see an organization listed, make sure you're signed in with an account that has access to the organization.
-
-
-#### 2. Add Organisation Policy Administrator Role
-
-Navigate to **IAM & Admin > IAM** in the Cloud Console
-
-Find the current user and Click on the **Pencil** icon.
-
-Click on the **Add another role** button.
-
-Search for the **Organisation Policy Administrator** role.
-
-Click on the **Add** button.
-
-<div style={{ textAlign: "center" }}>
-  <img
-    src="/images/connectors/googleWorkspace/enterprise/org_policy_admin.png"
-    alt="Add Organisation Policy Administrator"
-    style={{ display: 'block', margin: '0 auto' }}
-    width="80%"
-  />
-</div>
-
-Click on the **Save** button.
-
-#### 3. Disable the Service Account Key Creation constraint
-
-Navigate to **IAM & Admin > Organization Policies** in the Cloud Console
-
-Search for `"iam.disableServiceAccountKeyCreation"`
-
-Select the policy
-
-Click on the **Manage Policy** button
-
-In Policy source, Select **Override parent's policy**. Add a rule and set the enforcement to "Off"
-
-Click on the **Save** button
-
-After completing these steps, return to [Step 5](#step-5%3A-create-a-json-key-for-the-service-account) and try creating the service account key again.
+Your organization may enforce `iam.disableServiceAccountKeyCreation` to prevent long-lived service account keys. If the JSON-key step is blocked, ask your Google Cloud security administrator and Novaplan to agree on an approved connection method or a narrowly scoped exception. Do not grant yourself Organization Policy Administrator access or disable the restriction solely to complete this guide. Keep any approved key within your organization's credential-handling process.
 
 ## Google PubSub Configuration
 
@@ -410,38 +366,20 @@ The Google Drive connector uses OAuth 2.0 for authentication. This requires user
 1. Navigate to **APIs & Services > Credentials** in the Cloud Console
 2. Click **Create Credentials** and select **OAuth client ID**
 3. Select **Web application** as the application type
-4. Set the **Authorized redirect URI** to:
-   ```
-   http://your-frontend-dns/connectors/oauth/callback/Drive
-   ```
-   or for HTTPS:
-   ```
-   https://your-frontend-dns/connectors/oauth/callback/Drive
-   ```
+4. Set the **Authorized redirect URI** to the exact HTTPS callback shown in your Novaplan AI workspace. For the Drive personal connector, its path is `/connectors/oauth/callback/Drive`; a workspace-specific example is `https://your-workspace.example.com/connectors/oauth/callback/Drive`.
 5. Click **Create** and note your **Client ID** and **Client Secret**
 
 <Info>
-  Redirect URI must match exactly your frontend URL. For example: if your app is
-  running on https://f7f0-240.ngrok-free.app then redirect URI should be
-  https://f7f0-240.ngrok-free.app/connectors/oauth/callback/Drive
-  in Google Cloud Console.
+  The redirect URI registered in Google must exactly match the callback supplied by the deployed workspace. Do not register a development tunnel, a local address, or a callback copied from an old screenshot for a customer workspace.
 </Info>
 
 ### Step 5: Configure OAuth Scopes
 
 1. In the **OAuth consent screen**, navigate to the **Scopes** section
-2. Add the following OAuth scopes required for Google Drive sync:
-   - `https://www.googleapis.com/auth/drive.readonly` - Read-only access to Drive files
-   - `https://www.googleapis.com/auth/drive.metadata.readonly` - Read-only access to Drive file metadata
-   - `https://www.googleapis.com/auth/drive.metadata` - Access to Drive file metadata
-   - `https://www.googleapis.com/auth/documents.readonly` - Read Google Docs files
-   - `https://www.googleapis.com/auth/spreadsheets.readonly` - Read Google Sheets files
-   - `https://www.googleapis.com/auth/presentations.readonly` - Read Google Slides files
-   - `https://www.googleapis.com/auth/drive.file` - Access to files created by the app
-   - `https://www.googleapis.com/auth/drive` - Full access to Drive files
+2. The accessible Personal Drive connector registration requests `https://www.googleapis.com/auth/drive.readonly`. Declare that scope for this source-derived setup, then compare the deployed consent screen with Novaplan before approving any additional permission. `drive.readonly` permits viewing and downloading accessible Drive files; it does not grant file management.
 
 <Info>
-  These scopes allow the connector to:
+  The read-only scope allows the connector to:
   - Access and read files from Google Drive
   - Access file metadata for indexing and search
   - Access Google Docs, Sheets, and Slides files stored in Drive
@@ -509,7 +447,7 @@ The Google Drive connector uses OAuth 2.0 for authentication. This requires user
 
 7. After configuring connector settings, you can click on **Save Configuration**.
 
- Once PipesHub confirms the instance is ready, you can choose either **Start syncing now** or select the **I'll do it later** option.
+ Once Novaplan AI confirms the instance is ready, you can choose either **Start syncing now** or select the **I'll do it later** option.
    {" "}
    <div style={{ textAlign: "center" }}>
      <img
@@ -520,7 +458,7 @@ The Google Drive connector uses OAuth 2.0 for authentication. This requires user
    </div>
 
 <Warning>
-  **Important:** Authorize using the same email address as your PipesHub account. Using a different email will cause permission issues on the PipesHub platform.
+  Check which Google account you authorize. The accessible Personal connector assigns record permissions using the Google account email returned by Drive. If that differs from your Novaplan AI account address, ask an administrator to verify the account mapping and access before relying on search results.
 </Warning>
 
 <Info>
@@ -548,7 +486,13 @@ Sync settings allow you to control how the connector syncs data from Google Driv
 In what interval the connector will sync data (default: 60 minutes).
 
 ### Sync Filters
-Sync filters control which files are fetched from Google Drive. Files that don't match are skipped entirely. Folders are always synced regardless of these settings to preserve directory structure.
+Sync filters control which files are fetched from Google Drive. Files that don't match are skipped entirely. **Created Date**, **Modified Date**, and **Sync Files with Extensions** still let folders through to preserve directory structure. **Folder IDs** is the exception: it selects only the listed folders and their descendants.
+
+### Folder IDs
+
+Enter the IDs of the folders you want to sync; a folder's ID is the last part of its Google Drive URL (`drive.google.com/drive/folders/<FOLDER_ID>`). Content outside these folders is skipped. Before each run, the current upstream connector checks that the connected account can read the selected folders. A known permission refusal or a deleted folder is left out. Rate limits, network failures, and most unexplained errors stop the affected sync instead of silently dropping content.
+
+For an unexplained HTTP 403 that persists, the current upstream connector retries on runs 1–4 and may leave the folder out on the fifth run so other content can progress. The saved **Folder IDs** setting remains unchanged, and the folder is checked again on later runs. A full sync may be needed to bring back older content after access is restored. For a folder shared with a user rather than selected under **Folder IDs**, the recovery path differs: after the fifth failed run it is not revisited by incremental sync and needs a full sync. Check logs for skipped folders and verify expected files in Novaplan AI. Confirm this behavior in the deployed Enterprise build before treating the filter as a strict source-access boundary.
 
 ### Created Date
 
@@ -560,9 +504,9 @@ For example, set `Last 365 Days` to fetch only files created in the last year.
 
 Same as Created Date but filters by the file's last modified timestamp. Use `Last 30 Days` or `Is After` to limit sync to recently updated files.
 
-### File Extensions
+### Sync Files with Extensions
 
-Filters files support 2 options: `In` (only sync listed extensions) or `Not In` (sync everything except listed extensions). After selecting your desired option, you can select your desired extensions from a list of supported extensions.
+This filter supports `In` (only sync listed types) or `Not In` (sync everything except listed types). Choose **google docs**, **google sheets**, or **google slides** for Google's native formats, and extensions such as `.pdf` or `.docx` for uploaded files. Folders pass through this filter.
 
 <Note>
 Unsupported extensions are excluded under `In` and allowed through under `Not In`.
@@ -612,7 +556,7 @@ When enabled, files the user has shared with others are indexed. Disable this to
 | Aspect | Drive Connector | Drive Toolset |
 |--------|----------------|---------------|
 | **Purpose** | Sync and index files for search | Enable agents to perform file actions |
-| **Data Flow** | One-way (import data into PipesHub) | Two-way (read and write via API) |
+| **Data Flow** | One-way (import data into Novaplan AI) | Two-way (read and write via API) |
 | **When to Use** | Query/search files and folders | Create files, manage folders |
 
 **Example:** Use **Drive Connector** to search and retrieve document content. Use **Drive Toolset** to let agents create folders and manage file organization.
@@ -623,14 +567,14 @@ When enabled, files the user has shared with others are indexed. Disable this to
 
 There are three common causes:
 
-1. **Email mismatch** - The email used during connector authentication doesn't match your PipesHub account email. This causes permission issues preventing you from accessing synced data.
-   - **Fix:** Reconfigure the connector and authenticate using the same email as your PipesHub account.
+1. **Identity or Drive permissions do not match** - For a Personal connection, check that the Google account belongs to the person who connected it. For a Team connection, the service account and domain authorization are separate from each viewer's Google identity and file permissions.
+   - **Fix:** Ask your administrator to check the affected viewer's account mapping and access to the file, then check the connection's source authorization and filters. Do not reauthorize the Team service account as that viewer.
 
 2. **Records show in "All Records" but not in search** - Documents display in the All Records section but don't appear in search query results.
    - **Fix:** Verify sync filters in the connector settings and ensure indexing has completed. Check that the data matches your search query criteria.
 
 3. **Data not yet indexed** - The connector is still syncing or hasn't completed the initial indexing process.
-   - **Fix:** Go to **Settings > Connectors**, check the sync status, and wait for indexing to complete.
+   - **Fix:** Check the sync status under **Workspace Settings → Connectors** for a Team connection or **Workspace Settings → Your Connectors** for a Personal connection, then wait for indexing to complete.
 
 </Accordion>
 
@@ -641,6 +585,6 @@ There are three common causes:
 <div className="text-center mt-12 p-6 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl">
   <h3 className="text-lg font-semibold mb-2">Ready to Get Started?</h3>
   <p className="text-gray-600 dark:text-gray-400">
-    The Google Drive connector is fully operational and ready for use. Follow the configuration guide above for your setup type (Enterprise or Individual), or reach out to our support team if you need assistance.
+    Follow the configuration guide for your Team or Personal connection. Novaplan can confirm the available connector version, required Google permissions, and readiness of your workspace before the first synchronization.
   </p>
 </div>

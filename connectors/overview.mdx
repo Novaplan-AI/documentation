@@ -5,17 +5,17 @@ description: "Connectors are software components that enable different applicati
 
 ## What are Connectors?
 
-Connectors are software components that **sync and index data** from external applications into PipesHub. They enable your chatbot and agents to search through your organization's knowledge base.
+Connectors are software components that **sync and index data** from external applications into Novaplan AI. They enable your chatbot and agents to search through your organization's knowledge base.
 
 **Use Connectors when you want to query or search data.** The indexed data becomes searchable knowledge for your AI assistants.
 
 **Key characteristics:**
-- **One-way data sync** - Import data into PipesHub for indexing
+- **One-way data sync** - Import data into Novaplan AI for indexing
 - **Knowledge retrieval** - Make data searchable for AI assistants
-- **Periodic syncing** - Data is synced on a schedule, not in real-time
+- **Scheduled or manual syncing** - Choose an available sync strategy for each connector; results are not necessarily updated in real time
 
 <Warning>
-  **Important:** When authenticating a connector, use the same email address as your PipesHub account. Using a different email will cause permission issues on the PipesHub platform.
+  **Important:** Connectors that match source users to Novaplan AI accounts by email need readable, matching addresses. Other connectors use service accounts, keys, or connector-scope permissions. Check the requirements and access model in the specific connector guide.
 </Warning>
 
 <Note>
@@ -26,7 +26,7 @@ Connectors are software components that **sync and index data** from external ap
 
 ## Available Connectors
 
-Our platform supports a wide range of connectors organized by ecosystem to help you integrate with your favorite tools and services.
+Our platform supports connectors across these ecosystems. The options visible under **Workspace → Connectors** and **Your Personal Connectors** depend on your Enterprise workspace. If a connector covered here is not listed in your workspace, contact [Novaplan Support](/contact-us) before following its setup guide.
 
 ---
 
@@ -34,16 +34,14 @@ Our platform supports a wide range of connectors organized by ecosystem to help 
 
 | Connector        | Description |
 |------------------|-------------|
-| **Gmail**        | Access and manage email communications, create automated workflows |
-| **Google Calendar** | Sync events, create meetings, and manage scheduling |
-| **Google Drive** | File storage, sharing, and collaboration management |
-| **Google Docs**  | Document creation, editing, and collaboration |
-| **Google Sheets**| Spreadsheet data management and analysis |
-| **Google Slides**| Presentation creation and sharing |
+| **Gmail**        | Sync email and attachments for search |
+| **Google Calendar** | Sync calendar events for search |
+| **Google Drive** | Sync files and metadata for search |
+| **Google Docs**  | Sync documents stored in Drive through the Google Drive connector |
+| **Google Sheets**| Sync spreadsheets stored in Drive through the Google Drive connector |
+| **Google Slides**| Sync presentations stored in Drive through the Google Drive connector |
 | **Google Forms** | Survey and form data collection |
 | **Google Meet**  | Video conferencing integration |
-| **Google Admin** | Workspace administration and user management |
-| **YouTube**      | Video content management and analytics |
 
 ---
 
@@ -51,12 +49,11 @@ Our platform supports a wide range of connectors organized by ecosystem to help 
 
 | Connector        | Description |
 |------------------|-------------|
-| **Outlook**      | Email and calendar management |
+| **Outlook**      | Sync email and calendar data |
 | **OneDrive**     | Cloud file storage and synchronization |
 | **OneNote**      | Note-taking and knowledge management |
 | **Teams**        | Team collaboration and communication |
 | **SharePoint**   | Document management and team sites |
-| **Planner**      | Task and project management |
 
 ---
 
@@ -94,25 +91,18 @@ Our platform supports a wide range of connectors organized by ecosystem to help 
 
 | Connector | Description |
 |-----------|-------------|
-| **Local FS** | Index a folder on the connector host; set up under **Workspace Settings → Your Connectors**; optional desktop watcher in the Electron app |
+| **Local FS** | Index a folder that the managed connector process can read; confirm its availability with Novaplan before setup under **Workspace Settings → Personal → Your Connectors** |
 
 ---
 
-### Local storage
-
-| Connector | Description |
-|-----------|-------------|
-| **Local FS** | Index a folder on the connector host; set up under **Personal → Your Connectors**; optional desktop watcher in the Electron app |
-
----
-
-### Cloud Storage & Infrastructure
+### Cloud Storage
 
 | Connector        | Description |
 |------------------|-------------|
 | **Amazon S3**    | Scalable object storage and data management |
-| **Microsoft Azure** | Cloud computing platform and services |
-| **Google Cloud Platform (GCP)** | Google's cloud infrastructure services |
+| **Azure Blob Storage** | Sync objects and metadata from Azure Blob Storage |
+| **Azure Files** | Sync files and folders from Azure file shares |
+| **Google Cloud Storage** | Sync objects and metadata from Google Cloud Storage |
 | **Box**          | Enterprise content management and collaboration |
 | **Dropbox**      | File synchronization and cloud storage |
 | **Nextcloud**    | Self-hosted file sync and share platform |
@@ -142,7 +132,7 @@ Our platform supports a wide range of connectors organized by ecosystem to help 
 
 ## Security & Compliance
 
-All connectors are built with enterprise-grade security in mind, supporting OAuth 2.0 authentication, data encryption, and compliance with major industry standards including SOC 2, GDPR, and HIPAA where applicable.
+Connector access depends on the external service's authentication method, the permissions granted during setup, and the user's access to indexed content. Review the specific connector guide before granting access. For questions about Novaplan's security and compliance commitments, contact [Novaplan Support](/contact-us).
 
 ---
 
@@ -155,7 +145,7 @@ All connectors are built with enterprise-grade security in mind, supporting OAut
 | Aspect | Connectors | Toolsets |
 |--------|-----------|----------|
 | **Purpose** | Sync and index data for search | Enable agents to perform actions |
-| **Data Flow** | One-way (import data into PipesHub) | Two-way (read and write via API) |
+| **Data Flow** | One-way (import data into Novaplan AI) | Two-way (read and write via API) |
 | **When to Use** | Query/search data | Perform actions on data |
 
 **Example:** Use a **Gmail Connector** to index and search your email history. Use a **Gmail Toolset** to send new emails through an agent.
@@ -174,22 +164,20 @@ All connectors are built with enterprise-grade security in mind, supporting OAut
 
 <Accordion title="Where do I find the callback URL for my OAuth app?">
 
-The callback URL is displayed in PipesHub when configuring a connector:
+The callback URL is displayed in Novaplan AI when configuring a connector:
 
-1. Go to **Settings > Connectors**
-2. Click **"Configure"** on the connector you want to set up
-3. Copy the **Redirect URI** shown in the dialog
-4. Add it to your OAuth app's allowed redirect URIs in the service's developer console
+1. Open **Workspace Settings** and find the relevant connector under the workspace or personal connector section described in its guide.
+2. Choose **Setup** and open its authentication step.
+3. Copy the **Redirect URL** or **Redirect URI** shown for that connector.
+4. Add the exact URL to your OAuth app's allowed redirect URIs in the source service's developer console.
 
-The callback URL must match exactly between PipesHub and the OAuth app for authentication to succeed.
+The callback URL must match exactly between Novaplan AI and the OAuth app for authentication to succeed.
 
 </Accordion>
 
 <Accordion title="What OAuth scopes do Connectors require?">
 
-Connectors need **read-only permissions** to sync and index data. When creating your OAuth app in the service's developer console, grant only the scopes listed in the specific connector's documentation page.
-
-Using read-only scopes ensures connectors can access your data for indexing but cannot modify or delete anything in your external applications.
+The required scopes depend on the source and connector. Grant only those listed in the specific connector guide and review them with the source administrator. Some providers bundle read access with broader capabilities—for example, GitHub's `repo` OAuth scope—so a connector cannot always request a strictly read-only scope even if its sync workflow only reads data.
 
 </Accordion>
 
@@ -197,14 +185,14 @@ Using read-only scopes ensures connectors can access your data for indexing but 
 
 There are three common causes:
 
-1. **Email mismatch** - The email used during connector authentication doesn't match your PipesHub account email. This causes permission issues preventing you from accessing synced data.
-   - **Fix:** Reconfigure the connector and authenticate using the same email as your PipesHub account.
+1. **Identity mismatch** - For connectors that map source users by email, an unreadable or different address can prevent access to synced records.
+   - **Fix:** Check the connector's account-mapping requirements and the affected user's addresses before reauthorizing.
 
 2. **Records not displaying in "All Records"** - Documents or data from the connector are not showing up at all in the All Records section.
-   - **Fix:** Check permissions in the connector configuration, verify email match, and go to **Settings > Connectors** to ensure all records have synced successfully.
+   - **Fix:** Check the connector's permissions and sync status under **Workspace Settings → Connectors** for a team source or **Workspace Settings → Your Connectors** for a personal source. For email-mapped sources, also verify the account mapping.
 
 3. **Data not yet indexed** - The connector is still syncing or hasn't completed the initial indexing process.
-   - **Fix:** Go to **Settings > Connectors**, check the sync status, and wait for indexing to complete.
+   - **Fix:** Open **Workspace Settings → Connectors** (team) or **Workspace Settings → Your Connectors** (personal), check the sync status, and wait for indexing to complete.
 
 </Accordion>
 

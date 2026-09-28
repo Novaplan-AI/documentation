@@ -1,15 +1,15 @@
 ---
 title: OpenAI API Compatible
-description: "Configure PipesHub Workplace AI to use OpenAI-compatible API providers"
+description: "Configure Novaplan AI to use OpenAI-compatible API providers"
 ---
 
 # OpenAI API Compatible Configuration
 
 ![OpenAI Compatible Configuration Interface](/images/ai-models/llm/OpenAICompatible_LLMConfig.png)
 
-*The OpenAI API Compatible configuration screen in PipesHub where you'll enter your endpoint URL, API Key, and Model Name*
+*The OpenAI API Compatible configuration screen in Novaplan AI where you'll enter your endpoint URL, API Key, and Model Name*
 
-PipesHub allows you to integrate with any LLM provider that supports the OpenAI API format, giving you flexibility to use various AI services including DeepSeek, OpenRouter, vLLM, and other compatible providers.
+Novaplan AI can connect to an LLM provider with a compatible OpenAI-style chat API, including services such as Together AI, DeepSeek, OpenRouter, or an approved model server. Providers differ in supported endpoints and parameters; confirm the chosen model and connection from the managed workspace.
 
 ## Required Fields
 
@@ -18,10 +18,10 @@ PipesHub allows you to integrate with any LLM provider that supports the OpenAI 
 The Endpoint URL is the base API endpoint for your OpenAI-compatible service.
 
 **Common endpoint examples:**
-- Together AI: `https://api.together.xyz/v1/`
+- Together AI: [`https://api.together.ai/v1`](https://docs.together.ai/docs/inference/openai-compatibility)
 - OpenRouter: `https://openrouter.ai/api/v1/`
 
-**Important:** The endpoint URL should include the base path (typically ending in `/v1/`). PipesHub will append the necessary paths for completions and other operations.
+**Important:** Enter the base path documented by the selected provider. Many providers use `/v1/`, but this is not universal: DeepSeek currently documents `https://api.deepseek.com` without that suffix. Novaplan AI appends the paths needed for its requests. Confirm the value from the managed workspace before relying on the connection.
 
 ### API Key *
 
@@ -33,7 +33,7 @@ The API Key is required to authenticate your requests to the OpenAI-compatible s
 3. Create a new API key
 4. Copy the key immediately (most providers only show it once)
 
-**Security Note:** Your API key should be kept secure and never shared publicly. PipesHub securely stores your API key and uses it only for authenticating requests to your chosen provider.
+**Security note:** Treat this API key as a secret. Use the approved workspace setup flow, and coordinate access and rotation with Novaplan and your provider administrator.
 
 ### Model Name *
 
@@ -41,9 +41,11 @@ The Model Name field defines which specific model you want to use from your prov
 
 **Example model names by provider:**
 
-**Together AI / compatible providers:**
-- `deepseek-ai/DeepSeek-V3`
-- `meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8`
+**Together AI examples:**
+- `MiniMaxAI/MiniMax-M3`
+- `openai/gpt-oss-120b`
+
+These are examples from [Together AI's current documentation](https://docs.together.ai/docs/inference/openai-compatibility). Choose a model ID that is available to your account at setup time.
 
 **How to choose a model:**
 - Check your provider's model catalog for available options
@@ -69,7 +71,7 @@ Enable this checkbox if your selected model supports multimodal input (text + im
 Enable this checkbox if your selected model has enhanced reasoning capabilities.
 
 **When to enable:**
-- Your model is designed for complex reasoning tasks (e.g., DeepSeek-V3, OpenAI o1-style models)
+- Your selected model and provider explicitly support a reasoning mode
 - You need advanced problem-solving capabilities
 - Your use case involves mathematical or logical reasoning
 
@@ -91,7 +93,7 @@ As shown in the image above:
 
 ## Supported Providers
 
-PipesHub's OpenAI-compatible configuration works with any provider that implements the OpenAI API specification. Some popular providers include:
+The configuration can work with providers that implement the chat endpoints and parameters Novaplan AI uses. Check the provider's documentation and test the connection before relying on it. Examples to evaluate include:
 
 - **Together AI** - Access to various open-source models with fast inference
 - **Groq** - Ultra-fast inference with open-source models
@@ -114,9 +116,9 @@ PipesHub's OpenAI-compatible configuration works with any provider that implemen
 ## Troubleshooting
 
 **Connection Issues:**
-- Verify the endpoint URL is correct and includes the proper base path (usually `/v1/`)
+- Verify the endpoint URL matches the provider's documented base path; do not add `/v1/` unless that provider requires it
 - Ensure your endpoint URL uses `https://` for secure connections
-- Check that the endpoint is accessible from your network
+- Check that the endpoint is accessible from the managed Novaplan AI environment
 
 **Authentication Errors:**
 - Verify your API key is correct and has not expired
@@ -133,5 +135,4 @@ PipesHub's OpenAI-compatible configuration works with any provider that implemen
 - Verify that multimodal/reasoning flags match the model's actual capabilities
 - Check your provider's status page for any ongoing issues
 
-For additional support, refer to your provider's documentation or contact PipesHub support.
-
+For additional support, refer to your provider's documentation or contact Novaplan AI support.

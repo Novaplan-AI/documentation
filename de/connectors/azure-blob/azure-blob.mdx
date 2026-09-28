@@ -1,0 +1,83 @@
+---
+title: "Azure Blob Storage"
+description: "Dateien aus Azure-Blob-Containern für die Suche synchronisieren."
+icon: "/logo/azure-blob.png"
+---
+
+## Überblick
+
+Der Azure-Blob-Konnektor liest Dateien aus **Blob-Containern** eines Azure Storage Accounts und macht sie in Novaplan AI durchsuchbar. Er ändert oder löscht keine Quelldateien. Ein *Storage Account* enthält Container; ein *Blob* ist eine Datei beziehungsweise ein Objekt innerhalb eines Containers. Für echte Azure-Dateifreigaben verwenden Sie den [Azure-Files-Konnektor](/de/connectors/azure-files/azure-files).
+
+Novaplan unterstützt Sie bei der Einrichtung. Legen Sie vorab fest, welche Container und Dateitypen im Workspace sichtbar sein sollen. Die Auswahl **Personal** oder **Team** steuert die Sichtbarkeit in Novaplan AI; sie verändert keine Azure-Berechtigungen und übernimmt die individuellen Azure-Rechte einzelner Workspace-Mitglieder nicht automatisch. Prüfen Sie bei Teamfreigaben mit einem zweiten Testkonto, ob der gesamte gewählte Inhalt für die vorgesehenen Workspace-Mitglieder geeignet ist.
+
+<Warning>
+  Kann der zugängliche Konnektor die Person, die eine persönliche Verbindung erstellt hat, nicht zuordnen, vergibt er für Container und Blobs stattdessen Leserechte auf Organisationsebene. Prüfen Sie vor der Synchronisierung vertraulicher Inhalte die Zuordnung und danach den Zugriff mit einem zweiten Workspace-Konto. Bestätigen Sie das Verhalten in der bereitgestellten Enterprise-Version.
+</Warning>
+
+## Connection String vorbereiten
+
+1. Öffnen Sie das [Azure Portal](https://portal.azure.com) und wählen Sie **Storage accounts**.
+2. Öffnen Sie den Storage Account mit den gewünschten Blob-Containern.
+3. Wählen Sie **Security + networking → Access keys**.
+4. Zeigen Sie unter **key1** die **Connection string** an und kopieren Sie sie über die Kopierfunktion.
+
+<Warning>
+  Eine Connection String mit Storage-Account-Schlüssel ist ein weitreichendes Geheimnis und kann mehr als nur Lesezugriff ermöglichen. Geben Sie sie nicht in Chat, E-Mail oder Dokumenten weiter. Lassen Sie Ihre Azure-Administration prüfen, ob dieser Anmeldetyp und sein Berechtigungsumfang für die Anbindung zulässig sind. Tragen Sie den Wert nur in den vorgesehenen Konfigurationsdialog ein.
+</Warning>
+
+Die Azure-Administration muss außerdem den Zugriff aus der Novaplan-Umgebung durch Netzwerkregeln oder Firewall zulassen. Wenn der Schlüssel rotiert wird, muss die gespeicherte Konfiguration aktualisiert werden.
+
+**Wie wird die Connection String geschützt?** Behandeln Sie sie als Storage-Account-Geheimnis und geben Sie sie nur im Zugangsdatenfeld des Konnektors ein. Lassen Sie sich von Novaplan die Verschlüsselung, Zugriffsrechte und Protokollierung Ihres bereitgestellten Workspaces bestätigen, bevor Sie sensible Speicherbereiche anbinden. Diese Anleitung verifiziert diese Kontrollen nicht.
+
+## Konnektor einrichten
+
+1. Öffnen Sie in Novaplan AI **Workspace Settings → Connectors** für eine Teamverbindung oder unter **Personal** den Bereich **Your Connectors** für eine persönliche Verbindung. Wählen Sie **Azure Blob → Setup**.
+2. Geben Sie unter **Authenticate Instance** einen **Instance name** ein und fügen Sie die **Connection String** in das gleichnamige Feld ein.
+3. Wählen Sie **Next**, dann unter **Configure Records** **Scheduled** oder **Manual**. **1 Hour** ist ein möglicher Anfangswert für **Sync Interval**.
+4. Begrenzen Sie unter **Indexing & sync filters** den Inhalt, falls nicht der gesamte Storage Account benötigt wird.
+
+| Filter | Wirkung |
+| --- | --- |
+| **Container Names** | Gewünschte Blob-Container mit `In` auswählen oder mit `Not In` ausschließen. |
+| **File Extensions** | Dateiendungen wie `pdf` einschließen oder andere wie `jpg, png, gif` ausschließen. |
+| **Modified Date** und **Created Date** | Dateien nach Änderungs- oder Erstellungsdatum eingrenzen. |
+
+Ohne Filter werden alle für die Verbindung lesbaren Blobs berücksichtigt. Ein einzelner Unterordner innerhalb eines Containers lässt sich laut Quellanleitung nicht direkt auswählen; dafür sollten Sie Inhalt und Containerstruktur vorab prüfen.
+
+5. Speichern Sie mit **Save Configuration**. Auf der Instanzseite kann zunächst **Sync Paused** angezeigt werden; aktivieren Sie **Sync Enabled**.
+6. Öffnen Sie die Instanz, um **Total**, **Processing**, **Not Started** und **Failed** zu verfolgen. Mit **Sync** oder **Full sync** können Sie einen Lauf bei Bedarf auslösen.
+
+Beim ersten Lauf wird der gewählte Umfang vollständig gelesen. Folgeläufe listen die gewählten Container und verarbeiten passende neue oder geänderte Dateien. Eine feste Laufzeit lässt sich daraus nicht ableiten. Nach dem Löschen sensibler Quelldateien prüfen Sie, ob bereits indexierte Einträge auch in Novaplan AI verschwunden sind; wenden Sie sich andernfalls an [Novaplan Support](/de/contact-us). Dokumente und Textdateien können inhaltlich indexiert werden. Das gilt laut aktueller Upstream-Referenz auch für EPUB-E-Books ohne Kopierschutz (DRM); deren Text ist durchsuchbar, eine Vorschau ist nicht verfügbar. Bei Bilddateien hängt die inhaltliche Auswertung von den im Workspace aktivierten Verarbeitungsfunktionen ab. Video, Audio, Archive und andere Binärdateien können als Dateieintrag erscheinen, ohne dass ihr Inhalt durchsucht wird.
+
+## Fehler beheben
+
+| Problem | Prüfen Sie |
+| --- | --- |
+| Authentifizierung schlägt fehl | Vollständige Connection String ohne zusätzliche Leerzeichen, gültiger Schlüssel und richtiger Storage Account. |
+| Container fehlen | Es handelt sich um Blob-Container, nicht um Azure-Dateifreigaben; außerdem Firewall und Zugang prüfen. |
+| Null Dateien | Containerinhalt, aktive Synchronisierung und Filter. |
+| Einzelne Dateien fehlen in der Suche | **Failed**/**Processing**, Dateityp, Passwortschutz und Abschluss der Indexierung. |
+| Lauf ist sehr langsam | Anzahl und Größe der Blobs, Container-, Endungs- und Datumsfilter sowie Fortschritt unter **Overview**. Auch Folgeläufe listen ausgewählte Blobs erneut. |
+| Verbindung funktionierte zuvor | Mögliche Rotation des Azure-Schlüssels; unter **Manage Configuration** aktualisieren. |
+
+## Häufige Fragen
+
+<AccordionGroup>
+  <Accordion title="Kann ich mehrere Storage Accounts verbinden?">
+    Ja. Wählen Sie auf der Azure-Blob-Instanzseite **+ Add Another Instance** und richten Sie für den weiteren Storage Account eine eigene Instanz mit dessen Connection String ein.
+  </Accordion>
+  <Accordion title="Verändert Novaplan AI Dateien in Azure?">
+    Der dokumentierte Konnektor liest Blobs. Er lädt keine Quelldateien hoch und verschiebt, benennt oder löscht sie nicht. Seine Synchronisierung verändert jedoch die indexierten Datensätze in Novaplan AI.
+  </Accordion>
+  <Accordion title="Was geschieht nach dem Löschen einer Datei in Azure?">
+    Gehen Sie nicht davon aus, dass der nächste Lauf einen bereits indexierten Datensatz sofort entfernt. Prüfen Sie besonders bei sensiblen Dateien, ob der Eintrag aus Novaplan AI verschwunden ist. Wenn er weiterhin erscheint, wenden Sie sich an [Novaplan Support](/de/contact-us).
+  </Accordion>
+  <Accordion title="Kann ich nur einen Unterordner eines Containers auswählen?">
+    Nicht direkt. Der dokumentierte Filter wählt ganze Blob-Container aus. Dateiendungen und Datumsbereiche können den Umfang zusätzlich eingrenzen. Für eine klare Quellgrenze trennen Sie Inhalte in geeignete Container.
+  </Accordion>
+  <Accordion title="Wie schütze ich die Connection String?">
+    Behandeln Sie sie als Storage-Account-Geheimnis und geben Sie sie nur im vorgesehenen Zugangsdatenfeld ein. Lassen Sie Verschlüsselung, Zugriffsrechte und Protokollierung des bereitgestellten Workspaces von Novaplan bestätigen, bevor Sie sensible Container anbinden. Diese Anleitung verifiziert diese Kontrollen nicht.
+  </Accordion>
+</AccordionGroup>
+
+Bei Fragen zur sicheren Bereitstellung der Connection String oder zu den Filtern wenden Sie sich an [Novaplan Support](/de/contact-us).

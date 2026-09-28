@@ -1,0 +1,127 @@
+---
+title: "Dropbox Teams"
+description: "Dropbox-Teamordner, persönliche Bereiche und Berechtigungen mit Novaplan AI synchronisieren."
+icon: "/logo/dropbox.png"
+---
+
+Der **Dropbox-Teams-Konnektor** verbindet eine Dropbox Business- oder Enterprise-Umgebung mit Novaplan AI. Er synchronisiert Mitglieder, Gruppen, Teamordner, persönliche Ordner sowie Dateien und Freigaben. Für nur ein persönliches Konto verwenden Sie den [Dropbox-Personal-Konnektor](/de/connectors/dropbox/dropbox_personal).
+
+Novaplan richtet Ihren Workspace weitgehend für Sie ein. Die Dropbox-App und ihre teamweiten Berechtigungen stimmen Sie mit Ihrer Dropbox-Administration und Novaplan ab.
+
+## Dropbox-App vorbereiten
+
+### 1. App erstellen
+
+1. Öffnen Sie die [Dropbox App Console](https://www.dropbox.com/developers/apps) und klicken Sie auf **Create app**.
+2. Wählen Sie **Scoped access** und **Full Dropbox**.
+3. Vergeben Sie einen eindeutigen Namen, beispielsweise `Novaplan AI Dropbox Connector`, und schließen Sie die Erstellung ab.
+
+### 2. Berechtigungen festlegen
+
+Aktivieren Sie unter **Permissions → Individual Scopes**:
+
+```text
+account_info.read
+files.content.read
+files.metadata.read
+file_requests.read
+sharing.read
+sharing.write
+```
+
+Aktivieren Sie unter **Team Scopes**:
+
+```text
+groups.read
+members.read
+team_data.member
+team_data.team_space
+team_info.read
+events.read
+```
+
+Speichern Sie mit **Submit**. Prüfen Sie mit Ihrer Administration, dass die teamweiten Berechtigungen dem vorgesehenen Synchronisierungsumfang entsprechen.
+
+<Note>
+  Der Konnektor versucht während der Synchronisierung, für Dateien und Ordner Dropbox-Freigabelinks als Vorschauadresse zu erstellen. Dafür benötigt er `sharing.write`. Der zugängliche Quellcode fordert für neue Links die Dropbox-Zielgruppe `no_one` an und verwendet gegebenenfalls einen bereits vorhandenen Link. Prüfen Sie diese Berechtigung und Ihre Dropbox-Richtlinien für Freigabelinks mit Ihrer Administration.
+</Note>
+
+### 3. Weiterleitungsadresse und Zugangsdaten
+
+1. Öffnen Sie **Settings → OAuth 2 → Redirect URIs**. Hinterlegen Sie die Adresse Ihres Novaplan-Workspaces mit diesem Pfad:
+
+```text
+https://{your_workspace_domain}/connectors/oauth/callback/Dropbox
+```
+
+Ersetzen Sie `{your_workspace_domain}` durch den tatsächlichen Hostnamen ohne `https://`. Die Adresse muss exakt zur Callback-Adresse Ihrer Instanz passen.
+
+2. Beachten Sie die Einstellung für zusätzliche **Development users**, falls Ihre Dropbox-App noch im Entwicklungsmodus verwendet wird. Stimmen Sie die Freischaltung mit Ihrer Administration ab.
+3. Kopieren Sie unter **Settings** den **App key** und den **App secret**. Bewahren Sie das Secret geschützt auf.
+
+## Verbindung in Novaplan AI einrichten
+
+1. Öffnen Sie **Workspace Settings → Workspace → Connectors** und wählen Sie bei **Dropbox** die Option **Setup**.
+2. Vergeben Sie einen **Instance Name** und tragen Sie **App key** und **App secret** ein.
+3. Klicken Sie auf **Next** und unter **Authorize** auf **Authenticate Dropbox to Proceed**.
+4. Melden Sie sich mit einem geeigneten Dropbox-Teamkonto an und erteilen Sie die angezeigten Berechtigungen. Dieses Konto benötigt Zugriff auf die zu synchronisierenden Teamdaten; seine E-Mail-Adresse muss nicht mit dem Novaplan-AI-Konto der einrichtenden Person übereinstimmen.
+5. Wählen Sie **Continue to configuration**, prüfen Sie die [Konnektoreinstellungen](#konnektoreinstellungen) und speichern Sie.
+
+## Konnektoreinstellungen
+
+### Synchronisierung
+
+- **Scheduled:** Synchronisiert automatisch im gewählten Intervall; die Voreinstellung beträgt 60 Minuten.
+- **Manual:** Synchronisiert nur nach einem manuellen Start.
+- **Created Date / Modified Date:** Begrenzen Dateien nach Erstellungs- oder Änderungsdatum, etwa mit **Last 365 Days**, **Last 30 Days**, **Is After**, **Is Before** oder **Is Between**.
+- **File Extensions:** Mit **In** werden nur ausgewählte Endungen synchronisiert; **Not In** schließt ausgewählte Endungen aus. Nicht unterstützte Endungen werden bei **In** ausgeschlossen und bei **Not In** nicht durch diesen Filter blockiert.
+
+Dateien außerhalb der Synchronisierungsfilter werden nicht abgerufen. Ordner bleiben für die Verzeichnisstruktur erhalten.
+
+### Indexierung
+
+Indexierungsfilter bestimmen, welche synchronisierten Dateien durchsuchbar werden. Bei **Manual Indexing** werden Dateien zunächst nur synchronisiert; unter **All Records** können Sie sie später gezielt indexieren. **Index Shared Items** bezieht geteilte Dateien ein; deaktivieren Sie die Option, wenn nur Dateien aus eigenen Bereichen indexiert werden sollen.
+
+## Technischer Ablauf
+
+Der Konnektor verwendet sowohl einen Dropbox **Team Client** für teamweite Daten als auch einen **User Client** für Daten einzelner Mitglieder. Beim ersten Lauf werden Mitglieder, Gruppen, Teamordner, persönliche Bereiche und danach Dateien und Ordner erfasst. Für weitere Läufe speichert der Konnektor Dropbox-Cursor, damit nur Änderungen verarbeitet werden müssen.
+
+### Nutzer und Gruppen
+
+Mitglieder werden in Novaplan AI zugeordnet; der Fortschritt für Mitgliedsereignisse wird unter `member_events` gespeichert. Bei weiteren Läufen verarbeitet die Verbindung unter anderem geänderte Mitgliedsstatus. Ein aus Dropbox entferntes Mitglied wird laut Quellleitfaden nicht automatisch aus Novaplan AI gelöscht, da es dort noch andere Beziehungen haben kann.
+
+Beim ersten Gruppenlauf werden Gruppen und ihre Mitglieder vollständig erfasst. Danach erkennt ein Cursor unter `user_group_events` neue, gelöschte oder umbenannte Gruppen sowie Mitgliedschafts- und Rollenänderungen.
+
+### Teamordner und persönliche Bereiche
+
+Aktive Teamordner werden mit ihren Mitgliedern und Rechten erfasst. Dropbox-Rollen wie Eigentümer, Bearbeiter und Betrachter werden für die Berechtigungszuordnung übernommen. Für jede Person wird außerdem ein persönlicher Bereich mit **OWNER**-Recht erstellt.
+
+Teamordnerereignisse wie `team_folder_create`, `team_folder_rename`, `team_folder_archived` und `team_folder_permanently_delete` werden bei späteren Läufen verarbeitet. Änderungen an Mitgliedschaften laufen über gesonderte Freigabeereignisse.
+
+### Dateien, Änderungen und Freigaben
+
+Der Konnektor verarbeitet aktive Nutzer in Batches. Für jeden Nutzer werden persönliche und geteilte Zielordner ermittelt und einzeln synchronisiert. Beim ersten Lauf verwendet er `files_list_folder`; mit gespeichertem Cursor `files_list_folder_continue`. Neue Datensätze werden in Batches übergeben, Änderungen und Löschungen werden gesondert verarbeitet. Pro Ordner wird ein eigener Fortschrittspunkt gespeichert.
+
+Bei Freigabeereignissen ruft die Verbindung die aktuellen vollständigen Berechtigungen der betroffenen Datei oder des Ordners erneut aus Dropbox ab und aktualisiert danach die lokale Zuordnung. Dadurch wird nicht nur das einzelne Ereignis übernommen, sondern der aktuelle Dropbox-Zustand.
+
+### Technische Methoden und Fortschrittspunkte
+
+Der `DropboxConnector` erbt von `BaseConnector`. Die technische Quellbeschreibung nennt `init` für die Einrichtung, `test_connection_and_access` für die Verbindungsprüfung, `get_signed_url` und `stream_record` für den Dateizugriff sowie `run_sync`, `run_incremental_sync`, `cleanup` und die Factory-Methode `create_connector`. Ein `handle_webhook_notification`-Einstiegspunkt ist beschrieben; die regulären Änderungen werden hier über Cursor und Audit-Log-Ereignisse erklärt, nicht als zugesicherte Webhook-Echtzeitfunktion.
+
+| Bereich | Methoden und gespeicherter Stand |
+| --- | --- |
+| Mitglieder | `get_app_users` liest alle Mitglieder; `data_entities_processor.on_new_app_users` übernimmt sie. Danach markiert `member_events` den Stand für `member_change_status`. |
+| Gruppen | `team_groups_list` und `_fetch_group_members` erfassen Gruppen und Mitglieder; `data_entities_processor.on_new_user_groups` übernimmt die Zuordnung. `_process_group_event` verarbeitet spätere Ereignisse ab `user_group_events`. |
+| Teamordner | Aktive Ordner und ihre Rechte werden als Gruppen übernommen. `record_group_events` markiert den Stand für neue, umbenannte, archivierte und dauerhaft gelöschte Teamordner. |
+| Dateien | `_process_users_in_batches` ruft pro Person `_run_sync_with_yield` auf. `sharing_list_folders` liefert die persönlichen und freigegebenen Zielordner. |
+
+Für jeden Zielordner liest `dropbox_cursor_sync_point.read_sync_point` den letzten Cursor. Ohne Cursor startet `files_list_folder`, sonst `files_list_folder_continue`. `_process_dropbox_items_generator` und `_process_dropbox_entry` verarbeiten die Einträge. Dabei prüft `tx_store.get_record_by_external_id`, ob ein Datensatz schon existiert, und `_convert_dropbox_permissions_to_permissions` bereitet die Quellrechte auf. Ein `RecordUpdate` beschreibt die erkannte Änderung: Neue Elemente gehen an `data_entities_processor.on_new_records`, geänderte oder gelöschte Elemente über `_handle_record_updates` beispielsweise an `data_entities_processor.on_record_content_update` oder `on_record_deleted`. Danach speichert `dropbox_cursor_sync_point.update_sync_point` den neuen Stand für genau diesen Ordner.
+
+## Fehlerbehebung
+
+- **Keine Dateien sichtbar:** Prüfen Sie die Autorisierung des Team-Konnektors. Lassen Sie für die betroffene Person die Zuordnung ihrer Dropbox-E-Mail-Adresse zum Novaplan-AI-Konto, ihre Teammitgliedschaft und ihre Rechte auf die Datei oder den Ordner prüfen. Das Dropbox-Administratorkonto, das den gemeinsamen Konnektor autorisiert, muss nicht mit jedem betrachtenden Konto übereinstimmen.
+- **Datensätze unter All Records, aber nicht in der Suche:** Prüfen Sie Synchronisierungsfilter, **Manual Indexing**, **Index Shared Items** und den Abschluss der Indexierung.
+- **Erster Lauf noch aktiv:** Bei vielen Mitgliedern und Ordnern dauert die erste Erfassung länger. Prüfen Sie den Status unter **Workspace Settings → Connectors**.
+- **Freigabeänderung fehlt:** Prüfen Sie den nächsten Synchronisierungslauf und ob das betroffene Element noch im gewählten Bereich liegt.
+
+Wenn Sie Hilfe benötigen, schreiben Sie an [support@novaplan.ai](mailto:support@novaplan.ai). Weitere technische Informationen bieten die [Dropbox-HTTP-API](https://www.dropbox.com/developers/documentation/http/documentation) und die [Dropbox-Team-API](https://www.dropbox.com/developers/documentation/http/teams).

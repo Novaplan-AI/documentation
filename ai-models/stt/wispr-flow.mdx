@@ -1,18 +1,18 @@
 ---
 title: Wispr Flow
-description: "Configure PipesHub to use Wispr Flow for speech-to-text transcription"
+description: "Configure Novaplan AI to use Wispr Flow for speech-to-text transcription"
 ---
 
 # Wispr Flow Speech to Text Configuration
 
 ![Wispr Flow STT Configuration Interface](/images/ai-models/stt/WisprFlow_STTConfig.png)
 
-*The Wispr Flow STT configuration screen in PipesHub where you'll enter your API Key and optional settings*
+*The Wispr Flow STT configuration screen in Novaplan AI where you'll enter your API Key and optional settings*
 
-PipesHub integrates with Wispr Flow, a specialist hosted transcription service optimised for professional and enterprise voice input. Wispr Flow's `flow-v1` model is purpose-built for dictation and AI prompt input, with context-aware formatting across multiple output styles.
+Novaplan AI integrates with Wispr Flow, a specialist hosted transcription service optimised for professional and enterprise voice input. Wispr Flow's `flow-v1` model is purpose-built for dictation and AI prompt input, with context-aware formatting across multiple output styles.
 
 <Note>
-Wispr Flow requires **ffmpeg** installed on the PipesHub backend host for audio transcoding. Contact [enterprise@wisprflow.ai](mailto:enterprise@wisprflow.ai) to obtain an API key.
+Wispr Flow requires **ffmpeg** on the Novaplan-managed backend for audio transcoding. Novaplan checks this backend dependency during setup. Contact [enterprise@wisprflow.ai](mailto:enterprise@wisprflow.ai) to obtain an API key.
 </Note>
 
 ## Required Fields
@@ -24,7 +24,7 @@ The API Key is required to authenticate your requests to Wispr Flow's transcript
 **How to obtain an API Key:**
 - Contact Wispr Flow's enterprise team at [enterprise@wisprflow.ai](mailto:enterprise@wisprflow.ai) to request access and obtain your API key
 
-**Security Note:** Your API key should be kept secure and never shared publicly. PipesHub securely stores your API key and uses it only for authenticating requests to Wispr Flow.
+**Security note:** Treat this API key as a secret. Use the approved workspace setup flow, and coordinate access and rotation with Novaplan and your provider administrator.
 
 ### Model
 
@@ -57,7 +57,7 @@ Only change this if Wispr Flow has provided you with a dedicated or regional end
 
 ### Model Friendly Name
 
-A human-readable label for this configuration, shown in the PipesHub UI. Useful if you have multiple STT models configured.
+A human-readable label for this configuration, shown in the Novaplan AI UI. Useful if you have multiple STT models configured.
 
 ## Configuration Steps
 
@@ -75,7 +75,7 @@ As shown in the image above:
 
 ## Usage Considerations
 
-- ffmpeg must be installed on the machine running the PipesHub backend for audio transcoding to work
+- Novaplan must have ffmpeg available on the managed backend for audio transcoding to work
 - API usage is billed through your Wispr Flow enterprise account — check with your Wispr Flow contact for pricing details
 - Selecting the correct App Type improves output formatting significantly for email dictation versus chat/prompt use
 - For multilingual teams, leaving Default Language on Auto-detect gives the best results across different speakers
@@ -83,8 +83,8 @@ As shown in the image above:
 ## Troubleshooting
 
 - If the health check fails, verify your API key is correct and active — contact [enterprise@wisprflow.ai](mailto:enterprise@wisprflow.ai) if unsure
-- If audio output is silent or transcription fails entirely, confirm ffmpeg is installed on the backend host
+- If audio output is silent or transcription fails entirely, ask [Novaplan Support](/contact-us) to check ffmpeg on the managed backend
 - If you are seeing formatting issues in output, try switching the App Type to better match your use case
 - Verify the API Endpoint is correct if you have overridden it — an incorrect URL will cause all requests to fail
 
-For additional support, contact Wispr Flow at [enterprise@wisprflow.ai](mailto:enterprise@wisprflow.ai) or reach out to PipesHub support.
+For provider access, contact Wispr Flow at [enterprise@wisprflow.ai](mailto:enterprise@wisprflow.ai). For workspace setup, contact [Novaplan Support](/contact-us).

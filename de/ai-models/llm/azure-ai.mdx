@@ -1,0 +1,44 @@
+---
+title: "Azure AI"
+description: "Modelle aus Azure AI Foundry mit Novaplan AI verbinden."
+---
+
+# Azure AI Foundry konfigurieren
+
+![Konfigurationsansicht für Azure AI](/images/ai-models/llm/AzureAI_LLMConfig.png)
+
+Über Azure AI Foundry kann Novaplan AI Sprachmodelle unterschiedlicher Anbieter verwenden. Novaplan unterstützt Sie bei der Einrichtung. Erforderlich sind die genaue Endpoint-Adresse Ihres Deployments, ein API-Schlüssel und der Modellname.
+
+## Erforderliche Angaben
+
+### Endpoint URL
+
+Öffnen Sie im [Azure-Portal](https://portal.azure.com) Ihre Azure-AI-Foundry-Ressource, wählen Sie das Modell-Deployment und kopieren Sie dessen Endpoint. Das Format hängt vom Modelltyp ab. Beispiele:
+
+| Modelltyp | Beispiel für den Endpoint |
+| --- | --- |
+| Claude über die Anthropic Messages API | Beispielsweise `https://<resource-name>.services.ai.azure.com/anthropic` |
+| OpenAI-kompatible Bereitstellung | Ein `/openai/v1/`-Endpoint der Ressource, zum Beispiel unter `services.ai.azure.com` oder `openai.azure.com` |
+
+Verwenden Sie die Adresse Ihrer **tatsächlichen Bereitstellung** gemäß der [aktuellen Microsoft-Anleitung zu Foundry-Endpunkten](https://learn.microsoft.com/en-us/azure/foundry/how-to/develop/sdk-overview). Ein Endpoint für einen anderen Modelltyp kann zu fehlgeschlagenen Aufrufen führen. Ältere Novaplan-Formulare können noch `inference.ai.azure.com/anthropic` oder `cognitiveservices.azure.com/openai/v1/` als Platzhalter zeigen; stimmen Sie den tatsächlich akzeptierten Wert mit Novaplan ab.
+
+### API Key und Model Name
+
+Kopieren Sie im Azure-Portal unter **Keys and Endpoint** entweder **Key 1** oder **Key 2**. Bewahren Sie ihn geschützt auf. Unter **Model Name** tragen Sie den genauen **Bereitstellungsnamen** ein; er muss nicht mit der Modell-ID im Katalog übereinstimmen. Prüfen Sie den [Azure-AI-Modellkatalog](https://ai.azure.com/explore/models), Region, API-Typ und die Bereitstellungen Ihres Kontos. Bei Claude muss Novaplan zusätzlich prüfen, dass die Integration die Anthropic Messages API verwendet.
+
+## Optionale Einstellungen
+
+- **Context Length:** Maximale Kontextlänge des gewählten Modells. Überschreiten Sie nicht dessen dokumentiertes Limit.
+- **Multimodal:** Nur aktivieren, wenn das Modell neben Text auch Bildeingaben unterstützt.
+- **Reasoning:** Nur aktivieren, wenn das Modell diese Fähigkeit unterstützt.
+
+## Modell hinzufügen
+
+1. Wählen Sie als **Provider Type** die Option **Azure AI**.
+2. Geben Sie **Endpoint URL**, **API Key** und **Model Name** ein.
+3. Legen Sie bei Bedarf **Context Length**, **Multimodal** und **Reasoning** passend zum Modell fest.
+4. Klicken Sie auf **Add Model**.
+
+Die ersten drei Angaben sind erforderlich. Nutzung zählt zum Kontingent und zur Abrechnung Ihrer Azure-Ressource; Kosten und Funktionen unterscheiden sich je nach Modell.
+
+Bei Fehlern prüfen Sie Schlüssel, Endpoint-Format, genaue Modell-ID, Azure-Abonnement und Kontingent, regionale Verfügbarkeit, Netzwerkfreigaben sowie den Zugang zu Modellen anderer Anbieter. Weitere Informationen bietet die [Azure-AI-Foundry-Dokumentation](https://learn.microsoft.com/en-us/azure/ai-studio/); [Novaplan Support](/de/contact-us) hilft bei der Einrichtung.

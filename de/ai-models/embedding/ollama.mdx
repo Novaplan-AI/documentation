@@ -1,0 +1,37 @@
+---
+title: "Ollama Embeddings"
+description: "Über Ollama bereitgestellte Embedding-Modelle mit Novaplan AI verbinden."
+---
+
+# Ollama Embeddings konfigurieren
+
+![Konfigurationsansicht für Ollama Embeddings](/images/ai-models/embedding/Ollama_EmbeddingConfig.png)
+
+Novaplan AI kann einen von Ihrer Organisation betriebenen Ollama-Dienst für Embeddings nutzen. Die Verarbeitung findet auf dem Modellserver statt, den Ihre Administration bereitstellt. Novaplan unterstützt Sie bei der Anbindung; für eine übliche lokale Ollama-Instanz ist kein API-Schlüssel nötig.
+
+## Voraussetzungen
+
+Installieren Sie [Ollama](https://ollama.com/) auf dem Modellserver, laden Sie ein geeignetes Embedding-Modell und starten Sie den Dienst. Ein Administrationsbeispiel:
+
+```bash
+ollama pull mxbai-embed-large
+ollama serve
+```
+
+Der Dienst muss von der Novaplan-AI-Umgebung aus erreichbar sein. Mit `ollama list` prüfen Sie, ob das Modell bereitsteht.
+
+## Angaben in Novaplan AI
+
+| Feld | Verwendung |
+| --- | --- |
+| **Model Name** | Pflichtfeld. Exakte Ollama-Modell-ID, beispielsweise `mxbai-embed-large`; weitere Modelle stehen in der [Ollama-Bibliothek](https://ollama.com/library). |
+| **Endpoint URL** | Optional. Adresse des erreichbaren Ollama-Dienstes. Ohne Eintrag verwendet die Konfiguration `http://host.docker.internal:11434`. |
+| **API Key** | Optional. Nur für eine Umgebung oder einen vorgeschalteten Dienst mit Authentifizierung. |
+
+`host.docker.internal` ist eine mögliche Adresse, wenn die Novaplan-Komponente in einem Container läuft und Ollama auf dessen Host erreichbar ist. Für andere Umgebungen muss die Administration die tatsächlich erreichbare Adresse eintragen. Ollama verwendet standardmäßig Port `11434`.
+
+1. Klicken Sie auf der Ollama-Embedding-Anbieterkarte auf **Configure**.
+2. Geben Sie **Model Name** ein und passen Sie bei Bedarf **Endpoint URL** und **API Key** an.
+3. Klicken Sie auf **Add Model**.
+
+Bei Fehlern prüfen Sie den laufenden Dienst, die Modell-ID mit `ollama list`, Netzwerkadresse und Firewall. Weitere Informationen bietet die [Ollama-Dokumentation](https://github.com/ollama/ollama/tree/main/docs); [Novaplan Support](/de/contact-us) hilft bei der Anbindung.

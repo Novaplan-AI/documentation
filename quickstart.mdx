@@ -1,115 +1,62 @@
 ---
-title: "Quickstart"
-description: "How to deploy PipesHub Workplace AI platform on your local machine"
+title: "Getting started"
+description: "Accept your invitation and get started in the workspace prepared for you by Novaplan AI."
 icon: "play"
 ---
 
-## Requirements
+The Novaplan team creates your organization's workspace, manages most of its setup and administration, and invites you to join it. Start with the invitation sent to your email address.
 
-- [Docker](https://docs.docker.com/get-docker/) with Compose v2
+<div id="requirements" />
 
-<Tip>
-  Coding agent standing this up for a user who has no PipesHub yet? Follow [Local Docker demo](/for-agents-local-demo). Do not scaffold LangChain. First-run (account + LLM) stays in the browser.
-</Tip>
+## Before you begin
 
-## Setup
+- Have your Novaplan AI invitation email ready.
+- Use the email address that received the invitation.
+- Follow the workspace link in that email.
 
-### Quickstart (Recommended)
+<div id="setup" />
 
-**Note**: If you are deploying PipesHub on a cloud server, make sure you are using an HTTPS endpoint. PipesHub enforces stricter security checks, and browsers will block certain requests when the application is served over HTTP.
-
-You can use a reverse proxy like Cloudflare, Nginx, or Traefik to terminate SSL/TLS and provide a valid HTTPS certificate.
-
-If you see a white screen after deploying PipesHub while accessing it over HTTP, this is likely the cause. The frontend will refuse to load due to stricter security checks.
+## Join your workspace
 
 <Steps>
-  <Step title="⚡ Run the one-command installer">
-    ```bash
-    curl -fsSL https://get.pipeshub.com/install | bash
-    ```
+  <Step title="Open your invitation">
+    Open the invitation email and follow its link to your workspace.
 
-    This downloads the deployment files for the latest GitHub **release** into `./pipeshub` (falling back to `main` if the unauthenticated GitHub API lookup fails — 60 requests/hour per IP) and launches the interactive installer. Open **http://localhost:3000** once it finishes.
-
-    `get.pipeshub.com/install` is a 302 to the root [`install.sh`](https://github.com/pipeshub-ai/pipeshub-ai/blob/main/install.sh) on GitHub (`https://raw.githubusercontent.com/pipeshub-ai/pipeshub-ai/main/install.sh`). The wrapper then fetches `docker-compose.yml` and the in-tree installer for that resolved ref.
-
-    <Info>
-      Prefer to read before running?
-
-      ```bash
-      curl -fsSL https://get.pipeshub.com/install -o pipeshub-install.sh
-      less pipeshub-install.sh        # review it
-      bash pipeshub-install.sh
-      ```
-    </Info>
-
-    The installer will:
-    - Check Docker, RAM, and disk prerequisites
-    - Ask whether you want a **slim** or **full** deployment
-    - Let you optionally customize the graph DB, message broker, and KV store
-    - Generate randomized secrets and write a `.env` file
-    - Pull images and start the stack
-    - Wait for PipesHub to become healthy, verify it is reachable, and print the URL
-
-    When prompted for a **Public HTTPS URL**, enter the URL you'll use to access PipesHub (e.g. `https://pipeshub.yourdomain.com`). This is written to `.env` as `FRONTEND_PUBLIC_URL` and is required for OAuth callbacks, email invites, and to avoid the HTTP white-screen issue described above. Leave it blank only for local, `localhost`-only access. You can update it later by editing `.env` and running `./install.sh --reconfigure` from the directory the installer prints, or by setting `PIPESHUB_PUBLIC_URL` for a non-interactive install.
-
-    #### Installer options
-
-    | Flag | Description |
-    |------|-------------|
-    | `-y` / `--yes` | Accept all defaults; skip interactive prompts (CI-friendly) |
-    | `--version TAG` | Pin the **Docker image** tag only, e.g. `--version 0.7.0`. Does not pin compose/installer files — use `PIPESHUB_REF` for that |
-    | `--no-pull` | Keep the locally cached images (do not refresh) |
-    | `--reconfigure` | Re-run the wizard and overwrite an existing `.env` |
-    | `--print-env-only` | Write `.env` and print the compose command without starting containers |
-    | `--upgrade` | Pull/rebuild images and recreate containers using the existing `.env` |
-    | `--stop` | Stop the running stack (data preserved) |
-    | `--uninstall` | Stop the stack and remove all data volumes |
-    | `--build` | Build the image locally instead of pulling from Docker Hub (clone only) |
-
-    Standalone `curl | bash` uses prebuilt Hub images only. `--build` needs a git clone — see [From a cloned repository](#from-a-cloned-repository-developers).
-
-    Standalone-only environment overrides (set them on the `bash` side of the pipe):
-
-    | Variable | Description |
-    |----------|-------------|
-    | `PIPESHUB_REF` | Branch, tag, or commit SHA for `docker-compose.yml` and the in-tree installer. Default: latest GitHub release, else `main` |
-    | `PIPESHUB_DIR` | Directory to download deployment files into. Default: `./pipeshub` |
-
-    Advanced options such as CI environment variables, slim vs. full deployment types, a second instance on the same host, and manual Compose profile usage are covered in [Advanced Deployment Options](https://github.com/pipeshub-ai/pipeshub-ai/blob/main/deployment/docker-compose/ADVANCED_DEPLOYMENT.md).
+    If you cannot find the email, check your spam folder. If it is still missing, contact the person who arranged your access or [Novaplan AI support](mailto:support@novaplan.ai).
   </Step>
 
-  <Step title="Onboarding Setup">
+  <Step title="Sign in">
+    Follow the instructions on the sign-in screen. The available sign-in methods depend on your organization's workspace settings.
 
-1. After the installer reports PipesHub is healthy, **open the UI** via localhost:3000 (if running on the same system) or the Frontend Public URL / port you configured.
-2. If you're an individual, select the **"Individual"** account type. For businesses, choose **"Enterprise"** and complete your account setup by filling in the basic details.
-3. You will then be redirected to the **onboarding** page. Please fill in all the required information carefully. You can always update these details later under the "Profile" tab in the Settings page.
+    Use the invited email address, including when signing in through your organization's identity provider.
+  </Step>
 
-For more information, refer to our [Onboarding Guide](/onboarding).
+  <Step title="Check your workspace access">
+    Once signed in, check that you are in the workspace you were invited to join.
 
-</Step>
+    If your workspace is missing or you see an access error, contact your workspace administrator or [Novaplan AI support](mailto:support@novaplan.ai).
+  </Step>
 
-<Step title="🛑 To stop the services">
+  <Step title="Start using Novaplan AI">
+    Ask a question about content available in your workspace. Review the sources provided with the answer to check the underlying information.
 
-`curl | bash` does not `cd` your shell. The success banner prints the directory for later commands — `./pipeshub` by default, or `PIPESHUB_DIR` if you set it. `--stop`, `--upgrade`, `--reconfigure`, and `--uninstall` all run from there.
-
-```bash
-cd pipeshub
-./install.sh --stop
-```
-
-</Step>
+    The content you can find depends on what has been added or connected and the permissions assigned to you. Ask your workspace administrator if expected content is missing.
+  </Step>
 </Steps>
 
-### From a cloned repository (developers)
+## Invitation and sign-in help
 
-Requires Git. To build from source, contribute, or pin the installer to your checkout:
+| Situation | What to do |
+| --- | --- |
+| Your invitation has expired | Ask your workspace administrator or Novaplan AI support to send a new invitation. |
+| The invitation was sent to the wrong email address | Ask the person who invited you to correct the address and send a new invitation. |
+| You cannot use the sign-in method shown | Contact your workspace administrator to confirm which method your organization uses. |
+| You reach an unexpected setup screen | Contact your workspace administrator or Novaplan AI support before changing workspace settings. |
 
-```bash
-git clone https://github.com/pipeshub-ai/pipeshub-ai.git
-cd pipeshub-ai
+## For workspace administrators
 
-# Same installer, run from the repo root
-./install.sh
-```
+To invite colleagues and manage their access, see [Users](/user-management/user). Only administrators with the appropriate permissions should change workspace settings.
 
-Building local images from source requires this cloned-repo path (`./install.sh --build`). The one-command installer above always uses prebuilt images. From a clone, run `--stop`, `--upgrade`, `--reconfigure`, and `--uninstall` from this same repository root.
+Novaplan manages most configuration. The full documentation remains available as a reference. Confirm with the Novaplan team which configuration steps, if any, your organization needs to complete. Keep settings that are already configured unless a change has been agreed.
+
+For help getting started, email [support@novaplan.ai](mailto:support@novaplan.ai).

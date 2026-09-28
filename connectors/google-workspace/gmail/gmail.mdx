@@ -44,7 +44,7 @@ Gmail is Google's email service that provides access to emails, attachments, and
 
 ### Authentication
 
-The Gmail connector uses OAuth 2.0 for authentication. This requires users to grant permission for the application to access their Gmail data within the scopes specified.
+For this shared connection, a Google Workspace administrator authorizes a service account for domain-wide delegation. That account can read the selected users' mailboxes under the approved scopes; individual mailbox owners do not complete a separate OAuth consent flow for this Team connector. Review the delegated scope and mailbox coverage with your administrator and Novaplan.
 
 ## How to configure and enable the Gmail Connector
 
@@ -226,7 +226,7 @@ https://www.googleapis.com/auth/admin.directory.group.readonly,https://www.googl
 
 4. After configuring connector settings, you can click on **Save Configuration**.
 
- Once PipesHub confirms the instance is ready, you can choose either **Start syncing now** or select the **I'll do it later** option.
+ Once Novaplan AI confirms the instance is ready, you can choose either **Start syncing now** or select the **I'll do it later** option.
    {" "}
    <div style={{ textAlign: "center" }}>
      <img
@@ -237,57 +237,9 @@ https://www.googleapis.com/auth/admin.directory.group.readonly,https://www.googl
    </div>
 
 
-### Enable Service Account Key Creation
+### If service account key creation is blocked
 
-If you encounter an error while creating the service account key due to organization policy constraints, follow these steps:
-
-#### 1. Switch to the Organization Context
-
-At the top of the Google Cloud Console (where the project name is shown), click the drop-down to see a list of organizations and projects.
-
-Select your organization rather than a specific project.
-
-If you don't see an organization listed, make sure you're signed in with an account that has access to the organization.
-
-
-#### 2. Add Organisation Policy Administrator Role
-
-Navigate to **IAM & Admin > IAM** in the Cloud Console
-
-Find the current user and Click on the **Pencil** icon.
-
-Click on the **Add another role** button.
-
-Search for the **Organisation Policy Administrator** role.
-
-Click on the **Add** button.
-
-<div style={{ textAlign: "center" }}>
-  <img
-    src="/images/connectors/googleWorkspace/enterprise/org_policy_admin.png"
-    alt="Add Organisation Policy Administrator"
-    style={{ display: 'block', margin: '0 auto' }}
-    width="80%"
-  />
-</div>
-
-Click on the **Save** button.
-
-#### 3. Disable the Service Account Key Creation constraint
-
-Navigate to **IAM & Admin > Organization Policies** in the Cloud Console
-
-Search for `"iam.disableServiceAccountKeyCreation"`
-
-Select the policy
-
-Click on the **Manage Policy** button
-
-In Policy source, Select **Override parent's policy**. Add a rule and set the enforcement to "Off"
-
-Click on the **Save** button
-
-After completing these steps, return to [Step 5](#step-5%3A-create-a-json-key-for-the-service-account) and try creating the service account key again.
+Your organization may enforce `iam.disableServiceAccountKeyCreation` to prevent long-lived service account keys. If the JSON-key step is blocked, ask your Google Cloud security administrator and Novaplan to agree on an approved connection method or a narrowly scoped exception. Do not grant yourself Organization Policy Administrator access or disable the restriction solely to complete this guide. Keep any approved key within your organization's credential-handling process.
 
 ## Google PubSub Configuration
 
@@ -405,21 +357,11 @@ The Gmail connector uses OAuth 2.0 for authentication. This requires users to gr
 1. Navigate to **APIs & Services > Credentials** in the Cloud Console
 2. Click **Create Credentials** and select **OAuth client ID**
 3. Select **Web application** as the application type
-4. Set the **Authorized redirect URI** to:
-   ```
-   http://your-frontend-dns/connectors/oauth/callback/Gmail
-   ```
-   or for HTTPS:
-   ```
-   https://your-frontend-dns/connectors/oauth/callback/Gmail
-   ```
+4. Set the **Authorized redirect URI** to the exact HTTPS callback shown in your Novaplan AI workspace. For the Gmail personal connector, its path is `/connectors/oauth/callback/Gmail`; a workspace-specific example is `https://your-workspace.example.com/connectors/oauth/callback/Gmail`.
 5. Click **Create** and note your **Client ID** and **Client Secret**
 
 <Info>
-  Redirect URI must match exactly your frontend URL. For example: if your app is
-  running on https://f7f0-240.ngrok-free.app then redirect URI should be
-  https://f7f0-240.ngrok-free.app/connectors/oauth/callback/Gmail
-  in Google Cloud Console.
+  The redirect URI registered in Google must exactly match the callback supplied by the deployed workspace. Do not register a development tunnel, a local address, or a callback copied from an old screenshot for a customer workspace.
 </Info>
 
 ### Step 5: Configure OAuth Scopes
@@ -493,7 +435,7 @@ The Gmail connector uses OAuth 2.0 for authentication. This requires users to gr
 
 7. After configuring connector settings, you can click on **Save Configuration**.
 
- Once PipesHub confirms the instance is ready, you can choose either **Start syncing now** or select the **I'll do it later** option.
+ Once Novaplan AI confirms the instance is ready, you can choose either **Start syncing now** or select the **I'll do it later** option.
    {" "}
    <div style={{ textAlign: "center" }}>
      <img
@@ -504,7 +446,7 @@ The Gmail connector uses OAuth 2.0 for authentication. This requires users to gr
    </div>
 
 <Warning>
-  **Important:** Authorize using the same email address as your PipesHub account. Using a different email will cause permission issues on the PipesHub platform.
+  Check which Google account you authorize. The accessible connector assigns mailbox permissions using the Gmail address returned by Google. If that address differs from your Novaplan AI account address, ask an administrator to verify the account mapping and access before relying on search results.
 </Warning>
 
 <Info>
@@ -577,10 +519,10 @@ When disabled, file attachments on synced messages are not indexed for search by
 | Aspect | Gmail Connector | Gmail Toolset |
 |--------|----------------|---------------|
 | **Purpose** | Sync and index emails for search | Enable agents to perform email actions |
-| **Data Flow** | One-way (import data into PipesHub) | Two-way (read and write via API) |
+| **Data Flow** | One-way (import data into Novaplan AI) | Two-way (read and write via API) |
 | **When to Use** | Query/search email history and conversations | Send emails, manage messages, create drafts |
 
-**Example:** Use **Gmail Connector** to search past email conversations. Use **Gmail Toolset** to let agents send replies or forward messages.
+**Example:** Use **Gmail Connector** to search past email conversations. Use **Gmail Toolset** to let agents draft, send, or reply to messages. The listed toolset actions do not include a dedicated forwarding action.
 
 </Accordion>
 
@@ -588,14 +530,14 @@ When disabled, file attachments on synced messages are not indexed for search by
 
 There are three common causes:
 
-1. **Email mismatch** - The email used during connector authentication doesn't match your PipesHub account email. This causes permission issues preventing you from accessing synced data.
-   - **Fix:** Reconfigure the connector and authenticate using the same email as your PipesHub account.
+1. **Identity or mailbox access does not match** - For a Personal connection, check the Google account that authorized its mailbox. For a Team connection, the service account and domain delegation are separate from each person's mapped mailbox identity.
+   - **Fix:** Ask your administrator to check the affected person's account mapping and the intended mailbox, then verify the connection's source authorization and filters. Do not reauthorize the Team service account as that person.
 
 2. **Records show in "All Records" but not in search** - Documents display in the All Records section but don't appear in search query results.
    - **Fix:** Verify sync filters in the connector settings and ensure indexing has completed. Check that the data matches your search query criteria.
 
 3. **Data not yet indexed** - The connector is still syncing or hasn't completed the initial indexing process.
-   - **Fix:** Go to **Settings > Connectors**, check the sync status, and wait for indexing to complete.
+   - **Fix:** Check the sync status under **Workspace Settings → Connectors** for a Team connection or **Workspace Settings → Your Connectors** for a Personal connection, then wait for indexing to complete.
 
 </Accordion>
 
@@ -606,6 +548,6 @@ There are three common causes:
 <div className="text-center mt-12 p-6 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl">
   <h3 className="text-lg font-semibold mb-2">Ready to Get Started?</h3>
   <p className="text-gray-600 dark:text-gray-400">
-    The Gmail connector is fully operational and ready for use. Follow the configuration guide above for your setup type (Enterprise or Individual), or reach out to our support team if you need assistance.
+    Follow the configuration guide for your Team or Personal connection. Novaplan can confirm the available connector version, required Google permissions, and readiness of your workspace before the first synchronization.
   </p>
 </div>

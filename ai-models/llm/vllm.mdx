@@ -1,15 +1,15 @@
 ---
 title: vLLM
-description: "Configure PipesHub Workplace AI to use vLLM with OpenAI-compatible API"
+description: "Configure Novaplan AI to use vLLM with OpenAI-compatible API"
 ---
 
 # vLLM Configuration
 
 ![OpenAI Compatible Configuration Interface](/images/ai-models/llm/OpenAICompatible_LLMConfig.png)
 
-*The OpenAI API Compatible configuration screen in PipesHub where you'll enter your vLLM endpoint URL, API Key, and Model Name*
+*The OpenAI API Compatible configuration screen in Novaplan AI where you'll enter your vLLM endpoint URL, API Key, and Model Name*
 
-PipesHub allows you to integrate with vLLM (High-throughput and memory-efficient inference engine) using its OpenAI-compatible API endpoint. vLLM is designed for fast LLM inference and serving, making it ideal for self-hosted deployments.
+Novaplan AI allows you to integrate with vLLM (High-throughput and memory-efficient inference engine) using its OpenAI-compatible API endpoint. vLLM is designed for fast LLM inference and serving, making it ideal for self-hosted deployments.
 
 ## What is vLLM?
 
@@ -22,9 +22,9 @@ vLLM is an open-source library for fast LLM inference and serving. It provides:
 
 ## Prerequisites
 
-Before configuring vLLM in PipesHub, ensure you have:
+Before configuring vLLM in Novaplan AI, ensure you have:
 1. A running vLLM server instance
-2. The endpoint URL where your vLLM server is accessible
+2. An endpoint URL that Novaplan has confirmed is accessible from your managed workspace
 3. (Optional) API key if you've configured authentication on your vLLM server
 4. The model name/path used when starting your vLLM server
 
@@ -40,7 +40,7 @@ pip install "vllm>=0.8.5"
 vllm serve Qwen/Qwen3-8B --port 8000 --api-key your-secret-key
 ```
 
-Your vLLM server will be accessible at `http://localhost:8000/v1/` (or your server's IP/domain).
+From the vLLM server itself, this example is available at `http://localhost:8000/v1/`. A managed Novaplan AI workspace needs a separately reachable network address; confirm it with Novaplan.
 
 ## Required Fields
 
@@ -51,14 +51,14 @@ The Endpoint URL is the base API endpoint of your vLLM server.
 **Format:** `http://your-server:port/v1/`
 
 **Examples:**
-- Local deployment: `http://localhost:8000/v1/`
+- On the vLLM server itself: `http://localhost:8000/v1/` (for local checks only)
 - Remote server: `http://192.168.1.100:8000/v1/`
 - Domain-based: `https://vllm.yourdomain.com/v1/`
 
 **Important:** 
 - The endpoint URL must include the `/v1/` suffix
 - Use `https://` for production deployments with SSL/TLS
-- Ensure the server is accessible from where PipesHub is running
+- Ensure the server is accessible from where Novaplan AI is running
 - Check firewall rules if connecting to a remote vLLM server
 
 ### API Key *
@@ -69,11 +69,11 @@ The API Key field is used to authenticate requests to your vLLM server.
 - If your vLLM server was started **with** `--api-key`, enter that key here
 - If your vLLM server was started **without** authentication, you can enter any placeholder value (e.g., `no-key` or `dummy`)
 
-**Security Note:** For production deployments, always configure API key authentication on your vLLM server and use strong, unique keys.
+**Security Note:** Use a strong, unique API key for the OpenAI-compatible endpoints, and restrict network access to the server. The [vLLM CLI reference](https://docs.vllm.ai/en/latest/cli/serve/) warns that `--api-key` does not authenticate every endpoint on the server, including `/invocations`; it is not a complete server access control. Coordinate the network path and any additional protection with Novaplan and your model-server administrator.
 
 ### Model Name *
 
-The Model Name must match the model identifier used when starting your vLLM server.
+The Model Name must match the identifier exposed by your vLLM server's API. This is usually the model used at startup, but a server configured with `--served-model-name` can expose a different name.
 
 **Examples:**
 - `Qwen/Qwen3-8B`
@@ -85,7 +85,7 @@ You can query your vLLM server to list available models:
 curl http://localhost:8000/v1/models
 ```
 
-**Important:** The model name must exactly match what was specified when starting the vLLM server.
+**Important:** Use an ID returned by `/v1/models`; do not guess from the startup command alone.
 
 ## Optional Features
 
@@ -98,8 +98,7 @@ Enable this checkbox if your vLLM server is running a model that supports multim
 - The model was specifically trained for multimodal understanding
 - You need to process documents with images or visual content
 
-**Example multimodal models for vLLM:**
-- `Qwen/Qwen3-8B`
+**Model choice:** Use a vision-language model supported by your installed vLLM version. The `Qwen/Qwen3-8B` server example above is a text-generation model; do not enable **Multimodal** for that example solely because it belongs to the Qwen family. Consult the selected model's card and the [vLLM supported-model list](https://docs.vllm.ai/en/latest/models/supported_models.html).
 
 **Note:** Standard text-only models do not support multimodal capabilities. Verify your model's documentation before enabling this feature.
 
@@ -119,7 +118,7 @@ Enable this checkbox if your model has enhanced reasoning capabilities.
 As shown in the image above:
 
 1. Select "OpenAI API Compatible" as your Provider Type from the dropdown
-2. Enter your vLLM server's Endpoint URL (e.g., `http://localhost:8000/v1/`)
+2. Enter the vLLM Endpoint URL that Novaplan has confirmed is reachable from your workspace (for example, `https://vllm.example.com/v1/`)
 3. Enter your API Key (or a placeholder if authentication is disabled)
 4. Specify the exact Model Name used when starting your vLLM server
 5. (Optional) Check "Multimodal" if using a vision-language model
@@ -157,7 +156,7 @@ vllm serve Qwen/Qwen3-8B \
 **Connection Issues:**
 - Verify the endpoint URL is correct and includes `/v1/`
 - Check that the vLLM server is running: `curl http://localhost:8000/health`
-- Ensure network connectivity between PipesHub and vLLM server
+- Ensure network connectivity between Novaplan AI and vLLM server
 - Check firewall rules and port accessibility
 - For remote servers, ensure proper DNS resolution
 
@@ -184,4 +183,4 @@ vllm serve Qwen/Qwen3-8B \
 - Review vLLM server logs for detailed error messages
 - Ensure the model is compatible with your vLLM version
 
-For additional support, refer to the [vLLM documentation](https://docs.vllm.ai/) or contact PipesHub support.
+For additional support, refer to the [vLLM documentation](https://docs.vllm.ai/) or contact Novaplan AI support.

@@ -1,15 +1,15 @@
 ---
 title: HuggingFace
-description: "Configure PipesHub to use HuggingFace embedding models locally"
+description: "Configure Novaplan AI to use HuggingFace embedding models locally"
 ---
 
 # HuggingFace Embeddings Configuration
 
 ![HuggingFace Embeddings Configuration Interface](/images/ai-models/embedding/HuggingFace_EmbeddingConfig.png)
 
-*The HuggingFace embeddings configuration screen in PipesHub where you'll enter your Model Name*
+*The HuggingFace embeddings configuration screen in Novaplan AI where you'll enter your Model Name*
 
-PipesHub allows you to use HuggingFace embedding models that run locally inside your PipesHub instance. No external API, no API key, and no usage costs are required. Simply provide the full HuggingFace model repository slug and PipesHub will load and run the model locally.
+Novaplan AI can use HuggingFace embedding models in the managed workspace without a separate inference API key. Provide the full HuggingFace model repository slug; Novaplan AI downloads the model and runs inference in its configured environment. Coordinate model availability and resource needs with Novaplan.
 
 ## Required Fields
 
@@ -33,20 +33,20 @@ As shown in the image above:
 2. Enter the full HuggingFace model repository slug in the Model Name field (marked with *) — e.g. `sentence-transformers/all-MiniLM-L6-v2`
 3. Click **Add Model** to save and validate
 
-> Model Name is the only required field. No API key or external service is needed — the model runs locally inside PipesHub.
+> Model Name is the only required field. No API key or external service is needed — the model runs locally inside Novaplan AI.
 
 ## Usage Considerations
 
-- All embedding happens locally inside PipesHub — data never leaves your infrastructure
+- Embedding inference runs in the Novaplan-managed workspace, without sending each request to a separate HuggingFace inference API
 - No API key or billing setup required
-- The model is downloaded from HuggingFace on first use; ensure your PipesHub instance has outbound internet access on first load
+- The model is downloaded from HuggingFace on first use; Novaplan must ensure the managed workspace can reach the model repository
 - Larger models provide better quality but require more memory and take longer to load
 
 ## Troubleshooting
 
 - If the model fails to load, verify the repository slug is correct (e.g. `sentence-transformers/all-MiniLM-L6-v2`, not just `all-MiniLM-L6-v2`)
-- Ensure your PipesHub instance can reach `huggingface.co` to download the model on first use
+- Ask Novaplan to verify that the managed workspace can reach `huggingface.co` to download the model on first use
 - For memory issues, switch to a smaller model
 - Check that the model supports the sentence embedding task (pipeline tag: `sentence-similarity` or `feature-extraction`)
 
-For additional support, refer to the [HuggingFace documentation](https://huggingface.co/docs) or contact PipesHub support.
+For additional support, refer to the [HuggingFace documentation](https://huggingface.co/docs) or contact Novaplan AI support.

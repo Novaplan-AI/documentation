@@ -1,0 +1,29 @@
+---
+title: "OpenRouter"
+description: "Ein OpenRouter-Sprachmodell in Novaplan AI konfigurieren."
+---
+
+# OpenRouter konfigurieren
+
+OpenRouter bietet über ein Konto Zugriff auf Sprachmodelle verschiedener Anbieter. Die verfügbare Novaplan-AI-Anbieterkonfiguration enthält eine eigene Option **OpenRouter**. Novaplan kann die Verbindung im verwalteten Workspace einrichten.
+
+## Vorbereitung
+
+Erstellen Sie ein Konto bei [OpenRouter](https://openrouter.ai/) und einen API-Schlüssel. Wählen Sie ein Modell aus dem [aktuellen Modellkatalog](https://openrouter.ai/models). Verfügbarkeit, Funktionen und Preise hängen vom Modell und Ihrem Konto ab. Schützen Sie den Schlüssel und klären Sie die erforderliche Abrechnung oder das Guthaben bei OpenRouter.
+
+## Sprachmodell hinzufügen
+
+1. Öffnen Sie **AI Models**, fügen Sie ein Sprachmodell hinzu und wählen Sie **OpenRouter** als Anbieter, falls diese Option in Ihrem Workspace verfügbar ist.
+2. Tragen Sie den OpenRouter-**API Key** ein.
+3. Übernehmen Sie die genaue **Model Name**-ID aus dem Katalog im Format `anbieter/modell`. Verwenden Sie nicht nur den verkürzten Anzeigenamen.
+4. Optional können Sie einen **Model Friendly Name** und die unterstützte **Context Length** angeben.
+5. Aktivieren Sie **Is Multimodal** nur, wenn das gewählte Modell die benötigte Bildeingabe unterstützt. **Is Reasoning** gilt nur für Modelle mit entsprechender Funktion. Prüfen Sie beides im aktuellen Katalogeintrag.
+6. Speichern und testen Sie das Modell im Workspace, bevor Sie es für Agenten oder Kundendaten verwenden.
+
+Für die eigene OpenRouter-Konfiguration sind **API Key** und **Model Name** erforderlich. Eine Endpoint URL wird dort nicht eingegeben. Falls Ihr bereitgestellter Workspace nur **OpenAI API Compatible** anbietet, lassen Sie die unterstützte Einrichtung von [Novaplan Support](/de/contact-us) bestätigen.
+
+## Fehlerbehebung
+
+Bei Authentifizierungsfehlern prüfen Sie den Schlüssel im OpenRouter-Konto und die Erreichbarkeit von OpenRouter aus dem verwalteten Novaplan-Dienst. Wird das Modell nicht gefunden, übernehmen Sie seine aktuelle vollständige ID aus dem Katalog und prüfen den Kontozugang. Bei Rate-Limits, nicht verfügbaren Modellen oder Abrechnungsfehlern kontrollieren Sie den Modell- und Kontostatus bei OpenRouter. [Novaplan Support](/de/contact-us) hilft beim Verbindungstest.
+
+Für Embeddings siehe [OpenRouter-Embedding-Konfiguration](/de/ai-models/embedding/openrouter).

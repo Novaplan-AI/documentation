@@ -1,6 +1,6 @@
 ---
 title: "Local FS"
-description: "Index a folder on your computer for search in PipesHub"
+description: "Index a folder accessible to the Novaplan AI connector for personal search"
 icon: "/logo/local-fs.svg"
 ---
 
@@ -31,7 +31,7 @@ icon: "/logo/local-fs.svg"
       <div className="text-xl font-semibold text-gray-900 dark:text-white">Local FS</div>
     </div>
     <p className="text-base text-gray-700 dark:text-gray-300 mt-0 mb-5">
-      Index files from a folder on your computer
+      Index files from a folder accessible to the connector
     </p>
     <div className="flex flex-wrap items-center gap-2">
       <span className="px-3 py-1.5 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-sm font-medium">
@@ -46,43 +46,30 @@ icon: "/logo/local-fs.svg"
 
 ## What is this?
 
-**Local FS** lets you point PipesHub at a **folder on your computer** so you can **search the files in it from PipesHub chat and the knowledge base** — just like any other connector.
+**Local FS** lets you search files from a folder that the **Novaplan AI connector process** can read. Novaplan manages your workspace, so confirm with [Novaplan AI support](/contact-us) that the folder is available to the connector before configuring a path.
 
 Three things to know up front:
 
-- PipesHub only **reads** the folder. It doesn't move, rename, copy, or delete anything.
+- The connector does not move, rename, or delete files in the source folder. Synchronization creates records in Novaplan AI and can upload file bytes to workspace storage for processing; do not treat it as a metadata-only scan.
 - There's **no login**. No password, no API key, no cloud account. You just give it a folder path.
-- It's a **personal** connector — you set it up under **Workspace Settings → Your Connectors**, and the files you index are searchable by **you** inside PipesHub. It is not shared with the rest of your team.
+- It's a **personal** connector — you set it up under **Workspace Settings → Your Connectors**, and the files you index are searchable by **you** inside Novaplan AI. It is not shared with the rest of your team.
 
 ### Words you'll see
 
 | Word | Means |
 |------|-------|
-| **Folder** | A regular folder on your machine (or on the machine running PipesHub). |
+| **Folder** | A directory made available to the Novaplan AI connector process. |
 | **Instance** | One Local FS setup pointing at one folder. You can have several — one per folder. |
-| **Sync** | The moment PipesHub reads the folder and updates what it knows about your files. |
+| **Sync** | The moment Novaplan AI reads the folder and updates what it knows about your files. |
 
-### One thing to check first — *which* computer?
+### Check folder availability first
 
-The folder needs to be readable by the **machine running the PipesHub connector**, which isn't always the same as the laptop in front of you.
-
-| How you run PipesHub | What "the folder" means |
-|------|---------|
-| **PipesHub on your own laptop** | A normal folder path on your laptop, e.g. `/Users/you/Documents/notes`. |
-| **PipesHub Desktop app** | Same — a folder on your laptop. |
-| **PipesHub in Docker / Kubernetes** | A folder that has been **mounted into the container**, e.g. host `/data` mounted as `/data` → use `/data`. |
-
-If you're using Docker or a server deployment and you're not sure, ask whoever set PipesHub up. If it's just on your laptop, you're fine — pick any folder.
-
-<Info>
-  Quick check for Docker users: `docker compose exec <connectors-service> ls /path/you/will/use`. If that lists your files, you're good. If it says "No such file" or "Permission denied", the folder isn't mounted yet.
-</Info>
+The folder must be readable **from the connector process**, not merely from your browser or laptop. A path such as `C:\Users\...` on your device is not automatically available in a managed Novaplan AI workspace. Ask Novaplan to confirm the folder's availability and permissions before you enter its path. This guide does not describe deploying Novaplan AI.
 
 ### What you need before you start
 
-1. A PipesHub account where you can open **Workspace Settings** (profile menu at the bottom of the main sidebar) and see **Your Connectors** under the **Personal** section.
-2. A folder you want to make searchable.
-3. About 2 minutes. There's no cloud setup at all.
+1. A Novaplan AI account where you can open **Workspace Settings** (profile menu at the bottom of the main sidebar) and see **Your Connectors** under the **Personal** section.
+2. A folder that Novaplan has confirmed the connector can read.
 
 ---
 
@@ -94,7 +81,9 @@ If you're using Docker or a server deployment and you're not sure, ask whoever s
 
 <div className="mt-4">
 
-### Step 1 — Open Local FS in PipesHub
+<div id="step-1--open-local-fs-in-novaplan-ai" />
+
+### Step 1 — Open Local FS in Novaplan AI
 
 1. In the main app, open your **user profile** menu at the bottom of the left sidebar, then choose **Workspace Settings**.
 2. In the workspace settings sidebar, under **Personal**, click **Your Connectors**.
@@ -129,7 +118,7 @@ The first tab is **Authenticate Instance**. Local FS has no login, so you'll see
   />
 </div>
 
-1. In **Instance name**, type a short name you'll recognise later (for example `My laptop` or `Work notes`).
+1. In **Instance name**, type a short name you'll recognise later (for example `Work notes`).
 2. Click **Next →** at the bottom.
 
 <Info>
@@ -153,13 +142,13 @@ The panel moves you to the **Configure Records** tab. This is the only tab where
 Under **Sync settings** there are two choices:
 
 - **Sync Strategy**
-  - **Scheduled** — PipesHub rescans the folder on its own. (Recommended.)
+  - **Scheduled** — Novaplan AI rescans the folder on its own. (Recommended.)
   - **Manual** — only rescans when you press **Sync** / **Full sync** yourself.
 - **Sync Interval** — how often a scheduled sync runs. **1 Hour** is a good starting point.
 
 Under **Additional settings**:
 
-- **Local folder** — the **path to the folder** you want to index. Use **Choose folder** if a picker is shown, or type the path directly. Make sure it's a path the **PipesHub connector** can see (see "Which computer?" above).
+- **Local folder** — the **path to the folder** you want to index. Use **Choose folder** if a picker is shown, or type the path directly. Make sure it's a path the **Novaplan AI connector** can see (see "Which computer?" above).
 - **Include subfolders** — leave this on to index everything inside the folder. Turn it off to index only the files at the top level.
 - **Batch size** — leave it as the default unless someone has told you otherwise.
 
@@ -168,14 +157,14 @@ Under **Additional settings**:
 </Info>
 
 <Warning>
-  Just turning the connector "on" later won't read your files by itself. PipesHub still needs either a **manual sync** or a **schedule** to actually walk the folder. Step 6 covers running a sync.
+  Just turning the connector "on" later won't read your files by itself. Novaplan AI still needs either a **manual sync** or a **schedule** to actually walk the folder. Step 6 covers running a sync.
 </Warning>
 
 ---
 
 ### Step 4 — (Optional) Narrow down what gets synced
 
-If your folder has lots of files you don't care about (build outputs, photos, downloads), you can tell PipesHub to skip them.
+If your folder has lots of files you don't care about (build outputs, photos, downloads), you can tell Novaplan AI to skip them.
 
 Scroll to **Indexing & sync filters** and click **+ Add filter**.
 
@@ -206,7 +195,7 @@ Quick examples:
 When you're done, click **Save Configuration** at the bottom of the panel.
 
 <Info>
-  No filters? That's fine for small folders. PipesHub will just sync everything it can read.
+  No filters? That's fine for small folders. Novaplan AI will just sync everything it can read.
 </Info>
 
 ---
@@ -228,7 +217,7 @@ Right now the row shows **Sync Paused** — nothing is happening yet.
 1. Find the **Sync Enabled** toggle on the right of the row.
 2. Click it on.
 
-The status flips to **Sync Enabled** and PipesHub is ready to scan your folder.
+The status flips to **Sync Enabled** and Novaplan AI is ready to scan your folder.
 
 ---
 
@@ -248,15 +237,15 @@ If you picked **Manual** sync strategy in Step 3, click **Sync** or **Full sync*
 
 In the panel you can see:
 
-- **Total** — how many files PipesHub has found.
+- **Total** — how many files Novaplan AI has found.
 - **Completed** — files that are fully indexed and searchable.
 - **Processing** — files being read right now.
 - **Queued** / **Not Started** — files waiting their turn.
-- **Failed** — files PipesHub couldn't read (usually a permission issue, or a corrupt/protected file).
-- **Sync** / **Full sync** — re-run a sync any time. **Full sync** rescans everything; **Sync** picks up only what's changed.
+- **Failed** — files Novaplan AI couldn't read (usually a permission issue, or a corrupt/protected file).
+- **Sync** / **Full sync** — request another synchronization. The accessible backend sync scans the selected folder again and may rebuild records; do not assume **Sync** processes only changed files. Confirm the behavior of these controls in your deployed workspace.
 - **Manage Configuration** — re-opens the two tabs from Steps 2–4 if you want to change the folder or filters later.
 
-That's it! 🎉 Once **Processing** and **Queued** drop to zero, your folder is fully searchable in PipesHub.
+Once **Processing** and **Queued** drop to zero, check **Completed** and **Failed** to see which files were indexed. Searchability depends on the file type and the parsers enabled for your workspace.
 
 </div>
 
@@ -268,30 +257,21 @@ That's it! 🎉 Once **Processing** and **Queued** drop to zero, your folder is 
 
 ### First sync (full scan)
 
-The first time, PipesHub walks **every file** in the folder you chose (and every subfolder, if you left that option on). Bigger folders take longer:
+The first time, Novaplan AI walks the files in the configured folder and its subfolders, if enabled. Duration depends on folder size, file types, parsing, and workspace capacity. Filters can reduce the number of files to process.
 
-| Number of files | Roughly how long |
-|-----------------|------------------|
-| Under 1,000 | A few minutes |
-| 1,000 – 10,000 | 10 – 30 minutes |
-| 10,000 – 100,000 | 30 minutes – 2 hours |
-| Over 100,000 | Several hours |
+### Later syncs
 
-Tip: filtering by file extension (e.g. PDFs only) makes the first sync dramatically faster.
-
-### Later syncs (just what changed)
-
-After the first sync, PipesHub only looks at **what's different** since last time:
+Later syncs update search records to reflect changes in the source folder:
 
 - New files — added to search.
 - Edited files — re-indexed.
 - Deleted files — removed from search.
 
-These are usually quick.
+The accessible backend path scans the folder again and resets its records before rebuilding them. Another event-based path can apply individual file changes. Duration therefore depends on the deployed sync path, folder size, file types, and indexing work; do not assume later runs are quick.
 
 ### Who can see the synced files?
 
-Local FS is registered as a **personal** connector. Only **your** PipesHub user can search the files indexed by your instance. It does not change permissions on disk in any way.
+Local FS is registered as a **personal** connector. Only **your** Novaplan AI user can search the files indexed by your instance. It does not change permissions on disk in any way.
 
 ### Scheduled vs Manual
 
@@ -306,7 +286,7 @@ Local FS is registered as a **personal** connector. Only **your** PipesHub user 
 
 </Accordion>
 
-<Accordion title="What PipesHub can read">
+<Accordion title="What Novaplan AI can read">
 
 <div className="mt-4">
 
@@ -315,6 +295,7 @@ Local FS is registered as a **personal** connector. Only **your** PipesHub user 
 These get parsed so you can search the actual contents:
 
 - Documents — **PDF**, **DOCX**, **PPTX**, **XLSX**, **ODT**, **RTF**
+- E-books — **EPUB** without copy protection (DRM). Their text can be searched, but they cannot be previewed in Novaplan AI; download the book to read it.
 - Plain text — **TXT**, **MD**, **CSV**, **JSON**, **XML**, **HTML**
 - Code — **.py**, **.js**, **.ts**, **.java**, and most others
 
@@ -343,11 +324,7 @@ Password-protected PDFs and Office files can't be indexed unless they're unlocke
 
 <Accordion title="The connector says it can't find my folder">
 
-This almost always means the path is on **your laptop** but PipesHub is running **somewhere else** (Docker, a server, Kubernetes).
-
-- If you're using Docker: the folder must be **mounted** into the container. Test with `docker compose exec <connectors-service> ls /your/path`.
-- Check Windows vs Mac/Linux path style matches the OS the connector is running on (e.g. don't paste `C:\Users\...` into a Linux container).
-- Make sure the user the connector runs as has **read permission** on the folder.
+The folder path may exist on your laptop but not in the managed workspace, or the connector may lack read permission. Ask [Novaplan AI support](/contact-us) to verify the path and access from the connector process. Do not use a path from your device unless Novaplan has confirmed it is available there.
 
 </Accordion>
 
@@ -355,14 +332,14 @@ This almost always means the path is on **your laptop** but PipesHub is running 
 
 - The folder might genuinely be empty, or all the files might live in subfolders while **Include subfolders** is off.
 - Your filters might be excluding everything — open **Manage Configuration** and double-check.
-- Confirm the files exist where you think they do (`ls` on Mac/Linux, File Explorer on Windows) on the **machine running the connector**.
+- Ask Novaplan to confirm the files exist at the configured path from the connector process.
 
 </Accordion>
 
 <Accordion title="Some files synced but they don't appear in search">
 
 - Allow a minute or two for indexing to finish — large files take longer.
-- Check the file type is one PipesHub can read inside (see **What PipesHub can read**).
+- Check the file type is one Novaplan AI can read inside (see **What Novaplan AI can read**).
 - Password-protected PDFs and Office files won't be indexed.
 - Files showing in **Failed** on the Overview panel will tell you why — usually a permissions problem.
 
@@ -372,16 +349,13 @@ This almost always means the path is on **your laptop** but PipesHub is running 
 
 - Make sure **Sync Strategy** is set to **Scheduled** and **Sync Interval** has a value.
 - Confirm **Sync Enabled** on the instance card is on (not paused).
-- Check the connector process is running and healthy.
+- If the settings look correct, contact Novaplan AI support to check the managed connector process.
 
 </Accordion>
 
-<Accordion title="It worked locally but broke after a deploy">
+<Accordion title="The folder stopped working after a workspace change">
 
-If you moved PipesHub to a new server or container, the old folder path probably doesn't exist there.
-
-- Re-mount your folder in the new environment (or copy the files).
-- Open the instance, click **Manage Configuration**, update **Local folder** to the new path, and save.
+The folder may no longer be available at its previous path. Ask Novaplan to check the folder's availability and permissions in the current workspace. If the path has changed, update **Local folder** under **Manage Configuration** after Novaplan confirms the replacement.
 
 </Accordion>
 
@@ -393,16 +367,16 @@ If you moved PipesHub to a new server or container, the old folder path probably
 
 <AccordionGroup type="single" collapsible>
 
-<Accordion title="Does PipesHub modify or delete my files?">
-  No. The connector only **reads** files to build search records. It never writes back to your folder.
+<Accordion title="Does Novaplan AI modify or delete my files?">
+  It does not write back to the source folder. It reads files to build search records, and some sync paths upload file bytes into Novaplan AI storage for processing. Ask Novaplan to confirm storage and retention controls for your workspace before connecting sensitive files.
 </Accordion>
 
 <Accordion title="Can I share the indexed files with my team?">
-  Local FS is registered as a **personal** connector — only your PipesHub user can search files indexed by your instance. For team-wide file sharing, use a cloud connector (S3, GCS, Azure Blob, Google Drive, OneDrive, etc.).
+  Local FS is registered as a **personal** connector — only your Novaplan AI user can search files indexed by your instance. For team-wide file sharing, use a cloud connector (S3, GCS, Azure Blob, Google Drive, OneDrive, etc.).
 </Accordion>
 
 <Accordion title="What happens if I delete a file on disk?">
-  On the next sync, PipesHub notices it's gone and removes it from search.
+  On the next sync, Novaplan AI notices it's gone and removes it from search.
 </Accordion>
 
 <Accordion title="Can I connect more than one folder?">
@@ -410,7 +384,7 @@ If you moved PipesHub to a new server or container, the old folder path probably
 </Accordion>
 
 <Accordion title="Is the folder path stored anywhere sensitive?">
-  The path is saved in your PipesHub configuration. There are no credentials to leak — only the path string itself.
+  The path is saved in your Novaplan AI configuration. Treat it as workspace configuration information and avoid entering credentials in the path field.
 </Accordion>
 
 </AccordionGroup>

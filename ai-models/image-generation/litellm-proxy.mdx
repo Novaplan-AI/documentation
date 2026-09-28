@@ -1,11 +1,11 @@
 ---
 title: LiteLLM Proxy
-description: "Configure PipesHub to generate images through a self-hosted LiteLLM Proxy gateway"
+description: "Configure Novaplan AI to generate images through a self-hosted LiteLLM Proxy gateway"
 ---
 
 # LiteLLM Proxy Image Generation Configuration
 
-PipesHub can generate images through a LiteLLM Proxy instance, routing to whichever image model you have configured in the proxy.
+Novaplan AI can generate images through a LiteLLM Proxy instance, routing to whichever image model you have configured in the proxy.
 
 ## Before you start
 
@@ -19,7 +19,7 @@ The address of your LiteLLM Proxy.
 
 **Default:** `http://host.docker.internal:4000`
 
-Use `host.docker.internal` rather than `localhost` when the proxy runs on the Docker host.
+Use the proxy URL that Novaplan confirms is reachable from the managed workspace. The default `host.docker.internal` works only in a compatible network setup; your computer's `localhost` is not a workspace endpoint.
 
 ### API Key *
 
@@ -27,13 +27,13 @@ The master key or a virtual key from your LiteLLM Proxy.
 
 ### Model Name *
 
-The image model as named in your proxy configuration, for example `dall-e-3` or `gpt-image-1`.
+Use the exact `model_name` of an image model that your proxy currently exposes. A proxy alias such as `company-image-model` is only an example; verify the upstream model behind it is still available.
 
 ## Optional Fields
 
 ### Model Friendly Name
 
-A label shown in the PipesHub interface so you can tell several configurations apart.
+A label shown in the Novaplan AI interface so you can tell several configurations apart.
 
 ## Related
 

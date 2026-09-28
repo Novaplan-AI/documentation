@@ -1,0 +1,62 @@
+---
+title: "Slack-Toolset"
+description: "Slack-Nachrichten, Kanäle und Reaktionen mit Agenten verwalten."
+icon: "/logo/slack.png"
+---
+
+## Überblick
+
+Mit dem Slack-Toolset können Agenten live in Slack suchen und Aktionen im Namen der angemeldeten Person ausführen. Eine Workspace-Administration konfiguriert die gemeinsame Slack-App unter **Workspace Settings → Actions**. Jede Person verbindet sich anschließend unter **Your actions**. Der [Slack-Konnektor](/de/connectors/slack/slack) dient der Synchronisierung von Inhalten für die Suche.
+
+| Bereich | Verfügbare Tools |
+| --- | --- |
+| Nachrichten senden und ändern | `send_message`, `send_direct_message`, `send_message_with_mentions`, `send_message_to_multiple_channels`, `reply_to_message`, `update_message`, `delete_message`, `schedule_message`, `get_scheduled_messages` |
+| Lesen und suchen | `get_channel_history`, `get_dm_history`, `get_unread_messages`, `get_thread_replies`, `get_message_permalink`, `search_all`, `search_messages` |
+| Kanäle und Personen | `fetch_channels`, `get_user_conversations`, `get_user_channels`, `get_channel_info`, `get_channel_members`, `get_channel_members_by_id`, `get_user_info`, `get_users_list`, `search_users`, `resolve_user`, `get_user_groups`, `get_user_group_info` |
+| Weitere Aktionen | `set_user_status`, `add_reaction`, `remove_reaction`, `get_reactions`, `pin_message`, `unpin_message`, `get_pinned_messages`, `upload_file_to_channel`, `check_token_info` |
+
+<Warning>
+  Das Toolset kann Nachrichten auch in mehreren Kanälen versenden oder löschen und Dateien in einen Kanal hochladen. Prüfen Sie Empfänger, Kanal, Nachrichtentext und Datei vor einer schreibenden Aktion.
+</Warning>
+
+## Slack-App und gemeinsame Instanz einrichten
+
+1. Öffnen Sie [Slack Apps](https://api.slack.com/apps), wählen Sie **Create New App** und erstellen Sie eine App für den gewünschten Slack-Workspace. Falls Installationen eingeschränkt sind, muss eine Workspace-Administration die App genehmigen.
+2. Öffnen Sie in Novaplan AI **Workspace Settings → Actions → Slack → + Setup** oder **Configure** und kopieren Sie die **Redirect URI**.
+3. Öffnen Sie in der Slack-App **OAuth & Permissions → Redirect URLs**, fügen Sie die URI hinzu und speichern Sie sie. Protokoll, Host, Pfad und abschließender Schrägstrich müssen exakt übereinstimmen.
+4. Fügen Sie unter **Bot Token Scopes** die Rechte für die tatsächlich benötigten Aktionen hinzu. Die vollständige Liste aus der Integrationsanleitung steht unten. Schreibrechte für Kanäle, Dateien und Pins sollten Sie nur für freigegebene Aktionen gewähren.
+5. Fügen Sie unter **User Token Scopes** `search:read` für die Slack-Suche und, falls Statusänderungen erlaubt sind, `users.profile:write` hinzu. Diese Scopes gehören nicht in den Bereich **Bot Token Scopes**.
+6. Kopieren Sie unter **Basic Information → App Credentials** die **Client ID** und das **Client Secret**. Hinterlegen Sie beide in der Slack-Aktion unter **Workspace Settings → Actions** und speichern Sie die Instanz. Bewahren Sie das Secret sicher auf.
+
+Wenn Sie Scopes später ändern, müssen bereits angemeldete Personen den Zugriff erneut autorisieren.
+
+### Slack-Scopes nach Funktion
+
+Die folgenden Rechte gehören in Slack unter **Bot Token Scopes**:
+
+| Funktion | Scopes |
+| --- | --- |
+| Nachrichten senden und ändern | `chat:write` |
+| Öffentliche Kanäle lesen und verwalten | `channels:read`, `channels:history`, `channels:write` |
+| Private Kanäle lesen und verwalten | `groups:read`, `groups:history`, `groups:write` |
+| Gruppennachrichten lesen und verwalten | `mpim:read`, `mpim:history`, `mpim:write` |
+| Direktnachrichten lesen und senden | `im:read`, `im:history`, `im:write` |
+| Personen und Profile finden | `users:read`, `users:read.email`, `users.profile:read` |
+| Dateien, Reaktionen und angeheftete Nachrichten | `files:read`, `files:write`, `reactions:read`, `reactions:write`, `pins:read`, `pins:write` |
+| Benutzergruppen lesen | `usergroups:read` |
+
+Unter **User Token Scopes** gehören `search:read` für die Suche in Nachrichten und Dateien sowie `users.profile:write` für das Ändern des persönlichen Status. Diese beiden Rechte nicht in **Bot Token Scopes** eintragen. Stimmen Sie die Auswahl mit den erlaubten Agentenaktionen ab; die Tabelle ist die dokumentierte Funktionsliste, kein pauschaler Freigabevorschlag.
+
+## Persönlich verbinden und verwenden
+
+1. Öffnen Sie **Your actions → Slack** und wählen Sie **Authenticate with OAuth**.
+2. Wählen Sie im Slack-Fenster den richtigen Workspace, prüfen Sie die Berechtigungen und wählen Sie **Allow**. Nutzen Sie laut Integrationsanleitung dieselbe E-Mail-Adresse wie für Ihr Novaplan-Konto.
+3. Fügen Sie die Slack-Aktion im **Agent Builder** als Tool hinzu.
+
+Nennen Sie bei Nachrichten den Zielkanal oder die empfangende Person eindeutig. Wenn die Anmeldung scheitert, prüfen Sie Redirect URL, Client-Zugangsdaten, App-Freigabe und die persönlichen Berechtigungen. Bei Fragen hilft [Novaplan Support](/de/contact-us).
+
+Für Direktnachrichten ist die E-Mail-Adresse der empfangenden Person am eindeutigsten. Eine unbekannte E-Mail-Adresse oder ein bloßer Namensteil wird nicht als ähnlicher Treffer verwendet. Scheitert der Verzeichniszugriff, meldet der Agent den Fehler statt „Person nicht gefunden“. Listen mit vielen Nutzern, Kanälen oder Gesprächen lesen alle verfügbaren Seiten; bei einem Fehler währenddessen wird die Liste als unvollständig gemeldet.
+
+Dieses per OAuth verbundene Toolset unterstützt Slack-Token-Rotation. Die Anmeldung wird vor Ablauf des ungefähr zwölf Stunden gültigen Zugriffstokens erneuert. Bei einer vorübergehenden Verzögerung versuchen Sie es nach einigen Minuten erneut. Lehnt Slack die gespeicherte Anmeldung ab, verbinden Sie Ihr Konto unter **Your actions → Slack** erneut.
+
+Für vergangene Nachrichten verwenden Sie den [Slack-Konnektor](/de/connectors/slack/slack), der Inhalte für die Suche synchronisiert. Das Toolset greift live auf Slack zu. Der Agent kann damit etwa in einem Thread antworten, einer Nachricht eine Reaktion hinzufügen oder die jüngsten Nachrichten eines freigegebenen Kanals anzeigen.

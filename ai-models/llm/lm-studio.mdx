@@ -1,11 +1,11 @@
 ---
 title: LM Studio
-description: "Configure PipesHub to use local models served by LM Studio"
+description: "Configure Novaplan AI to use local models served by LM Studio"
 ---
 
 # LM Studio Configuration
 
-LM Studio is a desktop application that downloads open-source models and serves them from your own machine through an OpenAI-compatible API. Nothing leaves your computer, which makes it a good fit for private or offline work.
+LM Studio is a desktop application that serves downloaded models through an OpenAI-compatible API. When connected to a managed Novaplan AI workspace, requests travel between the workspace and the LM Studio server. Coordinate the network route and data handling with Novaplan before using it.
 
 ## Before you start
 
@@ -24,16 +24,7 @@ The machine running LM Studio needs enough memory to hold the model. As a rough 
 
 The address of the LM Studio server, including the `/v1` path.
 
-**Default:** `http://host.docker.internal:1234/v1`
-
-**Which value to use:**
-
-| Where LM Studio runs | Endpoint URL to enter |
-|---|---|
-| On the same machine as PipesHub | `http://host.docker.internal:1234/v1` |
-| On another machine on your network | `http://192.168.1.50:1234/v1` |
-
-PipesHub runs inside a container, so `http://localhost:1234/v1` points at the PipesHub container rather than your desktop. Use `host.docker.internal` instead.
+**Application default:** `http://host.docker.internal:1234/v1`. Use this only if Novaplan confirms that the managed workspace can reach the LM Studio server through that hostname. Otherwise enter the server's actual reachable URL. Your computer's `localhost` address is not reachable from the managed workspace by default.
 
 If LM Studio runs on a different machine, enable **Serve on Local Network** in its server settings, otherwise it only accepts connections from its own host.
 
@@ -55,11 +46,11 @@ LM Studio does not check API keys. Leave this blank unless you have put the serv
 
 ### Model Friendly Name
 
-A label shown in the PipesHub interface so you can tell several configurations apart. If you leave it blank, the model name is used.
+A label shown in the Novaplan AI interface so you can tell several configurations apart. If you leave it blank, the model name is used.
 
 ### Context Length
 
-The size of the model's context window, in tokens. PipesHub uses this number to decide how much retrieved content it can safely include in a prompt. Set it to the value published for your model. If you leave it blank, PipesHub uses a conservative default.
+The size of the model's context window, in tokens. Novaplan AI uses this number to decide how much retrieved content it can safely include in a prompt. Set it to the value published for your model. If you leave it blank, Novaplan AI uses a conservative default.
 
 ### Is Multimodal
 
@@ -71,9 +62,9 @@ Turn this on if the model performs extended reasoning before answering. It is on
 
 ## Troubleshooting
 
-**"Connection refused".** The LM Studio server is not running, or you used `localhost` where `host.docker.internal` is needed.
+**"Connection refused".** Check that LM Studio is serving the model and ask Novaplan to verify the endpoint from the managed workspace.
 
-**Requests time out on the first message.** LM Studio loads the model into memory on the first request, which can take a minute for a large model. Load the model in the Developer tab before using it from PipesHub.
+**Requests time out on the first message.** LM Studio loads the model into memory on the first request, which can take a minute for a large model. Load the model in the Developer tab before using it from Novaplan AI.
 
 **"Model not found".** The identifier does not match. Copy it from the `curl` output above rather than typing it by hand.
 

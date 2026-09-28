@@ -1,15 +1,15 @@
 ---
 title: OpenAI
-description: "Configure PipesHub Workplace AI to use different OpenAI models"
+description: "Configure Novaplan AI to use different OpenAI models"
 ---
 
 # OpenAI Configuration
 
 ![OpenAI Configuration Interface](/images/ai-models/llm/OpenAI_LLMConfig.png)
 
-*The OpenAI configuration screen in PipesHub where you'll enter your API Key and Model Name*
+*The OpenAI configuration screen in Novaplan AI where you'll enter your API Key and Model Name*
 
-PipesHub allows you to integrate with OpenAI's powerful language models to enable AI features in your workspace.
+Novaplan AI allows you to integrate with OpenAI's powerful language models to enable AI features in your workspace.
 
 ## Required Fields
 
@@ -23,22 +23,18 @@ The OpenAI API Key is required to authenticate your requests to OpenAI's service
 3. Create a new secret key
 4. Copy the key immediately (it will only be shown once)
 
-**Security Note:** Your API key should be kept secure and never shared publicly. PipesHub securely stores your API key and uses it only for authenticating requests to OpenAI.
+**Security note:** Treat this API key as a secret. Use the approved workspace setup flow, and coordinate access and rotation with Novaplan and your provider administrator.
 
 ### Model Name
 
-The Model Name field defines which OpenAI model you want to use with PipesHub.
+The Model Name field defines which OpenAI model you want to use with Novaplan AI.
 
-**Popular OpenAI models include:**
-- `gpt-5` - OpenAI's latest flagship model, best for complex reasoning and agentic tasks.
-- `gpt-5-mini` - Faster, more cost-effective option for many use cases.
-- `gpt-5-nano` - Fastest, most cost-efficient version of GPT-5.
+**Current model examples:** OpenAI's [model catalog](https://developers.openai.com/api/docs/models) lists `gpt-6-astra` for demanding work, `gpt-6-sol` as a balance of capability and cost, and `gpt-6-luna` for high-volume tasks. These are examples, not a promise that every model or feature is already enabled in your Novaplan workspace.
 
 **How to choose a model:**
-- For the latest features and best performance, select `gpt-5`
-- For routine tasks and lower latency, select `gpt-5-mini`
-- For very low latency and cost-effective tasks, select `gpt-5-nano`
-- Check OpenAI's [model documentation](https://platform.openai.com/docs/models) for the most up-to-date options
+- Copy the exact model ID available to your OpenAI project and review its capabilities, latency, and pricing
+- Ask Novaplan to test the selected model with the deployed integration before assigning it to agents; tool calling and other features can depend on the API used
+- Check OpenAI's [current model documentation](https://developers.openai.com/api/docs/models) whenever you change models
 
 ## Configuration Steps
 
@@ -63,4 +59,4 @@ As shown in the image above:
 - Ensure your OpenAI account has billing set up if you're using paid models
 - Check that the model name is spelled correctly and is available on your OpenAI account tier
 
-For additional support, refer to the [OpenAI documentation](https://platform.openai.com/docs/overview) or contact PipesHub support on our Discord.
+For additional support, refer to the [OpenAI documentation](https://platform.openai.com/docs/overview) or contact [Novaplan AI support](mailto:support@novaplan.ai).

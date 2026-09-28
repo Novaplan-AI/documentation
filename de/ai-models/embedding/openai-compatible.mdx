@@ -1,0 +1,26 @@
+---
+title: "OpenAI-kompatible Embedding-API"
+description: "Embedding-Modelle über eine OpenAI-kompatible API mit Novaplan AI verbinden."
+---
+
+# OpenAI-kompatible Embeddings konfigurieren
+
+![Konfigurationsansicht für OpenAI-kompatible Embeddings](/images/ai-models/embedding/OpenAICompatible_EmbeddingConfig.png)
+
+Diese Option verbindet Novaplan AI mit einem Dienst, der das OpenAI-Format für Embedding-Anfragen unterstützt. Nutzen Sie sie für einen Anbieter ohne eigene Konfigurationskarte oder für einen von Ihrer Organisation betriebenen kompatiblen Endpoint. Novaplan unterstützt Sie bei der Anbindung.
+
+## Erforderliche Angaben
+
+| Feld | Bedeutung |
+| --- | --- |
+| **Endpoint URL** | Erreichbare API-Basisadresse, üblicherweise mit `/v1/`. Beispiele sind `https://api.openai.com/v1` und `https://your-proxy.example.com/v1/`. Novaplan AI ergänzt den Pfad für Embedding-Anfragen. |
+| **API Key** | Schlüssel des gewählten Dienstes. Erstellen Sie ihn in dessen Konto oder Einstellungen und bewahren Sie ihn geschützt auf. |
+| **Model Name** | Genaue Embedding-Modell-ID des Dienstes, beispielsweise `text-embedding-3-small` bei einem passenden OpenAI-Proxy. |
+
+Der Endpoint muss OpenAI-formatierte Embedding-Anfragen unterstützen, insbesondere `POST /v1/embeddings`, und aus der Novaplan-AI-Umgebung erreichbar sein.
+
+1. Klicken Sie auf der Karte **OpenAI Compatible** auf **Configure**.
+2. Geben Sie **Endpoint URL**, **API Key** und **Model Name** ein.
+3. Klicken Sie auf **Add Model**, um die Angaben zu speichern und prüfen zu lassen.
+
+Alle drei Felder sind erforderlich. Bei Fehlern prüfen Sie die Basisadresse, den Schlüssel, die exakte Modell-ID und die Unterstützung des Embedding-Formats. Nutzung und Abrechnung richten sich nach dem jeweiligen Dienst. [Novaplan Support](/de/contact-us) hilft bei der Verbindung.

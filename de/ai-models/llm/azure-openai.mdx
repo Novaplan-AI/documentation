@@ -1,0 +1,37 @@
+---
+title: "Azure OpenAI"
+description: "Azure-OpenAI-Bereitstellungen mit Novaplan AI verbinden."
+---
+
+# Azure OpenAI konfigurieren
+
+![Konfigurationsansicht für Azure OpenAI](/images/ai-models/llm/AzureOpenAI_LLMConfig.png)
+
+Novaplan AI kann Modelle aus Ihrer Azure-OpenAI-Ressource verwenden. Novaplan unterstützt Sie bei der Einrichtung. Die Ressource, das Modell-Deployment und die API-Berechtigung müssen in Ihrem Azure-Abonnement verfügbar sein.
+
+## Erforderliche Angaben
+
+| Feld | Woher Sie den Wert erhalten |
+| --- | --- |
+| **Endpoint** | Öffnen Sie im [Azure-Portal](https://portal.azure.com) Ihre Azure-OpenAI-Ressource und kopieren Sie unter **Keys and Endpoint** die vollständige Adresse, beispielsweise `https://your-resource-name.openai.azure.com/`. |
+| **Deployment Name** | Öffnen Sie in derselben Ressource **Model deployments** und kopieren Sie den Namen Ihres Deployments. Das ist der von Ihnen vergebene **Bereitstellungsname**, nicht automatisch die Modell-ID. |
+| **API Key** | Kopieren Sie unter **Keys and Endpoint** entweder **Key 1** oder **Key 2**. Bewahren Sie den Schlüssel geschützt auf. |
+| **Model Name** | Tragen Sie die genaue Modell-ID ein, die für Ihr Azure-OpenAI-Deployment vorgesehen ist. |
+
+Die [aktuelle Azure-OpenAI-Modellübersicht](https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/models) enthält auch die GPT-6-Familie, beispielsweise `gpt-6-astra`. Tragen Sie die Modell-ID ein, die zu Ihrem tatsächlichen Azure-Deployment gehört. Ein Eintrag im Katalog garantiert weder Verfügbarkeit in Ihrer Region oder Ihrem Kontingent noch die Unterstützung aller Funktionen durch die bereitgestellte Novaplan-Integration. Prüfen Sie Leistung, Latenz, Kosten und benötigte Agenten-Tools mit Novaplan vor dem produktiven Einsatz.
+
+## Modell hinzufügen
+
+1. Klicken Sie auf der Azure-OpenAI-Anbieterkarte auf **Configure**.
+2. Geben Sie **Endpoint**, **Deployment Name**, **API Key** und **Model Name** ein.
+3. Klicken Sie auf **Add Model**, um die Angaben zu speichern und prüfen zu lassen.
+
+Alle vier Felder sind erforderlich. API-Aufrufe zählen zu Kontingent und Abrechnung Ihrer Azure-Ressource. Falls Ihre Organisation Netzwerkzugriff beschränkt, muss die Verbindung zur Ressource zugelassen sein.
+
+## Fehler beheben
+
+- **Authentifizierung schlägt fehl:** Prüfen Sie Schlüssel und vollständigen Endpoint einschließlich Ressourcenname.
+- **Deployment oder Modell nicht gefunden:** Vergleichen Sie den **Deployment Name** mit der Azure-Bereitstellung und den **Model Name** mit einem dafür verfügbaren Modell.
+- **Aufruf wird abgewiesen:** Prüfen Sie Abonnement, Kontingent, Modellzugang, Region und gegebenenfalls IP- oder Netzwerkrichtlinien.
+
+Weitere Informationen finden Sie in der [Azure-OpenAI-Dokumentation](https://learn.microsoft.com/en-us/azure/ai-services/openai/). Bei der Novaplan-Konfiguration hilft [Support](/de/contact-us).

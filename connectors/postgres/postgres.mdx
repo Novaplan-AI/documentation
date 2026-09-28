@@ -1,6 +1,6 @@
 ---
 title: "PostgreSQL"
-description: "Sync schemas, tables, and row data from PostgreSQL into PipesHub"
+description: "Sync schemas, tables, and row data from PostgreSQL into Novaplan AI"
 icon: "/logo/postgres.png"
 ---
 
@@ -28,7 +28,7 @@ icon: "/logo/postgres.png"
 
 ## Overview
 
-The PostgreSQL connector indexes schemas, tables, and row data from a PostgreSQL database into PipesHub so your AI assistant can search across structured data alongside your other knowledge sources.
+The PostgreSQL connector indexes schemas, tables, and row data from a PostgreSQL database into Novaplan AI so your AI assistant can search across structured data alongside your other knowledge sources.
 
 ### What Gets Synced
 
@@ -42,6 +42,10 @@ The PostgreSQL connector indexes schemas, tables, and row data from a PostgreSQL
 ---
 
 ## Configuration Guide
+
+<Info>
+  Novaplan prepares your workspace. The local PostgreSQL setup below is optional and installs a **database for testing**, not Novaplan AI. A managed Novaplan connector cannot reach a database on your laptop through `localhost`; use a host reachable from your workspace and confirm the required network access with Novaplan Support.
+</Info>
 
 <AccordionGroup>
 
@@ -84,20 +88,20 @@ Download the installer from the [pgAdmin Downloads page](https://www.pgadmin.org
 
 ### Create a user for the connector
 
-Create a dedicated read-only role for PipesHub. Run these as a superuser (e.g. `postgres`) against the target database:
+Create a dedicated read-only role for Novaplan AI. Run these as a superuser (e.g. `postgres`) against the target database:
 
 ```sql
-CREATE USER pipeshub_user WITH PASSWORD 'a_strong_password';
-GRANT CONNECT ON DATABASE bird_mini_dev TO pipeshub_user;
-GRANT USAGE ON SCHEMA public TO pipeshub_user;
-GRANT SELECT ON ALL TABLES IN SCHEMA public TO pipeshub_user;
-ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO pipeshub_user;
+CREATE USER novaplan_reader WITH PASSWORD 'a_strong_password';
+GRANT CONNECT ON DATABASE bird_mini_dev TO novaplan_reader;
+GRANT USAGE ON SCHEMA public TO novaplan_reader;
+GRANT SELECT ON ALL TABLES IN SCHEMA public TO novaplan_reader;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO novaplan_reader;
 ```
 
 The connector also reads schema metadata from `information_schema` and `pg_catalog`, which are available to any authenticated user by default.
 
 <Info>
-  Replace `pipeshub_user` and `a_strong_password` with your own values, and repeat the `USAGE`/`SELECT`/`ALTER DEFAULT PRIVILEGES` grants for each schema you plan to sync.
+  Replace `novaplan_reader` and `a_strong_password` with your own values, and repeat the `USAGE`/`SELECT`/`ALTER DEFAULT PRIVILEGES` grants for each schema you plan to sync.
 </Info>
 
 </Accordion>
@@ -108,7 +112,7 @@ If you already have data, skip this step.
 
 1. Download the dataset from [birdsql/bird_mini_dev on Hugging Face](https://huggingface.co/datasets/birdsql/bird_mini_dev).
 2. Click **Download BIRD Mini-Dev Complete Package** and extract the zip.
-3. Locate `BIRD_dev.sql` in `minidev_0703/minidev/MINIDEV_postgresql`.
+3. Locate `BIRD_dev.sql` in the downloaded PostgreSQL folder (`MINIDEV_postgresql`). The parent folder may differ between package versions.
 4. Load it with `psql`:
 
 **Windows** (use double quotes and Windows paths):
@@ -133,10 +137,10 @@ The dataset includes Formula 1 tables: `circuits`, `constructors`, `constructorr
 
 </Accordion>
 
-<Accordion title="Step 3: Configure the connector in PipesHub" icon="plug">
+<Accordion title="Step 3: Configure the connector in Novaplan AI" icon="plug">
 
-1. In PipesHub, open **Connector Settings**.
-2. In the **Available** tab, find the **PostgreSQL** card and click **Configure**.
+1. In Novaplan AI, open **Workspace Settings → Connectors**.
+2. Find **PostgreSQL** and choose **+ Setup** or **Configure**.
 
 <div className="text-center">
   <img
@@ -152,10 +156,10 @@ The dataset includes Formula 1 tables: `circuits`, `constructors`, `constructorr
 
 | Field | Example |
 |-------|---------|
-| **Host** | `localhost` |
+| **Host** | `db.example.com` — a host reachable from the Novaplan workspace |
 | **Port** | `5432` |
-| **Database** | `bird_mini_dev` |
-| **User** | `postgres` |
+| **Database** | `example_db` |
+| **User** | `novaplan_reader` |
 | **Password** | your password |
 
 #### Option 2: Connection String
@@ -163,7 +167,7 @@ The dataset includes Formula 1 tables: `circuits`, `constructors`, `constructorr
 Use a single PostgreSQL connection string:
 
 ```
-postgresql://postgres:your_password@localhost:5432/bird_mini_dev
+postgresql://novaplan_reader:your_password@db.example.com:5432/example_db
 ```
 
 If your password contains special characters, URL-encode them:
@@ -179,7 +183,7 @@ If your password contains special characters, URL-encode them:
 Example: `p@ss:word` becomes `p%40ss%3Aword`
 
 ```
-postgresql://postgres:p%40ss%3Aword@localhost:5432/bird_mini_dev
+postgresql://novaplan_reader:p%40ss%3Aword@db.example.com:5432/example_db
 ```
 
 <div className="text-center">
@@ -194,7 +198,7 @@ postgresql://postgres:p%40ss%3Aword@localhost:5432/bird_mini_dev
 
 <Accordion title="Step 4: Configure sync filters" icon="filter">
 
-Sync filters control what is pulled from PostgreSQL. Anything excluded by a filter is never downloaded.
+Sync filters select which schemas and tables are processed and limit the rows fetched from each selected table. The accessible connector still lists schema and table names to populate the selectors and run a sync. Excluding a table does not mean its name or other database metadata is never read. Use a database account with access only to the intended data when source-level isolation is required.
 
 <div className="text-center">
   <img
@@ -209,7 +213,7 @@ Sync filters control what is pulled from PostgreSQL. Anything excluded by a filt
 | **Schemas** | Pick the schemas to sync (e.g. `public`). Leave empty to sync all schemas. | All schemas |
 | **Tables** | Pick the tables to sync (e.g. `public.account`). Leave empty to sync all tables in the selected schemas. | All tables |
 | **Max rows per table** | Maximum number of rows to fetch from each table. | 1000 |
-| **Index tables** | When enabled, table content is indexed for AI search. When disabled, only schema metadata is indexed. | Enabled |
+| **Index tables** | Controls automatic AI indexing of synchronized table records; turning it off does not by itself restrict source access. | Enabled |
 
 <Info>
   Schemas and tables are dropdowns populated from your database after the credentials are saved — pick from the list rather than typing names by hand.
@@ -268,9 +272,9 @@ The connector exposes both schema (so the assistant knows which tables and colum
 For read-only sync, grant `USAGE` on the schemas and `SELECT` on the tables you want to sync:
 
 ```sql
-GRANT USAGE ON SCHEMA public TO pipeshub_user;
-GRANT SELECT ON ALL TABLES IN SCHEMA public TO pipeshub_user;
-ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO pipeshub_user;
+GRANT USAGE ON SCHEMA public TO novaplan_reader;
+GRANT SELECT ON ALL TABLES IN SCHEMA public TO novaplan_reader;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO novaplan_reader;
 ```
 
 The connector also reads schema metadata from `information_schema` and `pg_catalog`, which are available to any authenticated user by default.
@@ -279,8 +283,8 @@ The connector also reads schema metadata from `information_schema` and `pg_catal
 
 <Accordion title="Can I connect to a remote PostgreSQL server?">
 
-Yes. Use the public host and port. Make sure:
-- `pg_hba.conf` allows connections from the PipesHub deployment IP range.
+Yes. Use a host and port reachable from the Novaplan workspace through the network path approved by your database administrator and Novaplan. The database does not need to be exposed publicly if a private connection is available. Make sure:
+- `pg_hba.conf` allows connections from the Novaplan AI deployment IP range.
 - The PostgreSQL service is listening on a reachable interface (`listen_addresses` in `postgresql.conf`).
 - Any firewall or security group allows traffic on the chosen port (default `5432`).
 
@@ -304,7 +308,7 @@ So `p@ss:word` becomes `p%40ss%3Aword` in the connection string.
 
 <Accordion title="How do I keep large tables from blowing up the sync?">
 
-Use **Max rows per table** in sync filters to cap how many rows are fetched per table, narrow the **Schemas** and **Tables** filters to just what you need, and disable **Index tables** if you only want schema metadata in search.
+Use **Max rows per table** to cap how many rows are fetched per selected table, narrow **Schemas** and **Tables** to the intended data, and turn off **Index tables** if table records should not be indexed automatically. For a source access boundary, also limit the database account's permissions.
 
 </Accordion>
 

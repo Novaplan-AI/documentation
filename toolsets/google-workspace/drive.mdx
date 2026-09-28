@@ -34,6 +34,7 @@ The Google Drive toolset enables AI agents to manage files and folders in Google
 
 - List and search files across Drive
 - View file details and metadata
+- Read supported file content when the agent has access
 - Create folders and organize content
 - Check file permissions and sharing settings
 - Access shared drives
@@ -51,6 +52,11 @@ The Google Drive toolset enables AI agents to manage files and folders in Google
 | `get_drive_info` | Get information about the user's Drive |
 | `get_shared_drives` | Get list of shared drives |
 | `get_file_permissions` | Get permissions for a specific file |
+| `get_file_content` | Read the text content of a supported file by ID |
+
+<Info>
+  `get_file_content` supports common document and text formats, including Google Docs, Sheets, and Slides. The accessible tool implementation rejects folders, unsupported Google Workspace formats, and files larger than 50 MB. Confirm the available tools and limits in your Enterprise workspace before relying on this action.
+</Info>
 
 ---
 
@@ -86,16 +92,18 @@ The Google Drive toolset enables AI agents to manage files and folders in Google
 2. Configure the OAuth consent screen with your app information
 3. Add the required scopes (see Step 6)
 
-### Step 4: Get Redirect URI from PipesHub
+<div id="step-4-get-redirect-uri-from-novaplan-ai" />
 
-1. In PipesHub, go to **Settings > Toolsets**
-2. Find **Drive** and click **"Configure"**
+### Step 4: Get Redirect URI from Novaplan AI
+
+1. In Novaplan AI, open **Workspace Settings → Actions**.
+2. Find **Drive** and choose **+ Setup** or **Configure**.
 3. Copy the **Redirect URI** shown in the dialog
 
 <div className="text-center">
   <img
-    src="/images/toolsets/drive/pipeshub-config.png"
-    alt="Copy Redirect URI from PipesHub"
+    src="/images/toolsets/drive/novaplan-config.png"
+    alt="Copy Redirect URI from Novaplan AI"
     className="block mx-auto w-11/12"
   />
 </div>
@@ -105,12 +113,12 @@ The Google Drive toolset enables AI agents to manage files and folders in Google
 1. Navigate to **APIs & Services > Credentials**
 2. Click **"Create Credentials"** > **"OAuth client ID"**
 3. Select **"Web application"**
-4. Set the **Authorized redirect URI** to the URI from PipesHub
+4. Set the **Authorized redirect URI** to the URI from Novaplan AI
 5. Click **"Create"**
 6. Copy your **Client ID** and **Client Secret**
 
 <Info>
-  The redirect URI must match exactly your PipesHub URL.
+  The redirect URI must match exactly your Novaplan AI URL.
 </Info>
 
 ### Step 6: Add Required Scopes
@@ -122,16 +130,18 @@ Add these OAuth scopes in the **OAuth consent screen > Scopes** section:
 - `https://www.googleapis.com/auth/drive.file` - Access files created by the app
 - `https://www.googleapis.com/auth/drive.metadata.readonly` - Read file metadata
 
-### Step 7: Configure in PipesHub
+<div id="step-7-configure-in-novaplan-ai" />
 
-1. Return to the PipesHub Drive configuration dialog
+### Step 7: Configure in Novaplan AI
+
+1. Return to the Novaplan AI Drive configuration dialog
 2. Enter your **Client ID** and **Client Secret**
 3. Click **"Authenticate"**
 
 <div className="text-center">
   <img
     src="/images/toolsets/drive/enter-credentials.png"
-    alt="Enter Credentials in PipesHub"
+    alt="Enter Credentials in Novaplan AI"
     className="block mx-auto w-11/12"
   />
 </div>
@@ -150,7 +160,7 @@ Add these OAuth scopes in the **OAuth consent screen > Scopes** section:
   />
 </div>
 
-4. You'll be redirected back to PipesHub
+4. You'll be redirected back to Novaplan AI
 5. The toolset will show **"Authenticated"** status
 
 </Accordion>
@@ -168,10 +178,10 @@ Add these OAuth scopes in the **OAuth consent screen > Scopes** section:
 | Aspect | Drive Connector | Drive Toolset |
 |--------|----------------|---------------|
 | **Purpose** | Sync and index files for search | Enable agents to perform file actions |
-| **Data Flow** | One-way (import data into PipesHub) | Two-way (read and write via API) |
-| **When to Use** | Query/search files and folders | Create files, manage folders |
+| **Data Flow** | One-way (import data into Novaplan AI) | Two-way (read and write via API) |
+| **When to Use** | Query indexed files and folders | Search Drive, read supported files, or create folders |
 
-**Example:** Use **Drive Connector** to search and retrieve document content. Use **Drive Toolset** to let agents create new documents or manage folders.
+**Example:** Use **Drive Connector** to search indexed documents. Use **Drive Toolset** to inspect a Drive file or create a folder. The tools listed here do not include document creation.
 
 </Accordion>
 
@@ -182,7 +192,7 @@ Add these OAuth scopes in the **OAuth consent screen > Scopes** section:
 ## Usage Tips
 
 **How do I find files?**  
-Ask your agent to "search Drive for [filename]" or "find my presentation about Q4 results". The agent searches both file names and content.
+Ask your agent to "search Drive for [filename]". The Drive tool searches file names for plain-text queries; a structured Drive query can use other supported fields. To read a supported file's content, ask the agent to open the file it found.
 
 **How do I create folders?**  
 Ask to "create a folder called Project Files" and specify the parent folder if needed. Folders help organize your Drive content.

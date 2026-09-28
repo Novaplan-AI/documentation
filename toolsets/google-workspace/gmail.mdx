@@ -94,7 +94,7 @@ The Gmail toolset enables AI agents to send, read, and manage emails in Gmail.
 1. Navigate to **APIs & Services > OAuth consent screen**
 2. Choose **External** user type (or **Internal** for Workspace accounts)
 3. Fill in app information:
-   - **App name**: e.g., "PipesHub Gmail Toolset"
+   - **App name**: e.g., "Novaplan AI Gmail Toolset"
    - **User support email**: Your email
    - **Developer contact email**: Your email
 4. Click **"Save and Continue"**
@@ -104,23 +104,29 @@ The Gmail toolset enables AI agents to send, read, and manage emails in Gmail.
 1. On the **Scopes** page, click **"Add or Remove Scopes"**
 2. Search and add these Gmail API scopes:
 
-**Required Scopes:**
+**Scopes requested by the accessible toolset implementation:**
 - `https://www.googleapis.com/auth/gmail.send` - Send emails
 - `https://www.googleapis.com/auth/gmail.readonly` - Read emails
-- `https://www.googleapis.com/auth/gmail.modify` - Modify labels and metadata
+- `https://www.googleapis.com/auth/gmail.modify` - Broader mailbox permission requested by the implementation; it also authorizes the documented draft action
+
+<Warning>
+  The accessible toolset creates drafts with Gmail's `users.drafts.create` endpoint. Google accepts `gmail.modify` for that call, but also accepts the narrower [`gmail.compose` scope](https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.drafts/create). The toolset does not list a label-management action, while [Google classifies `gmail.modify` as a restricted scope](https://developers.google.com/workspace/gmail/api/auth/scopes). Confirm the deployed scope request and whether draft creation can use narrower access before approving this broader permission; changing the application's scopes requires an implementation and consent-flow check.
+</Warning>
 
 3. Click **"Update"** and **"Save and Continue"**
 
-### Step 5: Get Redirect URI from PipesHub
+<div id="step-5-get-redirect-uri-from-novaplan-ai" />
 
-1. In PipesHub, go to **Settings > Toolsets**
-2. Find **Gmail** and click **"Configure"**
+### Step 5: Get Redirect URI from Novaplan AI
+
+1. In Novaplan AI, open **Workspace Settings → Actions**.
+2. Find **Gmail** and choose **+ Setup** or **Configure**.
 3. Copy the **Redirect URI** shown in the dialog
 
 <div className="text-center">
   <img
-    src="/images/toolsets/gmail/pipeshub-config.png"
-    alt="Copy Redirect URI from PipesHub"
+    src="/images/toolsets/gmail/novaplan-config.png"
+    alt="Copy Redirect URI from Novaplan AI"
     className="block mx-auto w-11/12"
   />
 </div>
@@ -130,9 +136,9 @@ The Gmail toolset enables AI agents to send, read, and manage emails in Gmail.
 1. Navigate to **APIs & Services > Credentials**
 2. Click **"Create Credentials"** > **"OAuth client ID"**
 3. Select **"Web application"**
-4. Enter a name (e.g., "PipesHub Gmail")
+4. Enter a name (e.g., "Novaplan AI Gmail")
 5. Under **"Authorized redirect URIs"**, click **"Add URI"**
-6. Paste the **Redirect URI** from PipesHub
+6. Paste the **Redirect URI** from Novaplan AI
 7. Click **"Create"**
 
 <Info>
@@ -141,16 +147,18 @@ The Gmail toolset enables AI agents to send, read, and manage emails in Gmail.
 
 8. Copy the **Client ID** and **Client Secret** from the popup
 
-### Step 7: Configure in PipesHub
+<div id="step-7-configure-in-novaplan-ai" />
 
-1. Return to the PipesHub Gmail configuration dialog
+### Step 7: Configure in Novaplan AI
+
+1. Return to the Novaplan AI Gmail configuration dialog
 2. Enter your **Client ID** and **Client Secret**
 3. Click **"Authenticate"**
 
 <div className="text-center">
   <img
     src="/images/toolsets/gmail/enter-credentials.png"
-    alt="Enter Credentials in PipesHub"
+    alt="Enter Credentials in Novaplan AI"
     className="block mx-auto w-11/12"
   />
 </div>
@@ -169,7 +177,7 @@ The Gmail toolset enables AI agents to send, read, and manage emails in Gmail.
   />
 </div>
 
-4. You'll be redirected back to PipesHub
+4. You'll be redirected back to Novaplan AI
 5. The toolset will show **"Authenticated"** status
 
 </Accordion>
@@ -187,10 +195,10 @@ The Gmail toolset enables AI agents to send, read, and manage emails in Gmail.
 | Aspect | Gmail Connector | Gmail Toolset |
 |--------|----------------|---------------|
 | **Purpose** | Sync and index emails for search | Enable agents to perform email actions |
-| **Data Flow** | One-way (import data into PipesHub) | Two-way (read and write via API) |
+| **Data Flow** | One-way (import data into Novaplan AI) | Two-way (read and write via API) |
 | **When to Use** | Query/search email history and conversations | Send emails, manage messages, create drafts |
 
-**Example:** Use **Gmail Connector** to search past email conversations. Use **Gmail Toolset** to let agents send replies or forward messages.
+**Example:** Use **Gmail Connector** to search past email conversations. Use **Gmail Toolset** to let agents draft, send, or reply to messages. The listed tools do not include a dedicated forwarding action.
 
 </Accordion>
 

@@ -1,11 +1,13 @@
 ---
 title: "User Groups"
-description: "Create and manage user groups to organize members and control permissions"
+description: "Create user groups, manage membership, and check resource access"
 ---
 
 ## Overview
 
-User groups let administrators organize workspace members into logical collections for permission management. Users can belong to multiple groups, and every group can contain multiple users. Group membership is inherited during invitation and can be updated at any time.
+User groups let administrators organize workspace members into logical collections. Users can belong to multiple groups, and every group can contain multiple users. Membership can be assigned during invitation and updated later. Check how a resource uses a group before relying on membership as an access grant.
+
+Novaplan manages most workspace setup and administration. These steps remain as a reference for administrators; coordinate changes to group membership and access with the Novaplan team.
 
 <div style={{ textAlign: "center" }}>
   <img
@@ -20,12 +22,12 @@ User groups let administrators organize workspace members into logical collectio
 1. **Grouping Users:** Organize users into collections that reflect their team, function, or access needs.
 2. **Multiple Users per Group:** A single group can contain any number of members.
 3. **Multiple Groups per User:** A user can belong to any number of groups.
-4. **Permissions Inheritance:** Users inherit permissions assigned to each of their groups.
+4. **Resource access:** Group membership can matter where a resource is shared with that group. The **Access Permissions** controls on the Groups page are marked *Coming Soon*; do not assume a new group grants access by itself.
 5. **Custom Groups:** Create your own groups alongside the built-in system groups. System groups (for example, the everyone group) cannot be deleted.
 
 ## Navigating to Groups
 
-1. Sign in to your PipesHub account with administrator credentials
+1. Sign in to your Novaplan AI account with administrator credentials
 2. Open the user menu and click **Workspace Settings**
 3. In the workspace sidebar, expand the **People** section and select **Groups**
 
@@ -51,14 +53,14 @@ The page shows a table of all groups with columns for **Name**, **Description**,
 </div>
 
 <Tip>
-  **Access Permissions** for groups are shown as *Coming Soon* in the current UI — group membership itself controls access today.
+  **Access Permissions** for groups are shown as *Coming Soon* in the available UI. After changing membership, test the intended resource with a member account and an account outside the group.
 </Tip>
 
 ### Adding Users to Groups
 
 **Option 1 — During User Invitation**
 
-While inviting a user from the **Users** page, use the **Add to a User Group** field in the invite panel to assign one or more groups. New users inherit permissions from the groups you select.
+While inviting a user from the **Users** page, use the **Add to a User Group** field in the invite panel to assign one or more groups. Check the invited user's effective access after they join.
 
 <div style={{ textAlign: "center" }}>
   <img
@@ -104,7 +106,7 @@ While inviting a user from the **Users** page, use the **Add to a User Group** f
 3. Confirm the action
 
 <Warning>
-  Deleting a group is irreversible. Members of the group are not deleted, but they lose any permissions that were inherited from it. System groups cannot be deleted.
+  Deleting a group is irreversible. Its members remain in the workspace, but access tied to that group may change. Check affected resources and members before deletion. System groups cannot be deleted.
 </Warning>
 
 ### Conclusion

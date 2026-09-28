@@ -28,7 +28,7 @@ icon: "/logo/zoom.png"
 
 ## Overview
 
-Zoom is the video conferencing and online meeting platform used by teams for calls, webinars, and collaborative sessions. The Zoom connector brings your organization's meeting history — who attended, recording links, and AI Companion transcripts — into PipesHub, so everything said in a meeting is searchable alongside your other knowledge sources.
+Zoom is the video conferencing and online meeting platform used by teams for calls, webinars, and collaborative sessions. The Zoom connector brings supported meeting history — who attended, recording links, and available AI Companion transcripts — into Novaplan AI for search alongside your other knowledge sources.
 
 ### What Gets Synced
 
@@ -40,6 +40,10 @@ Zoom is the video conferencing and online meeting platform used by teams for cal
 | **Cloud Recording Link** | Zoom share URL to the recording (when available) — recording video/audio files are **not** downloaded |
 | **AI Companion Transcripts** | Timestamped transcripts from Zoom AI Companion |
 | **Permissions** | Host = **Owner**; alt-hosts, participants, invitees = **Read** |
+
+<Note>
+  The connector uses Zoom's meeting-report endpoint. [Zoom's API reference](https://developers.zoom.us/docs/api/meetings/) says this report includes meetings with at least two unique participants. A meeting with only one participant may therefore be absent even when it is within the 180-day sync window. Transcript text is available only when Zoom provides an AI Companion transcript.
+</Note>
 
 ---
 
@@ -88,17 +92,19 @@ In the app creation dialog, choose:
   The choice between **Admin-managed** and **User-managed** is **permanent** — it cannot be changed after the app is created. Admin-managed is required because the connector uses admin-scoped Report APIs to sync meeting data for all users.
 </Warning>
 
-#### Step 3: Get the Redirect URL from PipesHub
+<div id="step-3-get-the-redirect-url-from-novaplan-ai" />
 
-Before filling in the Zoom form, copy the Redirect URL from PipesHub so the values match exactly.
+#### Step 3: Get the Redirect URL from Novaplan AI
 
-1. In PipesHub, go to **Workspace Settings** → **Connectors**, find **Zoom**, and click **+ Setup** for a new instance.
+Before filling in the Zoom form, copy the Redirect URL from Novaplan AI so the values match exactly.
+
+1. In Novaplan AI, go to **Workspace Settings** → **Connectors**, find **Zoom**, and click **+ Setup** for a new instance.
 2. The connector panel opens as a right-side drawer. On the **Authenticate Instance** tab, copy the **Redirect URL**.
 
 <div className="text-center">
   <img
     src="/images/connectors/zoom/zoom_config.png"
-    alt="PipesHub Zoom Authenticate Instance tab — copy the Redirect URL"
+    alt="Novaplan AI Zoom Authenticate Instance tab — copy the Redirect URL"
     className="block mx-auto w-11/12"
   />
 </div>
@@ -107,7 +113,7 @@ Before filling in the Zoom form, copy the Redirect URL from PipesHub so the valu
 
 In the Zoom app builder, open **Basic Information** and scroll to **OAuth Information**:
 
-1. Paste the PipesHub **Redirect URL** into the **OAuth Redirect URL** field.
+1. Paste the Novaplan AI **Redirect URL** into the **OAuth Redirect URL** field.
 2. Add the same URL to the **OAuth Allow List** below.
 3. Click **Save**.
 
@@ -152,8 +158,8 @@ Open the **Scopes** section in the app builder and add the following **admin-sco
 
 1. Go to **Basic Information → App Credentials** in the Zoom app builder.
 2. Copy:
-   - **Client ID** — used as **Client ID** in PipesHub.
-   - **Client Secret** — used as **Client Secret** in PipesHub.
+   - **Client ID** — used as **Client ID** in Novaplan AI.
+   - **Client Secret** — used as **Client Secret** in Novaplan AI.
 
 <div className="text-center">
   <img
@@ -164,12 +170,12 @@ Open the **Scopes** section in the app builder and add the following **admin-sco
 </div>
 
 <Warning>
-  Store the Client Secret securely. It can be regenerated if needed, but you'll have to update your PipesHub configuration with the new value and re-authorize.
+  Store the Client Secret securely. It can be regenerated if needed, but you'll have to update your Novaplan AI configuration with the new value and re-authorize.
 </Warning>
 
 #### Step 7: Authenticate Instance tab — enter credentials
 
-Return to the PipesHub connector drawer. On the **Authenticate Instance** tab:
+Return to the Novaplan AI connector drawer. On the **Authenticate Instance** tab:
 
 1. Confirm the **Redirect URL** matches the OAuth Redirect URL you saved in Zoom in Step 4.
 2. Enter:
@@ -192,7 +198,7 @@ On the **Authorize** tab, all the OAuth authorization work happens. The tab show
 <div className="text-center">
   <img
     src="/images/connectors/zoom/connector_authenticate_option.png"
-    alt="PipesHub Authorize tab with the Authenticate button"
+    alt="Novaplan AI Authorize tab with the Authenticate button"
     className="block mx-auto w-11/12"
   />
 </div>
@@ -213,7 +219,7 @@ On the **Authorize** tab, all the OAuth authorization work happens. The tab show
   If the consent screen shows **"Only admins can install this app"** or blocks the install, confirm the signed-in Zoom user has admin privileges on the account.
 </Warning>
 
-4. The popup closes and returns you to PipesHub. The connector tile shows an **Authenticated** badge with a **Reauthenticate** option.
+4. The popup closes and returns you to Novaplan AI. The connector tile shows an **Authenticated** badge with a **Reauthenticate** option.
 5. Click **Next** to move to the **Configure Records** tab.
 
 #### Step 9: Configure Records tab — sync settings and indexing
@@ -249,7 +255,7 @@ On the **Configure Records** tab, control how the connector syncs and what gets 
 
 - **Index Meeting Transcripts** (default: enabled) — include AI Companion meeting transcripts in search. Disable if you want to sync meetings without indexing transcript content.
 
-Click **Save** to save your configuration. PipesHub confirms the instance is ready with a final dialog — **"Instance is configured and ready to sync"** — offering two choices: **I'll do it later** or **Start syncing now**.
+Click **Save** to save your configuration. Novaplan AI confirms the instance is ready with a final dialog — **"Instance is configured and ready to sync"** — offering two choices: **I'll do it later** or **Start syncing now**.
 
 <div className="text-center">
   <img
@@ -292,10 +298,10 @@ The Zoom connector syncs the following from your Zoom account:
 **Invalid client credentials error:**
 - Verify Client ID and Client Secret are correct — no extra spaces
 - Check that the OAuth app is still active in the Zoom Marketplace
-- Regenerate the secret if necessary and update PipesHub
+- Regenerate the secret if necessary and update Novaplan AI
 
 **OAuth Redirect URL mismatch:**
-- The Redirect URL in PipesHub must match the **OAuth Redirect URL** saved in Zoom exactly — protocol, host, path, and trailing slash
+- The Redirect URL in Novaplan AI must match the **OAuth Redirect URL** saved in Zoom exactly — protocol, host, path, and trailing slash
 - Also ensure the same URL is on the **OAuth Allow List** in Zoom
 
 **Scopes missing on the consent screen:**
@@ -308,6 +314,7 @@ The Zoom connector syncs the following from your Zoom account:
 **No meetings appear after sync:**
 - Confirm the authorizing admin can see the account's users (e.g., via Zoom Admin → User Management)
 - If users show up but no meetings, check that **Report API** access is enabled for your plan — Report APIs require Pro or higher
+- The meeting-report endpoint excludes meetings with fewer than two unique participants; check a meeting that had at least two participants before diagnosing the connection.
 - Initial sync only covers the **last 180 days**; older meetings are intentionally excluded
 
 **Transcripts missing:**
@@ -316,11 +323,11 @@ The Zoom connector syncs the following from your Zoom account:
 - If transcripts fail with Zoom error `3322`, the meeting simply has no transcript — this is expected, not an error
 
 **Sync stuck or slow:**
-- The Report API `GET /v2/report/meetings/{id}/participants` is a Heavy-rate endpoint (~10–20 req/s). For accounts with thousands of meetings, the initial 180-day backfill can take an hour or more.
+- The Report API `GET /v2/report/meetings/{id}/participants` is a Heavy-rate endpoint. Actual limits and first-sync duration depend on the Zoom account, workload, and current API policy.
 - The connector processes meetings with a concurrency cap to stay under rate limits — this is intentional.
 
 <Warning>
-  If you change the app's Client Secret, scopes, or Redirect URL in the Zoom Marketplace, you must update the configuration in PipesHub and re-authorize on the **Authorize** tab.
+  If you change the app's Client Secret, scopes, or Redirect URL in the Zoom Marketplace, you must update the configuration in Novaplan AI and re-authorize on the **Authorize** tab.
 </Warning>
 
 </Accordion>
@@ -328,6 +335,8 @@ The Zoom connector syncs the following from your Zoom account:
 </AccordionGroup>
 
 ## Data Sync Behavior
+
+The endpoint and checkpoint details below describe the accessible connector source. Confirm them against the deployed Enterprise version before using them as an operational contract.
 
 <AccordionGroup>
 
@@ -357,15 +366,15 @@ Every sync runs in this order:
 
 ### Rate-limit awareness
 
-- `GET /v2/report/meetings/{id}/participants` is Zoom's rate-limit bottleneck (Heavy-rate tier, ~10–20 req/s).
+- `GET /v2/report/meetings/{id}/participants` is a Heavy-rate endpoint; check [Zoom's current API limits](https://developers.zoom.us/docs/api/rest/rate-limits/) for the connected account.
 - The connector processes meetings with a concurrency cap to stay safely under the limit.
 - Throttled responses trigger exponential backoff; long-running syncs will continue across scheduled intervals.
 
 ### Transcripts
 
-- Transcripts are **not pre-cached** — they are fetched live when the record is opened in PipesHub.
+- Transcripts are **not pre-cached** — they are fetched live when the record is opened in Novaplan AI.
 - Zoom error `3322` means the meeting has no transcript (expected for meetings without AI Companion).
-- Zoom errors `3001`/`3301` mean the meeting/transcript expired — silently skipped.
+- Zoom error `3001` means the meeting was not found or has expired. Error `3301` means no recording exists for that meeting ([Zoom API reference](https://developers.zoom.us/docs/api/meetings/)). The connector does not return transcript text for either response; check the meeting and its recording in Zoom before treating this as an authorization problem.
 
 </Accordion>
 
@@ -382,7 +391,7 @@ Every sync runs in this order:
 | Aspect | Zoom Connector | Zoom Toolset |
 |--------|----------------|--------------|
 | **Purpose** | Sync and index Zoom meetings, participants, recordings, and transcripts for search | Enable agents to schedule meetings, update recurring series, fetch transcripts on demand |
-| **Data Flow** | One-way (import data into PipesHub) | Two-way (read and write via API) |
+| **Data Flow** | One-way (import data into Novaplan AI) | Two-way (read and write via API) |
 | **Zoom app type** | **Admin-managed** (single admin authorization) | **User-managed** (each user authorizes individually) |
 | **Scopes** | Admin-scoped (`*:admin`) | User-scoped |
 | **When to Use** | Query/search past meetings, find transcripts | Book meetings, cancel occurrences, pull transcripts in-conversation |
@@ -400,7 +409,7 @@ The connector syncs meeting history for **every user in the account**, not just 
 - **Fetch meeting participants** → `report:read:list_meeting_participants:admin`
 - **Meeting details and recording share URLs** across the account → `meeting:read:meeting:admin`, `cloud_recording:read:list_recording_files:admin`, `cloud_recording:read:meeting_transcript:admin`
 
-Admin scopes (`*:admin`) are only available to **Admin-managed** apps. A User-managed app cannot request them and would only return data the authorizing user personally hosted — which defeats the purpose of an organization-wide knowledge connector. Admin-managed also means a single authorization covers the entire account, so users don't need to individually connect their Zoom to PipesHub.
+Admin scopes (`*:admin`) are only available to **Admin-managed** apps. A User-managed app cannot request them and would only return data the authorizing user personally hosted — which defeats the purpose of an organization-wide knowledge connector. Admin-managed also means a single authorization covers the entire account, so users don't need to individually connect their Zoom to Novaplan AI.
 
 </Accordion>
 
@@ -411,6 +420,6 @@ Admin scopes (`*:admin`) are only available to **Admin-managed** apps. A User-ma
 <div className="text-center mt-12 p-6 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl">
   <h3 className="text-lg font-semibold mb-2">Ready to Get Started?</h3>
   <p className="text-gray-600 dark:text-gray-400">
-    Connect your Zoom account to PipesHub in just a few minutes. Follow the step-by-step guide above to enable organization-wide meeting and transcript search.
+    Coordinate the admin-managed Zoom app and requested scopes with your administrator and Novaplan. After the first sync, verify which meetings and available transcripts appear for users with different Zoom access.
   </p>
 </div>

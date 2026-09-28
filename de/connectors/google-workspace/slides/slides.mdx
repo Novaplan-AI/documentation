@@ -1,0 +1,33 @@
+---
+title: "Google Slides"
+description: "Präsentationen über den Google Drive Konnektor synchronisieren."
+icon: "/logo/gslides.png"
+---
+
+<Note>
+  Google Slides ist derzeit kein eigenständiger Konnektor. In Drive gespeicherte Präsentationen werden über den [Google Drive Konnektor](/de/connectors/google-workspace/drive/drive) synchronisiert. Mit **Sync Files with Extensions** können Sie den Import auf Präsentationen beschränken.
+</Note>
+
+## Präsentationen synchronisieren
+
+Novaplan übernimmt den Großteil der Einrichtung. Für eine eigene Anpassung:
+
+1. Richten Sie den [Google Drive Konnektor](/de/connectors/google-workspace/drive/drive) ein.
+2. Öffnen Sie nach der Authentifizierung **Configure Records**.
+3. Fügen Sie unter **Sync Filters** den Filter **Sync Files with Extensions** hinzu.
+
+<img src="/images/connectors/googleWorkspace/common/sheet1.png" alt="Filter Sync Files with Extensions für Google Drive hinzufügen" />
+
+4. Wählen Sie als Operator **In**.
+5. Wählen Sie `Google Slides`, `pptx` und `ppt`.
+
+<img src="/images/connectors/googleWorkspace/common/slides2.png" alt="Präsentationstypen im Dateiendungsfilter auswählen" />
+
+Der Filter **Sync Files with Extensions** gleicht native Google Slides über ihren Google-Dateityp und PowerPoint-Dateien über die Endung ab. **In** synchronisiert nur die ausgewählten Typen. Ohne diesen Filter synchronisiert Drive alle unterstützten Dateitypen, einschließlich Präsentationen.
+
+| Präsentationstyp | Filterwert |
+| --- | --- |
+| Google Slides | `Google Slides` |
+| Microsoft PowerPoint | `pptx`, `ppt` |
+
+Authentifizierung und weitere Einstellungen beschreibt die [Google Drive Anleitung](/de/connectors/google-workspace/drive/drive#konnektoreinstellungen).

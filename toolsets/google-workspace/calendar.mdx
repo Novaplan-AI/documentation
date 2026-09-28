@@ -86,16 +86,18 @@ The Google Calendar toolset enables AI agents to manage calendar events and sche
 2. Configure the OAuth consent screen with your app information
 3. Add the required scopes (see Step 6)
 
-### Step 4: Get Redirect URI from PipesHub
+<div id="step-4-get-redirect-uri-from-novaplan-ai" />
 
-1. In PipesHub, go to **Settings > Toolsets**
-2. Find **Calendar** and click **"Configure"**
+### Step 4: Get Redirect URI from Novaplan AI
+
+1. In Novaplan AI, open **Workspace Settings → Actions**.
+2. Find **Calendar** and choose **+ Setup** or **Configure**.
 3. Copy the **Redirect URI** shown in the dialog
 
 <div className="text-center">
   <img
-    src="/images/toolsets/calendar/pipeshub-config.png"
-    alt="Copy Redirect URI from PipesHub"
+    src="/images/toolsets/calendar/novaplan-config.png"
+    alt="Copy Redirect URI from Novaplan AI"
     className="block mx-auto w-11/12"
   />
 </div>
@@ -105,33 +107,39 @@ The Google Calendar toolset enables AI agents to manage calendar events and sche
 1. Navigate to **APIs & Services > Credentials**
 2. Click **"Create Credentials"** > **"OAuth client ID"**
 3. Select **"Web application"**
-4. Set the **Authorized redirect URI** to the URI from PipesHub
+4. Set the **Authorized redirect URI** to the URI from Novaplan AI
 5. Click **"Create"**
 6. Copy your **Client ID** and **Client Secret**
 
 <Info>
-  The redirect URI must match exactly your PipesHub URL.
+  The redirect URI must match exactly your Novaplan AI URL.
 </Info>
 
 ### Step 6: Add Required Scopes
 
 Add these OAuth scopes in the **OAuth consent screen > Scopes** section:
 
-**Required Scopes:**
+**Scopes requested by the accessible toolset implementation:**
 - `https://www.googleapis.com/auth/calendar` - Full calendar access
 - `https://www.googleapis.com/auth/calendar.events` - Manage events
-- `https://www.googleapis.com/auth/gmail.send` - Send calendar invites and notifications
+- `https://www.googleapis.com/auth/gmail.send` - Gmail send permission requested by the implementation
 
-### Step 7: Configure in PipesHub
+<Warning>
+  The accessible Calendar tools send invitations through the Calendar API's `sendUpdates` option; they do not call the Gmail API. Google's [event creation](https://developers.google.com/workspace/calendar/api/v3/reference/events/insert) and [event update](https://developers.google.com/workspace/calendar/api/v3/reference/events/update) references list Calendar scopes for those calls, not `gmail.send`. The accessible implementation still requests `gmail.send`. Ask Novaplan to confirm or remove that extra request in the deployed Enterprise toolset before approving it.
+</Warning>
 
-1. Return to the PipesHub Calendar configuration dialog
+<div id="step-7-configure-in-novaplan-ai" />
+
+### Step 7: Configure in Novaplan AI
+
+1. Return to the Novaplan AI Calendar configuration dialog
 2. Enter your **Client ID** and **Client Secret**
 3. Click **"Authenticate"**
 
 <div className="text-center">
   <img
     src="/images/toolsets/calendar/enter-credentials.png"
-    alt="Enter Credentials in PipesHub"
+    alt="Enter Credentials in Novaplan AI"
     className="block mx-auto w-11/12"
   />
 </div>
@@ -150,7 +158,7 @@ Add these OAuth scopes in the **OAuth consent screen > Scopes** section:
   />
 </div>
 
-4. You'll be redirected back to PipesHub
+4. You'll be redirected back to Novaplan AI
 5. The toolset will show **"Authenticated"** status
 
 </Accordion>
@@ -168,7 +176,7 @@ Add these OAuth scopes in the **OAuth consent screen > Scopes** section:
 | Aspect | Calendar Connector | Calendar Toolset |
 |--------|-------------------|-----------------|
 | **Purpose** | Sync and index calendar events for search | Enable agents to perform calendar actions |
-| **Data Flow** | One-way (import data into PipesHub) | Two-way (read and write via API) |
+| **Data Flow** | One-way (import data into Novaplan AI) | Two-way (read and write via API) |
 | **When to Use** | Query/search events and meetings | Create events, update meetings, manage calendar |
 
 **Example:** Use **Calendar Connector** to search past and upcoming events. Use **Calendar Toolset** to let agents schedule meetings or update event details.
@@ -186,3 +194,13 @@ Ask your agent to "schedule a meeting" and provide the date, time, title, and at
 
 **How do I update an event?**  
 Ask to "move my 2pm meeting to 3pm" or "add sarah@example.com to the team meeting". The agent will find and update the event.
+
+To move an event, give both the new start and end times. With only one, the event remains unchanged and the agent asks for both.
+
+**Which time zone should I use?**
+
+Include the time zone when it matters, such as "10:00 Europe/Berlin". A time without an offset uses the time zone supplied with the event, or UTC if none is supplied. Invalid time zones and an end before the start are refused. A one-day all-day event covers the requested date in its time zone.
+
+**What if an action fails?**
+
+The agent reports whether Google is rate-limiting, sign-in needs renewal, or permission is missing. If creating an event succeeds but reading back its meeting link fails, the agent reports that the event exists so it is not created twice.

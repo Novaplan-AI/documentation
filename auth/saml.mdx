@@ -4,24 +4,26 @@ description: "Configure Single Sign-On for your workspace using your organizatio
 icon: "user-lock"
 ---
 
-SAML SSO lets your users log in to PipesHub using your organization's existing Identity Provider (IdP) — such as Okta, Azure AD, OneLogin, or Google Workspace — without needing a separate password.
+SAML SSO lets your users log in to Novaplan AI using your organization's existing Identity Provider (IdP) — such as Okta, Azure AD, OneLogin, or Google Workspace — without needing a separate password.
 
 <Warning>
-  SAML configuration requires admin access to both PipesHub and your Identity Provider.
+  SAML configuration requires admin access to both Novaplan AI and your Identity Provider.
 </Warning>
 
 ---
 
 ## Configuring SAML SSO
 
-### Step 1 — Register PipesHub in Your Identity Provider
+<div id="step-1--register-novaplan-ai-in-your-identity-provider" />
 
-Before configuring SAML in PipesHub, you need to add PipesHub as an application in your IdP.
+### Step 1 — Register Novaplan AI in Your Identity Provider
+
+Before configuring SAML in Novaplan AI, you need to add Novaplan AI as an application in your IdP.
 
 1. Log in to your IdP's admin console (e.g. Okta, Azure AD, OneLogin, Google Workspace)
 2. Create a new SAML application (often called "Add Application" or "Create App Integration")
-3. Set the **Single Sign-On URL (ACS URL)** — copy this value from the PipesHub SAML configuration panel
-4. Set the **Audience (Entity ID)** — copy this from the PipesHub configuration panel as well
+3. Set the **Single Sign-On URL (ACS URL)** — copy this value from the Novaplan AI SAML configuration panel
+4. Set the **Audience (Entity ID)** — copy this from the Novaplan AI configuration panel as well
 5. Configure **attribute mappings** to include the user's email address in the SAML response
 6. Save the application and note the following — you'll need them in Step 3:
    - **SSO Entry Point URL** (your IdP's login URL)
@@ -58,7 +60,7 @@ Before configuring SAML in PipesHub, you need to add PipesHub as an application 
 
 ### Step 2 — Find Your Email Attribute Key
 
-Your IdP includes the user's email in the SAML response, but different providers use different attribute names for it. You need to enter the correct name in PipesHub so it can identify your users.
+Your IdP includes the user's email in the SAML response, but different providers use different attribute names for it. You need to enter the correct name in Novaplan AI so it can identify your users.
 
 **Option A: Check your IdP settings**
 
@@ -81,9 +83,11 @@ Your IdP includes the user's email in the SAML response, but different providers
 | OneLogin          | `NameID` / `User.Email` |
 | Custom IdP        | Check your IdP settings |
 
-### Step 3 — Configure SAML SSO in PipesHub
+<div id="step-3--configure-saml-sso-in-novaplan-ai" />
 
-1. Go to **Workspace → Authentication**
+### Step 3 — Configure SAML SSO in Novaplan AI
+
+1. Go to **Workspace Settings → Authentication**
 
 <Info>
   Only workspace admins can access Authentication Settings.
@@ -108,10 +112,11 @@ Your IdP includes the user's email in the SAML response, but different providers
 | SSO Entry Point           | Yes      | Your IdP's login URL (copied from Step 1). |
 | X.509 Certificate         | Yes      | Your IdP's signing certificate (copied from Step 1). |
 | Email Attribute Key       | Yes      | The attribute name for the user's email (from Step 2). |
-| Entity ID                 | No       | Your Service Provider entity ID (optional). |
-| Logout URL                | No       | Your IdP's logout URL (optional). |
+| SP Entity ID (Issuer)     | —        | Read-only service-provider identifier. Copy the displayed value into the IdP application's Audience or Entity ID field. |
 | Provider Name             | No       | A label like "Okta" or "Azure AD". If set, the login button shows "Continue with [Provider Name]". |
-| Just-in-Time Provisioning | No       | When enabled (default), users who exist in your IdP but not in PipesHub are automatically created on their first login. |
+| Just-in-Time Provisioning | No       | When enabled (default), users who exist in your IdP but not in Novaplan AI are automatically created on their first login. |
+
+Novaplan normally creates the workspace and invites users. For invitation-based access, turn **Just-in-Time Provisioning** off and verify that an invited user can sign in while an uninvited user cannot. Coordinate this setting with Novaplan. Confirm the displayed ACS URL and SP Entity ID against the deployed workspace before registering them with your IdP.
 
 <Info>
   The **Save** button stays disabled until all three required fields are filled in.
@@ -122,8 +127,12 @@ Your IdP includes the user's email in the SAML response, but different providers
 5. Click **Edit** on the Authentication Settings page, toggle **SAML SSO** on, and click **Save** to activate it
 
 <Warning>
-  Only one authentication method can be active at a time. Turn off any currently active method before enabling SAML SSO.
+  The reviewed workspace UI can enable several sign-in methods. Test SAML with an invited account before disabling Password or One-Time Password, and agree with Novaplan on an administrator recovery path. The UI warns when all password and email-code methods are switched off in favor of external sign-in.
 </Warning>
+
+<Note>
+  SAML can appear alongside Password or One-Time Password as **alternative methods in one sign-in step**. The current upstream implementation does not support SAML as one of several **sequential steps** (for example, SAML followed by an email code). Ask Novaplan to verify any multi-step policy in the deployed Enterprise workspace before enabling it.
+</Note>
 
 ---
 
@@ -131,11 +140,11 @@ Your IdP includes the user's email in the SAML response, but different providers
 
 Once SAML SSO is enabled, users can log in as follows:
 
-1. Go to the PipesHub login page
+1. Go to the Novaplan AI login page
 2. Click **Sign in with SSO** (or **Continue with [Provider Name]** if a provider name was configured)
 3. You'll be redirected to your organization's IdP login page
 4. Enter your corporate credentials
-5. You'll be automatically redirected back to PipesHub and logged in
+5. You'll be automatically redirected back to Novaplan AI and logged in
 
 ---
 
@@ -143,7 +152,8 @@ Once SAML SSO is enabled, users can log in as follows:
 
 | Issue | What to Do |
 |-------|------------|
-| SSO button is not visible on the login page | Check that SAML SSO is enabled in **Workspace → Authentication** |
+| SSO button is not visible on the login page | Check that SAML SSO is enabled in **Workspace Settings → Authentication** |
 | Login fails after entering IdP credentials | Verify the SSO Entry Point URL and X.509 Certificate are correct in the configuration panel |
-| "JIT Disabled" error on first login | Ask your admin to enable Just-in-Time Provisioning, or have your admin create your account in PipesHub manually |
+| "JIT Disabled" error on first login | For invitation-based access, ask your admin or Novaplan to invite the user and confirm that their IdP email matches the invited account. Enable Just-in-Time Provisioning only if automatic account creation is part of your approved access policy. |
 | Login redirects back to login page with an error | Ensure the Email Attribute Key matches the attribute name your IdP uses for email |
+| A direct API authentication request cannot complete SAML | SAML requires browser redirects; use the workspace's SAML sign-in route rather than posting SAML credentials to `POST /api/v1/userAccount/authenticate`. Confirm the route in the deployed workspace. |

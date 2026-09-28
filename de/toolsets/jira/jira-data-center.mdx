@@ -1,0 +1,76 @@
+---
+title: "Jira-Data-Center-Toolset"
+description: "Vorgänge in einer selbst betriebenen Jira-Instanz durch Agenten bearbeiten."
+icon: "/logo/jira.png"
+---
+
+## Überblick
+
+Mit dem Jira-Data-Center-Toolset können Agenten Vorgänge suchen, anlegen und aktualisieren sowie Kommentare hinzufügen. Es greift zum Zeitpunkt der Aktion auf Ihre selbst betriebene Jira-Instanz zu. Für von Atlassian gehostete Instanzen verwenden Sie das [Jira-Cloud-Toolset](/de/toolsets/jira/jira). Für die Suche in synchronisierten Daten verwenden Sie zusätzlich den [Jira-Data-Center-Konnektor](/de/connectors/jira/jira-data-center).
+
+| Verfügbare Tools | Zweck |
+| --- | --- |
+| `get_create_issue_fields`, `create_issue`, `update_issue` | Pflichtfelder ermitteln, Vorgang anlegen oder ändern. |
+| `get_issue`, `search_issues` | Vorgang lesen oder mit JQL suchen. |
+| `add_comment`, `get_comments` | Kommentare hinzufügen oder lesen. |
+| `get_projects`, `get_project`, `get_project_metadata` | Projekte, Vorgangstypen und Komponenten untersuchen. |
+| `search_users`, `get_current_user`, `validate_connection` | Benutzer finden, eigene Identität und Verbindung prüfen. |
+
+Schreibaktionen laufen mit den Rechten der jeweils angemeldeten Jira-Person. Prüfen Sie vor dem produktiven Einsatz, welche Agenten Vorgänge erstellen, Status ändern oder Kommentare veröffentlichen dürfen.
+
+## Anmeldung vorbereiten
+
+Das Toolset bietet **Personal Access Token** und **Basic Authentication**, jedoch kein OAuth aus der Atlassian Developer Console. Persönliche Tokens sind laut Quellanleitung ab Jira Core 8.14 verfügbar. Bei älteren Instanzen oder deaktivierten Tokens kann Basic Authentication verwendet werden.
+
+Für ein persönliches Token öffnen Sie in Jira **Profile → Personal Access Tokens → Create token**, vergeben einen Namen und ein Ablaufdatum gemäß Ihrer Richtlinie und kopieren das Token sofort. Es wird nur einmal angezeigt. Bei Basic Authentication benötigen Sie Ihren Jira-**Benutzernamen** und das Passwort; der Benutzername ist nicht zwingend die E-Mail-Adresse.
+
+## Gemeinsame Instanz anlegen
+
+1. Eine Administratorin oder ein Administrator öffnet in Novaplan AI **Workspace Settings → Actions**.
+2. Wählen Sie **Jira Data Center → + Setup**.
+3. Legen Sie die **Authentication method** fest und geben Sie **Instance Name** sowie **Base URL** der Jira-Instanz ein, etwa `https://jira.example.com` ohne abschließenden Schrägstrich.
+4. Speichern Sie mit **Create**.
+
+Die Administration hinterlegt dabei keine persönlichen Zugangsdaten. Die Instanz muss aus der Novaplan-Umgebung erreichbar sein. Stimmen Sie Netzwerk- und TLS-Anforderungen mit Novaplan ab.
+
+## Persönlich authentifizieren
+
+1. Öffnen Sie **Your actions** im Bereich **Personal** und wählen Sie die eingerichtete Jira-Data-Center-Instanz.
+2. Geben Sie entweder Ihr eigenes **Personal Access Token** oder bei Basic Authentication Ihren **Username** und Ihr **Password** ein.
+3. Wählen Sie **Save credentials** und prüfen Sie den Status **Authenticated**.
+4. Fügen Sie im **Agent Builder** das Jira-Data-Center-Toolset unter **Tools** hinzu und verbinden Sie es mit dem **Agent Core**.
+
+Jede Person authentifiziert sich getrennt. Dadurch werden Jira-Aktionen mit ihren jeweiligen Quellrechten ausgeführt und in der Jira-Historie entsprechend zugeordnet.
+
+## Agenten sicher verwenden
+
+Geben Sie beim Erstellen eines Vorgangs Projektkürzel, Titel und Vorgangstyp an. Der Agent kann mit `get_create_issue_fields` Pflichtfelder und zulässige Werte ermitteln, bevor er `create_issue` aufruft. Für Suchanfragen können Sie einen Zeitraum nennen; das Toolset verwendet JQL. Bei Zuweisungen sucht es nach dem Jira-Benutzernamen. Für Statusänderungen muss eine passende Jira-Workflow-Transition verfügbar sein.
+
+Beschreibungen und Kommentare in Jira Data Center verwenden Klartext oder Jira-Wiki-Markup, nicht das Atlassian Document Format der Cloud-Variante. Prüfen Sie erzeugte Inhalte und den Zielvorgang vor einer schreibenden Aktion.
+
+## Häufige Fragen
+
+### Kann ich für dieses Toolset OAuth verwenden?
+
+Nein. Diese Data-Center-Integration unterstützt **Personal Access Token** und **Basic Authentication**. Die hier beschriebene Einrichtung verwendet keine OAuth-App aus der Atlassian Developer Console. Für eine von Atlassian betriebene Instanz verwenden Sie stattdessen das [Jira-Cloud-Toolset](/de/toolsets/jira/jira).
+
+### Wann verwende ich ein Token und wann Basic Authentication?
+
+Verwenden Sie nach Möglichkeit ein **Personal Access Token** für jede Person. Die Quellanleitung nennt Jira Core 8.14 oder neuer als Voraussetzung. Ein Token lässt sich einzeln widerrufen. **Basic Authentication** ist für ältere Instanzen oder Umgebungen vorgesehen, in denen die Token-Erstellung deaktiviert wurde; dabei hinterlegt jede Person ihren Jira-Benutzernamen und ihr Passwort. In beiden Fällen legt die Administration die gemeinsame Instanz mit Name und Base URL an, ohne persönliche Zugangsdaten einzugeben.
+
+### Warum muss jede Person eigene Zugangsdaten hinterlegen?
+
+Die Agentenaktion läuft mit der Jira-Identität der angemeldeten Person. Das Toolset kann dadurch nur die Vorgänge sehen und bearbeiten, für die diese Person in Jira berechtigt ist; Jira ordnet die Aktion ihrem Konto zu. Die gemeinsame Instanz allein autorisiert noch keine Person für Aktionen.
+
+### Was unterscheidet den Konnektor vom Toolset?
+
+Der [Jira-Data-Center-Konnektor](/de/connectors/jira/jira-data-center) synchronisiert Vorgänge und Projekte für die Suche in Novaplan AI. Das Toolset führt bei Bedarf Aktionen direkt in Jira aus, etwa einen Vorgang anlegen, aktualisieren oder kommentieren. Für eine Frage zu bereits synchronisierten Vorgängen reicht der Konnektor; für Änderungen wird das Toolset benötigt.
+
+## Beispiele für Agentenanfragen
+
+- **Vorgang anlegen:** „Erstelle im Projekt `PA` einen Bug mit dem Titel ‚Anmeldung schlägt fehl‘.“ Nennen Sie bei Bedarf Zuständige, Priorität und Labels. Mit `get_create_issue_fields` kann der Agent erforderliche projektspezifische Felder und zulässige Werte abfragen und fehlende Angaben nachfordern.
+- **Vorgänge suchen:** „Zeige mir die offenen Vorgänge im Projekt `PA`, die in den letzten sieben Tagen aktualisiert wurden.“ Das Toolset setzt die Anfrage als JQL um. Für eigene Vorgänge kann es `currentUser()` verwenden.
+- **Zuweisen:** „Weise `PA-123` der zuständigen Person zu.“ Bei der Suche nach einer Person kann der Agent deren Jira-Benutzernamen ermitteln; Data Center verwendet dafür keinen Cloud-`accountId`.
+- **Status ändern:** „Verschiebe `PA-123` nach In Progress.“ Die Änderung ist nur möglich, wenn Jira für diesen Vorgang eine passende Workflow-Transition anbietet und Ihr Konto sie ausführen darf.
+
+Bei Anmelde- oder Berechtigungsproblemen wenden Sie sich an [Novaplan Support](/de/contact-us).

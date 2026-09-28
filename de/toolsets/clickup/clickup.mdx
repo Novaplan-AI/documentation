@@ -1,0 +1,52 @@
+---
+title: "ClickUp-Toolset"
+description: "Aufgaben, Listen, Kommentare und Dokumente in ClickUp mit Agenten verwalten."
+icon: "/logo/clickup.png"
+---
+
+## Überblick
+
+Das ClickUp-Toolset erlaubt Agenten Live-Aktionen in den ClickUp-Workspaces, für die die angemeldete Person berechtigt ist. Eine Workspace-Administration konfiguriert die gemeinsame OAuth-App unter **Workspace Settings → Actions**. Anschließend verbinden die Nutzenden ihre ClickUp-Konten unter **Your actions**.
+
+Viele Tool-Ergebnisse enthalten einen `web_url`-Link zum jeweiligen Element in ClickUp. Für manche Antworten benötigt das Tool eine Workspace- oder Aufgaben-ID, um diesen Link zu erzeugen.
+
+| Bereich | Verfügbare Tools |
+| --- | --- |
+| Aufgaben | `get_tasks`, `search_tasks`, `get_task`, `create_task`, `update_task` |
+| Workspace-Struktur | `get_authorized_teams_workspaces`, `get_spaces`, `create_space`, `get_folders`, `create_folder`, `get_lists`, `get_folderless_lists`, `create_list`, `update_list` |
+| Kommentare und Checklisten | `get_comments`, `create_task_comment`, `create_checklist`, `create_checklist_item`, `update_checklist_item` |
+| Dokumente und Anmeldung | `get_workspace_docs`, `get_doc_pages`, `get_doc_page`, `create_doc`, `create_doc_page`, `update_doc_page`, `get_authorized_user` |
+
+<Warning>
+  Der Agent kann Aufgaben, Listen, Spaces und Dokumente erstellen oder ändern. Prüfen Sie Ziel-Workspace und beabsichtigte Änderungen vor schreibenden Aktionen.
+</Warning>
+
+Bei Dokumentseiten kann `update_doc_page` Inhalt **ersetzen**, **anhängen** oder **voranstellen**. Geben Sie die gewünschte Art der Änderung ausdrücklich an und prüfen Sie den vorhandenen Seiteninhalt, bevor Sie einen vollständigen Ersatz zulassen.
+
+## OAuth-App und gemeinsame Instanz einrichten
+
+1. Melden Sie sich bei ClickUp mit einer Rolle als **Workspace Owner** oder **Admin** an. Öffnen Sie **Settings → Integrations & ClickApps → ClickUp API → ClickUp API Settings**. Wenn diese Ansicht fehlt, lassen Sie die Einrichtung von einer berechtigten Person durchführen.
+2. Öffnen Sie in Novaplan AI **Workspace Settings → Actions**, wählen Sie bei **ClickUp** **+ Setup** oder **Configure** und kopieren Sie die angezeigte **Redirect URI**.
+3. Wählen Sie in ClickUp **Create an App**, vergeben Sie einen App-Namen und fügen Sie die kopierte URI als **Redirect URL** ein. Die URL muss einschließlich Protokoll, Host, Pfad und abschließendem Schrägstrich übereinstimmen.
+4. Kopieren Sie die **Client ID** und das **Client Secret**. Das Secret wird nach dem Erstellen möglicherweise nur einmal angezeigt; bewahren Sie es sicher auf.
+5. Tragen Sie beide Werte in der ClickUp-Aktion unter **Workspace Settings → Actions** ein und speichern Sie die Instanz.
+
+ClickUp OAuth verwendet laut der vorhandenen Integrationsanleitung keine granularen Scopes. Bei der persönlichen Freigabe wählen Nutzende ihre ClickUp-Workspaces. Der ausgestellte Token kann in diesen Workspaces grundsätzlich die Aktionen ausführen, zu denen die angemeldete Person berechtigt ist. Für einen engeren Zugriff wählen Sie nur die nötigen Workspaces und verwenden Sie ein Konto mit entsprechend begrenzten ClickUp-Rechten.
+
+## Persönlich verbinden und verwenden
+
+1. Für die gemeinsame Instanz kann eine Administration unter **Workspace Settings → Actions** **Authenticate with OAuth** wählen. Nutzende verbinden ihr eigenes Konto unter **Your actions → ClickUp** mit demselben OAuth-Ablauf.
+2. Wählen Sie im ClickUp-Fenster die gewünschten Workspaces und anschließend **Connect Workspace**. Danach sollte die Aktion als **Authenticated** erscheinen.
+3. Fügen Sie die ClickUp-Aktion im **Agent Builder** als Tool hinzu und verbinden Sie sie mit dem Agenten.
+
+Nennen Sie bei Aufgabenänderungen den Workspace, die Liste und möglichst die konkrete Aufgaben-ID. Wenn die Anmeldung nicht funktioniert, prüfen Sie die Redirect URL, App-Zugangsdaten, ClickUp-Rolle und die persönliche Workspace-Freigabe. Fehlt ein erwarteter Workspace im Freigabefenster, prüfen Sie die Mitgliedschaft und das aktuell im Browser angemeldete ClickUp-Konto.
+
+## Beispiele für Agenten
+
+- **Aufgabe erstellen:** „Erstelle in der Liste Marketing die Aufgabe Launch-Checkliste mit Fälligkeit Freitag.“ Geben Sie bei Bedarf Priorität, zugewiesene Personen und Beschreibung an. Das aktuelle Upstream-Toolset akzeptiert die vier ClickUp-Prioritäten **Urgent**, **High**, **Normal** und **Low**. Ein unbekannter Prioritätswert stoppt das Erstellen oder Ändern, statt stillschweigend ignoriert zu werden. Prüfen Sie das Verhalten im bereitgestellten Workspace vor automatisierten Schreibaktionen.
+- **Aufgabe ändern:** „Setze Aufgabe abc123 auf In Progress.“ Verwenden Sie möglichst eine eindeutige Aufgaben-ID, damit nicht die falsche Aufgabe geändert wird.
+- **Aufgaben suchen:** „Finde meine offenen Aufgaben, die diese Woche fällig sind“ oder „Suche Aufgaben mit dem Label bug“.
+- **Checkliste ergänzen:** „Füge der Aufgabe abc123 eine QA-Checkliste mit den Punkten Review, Test und Freigabe hinzu.“
+- **Dokument bearbeiten:** „Erstelle im Engineering-Dokument eine Seite Release Notes“ oder „Hänge das heutige Stand-up an die Seite Team Updates an.“ Lassen Sie sich das Zieldokument vor einer Schreibaktion bestätigen.
+
+ClickUp verwendet bei dieser OAuth-App keine feingranularen Scopes. Wenn Sie weniger Workspaces sehen als erwartet, ist die angemeldete Person möglicherweise kein Mitglied oder in einem anderen ClickUp-Konto angemeldet. API-Limits und verfügbare Funktionen können vom ClickUp-Tarif abhängen; prüfen Sie den Tarif bei hoher Nutzung oder fehlenden Aktionen. [Novaplan Support](/de/contact-us) hilft bei weiteren Fragen.

@@ -1,0 +1,151 @@
+---
+title: "Linear"
+description: "Issues, Projekte und Teamrechte aus Linear mit Novaplan AI synchronisieren."
+icon: "/logo/linear.png"
+---
+
+## Überblick
+
+Der Linear-Konnektor synchronisiert Teams, Issues, Projekte, Kommentare, verknüpfte Dokumente und Anhänge für die Suche in Novaplan AI. Er verwendet **OAuth 2.0** mit dem Leserecht `read`. Nach der Autorisierung liest der Konnektor Daten aus Linear; er erstellt oder ändert dort keine Issues oder Projekte.
+
+| Inhalt | Beispiele |
+| --- | --- |
+| Issues | Titel, Beschreibung, Kennung, Status, Priorität, Labels, zuständige Person, Unter-Issues und Kommentare |
+| Anhänge und Dateien | Externe Links, Linear-Dokumente und Dateien aus Issue-Beschreibungen oder Kommentaren |
+| Projekte | Beschreibung, Meilensteine, Updates, Kommentare, Links und Dokumente |
+| Benutzer und Teams | Profile, Mitgliedschaften und Zugriffsrechte |
+
+Linear ordnet Issues und Projekte Teams zu. Issues können Unter-Issues, Kommentarverläufe mit Autor und Zeitpunkt, verknüpfte Dokumente und Dateien enthalten. Projekte können zusätzlich Meilensteine, Updates und externe Links enthalten. Der Konnektor übernimmt Nutzerprofile mit Kennung, E-Mail-Adresse und Anzeigenamen für die Zuordnung von Identitäten und Rechten.
+
+Bei öffentlichen Teams sind Inhalte für Mitglieder der Linear-Organisation sichtbar; bei privaten Teams nur für deren Mitglieder. Prüfen Sie die Sichtbarkeit nach der ersten Synchronisierung mit geeigneten Konten.
+
+## OAuth-Anwendung in Linear erstellen
+
+1. Öffnen Sie in Novaplan AI **Workspace Settings → Connectors**, suchen Sie **Linear** und wählen Sie **+ Setup**.
+2. Kopieren Sie auf **Authenticate Instance** die dort angezeigte **Redirect URL**.
+3. Melden Sie sich mit einem berechtigten Konto bei [Linear API Settings](https://linear.app/settings/api) an. Wählen Sie unter **OAuth Applications** das **+** zum Erstellen einer Anwendung.
+
+<div className="text-center">
+  <img src="/images/connectors/linear/api_settings.png" alt="API-Einstellungen und OAuth-Anwendungen in Linear" className="block mx-auto w-11/12" />
+</div>
+
+4. Geben Sie **Application name**, **Developer name**, **Developer URL** und bei Bedarf eine Beschreibung ein. Tragen Sie die kopierte **Redirect URL** als **Callback URL** ein.
+
+<div className="text-center">
+  <img src="/images/connectors/linear/linear_config.png" alt="Redirect URL im Konnektordialog von Novaplan AI" className="block mx-auto w-11/12" />
+</div>
+
+5. Die Quellanleitung sieht die Schalter **Public**, **Client credentials** und **Webhooks** als deaktiviert vor. Für diesen Konnektor wird ein normaler OAuth-Lesezugriff mit geplanter Synchronisierung verwendet.
+
+<div className="text-center">
+  <img src="/images/connectors/linear/create_oauth_app.png" alt="Formular zum Erstellen einer OAuth-Anwendung in Linear" className="block mx-auto w-11/12" />
+</div>
+
+<div className="text-center">
+  <img src="/images/connectors/linear/oauth_additional_scopes.png" alt="Zusätzliche Einstellungen der Linear-OAuth-Anwendung" className="block mx-auto w-11/12" />
+</div>
+
+6. Erstellen Sie die Anwendung und kopieren Sie **Client ID** und **Client Secret**. Bewahren Sie das Secret sicher auf.
+
+<div className="text-center">
+  <img src="/images/connectors/linear/oauth_credentials.png" alt="Client ID und Client Secret der Linear-OAuth-Anwendung" className="block mx-auto w-11/12" />
+</div>
+
+<Warning>
+  **Callback URL** in Linear und **Redirect URL** in Novaplan AI müssen Zeichen für Zeichen übereinstimmen, einschließlich Protokoll und möglichem abschließenden Schrägstrich. Verwenden Sie die URL aus dem tatsächlichen Workspace-Dialog.
+</Warning>
+
+## Verbindung autorisieren
+
+1. Kehren Sie zu **Authenticate Instance** zurück. Wählen Sie bei Bedarf eine bereits gespeicherte **OAuth app** oder tragen Sie **Client ID** und **Client Secret** ein.
+
+<div className="text-center">
+  <img src="/images/connectors/linear/connector_add_creds.png" alt="Zugangsdaten auf Authenticate Instance eingeben" className="block mx-auto w-11/12" />
+</div>
+
+2. Wählen Sie **Next** und auf **Authorize** die Schaltfläche **Authenticate**.
+
+<div className="text-center">
+  <img src="/images/connectors/linear/connector_authenticated.png" alt="Schaltfläche Authenticate auf der Authorize-Seite" className="block mx-auto w-11/12" />
+</div>
+
+3. Melden Sie sich bei Linear an, prüfen Sie Workspace und angeforderten Lesezugriff und wählen Sie **Authorize**.
+
+<div className="text-center">
+  <img src="/images/connectors/linear/oauth_consent.png" alt="Linear-Freigabedialog für die OAuth-Anwendung" className="block mx-auto w-11/12" />
+</div>
+
+4. Nach erfolgreicher Authentifizierung zeigt der Konnektor **Authenticated** an. Gehen Sie mit **Next** zu **Configure Records**.
+
+Autorisieren Sie den gemeinsamen Konnektor mit einem Linear-Konto, das die benötigten Teams lesen darf. Die E-Mail-Adressen und Mitgliedschaften der späteren Nutzenden werden getrennt ihren Novaplan-AI-Konten zugeordnet. [Linear verwendet ablaufende Zugriffstokens und Refresh-Tokens](https://linear.app/developers/oauth-2-0-authentication). Schlägt die Erneuerung fehl oder wird der Zugriff widerrufen, kann eine erneute Autorisierung nötig sein. Wird das Client Secret neu erzeugt oder die Callback URL geändert, aktualisieren Sie die Konfiguration und prüfen Sie die Verbindung erneut.
+
+## Synchronisierung und Filter
+
+Wählen Sie unter **Configure Records** **Scheduled** oder **Manual**. Für geplante Läufe beträgt das voreingestellte **Sync Interval** 60 Minuten. Die Verbindung verwendet Abfragen in Intervallen und keine Echtzeit-Webhooks.
+
+<div className="text-center">
+  <img src="/images/connectors/linear/connector_configure_sync_strategy.png" alt="Synchronisierungsstrategie für den Linear-Konnektor einstellen" className="block mx-auto w-11/12" />
+</div>
+
+| Synchronisierungsfilter | Wirkung |
+| --- | --- |
+| **Enable Manual Indexing** | Aktiviert: manuelle Indexierung; deaktiviert (Standard): automatische Indexierung nach der Synchronisierung. |
+| **Teams** | Mit `In` nur ausgewählte Teams einschließen oder mit `Not In` Teams ausschließen. Ohne Auswahl alle zugänglichen Teams. |
+| **Modified Date** | Nach Änderungsdatum filtern: `Is After`, `Is Before`, `Is Between`. |
+| **Created Date** | Nach Erstellungsdatum mit denselben Operatoren filtern. |
+
+Die Teamliste wird aus Linear geladen und ist durchsuchbar. Ein eigener Projektfilter ist laut Quellanleitung nicht vorhanden; Projekte lassen sich über ihre Teams eingrenzen. Team- und Datumsfilter begrenzen die abgerufenen Issues und Projekte. Der zugängliche Konnektor lädt weiterhin Workspace-Benutzer für Identitäts- und Berechtigungszuordnungen; die Filterauswahl lädt außerdem Teamoptionen. Behandeln Sie Inhaltsfilter daher nicht als Zusicherung, dass keine weiteren Quellmetadaten gelesen werden.
+
+<div className="text-center">
+  <img src="/images/connectors/linear/linear-filters.png" alt="Team- und Datumsfilter für den Linear-Konnektor" className="block mx-auto w-11/12" />
+</div>
+
+Die getrennten Indexierungsoptionen **Index Issues**, **Index Issue Attachments**, **Index Issue Documents**, **Index Issue and Comment Files** und **Index Projects** sind standardmäßig aktiviert. Sie steuern, welche synchronisierten Daten in die KI-Suche gelangen; das Deaktivieren einer Indexierungsoption verhindert für sich genommen nicht den Abruf der Quelldaten. Dateien werden laut Quellanleitung nur aus Linears eigenem Uploaddienst extrahiert; externe Datei-URLs werden nicht als Dateiinhalt indexiert.
+
+Speichern Sie mit **Save**. Wählen Sie anschließend **Start syncing now** oder **I'll do it later** und kontrollieren Sie **Indexing Progress**. Der erste Lauf liest alle Daten im festgelegten Umfang. Spätere Läufe nutzen Änderungszeitpunkte wie `updatedAt`; Team-Checkpoints helfen, nach Unterbrechungen fortzusetzen. Der zugängliche Quellcode prüft bei späteren Läufen auf als `trashed` markierte Issues und Projekte und entfernt deren Datensätze samt zugehörigen Inhalten. Allein das Archivieren ist in diesem Pfad kein Löschkriterium; prüfen Sie das produktive Verhalten, bevor Sie sich für Aufbewahrung oder Zugriffsänderungen darauf verlassen.
+
+<div className="text-center">
+  <img src="/images/connectors/linear/enable_connector.png" alt="Dialog zum Starten der ersten Linear-Synchronisierung" className="block mx-auto w-11/12" />
+</div>
+
+### Technischer Ablauf
+
+Der Konnektor synchronisiert zuerst Nutzer und Teams samt Mitgliedschaften und Rechten, danach Issues und Projekte mit Kommentaren und Dateien. Anhänge und Dokumente werden zusätzlich in eigenen Durchläufen abgefragt, weil eine neue Verknüpfung nicht zwingend `issue.updatedAt` verändert. Für Issues nutzt die Implementierung Batches von 50, für Projekte Batches von 10 Einträgen. Fortschrittspunkte für Teams, Anhänge, Dokumente, Projekte und Löschprüfungen helfen, unterbrochene Läufe fortzusetzen. Bei öffentlichen Teams vergibt der zugängliche Code Zugriff an Organisationsmitglieder; bei privaten Teams an die synchronisierte Teamgruppe. Diese Angaben beschreiben die zugängliche Implementierung, nicht eine verifizierte Zusage für jede Enterprise-Version.
+
+## Probleme beheben
+
+| Problem | Prüfen Sie |
+| --- | --- |
+| OAuth-Fehler | **Client ID**, **Client Secret**, aktive Linear-Anwendung und exakte Callback URL |
+| Autorisierung schlägt fehl | Linear-Konto mit Zugriff auf die benötigten Teams, OAuth-Scopes und exakt registrierte Callback-Adresse |
+| Teams oder Issues fehlen | Rechte des autorisierenden Kontos, private Teammitgliedschaft und **Teams**-Filter |
+| Kommentare oder Anhänge fehlen | **Index Issues** beziehungsweise **Index Issue Attachments** sowie Quellrechte |
+| Dateien fehlen | **Index Issue and Comment Files** und Herkunft der Datei vom Linear-Uploaddienst |
+| Datensätze vorhanden, aber keine Suchtreffer | Indexierungsstatus und aktivierte Indexierungsoptionen |
+| Nur bestimmte Personen sehen keine Treffer | E-Mail-Zuordnung zwischen Linear und Novaplan AI, Mitgliedschaft im privaten Team und Rechte des autorisierenden Kontos |
+
+Die erste Synchronisierung dauert je nach Zahl der Teams, Issues, Projekte und Anhänge sowie der Antwortzeit der Linear-API unterschiedlich lang. Team- und Datumsfilter können den Umfang begrenzen; ein deaktivierter Indexierungsfilter allein verringert die Quellabfragen nicht zwangsläufig. Prüfen Sie bei fehlenden Treffern zuerst, ob die Datensätze unter **All Records** vorhanden sind, ob ihre Indexierung abgeschlossen ist und ob die betroffene Person Zugriff auf das Linear-Team hat. Bei ungeklärten Berechtigungs- oder Synchronisierungsfehlern wenden Sie sich an [Novaplan Support](/de/contact-us).
+
+## Häufige Fragen
+
+<AccordionGroup>
+  <Accordion title="Welche OAuth-Berechtigung benötigt der Konnektor?">
+    Die dokumentierte Linear-Anwendung verwendet `read`. Der Konnektor liest Teams und deren Inhalte, erstellt, ändert oder löscht aber keine Daten in Linear. Prüfen Sie die angeforderten Berechtigungen im tatsächlichen Freigabedialog Ihres Workspaces.
+  </Accordion>
+  <Accordion title="Gibt es eine Synchronisierung in Echtzeit?">
+    Der dokumentierte Konnektor verwendet geplante Abfragen statt Webhooks in Echtzeit. Änderungen werden beim nächsten Lauf erfasst; das Standardintervall beträgt 60 Minuten. Sie können einen manuellen Lauf starten.
+  </Accordion>
+  <Accordion title="Kann ich einzelne Projekte auswählen?">
+    Ein eigener Projektfilter ist nicht dokumentiert. Sie können Teams sowie Erstellungs- und Änderungsdaten filtern. Da Projekte zu Teams gehören, begrenzt ein Teamfilter auch die zugehörigen Projekte.
+  </Accordion>
+  <Accordion title="Warum fehlen Suchtreffer, obwohl Datensätze vorhanden sind?">
+    Prüfen Sie zunächst unter **All Records**, ob die Datensätze synchronisiert wurden. Kontrollieren Sie dann Indexierungsstatus und Indexierungsoptionen. Wenn nur einzelne Personen keine Treffer erhalten, prüfen Sie die E-Mail-Zuordnung und ihre Mitgliedschaft in privaten Linear-Teams.
+  </Accordion>
+</AccordionGroup>
+
+## Weiterführende Links
+
+- [Linear API-Einstellungen](https://linear.app/settings/api)
+- [Linear OAuth 2.0](https://linear.app/developers/oauth-2-0-authentication)
+- [Linear GraphQL API](https://linear.app/developers/graphql)
+- [Linear API-Referenz](https://studio.apollographql.com/public/Linear-API/schema/reference?variant=current)

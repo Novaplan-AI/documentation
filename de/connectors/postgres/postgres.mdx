@@ -1,0 +1,104 @@
+---
+title: "PostgreSQL"
+description: "Schemas, Tabellen und Datensätze aus PostgreSQL mit Novaplan AI synchronisieren."
+icon: "/logo/postgres.png"
+---
+
+## Überblick
+
+Der PostgreSQL-Konnektor indexiert ausgewählte Datenbank-Schemas, Tabellenstrukturen und Datensätze. Diese Inhalte können Sie dann zusammen mit anderen Wissensquellen in Novaplan AI durchsuchen.
+
+| Inhalt | Umfang |
+| --- | --- |
+| Schemas | Alle über **Schemas** ausgewählten Bereiche |
+| Tabellen | Namen, Spalten, Datentypen sowie Primär- und Fremdschlüssel |
+| Schema-Metadaten | `CREATE TABLE`-Definitionen und Beziehungen |
+| Datensätze | Zeilen ausgewählter Tabellen bis zur Grenze **Max rows per table** |
+
+Novaplan unterstützt Sie bei der Einrichtung. Stimmen Sie Datenbankzugriff, Tabellenauswahl und Berechtigungen vor der Synchronisierung mit den zuständigen Administratoren ab.
+
+## Datenbankzugang vorbereiten
+
+Sie benötigen einen erreichbaren PostgreSQL-Server, den Datenbanknamen, Host, Port (standardmäßig `5432`) und einen Benutzer mit Leserechten. Für einen eigenen lesenden Benutzer können Datenbankadministratoren beispielsweise Folgendes ausführen:
+
+```sql
+CREATE USER novaplan_reader WITH PASSWORD 'a_strong_password';
+GRANT CONNECT ON DATABASE example_db TO novaplan_reader;
+GRANT USAGE ON SCHEMA public TO novaplan_reader;
+GRANT SELECT ON ALL TABLES IN SCHEMA public TO novaplan_reader;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO novaplan_reader;
+```
+
+Passen Sie Benutzer, Passwort, Datenbank und Schema an. Wiederholen Sie `USAGE` und `SELECT` für jedes weitere Schema, das Sie synchronisieren möchten. Die Berechtigungen für künftig angelegte Tabellen hängen von den jeweiligen Eigentümern und Standardberechtigungen ab; prüfen Sie diese gesondert. Schema-Metadaten werden außerdem aus `information_schema` und `pg_catalog` gelesen.
+
+Für einen entfernten Server müssen `pg_hba.conf`, `listen_addresses` und die Firewall Verbindungen aus der Novaplan-Umgebung zum gewünschten Port erlauben. Fragen Sie Novaplan Support nach den für Ihren Workspace erforderlichen Netzwerkdaten. Ein in Beispielen verwendetes `localhost` ist für einen verwalteten Workspace normalerweise nicht der Datenbankhost.
+
+## Optional: PostgreSQL mit Beispieldaten testen
+
+Wenn Sie noch keinen eigenen PostgreSQL-Server haben, können Sie die folgenden Schritte verwenden, um eine **Testdatenbank** auf Ihrem Rechner anzulegen. Dabei installieren Sie PostgreSQL, nicht Novaplan AI. Ein verwalteter Novaplan-Workspace kann Ihren Rechner nicht über `localhost` erreichen. Binden Sie eine lokale Testdatenbank nur über einen mit Ihren Administratoren und Novaplan abgestimmten Netzwerkweg an; öffnen Sie den Datenbankport nicht allein für diesen Test ins öffentliche Internet.
+
+1. Installieren Sie PostgreSQL über die [offizielle Downloadseite](https://www.postgresql.org/download/) und prüfen Sie die Installation mit `psql --version`. Falls `psql` unter Windows nicht gefunden wird, nehmen Sie das `bin`-Verzeichnis Ihrer PostgreSQL-Installation in `PATH` auf.
+2. Installieren Sie bei Bedarf [pgAdmin](https://www.pgadmin.org/download/). Registrieren Sie dort Ihren lokalen Server mit Host `localhost`, Port `5432` und dem bei der PostgreSQL-Installation eingerichteten Administratorkonto.
+3. Legen Sie in pgAdmin unter **Databases → Create → Database** eine Datenbank namens `bird_mini_dev` an. Für eigene Daten können Sie einen anderen Namen wählen.
+4. Laden Sie optional das [BIRD Mini-Dev-Beispieldataset](https://huggingface.co/datasets/birdsql/bird_mini_dev) herunter. Entpacken Sie das Gesamtpaket und suchen Sie die Datei `BIRD_dev.sql` im PostgreSQL-Ordner `MINIDEV_postgresql`. Der genaue übergeordnete Ordner kann je nach Paketversion variieren.
+5. Importieren Sie die SQL-Datei in Ihre Testdatenbank. Ersetzen Sie den Beispielpfad durch den tatsächlichen Speicherort:
+
+   ```powershell
+   psql -U postgres -d bird_mini_dev -f "C:\Pfad\zu\BIRD_dev.sql"
+   ```
+
+   Unter macOS oder Linux verwenden Sie entsprechend einen Pfad wie `~/Downloads/BIRD_dev.sql`. Prüfen Sie nach dem Import in pgAdmin, ob Tabellen angelegt wurden. Richten Sie danach einen eigenen lesenden Benutzer mit den oben beschriebenen Berechtigungen ein.
+
+Das Beispieldataset enthält unter anderem Formel-1-Tabellen zu Rennen, Fahrern, Teams und Ergebnissen. Es dient nur zum Ausprobieren; Sie müssen es nicht laden, wenn Sie bereits eine geeignete Datenbank haben.
+
+## Konnektor konfigurieren
+
+1. Öffnen Sie in Novaplan AI **Workspace Settings → Connectors**.
+2. Suchen Sie **PostgreSQL** und wählen Sie **+ Setup** oder **Configure**.
+3. Wählen Sie **Basic Auth** mit **Host**, **Port**, **Database**, **User** und **Password** oder verwenden Sie eine **Connection String** im Format `postgresql://user:password@host:5432/database`.
+4. Speichern Sie die Zugangsdaten und wählen Sie die Synchronisierungsfilter.
+
+Bei einer Connection String müssen reservierte Zeichen im Passwort URL-kodiert sein, beispielsweise `@` als `%40`, `:` als `%3A`, `/` als `%2F`, `%` als `%25` und `#` als `%23`. Das Passwort `p@ss:word` wird darin zu `p%40ss%3Aword`. Veröffentlichen Sie keine echte Connection String mit Zugangsdaten in einem Ticket oder Dokument.
+
+## Synchronisierung eingrenzen
+
+| Filter | Bedeutung | Standardwert |
+| --- | --- | --- |
+| **Schemas** | Gewünschte Schemas wie `public`. Ohne Auswahl werden alle Schemas berücksichtigt. | Alle Schemas |
+| **Tables** | Gewünschte Tabellen, etwa `public.account`. Ohne Auswahl werden alle Tabellen der gewählten Schemas berücksichtigt. | Alle Tabellen |
+| **Max rows per table** | Höchstzahl gelesener Zeilen pro Tabelle. | `1000` |
+| **Index tables** | Steuert die automatische KI-Indexierung synchronisierter Tabellendatensätze; die Deaktivierung beschränkt nicht allein den Quellzugriff. | Aktiviert |
+
+Die Listen für **Schemas** und **Tables** werden nach dem Speichern der Zugangsdaten aus der Datenbank gefüllt. Sie können mehrere Schemas und darin konkrete, voll qualifizierte Tabellennamen auswählen. Die Filter begrenzen, welche Tabellen verarbeitet und wie viele Zeilen daraus gelesen werden. Der zugängliche Konnektor liest dennoch Schema- und Tabellennamen für die Auswahllisten und die Synchronisierung. Ein Ausschluss garantiert deshalb nicht, dass keine Datenbankmetadaten gelesen werden. Wenn eine Isolation bereits an der Quelle nötig ist, verwenden Sie ein Datenbankkonto mit Zugriff nur auf die vorgesehenen Daten.
+
+Wählen Sie danach **Scheduled** oder **Manual**. Bei geplanter Synchronisierung liegt das voreingestellte **Sync interval** bei 60 Minuten. Nach **Save** prüft der Konnektor die Verbindung und beginnt die erste Synchronisierung. Den Status verfolgen Sie unter **Indexing Progress**.
+
+## Beispielsuchen
+
+Wenn Sie das BIRD Mini-Dev-Dataset synchronisiert haben, können Sie zum Beispiel fragen:
+
+- „Welches Team hat die meisten Meisterschaften gewonnen?“
+- „Welche Boxenstopps waren in der Saison 2008 am schnellsten?“
+- „Welche fünf Fahrer haben über alle Saisons hinweg die meisten Punkte erzielt?“
+
+Der Konnektor stellt sowohl Tabellen- und Spalteninformationen als auch die ausgewählten Datensätze bereit. Ob eine konkrete Frage beantwortet werden kann, hängt von den synchronisierten Tabellen, Zeilen und Berechtigungen ab.
+
+## Häufige Fragen
+
+### Welche Rechte sind nötig?
+
+Der Benutzer benötigt `CONNECT` auf der Datenbank, `USAGE` auf den ausgewählten Schemas und `SELECT` auf den Tabellen. Schreibrechte sind für die Synchronisierung nicht erforderlich. Werden später Tabellen hinzugefügt, prüfen Sie deren effektive Leserechte erneut.
+
+### Warum schlägt die Verbindung fehl?
+
+Prüfen Sie Host und Port, Erreichbarkeit aus der Novaplan-Umgebung, `pg_hba.conf`, `listen_addresses`, Firewall und Zugangsdaten. Bei einer Connection String sollten Sie zusätzlich die URL-Kodierung von Sonderzeichen im Passwort kontrollieren.
+
+### Wie begrenze ich große Datenbestände?
+
+Wählen Sie nur benötigte **Schemas** und **Tables**, reduzieren Sie **Max rows per table** und deaktivieren Sie **Index tables**, wenn Tabellendatensätze nicht automatisch indexiert werden sollen. Begrenzen Sie für eine Zugriffsschranke an der Quelle zusätzlich die Rechte des Datenbankkontos.
+
+### Kann ich Tabellen aus mehreren Schemas auswählen?
+
+Ja. Wählen Sie mehrere Einträge unter **Schemas** und danach die gewünschten voll qualifizierten Namen unter **Tables**, zum Beispiel `public.account` und `analytics.events`. Das Datenbankkonto benötigt Leserechte auf allen ausgewählten Tabellen.
+
+Bei Fragen zur Anbindung wenden Sie sich an [Novaplan Support](/de/contact-us).

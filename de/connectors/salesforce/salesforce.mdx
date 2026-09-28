@@ -1,0 +1,86 @@
+---
+title: "Salesforce"
+description: "CRM-Datensätze, Vertriebschancen, Fälle und Anhänge mit Novaplan AI durchsuchen."
+icon: "/logo/salesforce.png"
+---
+
+Der Salesforce-Konnektor synchronisiert CRM-Daten aus Ihrer Salesforce-Organisation mit Novaplan AI. Die Verbindung verwendet OAuth 2.0 und eine **External Client App** aus Salesforce Setup.
+
+Novaplan richtet Ihren Workspace weitgehend für Sie ein. Die Salesforce-App, OAuth-Berechtigungen und Auswahl der zu synchronisierenden Daten stimmen Sie mit Ihrer Salesforce-Administration und Novaplan ab.
+
+## Welche Daten werden synchronisiert?
+
+| Daten | Inhalt |
+| --- | --- |
+| **Users, Roles, Groups & Queues** | Aktive Nutzer, Rollenhierarchie, öffentliche Gruppen und Warteschlangen für die Berechtigungszuordnung |
+| **Accounts & Contacts** | Firmenkonten, Kontakte und ihre Beziehungen |
+| **Leads & Opportunities** | Interessenten, Vertriebschancen, Produkte und Positionen |
+| **Cases & Tasks** | Supportfälle, Kommentare und verknüpfte Aktivitäten |
+| **Files & Chatter** | Anhänge sowie Feed-Beiträge und Kommentare zu synchronisierten Datensätzen |
+
+Personen werden über ihre **E-Mail-Adresse** zugeordnet. Für die Autorisierung des gemeinsamen Konnektors verwenden Sie ein von Ihrer Administration freigegebenes Salesforce-Konto mit Zugriff auf die benötigten Datensätze. Dessen E-Mail-Adresse muss nicht mit dem einrichtenden Novaplan-AI-Administratorkonto übereinstimmen; prüfen Sie die Zuordnung der späteren Nutzenden getrennt.
+
+## Verbindung einrichten
+
+### 1. Callback-Adresse aus Novaplan AI kopieren
+
+Öffnen Sie **Workspace Settings → Workspace → Connectors → Salesforce → + Setup**. Vergeben Sie unter **Authenticate Instance** einen **Instance name** und kopieren Sie die angezeigte **Redirect/Callback URL**. Verwenden Sie den tatsächlichen Wert Ihres Workspaces; die Adresse muss später in Salesforce exakt übereinstimmen.
+
+### 2. External Client App in Salesforce erstellen
+
+1. Melden Sie sich mit einem geeigneten Administratorkonto bei Salesforce an und öffnen Sie **Setup**.
+2. Suchen Sie im Feld **Quick Find** nach **App Manager** und wählen Sie **New External Client App**.
+3. Vergeben Sie einen **External Client App Name**, prüfen Sie den **API Name** und tragen Sie eine **Contact Email** ein. Für eine interne App kann **Distribution State** auf **Local** bleiben.
+4. Öffnen Sie **API (Enable OAuth Settings)** und aktivieren Sie **Enable OAuth**.
+5. Fügen Sie als **Callback URL** die Adresse aus Novaplan AI ein.
+6. Wählen Sie die folgenden **Selected OAuth Scopes**:
+
+| Salesforce-Beschreibung | Scope |
+| --- | --- |
+| Access the identity URL service | `id`, `profile`, `email`, `address`, `phone` |
+| Manage user data via APIs | `api` |
+| Manage user data via Web browsers | `web` |
+| Perform requests at any time | `refresh_token`, `offline_access` |
+
+7. Aktivieren Sie unter **Security** die Optionen **Require secret for Web Server Flow** und **Require secret for Refresh Token Flow**. Lassen Sie **Issue JSON Web Token (JWT)-based access tokens for named users** deaktiviert und klicken Sie auf **Create**.
+
+### 3. Zugangsdaten übernehmen
+
+Öffnen Sie die gespeicherte App unter **Settings → OAuth Settings → Consumer Key and Secret**. Kopieren Sie **Consumer Key** und **Consumer Secret**; gegebenenfalls fordert Salesforce eine Identitätsprüfung. In Novaplan AI entsprechen sie **Client ID** und **Client Secret**. Bewahren Sie das Secret geschützt auf.
+
+Die **Salesforce Instance URL** ist die Basisadresse Ihrer Organisation, beispielsweise `https://yourcompany.my.salesforce.com`. Verwenden Sie die Adresse aus der Salesforce-Adresszeile, nicht allgemein `https://login.salesforce.com`. Für eine Sandbox verwenden Sie deren eigene My-Domain-Adresse.
+
+Neue External Client Apps brauchen möglicherweise einige Minuten, bevor sie OAuth-Anfragen annehmen.
+
+### 4. In Novaplan AI autorisieren
+
+1. Öffnen Sie **Salesforce Configuration → Authenticate Instance**.
+2. Tragen Sie einen **OAuth app name**, die **Salesforce Instance URL**, die **Client ID** und das **Client Secret** ein.
+3. Vergleichen Sie die **Redirect/Callback URL** exakt mit der Salesforce-App und klicken Sie auf **Next**.
+4. Wählen Sie unter **Authorize** die Option **Authenticate Salesforce to Proceed**, melden Sie sich bei Salesforce an und bestätigen Sie die Berechtigungen mit **Allow**.
+5. Sobald **Connected — you can continue to Configure records** angezeigt wird, klicken Sie auf **Continue to configuration**.
+
+<Warning>
+  Autorisieren Sie mit dem für diesen gemeinsamen Konnektor freigegebenen Salesforce-Konto. Es benötigt Zugriff auf die zu synchronisierenden Inhalte. Wenn eine Person später Datensätze nicht sieht, prüfen Sie ihre eigene E-Mail-Zuordnung und die geltenden Salesforce-Rechte.
+</Warning>
+
+### 5. Synchronisierung konfigurieren
+
+Unter **Configure Records** wählen Sie **Scheduled** oder **Manual** und legen gegebenenfalls ein **Sync Interval** fest. Mit **Enable Manual Indexing** deaktivieren Sie die automatische Indexierung. Unter **Sync filters → + Add filter** können Sie Inhalte nach Erstellungs- oder Änderungsdatum eingrenzen.
+
+Klicken Sie auf **Save Configuration**. Im Dialog **Start sync process?** beginnen Sie mit **Confirm** sofort oder verschieben den Start mit **Cancel**. Auf der Instanzkarte können Sie **Sync Enabled** und die Synchronisierungsaktionen verwenden. Unter **Overview** sehen Sie **Last Synced** und Datensatzstatistiken.
+
+## Verhalten bei weiteren Läufen
+
+Beim ersten Lauf importiert der Konnektor Nutzer, Rollen, Gruppen und CRM-Datensätze mit zugehörigen Dateien. Die Dauer hängt von der Größe Ihrer Salesforce-Organisation ab. Mit **Scheduled** werden bei späteren Läufen Datensätze abgerufen, die sich seit dem letzten erfolgreichen Lauf geändert haben.
+
+## Fehlerbehebung
+
+- **`redirect_uri_mismatch`:** Vergleichen Sie Salesforce **Callback URL** und Novaplan **Redirect/Callback URL** einschließlich Schema, Host und Pfad.
+- **`invalid_client_id` oder `invalid_client`:** Kopieren Sie **Consumer Key** und **Consumer Secret** erneut. Bei einer gerade erstellten App warten Sie einige Minuten.
+- **Falsche Instanzadresse:** Verwenden Sie die Basisadresse der Salesforce-Organisation oder Sandbox, nicht die allgemeine Login-Adresse.
+- **Datensätze fehlen:** Prüfen Sie Salesforce-Profil, Rolle, Freigaberegeln und Objektzugriff des autorisierenden Kontos sowie die Synchronisierungs- und Indexierungsfilter.
+- **Sitzung abgelaufen:** Wählen Sie unter **Authorize** die Option **Re-authenticate with provider**.
+- **Datensätze noch nicht durchsuchbar:** Prüfen Sie unter **Workspace Settings → Connectors → Salesforce → Overview**, ob der erste Lauf und die Indexierung abgeschlossen sind.
+
+Wenn Sie Hilfe benötigen, schreiben Sie an [support@novaplan.ai](mailto:support@novaplan.ai). Weitere technische Informationen finden Sie bei Salesforce zum [OAuth Web Server Flow](https://help.salesforce.com/s/articleView?id=sf.remoteaccess_oauth_web_server_flow.htm) und zu [External Client Apps](https://help.salesforce.com/s/articleView?id=sf.create_external_client_apps.htm).

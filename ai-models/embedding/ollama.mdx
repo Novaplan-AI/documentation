@@ -1,21 +1,21 @@
 ---
 title: Ollama
-description: "Configure PipesHub to use Ollama self-hosted embedding models"
+description: "Configure Novaplan AI to use Ollama self-hosted embedding models"
 ---
 
 # Ollama Embeddings Configuration
 
 ![Ollama Embeddings Configuration Interface](/images/ai-models/embedding/Ollama_EmbeddingConfig.png)
 
-*The Ollama embeddings configuration screen in PipesHub where you'll enter your Model Name and optional Endpoint URL*
+*The Ollama embeddings configuration screen in Novaplan AI where you'll enter your Model Name and optional Endpoint URL*
 
-PipesHub allows you to integrate with a self-hosted Ollama instance to run embedding models locally. This gives you full control over your data — no external API calls, no usage costs, and no API key required for standard local deployments.
+Novaplan AI can use an Ollama embedding service operated by your organization or Novaplan. Coordinate the server, network access, and data handling with Novaplan; an Ollama service outside the managed workspace still receives embedding requests over the network.
 
 ## Required Fields
 
 ### Model Name *
 
-The Model Name field defines which Ollama embedding model you want to use with PipesHub.
+The Model Name field defines which Ollama embedding model you want to use with Novaplan AI.
 
 **Popular Ollama embedding models include:**
 - `mxbai-embed-large` - A high-performance embedding model well-suited for retrieval tasks
@@ -23,7 +23,7 @@ The Model Name field defines which Ollama embedding model you want to use with P
 **How to choose a model:**
 - For general-purpose retrieval, select `mxbai-embed-large`
 - Check Ollama's [model library](https://ollama.com/library) for the full list of available embedding models
-- Pull the model first with `ollama pull <model-name>` before configuring it in PipesHub
+- Pull the model first with `ollama pull <model-name>` before configuring it in Novaplan AI
 
 ## Optional Fields
 
@@ -32,10 +32,10 @@ The Model Name field defines which Ollama embedding model you want to use with P
 The URL where your Ollama instance is running. Defaults to `http://host.docker.internal:11434` if left blank.
 
 **Common configurations:**
-- `http://host.docker.internal:11434` — for accessing Ollama from within a Docker container (default)
+- `http://host.docker.internal:11434` — application default; use only if Novaplan confirms that the managed workspace can reach Ollama through this hostname
 - `https://your-server-domain` — for remote Ollama instances
 
-**Note:** Ensure your Ollama instance is running and reachable from the PipesHub Docker network before configuring.
+**Note:** Your computer's `localhost` is not automatically reachable from a managed Novaplan AI workspace. Confirm the actual endpoint with Novaplan before configuring it.
 
 ### API Key
 
@@ -59,7 +59,7 @@ As shown in the image above:
 
 ## Prerequisites
 
-Before configuring Ollama in PipesHub, ensure you have:
+Before configuring Ollama in Novaplan AI, ensure you have:
 
 1. **Ollama installed** on your machine or server — download from [ollama.com](https://ollama.com/)
 2. **The embedding model pulled:**
@@ -67,11 +67,11 @@ Before configuring Ollama in PipesHub, ensure you have:
    ollama pull mxbai-embed-large
    ```
 3. **Ollama running:** `ollama serve`
-4. **Network accessible:** PipesHub must be able to reach your Ollama endpoint
+4. **Network accessible:** Novaplan must confirm the managed workspace can reach the Ollama endpoint
 
 ## Usage Considerations
 
-- All embedding happens locally — data never leaves your infrastructure
+- Embedding requests are processed by the Ollama server your organization or Novaplan provides; confirm its location and access controls
 - No API key or usage costs required
 - Processing speed depends on your server's available CPU/memory/GPU
 
@@ -80,7 +80,7 @@ Before configuring Ollama in PipesHub, ensure you have:
 - Verify Ollama is running: `ollama list`
 - Check the endpoint URL matches where Ollama is accessible
 - Ensure port 11434 is not blocked by a firewall
-- For Docker deployments, verify that `host.docker.internal` resolves correctly
+- Ask Novaplan to verify the managed workspace can reach the configured endpoint; the default `host.docker.internal` may not resolve there
 - If the model is not found, pull it first: `ollama pull <model-name>`
 
-For additional support, refer to the [Ollama documentation](https://github.com/ollama/ollama/tree/main/docs) or contact PipesHub support.
+For additional support, refer to the [Ollama documentation](https://github.com/ollama/ollama/tree/main/docs) or contact Novaplan AI support.

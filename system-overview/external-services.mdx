@@ -1,26 +1,26 @@
 ---
 title: "External services"
-description: "The databases and brokers PipesHub uses: the knowledge graph, Qdrant, MongoDB, Redis, and optional Kafka and etcd."
+description: "The databases and brokers Novaplan AI uses: the knowledge graph, Qdrant, MongoDB, Redis, and optional Kafka and etcd."
 ---
 
-This page describes the databases and brokers along the bottom of the [system overview](/system-overview) diagram. A default install starts these services for you. Use this page to learn what each service is for, and when you would switch to the other option.
+This page describes the databases and brokers along the bottom of the [system overview](/system-overview) diagram. Novaplan manages their deployment. Use this page to understand each service's role and the technologies supported by the reference architecture.
 
 The sections follow the same order as the diagram: search data, application data, then how services pass work to each other and where configuration is stored.
 
 ## Knowledge graph ([Neo4j](https://neo4j.com/) or [ArangoDB](https://www.arangodb.com/))
 
-The knowledge graph is how PipesHub stores that a Slack thread, a Drive file, and a person belong together. Permission checks and citations follow those links.
+The knowledge graph is how Novaplan AI stores that a Slack thread, a Drive file, and a person belong together. Permission checks and citations follow those links.
 
-You choose one graph database with the `DATA_STORE` environment variable. Application services talk to a graph abstraction, so the product behaves the same on either backend.
+The managed environment uses a graph database selected by Novaplan. Application services access it through a graph abstraction.
 
-- **Neo4j** is the default (`DATA_STORE=neo4j`). The default install, `backend/env.template`, and the Helm chart all use Neo4j.
-- **ArangoDB** is the other option (`DATA_STORE=arangodb`). If an existing install already has an ArangoDB data volume, the installer keeps ArangoDB.
+- **Neo4j** is the reference configuration (`DATA_STORE=neo4j`).
+- **ArangoDB** is another supported backend (`DATA_STORE=arangodb`).
 
 ## Vector search ([Qdrant](https://qdrant.tech/))
 
 After Indexing parses a document, an embedding model turns each chunk of text into a vector. Qdrant stores those vectors and finds similar text when Query answers a question.
 
-A default install uses Qdrant. The application also supports OpenSearch and Redis (`VECTOR_DB_TYPE=opensearch` or `VECTOR_DB_TYPE=redis`). Those values apply only when the app container receives `VECTOR_DB_TYPE`. The default Docker Compose file does not pass that variable, so Qdrant stays in use unless you add it to the service environment.
+The reference configuration uses Qdrant. The application also supports OpenSearch and Redis as vector backends. Novaplan determines which backend is configured for your workspace.
 
 ## Application data ([MongoDB](https://www.mongodb.com/))
 
@@ -28,29 +28,27 @@ MongoDB stores application data that is not part of the knowledge graph: session
 
 ## Files
 
-The contents of files are not stored in MongoDB. They live on local disk, S3, or Azure Blob, through the [storage](/system-overview/storage) module in the API.
+The contents of files are not stored in MongoDB. They live on local disk, S3, or Azure Blob through the storage module in the API. Novaplan configures that module for the managed workspace.
 
 ## How services hand work to each other
 
 Connectors publish records, and Indexing consumes them. That path is the **event bus** in the architecture diagram.
 
-- On a **local machine**, the event bus is Redis Streams (`MESSAGE_BROKER=redis`). Kafka is not started.
-- In a **larger deployment**, the event bus is [Apache Kafka](https://kafka.apache.org/) (`MESSAGE_BROKER=kafka`).
+- **Redis Streams** is one event-bus option.
+- [Apache Kafka](https://kafka.apache.org/) is another option for larger environments.
 
 The Python services stay the same. Only the transport between them changes.
 
 ## Cache, configuration, and [Redis](https://redis.io/)
 
-Redis always runs. It can do three jobs, depending on how you deploy:
+Redis can do three jobs, depending on the managed configuration:
 
 1. **Cache** — frequently used data and locks.
-2. **Encrypted configuration** — the default key-value store for settings (`KV_STORE_TYPE=redis`).
-3. **Event bus** — Redis Streams, when `MESSAGE_BROKER=redis`.
+2. **Encrypted configuration** — a key-value store for settings.
+3. **Event bus** — Redis Streams, where selected.
 
-In a larger deployment, Kafka takes over the event bus. Redis continues to provide the cache, and it remains the configuration store unless you switch that store to etcd.
+Where Kafka carries connector events, Redis may continue to provide caching and configuration.
 
 ## Optional: [etcd](https://etcd.io/)
 
-etcd is the other place to keep encrypted configuration. A default install uses Redis for this.
-
-To use etcd, set `KV_STORE_TYPE=etcd` and enable the Compose profile `kv-etcd`.
+etcd is an alternative store for encrypted configuration. Novaplan manages that selection.

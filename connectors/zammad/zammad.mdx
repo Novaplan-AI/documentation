@@ -104,7 +104,7 @@ The Zammad connector uses **API Access Token** authentication (HTTP Token Authen
 
    | Field | Description | Recommendation |
    |-------|-------------|----------------|
-   | **Name** | A descriptive identifier for the token | Use something like `PipesHub-Integration` |
+   | **Name** | A descriptive identifier for the token | Use something like `Novaplan-AI-Integration` |
    | **Expiry Date** | Expiration date for security | set based on your security policy |
 
 3. Enable the following **Permissions** for the token:
@@ -142,7 +142,7 @@ The Zammad connector uses **API Access Token** authentication (HTTP Token Authen
 
 1. After clicking Create, the token is displayed in a dialog or on screen.
 2. **Immediately copy the token** to a secure location.
-3. Store it temporarily until you complete the PipesHub configuration.
+3. Store it temporarily until you complete the Novaplan AI configuration.
 
 <div className="text-center">
   <img
@@ -154,13 +154,13 @@ The Zammad connector uses **API Access Token** authentication (HTTP Token Authen
 
 #### Step 5: Authenticate Instance tab — enter credentials
 
-The connector drawer in PipesHub has three tabs: **Authenticate Instance**, **Authorize**, and **Configure Records**. Start on the **Authenticate Instance** tab.
+The connector drawer in Novaplan AI has three tabs: **Authenticate Instance**, **Authorize**, and **Configure Records**. Start on the **Authenticate Instance** tab.
 
-1. In PipesHub, go to **Workspace Settings** → **Connectors**, find **Zammad**, and click **+ Setup** for a new instance.
+1. In Novaplan AI, go to **Workspace Settings** → **Connectors**, find **Zammad**, and click **+ Setup** for a new instance.
 2. The connector panel opens as a right-side drawer. On the **Authenticate Instance** tab, enter:
    - **Zammad URL** — your Zammad instance base URL (e.g., `https://support.yourcompany.com`; no trailing slash)
    - **API Token** — the token you copied in Step 4
-3. Click **Next**. PipesHub validates the credentials and advances directly to the **Configure Records** tab (the **Authorize** tab is skipped because API Token authenticates on its own).
+3. Click **Next**. Novaplan AI validates the credentials and advances directly to the **Configure Records** tab (the **Authorize** tab is skipped because API Token authenticates on its own).
 
 <div className="text-center">
   <img
@@ -171,7 +171,7 @@ The connector drawer in PipesHub has three tabs: **Authenticate Instance**, **Au
 </div>
 
 <Warning>
-  Generate the API token from a Zammad account that uses the same email address as your PipesHub account. Using a different email will cause permission issues on the PipesHub platform.
+  Generate the API token from an approved Zammad account with the required read access. Its email does not need to match the Novaplan AI administrator configuring this shared connector. Viewers are mapped from their own Zammad identities, groups, and roles.
 </Warning>
 
 <Info>
@@ -199,7 +199,7 @@ On the **Configure Records** tab, control how the connector syncs and what gets 
   **Scheduled sync** runs automatically at the specified intervals. **Manual sync** requires you to trigger synchronization on-demand.
 </Note>
 
-**Sync filters** — determine which content is downloaded from Zammad. Data excluded by sync filters is never downloaded.
+**Sync filters** — narrow the ticket groups and ticket dates fetched from Zammad. The accessible connector fetches users, groups, and roles on each run and synchronizes knowledge-base answers separately; these ticket filters do not prevent that retrieval. **Index Knowledge Base** controls whether synchronized knowledge-base content is made searchable, not whether it is fetched. Review the source scope with your administrator before connecting sensitive content.
 
 <div className="text-center">
   <img
@@ -230,7 +230,7 @@ Available sync filters:
 - **Index Attachments** (default: enabled) — include file attachments in search
 - **Index Knowledge Base** (default: enabled) — include knowledge base articles in search
 
-Click **Save** to save your configuration. PipesHub confirms the instance is ready with a final dialog — **"Instance is configured and ready to sync"** — offering two choices: **I'll do it later** or **Start syncing now**.
+Click **Save** to save your configuration. Novaplan AI confirms the instance is ready with a final dialog — **"Instance is configured and ready to sync"** — offering two choices: **I'll do it later** or **Start syncing now**.
 
 <div className="text-center">
   <img
@@ -247,7 +247,7 @@ Choose **Start syncing now** to kick off the initial sync immediately, or **I'll
 The Zammad connector provides:
 
 - **Full content sync** — Tickets, knowledge base, attachments, users, and groups
-- **Incremental sync** — only fetches changes since last sync using `updated_at` timestamps
+- **Incremental content sync** — ticket and knowledge-base queries use `updated_at` checkpoints; each run still refreshes users, groups, and roles for permission mapping
 - **Batch processing** — fetches data in optimized batches for performance
 - **Permission preservation** — respects group-based access controls
 - **Attachment handling** — syncs file attachments from ticket articles
@@ -261,7 +261,7 @@ Zammad uses different permission models for different content types:
 - **Knowledge Base**: Role-based access controls. Access to knowledge base content is determined by user roles.
 
 The connector preserves these permissions:
-- Group assignments determine which agents can view synced tickets in PipesHub.
+- Group assignments determine which agents can view synced tickets in Novaplan AI.
 - Internal articles respect the internal/public visibility flag.
 
 ## Useful Links
@@ -287,7 +287,7 @@ The connector preserves these permissions:
 
 **Connection refused or timeout:**
 - Verify the Zammad URL is correct and accessible
-- Check that your Zammad instance is running and reachable from PipesHub
+- Check that your Zammad instance is running and reachable from Novaplan AI
 - Ensure there are no firewall rules blocking the connection
 - Verify SSL/TLS certificates are valid (for HTTPS connections)
 
@@ -306,11 +306,10 @@ The connector preserves these permissions:
 **Missing tickets:**
 - Verify group filters aren't excluding the desired content
 - Check that the API token user has access to those groups
-- Ensure ticket state filters aren't excluding tickets
 - Verify date filters aren't too restrictive
 
 <Warning>
-  If you regenerate or revoke the API token in Zammad, you must update the configuration in PipesHub with the new token value.
+  If you regenerate or revoke the API token in Zammad, you must update the configuration in Novaplan AI with the new token value.
 </Warning>
 
 </Accordion>
@@ -337,14 +336,9 @@ The connector syncs data in the following order:
 
 ### Full Sync vs Incremental Sync
 
-**Full Sync** occurs when:
-- First-time synchronization
-- Manual full sync is triggered
+**A first content sync** has no saved ticket or knowledge-base checkpoint and fetches the matching existing content. Confirm how a manual **Full sync** control resets checkpoints in the deployed Enterprise workspace before relying on it for a complete backfill.
 
-**Incremental Sync** occurs when:
-- Previous sync completed successfully
-- Only fetches content modified since last sync
-- Uses `updated_at` timestamps for change detection
+**Later content syncs** use per-group ticket and knowledge-base `updated_at` checkpoints to request changed content. The connector still fetches users, groups, and roles on every run, so a later run is not limited to changed records across the whole source.
 
 ### What Gets Processed
 
@@ -396,8 +390,8 @@ The connector syncs data in the following order:
 
 There are three common causes:
 
-1. **Email mismatch** - The email used during connector authentication doesn't match your PipesHub account email. This causes permission issues preventing you from accessing synced data.
-   - **Fix:** Reconfigure the connector and authenticate using the same email as your PipesHub account.
+1. **Viewer identity or Zammad permissions do not match** - A viewer's Zammad email, group, or role may not map to their Novaplan AI account and the expected ticket or knowledge-base item.
+   - **Fix:** Ask your administrator to check the affected viewer's email and Zammad group and role access. The shared connector's API-token owner can be a different account.
 
 2. **Records show in "All Records" but not in search** - Documents display in the All Records section but don't appear in search query results.
    - **Fix:** Verify sync filters in the connector settings and ensure indexing has completed. Check that the data matches your search query criteria.
@@ -414,6 +408,6 @@ There are three common causes:
 <div className="text-center mt-12 p-6 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl">
   <h3 className="text-lg font-semibold mb-2">Ready to Get Started?</h3>
   <p className="text-gray-600 dark:text-gray-400">
-    Connect your Zammad helpdesk to PipesHub in just a few minutes. Follow the step-by-step guide above to enable organization-wide support ticket search across all your Zammad content.
+    Follow the setup guide with your Zammad administrator and Novaplan. Confirm the token's source access, selected groups, indexing settings, and first completed sync before relying on organization-wide ticket search.
   </p>
 </div>

@@ -1,0 +1,144 @@
+---
+title: "Google Drive"
+description: "Google-Drive-Dateien mit Novaplan AI verbinden, synchronisieren und durchsuchen."
+icon: "/logo/gdrive.png"
+---
+
+Mit dem Google-Drive-Konnektor können Sie Dateien und Ordner aus Google Drive in Novaplan AI synchronisieren. Dazu gehören auch Google Docs, Sheets und Slides. Synchronisierte und indexierte Inhalte werden entsprechend den Zugriffsrechten in der Suche verfügbar.
+
+Novaplan richtet Ihren Workspace weitgehend für Sie ein. Ob eine unternehmensweite oder persönliche Verbindung verwendet wird und welche Einrichtungsschritte Ihr Team übernimmt, stimmen Sie mit Novaplan ab. Für die persönliche Verbindung autorisiert die jeweilige Person den Zugriff auf ihr Google-Konto.
+
+## Welche Verbindung ist geeignet?
+
+| Variante | Zweck | Wer richtet sie ein? |
+| --- | --- | --- |
+| **Unternehmensweit** | Inhalte einer Google-Workspace-Domain über ein Dienstkonto synchronisieren | Novaplan gemeinsam mit Ihrer Google-Workspace-Administration |
+| **Persönlich** | Das Google-Drive-Konto einer Person per OAuth 2.0 verbinden | Novaplan oder Ihre Administration richtet die OAuth-Anwendung ein; die Person erteilt die Freigabe |
+
+Bei beiden Varianten können Sie die Synchronisierung und Indexierung über [Konnektoreinstellungen](#konnektoreinstellungen) eingrenzen.
+
+## Unternehmensweite Einrichtung
+
+Dieser Abschnitt dient Ihrer Google-Workspace-Administration und dem Novaplan-Team als technische Referenz. Die domainweite Delegation ermöglicht dem Dienstkonto, im Namen von Nutzern der Domain auf freigegebene Inhalte zuzugreifen. Prüfen Sie die Berechtigungen und die Sicherheitsrichtlinien Ihrer Organisation, bevor Sie diese Variante aktivieren.
+
+### 1. Google-Cloud-Projekt anlegen
+
+1. Melden Sie sich mit einem Konto mit den erforderlichen Administratorrechten in der [Google Cloud Console](https://console.cloud.google.com/) an.
+2. Öffnen Sie die Projektauswahl und wählen Sie **New Project**.
+3. Geben Sie einen Namen ein, wählen Sie gegebenenfalls eine Organisation oder einen Ordner und klicken Sie auf **Create**.
+4. Hinterlegen Sie über **IAM** mindestens eine weitere zuständige Person, damit der Projektzugriff nicht an ein einzelnes Konto gebunden ist.
+
+### 2. APIs aktivieren
+
+Öffnen Sie **APIs & Services → Library** und aktivieren Sie die **Google Drive API**, **Google Docs API**, **Google Sheets API**, **Google Slides API** und **Admin SDK API**. Die Admin SDK API wird für die domainweite Delegation benötigt.
+
+### 3. Dienstkonto erstellen
+
+1. Öffnen Sie **IAM & Admin → Service Accounts** und wählen Sie **Create Service Account**.
+2. Tragen Sie einen Namen und gegebenenfalls eine Beschreibung ein. Schließen Sie die Erstellung mit **Create and Continue** und **Done** ab.
+3. Kopieren Sie die Client-ID des Dienstkontos für die Delegation im nächsten Schritt.
+
+### 4. Domainweite Delegation einrichten
+
+1. Melden Sie sich als Superadministrator in der [Google Admin-Konsole](https://admin.google.com/) an.
+2. Öffnen Sie **Security → Access and data control → API controls → Manage Domain Wide Delegation**.
+3. Wählen Sie **Add new** und tragen Sie die Client-ID des Dienstkontos ein.
+4. Prüfen Sie die folgende übernommene Scope-Liste mit Novaplan und Ihrer Google-Workspace-Administration, bevor Sie das Dienstkonto autorisieren. Die für den betriebenen Konnektor tatsächlich benötigten Scopes sind noch nicht bestätigt. Tragen Sie nur die bestätigten Scopes als kommaseparierte Liste ein und klicken Sie dann auf **Authorize**:
+
+```text
+https://www.googleapis.com/auth/admin.directory.group.readonly,https://www.googleapis.com/auth/admin.reports.audit.readonly,https://www.googleapis.com/auth/admin.directory.user.readonly,https://www.googleapis.com/auth/admin.directory.domain.readonly,https://www.googleapis.com/auth/admin.directory.orgunit,https://www.googleapis.com/auth/drive.readonly,https://www.googleapis.com/auth/drive.metadata.readonly,https://www.googleapis.com/auth/drive.metadata,https://www.googleapis.com/auth/documents.readonly,https://www.googleapis.com/auth/spreadsheets.readonly,https://www.googleapis.com/auth/presentations.readonly,https://www.googleapis.com/auth/drive.file,https://www.googleapis.com/auth/drive
+```
+
+Die übernommene Liste enthält Berechtigungen mit unterschiedlicher Reichweite: `drive.readonly` erlaubt das Ansehen und Herunterladen zugänglicher Drive-Dateien, während `drive` die Verwaltung aller zugänglichen Drive-Dateien erlaubt. Auch `drive.file` und `drive.metadata` sind nicht bloß Leseberechtigungen. Die Docs-, Sheets- und Slides-Scopes betreffen deren Inhalte; die `admin.*`-Scopes betreffen die domainweite Einrichtung. Geben Sie nicht pauschal die gesamte Liste frei. Vergleichen Sie die tatsächliche Anfrage mit [Googles Beschreibung der Drive-Scopes](https://developers.google.com/workspace/drive/api/guides/api-specific-auth) und lassen Sie Novaplan und Ihre Administration die erforderlichen Berechtigungen prüfen. Das Dienstkonto und die betroffenen Nutzerkonten müssen zur vorgesehenen Domain gehören.
+
+### 5. Dienstkontoschlüssel bereitstellen
+
+Öffnen Sie beim Dienstkonto **Keys → Add Key → Create new key → JSON**. Bewahren Sie die heruntergeladene JSON-Datei geschützt auf und übergeben Sie sie nur über den mit Novaplan vereinbarten sicheren Weg. Der Schlüssel enthält vertrauliche Zugangsdaten und kann nach Verlust nicht erneut heruntergeladen werden.
+
+Wenn Ihre Organisationsrichtlinie die Erstellung eines Dienstkontoschlüssels verhindert, stimmen Sie das mit Ihrer Sicherheitsadministration und Novaplan ab. Ändern Sie die Richtlinie `iam.disableServiceAccountKeyCreation` nicht allein wegen dieser Anleitung; eine alternative Bereitstellung oder eine gezielte Ausnahme muss zu Ihren Sicherheitsvorgaben passen.
+
+### 6. Verbindung in Novaplan AI konfigurieren
+
+1. Öffnen Sie **Workspace Settings → Workspace → Connectors**.
+2. Suchen Sie **Drive Workspace** und klicken Sie auf **Setup**.
+3. Tragen Sie einen **Instance Name** und die **Admin Email** ein und laden Sie den vereinbarten JSON-Schlüssel hoch.
+4. Klicken Sie auf **Next**, prüfen Sie die [Konnektoreinstellungen](#konnektoreinstellungen) und wählen Sie **Save Configuration**.
+5. Sobald die Instanz bereit ist, starten Sie mit **Start syncing now** die Synchronisierung oder verschieben sie mit **I'll do it later**.
+
+### Optional: Google Pub/Sub für zeitnahe Änderungen
+
+Pub/Sub kann Änderungen aus Google Drive zeitnah an den Konnektor melden. Die Einrichtung ist optional und wird von Novaplan mit Ihrer Google-Cloud-Administration abgestimmt.
+
+1. Erstellen Sie unter **Pub/Sub → Topics** ein Topic, beispielsweise `projects/your-project-id/topics/drive-webhook-topic`, mit einer Standardsubscription.
+2. Öffnen Sie die Subscription, wählen Sie als Zustelltyp **Push** und verwenden Sie den von Novaplan bestätigten Endpoint mit dem Pfad `/drive/webhook`. Die Basis-URL ist die Adresse des betriebenen Konnektordienstes, nicht die öffentliche Dokumentationsadresse.
+3. Geben Sie `drive-api-push@system.gserviceaccount.com` für das Topic die Rolle **Pub/Sub Publisher**.
+4. Prüfen Sie bei Richtlinienfehlern mit Ihrer Administration, welche Domain-Freigabe erforderlich ist. Änderungen an Organisationsrichtlinien können einige Minuten benötigen.
+
+## Persönliche Einrichtung
+
+Bei dieser Variante erteilt die Person Novaplan AI per OAuth 2.0 Zugriff auf ihr Google Drive. Die OAuth-Anwendung und ihre Zugangsdaten richtet ein Administrator ein; Novaplan kann diese Einrichtung für Sie koordinieren.
+
+### 1. OAuth-Anwendung vorbereiten
+
+1. Erstellen oder wählen Sie ein Projekt in der [Google Cloud Console](https://console.cloud.google.com/).
+2. Aktivieren Sie unter **APIs & Services → Library** die Google Drive, Docs, Sheets und Slides APIs.
+3. Konfigurieren Sie unter **OAuth consent screen** die Anwendung und ihre Berechtigungen.
+4. Erstellen Sie unter **Credentials → Create Credentials → OAuth client ID** einen Client vom Typ **Web application**.
+5. Tragen Sie als autorisierte Weiterleitungsadresse die tatsächliche Novaplan-Workspace-Adresse mit `/connectors/oauth/callback/Drive` ein. Beispiel: `https://your-workspace.example.com/connectors/oauth/callback/Drive`. Die Adresse muss exakt mit der bereitgestellten Workspace-Adresse übereinstimmen.
+6. Bewahren Sie **Client ID** und **Client Secret** sicher auf.
+
+Die zugängliche Registrierung des persönlichen Drive-Konnektors fordert diesen Scope an:
+
+```text
+https://www.googleapis.com/auth/drive.readonly
+```
+
+Dieser Scope erlaubt das Ansehen und Herunterladen zugänglicher Drive-Dateien, nicht deren Verwaltung. Vergleichen Sie die Freigabe im betriebenen Workspace mit Novaplan, bevor Sie weitere Berechtigungen genehmigen.
+
+### 2. Google Drive verbinden
+
+1. Öffnen Sie **Workspace Settings → Personal → Your Connectors** und wählen Sie bei **Drive** die Option **Setup**.
+2. Vergeben Sie einen **Instance Name**. Ein Administrator hinterlegt die Google **Client ID** und das **Client Secret**, sofern noch keine vorkonfigurierte OAuth-Anwendung zur Auswahl steht.
+3. Klicken Sie auf **Next** und auf **Authenticate Drive to Proceed**.
+4. Melden Sie sich auf der Google-Freigabeseite an und erteilen Sie die angezeigten Berechtigungen.
+5. Wählen Sie **Continue to configuration**, prüfen Sie die [Konnektoreinstellungen](#konnektoreinstellungen) und klicken Sie auf **Save Configuration**.
+6. Starten Sie die Synchronisierung mit **Start syncing now** oder wählen Sie **I'll do it later**.
+
+<Warning>
+  Prüfen Sie, welches Google-Konto Sie autorisieren. Der zugängliche persönliche Konnektor vergibt Datensatzberechtigungen anhand der von Drive gelieferten Google-Adresse. Falls sie von Ihrer Novaplan-AI-Kontoadresse abweicht, lassen Sie die Kontenzuordnung und den Zugriff vor der Nutzung der Suche durch Ihre Administration prüfen.
+</Warning>
+
+## Konnektoreinstellungen
+
+### Synchronisierung
+
+- **Scheduled:** Synchronisiert automatisch im gewählten Intervall; die Voreinstellung beträgt 60 Minuten.
+- **Manual:** Synchronisiert nur, wenn ein Administrator den Vorgang auslöst.
+- **Created Date / Modified Date:** Begrenzen die synchronisierten Dateien nach Erstellungs- oder Änderungsdatum. Die Auswahl bietet unter anderem **Last 365 Days**, **Last 30 Days**, **Is After**, **Is Before** und **Is Between** für einen festen Zeitraum. Die Bezeichnungen bleiben hier auf Englisch, damit Sie die Optionen in der Oberfläche wiederfinden.
+- **Sync Files with Extensions:** Mit **In** werden nur ausgewählte Dateitypen synchronisiert; **Not In** schließt ausgewählte Typen aus. Für native Google-Dateien wählen Sie **google docs**, **google sheets** oder **google slides**; für hochgeladene Dateien Endungen wie `.pdf` oder `.docx`. Nicht unterstützte Endungen werden bei **In** ausgeschlossen und bei **Not In** nicht durch diesen Filter blockiert.
+- **Folder IDs:** Begrenzen die Synchronisierung auf die angegebenen Ordner und deren Unterordner. Die ID steht am Ende der Drive-Adresse `drive.google.com/drive/folders/<FOLDER_ID>`.
+
+Dateien, die einen Synchronisierungsfilter nicht erfüllen, werden nicht abgerufen. Ordner passieren Datums- und Dateitypfilter für die Verzeichnisstruktur; bei **Folder IDs** werden dagegen nur die ausgewählten Ordner samt Unterordnern berücksichtigt. Der aktuelle Upstream-Konnektor prüft vor jedem Lauf, ob die ausgewählten Ordner lesbar sind. Ein gelöschter Ordner oder eine bekannte Berechtigungsverweigerung wird ausgelassen; Rate-Limits, Netzwerkfehler und andere ungeklärte Fehler unterbrechen den betroffenen Lauf, statt Dateien stillschweigend wegzulassen.
+
+Bei einer wiederholten HTTP-403-Antwort ohne erkennbaren Grund versucht der Konnektor den Ordner in den Läufen 1 bis 4 erneut und kann ihn beim fünften Lauf auslassen, damit andere Inhalte weiterlaufen. Die gespeicherte **Folder IDs**-Auswahl bleibt bestehen, und der Ordner wird später erneut geprüft. Ein nur mit einer Person geteilter Ordner wird nach der fünften Ablehnung bei inkrementellen Läufen dagegen nicht erneut aufgenommen; nach Wiederherstellung des Zugriffs ist ein vollständiger Lauf nötig. Prüfen Sie Protokolle und Suchergebnisse auf ausgelassene Ordner. Das Verhalten muss im bereitgestellten Enterprise Workspace bestätigt werden, bevor der Filter als strikte Zugriffsschranke gilt.
+
+### Indexierung
+
+Indexierungsfilter bestimmen, welche bereits synchronisierten Dateien durchsuchbar werden. Nicht automatisch indexierte Dateien bleiben als Datensätze sichtbar und tragen den Status **Manual Indexing**.
+
+- **Manual Indexing:** Synchronisiert Dateien ohne automatische Indexierung. Bei Bedarf öffnen Sie unter **All Records** einen Datensatz und wählen im Dreipunktmenü **Start Indexing**.
+- **Index Shared Items:** Bezieht mit anderen geteilte Dateien in die Indexierung ein.
+- **Index Shared with Me:** Bezieht Dateien ein, die andere mit der Person geteilt haben. Nur bei unternehmensweiter Einrichtung verfügbar.
+- **Index Shared by Me:** Bezieht Dateien ein, die die Person mit anderen geteilt hat. Nur bei unternehmensweiter Einrichtung verfügbar.
+
+## Häufige Fragen
+
+### Was ist der Unterschied zwischen Google-Drive-Konnektor und Drive-Toolset?
+
+Der **Konnektor** synchronisiert und indexiert Dateien, damit Sie sie suchen und in Antworten verwenden können. Das **[Drive-Toolset](/de/toolsets/google-workspace/drive)** erlaubt entsprechend konfigurierten Agenten Aktionen über die Google-Drive-API, beispielsweise Ordner anzulegen. Klären Sie die nötigen Schreibberechtigungen gesondert.
+
+### Warum liefert die Suche keine Ergebnisse?
+
+Prüfen Sie bei einer persönlichen Verbindung, welches Google-Konto den Zugriff autorisiert hat. Bei einer unternehmensweiten Verbindung sind Dienstkonto und domainweite Delegation getrennt von der Google-Identität und den Dateiberechtigungen der einzelnen Nutzer. Lassen Sie die Administration die Zuordnung und den Zugriff der betroffenen Person prüfen; autorisieren Sie das gemeinsame Dienstkonto nicht erneut als diese Person.
+
+Sehen Sie unter **All Records** nach, ob Dateien synchronisiert wurden, und kontrollieren Sie Synchronisierungsfilter, Indexierungsstatus und Abschluss des ersten Laufs. Den Synchronisierungsstatus finden Sie bei einer Teamverbindung unter **Workspace Settings → Connectors** und bei einer persönlichen Verbindung unter **Workspace Settings → Your Connectors**. Wenn die Ursache unklar bleibt, schreiben Sie an [support@novaplan.ai](mailto:support@novaplan.ai).

@@ -1,0 +1,59 @@
+---
+title: "OpenAI-kompatible API"
+description: "Sprachmodelle über eine OpenAI-kompatible API mit Novaplan AI verbinden."
+---
+
+# OpenAI-kompatible API konfigurieren
+
+![Konfigurationsansicht für OpenAI-kompatible APIs](/images/ai-models/llm/OpenAICompatible_LLMConfig.png)
+
+Diese Anbieteroption verbindet Novaplan AI mit einem Dienst, dessen API ein kompatibles OpenAI-Format für Chat-Anfragen unterstützt. Das kann eine externe Modellplattform oder ein von Ihrer Organisation betriebener Modellserver sein. Anbieter unterscheiden sich bei Endpunkten und Parametern. Novaplan unterstützt Sie bei der Einrichtung und prüft die Verbindung aus dem verwalteten Workspace.
+
+## Erforderliche Angaben
+
+### Endpoint URL
+
+Geben Sie die **API-Basisadresse** an, die der ausgewählte Anbieter für OpenAI-kompatible Aufrufe dokumentiert. Beispiele:
+
+| Anbieter | Dokumentierte Basisadresse |
+| --- | --- |
+| [Together AI](https://docs.together.ai/docs/inference/openai-compatibility) | `https://api.together.ai/v1` |
+| [OpenRouter](https://openrouter.ai/docs/quickstart) | `https://openrouter.ai/api/v1` |
+| [DeepSeek](https://api-docs.deepseek.com/guides/harness) | `https://api.deepseek.com` |
+
+Viele Anbieter verwenden `/v1`, aber nicht alle. Übernehmen Sie den vom Anbieter dokumentierten Basiswert; Novaplan AI ergänzt die für seine Anfragen benötigten Pfade. Der Dienst muss aus dem **verwalteten Workspace** erreichbar sein. Eine Adresse, die nur auf Ihrem Computer funktioniert, genügt nicht.
+
+### API Key
+
+Der **API Key** authentifiziert die Anfragen beim Anbieter. Erstellen Sie einen Schlüssel in dessen Konto- oder API-Einstellungen und kopieren Sie ihn sofort, falls der Anbieter ihn nur einmal anzeigt. Hinterlegen Sie ihn ausschließlich über den freigegebenen Novaplan-Einrichtungsablauf. Stimmen Sie Zugriff, Abrechnung und spätere Rotation mit Novaplan und Ihrer Anbieteradministration ab.
+
+### Model Name
+
+Tragen Sie die **exakte Modell-ID** aus dem aktuellen Katalog des Anbieters ein. Together AI zeigt beispielsweise `MiniMaxAI/MiniMax-M3` und `openai/gpt-oss-120b` in seiner [OpenAI-Kompatibilitätsanleitung](https://docs.together.ai/docs/inference/openai-compatibility). Diese Werte sind Beispiele, keine Zusage, dass sie in Ihrem Konto verfügbar sind. Prüfen Sie Verfügbarkeit, Kontextlänge, Geschwindigkeit und Kosten; beginnen Sie bei Bedarf mit einem kleineren Modell.
+
+Ein Dienst kann nur einen Teil des OpenAI-API-Formats anbieten. Prüfen Sie deshalb, ob das konkrete Modell die Chat-Anfragen und Funktionen unterstützt, die Ihr Anwendungsfall benötigt.
+
+## Optionale Funktionen
+
+- **Multimodal:** Aktivieren Sie diese Option nur, wenn das Modell und sein API-Endpunkt Bildeingaben unterstützen. Das ist beispielsweise für die Auswertung von Screenshots oder bildhaltigen Dokumenten relevant. Ein OpenAI-kompatibler Text-Endpunkt allein belegt keine Bildunterstützung.
+- **Reasoning:** Aktivieren Sie diese Option nur, wenn das Modell und der Anbieter einen entsprechenden Modus unterstützen. Reasoning kann die Antwortzeit und die Kosten verändern; prüfen Sie die Angaben des Anbieters.
+
+## Modell hinzufügen
+
+1. Wählen Sie als **Provider Type** die Option **OpenAI API Compatible**.
+2. Tragen Sie **Endpoint URL**, **API Key** und **Model Name** ein. Diese drei mit `*` markierten Felder sind erforderlich.
+3. Aktivieren Sie **Multimodal** oder **Reasoning** nur bei bestätigter Unterstützung.
+4. Wählen Sie **Add Model** und testen Sie anschließend eine Anfrage aus dem Workspace.
+
+Zu den möglichen Anbietern gehören Together AI, OpenRouter, DeepSeek, Groq, Fireworks AI und ein kompatibel konfigurierter eigener Modellserver wie vLLM. Die Nennung ist keine Zusage, dass jeder Endpunkt oder jede Funktion mit Novaplan AI funktioniert; prüfen Sie die jeweilige Anbieteranleitung und eine echte Verbindung. API-Nutzung kann Kontingente, Ratenlimits und Kosten beim Anbieter verursachen. Antwortzeit und maximale Kontextlänge hängen vom gewählten Modell ab.
+
+## Fehler beheben
+
+| Problem | Prüfen Sie |
+| --- | --- |
+| Keine Verbindung | Dokumentierte Basisadresse und HTTPS; `/v1` nur, wenn der Anbieter es verlangt; Erreichbarkeit aus dem verwalteten Workspace. |
+| Authentifizierung schlägt fehl | Gültigkeit und Berechtigung des API Keys sowie erforderliche Abrechnung oder Freischaltung beim Anbieter. |
+| **Model not found** | Exakte Modell-ID, Verfügbarkeit im eigenen Konto und mögliche zusätzliche Freigabe. |
+| Antwort oder Funktion schlägt fehl | Unterstützte Chat-Endpunkte und Parameter; **Multimodal** und **Reasoning** passend zum Modell; Anbieterstatus und Ratenlimits. |
+
+Bei Fragen zur Anbindung hilft [Novaplan Support](/de/contact-us).

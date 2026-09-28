@@ -50,24 +50,25 @@ Confluence is Atlassian's team workspace and documentation platform, widely used
 
 ## Configuration Guide
 
-The Confluence connector supports **two authentication methods**. Both sync the same data — pick whichever fits your rollout.
-
-### Prerequisite: Email Visibility
-
 <Warning>
-  <div className="text-lg font-semibold">
-    **Each user in your organization must set their email address to be visible** in order for PipesHub to correctly assign permissions and make records visible to them.
-  </div>
+  The accessible Confluence Cloud connector registers **Index Page Comments** and **Index Blogpost Comments**, but its reviewed sync path does not read those two indexing settings. Do not rely on either toggle to exclude comments until Novaplan verifies its behavior in the deployed Enterprise version. If comments must be excluded, agree on a verified source or connector scope before syncing sensitive spaces.
 </Warning>
 
-This prerequisite applies to **both** authentication methods (OAuth and API Token).
+The Confluence connector supports **two authentication methods**. Both sync the same data — pick whichever fits your rollout.
 
-**Why email visibility matters.** PipesHub uses email addresses to match Confluence users with their permissions. If a user's email is hidden:
-- PipesHub cannot match the user's Confluence account to their PipesHub account
-- Permissions cannot be synced correctly for that user
-- The user will not see any Confluence content in PipesHub
+<span id="prerequisite-email-visibility"></span>
 
-**How to configure email visibility.** Every user must complete these steps in their Atlassian account:
+### Verify Confluence account mapping
+
+<Warning>
+  Test account mapping with representative users before asking everyone to change Atlassian profile visibility. Making an email visible is a privacy decision and may not be necessary when the connector can resolve the account through Jira.
+</Warning>
+
+This check applies to **both** authentication methods (OAuth and API Token).
+
+**Why mapping matters.** Novaplan AI uses email addresses to match Confluence users with their permissions. The accessible connector skips users whose email is absent from Confluence's user search, but it can also try to link active workspace users through Jira user search. For OAuth, that fallback requires **Grant Jira user access** and the `read:jira-user` scope in the Atlassian app. The fallback may fail if Jira is unavailable, lacks permission, or cannot find the user; verify the deployed result before changing profile settings.
+
+**If an affected user needs to change visibility**, they can review these settings in their Atlassian account:
 
 1. Click your **profile picture** in the top right → select **Account Settings**.
 
@@ -81,7 +82,7 @@ This prerequisite applies to **both** authentication methods (OAuth and API Toke
 
 2. Select the **Profile and visibility** tab.
 3. Scroll down to the **Contact** section.
-4. In the **Who can see this?** dropdown for your email address, select either **Anyone** (recommended) or **Your organization**.
+4. In the **Who can see this?** dropdown for your email address, consider **Your organization** if your administrator confirms that a visibility change is needed and your privacy policy permits it. **Anyone** makes the address more broadly visible.
 
 <div className="text-center">
   <img
@@ -92,21 +93,21 @@ This prerequisite applies to **both** authentication methods (OAuth and API Toke
 </div>
 
 <Warning>
-  **Do not select "Only you and admins"** — this will prevent PipesHub from accessing your email address and matching you to permissions, making all records invisible to you.
+  **Only you and admins** may prevent Confluence user search from returning the address, but the Jira lookup can still resolve some users when configured. Test the mapping rather than assuming success or failure.
 </Warning>
 
 📖 **Official documentation:** [Configure User Email Visibility in Confluence](https://support.atlassian.com/confluence-cloud/docs/configure-user-email-visibility/)
 
 <Info>
-  This is a **per-user setting** that must be configured by each individual user. Administrators cannot change this setting for other users. We recommend communicating this requirement to your team during the Confluence connector rollout.
+  Profile email visibility is a **per-user setting**. Coordinate a change with the affected person and your privacy administrator only after a mapping test shows it is needed.
 </Info>
 
 ### Choose an authentication method
 
 | Method | Best for |
 |--------|----------|
-| **OAuth 2.0 (3LO)** | Multi-user / org-wide rollouts, production — per-user refresh tokens, per-user consent, audit trail. Requires Atlassian Developer Console access. |
-| **API Token** | Single-account setups, quick POCs, or environments where you cannot register an OAuth app. Fastest path to sync. |
+| **OAuth 2.0 (3LO)** | A Team connector authorized with a designated Atlassian account through an OAuth app. Requires Atlassian Developer Console access and consent from the account that connects the instance. |
+| **API Token** | A Team connector authenticated with a token from a designated Atlassian account. No OAuth app registration is required. |
 
 <Tabs>
 
@@ -130,7 +131,7 @@ This prerequisite applies to **both** authentication methods (OAuth and API Toke
 1. Click **Create** in the top-right corner.
 2. Select **OAuth 2.0 integration** from the dropdown.
 3. Fill in the application details:
-   - **Name:** Enter a meaningful name (e.g., `PipesHub Confluence Connector`).
+   - **Name:** Enter a meaningful name (e.g., `Novaplan AI Confluence Connector`).
    - **Access type:** Select **Resource-level**.
    - Check the box to agree to Atlassian's developer terms.
 4. Click **Create**.
@@ -144,7 +145,7 @@ This prerequisite applies to **both** authentication methods (OAuth and API Toke
 </div>
 
 <Warning>
-  **You must select "Resource-level" access type.** PipesHub does not ask for a site URL — the connector uses the exact site you authorize during the OAuth step. If you choose **Account-level**, authentication will not work.
+  **You must select "Resource-level" access type.** Novaplan AI does not ask for a site URL — the connector uses the exact site you authorize during the OAuth step. If you choose **Account-level**, authentication will not work.
 </Warning>
 
 <Info>
@@ -183,14 +184,14 @@ Use the left sidebar to navigate between **Permissions**, **Authorization**, and
   />
 </div>
 
-4. **Get the Redirect URL from PipesHub:**
-   - In PipesHub, go to **Workspace Settings** → **Connectors**, find **Confluence**, and click **+ Setup** for a new instance.
+4. **Get the Redirect URL from Novaplan AI:**
+   - In Novaplan AI, go to **Workspace Settings** → **Connectors**, find **Confluence**, and click **+ Setup** for a new instance.
    - The connector panel opens as a right-side drawer. On the **Authenticate Instance** tab, copy the **Redirect URL**.
 
 <div className="text-center">
   <img
     src="/images/connectors/confluence/confluence_config.png"
-    alt="PipesHub Confluence Authenticate Instance tab — copy the Redirect URL"
+    alt="Novaplan AI Confluence Authenticate Instance tab — copy the Redirect URL"
     className="block mx-auto w-11/12"
   />
 </div>
@@ -207,7 +208,7 @@ Use the left sidebar to navigate between **Permissions**, **Authorization**, and
 </div>
 
 <Warning>
-  The Callback URL must match exactly between Atlassian Developer Console and PipesHub. Any difference — trailing slash, protocol, casing — causes authentication to fail.
+  The Callback URL must match exactly between Atlassian Developer Console and Novaplan AI. Any difference — trailing slash, protocol, casing — causes authentication to fail.
 </Warning>
 
 #### Step 5: Add API permissions
@@ -308,8 +309,8 @@ Next, the **Granular scopes** tab. Add these read permissions:
 1. In the left sidebar, click **Settings**.
 2. Scroll to the **Authentication details** section.
 3. Copy:
-   - **Client ID** — used as **Client ID** in PipesHub.
-   - **Secret** — used as **Client Secret** in PipesHub. Copy it immediately.
+   - **Client ID** — used as **Client ID** in Novaplan AI.
+   - **Secret** — used as **Client Secret** in Novaplan AI. Copy it immediately.
 
 <div className="text-center">
   <img
@@ -320,12 +321,12 @@ Next, the **Granular scopes** tab. Add these read permissions:
 </div>
 
 <Warning>
-  Store the Client ID and Client Secret securely. The secret can be regenerated if needed, but you'll have to update your PipesHub configuration with the new value.
+  Store the Client ID and Client Secret securely. The secret can be regenerated if needed, but you'll have to update your Novaplan AI configuration with the new value.
 </Warning>
 
 #### Step 7: Authenticate Instance tab — enter credentials
 
-The connector drawer in PipesHub has three tabs: **Authenticate Instance**, **Authorize**, and **Configure Records**. Start on the **Authenticate Instance** tab.
+The connector drawer in Novaplan AI has three tabs: **Authenticate Instance**, **Authorize**, and **Configure Records**. Start on the **Authenticate Instance** tab.
 
 1. Confirm the **Redirect URL** matches the Callback URL you saved in Atlassian in Step 4.
 2. If your admin has pre-registered an OAuth app, pick it from the **OAuth app** dropdown. Otherwise leave it blank and enter credentials manually.
@@ -344,7 +345,7 @@ The connector drawer in PipesHub has three tabs: **Authenticate Instance**, **Au
 </div>
 
 <Info>
-  **Grant Jira user access.** Choose **Yes** only if your Atlassian OAuth app includes Jira and you've added the `read:jira-user` scope. PipesHub will request that scope during authorization and may use Jira to resolve user emails when Confluence profiles hide them. Choose **No** if you don't use Jira on this site or haven't added that scope.
+  **Grant Jira user access.** Choose **Yes** only if your Atlassian OAuth app includes Jira and you've added the `read:jira-user` scope. Novaplan AI will request that scope during authorization and may use Jira to resolve user emails when Confluence profiles hide them. Choose **No** if you don't use Jira on this site or haven't added that scope.
 </Info>
 
 #### Step 8: Authorize tab — complete the OAuth flow
@@ -354,7 +355,7 @@ On the **Authorize** tab, all the OAuth authorization work happens. The tab show
 <div className="text-center">
   <img
     src="/images/connectors/confluence/connector_authenticate_option.png"
-    alt="PipesHub Authorize tab with the Authenticate button"
+    alt="Novaplan AI Authorize tab with the Authenticate button"
     className="block mx-auto w-11/12"
   />
 </div>
@@ -371,7 +372,7 @@ On the **Authorize** tab, all the OAuth authorization work happens. The tab show
 </div>
 
 <Warning>
-  **Authorize using the same email as your PipesHub account.** Using a different email causes permission issues on the PipesHub platform.
+  Authorize this shared Team connector with the Atlassian account agreed with your administrator. It needs access to the Confluence spaces you intend to sync. Each viewer's email and Confluence permissions are matched separately in Novaplan AI.
 </Warning>
 
 3. Review the permissions requested by the connector and click **Accept**.
@@ -384,7 +385,7 @@ On the **Authorize** tab, all the OAuth authorization work happens. The tab show
   />
 </div>
 
-4. The popup closes and returns you to PipesHub. The connector tile shows an **Authenticated** badge with a **Reauthenticate** option.
+4. The popup closes and returns you to Novaplan AI. The connector tile shows an **Authenticated** badge with a **Reauthenticate** option.
 
 5. Click **Next** to move to the **Configure Records** tab.
 
@@ -409,7 +410,7 @@ On the **Configure Records** tab, control how the connector syncs and what gets 
   **Scheduled sync** runs automatically at the specified intervals. **Manual sync** requires you to trigger synchronization on-demand.
 </Note>
 
-**Sync filters** — determine which content is downloaded from Confluence. Data excluded by sync filters is never downloaded.
+**Sync filters** — narrow the spaces, pages, and blog posts processed by this Team connection. The accessible connector still reads Confluence users and groups for identity and permission mapping. Do not treat these content filters as a guarantee that no other source metadata is read.
 
 <div className="text-center">
   <img
@@ -439,7 +440,7 @@ Available sync filters:
 
 5. **Created Date** — filter by creation date. Same operators.
 
-**Indexing filters** — control what synced data gets processed for AI search. All data is synced, but only enabled content types are indexed.
+**Indexing filters** — are intended to control which synchronized pages, blog posts, comments, and attachments are processed for AI search. Turning indexing off does not by itself prevent source retrieval. Verify the comment controls as described in the warning above.
 
 - **Pages:** Index Pages / Index Page Attachments / Index Page Comments (all default: enabled)
 - **Blog posts:** Index Blogposts / Index Blogpost Attachments / Index Blogpost Comments (all default: enabled)
@@ -452,7 +453,7 @@ Available sync filters:
 - *Recent content only:* Modified Date → Operator `Is After`, Date `2024-06-01`
 - *Index pages but not attachments:* disable the **Index Page Attachments** toggle
 
-Click **Save** to save your configuration. PipesHub confirms the instance is ready with a final dialog — **"Instance is configured and ready to sync"** — offering two choices: **I'll do it later** or **Start syncing now**.
+Click **Save** to save your configuration. Novaplan AI confirms the instance is ready with a final dialog — **"Instance is configured and ready to sync"** — offering two choices: **I'll do it later** or **Start syncing now**.
 
 <div className="text-center">
   <img
@@ -474,7 +475,7 @@ Use this method when you want the fastest setup and only need a single user acco
 
 1. Sign in to [id.atlassian.com/manage-profile/security/api-tokens](https://id.atlassian.com/manage-profile/security/api-tokens).
 2. Click **Create API token**.
-3. Give it a meaningful label (e.g., `PipesHub Confluence Connector`), set an expiry if you want, and click **Create**.
+3. Give it a meaningful label (e.g., `Novaplan AI Confluence Connector`), set an expiry if you want, and click **Create**.
 
 <div className="text-center">
   <img
@@ -504,14 +505,14 @@ Use this method when you want the fastest setup and only need a single user acco
 
 #### Step 2: Authenticate Instance tab — enter credentials
 
-1. In PipesHub, go to **Workspace Settings** → **Connectors**, find **Confluence**, and click **+ Setup**.
+1. In Novaplan AI, go to **Workspace Settings** → **Connectors**, find **Confluence**, and click **+ Setup**.
 2. The connector panel opens as a right-side drawer with three tabs: **Authenticate Instance**, **Authorize**, and **Configure Records**.
 3. On the **Authenticate Instance** tab, pick **API Token** in the **Authentication method** dropdown.
 4. Enter:
    - **Base URL** — your Confluence site URL (e.g., `https://your-domain.atlassian.net`; no trailing slash)
    - **Email** — your Atlassian account email (the account that created the API token)
    - **API Token** — the token you copied in Step 1
-5. Click **Next**. PipesHub validates the credentials and advances directly to the **Configure Records** tab (the **Authorize** tab is skipped for API Token because the token authenticates on its own).
+5. Click **Next**. Novaplan AI validates the credentials and advances directly to the **Configure Records** tab (the **Authorize** tab is skipped for API Token because the token authenticates on its own).
 
 <div className="text-center">
   <img
@@ -542,7 +543,7 @@ On the **Configure Records** tab, control how the connector syncs and what gets 
   />
 </div>
 
-**Sync filters** — determine which content is downloaded from Confluence. Data excluded by sync filters is never downloaded.
+**Sync filters** — narrow the spaces, pages, and blog posts processed by this Team connection. The accessible connector still reads Confluence users and groups for identity and permission mapping. Do not treat these content filters as a guarantee that no other source metadata is read.
 
 <div className="text-center">
   <img
@@ -565,7 +566,7 @@ Available sync filters:
 - **Pages:** Index Pages / Index Page Attachments / Index Page Comments (all default: enabled)
 - **Blog posts:** Index Blogposts / Index Blogpost Attachments / Index Blogpost Comments (all default: enabled)
 
-Click **Save** to save your configuration. PipesHub confirms the instance is ready with a final dialog — **"Instance is configured and ready to sync"** — offering two choices: **I'll do it later** or **Start syncing now**.
+Click **Save** to save your configuration. Novaplan AI confirms the instance is ready with a final dialog — **"Instance is configured and ready to sync"** — offering two choices: **I'll do it later** or **Start syncing now**.
 
 <div className="text-center">
   <img
@@ -620,10 +621,10 @@ The Confluence connector syncs the following data from your Confluence Cloud wor
 **Invalid client credentials error (OAuth):**
 - Verify Client ID and Client Secret are correct — no extra spaces
 - Check that the OAuth app is active in Atlassian Developer Console
-- Regenerate the secret if necessary and update PipesHub
+- Regenerate the secret if necessary and update Novaplan AI
 
 **Callback URL mismatch error (OAuth):**
-- Ensure the Redirect URL in PipesHub exactly matches the Callback URL in Atlassian
+- Ensure the Redirect URL in Novaplan AI exactly matches the Callback URL in Atlassian
 - Check for trailing slashes, protocol differences (`http` vs `https`), or casing
 - Update both configurations to use the same URL
 
@@ -661,7 +662,7 @@ The Confluence connector syncs the following data from your Confluence Cloud wor
 - Review page restrictions that may limit access
 
 <Warning>
-  If you modify OAuth application settings in Atlassian Developer Console (Client ID, Secret, Callback URL, or scopes), update the configuration in PipesHub and re-authorize. For API tokens, re-enter the token in the Authenticate Instance tab if you regenerate it.
+  If you modify OAuth application settings in Atlassian Developer Console (Client ID, Secret, Callback URL, or scopes), update the configuration in Novaplan AI and re-authorize. For API tokens, re-enter the token in the Authenticate Instance tab if you regenerate it.
 </Warning>
 
 </Accordion>
@@ -683,6 +684,7 @@ The Confluence connector syncs the following data from your Confluence Cloud wor
 ### Incremental sync
 - Uses timestamp-based synchronization to detect changes
 - Only syncs new or modified content since last sync
+- Reads every attachment of a page or blog post. If a temporary error interrupts the attachment list, the connector keeps the attachments already read and retries that time window on the next sync. If the first list request fails permanently, it uses attachments included in the search results.
 - Efficiently handles additions, updates, and deletions
 - Reduces API calls and sync duration
 
@@ -691,6 +693,9 @@ The Confluence connector syncs the following data from your Confluence Cloud wor
 - Each user sees only content they have access to in Confluence
 - Respects space permissions and page restrictions
 - Maintains Confluence's access control model
+- Attachments, comments, and replies inherit a restricted page's visibility. Changes to the page restriction also update their stored visibility.
+- A restriction for a group that has not yet synced remains restricted. Group members gain access after the group syncs and the page is read again.
+- Temporary failures reading space permissions, group membership, or page restrictions preserve the access already stored and are retried on a later sync. A failed restriction read does not open the page to its whole space.
 
 </Accordion>
 
@@ -706,11 +711,11 @@ The Confluence connector syncs the following data from your Confluence Cloud wor
 
 | | OAuth 2.0 | API Token |
 |---|-----------|-----------|
-| **Best for** | Multi-user / org-wide rollouts, production | Single-account setups, quick POCs |
-| **Credentials model** | Per-user consent, rotating refresh tokens | Single token, long-lived until revoked |
+| **Best for** | A Team connection managed through an Atlassian OAuth app | A Team connection where an Atlassian API token is preferred |
+| **Credentials model** | The account authorizing this connector instance grants consent; the connector maintains its OAuth credentials | The token-owning account supplies one API token for the connector instance |
 | **Prerequisites** | Atlassian Developer Console admin access | Any Atlassian account |
 
-Choose **OAuth** for production and anything that needs per-user attribution. Choose **API Token** when you cannot register a developer-console app or just want to get syncing quickly. Both methods sync the same data.
+Both methods sync the same data through one configured Team connector instance. They do not require every Novaplan AI viewer to authorize the connector separately. Verified account mapping and source permissions determine what each viewer can find; agree on the authenticating account and method with Novaplan and your Atlassian administrator.
 
 </Accordion>
 
@@ -719,7 +724,7 @@ Choose **OAuth** for production and anything that needs per-user attribution. Ch
 | Aspect | Confluence Connector | Confluence Toolset |
 |--------|---------------------|-------------------|
 | **Purpose** | Sync and index Confluence data for search | Enable agents to perform actions in Confluence |
-| **Data Flow** | One-way (import data into PipesHub) | Two-way (read and write via API) |
+| **Data Flow** | One-way (import data into Novaplan AI) | Two-way (read and write via API) |
 | **When to Use** | Query/search pages, spaces, blog posts | Create pages, update content, manage spaces |
 
 **Example:** Use **Confluence Connector** to search and retrieve documentation. Use **Confluence Toolset** to let agents create or update Confluence pages.
@@ -730,14 +735,14 @@ Choose **OAuth** for production and anything that needs per-user attribution. Ch
 
 There are three common causes:
 
-1. **Email mismatch** - The email used during connector authentication doesn't match your PipesHub account email. This causes permission issues preventing you from accessing synced data.
-   - **Fix:** Reconfigure the connector and authenticate using the same email as your PipesHub account.
+1. **Viewer identity or Confluence access does not match** - A viewer's Confluence email or space permissions may not map to their Novaplan AI account. The account authorizing the shared connector does not have to match every viewer.
+   - **Fix:** Ask your administrator to check the affected viewer's account email and Confluence access, then confirm the connector's designated account can read the space.
 
 2. **Records show in "All Records" but not in search** - Documents display in the All Records section but don't appear in search query results.
    - **Fix:** Verify sync filters in the connector settings and ensure indexing has completed. Check that the data matches your search query criteria.
 
 3. **Data not yet indexed** - The connector is still syncing or hasn't completed the initial indexing process.
-   - **Fix:** Go to **Settings > Connectors**, check the sync status, and wait for indexing to complete.
+   - **Fix:** Go to **Workspace Settings → Connectors**, check the sync status, and wait for indexing to complete.
 
 </Accordion>
 
@@ -749,15 +754,7 @@ Yes. When creating a Confluence connector, the admin has the option to apply fil
 
 <Accordion title="Is it possible to index only specific pages within a Confluence space?">
 
-Yes. You can achieve this by following these steps:
-
-1. **Create a dedicated connector instance** — Create a Confluence connector instance for the space that contains the pages you want to index.
-
-2. **Select Manual Indexing** — When configuring the connector, choose the **Manual Indexing** option. This gives you granular control over which content gets indexed.
-
-3. **Select the Confluence space** — Use the filters to select the specific Confluence space that contains the pages you want to index.
-
-4. **Navigate to specific pages** — Go to **All Records** in the navigation bar, then browse to the specific pages you want to index within the selected Confluence space.
+Yes. Under **Configure Records**, use the **Space Keys** filter to select the space and the **Page IDs** filter with `In` to select the pages. The documented page filter also includes their child pages. Keep **Index Pages** enabled if you want the selected pages to be searchable by content. **Enable Manual Indexing** controls when synchronized records are indexed; it is not required to select a page subset. The accessible connector source registers this page filter as `page_ids` (displayed there as **Page Name**), so confirm the exact label in your deployed workspace.
 
 </Accordion>
 
@@ -768,6 +765,6 @@ Yes. You can achieve this by following these steps:
 <div className="text-center mt-12 p-6 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl">
   <h3 className="text-lg font-semibold mb-2">Ready to Get Started?</h3>
   <p className="text-gray-600 dark:text-gray-400">
-    Connect your Confluence workspace to PipesHub in just a few minutes. Follow the step-by-step guide above to enable organization-wide knowledge search and access across all your Confluence content.
+    Connect your Confluence workspace to Novaplan AI using the approved account and filters above. Search results reflect the content that was synced and each viewer's Confluence permissions.
   </p>
 </div>

@@ -34,55 +34,74 @@ The Redshift toolset lets agents query your Amazon Redshift database.
   Admin creates the Redshift toolset once. After that, each user authenticates with their own Redshift username and password.
 </Note>
 
+<Warning>
+  `execute_query` sends SQL to Redshift with the authenticated user's database privileges; the tool is not limited to read-only statements. For analytical agents, use an account with only the required read permissions. Review any write or administrative access separately.
+</Warning>
+
+## Available Tools
+
+| Tool | Description |
+| --- | --- |
+| `list_schemas` | List database schemas |
+| `list_schemas_and_tables` | List schemas and their tables together |
+| `list_tables` | List tables in a selected schema |
+| `get_table_ddl` | Get the `CREATE TABLE` definition of a table |
+| `get_schema_ddl` | Get table definitions for a schema |
+| `get_tables_schema` | Inspect columns and keys for selected tables |
+| `fetch_db_schema` | Fetch the database schema, including tables and views |
+| `execute_query` | Run SQL under the authenticated user's database permissions |
+
 ---
 
 ## Configuration Guide
 
 <AccordionGroup>
 
-<Accordion title="Step 1: Set up Redshift Serverless in AWS" icon="database">
+<Accordion title="Step 1: Prepare a Redshift database and network access" icon="database">
+
+If your organization already has a Redshift cluster or workgroup, use its approved endpoint and database; do not create another one for this toolset. The following Serverless names are only an example for an administrator preparing a separate test environment. Confirm resource creation, capacity, and cost with your AWS administrator.
 
 ### Create namespace and workgroup
 
-1. Open AWS Console and go to **Amazon Redshift**.
-2. Click **Try Amazon Redshift Serverless free trial**.
-3. Select **Customize settings**.
-4. Under **Namespace**, set:
+1. If a new test environment has been approved, open **Amazon Redshift** in the AWS Console and create a Serverless namespace and workgroup using your organization's process.
+2. Under **Namespace**, set:
    - **Namespace name**: `redshift-dev`
    - **Database name**: `dev`
    - **Admin username**: for example `root`
    - **Password**: choose **Add password manually** and set a password
    - Create or attach an IAM role for Redshift access
-5. Under **Workgroup**, set:
+3. Under **Workgroup**, set:
    - **Workgroup name**: `redshift-dev-wg`
-   - **RPU**: change from `128` to `16` for testing
-   - Enable **Turn on public accessibility**
-6. Keep other values as default and click **Save configuration**.
+   - **Capacity**: use the setting approved by your AWS administrator for this test
+   - Choose the network accessibility agreed with your AWS administrator and Novaplan. Public accessibility is not required when a private route from Novaplan to Redshift is available.
+4. Review the remaining settings, expected charges, and access controls before saving the workgroup.
 
-### Open port 5439 in security group
+### Allow the Novaplan connection in the security group
 
 1. In Redshift, open your **Workgroup** page.
 2. Open **Network and security**.
 3. Click the linked **Security group**.
 4. In EC2 security group, click **Edit inbound rules**.
-5. Add rule:
+5. Add a rule for the connection source confirmed for your Novaplan workspace:
    - **Type**: `Custom TCP`
    - **Port range**: `5439`
-   - **Source**: `My IP`
+   - **Source**: the approved Novaplan egress address or private network range, not automatically `My IP` on your laptop
 6. Click **Save rules**.
 
 <Info>
-  Redshift uses port `5439` by default.
+  Redshift uses port `5439` by default. Confirm the actual network path and source with Novaplan before opening an inbound rule.
 </Info>
 
 ### Copy endpoint and database details
 
 From the Redshift **Workgroup** page, copy the endpoint. Example:
 
-`redshift-dev-wg.891377406506.ap-south-1.redshift-serverless.amazonaws.com:5439/dev`
+`redshift-dev-wg.your-account.ap-south-1.redshift-serverless.amazonaws.com:5439/dev`
 
-Use these values in PipesHub setup:
-- **Host**: `redshift-dev-wg.891377406506.ap-south-1.redshift-serverless.amazonaws.com` (only hostname before `:`)
+Replace `your-account` with the account-specific value from your actual workgroup endpoint; this example is not a usable address.
+
+Use these values in Novaplan AI setup:
+- **Host**: `redshift-dev-wg.your-account.ap-south-1.redshift-serverless.amazonaws.com` (only hostname before `:`)
 - **Port**: `5439`
 - **Database**: `dev`
 
@@ -110,7 +129,7 @@ psql --version
 Then run:
 
 ```bash
-psql "sslmode=require host=redshift-dev-wg.891377406506.ap-south-1.redshift-serverless.amazonaws.com port=5439 user=root dbname=dev" -f "/path/to/tickitdb.sql"
+psql "sslmode=require host=redshift-dev-wg.your-account.ap-south-1.redshift-serverless.amazonaws.com port=5439 user=your_test_user dbname=dev" -f "/path/to/tickitdb.sql"
 ```
 
 </Accordion>
@@ -123,7 +142,7 @@ psql "sslmode=require host=redshift-dev-wg.891377406506.ap-south-1.redshift-serv
 
 ### Go to toolset creation flow
 
-1. In PipesHub, open **Workspace Settings**.
+1. In Novaplan AI, open **Workspace Settings**.
 2. Click **Actions**.
 3. Click **Create Toolset**.
 
@@ -253,10 +272,10 @@ After admin creates the toolset, each user must authenticate with their own Reds
 Use only the hostname part of the endpoint.
 
 If endpoint is:
-`redshift-dev-wg.891377406506.ap-south-1.redshift-serverless.amazonaws.com:5439/dev`
+`redshift-dev-wg.your-account.ap-south-1.redshift-serverless.amazonaws.com:5439/dev`
 
 Then use:
-- **Host**: `redshift-dev-wg.891377406506.ap-south-1.redshift-serverless.amazonaws.com`
+- **Host**: `redshift-dev-wg.your-account.ap-south-1.redshift-serverless.amazonaws.com`
 - **Port**: `5439`
 - **Database**: `dev`
 

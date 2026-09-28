@@ -1,12 +1,12 @@
 ---
 title: "Personal Access Tokens"
-description: "Create long-lived, scoped, revocable credentials that act as you — the recommended way to connect external agents and scripts to PipesHub"
+description: "Create long-lived, scoped, revocable credentials that act as you — the recommended way to connect external agents and scripts to Novaplan AI"
 icon: "id-badge"
 ---
 
-A **Personal Access Token (PAT)** is a long-lived, scoped, revocable credential that you create for yourself. Unlike a session token, it doesn't expire after a day. Unlike an [OAuth 2.0 Application](/developer/oauth2), it authenticates as **you** — every request made with it respects your own per-user permissions, not an app's.
+A **Personal Access Token (PAT)** is a long-lived, scoped, revocable credential that you create for yourself. Unlike a session token, it doesn't expire after a day. It authenticates as **you** — every request made with it respects your own per-user permissions. OAuth's `client_credentials` grant instead has no user identity; an [OAuth 2.0 Application](/developer/oauth2) using the authorization-code flow can authenticate a consenting user.
 
-Use a PAT when you want to connect something to PipesHub programmatically — most commonly, an MCP client (see [MCP Server Overview](/mcp/overview)) — without setting up an OAuth app or scraping a short-lived session token.
+Use a PAT when you want to connect something to Novaplan AI programmatically — most commonly, an MCP client (see [MCP Server Overview](/mcp/overview)) — without setting up an OAuth app or scraping a short-lived session token.
 
 <Note>
   PATs are self-service: **any org member** can create their own, no administrator involvement required.
@@ -31,8 +31,8 @@ If you're connecting your own tooling and want it to see exactly what you can se
 
 ### Step 1: Open Personal Access Tokens
 
-1. Sign in to your PipesHub account
-2. Navigate to **Workspace-settings**
+1. Sign in to your Novaplan AI account
+2. Navigate to **Workspace Settings**
 3. Select **Personal Access Tokens** under the **Developer Settings** section
 
 ### Step 2: Create a New Token
@@ -51,10 +51,10 @@ Click **New token** and fill in:
 
 ### Step 3: Copy the Token
 
-PipesHub generates the token and shows it to you **exactly once**, along with a ready-to-paste block for connecting an MCP client:
+Novaplan AI generates the token and shows it to you **exactly once**, along with a ready-to-paste block for connecting an MCP client:
 
 ```
-PIPESHUB_MCP_URL=https://your-pipeshub-instance.com/mcp
+PIPESHUB_MCP_URL=https://your-workspace.example.com/mcp
 PIPESHUB_MCP_TOKEN=phpat_eyJhbGciOiJIUzI1NiIs...
 ```
 
@@ -65,33 +65,33 @@ PIPESHUB_MCP_TOKEN=phpat_eyJhbGciOiJIUzI1NiIs...
 <Tip>
   The `phpat_` prefix is intentional and display-only — it makes personal access tokens easy to recognize in logs, config files, and secret-scanning tools, unlike a bare JWT. It's stripped automatically before the token is verified, so nothing else about how you use the token changes.
 
-  If a `phpat_` token returns 401, your instance predates the prefix-stripping fix — upgrade PipesHub. Until you can, store the token without the `phpat_` prefix and add it back afterwards.
+  If a `phpat_` token returns 401, contact Novaplan Support to verify the deployed version and token handling. Do not remove or alter the token prefix based on an example.
 </Tip>
 
 `PIPESHUB_MCP_TOKEN` is the same value you'll pass as `--bearer-auth` or in an `Authorization: Bearer` header below — the paste block just saves you from copying it twice.
 
 <Note>
-  This block is for MCP clients and the [local stdio server](/mcp/local-server). **QM expects different names**: the bare token as `PIPESHUB_TOKEN`, and the origin with no `/mcp` path as `PIPESHUB_BASE_URL`, on two personal keychain entries. Pasting this block into QM's keychain fails in a way that looks like a missing environment variable rather than a wrong one.
+  This block is intended for MCP clients and the [local stdio server](/mcp/local-server). The bundled QM CLI also accepts these `PIPESHUB_MCP_*` names, but QM still needs the token and URL as **two separate personal keychain entries** with explicit environment-variable fields. The [QM guide](/mcp/qm) recommends `PIPESHUB_TOKEN` and `PIPESHUB_BASE_URL` for clarity.
 </Note>
 
 ---
 
 ## Using a Personal Access Token
 
-Send it as a standard bearer token on any authenticated PipesHub API request, including the [MCP endpoint](/mcp/overview):
+Send it as a standard bearer token on any authenticated Novaplan AI API request, including the [MCP endpoint](/mcp/overview):
 
 ```bash
-curl -X POST https://your-pipeshub-instance.com/mcp \
+curl -X POST https://your-workspace.example.com/mcp \
   -H "Authorization: Bearer phpat_YOUR_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
 ```
 
-For the local stdio MCP server, or any MCP client that takes a bearer token (see [Local Server (Stdio)](/mcp/local-server)), pass the PAT as `YOUR_BEARER_TOKEN`:
+For the local stdio MCP server (see [Local Server (Stdio)](/mcp/local-server)), pass the PAT as `YOUR_BEARER_TOKEN` and set `NOVAPLAN_API_URL` to your workspace URL followed by `/api/v1`:
 
 ```bash
 npx -y @pipeshub-ai/mcp start \
-  --server-url PIPESHUB_INSTANCE_URL \
+  --server-url NOVAPLAN_API_URL \
   --bearer-auth phpat_YOUR_TOKEN
 ```
 
@@ -121,12 +121,12 @@ Because a PAT can live for months or years, an org admin needs a way to see and 
 
 <CodeGroup>
 ```bash List every active PAT in the org
-curl -X GET "https://your-pipeshub-instance.com/api/v1/personal-access-tokens/admin?page=1&limit=100" \
+curl -X GET "https://your-workspace.example.com/api/v1/personal-access-tokens/admin?page=1&limit=100" \
   -H "Authorization: Bearer YOUR_SESSION_TOKEN"
 ```
 
 ```bash Revoke any user's token by id
-curl -X DELETE https://your-pipeshub-instance.com/api/v1/personal-access-tokens/admin/TOKEN_ID \
+curl -X DELETE https://your-workspace.example.com/api/v1/personal-access-tokens/admin/TOKEN_ID \
   -H "Authorization: Bearer YOUR_SESSION_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{"reason": "departed employee"}'
@@ -213,7 +213,7 @@ Both accept an optional body:
 <CardGroup cols={2}>
 
 <Card title="One-time display" icon="eye-slash">
-  The raw token is shown only at creation time. Only its hash is stored — PipesHub can't show it to you again if you lose it.
+  The raw token is shown only at creation time. Only its hash is stored — Novaplan AI can't show it to you again if you lose it.
 </Card>
 
 <Card title="Scanner-friendly prefix" icon="magnifying-glass">
@@ -249,7 +249,7 @@ No, unless you're an org admin. Regular users can only see and revoke tokens the
 </Accordion>
 
 <Accordion title="What happens to my tokens if I'm removed from the org?">
-They stop authenticating immediately — PipesHub rejects a personal access token whose owning user has been deleted, the same way it would reject an expired one.
+They stop authenticating immediately — Novaplan AI rejects a personal access token whose owning user has been deleted, the same way it would reject an expired one.
 </Accordion>
 
 <Accordion title="Is there a limit on how many tokens I can create?">

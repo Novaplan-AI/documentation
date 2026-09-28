@@ -1,0 +1,26 @@
+---
+title: "Azure AI Embeddings"
+description: "Embedding-Modelle aus Azure AI Foundry in Novaplan AI konfigurieren."
+---
+
+# Azure AI Embeddings konfigurieren
+
+![Konfigurationsansicht für Azure AI Embeddings](/images/ai-models/embedding/AzureAI_EmbeddingConfig.png)
+
+Azure AI Foundry bietet Embedding-Modelle verschiedener Anbieter an. Novaplan AI kann ein dort bereitgestelltes Modell für semantische Suche und Dokumentabruf verwenden. Novaplan unterstützt Sie bei der Einrichtung.
+
+## Erforderliche Angaben
+
+**Endpoint URL:** Öffnen Sie im [Azure-Portal](https://portal.azure.com) Ihre Azure-AI-Foundry-Ressource, wählen Sie das Embedding-Deployment und kopieren Sie dessen Endpoint. Ein mögliches Format ist `https://<your-resource-name>.services.ai.azure.com/openai/v1/`. Verwenden Sie die Adresse Ihrer tatsächlichen Ressource und Region.
+
+**API Key:** Kopieren Sie in der Azure-Ressource unter **Keys and Endpoint** entweder **Key 1** oder **Key 2**. Bewahren Sie ihn geschützt auf.
+
+**Model Name:** Tragen Sie den genauen Namen Ihres bereitgestellten Embedding-Modells ein. Beispiele sind `text-embedding-ada-002` und `embed-v-4-0`. Prüfen Sie den [aktuellen Azure-AI-Modellkatalog](https://ai.azure.com/explore/models) und die Verfügbarkeit in Ihrer Bereitstellung.
+
+## Modell hinzufügen
+
+1. Klicken Sie auf der Azure-AI-Embedding-Anbieterkarte auf **Configure**.
+2. Geben Sie **Endpoint URL**, **API Key** und **Model Name** ein.
+3. Klicken Sie auf **Add Model**, um die Angaben zu speichern und prüfen zu lassen.
+
+Alle drei Felder sind erforderlich. Nutzung zählt zu Kontingent und Abrechnung Ihrer Azure-Ressource. Bei Fehlern prüfen Sie die vollständige Endpoint-Adresse, den Schlüssel, die exakte Modell-ID, Abonnement und Kontingent. Weitere Informationen bietet die [Azure-AI-Foundry-Dokumentation](https://learn.microsoft.com/en-us/azure/ai-studio/); [Novaplan Support](/de/contact-us) hilft bei der Einrichtung.

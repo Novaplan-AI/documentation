@@ -1,0 +1,122 @@
+---
+title: "Toolsets im Überblick"
+description: "Aktionen für Agenten mit externen Anwendungen verbinden."
+icon: "tools"
+---
+
+## Was sind Toolsets?
+
+**Toolsets** stellen Agenten Aktionen in verbundenen Anwendungen bereit: Daten lesen, Nachrichten versenden, Vorgänge anlegen oder Inhalte aktualisieren. Ein [Konnektor](/de/connectors/overview) synchronisiert dagegen Daten in die Novaplan-AI-Suche. Wenn ein Agent erst Wissen suchen und anschließend handeln soll, können Sie im Agent Builder **Knowledge**-Knoten für die Suche und **Tools**-Knoten für Aktionen mit dem Agent Core verbinden.
+
+| | Konnektor | Toolset |
+| --- | --- | --- |
+| Zweck | Daten für Suche und Kontext synchronisieren | Aktionen über die API einer Anwendung ausführen |
+| Zeitpunkt | Geplante oder manuelle Synchronisierung | Beim Aufruf einer Aktion durch den Agenten |
+| Beispiel | E-Mails in der Wissenssuche finden | Eine neue E-Mail versenden |
+
+Toolsets können je nach Anbieter lesen, schreiben oder löschen. Autorisieren Sie nur die Rechte, die für den vorgesehenen Agenten und Anwendungsfall nötig sind. Novaplan unterstützt Sie bei der Einrichtung und der Prüfung sensibler Aktionen.
+
+## Verfügbare Anwendungen
+
+Die folgenden Toolsets sind im zugänglichen Aktionskatalog beschrieben. Welche davon in Ihrem Workspace tatsächlich bereitstehen, sehen Sie unter **Workspace settings → Actions**. Die Zahl der Werkzeuge stammt aus diesem Katalog und kann sich mit der bereitgestellten Version ändern.
+
+### Google Workspace
+
+| Toolset | Aktionen | Werkzeuge |
+| --- | --- | ---: |
+| [Gmail](/de/toolsets/google-workspace/gmail) | E-Mails lesen, senden und beantworten | 7 |
+| [Calendar](/de/toolsets/google-workspace/calendar) | Termine anlegen und verwalten | 7 |
+| [Drive](/de/toolsets/google-workspace/drive) | Dateien finden, lesen und verwalten | 8 |
+
+### Microsoft 365
+
+| Toolset | Aktionen | Werkzeuge |
+| --- | --- | ---: |
+| [Outlook](/de/toolsets/microsoft-365/outlook) | E-Mails und Kalender verwalten | 19 |
+| [OneDrive](/de/toolsets/microsoft-365/onedrive) | Dateien finden, lesen und verwalten | 21 |
+| [SharePoint](/de/toolsets/microsoft-365/sharepoint) | Websites, Listen und Dokumente bearbeiten | 19 |
+| [Teams](/de/toolsets/microsoft-365/teams) | Kanäle, Chats und Besprechungen verwalten | 34 |
+
+### Atlassian
+
+| Toolset | Aktionen | Werkzeuge |
+| --- | --- | ---: |
+| [Jira](/de/toolsets/jira/jira) | Vorgänge, Kommentare und Statuswechsel | 15 |
+| [Jira Data Center](/de/toolsets/jira/jira-data-center) | Aktionen in selbst betriebenem Jira | 13 |
+| [Confluence](/de/toolsets/confluence/confluence) | Seiten, Kommentare und Anhänge | 16 |
+| [Confluence Data Center](/de/toolsets/confluence/confluence-data-center) | Aktionen in selbst betriebenem Confluence | 15 |
+
+### Weitere Anwendungen und Datenbanken
+
+| Toolset | Aktionen | Werkzeuge |
+| --- | --- | ---: |
+| [GitHub](/de/toolsets/github/github) | Repositories, Issues und Pull Requests | 23 |
+| [ClickUp](/de/toolsets/clickup/clickup) | Aufgaben, Dokumente und Checklisten | 26 |
+| [Slack](/de/toolsets/slack/slack) | Nachrichten, Kanäle und Threads | 37 |
+| [Zoom](/de/toolsets/zoom/zoom) | Besprechungen und Kontakte | 13 |
+| [Salesforce](/de/toolsets/salesforce/salesforce) | Datensätze, Cases und SOQL-Abfragen | 30 |
+| Lumos | Zugriffsanfragen und App-Berechtigungen | 26 |
+| [MariaDB](/de/toolsets/mariadb/mariadb) | Tabellen abfragen und Schemas prüfen | 5 |
+| [Redshift](/de/toolsets/redshift/redshift) | Tabellen abfragen und Schemas prüfen | 8 |
+
+Das sind **19 Katalog-Toolsets mit 342 Werkzeugen** in der zugänglichen Implementierung. Für Lumos ist noch keine eigene Anleitung verfügbar. Wenn Sie diese Aktion einrichten möchten, wenden Sie sich an [Novaplan Support](/de/contact-us). Weitere Implementierungen, etwa Notion, Linear, GitLab, Dropbox, Box, S3 und Zendesk, sind im zugänglichen Quellkatalog nicht als aktiv registrierte Toolsets enthalten. Ihre tatsächliche Verfügbarkeit muss im Workspace geprüft werden.
+
+Zusätzlich stehen Agenten eingebaute Fähigkeiten zur Verfügung, die nicht unter **Actions** eingerichtet werden: **Artifact Manager** (6 Werkzeuge), **Internal Tools** für strukturierte Rückfragen (1), **Calculator** für Berechnungen und Arbeitstage (5) sowie **Image Generator** (1). Bei angebundenem Wissen kommt **Knowledge Graph** mit 4 Such- und Strukturwerkzeugen hinzu. Für Bildgenerierung muss zuvor ein geeignetes Modell unter **Workspace Settings → AI Models → Image Generation** eingerichtet sein.
+
+<Warning>
+  Wenn Codeausführung für Ihren Workspace aktiviert ist, können Agenten über `run_code`, `install_packages` und `read_sandbox_file` Code und Dateien in einer isolierten Umgebung verwenden. In der zugänglichen Implementierung ist sie standardmäßig aktiviert; prüfen Sie mit Novaplan, ob das auch für Ihren bereitgestellten Workspace gilt. Diese Werkzeuge gehören zu den eingebauten Agentenfähigkeiten; die Repository-Einträge `coding_sandbox` und `database_sandbox` werden laut technischer Quellanleitung nicht zusätzlich als Toolsets an Agenten angehängt. Klären Sie mit Novaplan, ob diese Funktion für Ihre Agenten und Daten zugelassen sein soll.
+</Warning>
+
+## Toolset einrichten
+
+1. Öffnen Sie **Workspace settings → Actions**. Teamweit verwaltete Toolsets benötigen die entsprechenden Administrationsrechte. Persönliche Verbindungen finden Sie unter **Your Actions**.
+
+<div className="text-center">
+  <img src="/images/toolsets/navigate-to-toolsets.png" alt="Navigation zu Actions in den Workspace-Einstellungen" className="block mx-auto w-11/12" />
+</div>
+
+2. Suchen Sie die Anwendung. Für Team-Aktionen können Sie nach **All**, **Configured** und **Not configured** filtern; für persönliche Aktionen nach **All**, **Authenticated** und **Not authenticated**.
+
+<div className="text-center">
+  <img src="/images/toolsets/toolsets-page.png" alt="Aktionskatalog und Filter für Toolsets" className="block mx-auto w-11/12" />
+</div>
+
+3. Wählen Sie **Configure** und folgen Sie den anwendungsspezifischen Schritten. Je nach Toolset benötigen Sie OAuth-Zugangsdaten oder eine andere Anmeldemethode.
+
+<div className="text-center">
+  <img src="/images/toolsets/config-dialog.png" alt="Konfigurationsdialog eines Toolsets" className="block mx-auto w-11/12" />
+</div>
+
+4. Bei OAuth kopieren Sie die im Konfigurationsdialog angezeigte **Redirect URI** in die zugelassene Callback-Liste der externen Anwendung. Beide Werte müssen exakt übereinstimmen.
+5. Schließen Sie **Authenticate** und gegebenenfalls die Freigabe im Anbieterfenster ab. Prüfen Sie anschließend den Status **Authenticated**.
+
+<div className="text-center">
+  <img src="/images/toolsets/authenticated-toolset.png" alt="Authentifiziertes Toolset im Aktionskatalog" className="block mx-auto w-11/12" />
+</div>
+
+Die notwendigen Berechtigungen hängen von den tatsächlich genutzten Aktionen ab. Ein Toolset für E-Mails kann beispielsweise Leserechte und Senderechte benötigen; ein Toolset für Vorgänge kann Erstellen, Aktualisieren oder Löschen anbieten. Die Einzelanleitungen beschreiben die jeweiligen Zugangsdaten und Rechte. Bei Datenbank-Toolsets kann ein Administrator die Instanz anlegen, während Benutzer ihre eigenen Zugangsdaten hinterlegen.
+
+### Anmeldemethoden und persönliche Zugangsdaten
+
+Bei **OAuth 2.0** richtet die Workspace-Administration gegebenenfalls eine Anwendung beim Anbieter ein, hinterlegt deren Client ID und Client Secret und kopiert die **Redirect URI** aus Novaplan AI als zugelassene Callback-URL zum Anbieter. Anschließend bestätigt jede berechtigte Person den Zugriff mit ihrem eigenen Konto. Prüfen Sie die angeforderten Lese-, Schreib- und Löschrechte im Zustimmungsdialog; der Umfang unterscheidet sich je nach Toolset. OAuth-Tokens können von der Integration erneuert werden, sofern der Anbieter und die Workspace-Konfiguration das zulassen.
+
+Bei Toolsets mit Benutzername und Passwort, beispielsweise MariaDB, erstellt die Administration die gemeinsame Instanz mit Host, Port und Datenbank. Jede Person hinterlegt danach ihre **eigenen** Datenbank-Zugangsdaten unter **Your actions**. Verwenden Sie kein gemeinsam genutztes Datenbankkonto, und klären Sie mit Novaplan vor der Anbindung sensibler Daten, wie persönliche Zugangsdaten im bereitgestellten Workspace geschützt werden.
+
+## Im Agent Builder verwenden
+
+1. Öffnen Sie einen Agenten im **Agent Builder**.
+2. Suchen Sie im Bereich **Tools** das authentifizierte Toolset.
+3. Fügen Sie es dem Ablauf hinzu und verbinden Sie es mit dem Agent Core.
+4. Testen Sie den Agenten mit einem Konto, das die vorgesehenen Rechte besitzt. Prüfen Sie bei schreibenden Aktionen die Auswirkungen in der Zielanwendung.
+
+<div className="text-center">
+  <img src="/images/toolsets/toolset-in-agent-builder.png" alt="Toolset im Agent Builder verwenden" className="block mx-auto w-11/12" />
+</div>
+
+Ist ein Toolset nicht nutzbar, prüfen Sie unter **Actions** den Authentifizierungsstatus. Über den Konfigurationsdialog können Sie Zugangsdaten aktualisieren, bei Ablauf erneut authentifizieren oder eine nicht mehr benötigte Verbindung entfernen. Nicht authentifizierte Toolsets lassen sich nicht als ausführbare Aktionen verwenden.
+
+<div className="text-center">
+  <img src="/images/toolsets/manage-toolset.png" alt="Konfiguration und erneute Anmeldung eines Toolsets verwalten" className="block mx-auto w-11/12" />
+</div>
+
+Weitere Schritte finden Sie unter [Agent einrichten](/de/agent-guide/setup-guide) und in den jeweiligen Toolset-Anleitungen. Bei Fragen zur Freigabe von Aktionen wenden Sie sich an [Novaplan Support](/de/contact-us).

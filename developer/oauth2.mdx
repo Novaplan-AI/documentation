@@ -1,10 +1,10 @@
 ---
 title: "OAuth 2.0 Applications"
-description: "Create and manage OAuth 2.0 applications to integrate third-party services with PipesHub securely"
+description: "Create and manage OAuth 2.0 applications to integrate third-party services with Novaplan AI securely"
 icon: "key"
 ---
 
-PipesHub provides a built-in OAuth 2.0 authorization server that allows administrators to register third-party applications and control how they access organizational data. This guide walks through the complete process of creating, configuring, and managing OAuth applications.
+Novaplan AI provides a built-in OAuth 2.0 authorization server that allows administrators to register third-party applications and control how they access organizational data. This guide walks through the complete process of creating, configuring, and managing OAuth applications.
 
 ---
 
@@ -18,8 +18,8 @@ OAuth application management is available exclusively to **administrators**. Onl
 
 To access the OAuth application management page:
 
-1. Sign in to your PipesHub account with administrator credentials
-2. Navigate to **Workspace-settings** 
+1. Sign in to your Novaplan AI account with administrator credentials
+2. Navigate to **Workspace Settings**
 3. Select **OAuth 2.0 Apps** under the **Developer Settings** section
 
 <div style={{ textAlign: "center", padding: "10px" }}>
@@ -81,9 +81,9 @@ Select the authorization grant types that your application requires:
 The **Authorization Code** grant is the most common and secure flow. It is suitable for applications that have a backend server capable of securely storing credentials.
 
 **How it works:**
-1. The application redirects the user to PipesHub's authorization page
+1. The application redirects the user to Novaplan AI's authorization page
 2. The user reviews the requested permissions and grants consent
-3. PipesHub redirects the user back to your application with a temporary authorization code
+3. Novaplan AI redirects the user back to your application with a temporary authorization code
 4. Your application exchanges this code for an access token on the server side
 
 This grant type supports **PKCE (Proof Key for Code Exchange)**, which is required for public clients such as mobile applications or single-page applications that cannot securely store a client secret.
@@ -97,7 +97,9 @@ The **Client Credentials** grant is designed for server-to-server communication 
 **When to use:**
 - Background services or automation scripts
 - Machine-to-machine integrations
-- Scheduled tasks that access organizational data
+- Scheduled tasks that use endpoints explicitly approved for application identity
+
+Do not use client credentials for requests whose results must respect a particular user's permissions. Use Authorization Code or a user-bound token for those requests.
 
 </Accordion>
 
@@ -116,7 +118,7 @@ The **Refresh Token** grant allows your application to obtain a new access token
 
 ### Step 4: Add Redirect URIs
 
-Redirect URIs define where PipesHub sends users after they authorize (or deny) access. You may register up to **10 redirect URIs** per application.
+Redirect URIs define where Novaplan AI sends users after they authorize (or deny) access. You may register up to **10 redirect URIs** per application.
 
 <div style={{ textAlign: "center", padding: "10px" }}>
   <img
@@ -263,7 +265,7 @@ Scopes are organized by category for ease of selection. The following table prov
 
 ### Step 6: Save and Store Credentials
 
-After submitting the form, PipesHub generates a unique **Client ID** and **Client Secret** for your application.
+After submitting the form, Novaplan AI generates a unique **Client ID** and **Client Secret** for your application.
 
 <div style={{ textAlign: "center", padding: "10px" }}>
   <img
@@ -282,13 +284,13 @@ After submitting the form, PipesHub generates a unique **Client ID** and **Clien
 
 ## Authorization Flow
 
-The following diagram illustrates how the OAuth 2.0 Authorization Code flow operates within PipesHub.
+The following diagram illustrates how the OAuth 2.0 Authorization Code flow operates within Novaplan AI.
 
 ```mermaid
 sequenceDiagram
     participant App as Your Application
     participant Browser as User's Browser
-    participant PH as PipesHub
+    participant PH as Novaplan AI
 
     App->>Browser: Redirect to /api/v1/oauth2/authorize
     Browser->>PH: GET /api/v1/oauth2/authorize
@@ -308,7 +310,7 @@ sequenceDiagram
 <Steps>
 
 <Step title="Initiate Authorization">
-Your application redirects the user's browser to PipesHub's authorization endpoint with the required parameters:
+Your application redirects the user's browser to Novaplan AI's authorization endpoint with the required parameters:
 
 ```
 GET /api/v1/oauth2/authorize?
@@ -329,7 +331,7 @@ GET /api/v1/oauth2/authorize?
 </Step>
 
 <Step title="User Authentication">
-If the user is not already signed in to PipesHub, they are redirected to the sign-in page. After successful authentication, they are directed to the consent screen.
+If the user is not already signed in to Novaplan AI, they are redirected to the sign-in page. After successful authentication, they are directed to the consent screen.
 </Step>
 
 <Step title="User Consent">
@@ -347,7 +349,7 @@ The consent screen displays your application's name, description, and the specif
 </Step>
 
 <Step title="Authorization Code">
-Upon approval, PipesHub redirects the user's browser back to your registered redirect URI with a temporary authorization code:
+Upon approval, Novaplan AI redirects the user's browser back to your registered redirect URI with a temporary authorization code:
 
 ```
 https://your-app.com/callback?code=AUTHORIZATION_CODE&state=RANDOM_STATE_VALUE
@@ -359,7 +361,7 @@ https://your-app.com/callback?code=AUTHORIZATION_CODE&state=RANDOM_STATE_VALUE
 Your application exchanges the authorization code for tokens by making a server-side request:
 
 ```bash
-curl -X POST https://your-pipeshub-instance.com/api/v1/oauth2/token \
+curl -X POST https://your-workspace.example.com/api/v1/oauth2/token \
   -H "Content-Type: application/x-www-form-urlencoded" \
   -d "grant_type=authorization_code" \
   -d "code=AUTHORIZATION_CODE" \
@@ -392,7 +394,7 @@ curl -X POST https://your-pipeshub-instance.com/api/v1/oauth2/token \
 Use the access token to make API requests on behalf of the user:
 
 ```bash
-curl -X GET https://your-pipeshub-instance.com/api/v1/resource \
+curl -X GET https://your-workspace.example.com/api/v1/resource \
   -H "Authorization: Bearer ACCESS_TOKEN"
 ```
 
@@ -404,16 +406,20 @@ curl -X GET https://your-pipeshub-instance.com/api/v1/resource \
 
 ## Client Credentials Flow
 
-For server-to-server integrations that do not require user context:
+For server-to-server integrations that do not require user context and use scopes approved for application identity:
 
 ```bash
-curl -X POST https://your-pipeshub-instance.com/api/v1/oauth2/token \
+curl -X POST https://your-workspace.example.com/api/v1/oauth2/token \
   -H "Content-Type: application/x-www-form-urlencoded" \
   -d "grant_type=client_credentials" \
   -d "client_id=YOUR_CLIENT_ID" \
   -d "client_secret=YOUR_CLIENT_SECRET" \
-  -d "scope=kb:read semantic:read"
+  -d "scope=YOUR_APPLICATION_SCOPE"
 ```
+
+<Warning>
+  A client-credentials token does not represent a user. Do not use it to search or retrieve content where access must be checked against an individual user's permissions.
+</Warning>
 
 ---
 
@@ -422,7 +428,7 @@ curl -X POST https://your-pipeshub-instance.com/api/v1/oauth2/token \
 When an access token expires, use the refresh token to obtain a new one without requiring user interaction:
 
 ```bash
-curl -X POST https://your-pipeshub-instance.com/api/v1/oauth2/token \
+curl -X POST https://your-workspace.example.com/api/v1/oauth2/token \
   -H "Content-Type: application/x-www-form-urlencoded" \
   -d "grant_type=refresh_token" \
   -d "refresh_token=YOUR_REFRESH_TOKEN" \
@@ -431,7 +437,7 @@ curl -X POST https://your-pipeshub-instance.com/api/v1/oauth2/token \
 ```
 
 <Warning>
-  PipesHub uses **refresh token rotation**. Each time you refresh, the previous refresh token is revoked and a new one is issued. Always store and use the most recent refresh token from the response.
+  Novaplan AI uses **refresh token rotation**. Each time you refresh, the previous refresh token is revoked and a new one is issued. Always store and use the most recent refresh token from the response.
 </Warning>
 
 ---
@@ -441,7 +447,7 @@ curl -X POST https://your-pipeshub-instance.com/api/v1/oauth2/token \
 To revoke an access token or refresh token when it is no longer needed:
 
 ```bash
-curl -X POST https://your-pipeshub-instance.com/api/v1/oauth2/revoke \
+curl -X POST https://your-workspace.example.com/api/v1/oauth2/revoke \
   -H "Content-Type: application/x-www-form-urlencoded" \
   -d "token=TOKEN_TO_REVOKE" \
   -d "token_type_hint=access_token" \
@@ -455,7 +461,7 @@ Set `token_type_hint` to either `access_token` or `refresh_token` to help the se
 
 ## OpenID Connect Discovery
 
-PipesHub supports OpenID Connect Discovery, enabling clients to automatically discover OAuth endpoints and configuration:
+Novaplan AI supports OpenID Connect Discovery, enabling clients to automatically discover OAuth endpoints and configuration:
 
 | Endpoint | URL |
 |----------|-----|
@@ -652,8 +658,8 @@ The previous secret is immediately invalidated. Any integration using the old se
 There is no fixed limit on the number of OAuth applications per organization. However, each application can have a maximum of 10 registered redirect URIs.
 </Accordion>
 
-<Accordion title="Does PipesHub support PKCE?">
-Yes. PKCE (Proof Key for Code Exchange) is fully supported and is required for public (non-confidential) clients. PipesHub supports both `S256` and `plain` challenge methods, though `S256` is strongly recommended.
+<Accordion title="Does Novaplan AI support PKCE?">
+Yes. PKCE (Proof Key for Code Exchange) is fully supported and is required for public (non-confidential) clients. Novaplan AI supports both `S256` and `plain` challenge methods, though `S256` is strongly recommended.
 </Accordion>
 
 </AccordionGroup>

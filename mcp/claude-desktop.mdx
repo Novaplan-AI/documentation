@@ -1,72 +1,62 @@
 ---
 title: "Claude Desktop"
-description: "Connect Claude Desktop to the PipesHub MCP server via a custom connector or a local stdio bridge"
+description: "Connect Claude Desktop to the Novaplan AI MCP server via a custom connector or a local stdio bridge"
 icon: "/logo/claude.svg"
 ---
 
-Claude Desktop can talk to the PipesHub MCP server, but there's one important catch to understand before you start.
+Claude Desktop can talk to the Novaplan AI MCP server, but there's one important catch to understand before you start.
 
 <Warning>
-  **Claude Desktop does not support local HTTP MCP transport.** Unlike a server-side tool, it won't connect to a plain `http://localhost:.../mcp` endpoint. To connect PipesHub you have two options, and which one you pick depends on how PipesHub is hosted:
+  **Claude Desktop does not support local HTTP MCP transport.** Unlike a server-side tool, it won't connect to a plain `http://localhost:.../mcp` endpoint. To connect Novaplan AI you have two options, and which one you pick depends on how Novaplan AI is hosted:
 
-  1. **Add it as a custom connector** — works only when PipesHub is reachable over **public HTTPS** (a real domain with a valid SSL certificate), exactly like [Claude.ai (Web)](/mcp/claude-ai).
-  2. **Run a local stdio bridge** — works for **localhost / self-hosted** instances with no public domain, using the `@pipeshub-ai/mcp` npm package.
+  1. **Add it as a custom connector** — works only when Novaplan AI is reachable over **public HTTPS** (a real domain with a valid SSL certificate), exactly like [Claude.ai (Web)](/mcp/claude-ai).
+  2. **Run a local stdio bridge** — for a workspace reachable only on an internal network, using the `@pipeshub-ai/mcp` npm package and a personal access token. Confirm package suitability with Novaplan before using this route.
 </Warning>
 
 <Tip>
-  Coding agents standing up a **laptop demo**: follow [Local Docker demo](/for-agents-local-demo), then use the [stdio bridge](#option-2-local-stdio-bridge) below. Do not point Claude Desktop's custom connector at localhost.
+  Use the workspace endpoint supplied by your administrator. If you need access, contact [Novaplan AI support](/contact-us). Do not point Claude Desktop's custom connector at localhost.
 </Tip>
 
 ## Which option should I use?
 
 | Your situation | Use this |
 |---|---|
-| PipesHub is hosted on a public domain with valid SSL (e.g. `https://app.pipeshub.com`) | [Custom connector](#option-1-custom-connector-hosted-pipeshub) |
-| PipesHub runs locally or on an internal host without a public HTTPS domain (e.g. `http://localhost:3000`) | [Local stdio bridge](#option-2-local-stdio-bridge) |
+| Your workspace has a public HTTPS address (e.g. `https://your-workspace.example.com`) | [Custom connector](#option-1-custom-connector-hosted-novaplan-ai) |
+| Your workspace is available only on an internal network | [Local stdio bridge](#option-2-local-stdio-bridge), subject to Novaplan verification |
 
 ---
 
-## Option 1: Custom connector (hosted PipesHub)
+<div id="option-1-custom-connector-hosted-novaplan-ai" />
 
-If your PipesHub instance is served over HTTPS on a valid domain, Claude Desktop can connect to the remote MCP endpoint directly — no local setup, no npm packages. This is the same flow as [Claude.ai (Web)](/mcp/claude-ai).
+## Option 1: Custom connector (hosted Novaplan AI)
+
+If your Novaplan AI instance is served over HTTPS on a valid domain reachable from Anthropic's cloud, Claude Desktop can use a remote custom connector — no local npm package is needed. Remote connectors are configured through your Claude account and also appear in Claude Desktop. See the [Claude.ai guide](/mcp/claude-ai) and [Anthropic's current instructions](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp).
 
 <Note>
-  Before you start, create an OAuth app in PipesHub and note your **Client ID** and **Client Secret**. See [MCP Server Overview](/mcp/overview#step-1-create-an-oauth-app).
+  Before you start, create an OAuth app in Novaplan AI and note your **Client ID** and **Client Secret**. See [MCP Server Overview](/mcp/overview#step-1-create-an-oauth-app).
 </Note>
 
 <Steps>
   <Step title="Open Connectors settings">
-    In Claude Desktop, go to **Settings > Connectors**.
+    In Claude Desktop or [Claude.ai](https://claude.ai), open **Customize → Connectors** for an individual account. For a Team or Enterprise organization, an Owner first adds the connector under **Organization settings → Connectors**.
   </Step>
   <Step title="Add a custom connector">
-    Click **Add custom connector** at the bottom of the Connectors section.
-
-    <Frame caption="Claude Desktop Connectors settings">
-      <img src="/images/mcp-server/claude-desktop-1.png" alt="Claude Desktop Connectors settings" />
-    </Frame>
+    For an individual account, click **+** and then **Add custom connector**. For an organization, choose **Add → Custom → Web**.
   </Step>
   <Step title="Enter the MCP server URL">
     Use your public HTTPS instance URL with the `/mcp` path:
     ```
-    PIPESHUB_INSTANCE_URL/mcp
+    NOVAPLAN_WORKSPACE_URL/mcp
     ```
-    For example: `https://app.pipeshub.com/mcp`.
+    For example: `https://your-workspace.example.com/mcp`.
   </Step>
   <Step title="Enter OAuth credentials">
     Click **Advanced settings** and enter your OAuth credentials:
     - **OAuth Client ID**: `YOUR_CLIENT_ID`
     - **OAuth Client Secret**: `YOUR_CLIENT_SECRET`
-
-    <Frame caption="Add custom connector dialog with Advanced settings">
-      <img src="/images/mcp-server/claude-desktop-2.png" alt="Claude Desktop add custom connector dialog" />
-    </Frame>
   </Step>
   <Step title="Add and authenticate">
-    Click **Add**. Claude Desktop opens your browser to PipesHub's login page so you can authenticate and grant permissions. Once that's done, the connector goes active and PipesHub becomes visible in your list of connectors.
-
-    <Frame caption="PipesHub connector active in Claude Desktop">
-      <img src="/images/mcp-server/claude-desktop-3.png" alt="PipesHub connector active in Claude Desktop" />
-    </Frame>
+    Click **Add**, then **Connect** if prompted. Complete the Novaplan AI sign-in and review the requested permissions. Once connected, the connector is available through your Claude account, including in Claude Desktop.
   </Step>
 </Steps>
 
@@ -78,31 +68,31 @@ Claude Desktop uses the same OAuth callback as the Claude web app:
 https://claude.ai/api/mcp/auth_callback
 ```
 
-Register this as an allowed redirect URI in your PipesHub OAuth app.
+Register this as an allowed redirect URI in your Novaplan AI OAuth app, and confirm the callback used in the live Claude connector flow before deployment.
 
 <Note>
-  A custom connector needs PipesHub to be reachable from the public internet over HTTPS. If you only have a `localhost` instance, the connector flow won't work — use [Option 2](#option-2-local-stdio-bridge) instead.
+  A custom connector needs the workspace to be reachable from the public internet over HTTPS. If it is internal-only, ask Novaplan whether the local bridge is approved for your environment.
 </Note>
 
 ---
 
 ## Option 2: Local stdio bridge
 
-When PipesHub runs on `localhost` or an internal host without a public HTTPS domain, run the MCP server locally as a **stdio process**. Claude Desktop launches the `@pipeshub-ai/mcp` bridge, which then talks to your PipesHub instance over HTTP on your behalf.
+For an internal-only workspace, Claude Desktop can launch a local **stdio process** that connects to its remote API. The existing bridge package is `@pipeshub-ai/mcp`; Novaplan must confirm that this package is supported for the Enterprise workspace before customers use it.
 
 ### Prerequisites
 
 - Node.js 20+ installed
-- Your PipesHub instance URL (e.g. `http://localhost:3000/api/v1`)
-- An OAuth app configured for the **Client Credentials** grant (see below)
+- The workspace URL supplied by Novaplan, with `/api/v1` added for the local bridge
+- A personal access token for the person using Claude Desktop
 
 <Warning>
-  For this route, your OAuth app **must have the Client Credentials grant enabled**. When you [create the OAuth app](/mcp/overview#step-1-create-an-oauth-app), choose **Client Credentials** as the grant type so the bridge can exchange your Client ID and Secret for a token directly — no browser redirect is involved. (The redirect URI used by the connector flow does **not** apply here.)
+  Do not use a **Client Credentials** token for permissioned company search. That grant has no user identity. Use the person's token and confirm with Novaplan that the bridge is supported. Do not store the token in a shared or committed config file.
 </Warning>
 
 ### Configuration
 
-Open Claude Desktop's config file (`claude_desktop_config.json`) and add the PipesHub server. You can find it via **Settings > Developer > Edit Config**, or at:
+Open Claude Desktop's config file (`claude_desktop_config.json`) and add the Novaplan AI server. You can find it via **Settings > Developer > Edit Config**, or at:
 
 - **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
 - **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
@@ -110,34 +100,30 @@ Open Claude Desktop's config file (`claude_desktop_config.json`) and add the Pip
 ```json
 {
   "mcpServers": {
-    "pipeshub": {
+    "novaplan": {
       "command": "npx",
       "args": [
         "-y",
         "@pipeshub-ai/mcp",
         "start",
         "--server-url",
-        "http://localhost:3000/api/v1",
-        "--client-id",
-        "YOUR_CLIENT_ID",
-        "--client-secret",
-        "YOUR_CLIENT_SECRET",
-        "--token-url",
-        "/api/v1/oauth2/token"
+        "NOVAPLAN_API_URL",
+        "--bearer-auth",
+        "YOUR_BEARER_TOKEN"
       ]
     }
   }
 }
 ```
 
-Replace `http://localhost:3000` with your actual instance host, and `YOUR_CLIENT_ID` / `YOUR_CLIENT_SECRET` with the credentials from your OAuth app.
+Replace `NOVAPLAN_API_URL` with the approved workspace URL followed by `/api/v1` (for example, `https://your-workspace.example.com/api/v1`) and use the person's token. This differs from the hosted custom connector, which connects directly to `NOVAPLAN_WORKSPACE_URL/mcp`. Use a local secret-management method for the token rather than committing this example with real credentials.
 
 ### Apply the changes
 
-Save the file and **fully quit and reopen Claude Desktop** (a window reload isn't enough). Once it restarts, the PipesHub tools appear under the tools menu in your conversations.
+Save the file and **fully quit and reopen Claude Desktop** (a window reload isn't enough). Once it restarts, the Novaplan AI tools appear under the tools menu in your conversations.
 
-<Frame caption="PipesHub MCP server showing under Local MCP servers">
-  <img src="/images/mcp-server/claude-desktop-4.png" alt="PipesHub MCP server showing under Local MCP servers" />
+<Frame caption="Illustrative Novaplan AI entry under Local MCP servers; configuration arguments are hidden">
+  <img src="/images/mcp-server/claude-desktop-4.png" alt="Illustrative Claude Desktop Local MCP servers screen with Novaplan AI running and configuration arguments hidden" />
 </Frame>
 
 ---
@@ -146,14 +132,14 @@ Save the file and **fully quit and reopen Claude Desktop** (a window reload isn'
 
 <AccordionGroup>
   <Accordion title="The custom connector won't connect / shows an error">
-    Custom connectors require a **public HTTPS** endpoint with a valid SSL certificate. Claude Desktop can't reach `http://localhost`, self-signed certificates, or private hostnames through the connector flow. Either put PipesHub behind a real domain with valid SSL, or switch to the [local stdio bridge](#option-2-local-stdio-bridge).
+    Custom connectors require a **public HTTPS** endpoint with a valid SSL certificate. Claude Desktop cannot reach private hostnames through this connector flow. Ask Novaplan for the approved workspace endpoint or whether the [local stdio bridge](#option-2-local-stdio-bridge) is supported.
   </Accordion>
   <Accordion title="The stdio server doesn't start">
     - Make sure Node.js 20+ is installed and `npx` is on your `PATH`.
-    - Confirm your instance is reachable: `curl http://localhost:3000/api/v1` should respond (not a connection refused error).
+    - Confirm your approved workspace endpoint is reachable from the computer running Claude Desktop.
     - After editing `claude_desktop_config.json`, fully quit and relaunch Claude Desktop.
   </Accordion>
   <Accordion title="Authentication fails on the stdio bridge">
-    Verify the OAuth app has the **Client Credentials** grant enabled, and that the `--token-url` points to your instance's token endpoint (`PIPESHUB_INSTANCE_URL/api/v1/oauth2/token`). Double-check the Client ID and Secret are correct and the app is active.
+    Verify the personal token is valid, belongs to the intended user, has the required scopes, and is passed to `--bearer-auth`. If the package is not supported in your Enterprise workspace, contact Novaplan Support.
   </Accordion>
 </AccordionGroup>

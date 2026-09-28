@@ -30,7 +30,7 @@ icon: "/logo/slack.png"
 
 ## Overview
 
-The Slack connector syncs conversations from Slack — channels, messages, thread replies, shared files, and shared links — into PipesHub so they become searchable and available to agents.
+The Slack connector syncs conversations from Slack — channels, messages, thread replies, shared files, and shared links — into Novaplan AI so they become searchable and available to agents.
 
 Slack ships as **two separate connectors**. Pick the one that matches how you want data brought in:
 
@@ -40,7 +40,7 @@ Slack ships as **two separate connectors**. Pick the one that matches how you wa
 | **Who sets it up** | A workspace administrator, once for the whole organization | Each user, for their own account |
 | **Authentication** | **Bot User OAuth Token** (`xoxb-…`) from a Slack app | **OAuth 2.0** with a Slack app's Client ID and Client Secret (user token, `xoxp-…`) |
 | **What it can see** | Public channels, plus private channels the bot has been invited to | Everything the authorizing user can see — public and private channels, DMs, and group DMs |
-| **Permissions in PipesHub** | Per-channel: public channels are readable by all workspace members, private channels only by their Slack members | Only the authorizing user can read the synced records |
+| **Permissions in Novaplan AI** | Per-channel: public channels are readable by all workspace members, private channels only by their Slack members | Only the authorizing user can read the synced records |
 | **Users and groups** | All workspace members and user groups are synced | Only the authorizing user is synced |
 
 <Note>
@@ -80,11 +80,11 @@ The **Slack Workspace** connector syncs public and private channels for your ent
 ### Prerequisites
 
 - Permission to create and install a Slack app in your workspace (a workspace owner or admin may need to approve the installation).
-- PipesHub administrator access to **Workspace Settings → Connectors**.
+- Novaplan AI administrator access to **Workspace Settings → Connectors**.
 
 ### Authentication
 
-The connector uses a **Bot Access Token** (`xoxb-…`). You create a Slack app, grant it bot scopes, install it into your workspace, and paste the resulting token into PipesHub.
+The connector uses a **Bot Access Token** (`xoxb-…`). You create a Slack app, grant it bot scopes, install it into your workspace, and paste the resulting token into Novaplan AI.
 
 ## How to configure and enable the Slack Workspace connector
 
@@ -126,7 +126,7 @@ Enter an **App name** (for example `slack-app`), select the **Workspace** you wa
 </div>
 
 <Warning>
-  The workspace cannot be changed later. Create the app in the workspace whose content you want PipesHub to index.
+  The workspace cannot be changed later. Create the app in the workspace whose content you want Novaplan AI to index.
 </Warning>
 
 ### Step 4: Add Bot Token Scopes
@@ -166,7 +166,7 @@ usergroups.users:read
   - `channels:*` / `groups:*` — read public and private channel metadata and message history
   - `channels:join` — lets the bot join public channels on its own, so you don't have to invite it to each one
   - `im:*` / `mpim:*` — read DM and group-DM metadata
-  - `users:read`, `users:read.email`, `users.profile:read` — map Slack users to PipesHub accounts by email, and resolve `@mentions` to names
+  - `users:read`, `users:read.email`, `users.profile:read` — map Slack users to Novaplan AI accounts by email, and resolve `@mentions` to names
   - `files:read` — fetch files shared in messages
   - `usergroups:read`, `usergroups.users:read` — sync Slack user groups and their members
 </Info>
@@ -215,7 +215,9 @@ Back on **OAuth & Permissions**, copy the **Bot User OAuth Token** — it starts
   Treat this token like a password. Anyone holding it can read the Slack content the app has access to. If it leaks, use **Regenerate** in Slack and update the connector.
 </Warning>
 
-### Step 8: Configure the connector in PipesHub
+<div id="step-8-configure-the-connector-in-novaplan-ai" />
+
+### Step 8: Configure the connector in Novaplan AI
 
 1. Navigate to **Workspace Settings** → under **Workspace** in the sidebar → **Connectors**.
 
@@ -236,7 +238,7 @@ Back on **OAuth & Permissions**, copy the **Bot User OAuth Token** — it starts
 <div className="text-center">
   <img
     src="/images/connectors/slack-team/slack-8-pipeshub-page.png"
-    alt="PipesHub — Slack Workspace Configuration, Authenticate Instance tab with Bot Access Token"
+    alt="Novaplan AI — Slack Workspace Configuration, Authenticate Instance tab with Bot Access Token"
     className="block mx-auto w-11/12"
   />
 </div>
@@ -248,19 +250,19 @@ On the **Configure Records** tab, choose your **Sync Strategy** (Scheduled or Ma
 <div className="text-center">
   <img
     src="/images/connectors/slack-team/slack-9-pipeshub-configuration-1.png"
-    alt="PipesHub — Slack Workspace Configure Records tab with sync settings"
+    alt="Novaplan AI — Slack Workspace Configure Records tab with sync settings"
     className="block mx-auto w-11/12"
   />
 </div>
 
 ### Step 10: Start syncing
 
-Once PipesHub confirms the instance is ready, you can start the sync immediately or start it later from the instance card.
+Once Novaplan AI confirms the instance is ready, you can start the sync immediately or start it later from the instance card.
 
 <div className="text-center">
   <img
     src="/images/connectors/slack-team/slack-10-filters.png"
-    alt="PipesHub — Slack Workspace sync filters and indexing filters"
+    alt="Novaplan AI — Slack Workspace sync filters and indexing filters"
     className="block mx-auto w-11/12"
   />
 </div>
@@ -290,24 +292,26 @@ Replace `slack-app` with the name you gave the app in Step 3.
 
 ## Overview
 
-The **Slack** connector syncs your own Slack view — public and private channels you are a member of, your direct messages, and your group DMs. Records synced this way are visible only to you in PipesHub.
+The **Slack** connector syncs your own Slack view — public and private channels you are a member of, your direct messages, and your group DMs. Records synced this way are visible only to you in Novaplan AI.
 
 ### Prerequisites
 
 - Permission to create a Slack app in your workspace (some workspaces require admin approval before an app can be installed).
-- A PipesHub account whose email matches the Slack account you will authorize with.
+- A Novaplan AI account whose email matches the Slack account you will authorize with.
 
 ### Authentication
 
-This connector uses **OAuth 2.0** with a **user token** (`xoxp-…`). You create a Slack app, register PipesHub's callback URL, request user token scopes, then sign in from PipesHub to authorize it.
+This connector uses **OAuth 2.0** with a **user token** (`xoxp-…`). You create a Slack app, register Novaplan AI's callback URL, request user token scopes, then sign in from Novaplan AI to authorize it.
 
 <Note>
-  If an administrator has already registered a Slack OAuth app in PipesHub, you can select that saved app on the configuration screen and skip Steps 2 to 7 — go straight to authorizing.
+  If an administrator has already registered a Slack OAuth app in Novaplan AI, you can select that saved app on the configuration screen and skip Steps 2 to 7 — go straight to authorizing.
 </Note>
 
 ## How to configure and enable the Slack connector
 
-### Step 1: Copy the Redirect/Callback URL from PipesHub
+<div id="step-1-copy-the-redirectcallback-url-from-novaplan-ai" />
+
+### Step 1: Copy the Redirect/Callback URL from Novaplan AI
 
 1. Navigate to **Workspace Settings** → under **Personal** in the sidebar → **Your Connectors**.
 
@@ -335,7 +339,7 @@ This connector uses **OAuth 2.0** with a **user token** (`xoxp-…`). You create
 <div className="text-center">
   <img
     src="/images/connectors/slack-individual/pipeshub-redirect-urlpage.png"
-    alt="PipesHub — Slack Configuration showing the Redirect/Callback URL and OAuth credentials fields"
+    alt="Novaplan AI — Slack Configuration showing the Redirect/Callback URL and OAuth credentials fields"
     className="block mx-auto w-11/12"
   />
 </div>
@@ -373,13 +377,13 @@ Go to the [Slack API app dashboard](https://api.slack.com/apps), click **Create 
 <div className="text-center">
   <img
     src="/images/connectors/slack-individual/slack-4-add-redirect-url.png"
-    alt="Slack — Redirect URLs list with the PipesHub callback URL added"
+    alt="Slack — Redirect URLs list with the Novaplan AI callback URL added"
     className="block mx-auto w-11/12"
   />
 </div>
 
 <Warning>
-  The redirect URL must match PipesHub's value **exactly** — scheme, host, port, and path. A mismatch produces a `bad_redirect_uri` error during authorization.
+  The redirect URL must match Novaplan AI's value **exactly** — scheme, host, port, and path. A mismatch produces a `bad_redirect_uri` error during authorization.
 </Warning>
 
 <Info>
@@ -419,7 +423,7 @@ files:read
 
 ### Step 5: Install the app to your workspace
 
-Scroll to **OAuth Tokens**, click **Install to \<your workspace\>**, and click **Allow** on the permission screen. This makes the app available for the OAuth sign-in you'll run from PipesHub.
+Scroll to **OAuth Tokens**, click **Install to \<your workspace\>**, and click **Allow** on the permission screen. This makes the app available for the OAuth sign-in you'll run from Novaplan AI.
 
 <div className="text-center">
   <img
@@ -441,7 +445,9 @@ Open **Settings → Basic Information** and, under **App Credentials**, copy the
   />
 </div>
 
-### Step 7: Enter the credentials in PipesHub
+<div id="step-7-enter-the-credentials-in-novaplan-ai" />
+
+### Step 7: Enter the credentials in Novaplan AI
 
 Return to the **Slack Configuration** dialog and fill in:
 
@@ -456,7 +462,7 @@ Confirm the Redirect/Callback URL still matches what you added in Slack, then cl
 <div className="text-center">
   <img
     src="/images/connectors/slack-individual/slack-7-pipeshub-page.png"
-    alt="PipesHub — Slack Configuration with OAuth app name and client credentials"
+    alt="Novaplan AI — Slack Configuration with OAuth app name and client credentials"
     className="block mx-auto w-11/12"
   />
 </div>
@@ -468,13 +474,13 @@ On the **Authorize** tab, click **Authenticate Slack to Proceed**. Sign in to Sl
 <div className="text-center">
   <img
     src="/images/connectors/slack-individual/slack-8-auth.png"
-    alt="PipesHub — Slack Configuration Authorize tab"
+    alt="Novaplan AI — Slack Configuration Authorize tab"
     className="block mx-auto w-11/12"
   />
 </div>
 
 <Warning>
-  **Important:** Authorize with the same email address as your PipesHub account. Using a different Slack account causes permission issues, and the sync stops early if your Slack email cannot be resolved.
+  **Important:** Authorize with the same email address as your Novaplan AI account. Using a different Slack account causes permission issues, and the sync stops early if your Slack email cannot be resolved.
 </Warning>
 
 ### Step 9: Configure records and save
@@ -506,7 +512,7 @@ How often a scheduled sync runs (default: 60 minutes).
 
 ## Sync Filters
 
-Sync filters control which conversations are fetched from Slack. Anything excluded here is never fetched, so it never becomes a record.
+Sync filters narrow the conversations and message history processed by the connector. The accessible Team connector reads workspace users and user groups for permission mapping; the Individual connector also reads workspace user information for mentions and names. Channel discovery can return channel metadata before the channel ID filter is applied. An excluded channel therefore does not guarantee that no information about other workspace members or channels is read. Confirm the connected app's Slack scopes if this distinction matters for sensitive data.
 
 ### Channel
 
@@ -535,7 +541,7 @@ When enabled, records are synced but not indexed automatically. They won't appea
 
 ## Indexing Filters
 
-Indexing filters control which synced records are made searchable. Unlike sync filters, they don't stop content from being fetched — the records still exist in PipesHub, but their indexing status is set to **Manual Indexing** and they can be indexed later from **All Records**.
+Indexing filters control which synced records are made searchable. Unlike sync filters, they don't stop content from being fetched — the records still exist in Novaplan AI, but their indexing status is set to **Manual Indexing** and they can be indexed later from **All Records**.
 
 ### Index Messages
 
@@ -617,11 +623,17 @@ Slack rate-limits its API per method. The connector paces its own calls to stay 
 
 **`bad_redirect_uri` or `redirect_uri_mismatch` (Individual)**
 
-- The Redirect URL in Slack must match the one in PipesHub exactly, including scheme, host, port, and path.
+- The Redirect URL in Slack must match the one in Novaplan AI exactly, including scheme, host, port, and path.
 
-**`invalid_auth` / `token_revoked`**
+**`invalid_auth` / `token_revoked` / `token_expired`**
 
-- The token was regenerated or the app was uninstalled. For the team connector, paste the new **Bot User OAuth Token**. For the individual connector, re-run authorization from the **Authorize** tab.
+- For a Slack sign-in on the Individual connector, an expired token is normally renewed and the request retried once. If the error persists, reconnect from **Authorize**.
+- A pasted Workspace bot token or Individual user token cannot be refreshed by the connector. If its Slack app has token rotation enabled, the access token expires after about 12 hours. Use an app without rotation for a pasted token, or use Slack sign-in on the Individual connector.
+- For `token_revoked` or `invalid_auth` on a pasted token, check whether the app was reinstalled or the token regenerated, then paste a valid access token.
+
+**Token format and rotation**
+
+Bot access tokens start with `xoxb-` or `xoxe.xoxb-`; user access tokens start with `xoxp-` or `xoxe.xoxp-`. A token starting with `xoxe-` alone is a refresh token, not an access token to paste. Slack sign-in stores the rotating refresh token and renews it automatically. If Slack refuses the saved sign-in after an app reinstall or revocation, authorize again. A pasted token has no refresh token, so it cannot renew itself.
 
 **Only a bot token was found (Individual)**
 
@@ -629,7 +641,7 @@ Slack rate-limits its API per method. The connector paces its own calls to stay 
 
 **Users are missing from the sync (Team)**
 
-- Members without an email address on their Slack profile are skipped, because PipesHub matches people by email. Bots are cached for mention resolution but are not created as users.
+- Members without an email address on their Slack profile are skipped, because Novaplan AI matches people by email. Bots are cached for mention resolution but are not created as users.
 
 **Nothing synced beyond a certain date**
 
@@ -658,7 +670,7 @@ They aren't mutually exclusive — running both gives shared channel history plu
 | Aspect | Slack Connector | Slack Toolset |
 |--------|----------------|---------------|
 | **Purpose** | Sync and index Slack conversations for search | Enable agents to perform Slack actions |
-| **Data Flow** | One-way (import data into PipesHub) | Two-way (read and write via API) |
+| **Data Flow** | One-way (import data into Novaplan AI) | Two-way (read and write via API) |
 | **When to Use** | Query and search past conversations, files, and threads | Send messages, reply in threads, manage channels |
 
 **Example:** Use the **Slack Connector** to search what a team decided last quarter. Use the **Slack Toolset** to let an agent post the answer back into a channel.
@@ -675,14 +687,14 @@ No. The connector is read-only — it reads channels, messages, files, and links
 
 There are three common causes:
 
-1. **Email mismatch** — the email used during authentication doesn't match your PipesHub account email, which causes permission issues on synced data.
-   - **Fix:** Reconfigure the connector and authenticate with the same email as your PipesHub account.
+1. **Identity or channel access does not match** — for a Personal connection, the Slack account must map to the person who authorized it. For the Team connection, each viewer's Slack email and channel membership determine access separately from the administrator who installed the app.
+   - **Fix:** Check the affected viewer's account mapping and channel membership. Reauthorize only the connection whose Slack token is invalid or belongs to the wrong account.
 
 2. **Records show in "All Records" but not in search** — indexing hasn't run for those records.
    - **Fix:** Check whether **Enable Manual Indexing** is on, or whether the relevant indexing filter (messages, threads, files, links) is disabled. Index the records manually from **All Records** if needed.
 
 3. **Data not yet synced or indexed** — the connector is still working through the initial sync.
-   - **Fix:** Go to **Settings → Connectors**, check the sync status, and wait for indexing to complete.
+   - **Fix:** Check the sync status under **Workspace Settings → Connectors** for Slack Workspace (Team) or **Workspace Settings → Your Connectors** for Slack (Personal), then wait for indexing to complete.
 
 </Accordion>
 
@@ -693,6 +705,6 @@ There are three common causes:
 <div className="text-center mt-12 p-6 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl">
   <h3 className="text-lg font-semibold mb-2">Ready to get started?</h3>
   <p className="text-gray-600 dark:text-gray-400">
-    Connect Slack to PipesHub for unified search across your conversations. Follow the configuration guide above for your setup type (Team or Individual), or reach out to our support team if you need assistance.
+    Connect Slack to Novaplan AI for unified search across your conversations. Follow the configuration guide above for your setup type (Team or Individual), or reach out to our support team if you need assistance.
   </p>
 </div>

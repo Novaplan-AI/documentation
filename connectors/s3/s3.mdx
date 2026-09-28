@@ -30,7 +30,11 @@ icon: "/logo/s3.png"
 
 Amazon S3 (Simple Storage Service) is a scalable object storage service designed to store and retrieve any amount of data from anywhere on the web. It provides industry-leading scalability, data availability, security, and performance.
 
-The S3 connector enables you to sync files and folders from your S3 buckets into PipesHub, making your cloud storage content searchable through AI-powered search and accessible across your organization.
+The S3 connector syncs files and folders from your S3 buckets into Novaplan AI for search. The connection's Personal or Team scope determines who should be able to see the imported records.
+
+<Warning>
+  In the accessible connector source, a Personal connection assigns ownership to its creator when that user can be resolved. If the creator cannot be resolved, bucket and object records instead receive organization-wide read access. Before syncing sensitive buckets, verify the creator mapping and test the resulting access with a second workspace account. Confirm this behavior in the deployed Enterprise build.
+</Warning>
 
 ### S3 Data Structure
 
@@ -51,7 +55,7 @@ The connector indexes the following content for AI-powered search:
 - **Files**: Supported file types stored in S3 buckets, including documents and images
 - **Folders**: Directory structure and organization
 - **Metadata**: File names, sizes, modification dates, MIME types
-- **Permissions**: Access control based on bucket and object permissions
+- **Permissions**: AWS permissions limit what the connector can import; the selected Personal or Team scope controls access to imported records in Novaplan AI
 
 ---
 
@@ -109,7 +113,7 @@ The S3 connector uses **AWS Access Key ID and Secret Access Key** for authentica
 ### Step 2: Configure User Details
 
 1. **Enter User Name:**
-   - Enter a descriptive name for the user (e.g., "PipesHub-S3-Connector")
+   - Enter a descriptive name for the user (e.g., "Novaplan-AI-S3-Connector")
    - Click **"Next"** button
 
 <div className="text-center">
@@ -192,10 +196,12 @@ The S3 connector uses **AWS Access Key ID and Secret Access Key** for authentica
    - Click **"Download .csv file"** button to save credentials to a secure location
    - Click **"Done"** button to complete the process
 
-### Step 4: Open S3 in PipesHub
+<div id="step-4-open-s3-in-novaplan-ai" />
 
-1. Open the PipesHub app.
-2. In the left sidebar, click **Connectors** (under **Workspace**).
+### Step 4: Open S3 in Novaplan AI
+
+1. Open **Workspace Settings** in Novaplan AI.
+2. For a Team connection, open **Connectors**. For a Personal connection, open **Your Connectors** under **Personal**.
 3. Find the **S3** tile.
 4. Click **+ Setup** on the tile.
 
@@ -206,7 +212,7 @@ A panel called **S3 Configuration** opens on the right. It has two tabs: **Authe
 <div className="text-center">
   <img
     src="/images/connectors/s3/authenticate_tab.png"
-    alt="S3 Authenticate Instance tab in PipesHub"
+    alt="S3 Authenticate Instance tab in Novaplan AI"
     className="block mx-auto w-11/12"
   />
 </div>
@@ -223,7 +229,7 @@ Fill in the fields from top to bottom:
 </Warning>
 
 <Info>
-  The two links at the top (**S3 Access Key Setup** and **Pipeshub Documentation**) are just help links. You can ignore them if you've already followed Steps 1–3.
+  The two links at the top (**S3 Access Key Setup** and **Novaplan AI Documentation**) are just help links. You can ignore them if you've already followed Steps 1–3.
 </Info>
 
 ### Step 6: Choose how often S3 should sync
@@ -233,23 +239,23 @@ You're now on the **Configure Records** tab. The top part is called **Sync setti
 <div className="text-center">
   <img
     src="/images/connectors/s3/configure_tab.png"
-    alt="S3 Configure Records tab in PipesHub — sync settings and filters"
+    alt="S3 Configure Records tab in Novaplan AI — sync settings and filters"
     className="block mx-auto w-11/12"
   />
 </div>
 
 1. **Sync Strategy** — pick one:
-   - **Scheduled** — PipesHub checks S3 for new or changed files automatically. (Recommended.)
+   - **Scheduled** — Novaplan AI checks S3 for new or changed files automatically. (Recommended.)
    - **Manual** — nothing is pulled until you click **Sync** yourself.
 2. **Sync Interval** — only shown if you chose **Scheduled**. Pick how often to check S3 (for example `1 Hour`).
 
 ### Step 7: Pick what to sync (filters)
 
-Still on the same tab, scroll down to **Indexing & sync filters**. Filters let you limit what PipesHub pulls from S3. **If you don't add any filters, everything will be synced.**
+Still on the same tab, scroll down to **Indexing & sync filters**. Filters let you limit what Novaplan AI pulls from S3. **If you don't add any filters, everything will be synced.**
 
-1. **Enable Manual Indexing** — leave this **off**. (Turning it on stops PipesHub from automatically indexing new files for search.)
+1. **Enable Manual Indexing** — leave this **off**. (Turning it on stops Novaplan AI from automatically indexing new files for search.)
 2. Click **+ Add filter** to add a filter. You'll see four options:
-   - **Bucket Names** — pick which S3 buckets to include or exclude. PipesHub loads your bucket list automatically — just select from the dropdown.
+   - **Bucket Names** — pick which S3 buckets to include or exclude. Novaplan AI loads your bucket list automatically — just select from the dropdown.
    - **File Extensions** — include or exclude specific file types. Type them comma-separated, e.g. `pdf, docx, txt`.
    - **Modified Date** — only sync files changed after / before / between the dates you choose.
    - **Created Date** — same idea, but based on when the file was first uploaded to S3.
@@ -276,7 +282,7 @@ Right now the card says **Sync Paused** — nothing is being synced yet.
 1. Find the **Sync Enabled** row at the bottom of the card.
 2. Click the toggle so it turns **on**.
 
-That's it — PipesHub will now start pulling files from S3.
+That's it — Novaplan AI will now start pulling files from S3.
 
 <Info>
   Want to connect a second AWS account? Click **+ Add Another Instance** in the top-right and repeat Steps 5–8 with the new account's keys.
@@ -297,9 +303,9 @@ Click the instance card to open the **Overview** panel. This shows you live prog
 What to look at:
 
 - **Records Status** — the main scoreboard:
-  - **Total** — how many files PipesHub knows about.
+  - **Total** — how many files Novaplan AI knows about.
   - **Failed** — files that couldn't be fetched (usually a permission problem in AWS).
-  - **Unsupported** — file types PipesHub can't read (e.g. encrypted or unknown binary).
+  - **Unsupported** — file types Novaplan AI can't read (e.g. encrypted or unknown binary).
   - **Processing** — being indexed right now.
   - **Not Started** — waiting in the queue.
 - **Records by Type** — shows how many **FILE** records have been synced.
@@ -315,7 +321,7 @@ For enhanced security, you can create a custom IAM policy that restricts access 
 
 ### Example Custom Policy
 
-Here's a basic example policy for a single bucket:
+Here's a read-only example for one bucket. Replace the placeholder and have your AWS administrator check it against the connector's actual calls and your account policies:
 
 ```json
 {
@@ -323,26 +329,27 @@ Here's a basic example policy for a single bucket:
   "Statement": [
     {
       "Effect": "Allow",
-      "Action": [
-        "s3:ListAllMyBuckets",
-        "s3:GetBucketLocation"
-      ],
+      "Action": "s3:ListAllMyBuckets",
       "Resource": "*"
     },
     {
       "Effect": "Allow",
       "Action": [
         "s3:ListBucket",
-        "s3:GetObject"
+        "s3:GetBucketLocation"
       ],
-      "Resource": [
-        "arn:aws:s3:::your-bucket-name",
-        "arn:aws:s3:::your-bucket-name/*"
-      ]
+      "Resource": "arn:aws:s3:::your-bucket-name"
+    },
+    {
+      "Effect": "Allow",
+      "Action": "s3:GetObject",
+      "Resource": "arn:aws:s3:::your-bucket-name/*"
     }
   ]
 }
 ```
+
+`s3:ListAllMyBuckets` permits discovery of bucket names across the AWS account even though object reads are limited to the named bucket. The connector uses bucket discovery, so do not describe this policy as hiding other bucket names. AWS distinguishes bucket and object ARNs in its [S3 IAM policy examples](https://docs.aws.amazon.com/AmazonS3/latest/userguide/example-policies-s3.html). If your AWS administrator must prohibit account-wide bucket listing, confirm with Novaplan whether the deployed connector supports a different discovery flow before removing that action.
 
 ### Enhanced Custom Policy (Multiple Buckets)
 
@@ -364,10 +371,12 @@ For production use with multiple buckets and additional permissions, use this co
                 "s3:GetObjectTagging"
             ],
             "Resource": [
-                "arn:aws:s3:::*/*",
                 "arn:aws:s3:::your-bucket-name-1",
                 "arn:aws:s3:::your-bucket-name-2",
-                "arn:aws:s3:::your-bucket-name-3"
+                "arn:aws:s3:::your-bucket-name-3",
+                "arn:aws:s3:::your-bucket-name-1/*",
+                "arn:aws:s3:::your-bucket-name-2/*",
+                "arn:aws:s3:::your-bucket-name-3/*"
             ]
         },
         {
@@ -381,14 +390,14 @@ For production use with multiple buckets and additional permissions, use this co
 ```
 
 <Info>
-  Replace the bucket names in the Resource array (`your-bucket-name-1`, `your-bucket-name-2`, `your-bucket-name-3`) with your actual bucket names. The `arn:aws:s3:::*/*` allows access to all objects in the specified buckets.
+  Replace every placeholder bucket name in the Resource array with an approved bucket. Each bucket ARN covers bucket-level actions; its matching `/*` ARN covers objects in that bucket. Review the final policy with your AWS administrator before applying it.
 </Info>
 
 **Steps to apply custom policy:**
 
 1. In IAM, go to **"Policies"** → **"Create policy"**
 2. Use the JSON editor to paste the policy above (replace `your-bucket-name` with your actual bucket name)
-3. Name the policy (e.g., "PipesHub-S3-ReadOnly-SpecificBuckets")
+3. Name the policy (e.g., "Novaplan-AI-S3-ReadOnly-SpecificBuckets")
 4. Attach the policy to your IAM user instead of the managed policy
 
 ## Supported Features
@@ -398,7 +407,7 @@ The S3 connector syncs the following data from your AWS S3 buckets:
 - **Buckets**: All accessible buckets in your AWS account
 - **Files**: All file types with their metadata (name, size, modification date, MIME type)
 - **Folders**: Directory structure and organization using S3 prefixes
-- **Permissions**: Access control based on bucket and object-level permissions
+- **Permissions**: AWS bucket and object permissions limit ingestion; Novaplan AI visibility is set by the connector's Personal or Team scope
 
 ## Data Sync Behavior
 
@@ -414,54 +423,45 @@ The first sync performs a complete scan of your configured S3 buckets:
 - **Indexing**: Indexes file content for AI-powered search (based on indexing filter settings)
 - **Permission Assignment**: Assigns permissions based on connector scope (Personal or Team)
 
-**Sync Duration Estimates:**
-
-| Bucket Size | Objects | Estimated Time |
-|-------------|---------|----------------|
-| Small | < 1,000 | 5-15 minutes |
-| Medium | 1,000 - 10,000 | 15-45 minutes |
-| Large | 10,000 - 100,000 | 1-3 hours |
-| Very Large | 100,000 - 1,000,000 | 3-8 hours |
-| Enterprise | 1,000,000+ | 8+ hours |
+Sync duration depends on object count, size, file type, AWS limits, and your workspace's indexing capacity. Use the Overview panel to track the actual run.
 
 <Info>
-  Use bucket and file extension filters to significantly reduce initial sync time. For example, syncing only PDF files from a specific bucket can reduce sync time by 80-90%.
+  Use bucket and file-extension filters to limit the import to the content you need. Actual time savings depend on the bucket.
 </Info>
 
 ### Incremental Sync
 
-After the initial sync, subsequent syncs are much faster:
+After the initial sync, subsequent runs use a stored timestamp to avoid reprocessing unchanged objects:
 
 - **Timestamp-Based Detection**: Uses `LastModified` timestamps to identify changed objects
 - **Sync Point Tracking**: Stores the last sync timestamp per bucket in sync points
-- **Change Detection**: Only fetches objects modified since the last sync timestamp
+- **Change Detection**: Lists selected buckets and checks object timestamps against the last sync timestamp
 - **Pagination Resume**: Uses continuation tokens to resume interrupted syncs
-- **Efficient Updates**: Processes only new, modified, or deleted objects
-- **API Optimization**: Reduces API calls by 90%+ compared to full syncs
+- **Eligible Updates**: Processes new or modified objects that pass the filters; verify source deletions separately
 
 **How It Works:**
 
 1. Connector reads the sync point for each bucket (stored in our database)
 2. Retrieves the `last_sync_time` timestamp
-3. Queries S3 for objects with `LastModified >= last_sync_time`
+3. Lists selected S3 objects and compares their `LastModified` values with `last_sync_time`
 4. Processes only the changed objects
 5. Updates the sync point with the new maximum timestamp
 
 <Info>
-  Incremental syncs typically take 5-15 minutes for most buckets, regardless of total bucket size, as they only process changes.
+  Later syncs can still take time for large buckets because object listing is required. Monitor the run in your workspace.
 </Info>
 
 ### Permission Handling
 
-The connector respects AWS IAM permissions and PipesHub access controls:
+The connector respects AWS IAM permissions and Novaplan AI access controls:
 
 - **IAM-Based Access**: Only syncs buckets and objects the IAM user has permission to access
-- **Bucket Policies**: Respects S3 bucket policies and access control lists (ACLs)
-- **PipesHub Scope**: 
-  - **Personal Scope**: Only the connector creator can access synced content
+- **Bucket Policies**: The connector's AWS identity can import only objects it is allowed to read; each Novaplan AI viewer's separate AWS permissions are not reproduced
+- **Novaplan AI Scope**:
+  - **Personal Scope**: Intended for the connector creator; if creator mapping fails, the accessible source grants organization-wide read access. Verify access with a second workspace account before syncing sensitive buckets.
   - **Team Scope**: All organization users have read access to synced content
 - **Permission Inheritance**: Files inherit permissions from their parent bucket (Record Group)
-- **Access Control**: Users see only content they have permission to view in both AWS and PipesHub
+- **Access Control**: AWS IAM and bucket policies limit what the connector's IAM identity can ingest. The selected Personal or Team scope governs who can see that ingested content in Novaplan AI. Verify this scope before syncing sensitive buckets; individual Novaplan AI users do not authenticate to S3 through this connector.
 
 ### Sync Frequency
 
@@ -536,7 +536,7 @@ The connector respects AWS IAM permissions and PipesHub access controls:
 
 *Solutions:*
 1. Check that the IAM user has `s3:ListAllMyBuckets` permission
-2. Verify credentials are correctly entered in PipesHub
+2. Verify credentials are correctly entered in Novaplan AI
 3. Ensure the IAM user has access to at least one bucket
 4. Check AWS CloudTrail logs for permission errors
 5. Verify the IAM user is in the same AWS account as the buckets
@@ -601,7 +601,7 @@ The connector respects AWS IAM permissions and PipesHub access controls:
 
 *Solutions:*
 1. Access keys don't expire automatically, but they can be rotated or deleted
-2. If access keys were rotated in AWS, update credentials in PipesHub immediately
+2. If access keys were rotated in AWS, update credentials in Novaplan AI immediately
 3. Check if the IAM user or access keys were deleted in AWS IAM console
 4. Re-authenticate by updating credentials in connector settings
 5. Verify the IAM user still exists and is active
@@ -644,16 +644,15 @@ The connector respects AWS IAM permissions and PipesHub access controls:
 </AccordionGroup>
 
 <Warning>
-  If you rotate or change AWS access keys, you must update the configuration in PipesHub immediately. The connector will fail to sync until new credentials are provided.
+  If you rotate or change AWS access keys, you must update the configuration in Novaplan AI immediately. The connector will fail to sync until new credentials are provided.
 </Warning>
 
-## AWS S3 Compatibility
+## Amazon S3 Compatibility
 
-This connector is designed for **Amazon S3** and uses the AWS S3 API. It supports:
+This setup is for **Amazon S3**. The S3 connector asks for AWS access keys and does not expose a custom endpoint URL in its setup. It supports:
 
 - **All AWS S3 Regions**: Works with buckets in any AWS region worldwide
 - **Standard S3 Storage Classes**: Standard, Standard-IA, One Zone-IA, Intelligent-Tiering
-- **S3-Compatible Services**: Should work with MinIO and other S3-compatible storage (with proper endpoint configuration)
 
 **Not Supported:**
 - S3 Glacier and Glacier Deep Archive (requires restore process)
@@ -661,7 +660,7 @@ This connector is designed for **Amazon S3** and uses the AWS S3 API. It support
 - Requester Pays buckets (not currently supported)
 
 <Info>
-  The connector uses the standard S3 API and should work with S3-compatible services like MinIO, but is primarily tested and optimized for AWS S3.
+  For MinIO, select the separate **MinIO** connector if it is available in your workspace. Its setup requires an endpoint URL in addition to credentials; these Amazon S3 instructions do not configure that endpoint. Ask [Novaplan Support](/contact-us) for the appropriate setup until the MinIO guide is published.
 </Info>
 
 ## FAQ
@@ -669,24 +668,14 @@ This connector is designed for **Amazon S3** and uses the AWS S3 API. It support
 <AccordionGroup type="single" collapsible>
 
 <Accordion title="How long does the initial sync take?" defaultOpen>
-  The initial sync duration depends on the size of your S3 buckets:
-  
-  | Bucket Size | Estimated Time |
-  |-------------|----------------|
-  | Small (< 1,000 objects) | 5-15 minutes |
-  | Medium (1,000 - 10,000 objects) | 15-45 minutes |
-  | Large (10,000 - 100,000 objects) | 1-3 hours |
-  | Very Large (100,000 - 1,000,000 objects) | 3-8 hours |
-  | Enterprise (1,000,000+ objects) | 8+ hours |
-  
-  **Tip**: Use bucket and file extension filters to significantly reduce initial sync time. For example, syncing only PDF files from specific buckets can reduce sync time by 80-90%.
+  It depends on object count, size, file type, AWS limits, filters, and indexing capacity. Start with a limited bucket or file-type filter and check the Overview panel. Novaplan Support can help plan a large import.
 </Accordion>
 
 <Accordion title="Can I sync multiple AWS accounts?">
   **No**, each connector instance connects to a single AWS account. To sync buckets from multiple AWS accounts, you'll need to:
   
   1. Create separate IAM users in each AWS account
-  2. Create separate S3 connector instances in PipesHub
+  2. Create separate S3 connector instances in Novaplan AI
   3. Configure each connector with credentials from the respective AWS account
   
   This allows you to manage and filter buckets from different accounts separately.
@@ -697,6 +686,7 @@ This connector is designed for **Amazon S3** and uses the AWS S3 API. It support
   
   **Supported:**
   - Documents: PDF, DOCX, XLSX, PPTX, ODT, RTF
+  - E-books: EPUB without copy protection (DRM); searchable by text, but not previewable
   - Text: TXT, MD, CSV, JSON, XML, HTML
   - Code: Python, JavaScript, TypeScript, Java, Go, and many others
   - Images: JPG, PNG, GIF, WebP
@@ -715,33 +705,19 @@ This connector is designed for **Amazon S3** and uses the AWS S3 API. It support
   After the initial sync, the connector uses timestamp-based incremental sync:
   
   1. **Stores Sync Point**: Saves the last sync timestamp for each bucket
-  2. **Queries Changes**: On next sync, queries S3 for objects modified since that timestamp
+  2. **Lists Objects**: On the next sync, lists selected buckets and compares object modification times with that timestamp
   3. **Processes Only Changes**: Downloads and indexes only new or modified objects
   4. **Updates Timestamp**: Saves the new maximum timestamp for the next sync
   
-  This makes subsequent syncs 90%+ faster than full syncs, typically completing in 5-15 minutes regardless of bucket size.
+  This avoids reprocessing unchanged objects, but listing a large bucket can still take time. Check the actual run in the Overview panel.
 </Accordion>
 
 <Accordion title="Can I sync S3 Glacier files?">
-  **No**, the connector does not directly support S3 Glacier or Glacier Deep Archive storage classes. These storage classes require a restore process before files can be accessed.
-  
-  If you need to sync Glacier files:
-  1. Restore the files to Standard storage class in S3
-  2. Wait for restoration to complete
-  3. The connector will then sync the restored files
-  
-  Consider using S3 Intelligent-Tiering or Standard-IA for frequently accessed files that need to be searchable.
+  The documented connector does not directly support S3 Glacier Flexible Retrieval or Glacier Deep Archive objects. [AWS restoration](https://docs.aws.amazon.com/AmazonS3/latest/userguide/restoring-objects.html) makes a temporary copy readable after the restore completes; it does not change the archived object's storage class. Do not assume the connector will ingest that temporary copy. Confirm the deployed connector's behavior with Novaplan, or have your AWS administrator create a permanent copy in a supported storage class and test it with a limited sync.
 </Accordion>
 
 <Accordion title="What happens if I delete a file in S3?">
-  When a file is deleted from S3:
-  
-  - The deletion is detected during the next incremental sync
-  - The file record is marked as deleted in PipesHub
-  - The file is removed from search results
-  - Historical access to the file may still be available depending on your retention settings
-  
-  **Note**: If you use S3 versioning, deleted files may still appear if previous versions exist.
+  Do not assume that deleting an S3 object immediately removes an already indexed record or search result. After deleting sensitive content, verify its absence in Novaplan AI and contact [Novaplan Support](/contact-us) if it remains. Confirm deletion and versioning behavior for your Enterprise workspace before relying on source deletion to revoke access.
 </Accordion>
 
 <Accordion title="Can I sync encrypted S3 buckets?">
@@ -762,7 +738,7 @@ This connector is designed for **Amazon S3** and uses the AWS S3 API. It support
   2. **Use File Extension Filters**: Filter to specific file types
   3. **Use Date Filters**: Sync only recently modified files
   
-  Folder-level filtering within a bucket is not currently supported, but may be added in future releases.
+  Folder-level filtering within a bucket is not available in the documented connector. Use a separate bucket or another approved data layout when a narrower source boundary is required.
 </Accordion>
 
 </AccordionGroup>
@@ -778,6 +754,6 @@ This connector is designed for **Amazon S3** and uses the AWS S3 API. It support
 <div className="text-center mt-12 p-6 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl">
   <h3 className="text-lg font-semibold mb-2">Ready to Get Started?</h3>
   <p className="text-gray-600 dark:text-gray-400">
-    Connect your S3 buckets to PipesHub in just a few minutes. Follow the step-by-step guide above to enable organization-wide file search and access across all your S3 content.
+    Connect your S3 buckets to Novaplan AI in just a few minutes. Follow the step-by-step guide above to enable organization-wide file search and access across all your S3 content.
   </p>
 </div>

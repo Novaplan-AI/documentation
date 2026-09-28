@@ -1,0 +1,69 @@
+---
+title: "MariaDB"
+description: "Tabellen und Datensätze aus MariaDB mit Novaplan AI synchronisieren."
+icon: "/logo/mariadb.png"
+---
+
+## Überblick
+
+Der MariaDB-Konnektor übernimmt Tabellenstruktur und ausgewählte Datensätze in Novaplan AI. So können Sie strukturierte Daten zusammen mit Ihren anderen Wissensquellen durchsuchen. Der Konnektor synchronisiert und indexiert Daten; das [MariaDB-Toolset](/de/toolsets/mariadb/mariadb) dient dagegen dazu, SQL-Abfragen bei Bedarf direkt auszuführen.
+
+| Inhalt | Umfang |
+| --- | --- |
+| Tabellenstruktur | Tabellennamen, Spalten, Datentypen sowie Primär- und Fremdschlüssel |
+| Datensätze | Zeilen aus ausgewählten Tabellen, begrenzt durch **Max rows per table** |
+
+Novaplan unterstützt Sie bei der Einrichtung. Stimmen Sie vor der Freigabe ab, welche Datenbank und Tabellen für Ihren Workspace benötigt werden. Zugangsdaten sollten nur über den dafür vorgesehenen Konfigurationsdialog eingegeben werden.
+
+## Datenbankzugang vorbereiten
+
+Wenn Ihre MariaDB bereits läuft, benötigen Sie den Hostnamen, Port (üblicherweise `3306`), Datenbanknamen und einen Benutzer mit Leserechten. Der Server muss aus der Novaplan-Umgebung erreichbar sein. Für die Synchronisierung genügt `SELECT` auf der Zieldatenbank; Schemainformationen werden aus `information_schema` gelesen.
+
+Erstellen Sie nach Möglichkeit einen eigenen Benutzer mit minimalen Rechten. Das folgende Beispiel führen Datenbankadministratoren mit den nötigen Rechten aus:
+
+```sql
+CREATE USER 'novaplan_reader'@'%' IDENTIFIED BY 'a_strong_password';
+GRANT SELECT ON test_db.* TO 'novaplan_reader'@'%';
+FLUSH PRIVILEGES;
+```
+
+Ersetzen Sie Benutzernamen, Passwort und Datenbanknamen durch Ihre Werte. Das Hostmuster `%` erlaubt Verbindungen von mehreren Hosts; beschränken Sie es auf den tatsächlich benötigten Quellhost, wenn Ihre Netzwerkkonfiguration das zulässt.
+
+<Note>
+  Die Einrichtung einer MariaDB-Testinstanz ist unabhängig von der Bereitstellung von Novaplan AI. Novaplan AI selbst wird für Kunden nicht über diesen Leitfaden installiert.
+</Note>
+
+## Konnektor konfigurieren
+
+1. Öffnen Sie in Novaplan AI **Workspace Settings → Connectors**.
+2. Suchen Sie **MariaDB** und wählen Sie **+ Setup** oder **Configure**.
+3. Geben Sie **Host**, **Port**, **Database**, **User** und **Password** ein. Ein lokales Beispiel wäre `localhost`, `3306` und `test_db`; für einen von Novaplan verwalteten Workspace benötigen Sie in der Regel den aus dessen Umgebung erreichbaren Datenbankhost.
+4. Speichern Sie die Zugangsdaten und konfigurieren Sie die Synchronisierung.
+
+## Synchronisierung eingrenzen
+
+| Filter | Bedeutung | Standardwert |
+| --- | --- | --- |
+| **Tables** | Nur die ausgewählten Tabellen synchronisieren. Ohne Auswahl werden alle Tabellen der Datenbank berücksichtigt. | Alle Tabellen |
+| **Max rows per table** | Höchstzahl gelesener Zeilen pro Tabelle. | `1000` |
+| **Index tables** | Steuert die automatische KI-Indexierung synchronisierter Tabellendatensätze; die Deaktivierung beschränkt nicht allein den Quellzugriff. | Aktiviert |
+
+Die Filter begrenzen, welche Tabellen verarbeitet und wie viele Zeilen daraus gelesen werden. Der zugängliche Konnektor liest dennoch Tabellennamen für die Auswahlliste und die Synchronisierung. Ein Ausschluss garantiert deshalb nicht, dass keine Datenbankmetadaten gelesen werden. Wenn eine Isolation bereits an der Quelle nötig ist, verwenden Sie ein Datenbankkonto mit Zugriff nur auf die vorgesehenen Daten. Stimmen Sie Tabellen- und Zeilenauswahl mit den für Datenzugriff und Datenschutz zuständigen Personen ab.
+
+Wählen Sie anschließend **Scheduled** oder **Manual**. Für geplante Synchronisierung beträgt das voreingestellte **Sync interval** 60 Minuten. Nach **Save** prüft der Konnektor die Verbindung und startet die erste Synchronisierung. Den Fortschritt sehen Sie unter **Indexing Progress**.
+
+## Häufige Fragen
+
+### Welche Rechte braucht der Datenbankbenutzer?
+
+Für die reine Synchronisierung reicht `SELECT` auf den betroffenen Tabellen. Der Benutzer muss sich außerdem von der Novaplan-Umgebung aus mit der Datenbank verbinden können. Zusätzliche Schreibrechte sind dafür nicht erforderlich.
+
+### Kann Novaplan AI eine entfernte MariaDB erreichen?
+
+Ja, sofern Host, Port, Netzwerkrichtlinien und Benutzerberechtigungen die Verbindung erlauben. Verwenden Sie den aus der Novaplan-Umgebung erreichbaren Host; `localhost` bezeichnet immer den jeweiligen ausführenden Host.
+
+### Was ist der Unterschied zum Toolset?
+
+Der Konnektor indexiert Daten für die Suche. Das [MariaDB-Toolset](/de/toolsets/mariadb/mariadb) führt bei Bedarf aktuelle SQL-Abfragen aus, ohne die Ergebnisse vorher zu indexieren. Beide können zusammen eingesetzt werden.
+
+Wenn die Verbindung fehlschlägt oder Sie Hilfe bei Berechtigungen und Filtern benötigen, wenden Sie sich an [Novaplan Support](/de/contact-us).

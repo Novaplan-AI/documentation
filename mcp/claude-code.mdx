@@ -1,33 +1,60 @@
 ---
 title: "Claude Code"
-description: "Connect Claude Code to the PipesHub MCP server"
+description: "Connect Claude Code to the Novaplan AI MCP server"
 icon: "/logo/claude.svg"
 ---
 
-Claude Code supports remote HTTP MCP servers with static OAuth credentials via `--client-id`, `--client-secret`, and `--callback-port`.
+Claude Code can connect to Novaplan AI's remote HTTP MCP endpoint with a **personal access token** for an individual's own client, or with an **OAuth app** for a shared or administrator-managed setup. No local stdio bridge is needed for either remote connection.
 
-PipesHub exposes discovery at `/.well-known/oauth-protected-resource/mcp`, so Claude Code auto-discovers the authorization and token endpoints.
+The instructions below use the actual MCP URL ending in `/mcp`. The `/api/v1` base URL belongs only to the optional [local stdio bridge](/mcp/local-server).
 
 <Note>
-  Before you start, create an OAuth app in PipesHub and note your **Client ID** and **Client Secret**. See [MCP Server Overview](/mcp/overview#step-1-create-an-oauth-app).
+  Confirm that personal access tokens and the MCP endpoint are enabled in your managed workspace before connecting. A PAT is bound to the user who created it and is limited by that user's permissions and the token's scopes. See [Personal Access Tokens](/developer/personal-access-tokens).
 </Note>
 
 <Tip>
-  Coding agents: read [For coding agents](/for-agents) first. If they have no PipesHub yet, follow [Local Docker demo](/for-agents-local-demo) (do not scaffold LangChain). MCP config is not enough — also install the skill into **this** repo (`npx skills add pipeshub-ai/mcp-server`) and append the `AGENTS.md` snippet on that page. Otherwise the next chat still invents RAG.
+  Coding agents: read [For coding agents](/for-agents) first. If they do not have workspace access yet, contact [Novaplan AI support](/contact-us). MCP configuration and repository instructions are separate setup steps.
 </Tip>
 
-<Warning>
-  Claude Code does **not** support configuring specific scopes. It fetches `/.well-known/oauth-protected-resource/mcp`, reads the `scopes_supported` list, and requests **all** of them. Your OAuth app in PipesHub **must have access to all scopes** listed in the discovery endpoint, otherwise the authorization request will fail. To limit the exposed scopes, see [Customizing Default Scopes](/mcp/overview#customizing-default-scopes).
-</Warning>
+## Connect with your personal access token
 
-## Add with CLI
+1. In **Developer Settings → Personal Access Tokens**, create a token for your own account with the required scopes. Copy the MCP URL and token from the one-time paste block into a local secret store or environment variables named `PIPESHUB_MCP_URL` and `PIPESHUB_MCP_TOKEN`. These names are functional identifiers used by the current token flow. The URL already ends in `/mcp`.
+2. In your project, add a `.mcp.json` file with environment-variable references rather than a literal token:
+
+```json
+{
+  "mcpServers": {
+    "novaplan": {
+      "type": "http",
+      "url": "${PIPESHUB_MCP_URL}",
+      "headers": {
+        "Authorization": "Bearer ${PIPESHUB_MCP_TOKEN}"
+      }
+    }
+  }
+}
+```
+
+3. Run `claude mcp list` and test a query that your account is allowed to answer. Claude Code [expands environment variables in remote server URLs and headers](https://code.claude.com/docs/en/mcp#environment-variable-expansion-in-mcpjson). Make sure both variables exist in the environment where Claude Code starts.
+
+For a remote workspace, use an **HTTPS** MCP URL because each request carries a bearer token. Never commit the token or put its literal value in a project configuration. Revoke a leaked token under **Personal Access Tokens**.
+
+## Connect with an OAuth app
+
+For shared or administrator-managed OAuth setup, create an OAuth app in Novaplan AI and note your **Client ID** and **Client Secret**. See [MCP Server Overview](/mcp/overview#step-1-create-an-oauth-app). Novaplan AI exposes discovery at `/.well-known/oauth-protected-resource/mcp`, so Claude Code discovers the authorization and token endpoints.
+
+<Note>
+  Claude Code can request an approved subset of OAuth scopes through `oauth.scopes` in its server configuration. Without that setting, current Claude Code versions use the scope from the server's authentication challenge or protected-resource metadata, if provided. The OAuth app must permit the scopes actually requested. See [Customizing Default Scopes](/mcp/overview#customizing-default-scopes) if the server's advertised defaults need review.
+</Note>
+
+### Add with CLI
 
 ```bash
 claude mcp add --transport http \
   --client-id YOUR_CLIENT_ID \
   --client-secret \
   --callback-port 8080 \
-  pipeshub PIPESHUB_INSTANCE_URL/mcp
+  novaplan NOVAPLAN_WORKSPACE_URL/mcp
 ```
 
 <Note>
@@ -38,7 +65,7 @@ claude mcp add --transport http \
     --client-id YOUR_CLIENT_ID \
     --client-secret \
     --callback-port 8080 \
-    pipeshub PIPESHUB_INSTANCE_URL/mcp
+    novaplan NOVAPLAN_WORKSPACE_URL/mcp
   ```
 </Note>
 
@@ -49,15 +76,15 @@ claude mcp add --transport http --scope user \
   --client-id YOUR_CLIENT_ID \
   --client-secret \
   --callback-port 8080 \
-  pipeshub PIPESHUB_INSTANCE_URL/mcp
+  novaplan NOVAPLAN_WORKSPACE_URL/mcp
 ```
 
-## Add with JSON
+### Add with JSON
 
 ```bash
-claude mcp add-json pipeshub '{
+claude mcp add-json novaplan '{
   "type": "http",
-  "url": "PIPESHUB_INSTANCE_URL/mcp",
+  "url": "NOVAPLAN_WORKSPACE_URL/mcp",
   "oauth": {
     "clientId": "YOUR_CLIENT_ID",
     "callbackPort": 8080
@@ -65,37 +92,21 @@ claude mcp add-json pipeshub '{
 }' --client-secret
 ```
 
-## Project-Scoped (`.mcp.json`)
+### Project-scoped configuration
 
-Create a `.mcp.json` file in your project root. This can be committed to version control (secrets stay out via env vars):
-
-```json
-{
-  "mcpServers": {
-    "pipeshub": {
-      "type": "http",
-      "url": "${PIPESHUB_INSTANCE_URL}/mcp",
-      "oauth": {
-        "clientId": "${PIPESHUB_CLIENT_ID}",
-        "callbackPort": 8080
-      }
-    }
-  }
-}
-```
-
-Set environment variables before launching Claude Code:
+From the project root, add `--scope project` to the CLI command. Claude Code writes the non-secret server configuration to `.mcp.json`; review that file before committing it. Each team member still needs access to the Novaplan workspace and must authenticate individually.
 
 ```bash
-export PIPESHUB_INSTANCE_URL="https://app.pipeshub.com"
-export PIPESHUB_CLIENT_ID="your-client-id"
+claude mcp add --transport http --scope project \
+  --client-id YOUR_CLIENT_ID \
+  --client-secret \
+  --callback-port 8080 \
+  novaplan NOVAPLAN_WORKSPACE_URL/mcp
 ```
 
-<Note>
-  The client secret is stored in the system keychain, not in config files. You'll be prompted to enter it when you first authenticate via `/mcp`.
-</Note>
+The client secret is requested **when the server is added** and kept outside `.mcp.json` by Claude Code. Its storage depends on the operating system; do not put it in a committed configuration file. To pin a narrower set of scopes, set `oauth.scopes` in the server's JSON configuration to a single space-separated string of scopes approved for the intended tools, then re-authenticate. See [Claude Code's MCP documentation](https://code.claude.com/docs/en/mcp#restrict-oauth-scopes) for the current format.
 
-## Authenticate
+### Authenticate
 
 After adding the server, run `/mcp` inside Claude Code and follow the browser login flow. Tokens are stored securely and refreshed automatically.
 
@@ -103,5 +114,5 @@ After adding the server, run `/mcp` inside Claude Code and follow the browser lo
 
 ```bash
 claude mcp list
-claude mcp get pipeshub
+claude mcp get novaplan
 ```

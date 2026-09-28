@@ -1,11 +1,11 @@
 ---
 title: LiteLLM Proxy
-description: "Configure PipesHub to transcribe audio through a self-hosted LiteLLM Proxy gateway"
+description: "Configure Novaplan AI to transcribe audio through a self-hosted LiteLLM Proxy gateway"
 ---
 
 # LiteLLM Proxy Speech to Text Configuration
 
-PipesHub can transcribe spoken audio into text through a LiteLLM Proxy instance, so voice input and audio files are handled by the same gateway as your other models.
+Novaplan AI can transcribe spoken audio into text through a LiteLLM Proxy instance, so voice input and audio files are handled by the same gateway as your other models.
 
 ## Before you start
 
@@ -19,7 +19,7 @@ The address of your LiteLLM Proxy.
 
 **Default:** `http://host.docker.internal:4000`
 
-Use `host.docker.internal` rather than `localhost` when the proxy runs on the Docker host.
+Use the proxy URL that Novaplan confirms is reachable from the managed workspace. The default `host.docker.internal` works only in a compatible network setup; your computer's `localhost` is not a workspace endpoint.
 
 ### API Key *
 
@@ -33,9 +33,9 @@ The transcription model as named in your proxy configuration, for example `whisp
 
 ### Model Friendly Name
 
-A label shown in the PipesHub interface so you can tell several configurations apart.
+A label shown in the Novaplan AI interface so you can tell several configurations apart.
 
 ## Related
 
 - [LiteLLM Proxy for text generation](/ai-models/llm/litellm-proxy)
-- [Whisper](/ai-models/stt/whisper) — transcription that runs locally with no external service
+- [Whisper](/ai-models/stt/whisper) — transcription on the Novaplan-managed backend without a separate speech-to-text API

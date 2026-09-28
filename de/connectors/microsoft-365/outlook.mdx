@@ -1,0 +1,106 @@
+---
+title: "Microsoft Outlook"
+description: "E-Mails, Anhänge und Ordner aus Microsoft 365 mit Novaplan AI synchronisieren."
+icon: "/logo/outlook.png"
+---
+
+Der Microsoft-Outlook-Konnektor synchronisiert E-Mails aus den Postfächern Ihrer Microsoft-365-Organisation über Microsoft Graph. Dazu gehören Nutzerprofile für die Berechtigungszuordnung, Nachrichten, Anhänge, E-Mail-Ordner und bei entsprechender Einstellung Microsoft-365-Gruppenkonversationen. Indexierte Inhalte können anschließend in Novaplan AI gesucht werden.
+
+Novaplan richtet Ihren Workspace weitgehend für Sie ein. Die Registrierung einer Microsoft-Entra-Anwendung, die Freigabe ihrer Berechtigungen und die Auswahl der Postfächer stimmen Sie mit Ihrer Microsoft-365-Administration und Novaplan ab.
+
+<Note>
+  Dieser Konnektor verwendet OAuth 2.0 mit **Application permissions** und Administratorfreigabe. Nach der Freigabe ist innerhalb von Novaplan AI keine interaktive Anmeldung jeder einzelnen Person bei Microsoft nötig.
+</Note>
+
+## Welche Daten werden synchronisiert?
+
+| Daten | Bedeutung |
+| --- | --- |
+| **Users** | Nutzerprofile und Postfachkontext für Berechtigungen und Geltungsbereich |
+| **Emails** | Nachrichten aus Postfächern im gewählten Synchronisierungsbereich |
+| **Attachments** | Dateianhänge, wenn die Indexierung von Anhängen aktiviert ist |
+| **Mail folders** | Standardordner wie Inbox, Sent und Archive sowie eigene Ordner |
+| **Group mail** | Gruppenkonversationen, wenn ihre Indexierung aktiviert ist |
+
+## Verbindung einrichten
+
+Die folgenden Schritte dienen Ihrer Microsoft-365-Administration und dem Novaplan-Team als technische Referenz. Für App-Registrierung, Administratorfreigabe und Zugangsdaten sind die passenden Rechte in Microsoft Entra ID und Novaplan AI erforderlich.
+
+### 1. Anwendung in Microsoft Entra registrieren
+
+1. Öffnen Sie das [Azure-Portal](https://portal.azure.com) und melden Sie sich mit einem geeigneten Microsoft-365-Administratorkonto an.
+2. Öffnen Sie **Microsoft Entra ID → App registrations → New registration**.
+3. Vergeben Sie einen Namen, beispielsweise `Novaplan AI Outlook Connector`.
+4. Wählen Sie **Accounts in this organizational directory only (Single tenant)** und klicken Sie auf **Register**.
+
+Für diese Verbindung ist keine **Redirect URI** erforderlich: Der Konnektor nutzt Anwendungszugangsdaten und Administratorfreigabe statt einer interaktiven OAuth-Weiterleitung.
+
+### 2. Kennungen und Client Secret erfassen
+
+1. Kopieren Sie auf der **Overview**-Seite die **Application (client) ID** und die **Directory (tenant) ID**. Die **Object ID** ist nicht die Client-ID.
+2. Öffnen Sie **Certificates & secrets → New client secret**.
+3. Wählen Sie eine Beschreibung und eine zu Ihrer Richtlinie passende Laufzeit. Kopieren Sie nach **Add** sofort den **Value** des Secrets, nicht die Secret ID. Der Wert wird nur einmal angezeigt.
+4. Übergeben Sie die Kennungen und das Secret nur über den mit Novaplan vereinbarten sicheren Weg.
+
+### 3. Microsoft-Graph-Berechtigungen freigeben
+
+1. Öffnen Sie **API permissions → Add a permission → Microsoft Graph**.
+2. Wählen Sie **Application permissions**, nicht **Delegated permissions**.
+3. Fügen Sie `User.Read.All`, `Mail.Read` und `MailboxSettings.Read` hinzu.
+4. Klicken Sie auf **Grant admin consent for [your organization]** und bestätigen Sie die Freigabe.
+5. Prüfen Sie, dass bei allen drei Berechtigungen **Granted for [organization]** angezeigt wird. Die Freigabe kann einige Minuten benötigen.
+
+Diese Anwendungsberechtigungen erlauben dem Konnektor den Zugriff auf Organisationsdaten ohne individuelle Microsoft-Anmeldung. Prüfen Sie den Umfang vor der Freigabe mit Ihrer Administration. Die Microsoft-Administration, die diese App freigibt, muss nicht mit dem Novaplan-AI-Administratorkonto identisch sein. Die Zuordnung der einzelnen Postfächer und Nutzenden ist davon getrennt zu prüfen.
+
+### 4. Outlook-Konnektor in Novaplan AI konfigurieren
+
+1. Öffnen Sie über Ihr Profil **Workspace Settings → Workspace → Connectors**.
+2. Suchen Sie **Outlook** und wählen Sie **+ Setup** oder öffnen Sie eine vorhandene Instanz.
+3. Geben Sie unter **Outlook Configuration → Authenticate Instance** einen **Instance name** ein.
+4. Tragen Sie unter **OAuth (Admin Consent) Credentials** die **Application (Client) ID**, das **Client Secret** und die **Directory (Tenant) ID** ein.
+5. Aktivieren Sie **Has Admin Consent**, sobald die Freigabe in Microsoft Entra erteilt wurde, und klicken Sie auf **Next**.
+6. Legen Sie unter **Configure Records** Synchronisierungsstrategie, Intervalle und [Filter](#synchronisierung-und-filter) fest. Speichern Sie mit **Save Configuration**.
+
+Nach der Konfiguration können Sie **Start Syncing Now** oder **I'll do it later** wählen. Aktivieren Sie auf der Outlook-Konnektorseite **Sync Enabled**, wenn die Verbindung laufen soll. Die Instanz bietet je nach Status **Sync**, **Full sync** und **Retry failed**. Unter **Overview** sehen Sie Zähler für **Total**, **Completed**, **Failed** und Datensatztypen wie **MAIL** und **GROUP_MAIL**.
+
+## Synchronisierung und Filter
+
+### Synchronisierungsstrategie
+
+- **Scheduled:** Synchronisiert im festgelegten **Sync Interval**, beispielsweise stündlich.
+- **Manual:** Startet nur auf ausdrückliche Anforderung.
+
+Der erste Lauf verarbeitet die vorhandenen Nachrichten und Ordner innerhalb der gewählten Filter. Seine Dauer hängt von Postfachgröße und Microsoft-Graph-Limits ab. Spätere Läufe holen neue oder geänderte Daten entsprechend dem Intervall; wo anwendbar nutzt der Konnektor Änderungsverfolgung.
+
+### Synchronisierungsfilter
+
+Mit **+ Add filter** können Sie die abgerufenen Daten einschränken. Verfügbar sind unter anderem **Users**, **Standard Folders**, **Custom Folders**, **Groups** und **Received Date**. Jeder Filter verwendet einen passenden Operator und Wert. Mit **Clear** entfernen Sie eine Einschränkung.
+
+Beispiele: Begrenzen Sie **Received Date** mit **Is After** auf aktuelle Nachrichten oder wählen Sie mit **Users → In** bestimmte Postfächer. Prüfen Sie mit Ihrer Administration, welche Daten tatsächlich in die Suche aufgenommen werden sollen. Änderungen wirken sich bei nachfolgenden Synchronisierungen aus.
+
+### Indexierungsfilter
+
+- **Enable Manual Indexing:** Synchronisiert Datensätze ohne automatische Indexierung. Aktivieren Sie diese Option, wenn die Aufnahme in die Suche gesondert gesteuert werden soll.
+- **Index Emails:** Macht E-Mail-Inhalte und Metadaten durchsuchbar.
+- **Index Attachments:** Indexiert unterstützte Dateianhänge.
+- **Index Group Conversations:** Indexiert Microsoft-365-Gruppenkonversationen.
+
+Synchronisierte Datensätze, die noch nicht indexiert wurden, können unter **All Records** sichtbar sein, ohne in Suchergebnissen aufzutauchen.
+
+## Fehlerbehebung
+
+**Zugangsdaten ungültig:** Vergleichen Sie **Application (Client) ID**, **Client Secret** und **Directory (Tenant) ID** ohne zusätzliche Leerzeichen. Prüfen Sie, ob das Secret abgelaufen ist. Erstellen Sie bei Bedarf ein neues und aktualisieren Sie die Konnektorinstanz.
+
+**Berechtigung fehlt:** Prüfen Sie, ob `User.Read.All`, `Mail.Read` und `MailboxSettings.Read` als **Application permissions** eingetragen und mit **admin consent** freigegeben wurden. Warten Sie gegebenenfalls einige Minuten auf die Übernahme.
+
+**Falscher Kontotyp:** Diese Verbindung ist für Microsoft-365-Geschäfts- oder Schulkonten mit geeignetem Tenant gedacht. Reine private Outlook.com-Postfächer ohne passenden Tenant für Microsoft Graph App-Zugriff werden durch dieses Muster nicht unterstützt.
+
+**Keine Suchergebnisse:** Prüfen Sie bei der betroffenen Person, ob ihre Microsoft-365-E-Mail-Adresse und ihr Postfachzugriff dem Novaplan-AI-Konto richtig zugeordnet sind. Das Microsoft-Administratorkonto, das der App zugestimmt hat, kann eine andere Person sein. Kontrollieren Sie danach unter **Workspace Settings → Connectors → Outlook → Overview** den Synchronisierungsstatus. Wenn Datensätze unter **All Records**, aber nicht in der Suche erscheinen, prüfen Sie **Configure Records**, insbesondere Synchronisierungsfilter und **Index Emails** beziehungsweise **Index Attachments**. Warten Sie gegebenenfalls, bis die erste Indexierung abgeschlossen ist.
+
+Bei Fragen zur Einrichtung oder zu fehlenden Ergebnissen schreiben Sie an [support@novaplan.ai](mailto:support@novaplan.ai).
+
+## Weiterführende Microsoft-Dokumentation
+
+- [Anwendung registrieren](https://learn.microsoft.com/en-us/entra/identity-platform/quickstart-register-app)
+- [Microsoft-Graph-Berechtigungen](https://learn.microsoft.com/en-us/graph/permissions-reference)
+- [Tenantweite Administratorfreigabe](https://learn.microsoft.com/en-us/entra/identity/enterprise-apps/grant-admin-consent)

@@ -1,0 +1,161 @@
+---
+title: "Konnektoren im Überblick"
+description: "Verbinden und indexieren Sie Daten aus externen Anwendungen für die Suche in Novaplan AI."
+---
+
+## Was sind Konnektoren?
+
+Konnektoren **synchronisieren und indexieren Daten** aus externen Anwendungen in Novaplan AI. Dadurch können der Chat und Ihre Agenten in den Wissensquellen Ihrer Organisation suchen.
+
+**Verwenden Sie Konnektoren, wenn Sie Daten abfragen oder durchsuchen möchten.** Indexierte Daten werden als Wissen für Ihre KI-Assistenten verfügbar.
+
+**Wichtige Eigenschaften:**
+
+- **Einseitige Synchronisierung:** Daten werden zur Indexierung in Novaplan AI importiert.
+- **Wissenssuche:** KI-Assistenten können die indexierten Daten durchsuchen.
+- **Geplante oder manuelle Aktualisierung:** Wählen Sie die verfügbare Synchronisierungsstrategie des Konnektors; Ergebnisse erscheinen nicht zwingend in Echtzeit.
+
+Novaplan übernimmt den Großteil der Einrichtung. Diese Übersicht und die verlinkten Anleitungen bleiben als Referenz verfügbar, wenn Sie Konnektoren selbst verwalten oder ihre Einrichtung nachvollziehen möchten.
+
+<Warning>
+  Konnektoren, die Quellkonten per E-Mail-Adresse zuordnen, benötigen lesbare und passende Adressen. Andere verwenden Dienstkonten, Schlüssel oder Berechtigungen nach Konnektorumfang. Prüfen Sie die Anforderungen und das Zugriffsmodell in der jeweiligen Konnektor-Anleitung.
+</Warning>
+
+<Note>
+  **Konnektor und Toolset gemeinsam verwenden:** Fügen Sie im Agent Builder unter **Knowledge** Knoten für die Dokumentensuche und den Kontext hinzu. Unter **Tools** fügen Sie Knoten für Aktionen hinzu. Verbinden Sie beide mit dem **Agent Core**, damit der Agent Informationen suchen und Aktionen ausführen kann.
+</Note>
+
+---
+
+## Verfügbare Konnektoren
+
+Novaplan AI unterstützt Konnektoren für verschiedene Anwendungen und Dienste. Welche Optionen unter **Workspace → Connectors** und **Your Personal Connectors** angezeigt werden, hängt von Ihrem Enterprise-Workspace ab. Wenn ein hier beschriebener Konnektor dort fehlt, wenden Sie sich vor der Einrichtung an [Novaplan Support](/de/contact-us).
+
+### Google Workspace
+
+| Konnektor | Beschreibung |
+| --- | --- |
+| **Gmail** | E-Mails und Anhänge für die Suche synchronisieren. |
+| **Google Calendar** | Termine und Kalenderdaten synchronisieren. |
+| **Google Drive** | Dateien und gemeinsam genutzte Inhalte einbinden. |
+| **Google Docs** | In Drive gespeicherte Dokumente über den Google-Drive-Konnektor synchronisieren. |
+| **Google Sheets** | In Drive gespeicherte Tabellen über den Google-Drive-Konnektor synchronisieren. |
+| **Google Slides** | In Drive gespeicherte Präsentationen über den Google-Drive-Konnektor synchronisieren. |
+| **Google Forms** | Formulardaten einbinden. |
+| **Google Meet** | Videokonferenzdaten einbinden. |
+
+### Microsoft
+
+| Konnektor | Beschreibung |
+| --- | --- |
+| **Outlook** | E-Mail- und Kalenderdaten einbinden. |
+| **OneDrive** | Dateien aus dem Cloudspeicher einbinden. |
+| **OneNote** | Notizen und Wissensinhalte einbinden. |
+| **Teams** | Inhalte der Zusammenarbeit einbinden. |
+| **SharePoint** | Dokumente und Team-Websites einbinden. |
+
+### Atlassian
+
+| Konnektor | Beschreibung |
+| --- | --- |
+| **Jira Cloud** | Vorgänge und Projektdaten einbinden. |
+| **Jira Data Center** | Vorgänge aus einer selbst betriebenen Jira-Instanz einbinden. |
+| **Confluence Cloud** | Seiten und Wissensdatenbanken einbinden. |
+| **Confluence Data Center** | Seiten aus einer selbst betriebenen Confluence-Instanz einbinden. |
+
+### Kommunikation und Support
+
+| Konnektor | Beschreibung |
+| --- | --- |
+| **Slack** | Nachrichten und Inhalte der Zusammenarbeit einbinden. |
+| **Zammad** | Tickets und Helpdesk-Inhalte einbinden. |
+| **Zendesk** | Support-Tickets und Kundenservice-Inhalte einbinden. |
+
+### Webseiten und Feeds
+
+| Konnektor | Beschreibung |
+| --- | --- |
+| **Web** | Öffentlich erreichbare Seiten und Dateien einer Website crawlen und indexieren. |
+| **RSS** | Einträge aus öffentlichen RSS- und Atom-Feeds synchronisieren, optional mit vollständigem Artikeltext. |
+
+### Lokale Dateien
+
+| Konnektor | Beschreibung |
+| --- | --- |
+| **Local FS** | Einen für den verwalteten Konnektorprozess erreichbaren Ordner indexieren; Verfügbarkeit vor der Einrichtung unter **Workspace Settings → Personal → Your Connectors** mit Novaplan prüfen. |
+
+### Cloudspeicher
+
+| Konnektor | Beschreibung |
+| --- | --- |
+| **Amazon S3** | Inhalte aus Objektspeichern einbinden. |
+| **Azure Blob Storage** | Objekte und Metadaten aus Azure Blob Storage synchronisieren. |
+| **Azure Files** | Dateien und Ordner aus Azure-Dateifreigaben synchronisieren. |
+| **Google Cloud Storage** | Objekte und Metadaten aus Google Cloud Storage synchronisieren. |
+| **Box** | Dateien aus dem Unternehmensspeicher einbinden. |
+| **Dropbox** | Dateien aus dem Cloudspeicher einbinden. |
+| **Nextcloud** | Dateien aus einer selbst betriebenen Dateiplattform einbinden. |
+
+### Entwicklung und Projektmanagement
+
+| Konnektor | Beschreibung |
+| --- | --- |
+| **GitHub** | Repositories und Projektdaten einbinden. |
+| **GitLab** | Repositories und Merge-Request-Daten einbinden. |
+| **Linear** | Vorgänge und Projektdaten einbinden. |
+| **Notion** | Notizen, Dokumente und Workspace-Inhalte einbinden. |
+
+### Datenbanken und Analyse
+
+| Konnektor | Beschreibung |
+| --- | --- |
+| **Airtable** | Tabellen und Projektdaten einbinden. |
+| **MariaDB** | Tabellen und Zeilen aus einer MariaDB-Datenbank synchronisieren. |
+| **PostgreSQL** | Schemas, Tabellen und Zeilen aus einer PostgreSQL-Datenbank synchronisieren. |
+
+## Sicherheit und Berechtigungen
+
+Der Zugriff eines Konnektors hängt von der Authentifizierung des externen Dienstes, den bei der Einrichtung erteilten Berechtigungen und dem Zugriff des Benutzers auf indexierte Inhalte ab. Prüfen Sie vor der Freigabe die Anleitung des jeweiligen Konnektors. Bei Fragen zu Sicherheits- und Datenschutzvereinbarungen von Novaplan wenden Sie sich an [Novaplan Support](/de/contact-us).
+
+## Häufige Fragen
+
+<AccordionGroup>
+  <Accordion title="Was unterscheidet Konnektoren und Toolsets?">
+    | Aspekt | Konnektoren | Toolsets |
+    | --- | --- | --- |
+    | Zweck | Daten für die Suche synchronisieren und indexieren. | Agenten können Aktionen ausführen. |
+    | Datenfluss | Einseitig: Import in Novaplan AI. | Beidseitig: Lesen und Schreiben über APIs. |
+    | Verwendung | Daten abfragen und durchsuchen. | Aktionen mit Daten ausführen. |
+
+    Beispiel: Ein Gmail-Konnektor indexiert E-Mails für die Suche. Mit einem Gmail-Toolset kann ein Agent neue E-Mails senden.
+  </Accordion>
+  <Accordion title="Wann verwende ich einen Konnektor und wann ein Toolset?">
+    Verwenden Sie einen **Konnektor**, wenn Sie Dokumente, E-Mails oder Seiten durchsuchen möchten. Konnektoren synchronisieren und indexieren Inhalte; sie führen keine Aktionen in der externen Anwendung aus.
+
+    Verwenden Sie ein **Toolset** für Aktionen: Inhalte erstellen oder aktualisieren, Nachrichten senden oder Abfragen wie JQL, CQL und Berichte ausführen.
+
+    **Merksatz:** Suche und Kontext → **Konnektor**. Aktionen → **Toolset**.
+  </Accordion>
+  <Accordion title="Wo finde ich die Callback-URL für meine OAuth-Anwendung?">
+    Die Callback-URL erscheint in Novaplan AI bei der Konfiguration eines Konnektors:
+
+    1. Öffnen Sie **Workspace Settings** und suchen Sie den Konnektor im Bereich für Workspace- oder persönliche Verbindungen, den seine Anleitung nennt.
+    2. Wählen Sie **Setup** und öffnen Sie den Authentifizierungsschritt.
+    3. Kopieren Sie die dort angezeigte **Redirect URL** beziehungsweise **Redirect URI**.
+    4. Tragen Sie genau diese Adresse in der Entwicklerkonsole des externen Dienstes als zulässige Redirect-URI ein.
+
+    Die URL muss in beiden Anwendungen genau übereinstimmen, damit die Authentifizierung funktioniert.
+  </Accordion>
+  <Accordion title="Welche OAuth-Berechtigungen benötigen Konnektoren?">
+    Die erforderlichen Scopes hängen von Datenquelle und Konnektor ab. Erteilen Sie nur die in der jeweiligen Konnektor-Anleitung genannten Rechte und lassen Sie sie von der Administration der Quelle prüfen. Manche Anbieter bündeln Lesezugriff mit weitergehenden Rechten: GitHubs OAuth-Scope `repo` ist beispielsweise nicht auf reines Lesen privater Repositories begrenzt, auch wenn der Konnektor laut technischer Referenz nur Daten liest.
+  </Accordion>
+  <Accordion title="Warum liefert die Suche keine Ergebnisse?">
+    Drei häufige Ursachen sind:
+
+    1. **Konto nicht zugeordnet:** Bei Konnektoren mit E-Mail-Zuordnung kann eine nicht lesbare oder abweichende Adresse den Zugriff auf synchronisierte Einträge verhindern. Prüfen Sie zuerst die Anforderungen des betreffenden Konnektors und die Adressen der betroffenen Person.
+    2. **Keine Einträge unter „All Records“:** Prüfen Sie Berechtigungen und Synchronisierungsstatus unter **Workspace Settings → Connectors** für Team-Quellen oder **Workspace Settings → Your Connectors** für persönliche Quellen. Bei Quellen mit E-Mail-Zuordnung prüfen Sie zusätzlich die Kontozuordnung.
+    3. **Indexierung läuft noch:** Prüfen Sie den Status und warten Sie bei neu hinzugefügten Quellen auf den Abschluss der ersten Indexierung.
+  </Accordion>
+</AccordionGroup>
+
+Weitere Einzelheiten finden Sie in der Anleitung des jeweiligen Konnektors. Bei Fragen zur Einrichtung hilft [Novaplan Support](/de/contact-us).

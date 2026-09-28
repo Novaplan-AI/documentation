@@ -58,7 +58,7 @@ The SharePoint connector uses OAuth 2.0 with Application Permissions via Microso
 
 **Create New Registration:**
 - Enter application details:
-  - **Name:** Enter app name (e.g., "PipesHub Connector")
+  - **Name:** Enter app name (e.g., "Novaplan AI Connector")
   - **Supported account types:** Select "Accounts in this organizational directory only (Single tenant)"
   - **Select a platform:** Web
   - **Redirect URI:** Leave blank
@@ -139,7 +139,7 @@ Copy the "Application (client) ID" NOT the "Object ID". These are different valu
 </div>
 
 <Warning>
-  **Important:** The administrator granting consent should use the same email address as the PipesHub account configuring this connector. Using a different email will cause permission issues on the PipesHub platform.
+  A Microsoft 365 administrator must grant the app the required tenant permissions. Their email does not have to match the Novaplan AI administrator configuring this shared connector. Viewer access depends on each person's mapped Microsoft 365 identity and SharePoint permissions.
 </Warning>
 
 <Note>
@@ -178,14 +178,14 @@ Verify that both `certificate.crt` and `privatekey.key` exist. Open each file, a
 - The certificate file must start with `BEGIN CERTIFICATE` and end with `END CERTIFICATE`
 - The private key should begin with `BEGIN PRIVATE KEY` and end with `END PRIVATE KEY`. It must not include RSA in the headers, nor be encrypted.
 
-**Upload to PipesHub:**
-- Upload the `certificate.crt` in PipesHub under **Client Certificate**
-- Upload the `privatekey.key` in PipesHub under **Private Key**
+**Upload to Novaplan AI:**
+- Upload the `certificate.crt` in Novaplan AI under **Client Certificate**
+- Upload the `privatekey.key` in Novaplan AI under **Private Key**
 
 <div style={{ textAlign: "center" }}>
   <img
     src="/images/connectors/microsoft365/sharepoint/4.png"
-    alt="Uploading certificate and private key in PipesHub"
+    alt="Uploading certificate and private key in Novaplan AI"
     style={{ display: 'block', margin: '0 auto' }}
     width="90%"
   />
@@ -207,13 +207,15 @@ Verify that both `certificate.crt` and `privatekey.key` exist. Open each file, a
   />
 </div>
 
-### Step 6: Configure Connector in PipesHub
+<div id="step-6-configure-connector-in-novaplan-ai" />
+
+### Step 6: Configure Connector in Novaplan AI
 
 1. Navigate to **Workspace Settings** > **Connectors** in your application.
 <div style={{ textAlign: "center" }}>
   <img
     src="/images/connectors/microsoft365/sharepoint/6.png"
-    alt="PipesHub Workspace Settings with Connectors navigation"
+    alt="Novaplan AI Workspace Settings with Connectors navigation"
     style={{ display: 'block', margin: '0 auto' }}
     width="90%"
   />
@@ -252,7 +254,7 @@ Sync settings allow you to control how the connector syncs data from SharePoint.
 In what interval the connector will sync data (default: 60 minutes).
 
 ## Filters
-Filters let you control exactly what PipesHub syncs and indexes from your SharePoint environment. They are split into two categories:
+Filters let you control exactly what Novaplan AI syncs and indexes from your SharePoint environment. They are split into two categories:
  
 - **Sync filters** — applied during the sync phase. They determine which sites, libraries, files, and content are fetched from SharePoint.
 - **Indexing filters** — applied after content is fetched. They determine which content types are actually indexed and made searchable.
@@ -271,7 +273,7 @@ Filters let you control exactly what PipesHub syncs and indexes from your ShareP
 
 ### Sync Filters
  
-These filters run before any data is pulled from SharePoint. Content that doesn't pass a sync filter is never fetched, saving time and API quota, also helps exclude unwanted content. 
+These filters narrow the sites, libraries, files, and pages processed for search. The accessible connector first reads Microsoft 365 users and groups for permission mapping and discovers SharePoint sites before applying the site filter. Do not use the content filters as a guarantee that no other tenant metadata is read. Check the application's granted Microsoft permissions if source-level isolation is required.
  
 | Filter | Default | What it does |
 |---|---|---|
@@ -303,7 +305,7 @@ These filters run after content has been fetched. They control which content typ
 
 ---
 
-Once your settings are configured, click **Save Configuration**. PipesHub confirms the instance is ready with a final dialog — “Instance is configured and ready to sync” — offering two choices: I’ll do it later or Start syncing now.
+Once your settings are configured, click **Save Configuration**. Novaplan AI confirms the instance is ready with a final dialog — “Instance is configured and ready to sync” — offering two choices: I’ll do it later or Start syncing now.
 
 </Accordion>
 
@@ -319,14 +321,14 @@ Once your settings are configured, click **Save Configuration**. PipesHub confir
 
 There are three common causes:
 
-1. **Email mismatch** - The email used during connector authentication doesn't match your PipesHub account email. This causes permission issues preventing you from accessing synced data.
-   - **Fix:** Reconfigure the connector and authenticate using the same email as your PipesHub account.
+1. **Viewer identity or SharePoint access does not match** - A viewer's Microsoft 365 email or site permissions may not map to their Novaplan AI account.
+   - **Fix:** Ask your administrator to check the affected viewer's account email and access to the site or file. The tenant admin who granted app consent can be a different person.
 
 2. **Records show in "All Records" but not in search** - Documents display in the All Records section but don't appear in search query results.
    - **Fix:** Verify sync filters in the connector settings and ensure indexing has completed. Check that the data matches your search query criteria.
 
 3. **Data not yet indexed** - The connector is still syncing or hasn't completed the initial indexing process.
-   - **Fix:** Go to **Settings > Connectors**, check the sync status, and wait for indexing to complete.
+   - **Fix:** Go to **Workspace Settings → Connectors**, check the sync status, and wait for indexing to complete.
 
 </Accordion>
 

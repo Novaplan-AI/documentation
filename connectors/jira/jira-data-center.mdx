@@ -30,7 +30,7 @@ icon: "/logo/jira.png"
 
 Jira Data Center (and Jira Server) is the version of Jira that you install and run on your own servers. Atlassian does not host it for you.
 
-The Jira Data Center connector syncs projects, issues, comments, and attachments from your instance. It keeps Jira's permissions, so each user in PipesHub only sees what they can already see in Jira.
+The Jira Data Center connector syncs projects, issues, comments, and attachments from your instance. It keeps Jira's permissions, so each user in Novaplan AI only sees what they can already see in Jira.
 
 <Info>
   If Atlassian hosts your Jira for you, that is Jira Cloud. Use the [Jira Cloud connector](/connectors/jira/jira) instead. The two connectors are not interchangeable.
@@ -79,7 +79,7 @@ Check these before you start:
 
 | Requirement | Detail |
 |-------------|--------|
-| **Deployment** | Jira Data Center or Jira Server that PipesHub can reach over HTTPS |
+| **Deployment** | Jira Data Center or Jira Server that Novaplan AI can reach over HTTPS |
 | **Base URL** | The root URL of your instance, such as `https://jira.company.com`. Not a page URL like `/browse/PROJ-1` |
 | **PAT support** | Personal Access Tokens need Jira Core 8.14 or later. On older versions, use Basic Authentication |
 | **Service account** | Use a dedicated account for the integration rather than someone's personal account |
@@ -93,7 +93,9 @@ The connector reads a few admin-only APIs to work out who is allowed to see what
 |----------|-------|----------------------------------|
 | `GET /rest/api/2/applicationrole` | Jira administrator | The connector cannot expand application roles into their groups. Projects that grant access that way fall back to giving access only to the person who set up the connector. |
 | `GET /rest/api/2/project/{key}/permissionscheme` and its grants | Project or Jira administrator | The connector cannot read who has access to that project. The same fallback applies. |
-| `GET /rest/auditing/1.0/events` | Jira administrator | The connector cannot tell which issues were deleted, so deleted issues may stay in the index until a full resync. |
+| `GET /rest/auditing/1.0/events` | Jira administrator | Deleted issues remain indexed while access is denied. The deletion checkpoint stays in place; when audit-log access returns, the connector replays the missed deletion events. |
+
+Temporary failures reading project permissions or group members preserve the access already stored, and issues continue to sync. The next run retries the read; it does not broaden access or remove existing access because of that failure.
 
 <Warning>
   A non-admin account can still sync issues, but **some permissions will be missing**. Content may end up visible only to the person who set up the connector. Use a Jira administrator account for production.
@@ -101,13 +103,13 @@ The connector reads a few admin-only APIs to work out who is allowed to see what
 
 ### Prerequisite: Email visibility
 
-PipesHub matches Jira users to PipesHub accounts by email address.
+Novaplan AI matches Jira users to Novaplan AI accounts by email address.
 
 <Info>
-  If a user hides their email in Jira, PipesHub can still find them, as long as that user already exists in PipesHub or in another connected app. Making emails public is not required here. It only makes the first sync faster, because the connector does not have to look up each user one by one.
+  If a user hides their email in Jira, Novaplan AI can still find them, as long as that user already exists in Novaplan AI or in another connected app. Making emails public is not required here. It only makes the first sync faster, because the connector does not have to look up each user one by one.
 </Info>
 
-This is different from Jira Cloud, where a hidden email stops PipesHub from matching the user at all.
+This is different from Jira Cloud, where a hidden email stops Novaplan AI from matching the user at all.
 
 <Note>
   On Jira Data Center, email visibility is a **global setting that an administrator controls**. Users cannot change it for themselves, unlike Jira Cloud where each person sets their own.
@@ -154,7 +156,7 @@ To make the first sync faster, a Jira administrator can make email addresses vis
 </div>
 
 4. Click **Create token**.
-5. Give it a name you will recognise, such as `PipesHub Jira Connector`.
+5. Give it a name you will recognise, such as `Novaplan AI Jira Connector`.
 6. Set an expiry, or turn off **Automatic expiry** if your policy allows tokens that do not expire.
 7. Click **Create**.
 
@@ -186,13 +188,13 @@ To make the first sync faster, a Jira administrator can make email addresses vis
 
 #### Step 2: Authenticate Instance tab — enter your credentials
 
-1. In PipesHub, go to **Workspace Settings** → **Connectors**, find **Jira Data Center**, and click **+ Setup**.
+1. In Novaplan AI, go to **Workspace Settings** → **Connectors**, find **Jira Data Center**, and click **+ Setup**.
 2. The connector panel opens as a drawer on the right.
 3. On the **Authenticate Instance** tab, select **Personal Access Token** in the **Authentication method** dropdown.
 4. Enter:
    - **Base URL** — the root URL of your Jira, such as `https://jira.company.com`, with no trailing slash
    - **Personal Access Token** — the token you copied in Step 1
-5. Click **Next**. PipesHub checks the credentials and moves you to the **Configure Records** tab.
+5. Click **Next**. Novaplan AI checks the credentials and moves you to the **Configure Records** tab.
 
 <div className="text-center">
   <img
@@ -219,13 +221,13 @@ Use this on instances that do not support Personal Access Tokens, or where an ad
 
 #### Step 2: Authenticate Instance tab — enter your credentials
 
-1. In PipesHub, go to **Workspace Settings** → **Connectors**, find **Jira Data Center**, and click **+ Setup**.
+1. In Novaplan AI, go to **Workspace Settings** → **Connectors**, find **Jira Data Center**, and click **+ Setup**.
 2. On the **Authenticate Instance** tab, select **Basic Authentication** in the **Authentication method** dropdown.
 3. Enter:
    - **Base URL** — the root URL of your Jira, such as `https://jira.company.com`, with no trailing slash
    - **Username** — the Jira username of the service account, such as `svc-jira-sync`
    - **Password** — the account password
-4. Click **Next**. PipesHub checks the credentials and moves you to the **Configure Records** tab.
+4. Click **Next**. Novaplan AI checks the credentials and moves you to the **Configure Records** tab.
 
 <div className="text-center">
   <img
@@ -268,7 +270,7 @@ On the **Configure Records** tab, you choose how often the connector syncs and w
   **Scheduled sync** runs on its own at the interval you set. **Manual sync** runs only when you start it. Real-time sync is not available for Jira Data Center.
 </Note>
 
-**Sync filters** — these decide what gets downloaded from Jira. Anything a sync filter excludes is never downloaded.
+**Sync filters** — narrow the projects and issues processed by this Team connection. The accessible Jira Data Center connector still reads users and groups for identity and permission mapping and loads project options for the picker. Do not treat these content filters as a guarantee that no other source metadata is read.
 
 <div className="text-center">
   <img
@@ -290,7 +292,7 @@ Available sync filters:
   Leave **Project keys** empty to sync every project your account can see. The list is loaded from your instance, so you can type to search it.
 </Info>
 
-**Indexing filters** — these decide what gets prepared for AI search. Everything is synced, but only what you enable here is indexed.
+**Indexing filters** — decide which synchronized issue and attachment records are prepared for AI search. Disabling indexing does not by itself prevent source retrieval.
 
 - **Index issues** (default: on) — include issue descriptions and comments in search
 - **Index issue and comment attachments** (default: on) — include attachments in search
@@ -306,7 +308,7 @@ Available sync filters:
 - *Recent issues only:* Modified Date → `Is After` → `2024-06-01`
 - *Issues but not attachments:* turn off **Index issue and comment attachments**
 
-Click **Save**. PipesHub shows a dialog saying **"Instance is configured and ready to sync"**, with two choices: **I'll do it later** or **Start syncing now**.
+Click **Save**. Novaplan AI shows a dialog saying **"Instance is configured and ready to sync"**, with two choices: **I'll do it later** or **Start syncing now**.
 
 <div className="text-center">
   <img
@@ -334,7 +336,7 @@ The Jira Data Center connector syncs:
 - **Permissions** — project permission schemes and issue-level security
 
 <Info>
-  **Want agents to act in Jira?** This connector only syncs data into PipesHub. To let agents create and update issues, set up the [Jira Data Center toolset](/toolsets/jira/jira-data-center) as well.
+  **Want agents to act in Jira?** This connector only syncs data into Novaplan AI. To let agents create and update issues, set up the [Jira Data Center toolset](/toolsets/jira/jira-data-center) as well.
 </Info>
 
 ## Useful Links
@@ -372,8 +374,8 @@ The Jira Data Center connector syncs:
 - The account may be CAPTCHA-locked after failed sign-ins. Sign in once in a browser to clear it
 
 **Connection times out, or you see a certificate error:**
-- Check that PipesHub can reach the base URL through your firewall, VPN, or allowlist
-- If your instance uses a self-signed or internal certificate, PipesHub needs to trust that certificate
+- Check that Novaplan AI can reach the base URL through your firewall, VPN, or allowlist
+- If your instance uses a self-signed or internal certificate, Novaplan AI needs to trust that certificate
 
 **Nothing is syncing:**
 - Check that the connector shows **Active**
@@ -387,6 +389,9 @@ The Jira Data Center connector syncs:
 **Some users are missing from permissions:**
 - On Jira 10 and later, the bulk user list can be restricted, and the fallback search may not return everyone
 - Give the account Browse Users permission, or ask a Jira administrator to set **User email visibility** to **Public** in General Configuration
+
+**Project roles include a group beyond the first 1,000 groups:**
+- Jira Data Center's group list cannot page beyond the first 1,000 groups. Affected role memberships retain their previous state until the group can be included; people who join may not gain access, and people who leave may keep their previous access. Review this limit if your instance has more than 1,000 groups.
 
 **Deleted issues still show up in search:**
 - Deleted issues are found through the audit log, which needs Jira administrator access
@@ -462,6 +467,8 @@ For each project, the connector:
 
 After each successful sync, the connector saves the latest issue update time as a checkpoint and saves the filter settings so it can tell when they change. It also keeps a checkpoint per project, so a failed sync can pick up where it stopped instead of starting over. Deleted-issue tracking uses its own separate checkpoint.
 
+If one issue fails to process, other issues in its project continue. The checkpoint waits so the next run retries that issue. After five consecutive failed syncs for the same issue, the connector logs it and proceeds; a later change to the issue brings it back into scope. If Jira continues to rate-limit issue search after three retries, that project waits until the next sync.
+
 </Accordion>
 
 </AccordionGroup>
@@ -517,7 +524,7 @@ Yes. On the **Configure Records** tab, use the **Project keys** filter with the 
 
 Check these in order:
 
-1. **The sync has not finished.** Go to **Settings → Connectors** and check the sync status, then look in **All Records** for the issues you expect.
+1. **The sync has not finished.** Go to **Workspace Settings → Connectors** and check the sync status, then look in **All Records** for the issues you expect.
 2. **Permissions are incomplete.** If a non-admin account set up the connector, some projects may only be visible to that person. Set it up again with a Jira administrator account.
 3. **Your filters are too narrow.** Check the **Project keys** and date filters on the **Configure Records** tab.
 4. **Indexing is off.** Check that **Index issues** is turned on.
@@ -531,6 +538,6 @@ Check these in order:
 <div className="text-center mt-12 p-6 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl">
   <h3 className="text-lg font-semibold mb-2">Ready to Get Started?</h3>
   <p className="text-gray-600 dark:text-gray-400">
-    Connect your self-hosted Jira Data Center instance to PipesHub in a few minutes. Follow the steps above to search every project and issue across your Jira content.
+    Connect your Jira Data Center instance to Novaplan AI using the approved account and filters above. Search results reflect the content that was synced and the permissions available to each user.
   </p>
 </div>

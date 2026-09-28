@@ -1,0 +1,34 @@
+---
+title: "Google Sheets"
+description: "Tabellen über den Google Drive Konnektor synchronisieren."
+icon: "/logo/gsheets.png"
+---
+
+<Note>
+  Google Sheets ist derzeit kein eigenständiger Konnektor. In Drive gespeicherte Tabellen werden über den [Google Drive Konnektor](/de/connectors/google-workspace/drive/drive) synchronisiert. Mit **Sync Files with Extensions** können Sie den Import auf Tabellen beschränken.
+</Note>
+
+## Tabellen synchronisieren
+
+Novaplan übernimmt den Großteil der Einrichtung. Für eine eigene Anpassung:
+
+1. Richten Sie den [Google Drive Konnektor](/de/connectors/google-workspace/drive/drive) ein.
+2. Öffnen Sie nach der Authentifizierung **Configure Records**.
+3. Fügen Sie unter **Sync Filters** den Filter **Sync Files with Extensions** hinzu.
+
+<img src="/images/connectors/googleWorkspace/common/sheet1.png" alt="Filter Sync Files with Extensions für Google Drive hinzufügen" />
+
+4. Wählen Sie als Operator **In**.
+5. Wählen Sie `Google Sheets`, `xlsx`, `xls`, `csv` und `tsv`.
+
+<img src="/images/connectors/googleWorkspace/common/sheet2.png" alt="Tabellentypen im Dateiendungsfilter auswählen" />
+
+Der Filter **Sync Files with Extensions** gleicht native Google Sheets über ihren Google-Dateityp und Excel- oder Textdateien über die Endung ab. **In** synchronisiert nur die ausgewählten Typen. Ohne diesen Filter synchronisiert Drive alle unterstützten Dateitypen, einschließlich Tabellen.
+
+| Tabellentyp | Filterwert |
+| --- | --- |
+| Google Sheets | `Google Sheets` |
+| Microsoft Excel | `xlsx`, `xls` |
+| Text mit Trennzeichen | `csv`, `tsv` |
+
+Authentifizierung und weitere Einstellungen beschreibt die [Google Drive Anleitung](/de/connectors/google-workspace/drive/drive#konnektoreinstellungen).

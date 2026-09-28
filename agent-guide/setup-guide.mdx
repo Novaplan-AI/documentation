@@ -1,13 +1,11 @@
 ---
 title: "Agent Setup Guide"
 description: "Step-by-step guide to creating and configuring AI agents"
-icon: "wrench"
 ---
 
 <div className="not-prose mt-10">
   <div className="p-6 border border-gray-200 dark:border-gray-700 rounded-xl bg-blue-50 dark:bg-gray-800">
     <div className="flex items-center gap-3 mb-4">
-      <span className="text-4xl">🛠️</span>
       <div className="text-xl font-semibold text-gray-900 dark:text-white">Agent Setup Guide</div>
     </div>
     <p className="text-base text-gray-700 dark:text-gray-300 my-0">Create your first AI agent with the visual flow builder</p>
@@ -18,12 +16,12 @@ icon: "wrench"
 
 Before creating an agent, ensure you have:
 
-1. **AI Models Configured** - At least one reasoning-enabled LLM provider set up in your organization
+1. **AI model available** - An organization default LLM for agents without attached model nodes, or models to connect to this agent. If you attach model nodes, at least one must support reasoning.
 2. **Toolsets Configured** (optional) - Any external toolsets you want the agent to use
 3. **Knowledge Sources** (optional) - Connectors or collections for document search
 
 <Warning>
-  Toolsets must be authenticated before they can be added to an agent. If you plan to use Jira, Slack, or other external toolsets, configure them first in **Settings > Toolsets**.
+  Toolsets must be authenticated before they can be added to an agent. An administrator configures shared toolsets under **Workspace Settings → Actions**; each user connects their account under **Your actions**. If you plan to use Jira, Slack, or another external toolset, complete the relevant setup first.
 </Warning>
 
 ---
@@ -106,9 +104,9 @@ The **Agent Builder** opens with a visual flow canvas. You'll see an **Agent Cor
 
 ---
 
-## Step 4: Add Reasoning LLM Model
+## Step 4: Add an LLM Model (Optional)
 
-Every agent needs at least one reasoning-enabled LLM model to power its intelligence.
+An agent with no connected model uses the organization's default LLM at chat time. To choose models for this agent, connect one or more LLM model nodes. At least one connected model must support reasoning, or the agent cannot be saved.
 
 1. In the left sidebar, expand the **"LLM Models"** section
 2. Drag a LLM model node onto the canvas
@@ -251,14 +249,13 @@ The **Internal Retrieval** tool is a built-in utility that searches across all y
 <Accordion title="Toolset not appearing in sidebar">
 
 **Possible causes:**
-- The toolset is not configured in Settings > Toolsets
+- The shared toolset is not configured under **Workspace Settings → Actions**
 - The toolset is not authenticated (OAuth flow not completed)
 
 **Solution:**
-1. Go to **Settings > Toolsets**
-2. Find the toolset and click "Configure"
-3. Complete the authentication flow
-4. Return to the Agent Builder - the toolset should now appear
+1. Ask a workspace administrator to check the toolset under **Workspace Settings → Actions** and configure it if needed.
+2. Open **Your actions**, find the toolset, and complete your own authentication flow.
+3. Return to the Agent Builder; the toolset should now appear.
 
 </Accordion>
 
@@ -270,7 +267,7 @@ The **Internal Retrieval** tool is a built-in utility that searches across all y
 - System prompt causing issues
 
 **Solution:**
-1. Check that your LLM provider is properly configured with reasoning enabled in **Settings > AI Models**
+1. Check that your LLM provider is properly configured with reasoning enabled under **Workspace Settings → AI Models**.
 2. Re-authenticate any toolsets that may have expired tokens
 3. Simplify the system prompt and test again
 
@@ -284,7 +281,7 @@ The **Internal Retrieval** tool is a built-in utility that searches across all y
 - Indexing still in progress
 
 **Solution:**
-1. Check **Connector Settings** to verify connectors are synced
+1. Check **Workspace Settings → Connectors** (or **Your Connectors** for a personal source) to verify that connectors are synced.
 2. Verify collections have content
 3. Wait for indexing to complete if recently added
 
@@ -293,12 +290,12 @@ The **Internal Retrieval** tool is a built-in utility that searches across all y
 <Accordion title="Cannot save agent">
 
 **Possible causes:**
-- Missing required fields (name, reasoning model)
+- Missing agent name, or connected models with no reasoning-capable model
 - Invalid node connections
 
 **Solution:**
 1. Ensure the agent has a name
-2. Verify at least one reasoning model is connected to the Agent Core
+2. If you connected model nodes, verify that at least one reasoning-capable model is connected to the Agent Core. If you connected none, check that your organization's default LLM is available for chat.
 3. Check all node connections are valid
 
 </Accordion>

@@ -1,96 +1,23 @@
 ---
-title: "API References"
-description: "Explore the APIs of the PipesHub Workplace AI platform with detailed documentation for each service."
-icon: "server"
+title: "Developer API access"
+description: "Choose an approved way to connect an application or agent to a Novaplan AI workspace."
 ---
 
-## API Documentation
+Novaplan AI provides integration options for an existing, managed workspace. The API contract available to your organization depends on its Enterprise configuration and the permissions approved for your integration. Confirm the endpoints and authentication method with [Novaplan Support](/contact-us) before building against the REST API.
 
-### Authentication Service
-Comprehensive documentation for user authentication, session management, and authorization endpoints.
+## Choose an integration path
 
-<Card
-  title="Authentication API"
-  icon="lock"
-  href="/system-overview/authentication"
->
-  Complete guide to authentication methods, token management, and security features including password, OTP, OAuth, SAML SSO, and multi-factor authentication.
-</Card>
+| Need | Start here |
+| --- | --- |
+| Connect a coding agent or another MCP client to company knowledge | [MCP server overview](/mcp/overview) and [tool reference](/mcp/tools) |
+| Authenticate a personal script or client as one user | [Personal access tokens](/developer/personal-access-tokens) |
+| Let multiple users authorize an application separately | [OAuth 2.0 applications](/developer/oauth2) |
+| Understand the workspace and its components | [System overview](/system-overview) |
 
-### Configuration Management Service
-Centralized configuration management for all system components and integrations.
+MCP clients normally connect to the workspace's `/mcp` endpoint. A personal access token acts as its owner and remains limited by that person's permissions and the token's scopes. OAuth authorization code is appropriate when each person must sign in and consent separately. Do not use OAuth `client_credentials` for an integration that must respect a particular user's access.
 
-<Card
-  title="Configuration Manager API"
-  icon="gear"
-  href="/system-overview/configuration-manager"
->
-  Comprehensive guide to managing storage backends, database connections, authentication providers, AI models, connectors, and system-wide configurations with secure encryption and health checks.
-</Card>
+## REST API access
 
-### Connector Manager Service
-Comprehensive connector configuration and OAuth token management for third-party platform integrations.
-<Card
-title="Connector Manager API"
-icon="key"
-href="/system-overview/connector-manager"
->
+The detailed service API catalog is not part of this first public documentation release. Some internal and administrative routes described by the underlying platform may not be enabled or supported for customer integrations in the deployed Novaplan AI Enterprise workspace. Do not infer a supported contract from an internal route or a code example.
 
-Complete guide to connector lifecycle management with support for token management with oauth for Google Workspace, Microsoft 365, Atlassian, and other platforms. Features include automatic token refresh, encrypted credential storage, connector configuration, OAuth flow management, event-driven updates, and secure multi-platform authentication with comprehensive admin controls.
-</Card>
-
-### Crawling Manager Service
-Automated data ingestion and synchronization across multiple enterprise platforms and data sources.
-
-<Card
-title="Crawling Manager API"
-icon="robot"
-href="/system-overview/crawling-manager"
->
-Complete guide to scheduling and managing automated data crawling jobs across Gmail, Google Drive, OneDrive, SharePoint, Confluence, and Slack. Includes flexible scheduling options (hourly, daily, weekly, monthly, custom cron), job lifecycle management (pause, resume, remove), queue monitoring, and real-time job status tracking with comprehensive statistics and error handling.
-</Card>
-
-### Enterprise Search Service
-Intelligent search capabilities across organizational data with AI-powered conversations and semantic search.
-
-<Card
-  title="Enterprise Search API"
-  icon="magnifying-glass"
-  href="/system-overview/enterprise-search"
->
-  Complete guide to conversational AI interactions, agent management, semantic search, real-time streaming, citation management, and collaborative features including sharing, archiving, and feedback systems across multiple data sources.
-</Card>
-
-### Knowledge Base Service
-Centralized document repository for managing and accessing organizational data with intelligent indexing capabilities.
-
-<Card title="Knowledge Base API" icon="database" href="/system-overview/knowledge-base" >
-Complete guide to knowledge base and record management with folder organization, bulk file uploads, document versioning, and permission controls. Features include AI-powered content indexing, connector synchronization across multiple data sources, real-time event broadcasting, administrative operations for bulk reindexing, and seamless integration with Enterprise Search for intelligent document discovery.
-</Card>
-
-### Mail Service Comprehensive
-<Card title="Mail Service API" icon="envelope" href="/system-overview/mail-service" >
-Complete guide to email communication with support for multiple SMTP providers, template-based email generation, and delivery tracking. Features include customizable email templates, Handlebars templating engine, attachment support, CC/BCC functionality, delivery logging, authentication integration, and seamless SMTP provider switching with comprehensive email validation and security.
-</Card>
-
-### Storage Service
-Robust file storage, versioning, and retrieval capabilities with multi-vendor backend support.
-
-<Card
-  title="Storage Service API"
-  icon="hard-drive"
-  href="/system-overview/storage"
->
-  Complete guide to document management with support for Amazon S3, Azure Blob Storage, and local storage. Features include file upload/download, version control, metadata management, direct upload for large files, soft deletion, and seamless storage vendor switching with comprehensive MIME type support.
-</Card>
-
-### User Management Service
-Comprehensive user, organization, and access control management with role-based permissions and team collaboration.
-
-<Card
-  title="User Management API"
-  icon="users"
-  href="/system-overview/user-management"
->
-  Complete guide to managing users, organizations, and access control with role-based permissions, team collaboration, and administrative functions. Features include organization setup and branding, user profile management with display pictures, bulk user invitations with email automation, user groups for access control, team management via connector backend, image compression for logos and profiles, event publishing via Kafka, and comprehensive admin controls with audit trails.
-</Card>
+Tell [Novaplan Support](/contact-us) what your application needs to read or change, which users it will act for, and whether MCP meets the use case. Novaplan can confirm the supported interface, permissions, and any SDK options for your workspace.

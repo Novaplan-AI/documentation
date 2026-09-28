@@ -132,14 +132,14 @@ On the **App registrations** page, click **+ New registration**.
 
 ### Step 3: Register the application
 
-1. **Name**: Enter a display name (for example, `PipesHub OneDrive Toolset`).
+1. **Name**: Enter a display name (for example, `Novaplan AI OneDrive Toolset`).
 2. **Supported account types**: Choose who can sign in—for example **Accounts in any organizational directory and personal Microsoft accounts** for broad support, or a single-tenant option if you only use your organization.
-3. **Redirect URI**: Use the **Web** redirect URI from the PipesHub **Configure OneDrive** (or Microsoft 365 files) dialog in **toolset settings** where OneDrive is set up—for example **Workspace → Actions** and the OneDrive toolset **+ Setup** / **Configure** flow.
+3. **Redirect URI**: Use the **Web** redirect URI from the Novaplan AI **Configure OneDrive** (or Microsoft 365 files) dialog in **toolset settings** where OneDrive is set up—for example **Workspace Settings → Actions** and the OneDrive toolset **+ Setup** / **Configure** flow.
 
 <div style={{ textAlign: "center" }}>
   <img
     src="/images/toolsets/onedrive/onedrive_toolset_page.png"
-    alt="PipesHub Configure OneDrive dialog showing Redirect URI"
+    alt="Novaplan AI Configure OneDrive dialog showing Redirect URI"
     style={{ display: 'block', margin: '0 auto' }}
     width="90%"
   />
@@ -160,8 +160,8 @@ On the **App registrations** page, click **+ New registration**.
 
 On the **Overview** page for your app, copy:
 
-- **Application (client) ID** — used as **Client ID** in PipesHub.
-- **Directory (tenant) ID** — used as **Tenant ID** in PipesHub (or use `common` / leave blank per the toolset dialog if you want both work/school and personal accounts).
+- **Application (client) ID** — used as **Client ID** in Novaplan AI.
+- **Directory (tenant) ID** — used as **Tenant ID** in Novaplan AI (or use `common` / leave blank per the toolset dialog if you want both work/school and personal accounts).
 
 <div style={{ textAlign: "center" }}>
   <img
@@ -238,9 +238,11 @@ Click **Grant admin consent for** your organization (the button includes your te
   />
 </div>
 
-### Step 8: Configure the OneDrive toolset in PipesHub
+<div id="step-8-configure-the-onedrive-toolset-in-novaplan-ai" />
 
-1. In PipesHub, go to **Workspace** → **Actions** (or the area where toolsets are configured for your workspace).
+### Step 8: Configure the OneDrive toolset in Novaplan AI
+
+1. In Novaplan AI, go to **Workspace** → **Actions** (or the area where toolsets are configured for your workspace).
 2. Find **OneDrive** (or the Microsoft 365 files toolset that includes these tools) and open setup / configuration (**+ Setup** or **Configure**).
 3. Confirm the **Redirect URI** in the dialog matches the **Web** redirect URI you registered in Azure **Step 3**.
 4. Enter **Client ID**, **Client Secret**, and optionally **Tenant ID** (`common` or your tenant/domain per the form), then create or save the instance.
@@ -248,7 +250,7 @@ Click **Grant admin consent for** your organization (the button includes your te
 <div style={{ textAlign: "center" }}>
   <img
     src="/images/toolsets/onedrive/onedrive_toolset_page.png"
-    alt="PipesHub OneDrive toolset configuration with Client ID, secret, and redirect URI"
+    alt="Novaplan AI OneDrive toolset configuration with Client ID, secret, and redirect URI"
     style={{ display: 'block', margin: '0 auto' }}
     width="90%"
   />
@@ -262,7 +264,7 @@ Click **Grant admin consent for** your organization (the button includes your te
 <div style={{ textAlign: "center" }}>
   <img
     src="/images/toolsets/onedrive/onedrive_auth_page.png"
-    alt="OneDrive toolset OAuth sign-in and consent in PipesHub"
+    alt="OneDrive toolset OAuth sign-in and consent in Novaplan AI"
     style={{ display: 'block', margin: '0 auto' }}
     width="90%"
   />
@@ -297,8 +299,8 @@ Click **Grant admin consent for** your organization (the button includes your te
 
 | Aspect | OneDrive Connector | OneDrive Toolset |
 |--------|--------------------|------------------|
-| **Purpose** | Sync and index files for search in PipesHub | Let agents browse, search, edit metadata, share, and read content through the API |
-| **Data Flow** | One-way import into PipesHub | Two-way actions on live Microsoft 365 content |
+| **Purpose** | Sync and index files for search in Novaplan AI | Let agents browse, search, edit metadata, share, and read content through the API |
+| **Data Flow** | One-way import into Novaplan AI | Two-way actions on live Microsoft 365 content |
 | **Auth Type** | Application permissions (admin consent), background sync | Delegated permissions (user consent), per-user session |
 | **When to Use** | Enterprise search over file corpora | Interactive tasks such as “find this file,” “move to Archive,” or “share with my team” |
 
@@ -320,4 +322,3 @@ Ask to move “Budget.xlsx” into the “Archive” folder (the agent can searc
 
 **Example: Share read-only with a colleague**  
 Ask to share a specific file with `alice@contoso.com` with view access.
-

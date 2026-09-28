@@ -1,6 +1,6 @@
 ---
 title: "MariaDB"
-description: "Sync schema and tabular data from a MariaDB database into PipesHub"
+description: "Sync schema and tabular data from a MariaDB database into Novaplan AI"
 icon: "/logo/mariadb.png"
 ---
 
@@ -45,28 +45,19 @@ The MariaDB connector indexes schema metadata, table contents from a MariaDB dat
 
 ## Configuration Guide
 
+<Info>
+  Novaplan prepares your workspace. The optional local MariaDB steps below set up a **database for testing**, not Novaplan AI. A managed Novaplan connector can reach `localhost` only on its own host, so use a database address reachable from your workspace and confirm network access with Novaplan Support.
+</Info>
+
 <AccordionGroup>
 
 <Accordion title="Step 1: Set up MariaDB" icon="database">
 
 If you already have a MariaDB server, skip this step.
 
-### Option A: Docker (recommended for testing)
+### Option A: Docker (local testing only)
 
-Run a local MariaDB container:
-
-```bash
-docker run --name mariadb-test \
-  -e MARIADB_ROOT_PASSWORD=rootpass \
-  -e MARIADB_DATABASE=test_db \
-  -p 3306:3306 \
-  -d mariadb:latest
-```
-
-This starts MariaDB on `localhost:3306` with:
-- Username: `root`
-- Password: `rootpass`
-- Database: `test_db`
+If you need a disposable test database, follow the [official MariaDB container instructions](https://mariadb.com/docs/server/server-management/automated-mariadb-deployment-and-administration/docker-and-mariadb/installing-and-using-mariadb-via-docker) and set a unique test password. For a host-only test, bind the published port to `127.0.0.1` as described in [Docker's port-publishing guide](https://docs.docker.com/engine/network/port-publishing/). A port published without a host address may be reachable on other network interfaces. This local test database is not automatically reachable from your Novaplan AI workspace.
 
 ### Option B: Install locally
 
@@ -82,26 +73,26 @@ Enter your password when prompted. If you reach the `MariaDB [(none)]>` prompt, 
 
 ### Create a user for the connector
 
-Create a dedicated read-only user for PipesHub. Run these as `root` (or any user with `CREATE USER` and `GRANT` privileges) against the target database:
+Create a dedicated read-only user for Novaplan AI. Run these as `root` (or any user with `CREATE USER` and `GRANT` privileges) against the target database:
 
 ```sql
-CREATE USER 'pipeshub_user'@'%' IDENTIFIED BY 'a_strong_password';
-GRANT SELECT ON test_db.* TO 'pipeshub_user'@'%';
+CREATE USER 'novaplan_reader'@'%' IDENTIFIED BY 'a_strong_password';
+GRANT SELECT ON test_db.* TO 'novaplan_reader'@'%';
 FLUSH PRIVILEGES;
 ```
 
 The connector also reads schema metadata from `information_schema`, which is available to any authenticated user by default.
 
 <Info>
-  Replace `pipeshub_user`, `a_strong_password`, and `test_db` with your own values. Use `'pipeshub_user'@'localhost'` instead of `'%'` if PipesHub connects from the same host as the database.
+  Replace `novaplan_reader`, `a_strong_password`, and `test_db` with your own values. Use `'novaplan_reader'@'localhost'` instead of `'%'` if Novaplan AI connects from the same host as the database.
 </Info>
 
 </Accordion>
 
-<Accordion title="Step 2: Configure the connector in PipesHub" icon="plug">
+<Accordion title="Step 2: Configure the connector in Novaplan AI" icon="plug">
 
-1. In PipesHub, open **Connector Settings**.
-2. In the **Available** tab, find the **MariaDB** card and click **Configure**.
+1. In Novaplan AI, open **Workspace Settings → Connectors**.
+2. Find **MariaDB** and choose **+ Setup** or **Configure**.
 
 <div className="text-center">
   <img
@@ -115,11 +106,13 @@ The connector also reads schema metadata from `information_schema`, which is ava
 
 | Field | Example |
 |-------|---------|
-| **Host** | `localhost` |
+| **Host** | `db.example.com` — a host reachable from the Novaplan workspace |
 | **Port** | `3306` |
-| **Database** | `test_db` |
-| **User** | `pipeshub_user` |
+| **Database** | `your_database` |
+| **User** | `novaplan_reader` |
 | **Password** | the password you set when creating the user |
+
+The local `test_db` and `localhost` in Step 1 are only for testing MariaDB on the same computer. For a managed Novaplan workspace, use the actual reachable database host and database name agreed with Novaplan and your database administrator.
 
 <div className="text-center">
   <img
@@ -133,7 +126,7 @@ The connector also reads schema metadata from `information_schema`, which is ava
 
 <Accordion title="Step 3: Configure sync filters" icon="filter">
 
-Sync filters control what is pulled from MariaDB. Anything excluded by a filter is never downloaded.
+Sync filters select which tables are processed and limit the rows fetched from each selected table. The accessible connector still lists table names to populate the selector and run a sync. Excluding a table does not mean its name or other database metadata is never read. Use a database account with access only to the intended data when source-level isolation is required.
 
 <div className="text-center">
   <img
@@ -147,7 +140,7 @@ Sync filters control what is pulled from MariaDB. Anything excluded by a filter 
 |--------|-------------|---------|
 | **Tables** | Pick the tables to sync (e.g. `customers`, `orders`). Leave empty to sync all tables in the database. | All tables |
 | **Max rows per table** | Maximum number of rows to fetch from each table. | 1000 |
-| **Index tables** | When enabled, table content is indexed for AI search. When disabled, only schema metadata is indexed. | Enabled |
+| **Index tables** | Controls automatic AI indexing of synchronized table records; turning it off does not by itself restrict source access. | Enabled |
 
 <Info>
   Use **Max rows per table** to keep initial syncs fast on large tables, or to cap the amount of data exposed to your assistant.
@@ -194,7 +187,7 @@ The connector verifies the connection, then runs the initial sync. Watch the **I
 For read-only sync, `SELECT` on the target database is enough:
 
 ```sql
-GRANT SELECT ON test_db.* TO 'pipeshub_user'@'%';
+GRANT SELECT ON test_db.* TO 'novaplan_reader'@'%';
 ```
 
 The connector also reads schema metadata from `information_schema`, which is available to any authenticated user by default.
@@ -203,7 +196,7 @@ The connector also reads schema metadata from `information_schema`, which is ava
 
 <Accordion title="Can I connect to a remote MariaDB server?">
 
-Yes. Use the public host and port of your MariaDB server. Make sure the server allows connections from the PipesHub deployment and that the user has the required privileges.
+Yes. Use a host and port reachable from your Novaplan AI workspace through the network path approved by your database administrator and Novaplan. A public database endpoint is unnecessary when a private connection is available. Make sure the database accepts connections from that path and the user has the required privileges.
 
 </Accordion>
 

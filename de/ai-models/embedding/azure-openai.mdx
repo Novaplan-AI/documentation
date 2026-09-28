@@ -1,0 +1,29 @@
+---
+title: "Azure OpenAI Embeddings"
+description: "Azure-OpenAI-Embedding-Bereitstellungen in Novaplan AI konfigurieren."
+---
+
+# Azure OpenAI Embeddings konfigurieren
+
+![Konfigurationsansicht für Azure OpenAI Embeddings](/images/ai-models/embedding/AzureOpenAI_EmbeddingConfig.png)
+
+Novaplan AI kann Embedding-Modelle Ihrer Azure-OpenAI-Ressource für semantische Suche und Dokumentabruf verwenden. Novaplan unterstützt Sie bei der Einrichtung.
+
+## Erforderliche Angaben
+
+| Feld | Quelle und Bedeutung |
+| --- | --- |
+| **Endpoint URL** | Öffnen Sie im [Azure-Portal](https://portal.azure.com) Ihre Azure-OpenAI-Ressource und kopieren Sie unter **Keys and Endpoint** die vollständige Adresse, beispielsweise `https://your-resource-name.openai.azure.com/`. |
+| **API Key** | Kopieren Sie unter **Keys and Endpoint** entweder **Key 1** oder **Key 2** und bewahren Sie ihn geschützt auf. |
+| **Deployment Name** | Kopieren Sie unter **Model deployments** den Namen des konkreten Embedding-Deployments. Das ist Ihr selbst vergebener Bereitstellungsname, nicht automatisch die Modell-ID. |
+| **Model Name** | Tragen Sie die ID des Modells ein, das in diesem Deployment läuft, beispielsweise `text-embedding-3-small`. |
+
+Prüfen Sie die tatsächliche Bereitstellung und die [aktuelle Azure-OpenAI-Dokumentation](https://learn.microsoft.com/en-us/azure/ai-services/openai/), bevor Sie einen Modellnamen übernehmen.
+
+## Modell hinzufügen
+
+1. Klicken Sie auf der Azure-OpenAI-Embedding-Anbieterkarte auf **Configure**.
+2. Geben Sie **Endpoint URL**, **API Key**, **Deployment Name** und **Model Name** ein.
+3. Klicken Sie auf **Add Model**, um die Angaben zu speichern und prüfen zu lassen.
+
+Alle vier Felder sind erforderlich. Aufrufe zählen zu Kontingent und Abrechnung Ihrer Azure-Ressource. Bei Fehlern prüfen Sie Endpoint und Schlüssel, den exakten Deployment-Namen, das bereitgestellte Modell, Abonnement und Kontingent sowie gegebenenfalls Netzwerkfreigaben. [Novaplan Support](/de/contact-us) hilft bei der Einrichtung.

@@ -1,0 +1,81 @@
+---
+title: "Microsoft-Teams-Toolset"
+description: "Teams-Nachrichten, Chats, Meetings und Mitgliedschaften mit Agenten verwalten."
+icon: "/logo/teams.png"
+---
+
+## Überblick
+
+Das Microsoft-Teams-Toolset gibt Agenten über Microsoft Graph Live-Zugriff auf Kanäle, Chats, Kalender und Besprechungsdaten. Administrierende richten die gemeinsame Aktion unter **Workspace Settings → Actions** ein. Jede Person meldet sich anschließend unter **Your actions** mit ihrer eigenen Microsoft-Identität an. Für die Suche in zuvor synchronisierten Inhalten verwenden Sie den [Teams-Konnektor](/de/connectors/microsoft-365/teams).
+
+| Bereich | Beispiele verfügbarer Tools |
+| --- | --- |
+| Benutzer und Teams | `get_user_info`, `get_users_list`, `get_teams`, `get_team`, `get_members`, `get_channels`, `get_user_channels` |
+| Kanalnachrichten | `search_messages`, `get_channel_messages`, `get_thread_replies`, `get_message_permalink`, `get_reactions`, `send_channel_message`, `reply_to_message`, `update_message`, `send_message_to_multiple_channels`, `add_reaction`, `remove_reaction` |
+| Chats | `get_user_conversations`, `get_chat`, `send_user_message`, `create_chat` |
+| Teamverwaltung | `create_team`, `add_member`, `create_channel`, `update_channel` |
+| Kalender und Meetings | `get_meetings`, `search_calendar_events_in_range`, `create_event`, `edit_event`, `create_channel_meeting`, `get_my_meeting_transcripts`, `get_people_attended`, `get_people_invited` |
+
+<Warning>
+  Das Toolset kann Nachrichten veröffentlichen, Teammitglieder hinzufügen sowie Teams, Kanäle und Termine erstellen oder ändern. Prüfen Sie Zielkanal, Empfänger und Berechtigungen vor schreibenden Aktionen. Meeting-Transkripte und Anwesenheitsdaten können besonders sensible Inhalte enthalten.
+</Warning>
+
+## Entra-Anwendung vorbereiten
+
+1. Öffnen Sie [Azure Portal](https://portal.azure.com) und wählen Sie **Microsoft Entra ID → App registrations → New registration**.
+2. Vergeben Sie einen Namen und wählen Sie die Kontotypen passend zu Ihrer Organisation. Kopieren Sie die **Application (client) ID**.
+3. Erstellen Sie unter **Certificates & secrets** einen **Client secret** und kopieren Sie dessen Wert sofort.
+4. Wählen Sie unter **API permissions → Microsoft Graph → Delegated permissions** die Rechte, die zu den tatsächlich freigegebenen Teams-Aktionen passen. Prüfen Sie für jede Berechtigung, ob **Grant admin consent** nötig ist.
+
+Die englische Quellanleitung listet unter anderem `Team.ReadBasic.All`, `Channel.ReadBasic.All`, `ChannelMessage.Read.All`, `ChannelMessage.Send`, `Chat.ReadWrite`, `Chat.Create`, `Calendars.ReadWrite`, `OnlineMeetings.Read`, `OnlineMeetingTranscript.Read.All`, `OnlineMeetingArtifact.Read.All`, `TeamMember.ReadWrite.All`, `ChannelMember.ReadWrite.All`, `Group.ReadWrite.All`, `User.Read`, `User.ReadBasic.All` und `offline_access`. Sie nennt außerdem `Channel.Create` und `Channel.Delete.All`. Die tatsächlich nötigen und verfügbaren Scopes müssen mit der bereitgestellten Novaplan-Version und Ihrer Microsoft-Administration abgeglichen werden; insbesondere sollte ein Löschrecht nur erteilt werden, wenn eine entsprechende Aktion vorgesehen und freigegeben ist.
+
+### Delegierte Microsoft-Graph-Berechtigungen nach Funktion
+
+| Funktion | In der Integrationsanleitung genannte Berechtigungen |
+| --- | --- |
+| Teams und Kanäle lesen | `Team.ReadBasic.All`, `Channel.ReadBasic.All` |
+| Kanäle erstellen und gegebenenfalls löschen | `Channel.Create`, `Channel.Delete.All` |
+| Kanalnachrichten lesen und senden | `ChannelMessage.Read.All`, `ChannelMessage.Send` |
+| Team- und Kanalmitglieder verwalten | `TeamMember.ReadWrite.All`, `ChannelMember.ReadWrite.All` |
+| Gruppen und Teams erstellen oder verwalten | `Group.ReadWrite.All` |
+| Chats lesen, senden und erstellen | `Chat.ReadWrite`, `Chat.Create` |
+| Personen und Sitzungen | `User.Read`, `User.ReadBasic.All`, `offline_access` |
+| Kalender lesen und Termine ändern | `Calendars.Read`, `Calendars.Read.Shared`, `Calendars.ReadBasic`, `Calendars.ReadWrite` |
+| Meetings, Transkripte und Artefakte lesen | `OnlineMeetings.Read`, `OnlineMeetingTranscript.Read.All`, `OnlineMeetingArtifact.Read.All` |
+
+Die Tabelle ist eine Referenz der dokumentierten Integration, kein Satz von Rechten, der pauschal erteilt werden sollte. Die Tool-Liste auf dieser Seite enthält **keine Löschaktion für Kanäle**; klären Sie deshalb `Channel.Delete.All` gesondert, bevor Sie es freigeben. Prüfen Sie unter **API permissions** den Status jeder Berechtigung und erteilen Sie **Grant admin consent** nur, wenn Ihre Organisation und die freigegebenen Funktionen dies erfordern. Die [Microsoft-Graph-Berechtigungsreferenz](https://learn.microsoft.com/en-us/graph/permissions-reference) beschreibt die einzelnen Rechte.
+
+## Gemeinsame Aktion anlegen und Redirect URI registrieren
+
+1. Öffnen Sie als Workspace-Administration **Workspace Settings → Actions**. Gibt es noch keine Teams-Instanz, wählen Sie bei **Microsoft Teams** **Setup**. Bei einer vorhandenen Instanz öffnen Sie den Typ und wählen **Add instance**.
+2. Tragen Sie **Instance name**, **Client ID**, **Client secret** und gegebenenfalls **Tenant ID** ein und wählen Sie **Create**.
+3. Öffnen Sie danach für diese Instanz **Manage action configuration** und kopieren Sie die angezeigte **Redirect URI**. Sie wird laut Quellanleitung erst nach dem Anlegen der Instanz angezeigt.
+4. Öffnen Sie die Entra-App unter **Authentication**, fügen Sie eine **Web**-Plattform hinzu und tragen Sie die exakt kopierte URI ein. Schema, Host, Pfad und abschließender Schrägstrich müssen übereinstimmen.
+
+Verwenden Sie ausschließlich den Wert aus Ihrem Novaplan-Workspace. Beispiel-Hosts oder Screenshots liefern keine gültige produktive Callback-Adresse. Aktivieren Sie implizite Token-Flows nur, wenn Ihre Microsoft-Administration dies für den tatsächlich verwendeten OAuth-Flow verlangt.
+
+## Persönlich anmelden und Agenten verwenden
+
+1. Nach dem Registrieren der Redirect URI öffnet die Workspace-Administration die gemeinsame Teams-Instanz unter **Workspace Settings → Actions** und schließt dort **Authenticate** mit Microsoft ab. Prüfen Sie, ob die Instanz anschließend als authentifiziert angezeigt wird.
+2. Jede Person, die die Aktion im Agenten verwenden soll, öffnet **Your actions → Microsoft Teams** und wählt für die benötigte Instanz **Authenticate**.
+3. Melden Sie sich mit der eigenen Microsoft-Identität an und prüfen Sie die angeforderten Berechtigungen.
+4. Nach erfolgreicher Anmeldung fügen Sie die Teams-Aktion im **Agent Builder** unter **Tools** hinzu.
+
+Nennen Sie bei Nachrichten das Zielteam und den Kanal oder die adressierte Person eindeutig. Für Meeting-Suchen geben Sie einen Zeitraum an. Für Transkripte, Anwesenheit und Einladungen muss der Agent die richtige Besprechung identifizieren und die angemeldete Person Zugriff auf diese Daten haben. Bei privaten Kanälen sind Mitgliedschaft und zusätzliche Graph-Rechte zu prüfen.
+
+Eine Direktnachricht wird nur bei exakter Übereinstimmung mit Anzeigename, E-Mail-Adresse, Anmeldename (UPN) oder ID versendet. Bei einem Teiltreffer nennt der Agent mögliche Personen und bittet um E-Mail-Adresse oder ID, bevor er sendet. Kann Microsoft Graph das Verzeichnis nicht lesen, meldet das Tool den Berechtigungsfehler statt „Person nicht gefunden“. Bei der Suche nach Kanalnachrichten wird ein Fehler gemeldet, falls kein Kanal gelesen werden konnte, statt fälschlich „keine Treffer“ zu melden. Nutzerlisten lesen alle Seiten bis zur angeforderten Grenze.
+
+Für wiederkehrende Termine nennen Sie einen gültigen täglichen, wöchentlichen, monatlichen oder jährlichen Rhythmus. Ein von Microsoft nicht unterstütztes Muster wird abgelehnt und nicht stillschweigend als täglicher Termin erstellt.
+
+## Häufige Aufgaben mit Agenten
+
+- **Im Kanal schreiben:** Nennen Sie Team und Kanal sowie den Nachrichtentext. Der Agent kann mit `get_teams` und `get_channels` das Ziel prüfen und anschließend `send_channel_message` verwenden.
+- **Eine Direktnachricht senden:** Geben Sie den vollständigen Anzeigenamen oder besser die E-Mail-Adresse beziehungsweise UPN an. Bei mehrdeutigen Treffern darf der Agent erst nach einer Klärung mit `send_user_message` senden.
+- **Auf einen Thread antworten:** Bezeichnen Sie die Ausgangsnachricht. Mit `get_channel_messages` oder `get_thread_replies` lässt sich zuerst der Thread ermitteln; `reply_to_message` benötigt die passende Nachrichten-ID.
+- **Eine Besprechung planen:** Nennen Sie Zeitraum, Teilnehmende und gegebenenfalls den Kanal. Für persönliche Termine dienen `create_event` und für Kanalbesprechungen `create_channel_meeting`; vorhandene Meetings können zuvor mit `get_meetings` geprüft werden.
+- **Transkript oder Anwesenheit abfragen:** Benennen Sie die konkrete Onlinebesprechung. `get_my_meeting_transcripts`, `get_people_attended` und `get_people_invited` liefern nur Daten, für die die angemeldete Person berechtigt ist.
+- **Eine Person hinzufügen:** Nennen Sie E-Mail-Adresse oder ID sowie Team und gegebenenfalls privaten Kanal. Prüfen Sie mit `get_members` die vorhandene Mitgliedschaft, bevor Sie `add_member` verwenden.
+
+Der [Teams-Konnektor](/de/connectors/microsoft-365/teams) synchronisiert Inhalte für die Suche. Dieses Toolset liest und ändert Teams-Daten dagegen live im Rahmen der persönlichen Microsoft-Berechtigungen.
+
+Wenn OAuth fehlschlägt, prüfen Sie **Redirect URI**, Secret-Ablauf, erteilte Scopes, Admin-Zustimmung und die persönliche Anmeldung. Bei Fragen hilft [Novaplan Support](/de/contact-us).

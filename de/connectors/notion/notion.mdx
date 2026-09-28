@@ -1,0 +1,110 @@
+---
+title: "Notion"
+description: "Seiten und Datenbanken aus Notion mit Novaplan AI verbinden."
+icon: "/logo/notion.png"
+---
+
+## Überblick
+
+Der Notion-Konnektor synchronisiert **Seiten**, **Datenbanken** und **Benutzer** aus einem Notion-Workspace mit Novaplan AI. Die Verbindung verwendet OAuth 2.0 und eine öffentliche Verbindung, die Sie im Entwicklerbereich von Notion anlegen.
+
+| Inhalt | Umfang |
+| --- | --- |
+| **Seiten** | Freigegebene Notion-Seiten samt Inhalt. |
+| **Datenbanken** | Eigenschaften und Einträge innerhalb der erteilten Freigabe. |
+| **Benutzer** | Informationen zu Workspace-Mitgliedern, sofern die Integration Zugriff auf deren E-Mail-Adressen erhält. |
+| **Kommentare** | Kommentare auf freigegebenen Seiten, wenn die Berechtigung aktiviert ist. |
+
+<Note>
+  Novaplan AI ordnet Personen anhand ihrer E-Mail-Adresse zu. Verwenden Sie in Notion und Novaplan AI dieselbe Adresse, damit Berechtigungen und sichtbare Datensätze zusammenpassen.
+</Note>
+
+Novaplan übernimmt den Großteil der Einrichtung. Die Schritte zeigen, wie Sie eine bestehende Verbindung prüfen oder sie bei Bedarf selbst konfigurieren.
+
+## Verbindung einrichten
+
+### 1. Notion-Konnektor öffnen
+
+Öffnen Sie in Novaplan AI über Ihr Profil **Workspace Settings → Workspace → Connectors**. Suchen Sie **Notion** und wählen Sie **+ Setup**.
+
+<img src="/images/connectors/outlook/enterprise/outlook-connector-home-nav.png" alt="Workspace Settings im Profilmenü" />
+
+<img src="/images/connectors/notion/notion-connector-page.png" alt="Notion-Konnektor auf der Konnektorübersicht" />
+
+### 2. Weiterleitungsadresse kopieren
+
+Geben Sie im Reiter **Authenticate Instance** einen **Instance name** ein. Kopieren Sie die angezeigte **Redirect URL** genau; Sie benötigen sie gleich in Notion.
+
+<img src="/images/connectors/notion/notion-connector-redirect.png" alt="Redirect URL in der Notion-Konfiguration" />
+
+### 3. Öffentliche Verbindung in Notion anlegen
+
+Öffnen Sie in Notion **Settings & members → Features → Connections → Develop or manage connections** und im Entwicklerbereich **Build → Public connections**. Wählen Sie **Create a new connection**.
+
+<img src="/images/connectors/notion/notion-connector-connections.png" alt="Verbindungen in den Notion-Einstellungen" />
+
+<img src="/images/connectors/notion/notion-connector-public-connections.png" alt="Öffentliche Verbindungen im Notion-Entwicklerbereich" />
+
+Tragen Sie einen **Connection name**, bei Bedarf ein Symbol, den **Development workspace** und unter **Redirect URIs** die zuvor kopierte Adresse ein. Wählen Sie unter **Installable in** den gewünschten Geltungsbereich und erstellen Sie die Verbindung. Öffnen Sie anschließend **Configure connection settings**.
+
+<img src="/images/connectors/notion/notion-connector-new-connection.png" alt="Neue Notion-Verbindung mit Redirect URI" />
+
+<img src="/images/connectors/notion/notion-connector-connection-created.png" alt="Bestätigung nach dem Anlegen der Notion-Verbindung" />
+
+### 4. Berechtigungen und OAuth-Zugangsdaten festlegen
+
+Aktivieren Sie unter **Capabilities** mindestens **Read content**, **Read comments** und **Read user information including email addresses**. So kann Novaplan AI Inhalte lesen und Notion-Benutzer zuordnen. Kopieren Sie unter **Authorization (OAuth)** die **OAuth Client ID** und das **OAuth Client Secret**. Prüfen Sie noch einmal die **Redirect URIs**.
+
+<img src="/images/connectors/notion/notion-connector-scopes.png" alt="Notion-Berechtigungen für Inhalte und Benutzerinformationen" />
+
+<img src="/images/connectors/notion/notion-connector-creds.png" alt="OAuth-Zugangsdaten und Redirect URIs in Notion" />
+
+### 5. Novaplan AI mit Notion verbinden
+
+Kehren Sie zu **Notion Configuration → Authenticate Instance** zurück. Tragen Sie **Client ID** und **Client Secret** ein, prüfen Sie die Weiterleitungsadresse und wählen Sie **Next**. Im Reiter **Authorize** starten Sie die Anmeldung mit **Authenticate Notion to Proceed**.
+
+<img src="/images/connectors/notion/notion-connector-new.png" alt="OAuth-Zugangsdaten in der Notion-Konfiguration von Novaplan AI" />
+
+<img src="/images/connectors/notion/notion-connector-authenticate.png" alt="Notion-Authentifizierung starten" />
+
+### 6. Freigegebene Inhalte auswählen
+
+Prüfen Sie im Notion-Dialog die angeforderten Rechte. Mit **Select pages** können Sie Teamspaces, Seiten und Datenbanken gezielt auswählen; über **Deselect all** beginnen Sie mit einer leeren Auswahl. Bestätigen Sie mit **Allow access**.
+
+<img src="/images/connectors/notion/notion-connector-oauth.png" alt="Notion-Zugriff und Seitenauswahl" />
+
+<img src="/images/connectors/notion/notion-connector-auth-filters.png" alt="Freizugebende Notion-Seiten auswählen" />
+
+<Warning>
+  Die Seitenauswahl in Notion begrenzt, was der Konnektor überhaupt lesen darf. Die späteren Filter unter **Configure Records** können diesen Umfang nur weiter einschränken. Autorisieren Sie den gemeinsamen Konnektor mit einem Notion-Konto, das die benötigten Seiten auswählen darf; seine E-Mail-Adresse muss nicht mit der des einrichtenden Novaplan-AI-Administratorkontos übereinstimmen.
+</Warning>
+
+Wenn **Connected – you can continue to Configure records** erscheint, wählen Sie **Continue to configuration**.
+
+<img src="/images/connectors/notion/notion-connector-auth-done.png" alt="Erfolgreiche Notion-Autorisierung" />
+
+### 7. Datensätze konfigurieren und Synchronisierung starten
+
+Legen Sie **Sync strategy** und **Sync interval** fest. Bei Bedarf aktivieren Sie **Manual indexing** und die Indexierung für Seiten oder Datenbanken; mit Filtern können Sie den Umfang weiter begrenzen. Speichern Sie mit **Save Configuration**.
+
+<img src="/images/connectors/notion/notion-connector-filters.png" alt="Synchronisierung und Indexierung für Notion festlegen" />
+
+Wählen Sie **Start Syncing Now** oder **I'll do it later**. Im **Overview** der Konnektorinstanz sehen Sie Datensatzzahlen, Warteschlangen und Typen. Bei abgelaufenen oder widerrufenen Zugangsdaten verwenden Sie im Reiter **Authorize** die Aktion **Re-authenticate with provider**.
+
+<img src="/images/connectors/notion/notion-connector-start-sync.png" alt="Erste Notion-Synchronisierung starten" />
+
+<img src="/images/connectors/notion/notion-connector-stats.png" alt="Übersicht der Notion-Konnektorinstanz" />
+
+## Probleme beheben
+
+| Problem | Prüfen Sie Folgendes |
+| --- | --- |
+| **Redirect URI mismatch** | Die URI in Notion muss mit der angezeigten **Redirect URL** in Novaplan AI exakt übereinstimmen, einschließlich Protokoll, Host und Pfad. |
+| **Invalid client / secret** | Erstellen Sie bei Bedarf ein neues Secret in Notion und aktualisieren Sie **Authenticate Instance**. |
+| **Seiten fehlen** | Autorisieren Sie die Verbindung erneut und erweitern Sie die Seitenauswahl in Notion. Prüfen Sie anschließend die Indexierungsfilter. |
+| **Benutzer oder Sichtbarkeit passen nicht** | Prüfen Sie die Berechtigung für E-Mail-Adressen und die Verwendung derselben E-Mail-Adresse in beiden Systemen. |
+| **Noch keine Suchergebnisse** | Warten Sie, bis der erste Lauf und die Indexierung im **Overview** abgeschlossen sind. |
+
+Die erste Synchronisierung importiert alle freigegebenen Inhalte und kann je nach Workspace-Größe dauern. Geplante Folgeläufe übernehmen Änderungen gemäß **Sync interval**.
+
+Weitere Informationen finden Sie in der [Notion-Entwicklerdokumentation](https://developers.notion.com/). Bei Fragen zu Ihrem bestehenden Novaplan AI Workspace erreichen Sie [Novaplan Support](/de/contact-us).

@@ -1,0 +1,57 @@
+---
+title: "vLLM"
+description: "Einen vLLM-Modellserver über seine OpenAI-kompatible API mit Novaplan AI verbinden."
+---
+
+# vLLM konfigurieren
+
+![Konfigurationsansicht für OpenAI-kompatible APIs](/images/ai-models/llm/OpenAICompatible_LLMConfig.png)
+
+vLLM kann Sprachmodelle über eine OpenAI-kompatible API bereitstellen. Novaplan AI verbindet sich mit einem vorhandenen, aus seiner Umgebung erreichbaren vLLM-Server. Ihre Modellserver-Administration betreibt diesen Dienst; Novaplan unterstützt Sie bei der Anbindung.
+
+## Voraussetzungen
+
+Sie benötigen einen laufenden vLLM-Server, seine erreichbare Basisadresse, den dort geladenen Modellnamen und bei aktivierter Authentifizierung dessen API-Schlüssel. Ein Administrationsbeispiel für einen Modellserver:
+
+```bash
+pip install "vllm>=0.8.5"
+vllm serve Qwen/Qwen3-8B --port 8000 --api-key your-secret-key
+```
+
+Die genaue Installation und die Modellkompatibilität hängen von Ihrer vLLM-Version und Ihrer Hardware ab. Prüfen Sie die [vLLM-Dokumentation](https://docs.vllm.ai/) und stimmen Sie Betrieb, GPU-Ressourcen und Netzfreigaben mit der zuständigen Administration ab.
+
+## Angaben in Novaplan AI
+
+| Feld | Bedeutung |
+| --- | --- |
+| **Provider Type** | **OpenAI API Compatible** |
+| **Endpoint URL** | Erreichbare Basisadresse mit `/v1/`, beispielsweise `https://vllm.example.com/v1/`. `http://localhost:8000/v1/` funktioniert nur, wenn Novaplan AI denselben lokalen Netzwerkraum nutzt. |
+| **API Key** | Schlüssel, der beim Start des vLLM-Servers mit `--api-key` festgelegt wurde. Das Formular verlangt einen Wert; wenn der Server keine Authentifizierung nutzt, akzeptiert er laut Ausgangskonfiguration einen Platzhalter wie `no-key`. Für produktive Verbindungen sollten Sie Authentifizierung einrichten. |
+| **Model Name** | Exakte Modell-ID, die die vLLM-API bereitstellt, beispielsweise `Qwen/Qwen3-8B`. Mit `--served-model-name` kann sie vom Namen im Startbefehl abweichen. Prüfen Sie `/v1/models`. |
+
+Eine Administration kann die angebotenen IDs am `/v1/models`-Endpoint des vLLM-Servers abfragen. **Multimodal** aktivieren Sie nur bei einem Modell mit Bildeingabe, **Reasoning** nur bei einem entsprechenden Reasoning-Modell. Das oben als Serverbeispiel verwendete `Qwen/Qwen3-8B` ist ein Textmodell; aktivieren Sie für dieses Beispiel **Multimodal** nicht allein aufgrund des Modellnamens. Prüfen Sie die Modellkarte und die [Liste der von vLLM unterstützten Modelle](https://docs.vllm.ai/en/latest/models/supported_models.html).
+
+<Warning>
+  Schützen Sie den Modellserver zusätzlich über den freigegebenen Netzwerkzugang. Laut [vLLM-CLI-Referenz](https://docs.vllm.ai/en/latest/cli/serve/) schützt `--api-key` nur bestimmte API-Pfade und nicht alle Endpunkte desselben Servers, beispielsweise nicht `/invocations`. Stimmen Sie zusätzliche Zugriffskontrollen mit Ihrer Modellserver-Administration und Novaplan ab.
+</Warning>
+
+## Modell hinzufügen
+
+1. Wählen Sie **OpenAI API Compatible** als **Provider Type**.
+2. Geben Sie **Endpoint URL**, **API Key** und **Model Name** ein.
+3. Aktivieren Sie **Multimodal** und **Reasoning** nur passend zum Modell.
+4. Klicken Sie auf **Add Model**.
+
+## Leistung und Fehlerbehebung
+
+Die Leistung hängt vom gewählten Modell, der verfügbaren GPU-Hardware und den Einstellungen des vLLM-Servers ab. vLLM verarbeitet Anfragen unter anderem mit kontinuierlichem Batching. Bei größeren Modellen kann die Modellserver-Administration Tensor-Parallelität über mehrere GPUs prüfen. Quantisierte Modellvarianten können Speicher sparen; das unterstützte Format hängt vom Modell und der installierten vLLM-Version ab. Ein zu großes Kontextlimit (`--max-model-len`) kann Speicherfehler auslösen. Ändern Sie diese Servereinstellungen nur nach einem Test mit Ihrer Modellserver-Administration.
+
+| Problem | Prüfen Sie |
+| --- | --- |
+| Keine Verbindung | Läuft der Server? Antworten `/health` und `/v1/models` aus dem vorgesehenen Netzwerk? Stimmen DNS, Port, Firewall, TLS und die freigegebene Route aus dem Novaplan-Workspace? |
+| `401` oder Authentifizierungsfehler | Entspricht der in Novaplan eingetragene Schlüssel dem `--api-key` des Servers? Prüfen Sie die vLLM-Protokolle. |
+| Modell nicht gefunden | Steht die konfigurierte **Model Name**-ID exakt in der Antwort von `/v1/models`? Wurde der Server nach einem Modellwechsel neu gestartet? |
+| Langsame Antworten oder Speichermangel | Prüfen Sie GPU-Auslastung, Modellgröße, Kontextlimit, Quantisierung und gegebenenfalls Tensor-Parallelität. |
+| Server startet nicht | Prüfen Sie GPU-Treiber, verfügbaren Speicher, Modellkompatibilität und die Fehlermeldung im Serverprotokoll. |
+
+Die Befehle und Optionen finden Sie in der [aktuellen vLLM-CLI-Referenz](https://docs.vllm.ai/en/latest/cli/serve/). [Novaplan Support](/de/contact-us) hilft bei der Verbindung zum verwalteten Workspace; den Betrieb des Modellservers stimmen Sie mit dessen Administration ab.

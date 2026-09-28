@@ -1,148 +1,45 @@
 ---
-title: "Onboarding"
-description: "This guide walks through setting up the system when first time logging in, starting with AI model configuration, followed by optional configurations for storage, connectors, and SMTP."
+title: "Workspace setup"
+description: "Administrator reference for the initial AI model, embedding model, and storage settings."
 icon: "gear"
 ---
 
-## Step 1: Configure AI Model (Required)
-
-Before proceeding with the setup, configuring an AI model is mandatory.
-
-1. Select the AI Provider (OpenAI or Azure OpenAI).
-2. Enter the Client ID (if applicable).
-3. Provide the API Key to authenticate the AI model.
-4. Specify the Model Name (e.g., gpt-4-turbo).
-5. Click **Continue** to proceed.
-
-<img
-  src="/images/onboarding/aiModels.png"
-  alt="AI models onboarding"
-  width="100%"
-/>
-
-### For more info, refer to [AI models Configuration Guide](/ai-models/overview).
-
-<Info>AI model configuration is required to enable AI-powered features.</Info>
-
-## Step 2: Configure Embeddings Model (Optional)
-
-The Embeddings Configuration section is part of the System Setup workflow for
-enabling semantic search and document retrieval features in your application.
-This configuration step allows you to define the embedding provider and
-specify the model used for generating vector representations of textual
-content.
-
-1. Select the Embeddings Provider (OpenAI, Azure OpenAI or Sentence Tranformer).
-2. Enter the Endpoint (if applicable).
-3. Provide the API Key to authenticate the AI model (if applicable).
-4. Specify the Model Name (e.g., gpt-4-turbo).
-5. Click **Continue** to proceed.
-
-<img
-  src="/images/onboarding/embeddings.png"
-  alt="Embeddings onboarding"
-  width="100%"
-/>
-
-<Info>You can skip this step.</Info>
-
-## Step 3: Configure Storage (Optional)
-
-Setting up storage allows the system to save and retrieve data efficiently.
-By default, local storage (local machine) will be used to store the files.
-
-1. Choose a Storage Provider (e.g., AWS S3, Local, Azure Blob Storage).
-
-2. Enter the corresponding configuration.
-
-- Mount Name and Base Url for **Local Storage**.
-- Access Key and Secret Key for authentication and bucket Name or storage container details for **Amazon S3**.
-- Account name, container name,account key, protocol and endpoint suffix for **Azure Blob**.
-
-Click **Continue** to save the configuration.
-
-<img
-  src="/images/onboarding/storage.png"
-  alt="storage onboarding"
-  width="100%"
-/>
-
-### For more info, refer to [Storage Service documentation](/system-overview/storage).
-
-<Info>You can skip this step. By default Local storage will be chosen.</Info>
-
-## Step 4: Configure Public URLs (Optional)
-
-The Public URL Configuration step allows you to define the publicly accessible URLs for your frontend and connector services. These URLs are critical for operations like OAuth authentication, redirect flows, and webhook callbacks in your system.
-
-1. Enter the Frontend Endpoint (if applicable).
-2. Enter the Connector Endpoint (if applicable).
-3. Click **Continue** to save the configuration.
-
-<img
-  src="/images/onboarding/publicUrls.png"
-  alt="Public Urls onboarding"
-  width="100%"
-/>
-
-### For more info, refer to [Internal Services Configuration Guide](/system-overview/internal-services).
-
-<Info>You can skip this step.</Info>
-
-## Step 5: Configure Connectors (Optional)
-
-Connectors help integrate third-party services with the system.
-Enter the necessary API credentials to authenticate the connection.
-
-### - Enterprise
-
-Service credentials (json file) is required and Admin Email of your google admin account.
-
-For more information, refer to [the Google Drive connector guide](/connectors/google-workspace/drive/drive).
-
-### - Individual
-
-Google Client Id and Client Secret are required, set Redirect Uri in Google Cloud Console as given in the window.
-
-For more information, refer to [the Google Drive connector guide](/connectors/google-workspace/drive/drive).
-
-<img
-  src="/images/onboarding/connectors.png"
-  alt="connectors onboarding"
-  width="100%"
-/>
-
-Click **Continue** to save the configuration.
+Novaplan AI creates your organization's workspace, prepares most settings, and invites your users. If you have received an invitation, follow [Getting started](/quickstart). You do not need to run system setup unless Novaplan has assigned that task to you.
 
 <Info>
-  You can skip this step and later configure them in settings under profile tab.
+  This page is for administrators who need to review or complete an agreed setup. A workspace that is already configured may not show the initial setup screen. Keep existing settings unless a change has been agreed with Novaplan AI.
 </Info>
 
-## Step 6: Configure SMTP (Optional)
+## Initial system setup
 
-SMTP configuration allows the system to send emails (invite new users, forgot password etc).
+The current setup flow covers an AI model, an embedding model, and storage. If Novaplan has configured these for your workspace, confirm they work before changing them.
 
-1. Enter the SMTP Server Address (e.g., smtp.example.com).
+<div id="step-1-configure-ai-model-required" />
 
-2. Provide the Port Number (e.g., 587 for TLS).
+### 1. AI model
 
-3. Enter the Username and Password for authentication.
+An AI model is needed for AI-powered features. Choose a provider and model that Novaplan has approved for your workspace, or use an existing configured model. The available providers and fields depend on the selected provider. Enter credentials or an endpoint only when that provider requires them, then save the model and confirm it is selected as the default.
 
-4. Set up the From Email Address (e.g., noreply@example.com).
+See [AI models](/ai-models/overview) for provider-specific settings. Do not copy a model ID or credential from a screenshot into your workspace.
 
-Click **Save** to finalize the setup and then proceed.
+### 2. Embedding model
 
-<img src="/images/onboarding/smtp.png" alt="smtp onboarding" width="100%" />
+An embedding model is needed to index content for semantic search. Select an existing configured embedding model, add an approved provider, or choose the system default if that option is offered. The **Skip** action, when shown, opens the system-default model path; it does not mean that search can run without embeddings. Save or select a model before continuing.
 
-### For Smtp Configuration, refer to [SMTP Configuration Guide](/smtp).
+See [AI models](/ai-models/overview) for the supported provider configuration.
 
-<Info>
-  You can skip this step if email functionality is not needed and later add in
-  authentication tab in settings.
-</Info>
+### 3. Storage
 
-Finalizing Setup Once you complete the AI model setup (required) and any optional
-configurations, the system will be ready for use.
+The setup flow offers local storage or Amazon S3. Local storage means storage available to the hosted workspace, not a folder on your computer. Novaplan normally prepares the appropriate storage setting. Change it only as agreed, and verify access before inviting users or syncing content. The storage step can be left at its existing local setting when that is the approved configuration.
 
-✅ Required: AI Model Configuration
-⚡ Optional: Storage, Connectors, SMTP
+See [external services](/system-overview/external-services) for the managed storage options. Azure Blob is supported by the platform but is not shown in the current initial setup screen.
+
+## Settings managed outside initial setup
+
+The following remain available as separate administrator tasks; they are not additional screens in the current initial setup flow:
+
+- [Connectors](/connectors/overview): connect approved data sources after the workspace is ready. Credentials and access requirements differ by source.
+- [Public service URLs](/system-overview/internal-services): Novaplan normally configures these for OAuth redirects and webhooks. Coordinate any production change with support.
+- [Email delivery (SMTP)](/smtp): Novaplan normally configures the workspace mail service used for invitations and other email-based functions.
+
+After setup, confirm that an invited user can sign in and use the intended features. If a setting is missing or an expected screen differs, contact [Novaplan AI support](mailto:support@novaplan.ai).

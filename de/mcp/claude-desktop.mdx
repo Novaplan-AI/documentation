@@ -1,0 +1,48 @@
+---
+title: "Claude Desktop"
+description: "Claude Desktop über einen gehosteten Connector oder eine geprüfte lokale Brücke verbinden."
+icon: "/logo/claude.svg"
+---
+
+Claude Desktop kann einen Novaplan AI Workspace auf zwei Wegen erreichen. Für einen aus der Anthropic-Cloud erreichbaren HTTPS-Workspace verwenden Sie einen **Custom Connector** mit persönlicher OAuth-Anmeldung. Er wird über das Claude-Konto eingerichtet und steht dann auch in Claude Desktop bereit. Bei einem internen Workspace kann eine lokale Stdio-Brücke infrage kommen; dafür muss Novaplan die verwendete Paketversion und den Zugang freigeben. Die [aktuelle Anleitung von Anthropic](https://support.claude.com/de/articles/11175166-erste-schritte-mit-benutzerdefinierten-konnektoren-mit-remote-mcp) beschreibt die Connector-Oberfläche.
+
+## Custom Connector für einen HTTPS-Workspace
+
+1. Lassen Sie eine [OAuth-Anwendung](/de/mcp/overview#schritt-1-oauth-anwendung-erstellen) für den Workspace einrichten und sichern Sie **Client ID** und **Client Secret**.
+2. Öffnen Sie in Claude Desktop oder Claude.ai für ein persönliches Konto **Customize → Connectors → + → Add custom connector**. Bei Team- oder Enterprise-Konten fügt zunächst ein **Owner** den Connector unter **Organization settings → Connectors → Add → Custom → Web** hinzu.
+3. Tragen Sie `NOVAPLAN_WORKSPACE_URL/mcp` als Serveradresse ein. Verwenden Sie die von Novaplan bestätigte HTTPS-Adresse.
+4. Öffnen Sie **Advanced settings** und tragen Sie Client ID und Client Secret ein.
+5. Wählen Sie **Add**, melden Sie sich persönlich im Browser an und prüfen Sie die angeforderten Berechtigungen.
+
+Hinterlegen Sie in der Novaplan-OAuth-Anwendung die Redirect URI `https://claude.ai/api/mcp/auth_callback` und prüfen Sie die Callback-Adresse im produktiven Claude-Connector-Ablauf. Ein Custom Connector kann eine interne `localhost`-Adresse oder einen privaten Hostnamen nicht über das öffentliche Connector-Verfahren erreichen.
+
+## Lokale Stdio-Brücke für interne Workspaces
+
+Die bestehende technische Brücke verwendet das npm-Paket `@pipeshub-ai/mcp`. Dieser Paketname ist eine **funktionale Kennung**, für die kein bestätigtes Novaplan-Paket vorliegt. Verwenden Sie diese Variante erst, wenn Novaplan sie für Ihren Enterprise Workspace freigegeben hat.
+
+Sie benötigen Node.js **20 oder neuer**, die von Novaplan bereitgestellte Workspace-Adresse mit `/api/v1` für die lokale Brücke und ein persönliches Zugriffstoken der Person, die Claude Desktop verwendet. Der Computer muss den internen Workspace erreichen können.
+
+<Warning>
+  Suchen und Antworten mit persönlichen Quellberechtigungen benötigen eine **benutzergebundene** Anmeldung. Ein OAuth-`client_credentials`-Token besitzt keine Benutzeridentität und ist dafür nicht geeignet. Nutzen Sie bei der geprüften Brücke ein persönliches Zugriffstoken mit `--bearer-auth`; geben Sie es niemals in einer gemeinsam genutzten Konfiguration oder einem Repository weiter.
+</Warning>
+
+Öffnen Sie in Claude Desktop **Settings → Developer → Edit Config**. Die Datei `claude_desktop_config.json` liegt unter macOS in `~/Library/Application Support/Claude/` und unter Windows in `%APPDATA%\Claude\`. Ein Beispiel mit Platzhaltern:
+
+```json
+{
+  "mcpServers": {
+    "novaplan": {
+      "command": "npx",
+      "args": [
+        "-y", "@pipeshub-ai/mcp", "start",
+        "--server-url", "NOVAPLAN_API_URL",
+        "--bearer-auth", "YOUR_BEARER_TOKEN"
+      ]
+    }
+  }
+}
+```
+
+`novaplan` ist nur der lokale Servername; der Paketname muss dem tatsächlich installierten Paket entsprechen. `NOVAPLAN_API_URL` ist die freigegebene Workspace-Adresse gefolgt von `/api/v1`, beispielsweise `https://your-workspace.example.com/api/v1`. Der gehostete Custom Connector verwendet stattdessen `NOVAPLAN_WORKSPACE_URL/mcp`. Speichern Sie echte Tokens über eine geeignete lokale Geheimnisverwaltung und niemals im Repository. Nach dem Bearbeiten muss Claude Desktop vollständig beendet und erneut geöffnet werden; ein bloßes Neuladen des Fensters reicht nicht. Die [Stdio-Referenz](/de/mcp/local-server) enthält weitere Client-Beispiele.
+
+Bei Verbindungsfehlern prüfen Sie zuerst die Erreichbarkeit der Workspace-Adresse und die OAuth-Redirect-URI beziehungsweise das persönliche Token. Wenn die Brücke nicht startet, prüfen Sie Node.js und `npx`. Für die Bestätigung der unterstützten Paketversion und des Zugriffs hilft [Novaplan Support](/de/contact-us).

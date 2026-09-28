@@ -1,17 +1,17 @@
 ---
 title: "Gemini CLI"
-description: "Connect Gemini CLI to the PipesHub MCP server"
+description: "Connect Gemini CLI to the Novaplan AI MCP server"
 icon: "/logo/gemini.svg"
 ---
 
-Gemini CLI supports remote MCP servers with OAuth via `dynamic_discovery` (the default), which auto-discovers authorization and token endpoints from PipesHub's `/.well-known/oauth-protected-resource/mcp`.
+Gemini CLI supports remote Streamable HTTP MCP servers with OAuth. Its default `dynamic_discovery` mode discovers authorization and token endpoints from Novaplan AI's metadata.
 
 <Note>
-  Before you start, create an OAuth app in PipesHub and note your **Client ID** and **Client Secret**. See [MCP Server Overview](/mcp/overview#step-1-create-an-oauth-app).
+  Before you start, create an OAuth app in Novaplan AI and note your **Client ID** and **Client Secret**. See [MCP Server Overview](/mcp/overview#step-1-create-an-oauth-app).
 </Note>
 
 <Tip>
-  Coding agents: read [For coding agents](/for-agents) first. If they have no PipesHub yet, follow [Local Docker demo](/for-agents-local-demo) (do not scaffold LangChain). MCP config is not enough — also install the skill into **this** repo (`npx skills add pipeshub-ai/mcp-server`) and append the `AGENTS.md` snippet on that page.
+  Coding agents: read [For coding agents](/for-agents) first. If they do not have workspace access yet, contact [Novaplan AI support](/contact-us). MCP configuration and repository instructions are separate setup steps.
 </Tip>
 
 ## Option A: Settings File
@@ -21,11 +21,13 @@ Edit `~/.gemini/settings.json`:
 ```json
 {
   "mcpServers": {
-    "pipeshub": {
-      "url": "PIPESHUB_INSTANCE_URL/mcp",
+    "novaplan": {
+      "httpUrl": "NOVAPLAN_WORKSPACE_URL/mcp",
       "oauth": {
+        "enabled": true,
         "clientId": "YOUR_CLIENT_ID",
-        "clientSecret": "YOUR_CLIENT_SECRET",
+        "clientSecret": "$NOVAPLAN_CLIENT_SECRET",
+        "redirectUri": "http://localhost:7777/oauth/callback",
         "scopes": [
           "openid", "profile", "email", "offline_access",
           "semantic:write",
@@ -39,16 +41,18 @@ Edit `~/.gemini/settings.json`:
 ```
 
 <Note>
-  Adjust the `scopes` list to match what your OAuth app was granted. If you only need a subset of tools, you can limit the scopes accordingly.
+  `httpUrl` selects Streamable HTTP. The `url` key selects SSE in Gemini CLI and is not correct for Novaplan AI's `/mcp` endpoint. Adjust the `scopes` list to the tools and permissions approved for your OAuth app. Set `NOVAPLAN_CLIENT_SECRET` in your protected local environment before starting Gemini CLI; Gemini expands `$NOVAPLAN_CLIENT_SECRET` when it reads the settings file. Keep the actual secret out of shared or committed files.
 </Note>
+
+Register the exact `http://localhost:7777/oauth/callback` URI in your Novaplan OAuth app. Gemini CLI otherwise chooses a random local callback port, which cannot be pre-registered reliably; the explicit `redirectUri` above fixes it to port 7777.
 
 ## Option B: CLI Command
 
 ```bash
-gemini mcp add --transport http pipeshub PIPESHUB_INSTANCE_URL/mcp
+gemini mcp add --scope user --transport http novaplan NOVAPLAN_WORKSPACE_URL/mcp
 ```
 
-Then edit `~/.gemini/settings.json` to add the `oauth` block as shown above.
+Then edit `~/.gemini/settings.json` to add the `oauth` block as shown above. `--scope user` makes the CLI command write to that user settings file; the CLI otherwise defaults to project scope.
 
 ## Authenticate
 
@@ -58,11 +62,11 @@ Inside Gemini CLI, use the `/mcp auth` commands:
 # List servers and their auth status
 /mcp auth
 
-# Authenticate with PipesHub (opens browser for login)
-/mcp auth pipeshub
+# Authenticate with Novaplan AI (opens browser for login)
+/mcp auth novaplan
 
 # Re-authenticate if tokens expire
-/mcp auth pipeshub
+/mcp auth novaplan
 ```
 
 On first connection, Gemini will automatically detect the 401 response, discover the OAuth endpoints, and open a browser for login. Tokens are stored securely in `~/.gemini/mcp-oauth-tokens.json` and refreshed automatically.
@@ -74,23 +78,27 @@ On first connection, Gemini will automatically detect the 401 response, discover
 gemini mcp list
 
 # Remove the server
-gemini mcp remove pipeshub
+gemini mcp remove novaplan
 
 # Temporarily disable/enable
-gemini mcp disable pipeshub
-gemini mcp enable pipeshub
+gemini mcp disable novaplan
+gemini mcp enable novaplan
 ```
 
 ## OAuth Configuration Properties
 
 | Property | Required | Description |
 |---|---|---|
-| `clientId` | Yes | OAuth 2.0 Client ID from PipesHub |
+| `clientId` | Yes | OAuth 2.0 Client ID from Novaplan AI |
 | `clientSecret` | No | OAuth 2.0 Client Secret (for confidential clients) |
 | `scopes` | No | OAuth scopes to request |
 | `authorizationUrl` | No | Override authorization endpoint (auto-discovered by default) |
 | `tokenUrl` | No | Override token endpoint (auto-discovered by default) |
-| `redirectUri` | No | Override redirect URI (defaults to `http://localhost:7777/oauth/callback`) |
+| `redirectUri` | No | Fix the callback URI; otherwise Gemini CLI uses an OS-assigned random localhost port |
+
+<Warning>
+  Current Gemini CLI validates the OAuth callback's `iss` (issuer) parameter when an issuer is discovered. If sign-in fails with **Missing issuer parameter in response**, contact [Novaplan AI support](/contact-us). Do not disable issuer validation. Compatibility must be confirmed against the deployed Enterprise OAuth server.
+</Warning>
 
 <Warning>
   OAuth requires a local browser. It will not work in headless environments, remote SSH without X11 forwarding, or containers without browser access.

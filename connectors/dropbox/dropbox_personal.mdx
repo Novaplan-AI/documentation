@@ -57,7 +57,7 @@ This makes syncing highly efficient as you only process the differences.
 
 <Accordion title="Create Dropbox App" icon="rocket">
 
-This guide will walk you through creating a Dropbox application to connect your personal account to PipesHub.
+This guide will walk you through creating a Dropbox application to connect your personal account to Novaplan AI.
 
 ### Step 1: Create a Dropbox App
 
@@ -69,7 +69,7 @@ This guide will walk you through creating a Dropbox application to connect your 
 3. Configure your new app with the following settings:
    - **Choose an API:** Select **Scoped access**.
    - **Type of access:** Select **Full Dropbox**. (This allows access to all files in your account, not just a specific app folder).
-   - **Name your app:** Enter a unique name, for example, "Pipeshub Personal Connector".
+   - **Name your app:** Enter a unique name, for example, "Novaplan AI Personal Connector".
 
 4. Click **Create app**. You will be redirected to your new app's settings page.
 
@@ -79,13 +79,17 @@ This guide will walk you through creating a Dropbox application to connect your 
 
 <img src="/images/connectors/dropbox/db2.png" alt="Dropbox Permissions" style={{ display: 'block', margin: '0 auto' }} width="90%" />
 
-2. You must enable the following **Individual Scopes** by checking their boxes to allow PipesHub to access your data:
+2. You must enable the following **Individual Scopes** by checking their boxes to allow Novaplan AI to access your data:
 
    - `account_info.read` (Required to identify your user ID and email)
    - `files.content.read` (Required to download file content)
    - `files.metadata.read` (Required to track file names, types, and updates)
-   - `sharing.read` (Required to detect shared link permissions)
+   - `sharing.read` (Requested by the connector; shared-link permission handling should be verified in your deployed workspace)
    - `sharing.write` (Required to create preview links)
+
+   <Note>
+     During sync, the connector attempts to create Dropbox shared links for file and folder preview URLs. The accessible connector code requests Dropbox's `no_one` audience for new links and may reuse an existing link. Review this permission and your Dropbox shared-link policy with your administrator.
+   </Note>
 
    > **Note:** You do **not** need to check any "Team Scopes" as this connector is for individual accounts only.
 
@@ -94,9 +98,9 @@ This guide will walk you through creating a Dropbox application to connect your 
 ### Step 3: Configure Redirect URI
 
 1. Go to the **Settings** tab and find the **OAuth 2** section.
-2. Add the following URL to the **Redirect URIs** field (replace `{your_pipeshub_base_url}` with your actual domain):
+2. Add the following URL to the **Redirect URIs** field (replace `{your_workspace_domain}` with your actual workspace hostname, without `https://`):
 ```
-http://{your_pipeshub_base_url}/connectors/oauth/callback/Dropbox%20Personal
+https://{your_workspace_domain}/connectors/oauth/callback/Dropbox%20Personal
 ```
 > **Important:** Ensure the URL matches exactly what is configured in your connector code (specifically the `Dropbox%20Personal` suffix).
 
@@ -112,7 +116,7 @@ http://{your_pipeshub_base_url}/connectors/oauth/callback/Dropbox%20Personal
 
 </Accordion>
 
-<Accordion title="Connect to PipesHub" icon="plug">
+<Accordion title="Connect to Novaplan AI" icon="plug">
 
 ### Step 1: Configure Connection
 
@@ -169,7 +173,7 @@ http://{your_pipeshub_base_url}/connectors/oauth/callback/Dropbox%20Personal
   </div>
 
 <Warning>
-  **Important:** Authorize using the same email address as your PipesHub account. Using a different email will cause permission issues on the PipesHub platform.
+  **Important:** Authorize using the same email address as your Novaplan AI account. Using a different email will cause permission issues on the Novaplan AI platform.
 </Warning>
 <Note>
   Configuring OAuth App can only be performed by Admins. If you are not an Admin, you must request an Admin to configure the OAuth App for you. You can then access configured OAuth Apps via a dropdown menu.
@@ -227,7 +231,7 @@ This can allow you to explicitly control which files and folders are indexed for
 
 ### Index Shared Items
 
-When enabled, files shared with others are indexed alongside personal files. Disable this to exclude shared content and index only files originating from a user's own drive.
+This setting is intended to control indexing of shared items. The accessible Personal connector code checks an `is_shared` flag but does not visibly populate that flag from Dropbox sharing data. Do not rely on this setting alone to exclude shared content until Novaplan has verified it in your deployed workspace.
 
 <div style={{ textAlign: "center" }}>
      <img
@@ -326,8 +330,8 @@ For each entry, the system determines the specific metadata type and handles it 
 ### Simplified Model
 Unlike the Teams connector which maps complex organizational roles (e.g., Editor, Viewer, Commenter), the Personal connector uses a simplified permission model.
 
-1. **Default Ownership:** Since this connector syncs a private drive, the authenticated user is automatically assigned **OWNER** permissions for every file and folder.
-2. **Shared Links:** The connector uses `sharing.read` to detect if a file has shared links. While it does not import the list of external users, it ensures the file metadata reflects that it is shared.
+1. **Personal drive ownership:** The authenticated user receives **OWNER** permission on the personal Record Group. The accessible connector code assigns that user **WRITE** permission on individual files and folders, with an **OWNER** fallback if permission construction fails.
+2. **Shared links and external access:** The accessible Personal implementation attempts to create or reuse preview links, but it does not visibly import Dropbox's external shared-link users or set the record's `is_shared` flag from source sharing data. Confirm the deployed behavior before treating the shared-item index filter as an access boundary.
 
 </Accordion>
 
@@ -343,14 +347,14 @@ Unlike the Teams connector which maps complex organizational roles (e.g., Editor
 
 There are three common causes:
 
-1. **Email mismatch** - The email used during connector authentication doesn't match your PipesHub account email. This causes permission issues preventing you from accessing synced data.
-   - **Fix:** Reconfigure the connector and authenticate using the same email as your PipesHub account.
+1. **Email mismatch** - The email used during connector authentication doesn't match your Novaplan AI account email. This causes permission issues preventing you from accessing synced data.
+   - **Fix:** Reconfigure the connector and authenticate using the same email as your Novaplan AI account.
 
 2. **Records show in "All Records" but not in search** - Documents display in the All Records section but don't appear in search query results.
    - **Fix:** Verify sync filters in the connector settings and ensure indexing has completed. Check that the data matches your search query criteria.
 
 3. **Data not yet indexed** - The connector is still syncing or hasn't completed the initial indexing process.
-   - **Fix:** Go to **Settings > Connectors**, check the sync status, and wait for indexing to complete.
+   - **Fix:** Go to **Workspace Settings → Your Connectors**, check the sync status, and wait for indexing to complete.
 
 </Accordion>
 

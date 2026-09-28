@@ -1,0 +1,85 @@
+---
+title: "Azure File Shares"
+description: "Azure-Dateifreigaben und deren Ordner für die Suche synchronisieren."
+icon: "/logo/azure-files.svg"
+---
+
+## Überblick
+
+Der Azure-Files-Konnektor liest Dateien und Ordner aus **Azure File Shares** eines Storage Accounts. Er stellt sie in Novaplan AI für die Suche bereit und verändert die Quelldateien nicht. Ein *File Share* entspricht einer Dateifreigabe mit echten Verzeichnissen. Liegen Ihre Daten dagegen in Blob-Containern, verwenden Sie [Azure Blob Storage](/de/connectors/azure-blob/azure-blob).
+
+Klären Sie mit Novaplan und Ihrer Azure-Administration, welche Freigaben und Dateitypen benötigt werden. Eine Team-Verbindung kann Inhalte in Novaplan AI einem größeren Personenkreis zugänglich machen als eine persönliche Verbindung. Die Azure-Quellrechte werden dadurch nicht geändert; individuelle Azure-Rechte einzelner Workspace-Mitglieder werden auch nicht automatisch auf die importierten Dateien übertragen. Prüfen Sie die Sichtbarkeit mit einem zweiten Testkonto.
+
+<Warning>
+  Kann der zugängliche Konnektor die Person, die eine persönliche Verbindung erstellt hat, nicht zuordnen, vergibt er für Freigaben und Dateien stattdessen Leserechte auf Organisationsebene. Prüfen Sie vor der Synchronisierung vertraulicher Inhalte die Zuordnung und danach den Zugriff mit einem zweiten Workspace-Konto. Bestätigen Sie das Verhalten in der bereitgestellten Enterprise-Version.
+</Warning>
+
+## Connection String vorbereiten
+
+1. Melden Sie sich im [Azure Portal](https://portal.azure.com) an und öffnen Sie **Storage accounts**.
+2. Wählen Sie den Account mit den gewünschten **File shares**.
+3. Öffnen Sie **Security + networking → Access keys** und kopieren Sie unter **key1** die **Connection string**.
+
+<Warning>
+  Die Connection String enthält einen Storage-Account-Schlüssel mit weitreichendem Zugriff. Versenden oder veröffentlichen Sie ihn nicht. Stimmen Sie den Anmeldetyp und die Berechtigungen mit Ihrer Azure-Administration ab und verwenden Sie ausschließlich den vorgesehenen Konfigurationsdialog.
+</Warning>
+
+Der gleiche Storage Account kann sowohl Blob-Container als auch File Shares enthalten. Der Schlüssel kann deshalb für beide Konnektoren technisch derselbe sein; entscheiden Sie bewusst, ob Sie diesen weitreichenden Zugang für beide verwenden möchten. Netzwerkregeln müssen den Zugriff aus der Novaplan-Umgebung erlauben.
+
+**Wie wird die Connection String geschützt?** Behandeln Sie sie als Storage-Account-Geheimnis und geben Sie sie nur im Zugangsdatenfeld des Konnektors ein. Lassen Sie sich von Novaplan die Verschlüsselung, Zugriffsrechte und Protokollierung Ihres bereitgestellten Workspaces bestätigen, bevor Sie sensible Dateifreigaben anbinden. Diese Anleitung verifiziert diese Kontrollen nicht.
+
+## Konnektor einrichten
+
+1. Öffnen Sie in Novaplan AI **Workspace Settings → Connectors** für eine Teamverbindung oder unter **Personal** den Bereich **Your Connectors** für eine persönliche Verbindung. Wählen Sie **Azure Files → Setup**.
+2. Tragen Sie unter **Authenticate Instance** einen **Instance name** und die kopierte **Connection String** ein.
+3. Wählen Sie **Next** und unter **Configure Records** eine **Sync Strategy**: **Scheduled** oder **Manual**. Für **Sync Interval** kann **1 Hour** ein Anfangswert sein.
+4. Legen Sie unter **Indexing & sync filters** bei Bedarf fest, welche Inhalte gelesen werden.
+
+| Filter | Wirkung |
+| --- | --- |
+| **File Share Names** | Bestimmte Dateifreigaben mit `In` ein- oder mit `Not In` ausschließen. |
+| **File Extensions** | Dateitypen wie `pdf` auswählen oder unerwünschte Endungen ausschließen. |
+| **Modified Date** und **Created Date** | Dateien nach Änderungs- oder Erstellungsdatum eingrenzen. |
+
+Ohne Filter werden alle zugänglichen Dateien berücksichtigt. Einen einzelnen Unterordner innerhalb eines Shares kann der Filter laut Quellanleitung nicht direkt auswählen. Für eine enge Trennung kann eine eigene Freigabe sinnvoll sein.
+
+5. Speichern Sie mit **Save Configuration**. Aktivieren Sie auf der Instanzseite **Sync Enabled**, wenn der Status noch **Sync Paused** zeigt.
+6. Prüfen Sie im **Overview**-Bereich **Total**, **Processing**, **Not Started** und **Failed**. **Sync** und **Full sync** starten bei Bedarf einen Lauf; **Manage Configuration** öffnet Zugangsdaten und Filter erneut.
+
+Beim ersten Lauf wird der ausgewählte Datenbestand vollständig gelesen. Spätere Läufe listen die gewählten Freigaben und verarbeiten passende neue oder geänderte Dateien. Eine feste Laufzeit lässt sich daraus nicht ableiten. Nach dem Löschen sensibler Quelldateien prüfen Sie, ob bereits indexierte Einträge auch in Novaplan AI verschwunden sind; wenden Sie sich andernfalls an [Novaplan Support](/de/contact-us). Dokumente und Textdateien können inhaltlich indexiert werden. Das gilt laut aktueller Upstream-Referenz auch für EPUB-E-Books ohne Kopierschutz (DRM); deren Text ist durchsuchbar, eine Vorschau ist nicht verfügbar. Bei Bildern hängt die Inhaltsauswertung von den aktivierten Verarbeitungsfunktionen ab; Video, Audio und Archive werden nicht als durchsuchbarer Text versprochen.
+
+## Fehler beheben
+
+| Problem | Prüfen Sie |
+| --- | --- |
+| Authentifizierung schlägt fehl | Connection String vollständig kopiert, Schlüssel gültig, richtiger Storage Account. |
+| Shares fehlen in der Auswahl | Account enthält **File shares** statt Blob-Containern; außerdem Netzwerkzugriff prüfen. |
+| Lauf zeigt null Dateien | Freigabeinhalt, Filter, aktivierte Synchronisierung. |
+| Datei erscheint nicht in der Suche | Indexierungsstatus, **Failed**, unterstützter Dateityp und Passwortschutz. |
+| Lauf ist sehr langsam | Anzahl und Größe der Dateien, Share-, Endungs- und Datumsfilter sowie Fortschritt unter **Overview**. Auch Folgeläufe listen ausgewählte Dateien erneut. |
+| Verbindung stoppt nach Schlüsselwechsel | Connection String unter **Manage Configuration** aktualisieren. |
+
+## Häufige Fragen
+
+<AccordionGroup>
+  <Accordion title="Kann ich mehrere Storage Accounts verbinden?">
+    Ja. Wählen Sie auf der Azure-Files-Instanzseite **+ Add Another Instance** und richten Sie für den weiteren Storage Account eine getrennte Instanz mit dessen Connection String ein.
+  </Accordion>
+  <Accordion title="Verändert Novaplan AI Dateien in Azure?">
+    Der dokumentierte Konnektor liest Dateien. Er lädt keine Dateien hoch und verschiebt, benennt oder löscht keine Quelldateien. Seine Synchronisierung verändert jedoch die indexierten Datensätze in Novaplan AI.
+  </Accordion>
+  <Accordion title="Was geschieht nach dem Löschen einer Datei in Azure?">
+    Gehen Sie nicht davon aus, dass der nächste Lauf einen bereits indexierten Datensatz sofort entfernt. Prüfen Sie besonders bei sensiblen Dateien, ob der Eintrag aus Novaplan AI verschwunden ist. Wenn er weiterhin erscheint, wenden Sie sich an [Novaplan Support](/de/contact-us).
+  </Accordion>
+  <Accordion title="Kann ich nur einen Unterordner einer Freigabe auswählen?">
+    Nicht direkt. Der dokumentierte Filter wählt ganze File Shares aus. Dateiendungen und Datumsbereiche können den Umfang zusätzlich eingrenzen. Für eine klare Quellgrenze trennen Sie Inhalte in geeignete Freigaben.
+  </Accordion>
+  <Accordion title="Wie schütze ich die Connection String?">
+    Behandeln Sie sie als Storage-Account-Geheimnis und geben Sie sie nur im vorgesehenen Zugangsdatenfeld ein. Lassen Sie Verschlüsselung, Zugriffsrechte und Protokollierung des bereitgestellten Workspaces von Novaplan bestätigen, bevor Sie sensible Freigaben anbinden. Diese Anleitung verifiziert diese Kontrollen nicht.
+  </Accordion>
+  <Accordion title="Was ist der Unterschied zwischen Azure Files und Azure Blob?">
+    Beide Dienste können denselben Storage Account verwenden. **Azure Blob** speichert Objekte in Containern und bildet Ordner über Präfixe nach. **Azure Files** bietet Dateifreigaben mit echten Verzeichnissen, die häufig als Netzlaufwerk eingebunden werden. Wählen Sie den Konnektor entsprechend dem tatsächlichen Speicherort Ihrer Dateien.
+  </Accordion>
+</AccordionGroup>
+
+Wenn Ihre Dateifreigaben nicht aus der Novaplan-Umgebung erreichbar sind oder Sie Hilfe bei der Eingrenzung benötigen, wenden Sie sich an [Novaplan Support](/de/contact-us).

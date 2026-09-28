@@ -1,0 +1,92 @@
+---
+title: "Persönliche Zugriffstokens"
+description: "Benutzergebundene Tokens für freigegebene APIs und MCP-Clients erstellen und widerrufen."
+icon: "id-badge"
+---
+
+Ein **Personal Access Token (PAT)** ist eine widerrufbare Zugangsdatenfolge, die im Namen der Person handelt, die sie erstellt hat. Anfragen unterliegen deren Berechtigungen und den beim Erstellen gewährten Scopes. Das unterscheidet ein PAT von einem OAuth-`client_credentials`-Token ohne Benutzeridentität. Für Drittanwendungen mit persönlicher Einwilligung kann stattdessen der [OAuth Authorization Code Flow](/de/developer/oauth2) geeignet sein.
+
+Jedes Organisationsmitglied kann ein eigenes PAT erstellen, ohne dass eine Administratorin oder ein Administrator dafür eine OAuth-Anwendung registrieren muss. Verwenden Sie ein PAT für persönliche Skripte oder MCP-Clients. Eine Anwendung, die mehrere Personen getrennt autorisieren sollen, benötigt in der Regel eine OAuth-Anwendung mit persönlicher Anmeldung.
+
+## Token erstellen
+
+1. Melden Sie sich in Ihrem Novaplan AI Workspace an und öffnen Sie **Workspace Settings → Developer Settings → Personal Access Tokens**.
+2. Wählen Sie **New token** und geben Sie einen aussagekräftigen Namen ein.
+3. Legen Sie ein Ablaufdatum und die benötigten Scopes fest. Die technische Referenz nennt 30, 90 und 365 Tage sowie **Never**; ohne Auswahl gilt dort 30 Tage. **Never** hat keine automatische zeitliche Begrenzung. Verwenden Sie die kürzeste für Ihren Anwendungsfall passende Laufzeit. Der Name darf 1 bis 100 Zeichen lang sein. Wenn Sie keine Scopes auswählen, kann der Server seinen vollständigen konfigurierten MCP-Scope-Satz verwenden; wählen Sie deshalb ausdrücklich nur die nötigen Rechte.
+4. Kopieren Sie den Token sofort in einen geschützten Secret-Speicher. Der Rohwert wird nur beim Erstellen angezeigt. Wenn er verloren geht, widerrufen Sie ihn und erstellen einen neuen.
+
+<Warning>
+  Ein PAT ist so sensibel wie ein Passwort für die gewährten Rechte. Teilen Sie ihn weder im Chat noch in einem Repository oder Log. Der Präfix `phpat_` gehört zum angezeigten Tokenwert; entfernen oder verändern Sie ihn nicht aufgrund eines Beispielbefehls. Bei einem `401` kann [Novaplan Support](/de/contact-us) die bereitgestellte Version und Tokenbehandlung prüfen.
+</Warning>
+
+## Token verwenden
+
+Ein freigegebener API- oder MCP-Client sendet das PAT im Header `Authorization: Bearer <TOKEN>`. Der entfernte MCP-Endpunkt liegt unter `NOVAPLAN_WORKSPACE_URL/mcp`. Clients mit eigenem Header können den Token direkt verwenden; eine geprüfte [lokale Stdio-Brücke](/de/mcp/local-server) kann ihn über `--bearer-auth` erhalten. Für deren `--server-url` ist dagegen die Workspace-Adresse mit `/api/v1` als `NOVAPLAN_API_URL` erforderlich.
+
+Ein Beispiel für einen Aufruf der MCP-Werkzeugliste mit Platzhaltern:
+
+```bash
+curl -X POST https://your-workspace.example.com/mcp \
+  -H "Authorization: Bearer phpat_YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
+```
+
+Die Workspace-Adresse und das persönliche Token müssen durch die für Ihren Zugang freigegebenen Werte ersetzt werden. Der MCP-Paste-Block der Token-Oberfläche verwendet `PIPESHUB_MCP_URL` und `PIPESHUB_MCP_TOKEN`. Die QM-CLI in MCP-Paketversion 2.3.3 akzeptiert diese Namen ebenfalls, sofern URL und Token als **zwei getrennte persönliche Keychain-Einträge** mit ausdrücklich gesetzten Variablennamen hinterlegt werden. Die [QM-Anleitung](/de/mcp/qm) empfiehlt zur besseren Lesbarkeit `PIPESHUB_BASE_URL` und `PIPESHUB_TOKEN`. Verändern Sie den Tokenwert nicht.
+
+Ein PAT ist weiterhin auf die bei seiner Erstellung gewählten Scopes beschränkt. Weniger Scopes reduzieren die Auswirkungen eines verlorenen Tokens. Für Personen mit unterschiedlichen Rechten müssen getrennte Tokens erstellt werden; ein gemeinsam genutzter Team-Token würde die persönliche Berechtigungsprüfung verfälschen.
+
+## Tokens verwalten und widerrufen
+
+Unter **Personal Access Tokens** sehen Sie Ihre aktiven Tokens mit Name, Scopes, Erstellungsdatum, Ablauf und letzter Verwendung. Sie können einen eigenen Token widerrufen. Der Widerruf ist endgültig; abhängige Anwendungen benötigen anschließend einen neuen Token.
+
+Die technische API-Referenz nennt diese Pfade:
+
+| Methode und Pfad | Aufgabe |
+| --- | --- |
+| `POST /api/v1/personal-access-tokens` | Eigenes PAT erstellen |
+| `GET /api/v1/personal-access-tokens` | Eigene aktive Tokens auflisten |
+| `DELETE /api/v1/personal-access-tokens/{tokenId}` | Eigenes PAT widerrufen |
+| `GET /api/v1/personal-access-tokens/scopes` | Verfügbare Scopes abrufen |
+| `GET /api/v1/personal-access-tokens/admin` | Alle aktiven Tokens der Organisation administrativ auflisten |
+| `DELETE /api/v1/personal-access-tokens/admin/{tokenId}` | Ein PAT administrativ widerrufen |
+
+Die Admin-Endpunkte setzen Organisationsadministrationsrechte voraus und sollten nur für genehmigte Verwaltung oder Sicherheitsvorfälle genutzt werden. Die Liste ist paginiert; der Rohwert eines fremden Tokens wird nicht angezeigt. Prüfen Sie die tatsächliche Freigabe dieser API im Novaplan Enterprise Workspace.
+
+## API-Details
+
+Beim Erstellen über `POST /api/v1/personal-access-tokens` beschreibt die englische Referenz diesen Anfragekörper:
+
+```json
+{
+  "name": "Claude Desktop",
+  "scopes": ["kb:read", "semantic:write"],
+  "expiryDays": 30
+}
+```
+
+`name` ist erforderlich; `scopes` und `expiryDays` sind optional. Für `expiryDays` werden `30`, `90`, `365` oder `"never"` genannt. Ohne Wert gilt 30 Tage. Ohne `scopes` greift laut Referenz die vollständige serverseitig konfigurierte MCP-Scope-Auswahl, weshalb eine explizite Minimal-Auswahl vorzuziehen ist. Beide `DELETE`-Endpunkte können optional einen Grund wie `{ "reason": "rotated" }` erhalten.
+
+Die eigene Tokenliste antwortet als `{ "tokens": [...] }`. Die administrative Liste verwendet dagegen `{ "data": [...], "pagination": { ... } }` und ergänzt pro Eintrag Angaben zur besitzenden Person. `ownerDeleted: true` kennzeichnet dort ein gelöschtes Konto. Die Liste ist seitenweise abrufbar; die Quellanleitung nennt maximal 100 Einträge pro Seite. Ein gelöschtes Benutzerkonto kann mit seinem PAT nicht weiter authentifizieren; die Admin-Ansicht dient auch der Prüfung und Bereinigung.
+
+## Häufige Fragen
+
+### Welche Scopes kann ein PAT erhalten?
+
+Ohne ausdrückliche Auswahl verwendet die zugängliche Implementierung den vollständig konfigurierten `MCP_SCOPES`-Satz des Workspaces. Wählen Sie beim Erstellen eine kleinere, zum Anwendungsfall passende Teilmenge. Die [MCP-Übersicht](/de/mcp/overview#standard-scopes-anpassen) erklärt die serverseitigen Standardwerte.
+
+### Was unterscheidet ein PAT von einem Sitzungstoken?
+
+Ein Sitzungstoken entsteht bei der Anmeldung und ist für die Browser-Sitzung gedacht; die Quellreferenz nennt eine Gültigkeit von 24 Stunden. Ein PAT erstellen Sie bewusst für eine Integration, mit eigenem Ablaufdatum und unabhängigem Widerruf. Prüfen Sie die tatsächlichen Laufzeiten im bereitgestellten Workspace.
+
+### Kann ich Tokens anderer Personen sehen?
+
+Normale Mitglieder sehen und widerrufen nur ihre eigenen PATs. Organisationsadministrierende können über die Admin-API Metadaten aktiver Tokens auflisten und Tokens widerrufen, aber keine Rohwerte auslesen.
+
+### Was geschieht nach dem Entfernen meines Kontos?
+
+PATs eines gelöschten Benutzerkontos werden bei der Authentifizierung abgewiesen. Die Admin-Liste kann solche Einträge für die Nachkontrolle mit `ownerDeleted: true` kennzeichnen.
+
+### Gibt es eine feste Obergrenze für PATs?
+
+Die Quellreferenz nennt keine feste Obergrenze für das Erstellen. Die persönliche Listenansicht zeigt jedoch höchstens 100 der zuletzt aktiven Tokens; die administrative API ist paginiert. Verlassen Sie sich bei einer Inventur nicht allein auf die erste Listenseite.

@@ -1,0 +1,109 @@
+---
+title: "Jira Data Center"
+description: "Projekte, Vorgänge und Berechtigungen aus Jira Data Center synchronisieren."
+icon: "/logo/jira.png"
+---
+
+## Überblick
+
+Dieser Konnektor verbindet eine selbst betriebene **Jira-Data-Center- oder Jira-Server-Instanz** mit Novaplan AI. Für eine von Atlassian gehostete Instanz verwenden Sie den [Jira-Cloud-Konnektor](/de/connectors/jira/jira). Die Anmeldeverfahren und REST-APIs der beiden Varianten sind verschieden.
+
+Synchronisiert werden Projekte, Vorgänge, Kommentare, Anhänge, Benutzer, Gruppen sowie Projekt- und Anwendungsrollen. Beschreibungen, Status, Prioritäten, Labels, benutzerdefinierte Felder, Verknüpfungen und übergeordnete Vorgänge können so durchsucht werden. Die Sichtbarkeit richtet sich nach Projekt-Berechtigungsschemata und der Sicherheit einzelner Vorgänge.
+
+## Voraussetzungen und Rechte
+
+Die Jira-Instanz muss über HTTPS aus der Novaplan-Umgebung erreichbar sein. Verwenden Sie als **Base URL** die Stammadresse, etwa `https://jira.example.com`, gegebenenfalls mit Basispfad wie `/jira`. Eine Vorgangs-URL mit `/browse/` ist dafür ungeeignet. Für die Integration empfiehlt sich ein eigenes Dienstkonto.
+
+<Warning>
+  Ein Konto ohne Administrationsrechte kann zwar Inhalte synchronisieren, aber möglicherweise Berechtigungsschemata, Anwendungsrollen oder Löschereignisse nicht lesen. Dann können Inhalte nur für die einrichtende Person sichtbar sein oder gelöschte Vorgänge im Index bleiben. Die Quellanleitung empfiehlt für den produktiven Einsatz ein Jira-Administratorkonto.
+</Warning>
+
+| Benötigter Zugriff | Bedeutung bei fehlendem Zugriff |
+| --- | --- |
+| `GET /rest/api/2/applicationrole` | Anwendungsrollen können nicht in Gruppen aufgelöst werden. |
+| `GET /rest/api/2/project/{key}/permissionscheme` und Grants | Projektberechtigungen können nicht vollständig ermittelt werden. |
+| `GET /rest/auditing/1.0/events` | Gelöschte Vorgänge werden womöglich erst nach einem vollständigen Abgleich entfernt. |
+
+Jira-Benutzer werden über E-Mail-Adressen ihren Novaplan-AI-Konten zugeordnet. Laut Quellanleitung können bereits anderweitig bekannte Benutzer auch bei verborgener Jira-Adresse erkannt werden; öffentlich sichtbare Adressen sind für diesen Konnektor nicht zwingend erforderlich. **User email visibility** ist eine globale Einstellung der Jira-Administration. Eine Änderung auf **Public** sollte nur nach Prüfung Ihrer Datenschutz- und Sicherheitsregeln erfolgen.
+
+## Anmeldemethode wählen
+
+| Methode | Verwendung |
+| --- | --- |
+| **Personal Access Token** | Bevorzugt; verfügbar ab Jira Core 8.14, separat widerrufbar. |
+| **Basic Authentication** | Für ältere Instanzen oder wenn Token deaktiviert sind; benötigt Benutzername und Passwort. |
+
+OAuth-Anwendungen aus der Atlassian Developer Console gehören zu Jira Cloud und funktionieren hier nicht. Beide Data-Center-Methoden synchronisieren dieselben Inhalte.
+
+### Personal Access Token erstellen
+
+1. Melden Sie sich mit dem gewünschten Jira-Konnektorkonto an.
+2. Öffnen Sie über das Profilbild **Profile → Personal Access Tokens**.
+3. Wählen Sie **Create token**, benennen Sie es zum Beispiel `Novaplan AI Jira Connector` und setzen Sie ein Ablaufdatum gemäß Ihrer Richtlinie.
+4. Erstellen und kopieren Sie das Token sofort. Jira zeigt es nur einmal an; nach Verlust erstellen Sie ein neues.
+
+### Verbindung in Novaplan AI einrichten
+
+1. Öffnen Sie **Workspace Settings → Connectors**, suchen Sie **Jira Data Center** und wählen Sie **+ Setup**.
+2. Wählen Sie auf **Authenticate Instance** unter **Authentication method** **Personal Access Token** oder **Basic Authentication**.
+3. Geben Sie die **Base URL** und das Token ein. Bei **Basic Authentication** verwenden Sie stattdessen den Jira-**Username** und das **Password**; der Benutzername ist nicht zwingend die E-Mail-Adresse.
+4. Wählen Sie **Next**. Nach der Zugangsdatenprüfung öffnet sich **Configure Records**.
+
+Wird das Token oder Passwort geändert, aktualisieren Sie es in **Authenticate Instance**. Diese Zugangsdaten werden nicht automatisch erneuert.
+
+## Synchronisierung und Suche einrichten
+
+Unter **Configure Records** wählen Sie **Scheduled** oder **Manual**. Der voreingestellte **Sync Interval** beträgt 60 Minuten. Eine Echtzeit-Synchronisierung ist nicht vorgesehen.
+
+| Filter | Wirkung |
+| --- | --- |
+| **Project keys** | Mit `In` nur ausgewählte Projekte laden oder mit `Not In` Projekte ausschließen. Ohne Auswahl alle für das Konto sichtbaren Projekte. |
+| **Modified Date** | Nach Änderungsdatum filtern: `Is After`, `Is Before`, `Is Between`. |
+| **Created Date** | Nach Erstellungsdatum mit denselben Operatoren filtern. |
+
+Die Projektliste wird aus Ihrer Jira-Instanz geladen. Projekt- und Datumsfilter begrenzen die verarbeiteten Projekte und Vorgänge. Der zugängliche Jira-Data-Center-Konnektor liest dennoch Nutzer und Gruppen für Identitäts- und Berechtigungszuordnungen; die Inhaltsfilter garantieren deshalb nicht, dass keine weiteren Quellmetadaten gelesen werden. Die getrennten Optionen **Index issues** und **Index issue and comment attachments** steuern die Aufnahme synchronisierter Inhalte in die KI-Suche, nicht allein den Abruf aus Jira; beide sind laut Quellanleitung standardmäßig eingeschaltet. Kommentare werden im jeweiligen Vorgang mit indexiert und nicht als getrennte Datensätze gespeichert.
+
+Wählen Sie **Save** und anschließend **Start syncing now** oder **I'll do it later**. Über **Indexing Progress** können Sie den Lauf verfolgen. Beim ersten Lauf und nach Änderungen an Synchronisierungsfiltern erfolgt ein vollständiger Abgleich. Spätere Läufe verwenden Änderungszeiten und projektbezogene Checkpoints. Löschungen werden über das Audit-Log erkannt, wenn das Konnektorkonto darauf Zugriff hat.
+
+Kann das Konto das Audit-Log nicht lesen, bleiben gelöschte Vorgänge zunächst im Index. Der Lösch-Fortschrittspunkt bleibt stehen; nach Wiederherstellung des Zugriffs werden die versäumten Löschereignisse nachgeholt. Vorübergehende Fehler beim Lesen von Projektberechtigungen oder Gruppenmitgliedern erhalten die gespeicherten Zugriffe und werden beim nächsten Lauf erneut versucht. Andere Vorgänge werden weiter synchronisiert; ein Lesefehler erweitert oder entzieht dabei keine Rechte.
+
+Die Jira-Data-Center-Gruppenliste endet nach 1.000 Gruppen. Projektrollen mit Gruppen jenseits dieser Grenze behalten ihre bisher gespeicherten Mitgliedschaften: Neue Mitglieder erhalten möglicherweise keinen Zugriff, ausgeschiedene behalten unter Umständen ihren bisherigen Zugriff. Prüfen Sie diese Grenze bei großen Instanzen. Scheitert die Verarbeitung eines einzelnen Vorgangs, laufen die übrigen weiter und der Fortschrittspunkt wartet auf einen erneuten Versuch. Nach fünf aufeinanderfolgenden Fehl-Läufen für denselben Vorgang wird er protokolliert und übersprungen; eine spätere Änderung erfasst ihn erneut. Bei anhaltender Begrenzung der Jira-Suchanfragen wird das betroffene Projekt nach drei Versuchen erst beim nächsten Lauf fortgesetzt.
+
+## Berechtigungen und Ergebnisse prüfen
+
+Der Konnektor nutzt Projekt-Berechtigungsschemata, Projektrollen, Anwendungsrollen und Vorgangssicherheit. Prüfen Sie nach dem ersten Lauf mit Konten aus unterschiedlichen Projektrollen, ob nur zulässige Vorgänge angezeigt werden. Fehlen Rechteinformationen, kann die Suche zu stark eingeschränkt sein. Für agentengesteuerte Änderungen an Jira-Vorgängen wird das getrennte [Jira-Data-Center-Toolset](/de/toolsets/jira/jira-data-center) benötigt; dieser Konnektor synchronisiert Inhalte für die Suche.
+
+| Problem | Prüfen Sie |
+| --- | --- |
+| `authType is required` | Unter **Authenticate Instance** eine Anmeldemethode auswählen und erneut speichern. |
+| Token oder Basic Authentication schlägt fehl | Ablauf/Widerruf, Leerzeichen, Jira-Benutzername und mögliche CAPTCHA-Sperre. |
+| Verbindung oder TLS scheitert | Erreichbarkeit aus Novaplan, Firewall/VPN und Vertrauensstellung des Zertifikats. |
+| Vorgänge nur für die einrichtende Person sichtbar | Zugriffe auf Berechtigungsschema und Anwendungsrollen; gegebenenfalls Administratorkonto verwenden. |
+| Benutzer fehlen | **Browse Users**-Recht und E-Mail-Zuordnung überprüfen. |
+| Gelöschte Vorgänge bleiben sichtbar | Audit-Log-Zugriff und aktiviertes Jira-Auditing prüfen. |
+| Keine Suchtreffer | Synchronisierungsstatus, **Project keys**, Datumsfilter und **Index issues** prüfen. |
+
+## Häufige Fragen
+
+<AccordionGroup>
+  <Accordion title="Kann ich eine OAuth-Anwendung für diesen Konnektor verwenden?">
+    Nein. Der Jira-Data-Center-Konnektor verwendet ein **Personal Access Token** oder **Basic Authentication**. Eine OAuth-Anwendung aus der Atlassian Developer Console gehört zum Jira-Cloud-Ablauf und lässt sich hier nicht austauschen.
+  </Accordion>
+  <Accordion title="Soll ich ein Token oder Basic Authentication verwenden?">
+    Bevorzugen Sie ein separat widerrufbares Personal Access Token, wenn Ihre Jira-Instanz es unterstützt (ab Jira Core 8.14). Bei älteren Instanzen oder deaktivierten Tokens verwenden Sie Benutzernamen und Passwort. Beide Verfahren synchronisieren dieselben Inhalte. Sichern und rotieren Sie die gewählten Zugangsdaten gemäß Ihrer Richtlinie.
+  </Accordion>
+  <Accordion title="Wie unterscheidet sich Jira Data Center von Jira Cloud?">
+    Jira Cloud wird von Atlassian betrieben und verwendet für diesen Konnektor OAuth 2.0 oder ein API-Token sowie REST v3. Jira Data Center läuft in Ihrer eigenen Umgebung und verwendet Personal Access Tokens oder Basic Authentication sowie REST v2. Wählen Sie den Konnektor, der zu Ihrer Jira-Instanz passt.
+  </Accordion>
+  <Accordion title="Benötigt der Konnektor ein Jira-Administratorkonto?">
+    Für den produktiven Einsatz wird es dringend empfohlen. Ohne ausreichenden Zugriff auf Anwendungsrollen, Berechtigungsschemata, Benutzer und Audit-Ereignisse können Berechtigungen unvollständig sein oder gelöschte Vorgänge im Index verbleiben. Prüfen Sie die [Voraussetzungen und Rechte](#voraussetzungen-und-rechte) mit Ihrer Jira-Administration.
+  </Accordion>
+  <Accordion title="Kann ich nur bestimmte Projekte synchronisieren?">
+    Ja. Wählen Sie unter **Configure Records → Project keys** mit `In` die gewünschten Projekte oder schließen Sie mit `Not In` Projekte aus. Die Inhaltsfilter verhindern nicht zwangsläufig das Lesen weiterer Benutzer- und Gruppenmetadaten für die Berechtigungszuordnung.
+  </Accordion>
+  <Accordion title="Warum liefert die Suche keine Vorgänge?">
+    Prüfen Sie zuerst unter **Workspace Settings → Connectors**, ob die Synchronisierung abgeschlossen ist und die erwarteten Vorgänge unter **All Records** erscheinen. Prüfen Sie danach die Berechtigungszuordnung des verwendeten Jira-Kontos, die **Project keys**- und Datumsfilter sowie die Option **Index issues**. Ein Konto ohne ausreichende Administrationsrechte kann sichtbare Ergebnisse zu stark einschränken.
+  </Accordion>
+</AccordionGroup>
+
+Bei Fragen zur Berechtigungszuordnung oder zu fehlenden Vorgängen wenden Sie sich an [Novaplan Support](/de/contact-us).

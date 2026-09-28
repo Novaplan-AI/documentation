@@ -1,51 +1,35 @@
 ---
 title: "FAQ"
-description: "Frequently asked questions about PipesHub Workplace AI"
+description: "Help with workspace invitations, access, and setup responsibilities."
 icon: "question"
 ---
 
-## Deployment
+## Workspace access
 
 <AccordionGroup>
-  <Accordion title="What are the minimum system requirements to run PipesHub?">
-    To ensure optimal performance, we recommend the following minimum specifications:
-    - **RAM**: 16 GB or more
-    - **CPU Cores**: 4 cores or more
-    
-    These requirements ensure smooth operation of PipesHub and its various components.
+  <Accordion title="How do I get access to Novaplan AI?">
+    The Novaplan team creates your organization's workspace and invites you by email. Follow the invitation and sign in with the email address it was sent to. See [Getting started](/quickstart).
   </Accordion>
-
-  <Accordion title="What should I consider when deploying PipesHub's Docker image to the cloud?">
-    When deploying PipesHub to cloud platforms, keep these important points in mind:
-    
-    - **Always use HTTPS**: Ensure your deployment uses HTTPS instead of HTTP for secure communication
-    - **Port Configuration**: Redirect incoming traffic to `localhost:3000` where PipesHub runs
-    - **Using EC2 or VM instances**: If you're deploying on EC2 or other virtual machines, you can use NGINX as a reverse proxy to handle HTTPS termination and route traffic to your application
-    
-    This setup ensures your deployment is secure and properly configured for production use.
+  <Accordion title="What if my invitation is missing or has expired?">
+    Check your spam folder and confirm which email address was invited. Contact the person who arranged your access or [Novaplan support](/contact-us) if you need a new invitation.
   </Accordion>
-
-  <Accordion title="I'm seeing a white/blank screen after deploying PipesHub to the cloud. What could be wrong?">
-    If you're seeing a white screen even though all Docker containers show as healthy and running, the most likely cause is that you're accessing PipesHub using HTTP instead of HTTPS.
-    
-    **Solution**: PipesHub requires HTTPS for cloud deployments due to stricter security checks. To resolve this issue:
-    - Configure your deployment to use HTTPS instead of HTTP
-    - Set up SSL/TLS certificates for your domain
-    - If using EC2 or similar VM instances, configure NGINX or another reverse proxy to handle HTTPS termination
-    
-    Note: While PipesHub may work with HTTP in local development environments, cloud deployments must use HTTPS to function properly.
+  <Accordion title="Do I need to install or deploy Novaplan AI?">
+    No. Use the workspace provided by Novaplan. These customer guides do not require you to install the platform or manage servers.
+  </Accordion>
+  <Accordion title="Who configures the workspace?">
+    Novaplan manages most workspace setup and administration. The configuration guides remain available as a reference. Your team may need to approve access to its connected applications. Only change administrator settings that are part of your agreed responsibilities; see the [administrator setup reference](/onboarding).
+  </Accordion>
+  <Accordion title="Who can help with a workspace problem?">
+    Email [support@novaplan.ai](mailto:support@novaplan.ai). Include your organization, a description of the issue, and any error message, with sensitive information removed.
   </Accordion>
 </AccordionGroup>
+
+<div id="deployment" />
+
+## Looking for deployment instructions?
+
+Novaplan provides your workspace. If you arrived here through an older deployment link, contact [Novaplan support](/contact-us) for help with access.
 
 ## AI Models
 
-<AccordionGroup>
-  <Accordion title="Does PipesHub support OpenAI-compatible endpoints for AI and embedding models?">
-    Yes, PipesHub fully supports OpenAI-compatible endpoints. You can configure any provider that offers OpenAI-compatible endpoints in two ways:
-    - During the initial onboarding process
-    - By updating your settings after installation
-    
-    This flexibility allows you to use your preferred AI provider while maintaining compatibility with the OpenAI API standard.
-  </Accordion>
-
-</AccordionGroup>
+If AI model settings are part of your agreed setup responsibilities, see the [AI Providers reference](/ai-models/overview). Contact [Novaplan support](/contact-us) to confirm which settings apply to your workspace before changing providers or credentials.

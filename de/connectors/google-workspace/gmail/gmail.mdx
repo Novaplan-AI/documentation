@@ -1,0 +1,134 @@
+---
+title: "Gmail"
+description: "E-Mails und Anhänge aus Gmail mit Novaplan AI synchronisieren und durchsuchen."
+icon: "/logo/gmail.png"
+---
+
+Der Gmail-Konnektor synchronisiert E-Mails und Anhänge aus Gmail mit Novaplan AI. Dazu können eingebundene Google Docs, Sheets und Slides gehören. Erst nach der Indexierung erscheinen passende Inhalte in der Suche.
+
+Novaplan richtet Ihren Workspace weitgehend für Sie ein. Ob eine unternehmensweite oder persönliche Verbindung geeignet ist und welche Einrichtungsschritte Ihre Administration übernimmt, stimmen Sie mit Novaplan ab. Bei einer persönlichen Verbindung erteilt die jeweilige Person die Google-Freigabe selbst.
+
+## Welche Verbindung ist geeignet?
+
+| Variante | Zweck | Zuständigkeit |
+| --- | --- | --- |
+| **Unternehmensweit** | Gmail-Daten einer Google-Workspace-Domain über ein Dienstkonto synchronisieren | Novaplan und Ihre Google-Workspace-Administration |
+| **Persönlich** | Das Gmail-Konto einer Person per OAuth 2.0 verbinden | Novaplan oder Ihre Administration richtet die OAuth-Anwendung ein; die Person autorisiert den Zugriff |
+
+## Unternehmensweite Einrichtung
+
+Dieser Abschnitt ist eine technische Referenz für Ihre Google-Workspace-Administration und Novaplan. Bei domainweiter Delegation kann ein Dienstkonto im Namen von Nutzern der Domain handeln. Prüfen Sie die Berechtigungen und Sicherheitsrichtlinien Ihrer Organisation vor der Freigabe.
+
+### 1. Google-Cloud-Projekt anlegen
+
+1. Melden Sie sich mit den erforderlichen Administratorrechten in der [Google Cloud Console](https://console.cloud.google.com/) an.
+2. Öffnen Sie die Projektauswahl, wählen Sie **New Project**, vergeben Sie einen Namen und gegebenenfalls eine Organisation oder einen Ordner.
+3. Klicken Sie auf **Create** und hinterlegen Sie über **IAM** eine weitere zuständige Person für den Projektzugriff.
+
+### 2. APIs aktivieren
+
+Aktivieren Sie unter **APIs & Services → Library** die **Gmail API**, **Google Docs API**, **Google Sheets API**, **Google Slides API** und **Admin SDK API**. Die Admin SDK API wird für die domainweite Delegation verwendet.
+
+### 3. Dienstkonto erstellen und delegieren
+
+1. Öffnen Sie **IAM & Admin → Service Accounts → Create Service Account**. Geben Sie einen Namen ein und schließen Sie die Erstellung ab.
+2. Kopieren Sie die Client-ID des Dienstkontos.
+3. Melden Sie sich als Superadministrator in der [Google Admin-Konsole](https://admin.google.com/) an.
+4. Öffnen Sie **Security → Access and data control → API controls → Manage Domain Wide Delegation**.
+5. Wählen Sie **Add new**, tragen Sie die Client-ID ein und fügen Sie diese OAuth-Berechtigungen als kommaseparierte Liste hinzu:
+
+```text
+https://www.googleapis.com/auth/admin.directory.group.readonly,https://www.googleapis.com/auth/admin.reports.audit.readonly,https://www.googleapis.com/auth/admin.directory.user.readonly,https://www.googleapis.com/auth/admin.directory.domain.readonly,https://www.googleapis.com/auth/admin.directory.orgunit,https://www.googleapis.com/auth/gmail.readonly,https://www.googleapis.com/auth/documents.readonly,https://www.googleapis.com/auth/spreadsheets.readonly,https://www.googleapis.com/auth/presentations.readonly
+```
+
+6. Prüfen Sie die Freigabe mit Ihrer Administration und klicken Sie auf **Authorize**.
+
+`gmail.readonly` erlaubt das Lesen von Nachrichten. Die drei weiteren Lese-Scopes betreffen Google Docs, Sheets und Slides; die `admin.*`-Scopes dienen der domainweiten Einrichtung. Geben Sie nur die mit Novaplan für Ihre konkrete Verbindung geprüften Berechtigungen frei. Das Dienstkonto und die betroffenen Konten müssen zur vorgesehenen Domain gehören.
+
+### 4. Dienstkontoschlüssel bereitstellen
+
+Öffnen Sie beim Dienstkonto **Keys → Add Key → Create new key → JSON**. Bewahren Sie die heruntergeladene JSON-Datei geschützt auf und übergeben Sie sie nur über den mit Novaplan vereinbarten sicheren Weg. Der Schlüssel enthält vertrauliche Zugangsdaten und kann nach Verlust nicht erneut heruntergeladen werden.
+
+Wenn die Organisationsrichtlinie `iam.disableServiceAccountKeyCreation` die Erstellung verhindert, stimmen Sie mit Ihrer Sicherheitsadministration und Novaplan eine geeignete Lösung ab. Ändern Sie eine Organisationsrichtlinie nicht allein wegen dieser Anleitung.
+
+### 5. Verbindung in Novaplan AI konfigurieren
+
+1. Öffnen Sie **Workspace Settings → Workspace → Connectors**.
+2. Suchen Sie **Gmail** und klicken Sie auf **Setup**.
+3. Tragen Sie einen **Instance Name** und die **Admin Email** ein und laden Sie den vereinbarten JSON-Schlüssel hoch.
+4. Wählen Sie **Next**, prüfen Sie die [Konnektoreinstellungen](#konnektoreinstellungen) und klicken Sie auf **Save Configuration**.
+5. Sobald die Instanz bereit ist, wählen Sie **Start syncing now** oder **I'll do it later**.
+
+### Optional: Google Pub/Sub für zeitnahe Änderungen
+
+Google Pub/Sub kann neue Gmail-Ereignisse zeitnah an den Konnektor melden. Novaplan koordiniert die Einrichtung mit Ihrer Google-Cloud-Administration.
+
+1. Erstellen Sie unter **Pub/Sub → Topics** ein Topic, beispielsweise `projects/your-project-id/topics/gmail-webhook-topic`, mit einer Standardsubscription.
+2. Stellen Sie die Subscription auf **Push** und verwenden Sie den von Novaplan bestätigten Endpoint mit dem Pfad `/gmail/webhook`. Die Basis-URL ist die Adresse des betriebenen Konnektordienstes, nicht die öffentliche Dokumentationsadresse.
+3. Geben Sie `gmail-api-push@system.gserviceaccount.com` für das Topic die Rolle **Pub/Sub Publisher**.
+4. Prüfen Sie mögliche Domain- oder Organisationsrichtlinienfehler mit Ihrer Administration. Änderungen können einige Minuten benötigen.
+
+## Persönliche Einrichtung
+
+Die persönliche Verbindung verwendet OAuth 2.0. Ein Administrator richtet die OAuth-Anwendung ein; Novaplan kann diese Arbeit koordinieren. Danach autorisiert die Person ihr Gmail-Konto.
+
+### 1. OAuth-Anwendung vorbereiten
+
+1. Erstellen oder wählen Sie ein Projekt in der [Google Cloud Console](https://console.cloud.google.com/).
+2. Aktivieren Sie die Gmail, Docs, Sheets und Slides APIs unter **APIs & Services → Library**.
+3. Konfigurieren Sie unter **OAuth consent screen** die Anwendung und die benötigten Scopes.
+4. Erstellen Sie unter **Credentials → Create Credentials → OAuth client ID** einen Client vom Typ **Web application**.
+5. Tragen Sie die tatsächliche Novaplan-Workspace-Adresse mit `/connectors/oauth/callback/Gmail` als autorisierte Weiterleitungsadresse ein, beispielsweise `https://your-workspace.example.com/connectors/oauth/callback/Gmail`. Sie muss exakt mit der bereitgestellten Workspace-Adresse übereinstimmen.
+6. Bewahren Sie **Client ID** und **Client Secret** sicher auf.
+
+Die persönliche Verbindung verwendet diese Scopes:
+
+```text
+https://www.googleapis.com/auth/gmail.readonly
+https://www.googleapis.com/auth/documents.readonly
+https://www.googleapis.com/auth/spreadsheets.readonly
+https://www.googleapis.com/auth/presentations.readonly
+```
+
+### 2. Gmail verbinden
+
+1. Öffnen Sie **Workspace Settings → Personal → Your Connectors** und wählen Sie bei **Gmail** die Option **Setup**.
+2. Vergeben Sie einen **Instance Name**. Ein Administrator hinterlegt die Google **Client ID** und das **Client Secret**, sofern keine vorkonfigurierte OAuth-Anwendung auswählbar ist.
+3. Klicken Sie auf **Next** und **Authenticate Gmail to Proceed**.
+4. Melden Sie sich bei Google an und erteilen Sie die angezeigten Berechtigungen.
+5. Wählen Sie **Continue to configuration**, prüfen Sie die [Konnektoreinstellungen](#konnektoreinstellungen) und klicken Sie auf **Save Configuration**.
+6. Starten Sie die Synchronisierung mit **Start syncing now** oder wählen Sie **I'll do it later**.
+
+<Warning>
+  Prüfen Sie, welches Google-Konto Sie autorisieren. Der zugängliche Konnektor vergibt Postfachberechtigungen anhand der von Google gelieferten Gmail-Adresse. Falls diese von Ihrer Novaplan-AI-Kontoadresse abweicht, lassen Sie die Kontenzuordnung und den Zugriff vor der Nutzung der Suche durch Ihre Administration prüfen.
+</Warning>
+
+## Konnektoreinstellungen
+
+### Synchronisierung
+
+- **Scheduled:** Synchronisiert automatisch im gewählten Intervall; die Voreinstellung beträgt 60 Minuten.
+- **Manual:** Synchronisiert nur, wenn ein Administrator den Vorgang auslöst.
+- **Received Date:** Begrenzt die abgerufenen E-Mails nach Empfangsdatum. Wählen Sie beispielsweise **Last 365 Days** oder verwenden Sie **Is After**, **Is Before** beziehungsweise **Is Between** für einen festgelegten Zeitraum. Die Bezeichnungen entsprechen den Optionen in der Oberfläche.
+
+E-Mails, die den Synchronisierungsfilter nicht erfüllen, werden nicht abgerufen.
+
+### Indexierung
+
+Indexierungsfilter bestimmen, welche synchronisierten Inhalte durchsuchbar werden. Nicht automatisch indexierte Datensätze bleiben unter **All Records** sichtbar und tragen den Status **Manual Indexing**.
+
+- **Manual Indexing:** Synchronisiert E-Mails ohne automatische Indexierung. Öffnen Sie bei Bedarf einen Datensatz unter **All Records** und wählen Sie im Dreipunktmenü **Start Indexing**.
+- **Index Emails:** Bestimmt, ob synchronisierte E-Mail-Nachrichten standardmäßig indexiert werden.
+- **Index Attachments:** Bestimmt, ob Dateianhänge synchronisierter Nachrichten standardmäßig indexiert werden.
+
+## Häufige Fragen
+
+### Was ist der Unterschied zwischen Gmail-Konnektor und Gmail-Toolset?
+
+Der **Konnektor** synchronisiert und indexiert E-Mails für die Suche. Das **[Gmail-Toolset](/de/toolsets/google-workspace/gmail)** erlaubt entsprechend konfigurierten Agenten Aktionen über die Gmail-API, etwa Entwürfe zu erstellen oder Nachrichten zu senden. Klären Sie Schreib- und Sendeberechtigungen gesondert.
+
+### Warum liefert die Suche keine Ergebnisse?
+
+Prüfen Sie bei einer persönlichen Verbindung, welches Google-Konto das Postfach autorisiert hat. Bei einer unternehmensweiten Verbindung sind das delegierte Dienstkonto und die Zuordnung der einzelnen Postfachinhaber getrennte Dinge. Lassen Sie die Administration die Identitätszuordnung und den Zugriff der betroffenen Person prüfen; autorisieren Sie das gemeinsame Dienstkonto nicht erneut als diese Person.
+
+Kontrollieren Sie unter **All Records**, ob Nachrichten synchronisiert wurden, und prüfen Sie Empfangsdatumfilter und Indexierungsstatus. Wenn die erste Synchronisierung oder Indexierung noch läuft, warten Sie auf deren Abschluss. Den Laufstatus finden Sie bei einer Teamverbindung unter **Workspace Settings → Connectors** und bei einer persönlichen Verbindung unter **Workspace Settings → Your Connectors**. Wenn die Ursache unklar bleibt, schreiben Sie an [support@novaplan.ai](mailto:support@novaplan.ai).

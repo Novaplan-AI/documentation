@@ -1,0 +1,25 @@
+---
+title: "OpenAI Bildgenerierung"
+description: "OpenAI-Modelle für Bildgenerierung in Novaplan AI konfigurieren."
+---
+
+# OpenAI Bildgenerierung konfigurieren
+
+![Konfigurationsansicht für OpenAI Bildgenerierung](/images/ai-models/image-generation/OpenAI_ImageGenConfig.png)
+
+Novaplan AI kann OpenAI-Modelle verwenden, um Bilder aus Textanweisungen zu erzeugen. Novaplan unterstützt Sie bei der Einrichtung für Agents und Workflows.
+
+## Erforderliche Angaben
+
+**API Key:** Melden Sie sich bei Ihrem [OpenAI-Konto](https://platform.openai.com/api-keys) an, erstellen Sie unter **API Keys** einen geheimen Schlüssel und kopieren Sie ihn direkt nach der Erstellung. Bewahren Sie ihn geschützt auf.
+
+**Model Name:** Übernehmen Sie die genaue ID eines für Ihr Konto verfügbaren Modells aus der [aktuellen OpenAI-Dokumentation zur Bildgenerierung](https://developers.openai.com/api/docs/guides/image-generation) und prüfen Sie, ob es mit Ihrem bereitgestellten Novaplan-AI-Workspace funktioniert. Ältere Eingabebeispiele wie `gpt-image-1` oder `dall-e-3` belegen keine heutige Verfügbarkeit. OpenAI kennzeichnet [DALL·E 3 als veraltet und aus der API entfernt](https://developers.openai.com/api/docs/models/dall-e-3); verwenden Sie `dall-e-3` nicht für eine neue Verbindung.
+
+## Modell hinzufügen
+
+1. Klicken Sie auf der OpenAI-Karte für Bildgenerierung auf **Configure**.
+2. Tragen Sie **API Key** und **Model Name** ein.
+3. Vergeben Sie bei Bedarf einen **Model Friendly Name** als Anzeigenamen.
+4. Klicken Sie auf **Add Model**, um die Angaben zu speichern und prüfen zu lassen.
+
+API Key und Model Name sind erforderlich. Bildaufrufe zählen zu Kontingent und Abrechnung Ihres OpenAI-Kontos. Bei Fehlern prüfen Sie Schlüssel, genaue Schreibweise der Modell-ID, Modellzugang und Abrechnung. [Novaplan Support](/de/contact-us) hilft bei der Einrichtung.

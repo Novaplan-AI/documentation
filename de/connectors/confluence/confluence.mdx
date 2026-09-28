@@ -1,0 +1,165 @@
+---
+title: "Confluence Cloud"
+description: "Confluence-Bereiche, Seiten, Blogbeiträge und Anhänge mit Novaplan AI durchsuchen."
+icon: "/logo/confluence.png"
+---
+
+Der Confluence-Cloud-Konnektor synchronisiert Bereiche, Seiten, Blogbeiträge, Kommentare, Anhänge und Berechtigungen mit Novaplan AI. Für selbst betriebenes Confluence verwenden Sie stattdessen den [Confluence-Data-Center-Konnektor](/de/connectors/confluence/confluence-data-center).
+
+Novaplan richtet Ihren Workspace weitgehend für Sie ein. Die Atlassian-Anwendung, Authentifizierung und Bereichsauswahl stimmen Sie mit Novaplan und Ihrer Confluence-Administration ab.
+
+## Welche Daten werden synchronisiert?
+
+| Daten | Verwendung |
+| --- | --- |
+| **Bereiche und Ordner** | Struktur der Confluence-Inhalte |
+| **Seiten und Blogbeiträge** | Vollständige Inhalte und Metadaten für die Suche |
+| **Kommentare und Anhänge** | Diskussionen und Dateien an Seiten und Beiträgen |
+| **Nutzer und Gruppen** | Zuordnung von Konten und Gruppenmitgliedschaften |
+| **Berechtigungen** | Bereichsrechte und Einschränkungen einzelner Inhalte |
+
+Der Konnektor berücksichtigt Confluence-Zugriffsrechte. Für die Zuordnung einer Person benötigt Novaplan AI eine auflösbare Atlassian-Identität; die allgemeine Freigabe aller Profil-E-Mail-Adressen ist dafür nicht immer erforderlich.
+
+<span id="vor-dem-start-e-mail-sichtbarkeit-prüfen"></span>
+
+## Vor dem Start: Kontozuordnung prüfen
+
+Diese Prüfung gilt für **OAuth 2.0** und **API Token**. Die zugängliche Implementierung überspringt Personen ohne E-Mail-Adresse in der Confluence-Nutzersuche. Sie kann aber aktive Workspace-Nutzende über eine Jira-Suche ihrer E-Mail-Adresse zuordnen. Bei OAuth setzt dies **Grant Jira user access** und `read:jira-user` in der Atlassian-Anwendung voraus. Fehlen Jira-Zugriff oder eine eindeutige Antwort, kann die Zuordnung weiterhin scheitern. Prüfen Sie das mit betroffenen Testkonten, bevor Sie eine Änderung der Profilsichtbarkeit verlangen.
+
+Falls die Zuordnung im Test scheitert und eine Sichtbarkeitsänderung nach Prüfung nötig ist, öffnet die betroffene Person **Account Settings → Profile and visibility → Contact → Who can see this?**. **Your organization** kann eine passende Wahl sein, sofern die Datenschutzvorgaben dies erlauben; **Anyone** macht die Adresse breiter sichtbar. **Only you and admins** kann die E-Mail-Ausgabe in Confluence einschränken, schließt eine erfolgreiche Jira-Ersatzsuche aber nicht aus. Die Einstellung ist personenbezogen. Weitere Hinweise finden Sie in der [Atlassian-Dokumentation zur E-Mail-Sichtbarkeit](https://support.atlassian.com/confluence-cloud/docs/configure-user-email-visibility/).
+
+## Authentifizierung wählen
+
+| Methode | Geeignet für | Voraussetzungen |
+| --- | --- | --- |
+| **OAuth 2.0 (3LO)** | Gemeinsamer Team-Konnektor mit einer OAuth-Anwendung und einem dafür autorisierenden Atlassian-Konto | Zugriff auf die Atlassian Developer Console und Registrierung einer OAuth-Anwendung |
+| **API Token** | Gemeinsamer Team-Konnektor mit dem Token eines dafür vorgesehenen Atlassian-Kontos | API-Token eines Kontos mit Zugriff auf die benötigten Bereiche |
+
+Beide Methoden synchronisieren dieselben Datentypen über eine konfigurierte Team-Verbindung. Nicht jede Novaplan-AI-Nutzerin oder jeder Nutzer muss den Konnektor einzeln autorisieren; sichtbare Atlassian-E-Mail-Adressen und zugeordnete Quellberechtigungen bleiben für den Zugriff auf Suchergebnisse wichtig. Novaplan koordiniert mit Ihnen, welche Methode und welches Atlassian-Konto für den vorgesehenen Betrieb geeignet sind.
+
+## OAuth 2.0 (3LO) einrichten
+
+### 1. Atlassian-Anwendung erstellen
+
+1. Öffnen Sie die [Atlassian Developer Console](https://developer.atlassian.com/console/myapps/) und wählen Sie **Create → OAuth 2.0 integration**.
+2. Vergeben Sie einen Namen, beispielsweise `Novaplan AI Confluence Connector`.
+3. Wählen Sie bei **Access type** unbedingt **Resource-level** und schließen Sie die Registrierung ab. **Account-level** funktioniert mit der hier dokumentierten Autorisierung nicht.
+4. Öffnen Sie **Authorization → OAuth 2.0 (3LO) → Add**.
+
+### 2. Exakte Callback-Adresse hinterlegen
+
+1. Öffnen Sie in Novaplan AI **Workspace Settings → Connectors → Confluence → + Setup**.
+2. Kopieren Sie unter **Authenticate Instance** die angezeigte **Redirect URL**.
+3. Tragen Sie diesen exakten Wert in der Atlassian Developer Console als **Callback URL** ein und klicken Sie auf **Save changes**.
+
+Schema, Host, Groß- und Kleinschreibung, Pfad und ein möglicher abschließender Schrägstrich müssen übereinstimmen. Verwenden Sie die Adresse Ihrer tatsächlichen Novaplan-Instanz.
+
+### 3. API-Scopes eintragen
+
+Öffnen Sie **Permissions** in der Atlassian-Anwendung. Für die **User identity API** benötigen Sie `read:account`; `offline_access` wird bei OAuth 2.0 (3LO) automatisch ergänzt und ermöglicht Refresh-Tokens.
+
+Fügen Sie für die **Confluence API** diese **Classic scopes** hinzu:
+
+```text
+read:confluence-content.all
+read:confluence-content.permission
+read:confluence-props
+read:confluence-space.summary
+read:confluence-user
+read:confluence-groups
+search:confluence
+```
+
+Ergänzen Sie diese **Granular scopes**:
+
+```text
+read:content-details:confluence
+read:page:confluence
+read:blogpost:confluence
+read:attachment:confluence
+read:comment:confluence
+read:space:confluence
+read:user:confluence
+read:group:confluence
+read:permission:confluence
+read:audit-log:confluence
+read:folder:confluence
+read:email-address:confluence
+```
+
+Die Classic-Scopes decken allgemeine Confluence-Endpunkte ab; die Granular-Scopes ergänzen Details zu Seiten, Kommentaren, Anhängen, Berechtigungen und Nutzern. Prüfen Sie den beantragten Umfang mit Ihrer Atlassian-Administration. Atlassian empfiehlt laut Quellleitfaden, einer App nicht mehr als 50 Scopes zuzuweisen.
+
+### 4. Zugangsdaten in Novaplan AI eintragen
+
+1. Kopieren Sie unter **Settings → Authentication details** in der Atlassian Developer Console die **Client ID** und das **Secret**. Bewahren Sie das Secret sicher auf.
+2. Wählen Sie in Novaplan AI unter **Authenticate Instance** eine bereits hinterlegte **OAuth app** oder tragen Sie **Client ID** und **Client Secret** ein.
+3. Prüfen Sie die **Redirect URL**. Bei **Grant Jira user access** wählen Sie **Yes** nur, wenn dieselbe OAuth-Anwendung auch Jira umfasst und der Scope `read:jira-user` hinzugefügt wurde. Diese Option kann bei verborgenen Confluence-E-Mail-Adressen die Nutzerzuordnung über Jira unterstützen. Andernfalls wählen Sie **No**.
+4. Klicken Sie auf **Next** und dann unter **Authorize** auf **Authenticate**.
+5. Wählen Sie Ihre Confluence-Site, prüfen Sie die Berechtigungen und bestätigen Sie mit **Accept**. Verwenden Sie das mit Ihrer Administration abgestimmte Atlassian-Konto mit Zugriff auf die benötigten Bereiche. Die Konten der späteren Novaplan-AI-Nutzenden werden getrennt zugeordnet.
+6. Nach **Authenticated** wählen Sie **Next**, prüfen die [Synchronisierung und Filter](#synchronisierung-und-filter) und speichern die Konfiguration.
+
+Wenn Sie Client ID, Secret, Callback-Adresse oder Scopes in Atlassian ändern, aktualisieren Sie die Werte in Novaplan AI und autorisieren Sie erneut.
+
+## API-Token-Verbindung einrichten
+
+### 1. Atlassian-Token erstellen
+
+1. Öffnen Sie [Atlassian API tokens](https://id.atlassian.com/manage-profile/security/api-tokens) und wählen Sie **Create API token**.
+2. Vergeben Sie einen Namen, legen Sie gegebenenfalls eine Laufzeit fest und klicken Sie auf **Create**.
+3. Kopieren Sie den Token sofort und bewahren Sie ihn sicher auf; er wird nur einmal angezeigt.
+
+Der Token übernimmt die Rechte seines Atlassian-Kontos. Verwenden Sie ein Konto mit Zugriff auf die benötigten Confluence-Bereiche; stimmen Sie mit Ihrer Administration ab, ob ein gesondertes Integrationskonto sinnvoll ist.
+
+### 2. Token in Novaplan AI eintragen
+
+1. Öffnen Sie **Workspace Settings → Connectors → Confluence → + Setup**.
+2. Wählen Sie unter **Authenticate Instance → Authentication method** die Option **API Token**.
+3. Tragen Sie die **Base URL** Ihrer Confluence-Cloud-Site ein, beispielsweise `https://your-domain.atlassian.net`, ohne abschließenden Schrägstrich und ohne zusätzliche Pfade wie `/wiki`.
+4. Tragen Sie die **Email** des Kontos ein, das den Token erstellt hat, und fügen Sie den **API Token** hinzu.
+5. Klicken Sie auf **Next**. Bei dieser Methode wird **Authorize** übersprungen. Legen Sie unter **Configure Records** die [Synchronisierung und Filter](#synchronisierung-und-filter) fest.
+
+Die E-Mail-Adresse muss zum Atlassian-Konto gehören, das den Token erstellt hat. Die Berechtigungen der späteren Novaplan-AI-Nutzenden werden anhand ihrer eigenen Confluence-Konten zugeordnet.
+
+## Synchronisierung und Filter
+
+Diese Einstellungen gelten für beide Authentifizierungsmethoden.
+
+- **Sync Strategy:** **Scheduled** für automatische Läufe oder **Manual** für einen Start auf Anforderung.
+- **Sync Interval:** Intervall geplanter Läufe; die Voreinstellung beträgt 60 Minuten.
+- **Space Keys:** Bereiche mit **In** einbeziehen oder mit **Not In** ausschließen. Bereichsschlüssel sind groß- und kleinschreibungssensitiv und stehen beispielsweise in einer URL wie `/wiki/spaces/ENG/overview`.
+- **Page IDs:** Einzelne Seiten auswählen oder ausschließen; untergeordnete Seiten werden mit erfasst. Die ID steht in der Seiten-URL hinter `/pages/`. Die aktuelle Quellregistrierung nennt das Feld **Page Name**; prüfen Sie die Bezeichnung in Ihrem bereitgestellten Workspace.
+- **Blogpost IDs:** Bestimmte Blogbeiträge auswählen oder ausschließen. Die ID kann hinter `/blog/YYYY/MM/DD/` in der URL stehen.
+- **Modified Date / Created Date:** Inhalte nach Änderungs- oder Erstellungsdatum begrenzen, etwa mit **Is After**, **Is Before** oder **Is Between**.
+
+Synchronisierungsfilter begrenzen die verarbeiteten Bereiche, Seiten und Blogbeiträge. Der zugängliche Team-Konnektor liest dennoch Confluence-Nutzer und Gruppen für Identitäts- und Berechtigungszuordnungen; Inhaltsfilter garantieren deshalb nicht, dass keine weiteren Quellmetadaten gelesen werden. Indexierungsfilter sollen bestimmen, welche synchronisierten Inhalte in der Suche erscheinen; deaktivierte Indexierung verhindert für sich genommen nicht den Abruf der Quelldatensätze. Für Seiten gibt es **Index Pages**, **Index Page Attachments** und **Index Page Comments**; für Beiträge **Index Blogposts**, **Index Blogpost Attachments** und **Index Blogpost Comments**. Laut Quellleitfaden sind alle sechs Optionen zunächst aktiviert. Beachten Sie bei den Kommentarschaltern die folgende Warnung.
+
+<Warning>
+  Der zugängliche Confluence-Cloud-Konnektor registriert **Index Page Comments** und **Index Blogpost Comments**, liest diese beiden Einstellungen im geprüften Synchronisationspfad aber nicht aus. Verlassen Sie sich nicht darauf, dass die Schalter Kommentare ausschließen, bevor Novaplan das Verhalten der betriebenen Enterprise-Version bestätigt. Wenn Kommentare ausgeschlossen werden müssen, stimmen Sie vor der Synchronisierung vertraulicher Bereiche einen geprüften Quell- oder Konnektorumfang ab.
+</Warning>
+
+Beispiele: Mit **Space Keys → In → ENG** wählen Sie einen Bereich; mit **Page IDs → In** eine Dokumentationsstruktur. Deaktivieren Sie **Index Page Attachments**, wenn Seiten, aber keine Anhänge durchsuchbar sein sollen.
+
+Klicken Sie auf **Save** und wählen Sie im Dialog **Start syncing now** oder **I'll do it later**. Den Fortschritt können Sie unter **Indexing Progress** prüfen.
+
+## Verhalten bei weiteren Läufen
+
+Der erste Lauf erfasst zugängliche Bereiche, Seiten, Blogbeiträge, Kommentare und Anhänge. Seine Dauer hängt vom Umfang des Confluence-Workspaces ab. Spätere Läufe synchronisieren anhand von Zeitstempeln neue oder geänderte Inhalte. Der Konnektor liest alle Anhänge einer Seite oder eines Blogbeitrags. Unterbricht ein vorübergehender Fehler die Anhangliste, bleiben bereits gelesene Anhänge erhalten und das Zeitfenster wird beim nächsten Lauf erneut gelesen. Scheitert die erste Anfrage dauerhaft, werden die in den Suchergebnissen enthaltenen Anhänge verwendet.
+
+Bereichsrechte und Seiteneinschränkungen bestimmen, welche Inhalte Personen in Novaplan AI sehen dürfen. Anhänge, Kommentare und Antworten übernehmen die Sichtbarkeit einer eingeschränkten Seite; Änderungen der Seiteneinschränkung gelten auch für die gespeicherten Inhalte. Eine Einschränkung auf eine noch nicht synchronisierte Gruppe bleibt bestehen. Deren Mitglieder erhalten Zugriff, nachdem die Gruppe synchronisiert und die Seite erneut gelesen wurde. Schlagen Abfragen von Bereichsrechten, Gruppenmitgliedschaften oder Seiteneinschränkungen vorübergehend fehl, bleiben die gespeicherten Rechte bestehen und die Abfrage wird bei einem späteren Lauf wiederholt. Ein solcher Fehler macht die Seite nicht für den gesamten Bereich sichtbar.
+
+## Fehlerbehebung
+
+- **OAuth-Zugangsdaten ungültig:** Prüfen Sie Client ID und Secret ohne zusätzliche Leerzeichen sowie den Status der Atlassian-Anwendung.
+- **Callback-Fehler:** Vergleichen Sie die **Redirect URL** in Novaplan AI exakt mit der **Callback URL** in Atlassian.
+- **API-Token schlägt fehl:** Prüfen Sie Token, Ablauf, **Email** und **Base URL**. Die URL beginnt mit `https://`, enthält keinen abschließenden Schrägstrich und keinen Pfad wie `/wiki`.
+- **Autorisierung fehlgeschlagen:** Verwenden Sie ein Konto mit Confluence-Zugriff, wählen Sie die richtige Site und prüfen Sie die benötigten Scopes.
+- **Keine Daten:** Prüfen Sie den Status **Active**, den Bereichszugriff des authentifizierenden Kontos und die Filter. Kontrollieren Sie die Synchronisierungsprotokolle.
+- **Einzelne Inhalte fehlen:** Prüfen Sie Bereichsberechtigungen und Einschränkungen einzelner Seiten.
+- **Datensätze vorhanden, aber unsichtbar:** Prüfen Sie die E-Mail-Zuordnung und Sichtbarkeit im Atlassian-Profil sowie den Indexierungsstatus unter **All Records**.
+
+Der **Confluence-Konnektor** importiert Inhalte für die Suche. Das Confluence-Toolset erlaubt entsprechend konfigurierten Agenten Aktionen wie das Erstellen oder Ändern von Seiten. Für Hilfe schreiben Sie an [support@novaplan.ai](mailto:support@novaplan.ai).
+
+## Weiterführende Atlassian-Dokumentation
+
+- [OAuth 2.0 (3LO)](https://developer.atlassian.com/cloud/confluence/oauth-2-3lo-apps/)
+- [Confluence-Scopes](https://developer.atlassian.com/cloud/confluence/scopes/)

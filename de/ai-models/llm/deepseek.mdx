@@ -1,0 +1,42 @@
+---
+title: "DeepSeek"
+description: "Ein DeepSeek-Modell über die OpenAI-kompatible API mit Novaplan AI verbinden."
+---
+
+# DeepSeek konfigurieren
+
+![Konfigurationsansicht für OpenAI-kompatible APIs](/images/ai-models/llm/OpenAICompatible_LLMConfig.png)
+
+Novaplan AI kann ein DeepSeek-Modell über dessen OpenAI-kompatible API verwenden. Novaplan unterstützt Sie bei der Anbindung an den verwalteten Workspace. Sie benötigen ein DeepSeek-Konto, einen API-Schlüssel, ein freigegebenes Modell und Netzwerkzugriff aus der Novaplan-Umgebung auf DeepSeek.
+
+<Warning>
+  DeepSeek hat die älteren API-Modellnamen `deepseek-chat` und `deepseek-reasoner` im Juli 2026 eingestellt. Übernehmen Sie diese IDs nicht aus älteren Anleitungen. Prüfen Sie die [aktuelle Modellliste](https://api-docs.deepseek.com/quick_start/pricing/) vor der Einrichtung oder Erneuerung. Modell und optionale Funktionen müssen außerdem mit der bereitgestellten Novaplan-Version getestet werden.
+</Warning>
+
+## Erforderliche Angaben
+
+| Feld | Wert |
+| --- | --- |
+| **Provider Type** | **OpenAI API Compatible** |
+| **Endpoint URL** | Die von DeepSeek dokumentierte OpenAI-Basisadresse `https://api.deepseek.com`. Lassen Sie den im Novaplan-Workspace akzeptierten Wert vor dem Speichern prüfen; ältere Beispiele nannten `/v1/`. |
+| **API Key** | Schlüssel aus der [DeepSeek Platform](https://platform.deepseek.com); nur in der freigegebenen Modellkonfiguration hinterlegen. |
+| **Model Name** | Exakte aktuelle API-Modell-ID. DeepSeek nennt derzeit `deepseek-flash`; prüfen Sie die Verfügbarkeit für Ihr Konto und Ihre Region. |
+
+**Endpoint URL**, **API Key** und **Model Name** sind im Novaplan-Formular Pflichtfelder. Die von DeepSeek veröffentlichte Basisadresse enthält kein `/v1/`. Leiten Sie die Notwendigkeit dieses Suffixes nicht allein aus der Bezeichnung **OpenAI API Compatible** ab. Novaplan sollte die Verbindung aus dem verwalteten Workspace testen, bevor Kunden sie produktiv verwenden.
+
+Erstellen Sie den Schlüssel im Bereich **API Keys** der DeepSeek Platform und kopieren Sie ihn unmittelbar. Stimmen Sie Abrechnung, erlaubte Datenverarbeitung und Modellauswahl mit Ihrer Administration ab. Schreiben Sie den Schlüssel niemals in Dokumentation, Screenshots, Chats oder Quellcode.
+
+## Optionale Funktionen
+
+Die aktuelle `deepseek-flash`-API unterstützt laut [API-Referenz](https://api-docs.deepseek.com/api/create-chat-completion/) Bildeingaben und laut [Anleitung zum Thinking Mode](https://api-docs.deepseek.com/guides/thinking_mode/) einen Denkmodus. Aktivieren Sie **Multimodal** nur, nachdem Novaplan bestätigt hat, dass die bereitgestellte Integration Bilder in einem unterstützten Format übermittelt. Prüfen Sie ebenso **Reasoning**: DeepSeek verwendet eine eigene Steuerung für den Denkmodus; das Kontrollkästchen allein belegt nicht, wie Novaplan diese Einstellung überträgt.
+
+Modellnamen und Fähigkeiten ändern sich. Prüfen Sie bei jeder Konfigurationsänderung die aktuelle DeepSeek-Dokumentation und die Eigenschaften des gewählten Modells.
+
+## Modell verbinden
+
+1. Wählen Sie in Novaplan AI **OpenAI API Compatible** als **Provider Type**.
+2. Tragen Sie die mit Novaplan abgestimmte **Endpoint URL**, den **API Key** und die genaue **Model Name**-ID ein.
+3. Setzen Sie **Multimodal** und **Reasoning** erst nach einem Test mit dem gewählten Modell und der bereitgestellten Novaplan-Integration.
+4. Klicken Sie auf **Add Model** und führen Sie einen zulässigen Texttest durch. Prüfen Sie Bildverarbeitung und Denkmodus bei Bedarf getrennt.
+
+Bei Verbindungsfehlern prüfen Sie die Basisadresse, die Erreichbarkeit aus dem verwalteten Workspace, API-Schlüssel, Guthaben, Modell-ID und den aktuellen DeepSeek-Status. Vergleichen Sie Fehler bei Bild- oder Denkmodus mit der aktuellen API-Referenz. [Novaplan Support](/de/contact-us) hilft bei der Anbindung.

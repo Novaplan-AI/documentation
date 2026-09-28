@@ -1,0 +1,34 @@
+---
+title: "LiteLLM Proxy"
+description: "Modelle über einen LiteLLM Proxy mit Novaplan AI verbinden."
+---
+
+# LiteLLM Proxy konfigurieren
+
+LiteLLM Proxy ist ein Gateway mit OpenAI-kompatibler API. Es kann Anfragen an mehrere Modellanbieter weiterleiten und Schlüssel, Ausgabenlimits und Fallbacks zentral verwalten. Novaplan AI verbindet sich mit dem Proxy; dessen Betrieb und Konfiguration stimmen Sie mit Ihrer Administration und Novaplan ab.
+
+Über LiteLLM Proxy können in Novaplan AI **Sprachmodelle, Embeddings, Bildgenerierung, Text-zu-Sprache und Sprache-zu-Text** separat konfiguriert werden. Die einzelnen Konfigurationen dürfen denselben Proxy verwenden.
+
+## Voraussetzung
+
+Ein erreichbarer LiteLLM Proxy muss bereits laufen und mindestens ein Modell in seiner `config.yaml` anbieten. Die [LiteLLM-Proxy-Dokumentation](https://docs.litellm.ai/docs/simple_proxy) beschreibt die Einrichtung; der Standardport ist `4000`.
+
+## Erforderliche Angaben
+
+| Feld | Bedeutung |
+| --- | --- |
+| **Endpoint URL** | Erreichbare Basisadresse des Proxys samt Protokoll und Port. Die Voreinstellung lautet `http://host.docker.internal:4000`. Auf einem anderen Server kann dies beispielsweise `https://litellm.example.com` sein. |
+| **API Key** | `master_key` oder ein gültiger virtueller Schlüssel des LiteLLM Proxys. Das ist **nicht** der Schlüssel des dahinterliegenden Modellanbieters. |
+| **Model Name** | Exakter `model_name` aus der Proxy-Konfiguration, nicht automatisch die Modell-ID des dahinterliegenden Anbieters. |
+
+Wenn in `config.yaml` beispielsweise `model_name: my-gpt` auf ein OpenAI-Modell zeigt, tragen Sie in Novaplan AI `my-gpt` ein. Eine Administration kann die angebotenen Namen mit dem authentifizierten `/v1/models`-Endpoint des Proxys prüfen.
+
+Die Voreinstellung mit `host.docker.internal` passt nur zu einer Umgebung, in der Novaplan AI den Proxy unter dieser Hostadresse erreichen kann. Bei einer anderen Netzwerkarchitektur verwenden Sie die tatsächlich erreichbare Adresse; `localhost` verweist immer auf die Maschine beziehungsweise den Container, von dem die Anfrage ausgeht.
+
+## Optionale Angaben
+
+- **Model Friendly Name:** Anzeigename; ohne Wert wird der Modellname verwendet.
+- **Context Length:** Dokumentierte Kontextlänge des gewählten Modells. Ohne Wert nutzt Novaplan AI einen konservativen Standard.
+- **Is Multimodal** und **Is Reasoning:** Beide Optionen sind in der Ausgangskonfiguration aktiviert. Passen Sie sie an die tatsächlichen Modellfähigkeiten an.
+
+Bei **Connection refused** prüfen Sie Proxy-Status und Netzwerkadresse. Bei **Model not found** vergleichen Sie den eingegebenen Namen mit `model_name` in der Proxy-Konfiguration. Bei einem Authentifizierungsfehler prüfen Sie `master_key` beziehungsweise Gültigkeit und Berechtigungen des virtuellen Schlüssels. [Novaplan Support](/de/contact-us) hilft bei der Anbindung.

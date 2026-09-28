@@ -1,0 +1,268 @@
+---
+title: "KI-Modelle im Überblick"
+description: "Sprach-, Embedding-, Bild- und Audiomodelle für Ihren Novaplan AI Workspace konfigurieren."
+---
+
+Auf der Seite **AI Models** verbinden Workspace-Administratoren Novaplan AI mit einem oder mehreren KI-Anbietern. Die konfigurierten Modelle unterstützen die Antworten im Chat, die Zusammenfassung von Dokumenten und KI-Agenten. Sie können mehrere Anbieter verbinden und später zwischen ihnen wechseln.
+
+Novaplan übernimmt den Großteil der Einrichtung. Diese Referenz bleibt für Administratoren verfügbar. Stimmen Sie Änderungen an Modellen, Zugangsdaten und Standardwerten mit dem Novaplan-Team ab.
+
+Für KI-Funktionen benötigen Sie mindestens ein **LLM**. **Embedding-Modelle** sind für die Dokumentensuche zuständig und werden separat konfiguriert. Nur Workspace-Administratoren und -Owner können die Einstellungen für KI-Modelle öffnen.
+
+## Sprachmodelle (LLMs)
+
+Öffnen Sie in der linken Seitenleiste **Workspace Settings → AI Models**. Die Seite zeigt zunächst **Providers**; wählen Sie **LLMs**, um Sprachmodelle zu konfigurieren.
+
+### Erstes LLM hinzufügen
+
+<Steps>
+  <Step title="AI Models öffnen">
+    Öffnen Sie **Workspace Settings → AI Models**.
+  </Step>
+  <Step title="LLMs auswählen">
+    Wechseln Sie vom Bereich **Providers** zum Tab **LLMs**.
+  </Step>
+  <Step title="Anbieter suchen">
+    Wählen Sie eine Anbieterkarte oder filtern Sie über das Suchfeld nach dem Namen.
+  </Step>
+  <Step title="Konfiguration öffnen">
+    Klicken Sie auf **Configure**.
+  </Step>
+  <Step title="Pflichtfelder ausfüllen">
+    Tragen Sie die erforderlichen Angaben ein, etwa API-Schlüssel, Endpoint-URL und Modellname. Die Tabelle unten zeigt die Felder je Anbieter.
+  </Step>
+  <Step title="Optionen prüfen">
+    **Model Friendly Name** ist ein Anzeigename im Chat. **Context Length** überschreibt bei Bedarf das Tokenlimit (`1` bis `1.000.000`). **Multimodal** aktivieren Sie für Modelle mit Bildeingabe; die Option ist standardmäßig an. **Reasoning** aktivieren Sie für Modelle mit Reasoning-Funktion; die Option ist standardmäßig aus.
+  </Step>
+  <Step title="Speichern und prüfen">
+    Klicken Sie auf **Add Model**. Novaplan AI prüft die Zugangsdaten mit einem Live-Health-Check.
+  </Step>
+  <Step title="Standardmodell festlegen">
+    Das erste hinzugefügte LLM wird automatisch als Standard für KI-Funktionen verwendet.
+  </Step>
+</Steps>
+
+### Anbieterreferenz für LLMs
+
+Die Modellkennungen sind Beispiele. Verwenden Sie die Kennung, die der jeweilige Anbieter für Ihr Konto und Modell vorgibt, und testen Sie das Modell vor dem produktiven Einsatz mit Ihrem Novaplan-AI-Workspace.
+
+| Anbieter | Pflichtfelder | Optionale Felder | Beispiel für Modellnamen |
+| --- | --- | --- | --- |
+| **OpenAI** | API Key, Model Name | — | `gpt-6-astra`, `gpt-6-sol`, `gpt-6-luna` |
+| **Anthropic** | API Key, Model Name | — | `claude-opus-5-5`, `claude-sonnet-5`, `claude-haiku-4-5` |
+| **Gemini** | API Key, Model Name | — | `gemini-3-flash-preview`, `gemini-3.1-pro-preview` |
+| **Azure OpenAI** | Endpoint URL, API Key, Deployment Name, Model Name | — | `gpt-5`, `gpt-5-mini`, `gpt-5-nano` |
+| **Azure AI** | Endpoint URL, API Key, Model Name | — | Name Ihrer Foundry-Bereitstellung; siehe [Azure-AI-Anleitung](/de/ai-models/llm/azure-ai) |
+| **Cohere** | API Key, Model Name | — | `command-a-03-2025` |
+| **Mistral** | API Key, Model Name | — | `mistral-large-latest` |
+| **Groq** | API Key, Model Name | — | `meta-llama/llama-4-scout-17b-16e-instruct` |
+| **xAI** | API Key, Model Name | — | `grok-4.7` |
+| **MiniMax** | API Key, Model Name | — | `MiniMax-M2.7`, `MiniMax-M2.7-highspeed` |
+| **Fireworks** | API Key, Model Name | — | `accounts/fireworks/models/kimi-k2-instruct` |
+| **Together** | API Key, Model Name | Endpoint URL | `deepseek-ai/DeepSeek-V3` |
+| **OpenAI Compatible** | Endpoint URL, API Key, Model Name | — | `deepseek-ai/DeepSeek-V3` |
+| [**OpenRouter**](/de/ai-models/llm/openrouter) | API Key, Model Name | — | Aktuelle ID im Format `provider/model` |
+| [**LiteLLM Proxy**](/de/ai-models/llm/litellm-proxy) | Endpoint URL, API Key, Model Name | — | Im Proxy konfigurierter `model_name` |
+| **Ollama** | Model Name | API Key, Endpoint URL | `gemma4:latest`, `hf.co/unsloth/gpt-oss-20b-GGUF:F16` |
+| [**LM Studio**](/de/ai-models/llm/lm-studio) | Endpoint URL, Model Name | API Key | Von LM Studio bereitgestellte Modell-ID |
+| [**Vertex AI**](/de/ai-models/llm/vertex-ai) | GCP Project ID, Service Account JSON, Model Name | Region | Für Ihr Google-Cloud-Projekt verfügbares Modell |
+| **Amazon Bedrock** | AWS Region, Model Name, Provider | AWS Access Key ID, AWS Secret Access Key | `us.anthropic.claude-sonnet-4-20250514-v1:0` |
+
+**Hinweise zu einzelnen Anbietern:**
+
+- **Azure OpenAI:** **Deployment Name** ist der Name der Bereitstellung in Azure AI Studio, nicht die Modell-ID.
+- **Azure AI:** Übernehmen Sie die Endpoint-URL und den Bereitstellungsnamen aus Foundry. Die Claude Messages API verwendet häufig `https://<resource>.services.ai.azure.com/anthropic`; OpenAI-kompatible Bereitstellungen nutzen einen ressourcenspezifischen `/openai/v1/`-Endpoint. Prüfen Sie die [Azure-AI-Anleitung](/de/ai-models/llm/azure-ai) und die Unterstützung des API-Formats durch Novaplan.
+- **OpenAI Compatible:** Nutzen Sie diese Option für Dienste mit kompatiblem OpenAI-API-Format.
+- **Ollama:** Eine lokale Ollama-Instanz benötigt keinen API-Schlüssel. In der technischen Referenz wird `http://host.docker.internal:11434` als Standard-Endpoint genannt. Novaplan muss prüfen, ob der Server aus der betriebenen Umgebung erreichbar ist.
+- **Amazon Bedrock:** Lassen Sie die AWS-Schlüsselfelder nur leer, wenn Novaplan für das verwaltete Backend eine freigegebene AWS-Anmeldequelle eingerichtet hat, etwa eine Workload-Rolle. Anmeldedaten auf Ihrem eigenen Computer werden nicht automatisch verwendet.
+
+### Konfigurierte LLMs verwalten
+
+Unter **Configured** können Sie ein Modell mit **Edit** bearbeiten, mit **Set as Default** zum Standard machen oder mit **Delete** entfernen. Beim Löschen bestätigen Sie den Modellnamen.
+
+Falls der Health-Check beim Speichern scheitert, prüfen Sie den API-Schlüssel, die Endpoint-URL und Region (bei Azure), die Erreichbarkeit einer lokalen Ollama-Instanz sowie die exakte Modellkennung beim Anbieter.
+
+## Embedding-Modelle
+
+Embedding-Modelle wandeln Dokumente und Suchanfragen in Vektoren um. Novaplan AI verwendet sie für die Indexierung, die semantische Suche und das Abrufen relevanter Inhalte. Vor der Indexierung oder Suche muss mindestens ein Embedding-Modell konfiguriert sein.
+
+Das integrierte **BAAI/bge-large-en-v1.5** ist laut dieser Referenz als Systemstandard vorhanden. Einen externen Anbieter benötigen Sie nur, wenn Sie ein anderes Modell verwenden möchten.
+
+Öffnen Sie **Workspace Settings → AI Models → Embedding**.
+
+### Embedding-Modell hinzufügen
+
+<Steps>
+  <Step title="AI Models öffnen">
+    Öffnen Sie **Workspace Settings → AI Models** und wählen Sie **Embedding**.
+  </Step>
+  <Step title="Anbieter suchen">
+    Wählen Sie eine Anbieterkarte oder suchen Sie nach dem Namen.
+  </Step>
+  <Step title="Konfiguration öffnen">
+    Klicken Sie auf **Configure**.
+  </Step>
+  <Step title="Pflichtfelder ausfüllen">
+    Tragen Sie die für Ihren Anbieter erforderlichen Zugangsdaten und die Modellkennung ein.
+  </Step>
+  <Step title="Optionen prüfen">
+    **Model Friendly Name** ist ein Anzeigename. Mit **Output Dimensions** können Sie die Vektorgröße überschreiben (`1` bis `65.536`), sofern das Modell dies unterstützt. **Multimodal** aktivieren Sie für Modelle, die Bilder einbetten können; diese Option ist standardmäßig aus.
+  </Step>
+  <Step title="Speichern und prüfen">
+    Klicken Sie auf **Add Model**. Novaplan AI führt einen Health-Check aus.
+  </Step>
+  <Step title="Standardmodell festlegen">
+    Das erste hinzugefügte Embedding-Modell wird automatisch Standard für die Dokumentenindexierung und Suche.
+  </Step>
+</Steps>
+
+### Anbieterreferenz für Embeddings
+
+| Anbieter | Pflichtfelder | Optionale Felder | Beispiel für Modellnamen |
+| --- | --- | --- | --- |
+| **Default (System)** | Keine | — | `BAAI/bge-large-en-v1.5` |
+| **OpenAI** | API Key, Model Name | Output Dimensions | `text-embedding-3-small`, `text-embedding-3-large` |
+| **Gemini** | API Key, Model Name | — | `gemini-embedding-001` |
+| **Azure OpenAI** | Endpoint URL, API Key, Deployment Name, Model Name | — | `text-embedding-3-small` |
+| **Azure AI** | Endpoint URL, API Key, Model Name | — | `text-embedding-ada-002`, `embed-v-4-0` |
+| **Cohere** | API Key, Model Name | — | `embed-v4.0` |
+| **Mistral** | API Key, Model Name | — | `mistral-embed` |
+| **Together** | API Key, Model Name | Endpoint URL | `togethercomputer/m2-bert-80M-32k-retrieval` |
+| **OpenAI Compatible** | Endpoint URL, API Key, Model Name | — | `text-embedding-3-small` |
+| [**OpenRouter**](/de/ai-models/embedding/openrouter) | API Key, Model Name | Dimensions | Aktuelle ID im Format `provider/model` |
+| [**LiteLLM Proxy**](/de/ai-models/embedding/litellm-proxy) | Endpoint URL, API Key, Model Name | Dimensions | Im Proxy konfigurierter `model_name` |
+| **Ollama** | Model Name | Endpoint URL | `mxbai-embed-large` |
+| [**LM Studio**](/de/ai-models/embedding/lm-studio) | Endpoint URL, Model Name | API Key, Dimensions | Von LM Studio bereitgestellte Modell-ID |
+| [**Vertex AI**](/de/ai-models/embedding/vertex-ai) | GCP Project ID, Service Account JSON, Model Name | Region, Dimensions | Für Ihr Google-Cloud-Projekt verfügbares Modell |
+| **Sentence Transformers** | Model Name | — | `all-MiniLM-L6-v2` |
+| **HuggingFace** | Model Name | — | `sentence-transformers/all-MiniLM-L6-v2` |
+| **Jina AI** | API Key, Model Name | — | `jina-embeddings-v3` |
+| **Voyage** | API Key, Model Name | — | `voyage-3.5` |
+| **Amazon Bedrock** | AWS Region, Model Name, Provider | AWS Access Key ID, AWS Secret Access Key | `cohere2.embed-multilingual-v3` |
+
+**Weitere Hinweise:**
+
+- **Azure OpenAI:** **Deployment Name** ist der Bereitstellungsname in Azure, nicht die Modell-ID.
+- **Azure AI:** Die Endpoint-URL kann das Muster `https://<resource>.services.ai.azure.com/openai/v1/` haben.
+- **OpenAI Compatible:** Für Anbieter mit OpenAI-kompatibler Embeddings-API.
+- **Ollama:** Eine lokale Instanz benötigt keinen API-Schlüssel. Die technische Referenz nennt `http://host.docker.internal:11434` als Standard-Endpoint.
+- **Sentence Transformers / HuggingFace:** Laufen laut Referenz lokal in der betriebenen Umgebung und benötigen keine externe API.
+- **Amazon Bedrock:** Lassen Sie die AWS-Schlüsselfelder nur leer, wenn Novaplan für das verwaltete Backend eine freigegebene AWS-Anmeldequelle eingerichtet hat. Der Provider-Wähler bietet Cohere, Amazon (Titan) und Other.
+
+### Konfigurierte Embedding-Modelle verwalten
+
+Unter **Configured** können Sie mit **Edit** Zugangsdaten und Einstellungen ändern, mit **Set as Default** das Modell für neue Indexierungen und Suchanfragen auswählen oder es mit **Delete** entfernen.
+
+<Note>
+  Ein Wechsel des Standard-Embedding-Modells indexiert bestehende Dokumente nicht automatisch neu. Alte Dokumentvektoren und neue Suchvektoren können aus unterschiedlichen Vektorräumen stammen; dadurch sinkt die Suchqualität. Planen Sie nach einem Modellwechsel eine erneute Indexierung.
+</Note>
+
+Falls ein Health-Check fehlschlägt, prüfen Sie Schlüssel, Modellnamen, Azure-Endpoint und Region sowie die Verfügbarkeit lokal betriebener Modelle. **Output Dimensions** funktioniert nur bei Modellen mit entsprechendem Parameter; bei anderen Modellen kann die Einstellung Fehler auslösen.
+
+<Warning>
+  Halten Sie API-Schlüssel vertraulich und speichern Sie sie niemals in öffentlich zugänglichem Code oder Versionsverwaltungssystemen.
+</Warning>
+
+## Modelle zur Bildgenerierung
+
+Modelle zur Bildgenerierung ermöglichen es geeigneten Agenten und Workflows, Bilder aus Textanweisungen zu erstellen. Dafür muss mindestens ein entsprechendes Modell im Workspace konfiguriert sein. Der zugängliche Anbieterkatalog enthält **OpenAI**, **Gemini**, **OpenRouter** und **LiteLLM Proxy**. Prüfen Sie, welche Optionen Ihr bereitgestellter Workspace tatsächlich anzeigt.
+
+Öffnen Sie **Workspace Settings → AI Models → Image Generation**. Nur Administratoren und Owner können diese Einstellungen öffnen.
+
+### Bildmodell hinzufügen
+
+<Steps>
+  <Step title="AI Models öffnen">
+    Öffnen Sie **Workspace Settings → AI Models** und wählen Sie **Image Generation**.
+  </Step>
+  <Step title="Anbieter wählen">
+    Klicken Sie bei der gewünschten Anbieterkarte auf **Configure**.
+  </Step>
+  <Step title="Modell eintragen">
+    Geben Sie die für den Anbieter angezeigten Pflichtfelder ein. Für LiteLLM Proxy wird zusätzlich eine erreichbare **Endpoint URL** benötigt. Optional können Sie einen **Model Friendly Name** festlegen.
+  </Step>
+  <Step title="Speichern und prüfen">
+    Klicken Sie auf **Add Model**. Novaplan AI prüft die Zugangsdaten. Das erste hinzugefügte Bildmodell wird automatisch zum Standard.
+  </Step>
+</Steps>
+
+| Anbieter | Pflichtfelder | Modellauswahl |
+| --- | --- | --- |
+| [**OpenAI**](/de/ai-models/image-generation/openai) | API Key, Model Name | Aktuell verfügbares Modell aus dem OpenAI-Katalog; das alte Beispiel `dall-e-3` funktioniert nicht mehr |
+| [**Gemini**](/de/ai-models/image-generation/gemini) | API Key, Model Name | Modell, das für Ihr Google-Konto verfügbar ist |
+| [**OpenRouter**](/de/ai-models/image-generation/openrouter) | API Key, Model Name | Aktuelle Kennung im Format `provider/model` |
+| [**LiteLLM Proxy**](/de/ai-models/image-generation/litellm-proxy) | Endpoint URL, API Key, Model Name | Im Proxy konfigurierter `model_name` |
+
+OpenAI-Schlüssel erhalten Sie unter [platform.openai.com/api-keys](https://platform.openai.com/api-keys), Gemini-Schlüssel unter [aistudio.google.com/app/apikey](https://aistudio.google.com/app/apikey). Für Imagen kann ein Google Cloud Projekt mit aktivierter Vertex AI API oder ein passender Zugang über Google AI Studio nötig sein.
+
+Unter **Configured** können Sie ein Bildmodell mit **Edit** ändern, mit **Set as Default** zum Standard machen oder nach Bestätigung des Namens mit **Delete** entfernen. Bei einem fehlgeschlagenen Health-Check prüfen Sie Schlüssel, exakte Modellkennung und die Freischaltung für Bildgenerierung beim Anbieter.
+
+## Text-to-Speech-Modelle (TTS)
+
+TTS-Modelle wandeln KI-Antworten in gesprochene Audioausgabe um. Für Sprachfunktionen muss mindestens ein TTS-Modell konfiguriert sein. Der zugängliche Katalog enthält **OpenAI**, **Gemini**, **OpenRouter** und **LiteLLM Proxy**. Prüfen Sie die Verfügbarkeit und möglichen Stimmen im bereitgestellten Workspace und beim gewählten Modell.
+
+Öffnen Sie **Workspace Settings → AI Models → TTS**. Nur Administratoren und Owner können diese Einstellungen öffnen.
+
+### TTS-Modell hinzufügen
+
+<Steps>
+  <Step title="AI Models öffnen">
+    Öffnen Sie **Workspace Settings → AI Models** und wählen Sie **TTS**.
+  </Step>
+  <Step title="Anbieter konfigurieren">
+    Klicken Sie auf **Configure** und tragen Sie die angezeigten Pflichtfelder ein. LiteLLM Proxy benötigt zusätzlich eine erreichbare **Endpoint URL**.
+  </Step>
+  <Step title="Optionen auswählen">
+    Wählen Sie bei Bedarf **Voice**, **Audio Format** und einen **Model Friendly Name**.
+  </Step>
+  <Step title="Speichern und prüfen">
+    Klicken Sie auf **Add Model**. Nach dem Health-Check wird das erste hinzugefügte TTS-Modell automatisch Standard.
+  </Step>
+</Steps>
+
+| Anbieter | Pflichtfelder | Beispiel für Modellnamen | Standardstimme | Standardformat |
+| --- | --- | --- | --- | --- |
+| [**OpenAI**](/de/ai-models/tts/openai) | API Key, Model Name | `tts-1`, `tts-1-hd`, `gpt-4o-mini-tts` | Alloy | MP3 |
+| [**Gemini**](/de/ai-models/tts/gemini) | API Key, Model Name | `gemini-3.1-flash-tts-preview`, `gemini-2.5-flash-preview-tts`, `gemini-2.5-pro-preview-tts` | Kore | WAV |
+| [**OpenRouter**](/de/ai-models/tts/openrouter) | API Key, Model Name | Aktuelle Kennung im Format `provider/model` | Modellabhängig | Modellabhängig |
+| [**LiteLLM Proxy**](/de/ai-models/tts/litellm-proxy) | Endpoint URL, API Key, Model Name | Im Proxy konfigurierter `model_name` | Modellabhängig | Modellabhängig |
+
+**Stimmen und Formate:** OpenAI nennt Alloy, Echo, Fable, Onyx, Nova und Shimmer; als Formate sind MP3, Opus, AAC, FLAC und WAV dokumentiert. Für Gemini werden 30 vorgefertigte Stimmen genannt: Zephyr, Puck, Charon, Kore, Fenrir, Leda, Orus, Aoede, Callirrhoe, Autonoe, Enceladus, Iapetus, Umbriel, Algieba, Despina, Erinome, Algenib, Rasalgethi, Laomedeia, Achernar, Alnilam, Schedar, Gacrux, Pulcherrima, Achird, Zubenelgenubi, Vindemiatrix, Sadachbia, Sadaltager und Sulafat. WAV und PCM benötigen keine serverseitige Umwandlung; für MP3, Opus, AAC und FLAC ist **ffmpeg** im von Novaplan betriebenen Backend erforderlich. Bei Problemen hilft [Novaplan Support](/de/contact-us).
+
+Unter **Configured** können Sie Stimmen, Formate und Zugangsdaten mit **Edit** ändern, über **Set as Default** den Standard festlegen oder das Modell mit **Delete** entfernen. Bei einem fehlgeschlagenen Health-Check prüfen Sie API-Schlüssel, exakte Modellkennung und bei Gemini-komprimierten Formaten die Verfügbarkeit von ffmpeg in der betriebenen Umgebung.
+
+## Speech-to-Text-Modelle (STT)
+
+STT-Modelle wandeln gesprochene Sprache in Text um. Für Spracheingaben muss mindestens ein STT-Modell eingerichtet sein. Der zugängliche Katalog enthält sechs Optionen: **OpenAI**, **Gemini**, **OpenRouter**, **LiteLLM Proxy**, **Whisper** mit `faster-whisper` im von Novaplan betriebenen Backend und **Wispr Flow**. Prüfen Sie die tatsächliche Verfügbarkeit im bereitgestellten Workspace.
+
+Öffnen Sie **Workspace Settings → AI Models → STT**. Nur Administratoren und Owner können diese Einstellungen öffnen.
+
+### STT-Modell hinzufügen
+
+<Steps>
+  <Step title="AI Models öffnen">
+    Öffnen Sie **Workspace Settings → AI Models** und wählen Sie **STT**.
+  </Step>
+  <Step title="Anbieter konfigurieren">
+    Klicken Sie auf **Configure** und tragen Sie die für den Anbieter angezeigten Pflichtfelder ein, darunter für LiteLLM Proxy eine erreichbare **Endpoint URL** oder für Whisper im verwalteten Novaplan-Backend die Modellgröße.
+  </Step>
+  <Step title="Optionen auswählen">
+    Je nach Anbieter können Sprache, Gerät, Rechenformat, Anwendungstyp und **Model Friendly Name** eingestellt werden.
+  </Step>
+  <Step title="Speichern und prüfen">
+    Klicken Sie auf **Add Model**. Novaplan AI prüft die Konfiguration und macht das erste hinzugefügte STT-Modell zum Standard.
+  </Step>
+</Steps>
+
+| Anbieter | Pflichtfelder | Beispiel für Modellnamen oder Größen |
+| --- | --- | --- |
+| [**OpenAI**](/de/ai-models/stt/openai) | API Key, Model Name | `whisper-1`, `gpt-4o-transcribe`, `gpt-4o-mini-transcribe` |
+| [**Gemini**](/de/ai-models/stt/gemini) | API Key, Model Name | `gemini-2.5-flash`, `gemini-2.5-pro`, `gemini-3-flash-preview` |
+| [**OpenRouter**](/de/ai-models/stt/openrouter) | API Key, Model Name | Aktuelle Kennung im Format `provider/model` |
+| [**LiteLLM Proxy**](/de/ai-models/stt/litellm-proxy) | Endpoint URL, API Key, Model Name | Im Proxy konfigurierter `model_name` |
+| [**Whisper (lokal)**](/de/ai-models/stt/whisper) | Modellgröße | `tiny`, `base`, `small`, `medium`, `large-v2`, `large-v3`, `distil-large-v3` |
+| [**Wispr Flow**](/de/ai-models/stt/wispr-flow) | API Key | `flow-v1` wird automatisch gewählt. |
+
+**Weitere technische Hinweise:** Whisper benötigt keinen API-Schlüssel für einen externen Transkriptionsdienst. Beim ersten Start werden Modellgewichte von Hugging Face geladen; Novaplan stellt dafür den Backend-Zugriff bereit. Optional sind **Device** (`Auto`, `CPU`, `CUDA`), **Compute Type** (`int8`, `float16`, `float32`) und ein Verzeichnis für den Modell-Cache. Für Wispr Flow benötigen Sie einen aktiven Schlüssel; Novaplan stellt `ffmpeg` auf dem Backend bereit. Optional sind **Default Language**, **App Type** und ein abweichender API-Endpoint. Zugang erhalten Sie bei [enterprise@wisprflow.ai](mailto:enterprise@wisprflow.ai).
+
+Unter **Configured** können Sie die Einstellungen mit **Edit** ändern, über **Set as Default** den Standard festlegen oder ein Modell nach Bestätigung des Namens mit **Delete** entfernen. Bei einem fehlgeschlagenen Health-Check prüfen Sie Schlüssel und Modellkennungen. Für Whisper muss `faster-whisper` im Novaplan-Backend verfügbar sein; für Wispr Flow wird dort `ffmpeg` benötigt. [Novaplan Support](/de/contact-us) prüft diese serverseitigen Voraussetzungen.

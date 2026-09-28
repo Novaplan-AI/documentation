@@ -1,0 +1,24 @@
+---
+title: "Anmeldung mit Microsoft"
+description: "Microsoft Entra ID als Anmeldemethode für einen verwalteten Novaplan AI Workspace einrichten."
+icon: "microsoft"
+---
+
+Mit der Microsoft-Anmeldung können eingeladene Personen ihr Microsoft-Konto der Organisation zur Authentifizierung verwenden. Novaplan AI bereitet den Workspace normalerweise vor und stimmt Änderungen am Identitätsanbieter mit Ihrer Microsoft-Entra-Administration ab.
+
+## Anwendung registrieren
+
+1. Öffnen Sie im [Microsoft Entra Admin Center](https://entra.microsoft.com/) **App registrations** und erstellen oder wählen Sie die für Novaplan AI freigegebene Anwendung. Wählen Sie den Kontotyp, den Ihre Organisation zulassen möchte.
+2. Öffnen Sie als berechtigte Administration in Novaplan AI **Workspace Settings → Authentication → Microsoft** und kopieren Sie die angezeigte **Redirect URI**.
+3. Tragen Sie diese exakte Adresse in der Microsoft-Anwendungsregistrierung als Redirect URI vom Typ **Single-page application** ein. Der zugängliche Novaplan AI Anmeldeablauf tauscht den Autorisierungscode im Browser mit PKCE aus; die [Microsoft-Anleitung zu Redirect URIs](https://learn.microsoft.com/en-us/entra/identity-platform/how-to-add-redirect-uri) beschreibt die SPA-Option. Verwenden Sie die HTTPS-Adresse des bereitgestellten Workspace, keine Beispieladresse.
+4. Kopieren Sie aus der Registrierung die **Application (client) ID** und die **Directory (tenant) ID** in die Novaplan AI Einstellungen und speichern Sie. Das aktuelle Workspace-Formular verlangt kein Client Secret.
+
+<Warning>
+  Die zugängliche Konfiguration unterstützt die automatische Benutzeranlage beim ersten Anmelden (JIT) und aktiviert sie standardmäßig. Wenn Novaplan die Konten erstellt und Personen einlädt, prüfen Sie vor der Aktivierung der Microsoft-Anmeldung, dass JIT ausgeschaltet ist. Testen Sie mit einem eingeladenen und einem nicht eingeladenen Testkonto. Prüfen Sie den Schalter und das Verhalten im tatsächlich bereitgestellten Enterprise Workspace.
+</Warning>
+
+## Anmeldung prüfen
+
+Bitten Sie eine eingeladene Testperson, **Sign in with Microsoft** auszuwählen. Wenn der Ablauf scheitert, prüfen Sie die exakte Redirect URI, Client- und Tenant-ID, den gewählten Kontotyp, Microsoft-App-Freigaben oder Zustimmung sowie die E-Mail-Adresse der Einladung. Erhalten Sie während der Änderung eine funktionierende Administrations-Anmeldung aufrecht.
+
+Bei Zugangsproblemen helfen Ihre Workspace-Administration oder der [Novaplan AI Support](mailto:support@novaplan.ai).

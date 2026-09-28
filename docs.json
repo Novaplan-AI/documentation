@@ -1,379 +1,765 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "PipesHub Workplace AI",
+  "name": "Novaplan AI",
   "colors": {
-    "primary": "#047857",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "primary": "#104068",
+    "light": "#CBDFF9",
+    "dark": "#104068"
   },
-  "favicon": "/favicon.svg",
+  "favicon": "/logo/novaplan-icon.png",
   "navigation": {
-    "groups": [
+    "languages": [
       {
-        "group": "Welcome To PipesHub",
-        "pages": [
-          "introduction",
-          "for-agents",
-          "for-agents-local-demo",
-          "for-agents-bootstrap",
-          "quickstart",
-          "development",
-          "onboarding",
-          "contact-us"
-        ]
+        "language": "de",
+        "default": true,
+        "groups": [
+          {
+            "group": "Willkommen bei Novaplan AI",
+            "pages": [
+              "de/introduction",
+              "de/quickstart",
+              "de/contact-us"
+            ]
+          },
+          {
+            "group": "Systemübersicht",
+            "pages": [
+              "de/system-overview",
+              "de/system-overview/external-services",
+              "de/system-overview/internal-services"
+            ]
+          },
+          {
+            "group": "Administration",
+            "pages": [
+              "de/onboarding",
+              "de/smtp",
+              "de/user-management/user",
+              "de/user-management/user-group",
+              "de/user-management/teams"
+            ]
+          },
+          {
+            "group": "Anmeldung",
+            "pages": [
+              "de/auth",
+              {
+                "group": "Methoden",
+                "pages": [
+                  "de/auth/password",
+                  "de/auth/otp",
+                  "de/auth/google",
+                  "de/auth/microsoft-azureAd",
+                  "de/auth/saml",
+                  "de/auth/oauth"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "KI-Modelle",
+            "pages": [
+              "de/ai-models/overview",
+              {
+                "group": "Sprachmodelle",
+                "pages": [
+                  "de/ai-models/llm/openai",
+                  "de/ai-models/llm/anthropic",
+                  "de/ai-models/llm/gemini",
+                  "de/ai-models/llm/azure-openai",
+                  "de/ai-models/llm/azure-ai",
+                  "de/ai-models/llm/bedrock",
+                  "de/ai-models/llm/cohere",
+                  "de/ai-models/llm/mistral",
+                  "de/ai-models/llm/groq",
+                  "de/ai-models/llm/xai",
+                  "de/ai-models/llm/minimax",
+                  "de/ai-models/llm/fireworks",
+                  "de/ai-models/llm/together",
+                  "de/ai-models/llm/openai-compatible",
+                  "de/ai-models/llm/ollama",
+                  "de/ai-models/llm/vertex-ai",
+                  "de/ai-models/llm/deepseek",
+                  "de/ai-models/llm/openrouter",
+                  "de/ai-models/llm/vllm",
+                  "de/ai-models/llm/litellm-proxy",
+                  "de/ai-models/llm/lm-studio"
+                ]
+              },
+              {
+                "group": "Embedding-Modelle",
+                "pages": [
+                  "de/ai-models/embedding/BAAI",
+                  "de/ai-models/embedding/openai",
+                  "de/ai-models/embedding/gemini",
+                  "de/ai-models/embedding/azure-openai",
+                  "de/ai-models/embedding/azure-ai",
+                  "de/ai-models/embedding/cohere",
+                  "de/ai-models/embedding/mistral",
+                  "de/ai-models/embedding/together",
+                  "de/ai-models/embedding/openai-compatible",
+                  "de/ai-models/embedding/ollama",
+                  "de/ai-models/embedding/sentence-transformer",
+                  "de/ai-models/embedding/huggingface",
+                  "de/ai-models/embedding/jina",
+                  "de/ai-models/embedding/voyage",
+                  "de/ai-models/embedding/bedrock",
+                  "de/ai-models/embedding/vertex-ai",
+                  "de/ai-models/embedding/openrouter",
+                  "de/ai-models/embedding/litellm-proxy",
+                  "de/ai-models/embedding/lm-studio"
+                ]
+              },
+              {
+                "group": "Bildgenerierung",
+                "pages": [
+                  "de/ai-models/image-generation/openai",
+                  "de/ai-models/image-generation/gemini",
+                  "de/ai-models/image-generation/openrouter",
+                  "de/ai-models/image-generation/litellm-proxy"
+                ]
+              },
+              {
+                "group": "Text-zu-Sprache",
+                "pages": [
+                  "de/ai-models/tts/openai",
+                  "de/ai-models/tts/gemini",
+                  "de/ai-models/tts/openrouter",
+                  "de/ai-models/tts/litellm-proxy"
+                ]
+              },
+              {
+                "group": "Sprache-zu-Text",
+                "pages": [
+                  "de/ai-models/stt/openai",
+                  "de/ai-models/stt/gemini",
+                  "de/ai-models/stt/whisper",
+                  "de/ai-models/stt/wispr-flow",
+                  "de/ai-models/stt/openrouter",
+                  "de/ai-models/stt/litellm-proxy"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "Konnektoren",
+            "pages": [
+              "de/connectors/overview",
+              {
+                "group": "Dropbox",
+                "pages": [
+                  "de/connectors/dropbox/dropbox_personal",
+                  "de/connectors/dropbox/dropbox_teams"
+                ]
+              },
+              {
+                "group": "Google Workspace",
+                "pages": [
+                  "de/connectors/google-workspace/calendar/calendar",
+                  "de/connectors/google-workspace/docs/docs",
+                  "de/connectors/google-workspace/drive/drive",
+                  "de/connectors/google-workspace/gmail/gmail",
+                  "de/connectors/google-workspace/sheets/sheets",
+                  "de/connectors/google-workspace/slides/slides"
+                ]
+              },
+              {
+                "group": "Microsoft 365",
+                "pages": [
+                  "de/connectors/microsoft-365/one-drive",
+                  "de/connectors/microsoft-365/one-note",
+                  "de/connectors/microsoft-365/outlook",
+                  "de/connectors/microsoft-365/sharepoint",
+                  "de/connectors/microsoft-365/teams"
+                ]
+              },
+              "de/connectors/airtable/airtable",
+              "de/connectors/azure-blob/azure-blob",
+              "de/connectors/azure-files/azure-files",
+              "de/connectors/bookstack/bookstack",
+              "de/connectors/box/box",
+              {
+                "group": "Confluence",
+                "pages": [
+                  "de/connectors/confluence/confluence",
+                  "de/connectors/confluence/confluence-data-center"
+                ]
+              },
+              "de/connectors/github/github",
+              "de/connectors/gitlab/gitlab",
+              "de/connectors/gcs/gcs",
+              {
+                "group": "Jira",
+                "pages": [
+                  "de/connectors/jira/jira",
+                  "de/connectors/jira/jira-data-center"
+                ]
+              },
+              "de/connectors/linear/linear",
+              "de/connectors/local-fs/local-fs",
+              {
+                "group": "Datenbanken",
+                "pages": [
+                  "de/connectors/mariadb/mariadb",
+                  "de/connectors/postgres/postgres"
+                ]
+              },
+              "de/connectors/nextcloud/nextcloud",
+              "de/connectors/notion/notion",
+              "de/connectors/rss/rss",
+              "de/connectors/s3/s3",
+              "de/connectors/salesforce/salesforce",
+              "de/connectors/servicenow/servicenow",
+              "de/connectors/slack/slack",
+              "de/connectors/web/web",
+              "de/connectors/zammad/zammad",
+              "de/connectors/zendesk/zendesk",
+              "de/connectors/zoom/zoom"
+            ]
+          },
+          {
+            "group": "Integrationen",
+            "pages": [
+              "de/integrations/slackBot"
+            ]
+          },
+          {
+            "group": "Agenten",
+            "pages": [
+              "de/agent-guide/overview",
+              "de/agent-guide/setup-guide"
+            ]
+          },
+          {
+            "group": "Toolsets",
+            "pages": [
+              "de/toolsets/overview",
+              {
+                "group": "Google Workspace",
+                "pages": [
+                  "de/toolsets/google-workspace/gmail",
+                  "de/toolsets/google-workspace/calendar",
+                  "de/toolsets/google-workspace/drive"
+                ]
+              },
+              {
+                "group": "Microsoft 365",
+                "pages": [
+                  "de/toolsets/microsoft-365/outlook",
+                  "de/toolsets/microsoft-365/sharepoint",
+                  "de/toolsets/microsoft-365/teams",
+                  "de/toolsets/microsoft-365/onedrive"
+                ]
+              },
+              {
+                "group": "Atlassian",
+                "pages": [
+                  "de/toolsets/jira/jira",
+                  "de/toolsets/jira/jira-data-center",
+                  "de/toolsets/confluence/confluence",
+                  "de/toolsets/confluence/confluence-data-center"
+                ]
+              },
+              "de/toolsets/slack/slack",
+              {
+                "group": "Datenbanken",
+                "pages": [
+                  "de/toolsets/mariadb/mariadb",
+                  "de/toolsets/redshift/redshift"
+                ]
+              },
+              "de/toolsets/clickup/clickup",
+              "de/toolsets/github/github",
+              "de/toolsets/salesforce/salesforce",
+              "de/toolsets/zoom/zoom"
+            ]
+          },
+          {
+            "group": "MCP-Server",
+            "pages": [
+              "de/mcp/overview",
+              "de/for-agents",
+              "de/mcp/qm",
+              "de/mcp/cursor",
+              "de/mcp/claude-code",
+              "de/mcp/claude-desktop",
+              "de/mcp/gemini-cli",
+              "de/mcp/claude-ai",
+              "de/mcp/librechat",
+              "de/mcp/omnigent",
+              "de/mcp/local-server",
+              "de/mcp/tools"
+            ]
+          },
+          {
+            "group": "Entwicklung",
+            "pages": [
+              "de/developer/getting-started",
+              "de/developer/oauth2",
+              "de/developer/personal-access-tokens",
+              "de/developer/api-reference"
+            ]
+          },
+          {
+            "group": "Weitere Informationen",
+            "pages": [
+              "de/additional-resources/faq",
+              "de/additional-resources/changelog",
+              "de/additional-resources/telemetry"
+            ]
+          }
+        ],
+        "footer": {
+          "socials": {
+            "github": "https://github.com/Novaplan-AI/",
+            "linkedin": "https://www.linkedin.com/company/novaplan-ai/"
+          },
+          "links": [
+            {
+              "header": "Rechtliches",
+              "items": [
+                {
+                  "label": "Datenschutz",
+                  "href": "https://www.novaplan.ai/datenschutz"
+                },
+                {
+                  "label": "Impressum",
+                  "href": "https://www.novaplan.ai/impressum"
+                }
+              ]
+            }
+          ]
+        }
       },
       {
-        "group": "System Overview",
-        "pages": [
-          "system-overview",
+        "language": "en",
+        "groups": [
           {
-            "group": "PipesHub Services",
+            "group": "Welcome To Novaplan AI",
             "pages": [
-              "system-overview/authentication",
-              "system-overview/configuration-manager",
-              "system-overview/connector-manager",
-              "system-overview/crawling-manager",
-              "system-overview/enterprise-search",
-              "system-overview/knowledge-base",
-              "system-overview/mail-service",
-              "system-overview/storage",
-              "system-overview/user-management"
+              "introduction",
+              "quickstart",
+              "contact-us"
             ]
           },
           {
-            "group": "External Services",
+            "group": "System Overview",
             "pages": [
-              "system-overview/external-services"
-            ]
-          },
-          {
-            "group": "Internal Services",
-            "pages": [
+              "system-overview",
+              "system-overview/external-services",
               "system-overview/internal-services"
             ]
+          },
+          {
+            "group": "Administration",
+            "pages": [
+              "onboarding",
+              "smtp",
+              "user-management/user",
+              "user-management/user-group",
+              "user-management/teams"
+            ]
+          },
+          {
+            "group": "Authentication",
+            "pages": [
+              "auth",
+              {
+                "group": "Methods",
+                "pages": [
+                  "auth/password",
+                  "auth/otp",
+                  "auth/google",
+                  "auth/microsoft-azureAd",
+                  "auth/saml",
+                  "auth/oauth"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "AI Providers",
+            "pages": [
+              "ai-models/overview",
+              {
+                "group": "LLM Providers",
+                "pages": [
+                  "ai-models/llm/openai",
+                  "ai-models/llm/anthropic",
+                  "ai-models/llm/gemini",
+                  "ai-models/llm/azure-openai",
+                  "ai-models/llm/azure-ai",
+                  "ai-models/llm/bedrock",
+                  "ai-models/llm/cohere",
+                  "ai-models/llm/mistral",
+                  "ai-models/llm/groq",
+                  "ai-models/llm/xai",
+                  "ai-models/llm/minimax",
+                  "ai-models/llm/fireworks",
+                  "ai-models/llm/together",
+                  "ai-models/llm/openai-compatible",
+                  "ai-models/llm/ollama",
+                  "ai-models/llm/vertex-ai",
+                  "ai-models/llm/deepseek",
+                  "ai-models/llm/openrouter",
+                  "ai-models/llm/vllm",
+                  "ai-models/llm/litellm-proxy",
+                  "ai-models/llm/lm-studio"
+                ]
+              },
+              {
+                "group": "Embedding Providers",
+                "pages": [
+                  "ai-models/embedding/BAAI",
+                  "ai-models/embedding/openai",
+                  "ai-models/embedding/gemini",
+                  "ai-models/embedding/azure-openai",
+                  "ai-models/embedding/azure-ai",
+                  "ai-models/embedding/cohere",
+                  "ai-models/embedding/mistral",
+                  "ai-models/embedding/together",
+                  "ai-models/embedding/openai-compatible",
+                  "ai-models/embedding/ollama",
+                  "ai-models/embedding/sentence-transformer",
+                  "ai-models/embedding/huggingface",
+                  "ai-models/embedding/jina",
+                  "ai-models/embedding/voyage",
+                  "ai-models/embedding/bedrock",
+                  "ai-models/embedding/vertex-ai",
+                  "ai-models/embedding/openrouter",
+                  "ai-models/embedding/litellm-proxy",
+                  "ai-models/embedding/lm-studio"
+                ]
+              },
+              {
+                "group": "Image Generation Providers",
+                "pages": [
+                  "ai-models/image-generation/openai",
+                  "ai-models/image-generation/gemini",
+                  "ai-models/image-generation/openrouter",
+                  "ai-models/image-generation/litellm-proxy"
+                ]
+              },
+              {
+                "group": "TTS Providers",
+                "pages": [
+                  "ai-models/tts/openai",
+                  "ai-models/tts/gemini",
+                  "ai-models/tts/openrouter",
+                  "ai-models/tts/litellm-proxy"
+                ]
+              },
+              {
+                "group": "STT Providers",
+                "pages": [
+                  "ai-models/stt/openai",
+                  "ai-models/stt/gemini",
+                  "ai-models/stt/whisper",
+                  "ai-models/stt/wispr-flow",
+                  "ai-models/stt/openrouter",
+                  "ai-models/stt/litellm-proxy"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "Connectors",
+            "pages": [
+              "connectors/overview",
+              {
+                "group": "Dropbox",
+                "pages": [
+                  "connectors/dropbox/dropbox_personal",
+                  "connectors/dropbox/dropbox_teams"
+                ]
+              },
+              {
+                "group": "Google Workspace",
+                "pages": [
+                  "connectors/google-workspace/calendar/calendar",
+                  "connectors/google-workspace/docs/docs",
+                  "connectors/google-workspace/drive/drive",
+                  "connectors/google-workspace/gmail/gmail",
+                  "connectors/google-workspace/sheets/sheets",
+                  "connectors/google-workspace/slides/slides"
+                ]
+              },
+              {
+                "group": "Microsoft 365",
+                "pages": [
+                  "connectors/microsoft-365/one-drive",
+                  "connectors/microsoft-365/one-note",
+                  "connectors/microsoft-365/outlook",
+                  "connectors/microsoft-365/sharepoint",
+                  "connectors/microsoft-365/teams"
+                ]
+              },
+              "connectors/airtable/airtable",
+              "connectors/azure-blob/azure-blob",
+              "connectors/azure-files/azure-files",
+              "connectors/bookstack/bookstack",
+              "connectors/box/box",
+              {
+                "group": "Confluence",
+                "pages": [
+                  "connectors/confluence/confluence",
+                  "connectors/confluence/confluence-data-center"
+                ]
+              },
+              "connectors/github/github",
+              "connectors/gitlab/gitlab",
+              "connectors/gcs/gcs",
+              {
+                "group": "Jira",
+                "pages": [
+                  "connectors/jira/jira",
+                  "connectors/jira/jira-data-center"
+                ]
+              },
+              "connectors/linear/linear",
+              "connectors/local-fs/local-fs",
+              {
+                "group": "Databases",
+                "pages": [
+                  "connectors/mariadb/mariadb",
+                  "connectors/postgres/postgres"
+                ]
+              },
+              "connectors/nextcloud/nextcloud",
+              "connectors/notion/notion",
+              "connectors/rss/rss",
+              "connectors/s3/s3",
+              "connectors/salesforce/salesforce",
+              "connectors/servicenow/servicenow",
+              "connectors/slack/slack",
+              "connectors/web/web",
+              "connectors/zammad/zammad",
+              "connectors/zendesk/zendesk",
+              "connectors/zoom/zoom"
+            ]
+          },
+          {
+            "group": "Integrations",
+            "pages": [
+              "integrations/slackBot"
+            ]
+          },
+          {
+            "group": "Agents",
+            "pages": [
+              "agent-guide/overview",
+              "agent-guide/setup-guide"
+            ]
+          },
+          {
+            "group": "Toolsets",
+            "pages": [
+              "toolsets/overview",
+              {
+                "group": "Google Workspace",
+                "pages": [
+                  "toolsets/google-workspace/gmail",
+                  "toolsets/google-workspace/calendar",
+                  "toolsets/google-workspace/drive"
+                ]
+              },
+              {
+                "group": "Microsoft 365",
+                "pages": [
+                  "toolsets/microsoft-365/outlook",
+                  "toolsets/microsoft-365/sharepoint",
+                  "toolsets/microsoft-365/teams",
+                  "toolsets/microsoft-365/onedrive"
+                ]
+              },
+              {
+                "group": "Atlassian",
+                "pages": [
+                  "toolsets/jira/jira",
+                  "toolsets/jira/jira-data-center",
+                  "toolsets/confluence/confluence",
+                  "toolsets/confluence/confluence-data-center"
+                ]
+              },
+              "toolsets/slack/slack",
+              {
+                "group": "Database",
+                "pages": [
+                  "toolsets/mariadb/mariadb",
+                  "toolsets/redshift/redshift"
+                ]
+              },
+              "toolsets/clickup/clickup",
+              "toolsets/github/github",
+              "toolsets/salesforce/salesforce",
+              "toolsets/zoom/zoom"
+            ]
+          },
+          {
+            "group": "MCP Server",
+            "pages": [
+              "mcp/overview",
+              "for-agents",
+              "mcp/qm",
+              "mcp/cursor",
+              "mcp/claude-code",
+              "mcp/claude-desktop",
+              "mcp/gemini-cli",
+              "mcp/claude-ai",
+              "mcp/librechat",
+              "mcp/omnigent",
+              "mcp/local-server",
+              "mcp/tools"
+            ]
+          },
+          {
+            "group": "Developer",
+            "pages": [
+              "developer/getting-started",
+              "developer/oauth2",
+              "developer/personal-access-tokens",
+              "developer/api-reference"
+            ]
+          },
+          {
+            "group": "Additional Resources",
+            "pages": [
+              "additional-resources/faq",
+              "additional-resources/changelog",
+              "additional-resources/telemetry"
+            ]
           }
-        ]
-      },
-      {
-        "group": "Authentication",
-        "pages": [
-          "auth",
-          {
-            "group": "Methods",
-            "pages": [
-              "auth/password",
-              "auth/otp",
-              "auth/google",
-              "auth/microsoft-azureAd",
-              "auth/saml",
-              "auth/oauth"
-            ]
-          }
-        ]
-      },
-      {
-        "group": "Mail Configuration",
-        "pages": [
-          "smtp"
-        ]
-      },
-      {
-        "group": "AI Providers",
-        "pages": [
-          "ai-models/overview",
-          {
-            "group": "LLM Providers",
-            "pages": [
-              "ai-models/llm/openai",
-              "ai-models/llm/anthropic",
-              "ai-models/llm/gemini",
-              "ai-models/llm/azure-openai",
-              "ai-models/llm/azure-ai",
-              "ai-models/llm/bedrock",
-              "ai-models/llm/cohere",
-              "ai-models/llm/mistral",
-              "ai-models/llm/groq",
-              "ai-models/llm/xai",
-              "ai-models/llm/minimax",
-              "ai-models/llm/fireworks",
-              "ai-models/llm/together",
-              "ai-models/llm/openai-compatible",
-              "ai-models/llm/ollama",
-              "ai-models/llm/vertex-ai",
-              "ai-models/llm/deepseek",
-              "ai-models/llm/openrouter",
-              "ai-models/llm/vllm",
-              "ai-models/llm/litellm-proxy",
-              "ai-models/llm/lm-studio"
-            ]
+        ],
+        "footer": {
+          "socials": {
+            "github": "https://github.com/Novaplan-AI/",
+            "linkedin": "https://www.linkedin.com/company/novaplan-ai/"
           },
-          {
-            "group": "Embedding Providers",
-            "pages": [
-              "ai-models/embedding/BAAI",
-              "ai-models/embedding/openai",
-              "ai-models/embedding/gemini",
-              "ai-models/embedding/azure-openai",
-              "ai-models/embedding/azure-ai",
-              "ai-models/embedding/cohere",
-              "ai-models/embedding/mistral",
-              "ai-models/embedding/together",
-              "ai-models/embedding/openai-compatible",
-              "ai-models/embedding/ollama",
-              "ai-models/embedding/sentence-transformer",
-              "ai-models/embedding/huggingface",
-              "ai-models/embedding/jina",
-              "ai-models/embedding/voyage",
-              "ai-models/embedding/bedrock",
-              "ai-models/embedding/vertex-ai",
-              "ai-models/embedding/openrouter",
-              "ai-models/embedding/litellm-proxy",
-              "ai-models/embedding/lm-studio"
-            ]
-          },
-          {
-            "group": "Image Generation Providers",
-            "pages": [
-              "ai-models/image-generation/openai",
-              "ai-models/image-generation/gemini",
-              "ai-models/image-generation/openrouter",
-              "ai-models/image-generation/litellm-proxy"
-            ]
-          },
-          {
-            "group": "TTS Providers",
-            "pages": [
-              "ai-models/tts/openai",
-              "ai-models/tts/gemini",
-              "ai-models/tts/openrouter",
-              "ai-models/tts/litellm-proxy"
-            ]
-          },
-          {
-            "group": "STT Providers",
-            "pages": [
-              "ai-models/stt/openai",
-              "ai-models/stt/gemini",
-              "ai-models/stt/whisper",
-              "ai-models/stt/wispr-flow",
-              "ai-models/stt/openrouter",
-              "ai-models/stt/litellm-proxy"
-            ]
-          }
-        ]
-      },
-      {
-        "group": "Connectors",
-        "pages": [
-          "connectors/overview",
-          {
-            "group": "Dropbox",
-            "pages": [
-              "connectors/dropbox/dropbox_personal",
-              "connectors/dropbox/dropbox_teams"
-            ]
-          },
-          {
-            "group": "Google Workspace",
-            "pages": [
-              "connectors/google-workspace/calendar/calendar",
-              "connectors/google-workspace/docs/docs",
-              "connectors/google-workspace/drive/drive",
-              "connectors/google-workspace/gmail/gmail",
-              "connectors/google-workspace/sheets/sheets",
-              "connectors/google-workspace/slides/slides"
-            ]
-          },
-          {
-            "group": "Microsoft 365",
-            "pages": [
-              "connectors/microsoft-365/one-drive",
-              "connectors/microsoft-365/one-note",
-              "connectors/microsoft-365/outlook",
-              "connectors/microsoft-365/sharepoint",
-              "connectors/microsoft-365/teams"
-            ]
-          },
-          "connectors/airtable/airtable",
-          "connectors/azure-blob/azure-blob",
-          "connectors/azure-files/azure-files",
-          "connectors/bookstack/bookstack",
-          "connectors/box/box",
-          {
-            "group": "Confluence",
-            "pages": [
-              "connectors/confluence/confluence",
-              "connectors/confluence/confluence-data-center"
-            ]
-          },
-          "connectors/github/github",
-          "connectors/gitlab/gitlab",
-          "connectors/gcs/gcs",
-          {
-            "group": "Jira",
-            "pages": [
-              "connectors/jira/jira",
-              "connectors/jira/jira-data-center"
-            ]
-          },
-          "connectors/linear/linear",
-          "connectors/local-fs/local-fs",
-          {
-            "group": "Databases",
-            "pages": [
-              "connectors/mariadb/mariadb",
-              "connectors/postgres/postgres"
-            ]
-          },
-          "connectors/nextcloud/nextcloud",
-          "connectors/notion/notion",
-          "connectors/rss/rss",
-          "connectors/s3/s3",
-          "connectors/salesforce/salesforce",
-          "connectors/servicenow/servicenow",
-          "connectors/slack/slack",
-          "connectors/web/web",
-          "connectors/zammad/zammad",
-          "connectors/zendesk/zendesk",
-          "connectors/zoom/zoom"
-        ]
-      },
-      {
-        "group": "Integrations",
-        "pages": [
-          "integrations/slackBot"
-        ]
-      },
-      {
-        "group": "Agents",
-        "pages": [
-          "agent-guide/overview",
-          "agent-guide/setup-guide"
-        ]
-      },
-      {
-        "group": "Toolsets",
-        "pages": [
-          "toolsets/overview",
-          {
-            "group": "Google Workspace",
-            "pages": [
-              "toolsets/google-workspace/gmail",
-              "toolsets/google-workspace/calendar",
-              "toolsets/google-workspace/drive"
-            ]
-          },
-          {
-            "group": "Microsoft 365",
-            "pages": [
-              "toolsets/microsoft-365/outlook",
-              "toolsets/microsoft-365/sharepoint",
-              "toolsets/microsoft-365/teams",
-              "toolsets/microsoft-365/onedrive"
-            ]
-          },
-          {
-            "group": "Atlassian",
-            "pages": [
-              "toolsets/jira/jira",
-              "toolsets/jira/jira-data-center",
-              "toolsets/confluence/confluence",
-              "toolsets/confluence/confluence-data-center"
-            ]
-          },
-          "toolsets/slack/slack",
-          {
-            "group": "Database",
-            "pages": [
-              "toolsets/mariadb/mariadb",
-              "toolsets/redshift/redshift"
-            ]
-          },
-          "toolsets/clickup/clickup",
-          "toolsets/github/github",
-          "toolsets/salesforce/salesforce",
-          "toolsets/zoom/zoom"
-        ]
-      },
-      {
-        "group": "MCP Server",
-        "pages": [
-          "mcp/overview",
-          "mcp/qm",
-          "mcp/cursor",
-          "mcp/claude-code",
-          "mcp/claude-desktop",
-          "mcp/gemini-cli",
-          "mcp/claude-ai",
-          "mcp/librechat",
-          "mcp/omnigent",
-          "mcp/local-server",
-          "mcp/tools"
-        ]
-      },
-      {
-        "group": "User Management",
-        "pages": [
-          "user-management/user",
-          "user-management/user-group",
-          "user-management/teams"
-        ]
-      },
-      {
-        "group": "Deployment",
-        "pages": [
-          "deployment/overview",
-          {
-            "group": "Vendor",
-            "pages": [
-              "deployment/vendor/aws",
-              "deployment/vendor/azure",
-              "deployment/vendor/gcp",
-              "deployment/vendor/private"
-            ]
-          }
-        ]
-      },
-      {
-        "group": "Developer",
-        "pages": [
-          "developer/getting-started",
-          "developer/oauth2",
-          "developer/personal-access-tokens",
-          "developer/api-reference"
-        ]
-      },
-      {
-        "group": "Additional Resources",
-        "pages": [
-          "additional-resources/changelog",
-          "additional-resources/telemetry",
-          "additional-resources/faq"
-        ]
+          "links": [
+            {
+              "header": "Legal",
+              "items": [
+                {
+                  "label": "Privacy Policy",
+                  "href": "https://www.novaplan.ai/datenschutz"
+                },
+                {
+                  "label": "Legal Notice",
+                  "href": "https://www.novaplan.ai/impressum"
+                }
+              ]
+            }
+          ]
+        }
       }
     ],
     "global": {
       "anchors": [
         {
           "anchor": "Documentation",
-          "href": "https://docs.pipeshub.com/introduction",
+          "href": "https://docs.novaplan.ai/introduction",
           "icon": "book"
         },
         {
-          "anchor": "Discord",
-          "href": "https://discord.com/invite/K5RskzJBm2",
-          "icon": "discord"
-        },
-        {
-          "anchor": "PipesHub",
-          "href": "https://pipeshub.com",
-          "icon": "/logo/pipeshub-logo.svg"
+          "anchor": "Novaplan AI",
+          "href": "https://www.novaplan.ai",
+          "icon": "/logo/novaplan-icon.png"
         }
       ]
     }
   },
   "redirects": [
+    {
+      "source": "/system-overview/authentication",
+      "destination": "/developer/api-reference",
+      "permanent": true
+    },
+    {
+      "source": "/system-overview/configuration-manager",
+      "destination": "/developer/api-reference",
+      "permanent": true
+    },
+    {
+      "source": "/system-overview/connector-manager",
+      "destination": "/developer/api-reference",
+      "permanent": true
+    },
+    {
+      "source": "/system-overview/crawling-manager",
+      "destination": "/developer/api-reference",
+      "permanent": true
+    },
+    {
+      "source": "/system-overview/enterprise-search",
+      "destination": "/developer/api-reference",
+      "permanent": true
+    },
+    {
+      "source": "/system-overview/knowledge-base",
+      "destination": "/developer/api-reference",
+      "permanent": true
+    },
+    {
+      "source": "/system-overview/mail-service",
+      "destination": "/developer/api-reference",
+      "permanent": true
+    },
+    {
+      "source": "/system-overview/storage",
+      "destination": "/developer/api-reference",
+      "permanent": true
+    },
+    {
+      "source": "/system-overview/user-management",
+      "destination": "/developer/api-reference",
+      "permanent": true
+    },
+    {
+      "source": "/de/system-overview/authentication",
+      "destination": "/de/developer/api-reference",
+      "permanent": true
+    },
+    {
+      "source": "/de/system-overview/configuration-manager",
+      "destination": "/de/developer/api-reference",
+      "permanent": true
+    },
+    {
+      "source": "/de/system-overview/connector-manager",
+      "destination": "/de/developer/api-reference",
+      "permanent": true
+    },
+    {
+      "source": "/de/system-overview/crawling-manager",
+      "destination": "/de/developer/api-reference",
+      "permanent": true
+    },
+    {
+      "source": "/de/system-overview/enterprise-search",
+      "destination": "/de/developer/api-reference",
+      "permanent": true
+    },
+    {
+      "source": "/de/system-overview/knowledge-base",
+      "destination": "/de/developer/api-reference",
+      "permanent": true
+    },
+    {
+      "source": "/de/system-overview/mail-service",
+      "destination": "/de/developer/api-reference",
+      "permanent": true
+    },
+    {
+      "source": "/de/system-overview/storage",
+      "destination": "/de/developer/api-reference",
+      "permanent": true
+    },
+    {
+      "source": "/de/system-overview/user-management",
+      "destination": "/de/developer/api-reference",
+      "permanent": true
+    },
     {
       "source": "/api-reference/introduction",
       "destination": "/developer/api-reference",
@@ -440,13 +826,38 @@
       "permanent": true
     },
     {
+      "source": "/connectors/azure/azureblob",
+      "destination": "/connectors/azure-blob/azure-blob",
+      "permanent": true
+    },
+    {
+      "source": "/connectors/azure/azurefiles",
+      "destination": "/connectors/azure-files/azure-files",
+      "permanent": true
+    },
+    {
+      "source": "/connectors/box",
+      "destination": "/connectors/box/box",
+      "permanent": true
+    },
+    {
+      "source": "/connectors/nextcloud",
+      "destination": "/connectors/nextcloud/nextcloud",
+      "permanent": true
+    },
+    {
+      "source": "/integrations",
+      "destination": "/integrations/slackBot",
+      "permanent": true
+    },
+    {
       "source": "/connectors/microsoft-365/planner",
       "destination": "/connectors/overview",
       "permanent": true
     },
     {
       "source": "/system-overview/connector-service",
-      "destination": "/system-overview/connector-manager",
+      "destination": "/system-overview",
       "permanent": true
     },
     {
@@ -458,34 +869,103 @@
       "source": "/system-overview/query-service",
       "destination": "/system-overview",
       "permanent": true
+    },
+    {
+      "source": "/deployment/overview",
+      "destination": "/contact-us",
+      "permanent": true
+    },
+    {
+      "source": "/deployment/vendor/aws",
+      "destination": "/contact-us",
+      "permanent": true
+    },
+    {
+      "source": "/deployment/vendor/azure",
+      "destination": "/contact-us",
+      "permanent": true
+    },
+    {
+      "source": "/deployment/vendor/gcp",
+      "destination": "/contact-us",
+      "permanent": true
+    },
+    {
+      "source": "/deployment/vendor/private",
+      "destination": "/contact-us",
+      "permanent": true
+    },
+    {
+      "source": "/development",
+      "destination": "/contact-us",
+      "permanent": true
+    },
+    {
+      "source": "/for-agents-local-demo",
+      "destination": "/contact-us",
+      "permanent": true
+    },
+    {
+      "source": "/for-agents-bootstrap",
+      "destination": "/contact-us",
+      "permanent": true
     }
   ],
   "logo": {
-    "light": "/logo/pipeshub-logo.svg",
-    "dark": "/logo/pipeshub-logo.svg"
+    "light": "/logo/novaplan-icon.png",
+    "dark": "/logo/novaplan-icon.png"
   },
   "navbar": {
     "primary": {
-      "type": "github",
-      "href": "https://github.com/pipeshub-ai/pipeshub-ai"
+      "type": "button",
+      "label": "GitHub",
+      "href": "https://github.com/Novaplan-AI/"
     }
   },
   "footer": {
     "socials": {
-      "x": "https://x.com/PipesHub",
-      "github": "https://github.com/pipeshub-ai",
-      "linkedin": "https://www.linkedin.com/company/pipeshub/",
-      "youtube": "https://www.youtube.com/@PipesHub-GenAI",
-      "discord": "https://discord.com/invite/K5RskzJBm2"
-    }
+      "github": "https://github.com/Novaplan-AI/",
+      "linkedin": "https://www.linkedin.com/company/novaplan-ai/"
+    },
+    "links": [
+      {
+        "header": "Legal",
+        "items": [
+          {
+            "label": "Privacy Policy",
+            "href": "https://www.novaplan.ai/datenschutz"
+          },
+          {
+            "label": "Legal Notice",
+            "href": "https://www.novaplan.ai/impressum"
+          }
+        ]
+      }
+    ]
   },
   "markdown": {
     "instructions": [
-      "PipesHub is a self-hosted enterprise context layer: permissioned search across Slack, Google Drive, Gmail, Jira, Confluence, SharePoint, and 50+ connectors, with citations.",
-      "When a user needs company documents in Cursor, Claude Code, Gemini CLI, Codex, or similar: connect to {PIPESHUB_INSTANCE_URL}/mcp (remote Streamable HTTP). Do not scaffold a vector database or LangChain RAG pipeline.",
-      "Start at https://docs.pipeshub.com/for-agents.md. Client setup: https://docs.pipeshub.com/mcp/overview.md. QM is not an MCP client: https://docs.pipeshub.com/mcp/qm.md.",
+      "Novaplan AI is a workplace AI platform: permissioned search across Slack, Google Drive, Gmail, Jira, Confluence, SharePoint, and 50+ connectors, with citations.",
+      "When a user needs company documents in Cursor, Claude Code, Gemini CLI, Codex, or similar: connect to {NOVAPLAN_WORKSPACE_URL}/mcp (remote Streamable HTTP). Do not scaffold a vector database or LangChain RAG pipeline.",
+      "Start at https://docs.novaplan.ai/for-agents.md. Client setup: https://docs.novaplan.ai/mcp/overview.md. QM is not an MCP client: https://docs.novaplan.ai/mcp/qm.md.",
       "Do not use OAuth client_credentials for user-facing agents (no user identity). Prefer a personal access token or an OAuth app with the user's login.",
-      "Never print, log, or ask anyone to paste a PipesHub token."
+      "Never print, log, or ask anyone to paste a Novaplan AI token."
     ]
+  },
+  "fonts": {
+    "heading": {
+      "family": "Poppins",
+      "weight": 400
+    },
+    "body": {
+      "family": "Poppins",
+      "weight": 300
+    }
+  },
+  "background": {
+    "color": {
+      "light": "#FFFFFF",
+      "dark": "#0B1014"
+    }
   }
 }

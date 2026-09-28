@@ -1,0 +1,29 @@
+---
+title: "Gemini Text-zu-Sprache"
+description: "Google-Gemini-Sprachausgabe in Novaplan AI konfigurieren."
+---
+
+# Gemini Text-zu-Sprache konfigurieren
+
+![Konfigurationsansicht für Gemini Sprachausgabe](/images/ai-models/tts/Gemini_TTSConfig.png)
+
+Novaplan AI kann Agents und Workflows über Gemini-Modelle gesprochene Ausgaben erzeugen lassen. Novaplan unterstützt Sie bei der Einrichtung und bei der Wahl eines passenden Audioformats.
+
+## Erforderliche Angaben
+
+**API Key:** Erstellen Sie in [Google AI Studio](https://aistudio.google.com/app/apikey) über **Create API key** einen Schlüssel für ein bestehendes oder neues Google-Cloud-Projekt. Kopieren Sie ihn und bewahren Sie ihn geschützt auf.
+
+**Model Name:** Geben Sie die genaue ID eines für Ihr Konto verfügbaren TTS-Modells ein. Beispiele sind `gemini-3.1-flash-tts-preview`, `gemini-2.5-flash-preview-tts` und `gemini-2.5-pro-preview-tts`. Prüfen Sie die [aktuelle Google-Dokumentation](https://ai.google.dev/docs), da sich Preview-Modelle ändern können.
+
+## Stimme und Audioformat
+
+**Voice** ist optional; Standard ist **Kore**. Weitere Stimmen in der Anbieter-Auswahl sind Zephyr, Puck, Charon, Fenrir, Leda, Orus, Aoede, Callirrhoe, Autonoe, Enceladus, Iapetus, Umbriel, Algieba, Despina, Erinome, Algenib, Rasalgethi, Laomedeia, Achernar, Alnilam, Schedar, Gacrux, Pulcherrima, Achird, Zubenelgenubi, Vindemiatrix, Sadachbia, Sadaltager und Sulafat.
+
+**Audio Format** ist optional; Standard ist **WAV**. **PCM** steht ebenfalls ohne Umwandlung bereit. **MP3**, **Opus**, **AAC** und **FLAC** benötigen eine Umwandlung durch `ffmpeg` im Novaplan-AI-Backend. Wenn bei einem dieser Formate die Ausgabe stumm bleibt oder fehlschlägt, wenden Sie sich an Novaplan Support, damit die Backend-Konfiguration geprüft wird.
+
+1. Klicken Sie auf der Gemini-Karte für Sprachausgabe auf **Configure**.
+2. Geben Sie **API Key** und **Model Name** ein.
+3. Wählen Sie bei Bedarf **Voice**, **Audio Format** und einen **Model Friendly Name**.
+4. Klicken Sie auf **Add Model**.
+
+API Key und Model Name sind erforderlich. Nutzung zählt zu Kontingent und gegebenenfalls zur Abrechnung Ihres Google-Kontos. Bei Fehlern prüfen Sie Schlüssel, Modell-ID, Konto-Zugang und API-Quota. [Novaplan Support](/de/contact-us) hilft bei der Einrichtung.

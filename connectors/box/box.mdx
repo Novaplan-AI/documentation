@@ -71,7 +71,7 @@ The following features are currently under development and will be available in 
 
 <Accordion title="Create Box App" icon="rocket">
 
-This guide will walk you through the process of creating a Box application and connecting it to PipesHub to sync your enterprise files, folders, users, and permissions.
+This guide will walk you through the process of creating a Box application and connecting it to Novaplan AI to sync your enterprise files, folders, users, and permissions.
 
 ### Box Enterprise Account
 
@@ -84,7 +84,7 @@ This guide will walk you through the process of creating a Box application and c
 3. Configure your new app with the following settings:
    - **Select App Type:** Choose **Custom App**.
    - **Authentication Method:** Select **OAuth 2.0 with Client Credentials Grant**.
-   - **Name your app:** Enter a unique name for your application, for example, "PipesHub Connector".
+   - **Name your app:** Enter a unique name for your application, for example, "Novaplan AI Connector".
 
 
 <img
@@ -107,7 +107,7 @@ This guide will walk you through the process of creating a Box application and c
 
 1. On your app's **Configuration** page, scroll to the **Application Scopes** section.
 
-2. Enable the following scopes that PipesHub needs:
+2. Enable the following scopes that Novaplan AI needs:
    - **Content Actions:**
      - Read all files and folders stored in Box
      - Write all files and folders stored in Box
@@ -164,7 +164,7 @@ This guide will walk you through the process of creating a Box application and c
 #### Step 4: Admin Authorization
 
 <Warning>
-  **Important:** The admin who authorizes the Box app should use the same email address as the PipesHub account configuring this connector. Using a different email will cause permission issues on the PipesHub platform.
+  The Box admin must approve the Enterprise app and its requested access. The admin's email does not have to match the Novaplan AI account that configures this shared connector. Check each viewer's Box identity and item permissions separately.
 </Warning>
 
 1. As an admin, approve the app:
@@ -195,13 +195,13 @@ This guide will walk you through the process of creating a Box application and c
 
 </Accordion>
 
-<Accordion title="Connect Box to PipesHub" icon="plug">
+<Accordion title="Connect Box to Novaplan AI" icon="plug">
 
 Box is a **team** connector — only an organization admin can configure it, and the resulting instance is shared across the workspace.
 
 ### Step 1: Open the Connector Catalog
 
-1. In PipesHub, navigate to **Workspace Settings** > **Connectors** > **Team**.
+1. In Novaplan AI, navigate to **Workspace Settings** > **Connectors** > **Team**.
 2. Find the **Box** card and click **Setup**.
 
 ### Step 2: Authenticate
@@ -221,10 +221,10 @@ On the **Authenticate** tab, enter:
 />
 
 <Warning>
-  **Email must match.** The Box admin who authorized the app should use the same email address as the PipesHub admin configuring this connector. A mismatch breaks permission resolution and users will not see their synced records in search.
+  Use the Client ID, Client Secret, and Enterprise ID of the Box app your administrator approved. Search visibility depends on the synced Box users, collaborations, and permissions for each viewer, not on an email match between the two administrators.
 </Warning>
 
-Click **Save**. PipesHub fetches an access token using Client Credentials Grant to verify the credentials before persisting.
+Click **Save**. Novaplan AI fetches an access token using Client Credentials Grant to verify the credentials before persisting.
 
 </Accordion>
 
@@ -242,7 +242,7 @@ Sync settings control how the connector pulls data from Box.
 
 **Sync Interval:** For scheduled syncs, the cadence in minutes (default: 60).
 
-**Batch Size:** Number of items processed per batch when committing to PipesHub (default: 100).
+**Batch Size:** Number of items processed per batch when committing to Novaplan AI (default: 100).
 
 <img
   src="/images/connectors/box/t2.png"
@@ -280,7 +280,7 @@ Filters split into two categories:
   width="90%"
 />
 
-Once your settings are configured, click **Save Configuration**. PipesHub confirms the instance is ready with a final dialog — *"Instance is configured and ready to sync"* — offering two choices: **I'll do it later** or **Start syncing now**.
+Once your settings are configured, click **Save Configuration**. Novaplan AI confirms the instance is ready with a final dialog — *"Instance is configured and ready to sync"* — offering two choices: **I'll do it later** or **Start syncing now**.
 
 </Accordion>
 
@@ -344,7 +344,7 @@ Users are fetched from Box Enterprise API and converted to `AppUser` entities.
 
 ### Incremental Sync
 
-User sync currently operates as a full sync on each run. The connector fetches all active users from Box Enterprise and updates their status in PipesHub. Users marked as inactive in Box will be reflected accordingly in the system.
+User sync currently operates as a full sync on each run. The connector fetches all active users from Box Enterprise and updates their status in Novaplan AI. Users marked as inactive in Box will be reflected accordingly in the system.
 
 ---
 
@@ -358,7 +358,7 @@ A full sync executes when no cursor exists:
 
 2. **Fetch Group Memberships:** For each group, fetches all members and their roles.
 
-3. **Process Permissions:** Maps Box group roles to PipesHub permission types (Admin, Member).
+3. **Process Permissions:** Maps Box group roles to Novaplan AI permission types (Admin, Member).
 
 4. **Batch Processing:** Collects all groups and memberships into a single batch.
 
@@ -378,21 +378,21 @@ Once a cursor is established, incremental sync processes only new events:
 
 3. **Update State:** Saves the new cursor position for next sync cycle.
 
-4. **Reconciliation:** Periodically validates that all Box groups exist in the database and removes orphaned entries.
+4. **Reconciliation:** Periodically validates Box groups and removes orphaned entries only after a complete group listing. If a group member list cannot be read, the current upstream connector retains the previously stored members and retries later rather than emptying the group.
 
 ---
 
 ## Record Groups Sync Workflow
 
-Record Groups in Box represent user "drives" - the root "All Files" folder (ID: 0) for each user.
+Record Groups in Box represent each user's root **All Files** drive (folder ID 0) and an internal **Shared with Me** area for items shared with that user.
 
 ### Full Sync
 
 1. **Fetch Active Users:** Retrieves list of all active enterprise users.
 
-2. **Create Record Groups:** For each user, creates a `RecordGroup` representing their root folder.
+2. **Create Record Groups:** For each user, creates a `RecordGroup` for their root folder and an internal **Shared with Me** group.
 
-3. **Set Permissions:** Assigns OWNER permission to each user for their own drive.
+3. **Set Permissions:** Assigns OWNER permission to each user for their own drive and **Shared with Me** group.
 
 4. **Batch Submission:** Sends all record groups to the processor with full permission mappings.
 
@@ -426,12 +426,12 @@ Record groups sync operates as a full sync, re-processing all active users to en
 3. **Item Processing:** For each item:
    - **Metadata Extraction:** Collects file/folder properties (name, size, timestamps, path, etag, sha1)
    - **Permission Fetching:** Retrieves collaborations and sharing settings via `client.folder(id).get_collaborations()`
-   - **Conversion:** Maps Box permissions to PipesHub permission types:
+   - **Conversion:** Maps Box permissions to Novaplan AI permission types:
      - `owner` → OWNER
-     - `co-owner` → OWNER
+     - `co-owner` → WRITE
      - `editor` → WRITE
-     - `viewer uploader` → WRITE
-     - `previewer uploader` → WRITE
+     - `viewer uploader` → READ
+     - `previewer uploader` → READ
      - `viewer` → READ
      - `previewer` → READ
 
@@ -473,9 +473,9 @@ Box uses a **global Enterprise Event Stream** with a single `stream_position` cu
    - Re-processes permissions
    - Updates database records
 
-6. **Deletion Handling:** Processes deletion events by marking records as deleted in the database.
+6. **Deletion Handling:** Deleted or trashed files and folders are removed on an incremental sync, and deleting a folder also removes its indexed contents. A failed delete holds the event cursor for up to five attempts. After the fifth failure, the batch can advance with an error while the item remains in Novaplan AI. A later full sync does not necessarily remove a record whose source item is already gone. Verify sensitive deletions in the workspace and escalate a persistent record to [Novaplan Support](/contact-us).
 
-7. **Stream Position Update:** After processing all events, saves the new `stream_position` cursor for the next incremental sync cycle. This single cursor tracks the state of the entire enterprise event stream, not individual folders.
+7. **Stream Position Update:** After processing events, saves the new `stream_position` cursor for the next incremental sync cycle. This single cursor tracks the enterprise event stream. A failed event batch is retried on later runs, up to the current upstream limit of five attempts; check sync logs for batches passed over with an error.
 
 ---
 
@@ -492,6 +492,8 @@ Box permissions are managed through **collaborations** - explicit grants that gi
 3. **Group Memberships:** Users inherit permissions through group collaborations.
 
 4. **Public/Company Links:** Shared links can grant broader access.
+
+Items owned inside the Box enterprise stay in their owner's folder hierarchy when shared; recipients see them under **Shared with me**. In the current upstream connector, a folder owned outside the enterprise can be imported through a full sync when it appears in a colleague's folders. Other externally owned shares, including a single shared file, may not be imported at all. Check expected shared content in the deployed workspace rather than assuming every Box share is searchable.
 
 ### Sync Process
 
@@ -516,6 +518,10 @@ Box permissions are managed through **collaborations** - explicit grants that gi
    - Removes permissions from the folder
    - Recursively removes permissions from all descendant files and folders
    - Ensures access control consistency
+
+The current upstream connector reads collaborator lists page by page. If a temporary error interrupts a list, the item retains its stored access until a later sync. A 403 or 404 on a later page is treated as Box's final answer and the pages already read are saved. Verify sensitive access changes in the deployed workspace.
+
+During a full sync, the connector also replays Box share history to populate **Shared with me**. It can read up to 200 history pages per sync and resumes a long replay on a later full sync. A temporary page failure pauses the replay for a later full sync. If Box refuses a history page with 403 or 404, the remaining history may wait for a later full sync rather than an incremental run.
 
 </Accordion>
 
@@ -546,6 +552,9 @@ The connector automatically determines the optimal sync approach:
 1. **No Cursor:** Performs full sync
 2. **Has Cursor:** Performs incremental sync using event stream
 3. **Cursor Expired:** Falls back to full sync and establishes new cursor
+4. **Previous full sync incomplete:** Repeats the full sync instead of saving a cursor, so unread folders or files are retried. A 403 while listing users also leaves the full sync incomplete.
+
+Scheduled runs, manual runs, and webhooks do not start two syncs for this connector at once. Webhooks arriving during a run queue one follow-up run.
 
 </Accordion>
 
@@ -578,6 +587,8 @@ The connector automatically determines the optimal sync approach:
 - Verify "Perform actions as users" is enabled
 - Check that App Access Level is set to "App + Enterprise Access"
 - Re-authorize the application if scopes were changed
+
+If sync logs say Box refused to list users or groups with **403**, verify the **Manage users** and **Manage groups** scopes respectively, then ask a Box administrator to re-authorize the app. Missing **Manage users** can stop file synchronization. The current upstream connector can replay a gap of up to 14 days from Box's event stream after access is restored; beyond that it falls back to a full sync. A full sync may not remove records for items deleted during the gap, so check sensitive content and ask Novaplan Support to resolve stale records.
 
 ### Sync Issues
 
@@ -642,14 +653,14 @@ The connector automatically determines the optimal sync approach:
 
 There are three common causes:
 
-1. **Email mismatch** - The email used during connector authentication doesn't match your PipesHub account email. This causes permission issues preventing you from accessing synced data.
-   - **Fix:** Reconfigure the connector and authenticate using the same email as your PipesHub account.
+1. **Viewer identity or Box access does not match** - A viewer's Box login or collaborations may not map to their Novaplan AI account and the item they expect to find.
+   - **Fix:** Ask your administrator to check the affected viewer's email, Box membership, and access to that file or folder. The shared connector's Box admin can be a different person.
 
 2. **Records show in "All Records" but not in search** - Documents display in the All Records section but don't appear in search query results.
    - **Fix:** Verify sync filters in the connector settings and ensure indexing has completed. Check that the data matches your search query criteria.
 
 3. **Data not yet indexed** - The connector is still syncing or hasn't completed the initial indexing process.
-   - **Fix:** Go to **Settings > Connectors**, check the sync status, and wait for indexing to complete.
+   - **Fix:** Go to **Workspace Settings → Connectors**, check the sync status, and wait for indexing to complete.
 
 </Accordion>
 

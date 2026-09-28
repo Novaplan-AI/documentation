@@ -1,0 +1,33 @@
+---
+title: "E-Mail-Versand (SMTP)"
+description: "Administrationsreferenz für den Mailversand in einem verwalteten Workspace."
+icon: "envelope"
+---
+
+# E-Mail-Versand (SMTP)
+
+Novaplan AI verwendet die Mailkonfiguration des Workspace für Nachrichten wie Einladungen, Einmalcodes und E-Mails zum Zurücksetzen des Passworts. Novaplan bereitet diese Einstellung normalerweise vor. Administratorinnen und Administratoren sollten sie nur ändern, wenn Absenderadresse und Maildienst mit dem Novaplan-Team abgestimmt sind.
+
+<Info>
+  SMTP wird getrennt von der Ersteinrichtung für KI-Modell, Embedding-Modell und Speicher konfiguriert. Ein Workspace kann die Maileinstellungen aus seiner verwalteten Bereitstellung übernehmen.
+</Info>
+
+## Konfiguration prüfen oder ändern
+
+1. Melden Sie sich mit einem Administratorkonto an und öffnen Sie **Workspace → Mail**.
+2. Prüfen Sie, ob der SMTP-Eintrag **Configured** anzeigt. Wenn die Einstellung übernommen wurde oder bereits funktioniert, belassen Sie sie unverändert, sofern Novaplan keine Änderung vereinbart hat.
+3. Öffnen Sie für einen vereinbarten Maildienst die SMTP-Einstellungen. Tragen Sie Serveradresse, Port und Absenderadresse ein. Ergänzen Sie Benutzername und Passwort nur, wenn Ihr Mailanbieter eine Anmeldung verlangt.
+4. Speichern Sie die Einstellungen und prüfen Sie den Versand mit einer Einladung oder einer anderen vereinbarten Testnachricht. Falls sie nicht ankommt, prüfen Sie Absenderadresse und Spamfilter.
+
+Das aktuelle Formular verlangt **SMTP Host**, **Port** und **From Email Address**. Im Formular ist Port `587` voreingestellt; verwenden Sie den Port und die Sicherheitseinstellungen Ihres Mailanbieters. Zugangsdaten sind optional, wenn keine Authentifizierung erforderlich ist. Tragen Sie diese nur im Konfigurationsformular ein, nicht in Dokumenten oder Support-Nachrichten.
+
+<Warning>
+  Änderungen am Maildienst können Einladungen, Einmalcodes und Passwortzurücksetzungen unterbrechen. Stimmen Sie produktive Änderungen mit Novaplan AI ab und prüfen Sie den Versand, bevor Sie sich auf die neue Einstellung verlassen.
+</Warning>
+
+## Wenn E-Mails nicht ankommen
+
+- Prüfen Sie, ob SMTP konfiguriert ist und Ihr Anbieter die Absenderadresse akzeptiert.
+- Vergleichen Sie Serveradresse, Port, Authentifizierung und Transportvorgaben mit den aktuellen Angaben Ihres Mailanbieters.
+- Prüfen Sie den Spamordner und die Zustellprotokolle des Mailanbieters.
+- Wenn Ihr Workspace die Maileinstellungen übernimmt oder Sie keinen Zugriff auf die Konfiguration haben, kontaktieren Sie den [Novaplan AI Support](mailto:support@novaplan.ai).

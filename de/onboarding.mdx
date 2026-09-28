@@ -1,0 +1,43 @@
+---
+title: "Workspace-Einrichtung"
+description: "Administrationsreferenz für KI-Modell, Embedding-Modell und Speicher bei der Ersteinrichtung."
+icon: "gear"
+---
+
+Novaplan AI erstellt den Workspace Ihrer Organisation, richtet die meisten Einstellungen ein und lädt Ihre Nutzerinnen und Nutzer ein. Wenn Sie eine Einladung erhalten haben, beginnen Sie mit [Erste Schritte](/de/quickstart). Eine Systemeinstellung ist nur nötig, wenn Novaplan Ihnen diese Aufgabe zugewiesen hat.
+
+<Info>
+  Diese Seite richtet sich an Administratorinnen und Administratoren, die eine vereinbarte Einrichtung prüfen oder abschließen. Bei einem bereits konfigurierten Workspace erscheint die Ersteinrichtung möglicherweise nicht. Ändern Sie vorhandene Einstellungen nur in Abstimmung mit Novaplan AI.
+</Info>
+
+## Ersteinrichtung des Systems
+
+Der aktuelle Einrichtungsablauf umfasst ein KI-Modell, ein Embedding-Modell und den Speicher. Falls Novaplan diese Einstellungen bereits vorbereitet hat, prüfen Sie ihre Funktion, bevor Sie etwas ändern.
+
+### 1. KI-Modell
+
+Für KI-Funktionen wird ein KI-Modell benötigt. Wählen Sie einen für Ihren Workspace freigegebenen Anbieter und ein Modell oder verwenden Sie ein bereits konfiguriertes Modell. Die verfügbaren Anbieter und Eingabefelder hängen vom gewählten Anbieter ab. Tragen Sie Zugangsdaten oder einen Endpunkt nur ein, wenn der Anbieter diese verlangt. Speichern Sie das Modell und prüfen Sie, ob es als Standard gewählt ist.
+
+Anbieterspezifische Angaben finden Sie unter [KI-Modelle](/de/ai-models/overview). Übernehmen Sie keine Modell-ID und keine Zugangsdaten aus einem Screenshot.
+
+### 2. Embedding-Modell
+
+Für die semantische Suche wird ein Embedding-Modell benötigt. Wählen Sie ein bereits eingerichtetes Modell, fügen Sie einen freigegebenen Anbieter hinzu oder wählen Sie den Systemstandard, falls diese Option angeboten wird. Die Schaltfläche **Skip** öffnet, sofern vorhanden, den Weg zum Systemstandard. Sie bedeutet nicht, dass die Suche ohne Embeddings funktioniert. Speichern oder wählen Sie ein Modell, bevor Sie fortfahren.
+
+Weitere Angaben zur Anbieterkonfiguration finden Sie unter [KI-Modelle](/de/ai-models/overview).
+
+### 3. Speicher
+
+Im Einrichtungsablauf stehen lokaler Speicher und Amazon S3 zur Wahl. „Lokal“ bedeutet Speicher, der dem gehosteten Workspace zur Verfügung steht, und keinen Ordner auf Ihrem Computer. Novaplan bereitet die passende Einstellung normalerweise vor. Ändern Sie sie nur nach Absprache und prüfen Sie den Zugriff, bevor Sie Nutzer einladen oder Inhalte synchronisieren. Wenn lokaler Speicher die vereinbarte Konfiguration ist, können Sie die vorhandene Einstellung beibehalten.
+
+Die verwalteten Speicheroptionen beschreibt die Seite [Externe Dienste](/de/system-overview/external-services). Azure Blob wird von der Plattform unterstützt, erscheint aber nicht auf der aktuellen Seite zur Ersteinrichtung.
+
+## Einstellungen außerhalb der Ersteinrichtung
+
+Die folgenden Einstellungen bleiben als getrennte Administrationsaufgaben verfügbar. Sie sind keine weiteren Seiten des aktuellen Einrichtungsablaufs:
+
+- [Konnektoren](/de/connectors/overview): Verbinden Sie freigegebene Datenquellen, nachdem der Workspace bereit ist. Zugangsdaten und Berechtigungen unterscheiden sich je nach Quelle.
+- [Öffentliche Dienst-URLs](/de/system-overview/internal-services): Novaplan richtet diese normalerweise für OAuth-Weiterleitungen und Webhooks ein. Stimmen Sie Änderungen am produktiven System mit dem Support ab.
+- [E-Mail-Versand (SMTP)](/de/smtp): Novaplan richtet den Maildienst für Einladungen und weitere E-Mail-Funktionen normalerweise ein.
+
+Prüfen Sie anschließend, ob eine eingeladene Person sich anmelden und die vorgesehenen Funktionen verwenden kann. Falls eine Einstellung fehlt oder eine Ansicht anders aussieht, kontaktieren Sie den [Novaplan AI Support](mailto:support@novaplan.ai).

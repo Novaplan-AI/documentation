@@ -1,21 +1,21 @@
 ---
 title: Ollama
-description: "Configure PipesHub Workplace AI to use different Ollama models"
+description: "Configure Novaplan AI to use different Ollama models"
 ---
 
 # Ollama Configuration
 
 ![Ollama Configuration Interface](/images/ai-models/llm/Ollama_LLMConfig.png)
 
-*The Ollama configuration screen in PipesHub where you'll configure your local Ollama instance connection*
+*The Ollama configuration screen in Novaplan AI where you'll configure the model server connection*
 
-PipesHub allows you to integrate with Ollama to run open-source language models locally, providing privacy-focused AI capabilities in your workspace with full control over your data and infrastructure.
+Novaplan AI can connect to an Ollama service operated by your organization or Novaplan. Coordinate the model server, network access, and data handling with Novaplan before adding it to a managed workspace.
 
 ## Required Fields
 
 ### Model Name *
 
-The Model Name field defines which Ollama model you want to use with PipesHub.
+The Model Name field defines which Ollama model you want to use with Novaplan AI.
 
 **Popular Ollama models include:**
 - `gemma4:latest` - Google's Gemma 4 model
@@ -32,12 +32,12 @@ The Model Name field defines which Ollama model you want to use with PipesHub.
 The Endpoint URL specifies where your Ollama instance is running. Defaults to `http://host.docker.internal:11434` if left blank.
 
 **Common configurations:**
-- `http://host.docker.internal:11434` - For accessing Ollama from within a Docker container (default)
-- `https://your-server-domain` - For remote Ollama instances
+- `http://host.docker.internal:11434` - Application default; use only if Novaplan confirms that this hostname resolves to your Ollama service from the workspace
+- `https://your-server-domain` - Example of a separately hosted, reachable Ollama service
 
 **Default port:** Ollama runs on port `11434` by default.
 
-**Note:** Ensure your Ollama instance is running and accessible at the specified endpoint before configuring PipesHub.
+**Note:** Your computer's `localhost` is not automatically reachable from a managed Novaplan AI workspace. Confirm the endpoint with Novaplan before configuring it.
 
 ### API Key
 
@@ -60,7 +60,7 @@ Enable the Multimodal checkbox if your selected model supports both text and ima
 - `qwen3-vl:8b`
 
 **When enabled:**
-- PipesHub can send both text and image data to the model
+- Novaplan AI can send both text and image data to the model
 - Supports use cases like image analysis, visual question answering, and document understanding
 
 ### Reasoning
@@ -82,15 +82,15 @@ As shown in the image above:
 4. (Optional) Enter an API Key if your Ollama instance requires authentication
 5. (Optional) Check "Multimodal" if your model supports text + image processing
 6. (Optional) Check "Reasoning" if your model has enhanced reasoning capabilities
-7. Click **Add Model** to save and validate your credentials
+7. Click **Add Model**, then test a request from the managed workspace
 
 > Model Name is the only required field. The endpoint defaults to `http://host.docker.internal:11434` if left blank. No API key is required for a standard local Ollama installation.
 
 ## Prerequisites
 
-Before configuring Ollama in PipesHub, ensure you have:
+Before configuring Ollama in Novaplan AI, coordinate with the model-server operator to ensure:
 
-1. **Ollama installed** on your machine or server
+1. **Ollama installed** on the agreed model server
    - Download from [ollama.com](https://ollama.com/)
    - Follow installation instructions for your operating system
 
@@ -105,26 +105,26 @@ Before configuring Ollama in PipesHub, ensure you have:
    ollama serve
    ```
 
-4. **Network accessibility** - Ensure PipesHub can reach your Ollama endpoint
+4. **Network accessibility** - Ask Novaplan to verify that the managed workspace can reach your Ollama endpoint
 
 ## Usage Considerations
 
 ### Advantages of Ollama
-- **Privacy:** All processing happens locally or on your infrastructure
-- **Cost-effective:** No API usage fees or quotas
-- **Customizable:** Full control over model selection and configuration
-- **Offline capable:** Works without internet connectivity (after initial model download)
-- **No rate limits:** Process as many requests as your hardware can handle
+- **Data location:** Processing occurs on the Ollama server your organization or Novaplan provides; confirm its location and access controls before use
+- **Cost planning:** A self-hosted Ollama server does not charge per local API request, but its compute, storage, network, and Novaplan service costs still matter. Hosted Ollama or a gateway can have separate charges and limits.
+- **Customizable:** The model-server operator controls the models and server configuration
+- **Network-dependent:** The managed workspace must maintain access to the Ollama server
+- **Capacity-dependent:** Throughput can be limited by hardware, server settings, a gateway, or workspace policy
 
 ### System Requirements
-- Sufficient RAM (varies by model - typically 8GB minimum, 16GB+ recommended)
+- Sufficient RAM or GPU memory for the selected model; check its published requirements
 - Modern CPU or GPU for optimal performance
-- Adequate disk space for model storage (models range from 2GB to 40GB+)
+- Adequate disk space for the selected model and its variants
 
 ### Performance Tips
 - Use GPU acceleration when available for faster inference
 - Choose smaller models for quicker responses if your use case allows
-- Consider quantized models (e.g., `llama2:7b-q4` vs `llama2:7b`) for lower memory usage
+- Consider a smaller or quantized model if memory or response time is constrained
 
 ## Troubleshooting
 
@@ -132,7 +132,7 @@ Before configuring Ollama in PipesHub, ensure you have:
 - **Verify Ollama is running:** Run `ollama list` in your terminal
 - **Check endpoint URL:** Ensure the URL matches where Ollama is accessible
 - **Firewall settings:** Verify that port 11434 is not blocked
-- **Docker networking:** If using Docker, ensure proper network configuration for `host.docker.internal`
+- **Managed workspace routing:** Ask Novaplan to verify the endpoint and network path; the default `host.docker.internal` may not resolve in your workspace
 
 ### Model Issues
 - **Model not found:** Ensure you've pulled the model with `ollama pull <model-name>`
@@ -152,4 +152,4 @@ Visit the [Ollama Model Library](https://ollama.com/library) to browse all avail
 - Embedding models
 - Quantized variants for efficiency
 
-For additional support, refer to the [Ollama documentation](https://github.com/ollama/ollama/tree/main/docs) or contact PipesHub support.
+For additional support, refer to the [Ollama documentation](https://docs.ollama.com/api/introduction) or [contact Novaplan Support](/contact-us).

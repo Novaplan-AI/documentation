@@ -1,0 +1,23 @@
+---
+title: "API-Zugang für Entwickler"
+description: "Freigegebene Wege zur Verbindung von Anwendungen und Agenten mit einem Novaplan AI Workspace."
+---
+
+Novaplan AI bietet Integrationsmöglichkeiten für einen bestehenden, verwalteten Workspace. Welche APIs Ihrer Organisation zur Verfügung stehen, hängt von der Enterprise-Konfiguration und den für Ihre Integration freigegebenen Rechten ab. Klären Sie Endpunkte und Authentifizierung mit [Novaplan Support](/de/contact-us), bevor Sie eine Anwendung gegen die REST-API entwickeln.
+
+## Integrationsweg wählen
+
+| Aufgabe | Einstieg |
+| --- | --- |
+| Coding-Agenten oder andere MCP-Clients mit Unternehmenswissen verbinden | [MCP-Server im Überblick](/de/mcp/overview) und [Werkzeugreferenz](/de/mcp/tools) |
+| Ein persönliches Skript oder einen Client als eine Person authentifizieren | [Persönliche Zugriffstokens](/de/developer/personal-access-tokens) |
+| Mehrere Personen eine Anwendung einzeln autorisieren lassen | [OAuth-2.0-Anwendungen](/de/developer/oauth2) |
+| Den Workspace und seine Komponenten verstehen | [Systemüberblick](/de/system-overview) |
+
+MCP-Clients verbinden sich normalerweise mit dem `/mcp`-Endpunkt des Workspaces. Ein persönliches Zugriffstoken handelt im Namen seines Eigentümers und bleibt auf dessen Berechtigungen und die gewährten Scopes beschränkt. Der OAuth Authorization Code Flow eignet sich, wenn jede Person sich selbst anmelden und zustimmen soll. Verwenden Sie OAuth `client_credentials` nicht für eine Integration, die den Zugriff einer bestimmten Person beachten muss.
+
+## Zugang zur REST-API
+
+Der detaillierte Katalog der Dienst-APIs gehört nicht zu dieser ersten öffentlichen Dokumentationsversion. Einige interne oder administrative Routen der zugrunde liegenden Plattform sind im bereitgestellten Novaplan AI Enterprise Workspace möglicherweise nicht aktiviert oder für Kundenintegrationen freigegeben. Leiten Sie aus einer internen Route oder einem Codebeispiel keinen unterstützten API-Vertrag ab.
+
+Beschreiben Sie [Novaplan Support](/de/contact-us), welche Daten Ihre Anwendung lesen oder ändern soll, für welche Personen sie handelt und ob MCP Ihren Anwendungsfall abdeckt. Novaplan kann die unterstützte Schnittstelle, die nötigen Rechte und gegebenenfalls SDK-Optionen für Ihren Workspace bestätigen.

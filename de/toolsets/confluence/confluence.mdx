@@ -1,0 +1,65 @@
+---
+title: "Confluence-Cloud-Toolset"
+description: "Confluence-Seiten mit Agenten suchen, erstellen und bearbeiten."
+icon: "/logo/confluence.png"
+---
+
+## Überblick
+
+Das Confluence-Toolset gibt Agenten Live-Zugriff auf Inhalte in Confluence Cloud. Sie können Seiten und Spaces durchsuchen, Seiten erstellen oder ändern, Versionen abrufen, Kommentare hinzufügen, Anhänge abrufen und Personen suchen. Eine Workspace-Administration richtet die gemeinsame Instanz unter **Workspace Settings → Actions** ein. Jede Person verbindet anschließend ihr eigenes Atlassian-Konto unter **Your actions**. Für die Suche in zuvor synchronisierten Inhalten verwenden Sie den [Confluence-Konnektor](/de/connectors/confluence/confluence).
+
+Diese Anleitung gilt für **Confluence Cloud**. Wenn Ihre Organisation Confluence auf eigenen Servern betreibt, verwenden Sie stattdessen das [Confluence-Data-Center-Toolset](/de/toolsets/confluence/confluence-data-center).
+
+| Aufgabe | Verfügbare Tools |
+| --- | --- |
+| Seiten bearbeiten | `create_page`, `update_page`, `update_page_title`, `comment_on_page` |
+| Seiten lesen | `get_page_content`, `get_pages_in_space`, `get_child_pages`, `get_page_versions` |
+| Suche und Spaces | `search_pages`, `search_content`, `get_spaces`, `get_space` |
+| Anhänge und Personen | `list_page_attachments`, `get_attachment_metadata`, `download_attachment`, `search_users` |
+
+<Warning>
+  Änderungen an Seiten und Kommentare sind für andere Confluence-Nutzende sichtbar. Prüfen Sie Ziel-Space, Seite und beabsichtigte Änderung vor einer schreibenden Agentenaktion.
+</Warning>
+
+## Authentifizierung wählen
+
+| Methode | Gemeinsame Einrichtung | Persönliche Anmeldung |
+| --- | --- | --- |
+| **OAuth 2.0 (3LO)** | Atlassian-App mit Client ID und Client Secret | Jede Person bestätigt den OAuth-Zugriff |
+| **API Token** | Atlassian Site URL | Jede Person hinterlegt eigene E-Mail-Adresse und eigenen API Token |
+
+### OAuth 2.0 einrichten
+
+1. Öffnen Sie die [Atlassian Developer Console](https://developer.atlassian.com/console/myapps/). Sie können eine vorhandene OAuth-App für Jira und Confluence gemeinsam verwenden, sofern die nötigen API-Berechtigungen eingerichtet sind. Bei einer neuen App wählen Sie **OAuth 2.0 integration** und **Resource-level** als Zugriffstyp.
+2. Öffnen Sie **Workspace Settings → Actions → Confluence → + Setup** in Novaplan AI und kopieren Sie die angezeigte **Redirect URI**.
+3. Hinterlegen Sie diese URI in der Atlassian-App unter **Authorization → OAuth 2.0 (3LO)** als **Callback URL**. Der Wert muss exakt übereinstimmen.
+4. Wählen Sie unter **Permissions** die benötigten Berechtigungen für **User Identity API** und **Confluence API**. Die Berechtigungsliste aus der Integrationsanleitung steht unten. Prüfen Sie mit Ihrer Atlassian-Administration, welche davon für die tatsächlich freigegebenen Aktionen nötig sind.
+5. Kopieren Sie unter **Settings → Authentication details** die **Client ID** und das **Secret**. Tragen Sie beide zusammen mit einem **Instance Name** in der Confluence-Instanz unter **Workspace Settings → Actions** ein und wählen Sie **Create**.
+6. Eine Workspace-Administration kann die gemeinsame Instanz direkt unter **Workspace Settings → Actions** authentifizieren. Alle anderen Personen öffnen **Your actions → Confluence** im Bereich **Personal** und authentifizieren ihren eigenen Zugang. Wählen Sie **Authenticate with OAuth**, die richtige Confluence-Site und bestätigen Sie die Berechtigungen. Laut Quellanleitung sollte dabei dieselbe E-Mail-Adresse wie für das Novaplan-Konto verwendet werden.
+
+Die OAuth-App benötigt **Resource-level**-Zugriff. Mit **Account-level** funktioniert die persönliche Site-Auswahl in diesem Ablauf nicht. Die Callback URL muss exakt mit der in Novaplan AI angezeigten Redirect URI übereinstimmen. Client ID und Client Secret gehören zur gemeinsamen App; die persönlichen Zugangstokens werden erst bei der Anmeldung jeder Person ausgestellt.
+
+#### Berechtigungsliste aus der Integrationsanleitung
+
+| API | Scopes |
+| --- | --- |
+| User Identity | `read:account` |
+| Confluence, klassische Scopes | `read:confluence-content.all`, `write:confluence-content`, `read:confluence-content.summary`, `read:confluence-props`, `read:confluence-space.summary`, `read:confluence-user`, `read:confluence-groups`, `search:confluence` |
+| Confluence, granulare Scopes für Inhalte | `read:content-details:confluence`, `read:page:confluence`, `write:page:confluence`, `read:blogpost:confluence`, `read:attachment:confluence`, `read:comment:confluence`, `write:comment:confluence`, `delete:comment:confluence` |
+| Confluence, granulare Scopes für Verwaltung und Metadaten | `read:space:confluence`, `read:user:confluence`, `read:group:confluence`, `read:permission:confluence`, `read:audit-log:confluence`, `read:folder:confluence`, `read:email-address:confluence` |
+
+Die Liste bildet die dokumentierte Integration ab; sie ist keine Aufforderung, jeder App pauschal alle Rechte zu geben. Stimmen Sie insbesondere Schreib-, Lösch- und Audit-Rechte mit dem geplanten Einsatz ab.
+
+### API Token einrichten
+
+1. Jede Person erstellt unter [Atlassian API Tokens](https://id.atlassian.com/manage-profile/security/api-tokens) einen eigenen Token und kopiert ihn sofort; der Wert wird nur einmal angezeigt.
+2. Die Workspace-Administration öffnet **Workspace Settings → Actions → Confluence → + Setup**, wählt **API Token** und trägt nur einen **Instance Name** sowie die **Atlassian Site URL** ohne abschließenden Schrägstrich ein. Anschließend wählt sie **Create**.
+3. Jede Person öffnet **Your actions → Confluence**, trägt ihre Atlassian-E-Mail-Adresse und den zugehörigen **API Token** ein und wählt **Save credentials**. Diese Zugangsdaten gelten nur für die jeweilige Person.
+
+## In einem Agenten verwenden
+
+Öffnen Sie auf der Startseite **Agents → +**, erstellen Sie einen Agenten und ziehen Sie das Confluence-Toolset auf die Arbeitsfläche. Verbinden Sie es mit **Agent Core** und speichern Sie den Agenten. Nennen Sie beim Erstellen oder Ändern einer Seite den Ziel-Space, den Seitentitel und gegebenenfalls die übergeordnete Seite. Bei Suchanfragen helfen eindeutige Titel oder Begriffe; prüfen Sie vor Änderungen, ob der Agent die richtige Seite gefunden hat. Eine Aktion zum Aktualisieren einer Seite kann den **gesamten Seiteninhalt ersetzen**; geben Sie den vollständigen gewünschten Inhalt an und prüfen Sie das Ergebnis. Um Space-IDs zu finden, lassen Sie den Agenten zunächst die verfügbaren Spaces auflisten.
+
+Der [Confluence-Konnektor](/de/connectors/confluence/confluence) synchronisiert Inhalte für die spätere Suche. Das Toolset greift bei einer Agentenaktion direkt auf Confluence zu und kann je nach Berechtigung Inhalte schreiben. Für mehrere Personen ist OAuth meist der einfachere persönliche Anmeldeweg; verwenden Sie API Tokens, wenn eine OAuth-App nicht eingerichtet werden kann oder jede Person ihren Token selbst verwalten soll.
+
+Bei Anmeldeproblemen prüfen Sie Callback URL, ausgewählte Site, Berechtigungen, Secret-Ablauf und die persönliche Anmeldung. Bei Fragen hilft [Novaplan Support](/de/contact-us).

@@ -1,25 +1,25 @@
 ---
 title: "Use with QM"
-description: "Give QM agents access to your organization's documents through PipesHub — each person sees only what they can already see"
+description: "Give QM agents access to your organization's documents through Novaplan AI — each person sees only what they can already see"
 icon: "terminal"
 ---
 
-When this is done, anyone in your [QM](https://github.com/yc-software/qm) org can ask the agent about company documents. Answers are limited to what that person's PipesHub account can see.
+When this is done, anyone in your [QM](https://github.com/yc-software/qm) org can ask the agent about company documents. Answers are limited to what that person's Novaplan AI account can see.
 
-If you **already run QM**, start at [Connect PipesHub](#connect-pipeshub). Standing up QM is the long part. The integration itself is short.
+If you **already run QM**, start at [Connect Novaplan AI](#connect-novaplan-ai). Standing up QM is the long part. The integration itself is short.
 
 <Warning>
-  This is **not** an MCP attachment. QM is an MCP *server* to its own harness — it cannot add PipesHub as an MCP client the way Cursor or Claude Code can. The integration is a `pipeshub` CLI inside the agent sandbox.
+  This is **not** an MCP attachment. QM is an MCP *server* to its own harness — it cannot add Novaplan AI as an MCP client the way Cursor or Claude Code can. The integration is a `pipeshub` CLI inside the agent sandbox.
 </Warning>
 
-Each person uses **their own** PipesHub [personal access token](/developer/personal-access-tokens). Never share one token across the org.
+Each person uses **their own** Novaplan AI [personal access token](/developer/personal-access-tokens). Never share one token across the org.
 
 ## What you need
 
 | You need | Why |
 | --- | --- |
-| A running PipesHub with indexed documents | That is what the agent searches |
-| A **public HTTPS** URL for that PipesHub | Agent sandboxes run on [Fly Sprites](https://fly.io/docs/sprites/), not on your laptop. `localhost` is unreachable from them. A Cloudflare tunnel is enough for a trial |
+| A running Novaplan AI with indexed documents | That is what the agent searches |
+| A **public HTTPS** URL for that Novaplan AI | Agent sandboxes run on [Fly Sprites](https://fly.io/docs/sprites/), not on your laptop. `localhost` is unreachable from them. A Cloudflare tunnel is enough for a trial |
 | Fly Sprites access (`sprite login`) | A Fly account alone is not enough. Sandboxes do not run locally |
 | A model API key (Anthropic, OpenRouter, …) | QM calls a model every turn |
 | Node **24+** and Docker | QM requires `engines.node` `>=24.0.0` |
@@ -56,7 +56,9 @@ npx qm up
   `qm setup` writes empty placeholders for values you skip. If you later append the real value, the key can appear twice. Search `.env` for duplicates before debugging anything else. The first `qm up` can take 10–40 minutes (large image pulls). When it finishes it prints URLs.
 </Note>
 
-## Connect PipesHub
+<div id="connect-novaplan-ai" />
+
+## Connect Novaplan AI
 
 From the QM deployment directory:
 
@@ -71,7 +73,7 @@ If you already ran `init-qm` from 2.3.1, delete `sandbox/Dockerfile`. Sprites ne
 
 Re-running is safe: existing files are kept. Do not re-run 2.3.1 after deleting the file, or it will write it again. Confirm `pipeshub --version` is 2.3.2 or later before `init-qm`.
 
-Set `egress` in `sandbox/tools/pipeshub/tool.json` to your PipesHub hostname only — for example `pipeshub.your-company.com` or `your-subdomain.trycloudflare.com`. No scheme, no path.
+Set `egress` in `sandbox/tools/pipeshub/tool.json` to your approved Novaplan AI hostname only — for example `workspace.example.com`. No scheme, no path. The directory name is part of the current CLI package's functional configuration.
 
 Then:
 
@@ -87,7 +89,7 @@ npx qm check && npx qm up
 
 <Steps>
   <Step title="Create a personal access token">
-    In PipesHub: **Developer Settings → Personal Access Tokens → New token**. Accept the defaults. Keep the `phpat_` prefix if the token has one; it is for secret scanners, not a second secret.
+    In Novaplan AI: **Developer Settings → Personal Access Tokens → New token**. Select a bounded expiry and the minimum scopes needed for the approved integration; leaving scopes unselected can grant the server's full configured MCP scope set. Keep the `phpat_` prefix if the token has one; it is part of the displayed token.
 
     Do not add `semantic:read` if the agent asks for it — that scope is search *history*, not search, and it is not on a stock instance. Search is `semantic:write`, and the CLI already uses it.
 
@@ -101,7 +103,7 @@ npx qm check && npx qm up
     | `pipeshub` | `PIPESHUB_TOKEN` | The PAT only — no `KEY=`, no URL |
     | `pipeshub` | `PIPESHUB_BASE_URL` | Public HTTPS origin, no `/mcp` path |
 
-    Service must be exactly `pipeshub`. The environment-variable field is marked optional; fill it in. If you leave it blank on the token entry, QM derives `PIPESHUB_TOKEN` from the service name. It will not derive `PIPESHUB_BASE_URL`.
+    Use service `pipeshub` for the bundled QM setup. The environment-variable field is marked optional; fill it in. If you leave it blank on the token entry, QM derives `PIPESHUB_TOKEN` from the service name. It will not derive `PIPESHUB_BASE_URL`.
   </Step>
 </Steps>
 
@@ -110,7 +112,7 @@ npx qm check && npx qm up
 </Warning>
 
 <Note>
-  The create-token paste block (`PIPESHUB_MCP_URL=` / `PIPESHUB_MCP_TOKEN=`) is for a local MCP client, not for this keychain.
+  The CLI in bundled package 2.3.3 also accepts `PIPESHUB_MCP_TOKEN` and `PIPESHUB_MCP_URL`; it strips `/mcp` from the latter. If you use the create-token paste block in QM, split it into **two personal keychain entries** and set each environment-variable field explicitly. The table above is the recommended setup for clarity.
 </Note>
 
 ## First message
@@ -135,7 +137,7 @@ If the CLI says it is not connected, have the agent run `pipeshub auth connect-h
 
 | Check | Expect |
 | --- | --- |
-| `pipeshub auth status --json` | Connected; your user and org; no token printed |
+| `pipeshub auth status --json` | Connected; your user and org; no token printed; a token echoed by an error response is redacted |
 | `pipeshub search "a term you know is indexed" --json` | `hits` with `recordId` / `webUrl`, or exit `6` if nothing matches |
 | `pipeshub ask "…" --json` | An answer **with citations**, or exit `6` if uncited |
 | A document you cannot access | Denial — not a leak |
@@ -145,8 +147,11 @@ If the CLI says it is not connected, have the agent run `pipeshub auth connect-h
 | Symptom | Cause | What to do |
 | --- | --- | --- |
 | Agent says it needs `semantic:read` | It called `GET /api/v1/search` (history) instead of the CLI | New chat. Tell it to use `pipeshub ask` / `search`. Do not widen the PAT |
-| `sources: []` and `ask` 401 with a `phpat_` token | PipesHub older than [pipeshub-ai#2971](https://github.com/pipeshub-ai/pipeshub-ai/pull/2971) (not in `v0.6.0-beta`) | Upgrade PipesHub. Keep the `phpat_` prefix — do not strip it |
+| `sources: []` and `ask` 401 with a `phpat_` token | The deployed version or token handling may differ from the package's expectations | Contact Novaplan Support to check compatibility. Keep the token intact — do not strip its prefix |
 | `localhost` / connection refused from the agent | The sandbox is not on your machine | Use public HTTPS; put that origin in the keychain |
+| `could not reach …/mcp: fetch failed (…)` | Network or certificate failure, not necessarily authentication | Check the public endpoint, DNS, and certificate trust |
+| `PIPESHUB_BASE_URL is not a valid URL` with a token-like value | URL and token keychain entries are swapped | Put the workspace origin under `PIPESHUB_BASE_URL` and the PAT under `PIPESHUB_TOKEN` |
+| The server redirected from HTTP to HTTPS | The CLI does not follow the redirect or send the token to it | Set the base URL directly to the verified HTTPS origin of your workspace |
 | `PIPESHUB_TOKEN` set, `PIPESHUB_BASE_URL` missing | `sandbox.env` does not reach Sprites | Second keychain entry (or org credential) for the URL |
 | `pipeshub: command not found` | Stock Sprite image, no first-run install | `npm install -g @pipeshub-ai/mcp` once on that Sprite |
 | `qm doctor` rejects a Resend *sending-only* key | [qm#353](https://github.com/yc-software/qm/issues/353) | Known false complaint; the key is the right kind |
@@ -158,4 +163,4 @@ If the CLI says it is not connected, have the agent run `pipeshub auth connect-h
 - Point the sandbox at `http://localhost:…`
 - Invent a source the CLI did not return
 - Expect `qm sandbox publish` to put `pipeshub` on PATH (Sprites)
-- Paste the MCP create-token block (`PIPESHUB_MCP_URL` / `PIPESHUB_MCP_TOKEN`) into the QM keychain
+- Paste the MCP create-token block into a single QM keychain credential; split its URL and token into two personal entries with explicit variable names

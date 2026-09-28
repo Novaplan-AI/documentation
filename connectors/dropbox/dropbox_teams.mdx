@@ -62,7 +62,7 @@ Instead of re-downloading the entire list of files to check for changes, you can
 
 <Accordion title="Create Dropbox App" icon="rocket">
 
-This guide will walk you through the process of creating a Dropbox application and connecting it to PipesHub to fetch your files and folders.
+This guide will walk you through the process of creating a Dropbox application and connecting it to Novaplan AI to fetch your files and folders.
 
 ### Dropbox Team Account
 
@@ -82,7 +82,7 @@ This guide will walk you through the process of creating a Dropbox application a
 3. Configure your new app with the following settings:
    - **Choose an API:** Select **Scoped access**.
    - **Type of access:** Select **Full Dropbox**.
-   - **Name your app:** Enter a unique name for your application, for example, "Pipeshub Connector".
+   - **Name your app:** Enter a unique name for your application, for example, "Novaplan AI Connector".
 
 4. Click **Create app**. You will be redirected to your new app's settings page.
 
@@ -97,13 +97,17 @@ This guide will walk you through the process of creating a Dropbox application a
     width="90%"
   />
 
-2. Under **Individual Scopes**, check the boxes for the permissions PipesHub needs to access your data:
+2. Under **Individual Scopes**, check the boxes for the permissions Novaplan AI needs to access your data:
    - `account_info.read`
    - `files.content.read`
    - `files.metadata.read`
    - `file_requests.read`
    - `sharing.read`
    - `sharing.write`
+
+   <Note>
+     During sync, the connector attempts to create Dropbox shared links for file and folder preview URLs. The accessible connector code requests Dropbox's `no_one` audience for new links and may reuse an existing link. Review this permission and your Dropbox shared-link policy with your administrator.
+   </Note>
 
 3. Under **Team Scopes**, check the boxes:
    - `groups.read`
@@ -126,9 +130,9 @@ This guide will walk you through the process of creating a Dropbox application a
 
 6. You also need to enable **additional Development users**.
 
-7. Find the **OAuth 2** section and add the following URL to the **Redirect URIs** field (where {your_pipeshub_base_url} is your PipesHub instance URL):
+7. Find the **OAuth 2** section and add the following URL to the **Redirect URIs** field (replace `{your_workspace_domain}` with your Novaplan AI workspace hostname, without `https://`):
 ```
-http://{your_pipeshub_base_url}/connectors/oauth/callback/Dropbox
+https://{your_workspace_domain}/connectors/oauth/callback/Dropbox
 ```
 8. Click **Add** to save the URI.
 
@@ -149,7 +153,7 @@ http://{your_pipeshub_base_url}/connectors/oauth/callback/Dropbox
 
 </Accordion>
 
-<Accordion title="Connect Dropbox to PipesHub" icon="plug">
+<Accordion title="Connect Dropbox to Novaplan AI" icon="plug">
 
 ### Step 1: Configure Connection
 
@@ -203,7 +207,7 @@ http://{your_pipeshub_base_url}/connectors/oauth/callback/Dropbox
      />
    </div>
 <Warning>
-  **Important:** Authorize using the same email address as your PipesHub account. Using a different email will cause permission issues on the PipesHub platform.
+  Authorize with a Dropbox team account approved for this shared connector and able to read the intended data. It does not need to match the Novaplan AI administrator's email. Each viewer's Dropbox identity and item permissions are mapped separately.
 </Warning>
 
 2. After giving consent, you can click on **Continue to configuration** to configure connector settings. More about it in the next section.
@@ -326,7 +330,7 @@ Uses the saved cursor to call team logs in 'members' category and listens for `m
 
 - **Member Added:** If a user's status changes to active, the system treats them as a new addition and processes their profile.
 
-- **Member Removed:** If a user's status changes to removed, they are not removed from PipesHub as they might still be part of team.
+- **Member Removed:** If a user's status changes to removed, they are not removed from Novaplan AI as they might still be part of team.
 
 At the end of the process, the new cursor returned by the Dropbox API is saved to the sync point.
 
@@ -454,14 +458,14 @@ This is an incremental, event-driven process designed to keep file and folder pe
 
 There are three common causes:
 
-1. **Email mismatch** - The email used during connector authentication doesn't match your PipesHub account email. This causes permission issues preventing you from accessing synced data.
-   - **Fix:** Reconfigure the connector and authenticate using the same email as your PipesHub account.
+1. **Viewer identity or source permissions do not match** - The Team connector imports Dropbox members, groups, and file permissions. A viewer may not see a file if their Dropbox email cannot be matched to their Novaplan AI account, or if Dropbox does not grant that viewer access.
+   - **Fix:** Ask your administrator to check that viewer's account email, Dropbox team membership, and access to the affected file or folder. The Dropbox admin account authorizing the shared connector does not have to be the same account as every viewer.
 
 2. **Records show in "All Records" but not in search** - Documents display in the All Records section but don't appear in search query results.
    - **Fix:** Verify sync filters in the connector settings and ensure indexing has completed. Check that the data matches your search query criteria.
 
 3. **Data not yet indexed** - The connector is still syncing or hasn't completed the initial indexing process.
-   - **Fix:** Go to **Settings > Connectors**, check the sync status, and wait for indexing to complete.
+   - **Fix:** Go to **Workspace Settings → Connectors**, check the sync status, and wait for indexing to complete.
 
 </Accordion>
 

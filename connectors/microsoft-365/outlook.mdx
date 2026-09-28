@@ -28,7 +28,7 @@ icon: "/logo/outlook.png"
 
 ## Overview
 
-The Microsoft Outlook connector provides access to organizational email data through Microsoft Graph. It syncs users, messages, attachments, and mail folders across your Microsoft 365 organization for search and retrieval in PipesHub.
+The Microsoft Outlook connector provides access to organizational email data through Microsoft Graph. It syncs users, messages, attachments, and mail folders across your Microsoft 365 organization for search and retrieval in Novaplan AI.
 
 ### What gets synced
 
@@ -42,17 +42,17 @@ The Microsoft Outlook connector provides access to organizational email data thr
 
 ### Authentication
 
-The connector uses **OAuth 2.0** with Microsoft Graph **application permissions** (client credentials plus **admin consent**). It runs as a background integration—no per-user interactive sign-in inside PipesHub for this connector.
+The connector uses **OAuth 2.0** with Microsoft Graph **application permissions** (client credentials plus **admin consent**). It runs as a background integration—no per-user interactive sign-in inside Novaplan AI for this connector.
 
 <Warning>
-  Registering the app, granting admin consent, and entering secrets in PipesHub requires appropriate **Microsoft Entra ID** (Azure AD) and **Microsoft 365** admin privileges. Use the same administrator identity in Azure and PipesHub when configuring consent-related steps to avoid permission mismatches.
+  Registering the app, granting admin consent, and entering secrets in Novaplan AI requires appropriate **Microsoft Entra ID** (Azure AD) and **Microsoft 365** admin privileges. The Microsoft administrator granting tenant consent can be different from the Novaplan AI administrator configuring the shared connector; verify each viewer's mailbox permissions separately.
 </Warning>
 
 ---
 
 ## Configuration Guide
 
-Follow the steps below: first register an app in Azure and grant permissions, then add the Outlook connector under **Workspace Settings** in PipesHub.
+Follow the steps below: first register an app in Azure and grant permissions, then add the Outlook connector under **Workspace Settings** in Novaplan AI.
 
 ### How to configure and enable the Outlook connector
 
@@ -77,9 +77,9 @@ Follow the steps below: first register an app in Azure and grant permissions, th
 </div>
 
 4. Enter application details:
-   - **Name** — A meaningful name (e.g. `PipesHub Outlook Connector`)
+   - **Name** — A meaningful name (e.g. `Novaplan AI Outlook Connector`)
    - **Supported account types** — **Accounts in this organizational directory only (Single tenant)**
-5. You do **not** need a **Redirect URI** for this connector; it uses application credentials and admin consent, not an interactive redirect flow in PipesHub.
+5. You do **not** need a **Redirect URI** for this connector; it uses application credentials and admin consent, not an interactive redirect flow in Novaplan AI.
 6. Click **Register**
 
 <div className="text-center">
@@ -97,7 +97,7 @@ Follow the steps below: first register an app in Azure and grant permissions, th
 #### Step 2: Copy application credentials
 
 1. After registration, open the app **Overview** page.
-2. Copy (you will paste these into PipesHub later):
+2. Copy (you will paste these into Novaplan AI later):
    - **Application (client) ID** — in **Essentials**
    - **Directory (tenant) ID** — in **Essentials**
 
@@ -117,7 +117,7 @@ Follow the steps below: first register an app in Azure and grant permissions, th
 
 1. In the left sidebar, open **Certificates & secrets**.
 2. Click **New client secret**.
-3. Set **Description** (e.g. `PipesHub Connector Secret`) and **Expires** (24 months is a common choice).
+3. Set **Description** (e.g. `Novaplan AI Connector Secret`) and **Expires** (24 months is a common choice).
 4. Click **Add**, then **copy the secret Value immediately** from the table (not the Secret ID).
 
 <div className="text-center">
@@ -274,7 +274,7 @@ Click **Save Configuration** when finished, or **← Back** to return to **Authe
 #### Step 9: Enable sync and monitor
 
 <Warning>
-  The administrator who grants consent in Azure should align with the **PipesHub account** used to configure this connector; mismatched identities often cause permission issues in PipesHub.
+  Confirm the Microsoft app has tenant admin consent for the intended mailboxes. The consenting administrator's email need not match the Novaplan AI administrator's email; individual mailbox visibility is mapped separately.
 </Warning>
 
 After saving, you may see **Instance is configured and ready to sync** — choose **Start Syncing Now** or **I'll do it later**.
@@ -298,7 +298,7 @@ On the **Outlook** connector page, turn **Sync Enabled** on when ready. Use **Sy
 </div>
 
 <Note>
-  There is no separate interactive “Sign in to Microsoft” step inside PipesHub for this connector after admin consent—access is via application permissions and client credentials.
+  There is no separate interactive “Sign in to Microsoft” step inside Novaplan AI for this connector after admin consent—access is via application permissions and client credentials.
 </Note>
 
 ## Supported Features
@@ -331,7 +331,7 @@ The Outlook connector syncs the following data:
 **Invalid client credentials**
 
 - Verify **Application (Client) ID**, **Client Secret**, and **Directory (Tenant) ID** with no extra spaces.  
-- Confirm the secret has not expired; create a new secret in Azure and update PipesHub if needed.
+- Confirm the secret has not expired; create a new secret in Azure and update Novaplan AI if needed.
 
 **Insufficient privileges**
 
@@ -345,7 +345,7 @@ The Outlook connector syncs the following data:
 
 **Secret expired**
 
-- Create a new client secret in Azure → **Certificates & secrets**, then update the **Authenticate Instance** tab in PipesHub.
+- Create a new client secret in Azure → **Certificates & secrets**, then update the **Authenticate Instance** tab in Novaplan AI.
 
 <Info>
   Personal Microsoft accounts (e.g. outlook.com as a consumer identity without the right tenant model for this flow) are not a supported target for this enterprise connector pattern.
@@ -386,8 +386,8 @@ The Outlook connector syncs the following data:
 
 There are three common causes:
 
-1. **Email mismatch** — The email used during connector authentication does not match your PipesHub account email. That causes permission issues and can hide synced data.  
-   - **Fix:** Reconfigure the connector and complete the flow using the **same email** as your PipesHub account (see the warning in Step 9).
+1. **Viewer identity or mailbox access does not match** — A viewer's Microsoft 365 email or mailbox permissions may not map to their Novaplan AI account.<br />
+   - **Fix:** Ask your administrator to check the affected viewer's email and mailbox access. The tenant admin who granted app consent can be a different person.
 
 2. **Records show in "All Records" but not in search** — Documents appear in All Records but not in search results.  
    - **Fix:** Verify sync filters and indexing toggles on **Configure Records**, and ensure indexing has finished for those items.
@@ -404,6 +404,6 @@ There are three common causes:
 <div className="text-center mt-12 p-6 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl">
   <h3 className="text-lg font-semibold mb-2">Ready to get started?</h3>
   <p className="text-gray-600 dark:text-gray-400">
-    The Outlook connector is ready for production use. Follow the configuration guide above, or contact support if you need help.
+    Coordinate the Microsoft 365 app permissions and mailbox scope with your administrator and Novaplan. After the first sync, verify search results with users who have different mailbox access.
   </p>
 </div>

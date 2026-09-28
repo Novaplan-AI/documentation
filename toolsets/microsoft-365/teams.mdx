@@ -30,7 +30,7 @@ icon: "/logo/teams.png"
 
 The Microsoft Teams **action** lets AI agents work with your organization through **Microsoft Graph**: post and read channel messages, manage chats, search conversations, manage teams and channels, and work with calendar events, online meetings, transcripts, and attendance.
 
-Administrators enable the integration under **Workspace → Actions** in the web app. Each user completes sign-in under **Your actions** so agents run with that user’s Microsoft identity and permissions.
+Administrators enable the integration under **Workspace Settings → Actions** in the web app. Each user completes sign-in under **Your actions** so agents run with that user’s Microsoft identity and permissions.
 
 ### Key Capabilities
 
@@ -97,7 +97,7 @@ These are the Graph-backed **tools** your agents can call once the Microsoft Tea
 1. Sign in to the [Azure portal](https://portal.azure.com) as an administrator (or a user who can register apps).
 2. Open **Microsoft Entra ID** (Azure Active Directory).
 3. Under **Manage**, select **App registrations** → **New registration**.
-4. Enter a name (for example, “PipesHub Teams actions”), choose **Accounts in any organizational directory and personal Microsoft accounts** if you need the broadest sign-in audience (or a stricter option for your tenant), then register.
+4. Enter a name (for example, “Novaplan AI Teams actions”), choose **Accounts in any organizational directory and personal Microsoft accounts** if you need the broadest sign-in audience (or a stricter option for your tenant), then register.
 5. Copy the **Application (client) ID** for later.
 
 {/* Screenshot: Entra app registration overview (application name and client ID) */}
@@ -114,7 +114,7 @@ These are the Graph-backed **tools** your agents can call once the Microsoft Tea
 
 1. In the app registration, open **API permissions**.
 2. Click **Add a permission** → **Microsoft Graph** → **Delegated permissions**.
-3. Add the permissions required by the Teams action (see the table below). Add each permission that appears in your product version; your administrator may consolidate or adjust these over time.
+3. Add only the permissions required by the Teams actions you have approved (see the reference table below). Verify the action list and scopes in your deployed product version with your Microsoft administrator.
 4. Click **Add permissions**.
 
 {/* Screenshot: Microsoft Graph delegated permissions for the Teams app */}
@@ -136,7 +136,7 @@ These align with the agent OAuth scope configuration for the Microsoft Teams act
 | `Team.ReadBasic.All` | Read basic team properties |
 | `Channel.ReadBasic.All` | Read basic channel properties |
 | `Channel.Create` | Create channels |
-| `Channel.Delete.All` | Delete channels |
+| `Channel.Delete.All` | Channel deletion permission listed in the source reference; no channel-deletion action is documented on this page, so confirm a real need before granting it |
 | `ChannelMessage.Read.All` | Read channel messages |
 | `ChannelMessage.Send` | Send channel messages |
 | `TeamMember.ReadWrite.All` | Add or manage team members |
@@ -154,6 +154,10 @@ These align with the agent OAuth scope configuration for the Microsoft Teams act
 | `OnlineMeetingTranscript.Read.All` | Read meeting transcripts |
 | `OnlineMeetingArtifact.Read.All` | Read meeting artifacts |
 | `ChannelMember.ReadWrite.All` | Add or manage channel members |
+
+<Warning>
+  This table records the source integration's documented delegated scopes; it is not a blanket consent request. The tool list above has no channel-deletion action. Do not grant `Channel.Delete.All` solely because it appears in this reference—confirm the deployed action and approval with your Microsoft administrator first.
+</Warning>
 
 ### Step 3: Grant admin consent (if required)
 
@@ -186,9 +190,11 @@ These align with the agent OAuth scope configuration for the Microsoft Teams act
   />
 </div>
 
-### Step 5: Create the Microsoft Teams action in PipesHub
+<div id="step-5-create-the-microsoft-teams-action-in-novaplan-ai" />
 
-These steps require a **workspace administrator**. Open **Workspace → Actions** (or `/workspace/actions/team`). Use the path that matches whether your organization already has a Microsoft Teams **org instance**.
+### Step 5: Create the Microsoft Teams action in Novaplan AI
+
+These steps require a **workspace administrator**. Open **Workspace Settings → Actions** (or `/workspace/actions/team`). Use the path that matches whether your organization already has a Microsoft Teams **org instance**.
 
 #### Case A — Organization does not have a Microsoft Teams instance yet
 
@@ -240,18 +246,19 @@ The **Action configuration** drawer does not show the redirect URL; you copy it 
 2. Open **Manage action configuration** (the settings control on the instance row).
 3. Under **Redirect URI**, copy the value (or use **Copy**). It matches your deployment host and this pattern:
 
-   `https://<your-pipeshub-host>/toolsets/oauth/callback/teams`
+   `https://your-workspace.example.com/toolsets/oauth/callback/teams`
 
    The path segment `teams` matches the Microsoft Teams action type. The value must match what you register in Entra **exactly** (scheme, host, path; no stray trailing slash unless your deployment includes one).
 
 4. In the Entra app registration, open **Authentication**.
 5. Under **Platform configurations**, add a **Web** platform if needed.
-6. Under **Redirect URIs**, paste the **exact** Redirect URI from PipesHub.
+6. Under **Redirect URIs**, paste the **exact** Redirect URI from Novaplan AI.
 7. For a web-based OAuth callback, you can enable **Access tokens** and **ID tokens** under **Implicit grant and hybrid flows** only if your organization’s security policy requires it; many confidential-client flows use the authorization code flow only.
 8. Save the **Authentication** blade.
 
 <Warning>
-  The Redirect URI in Azure must match the value from PipesHub **exactly** (including scheme, host, path, and trailing slashes).
+  The Redirect URI in Azure must match the value from Novaplan AI **exactly** (including scheme, host, path, and trailing slashes).
+  The `example.com` hosts in the screenshots are illustrative; use the URI shown in your Novaplan AI workspace.
 </Warning>
 
 {/* Screenshot: Azure Authentication blade with redirect URI */}
@@ -267,7 +274,7 @@ The **Action configuration** drawer does not show the redirect URL; you copy it 
 ### Step 7: Sign in and authorize
 
 **Administrators (org instance)**  
-On **Workspace → Actions**, open Microsoft Teams, select your instance, and use **Authenticate** to complete the Microsoft sign-in and consent flow. After redirect back to PipesHub, the instance should show as authenticated.
+On **Workspace Settings → Actions**, open Microsoft Teams, select your instance, and use **Authenticate** to complete the Microsoft sign-in and consent flow. After redirect back to Novaplan AI, the instance should show as authenticated.
 
 **End users**  
 Each person who should use Microsoft Teams in agents opens **Your actions** in the workspace sidebar (`/workspace/actions/personal`), finds Microsoft Teams, and completes **Authenticate** for the organization instance they need.
@@ -296,8 +303,8 @@ Each person who should use Microsoft Teams in agents opens **Your actions** in t
 
 | Aspect | Teams Connector | Microsoft Teams action |
 |--------|-----------------|-------------------------|
-| **Purpose** | Sync and index Teams-related content for search in PipesHub | Let agents call Microsoft Graph in real time (messages, meetings, membership, and more) |
-| **Data flow** | Primarily one-way import into PipesHub | Two-way: read and write through APIs |
+| **Purpose** | Sync and index Teams-related content for search in Novaplan AI | Let agents call Microsoft Graph in real time (messages, meetings, membership, and more) |
+| **Data flow** | Primarily one-way import into Novaplan AI | Two-way: read and write through APIs |
 | **When to use** | Search historical Teams or Microsoft 365 content already indexed | Create events, post messages, add members, fetch live meeting transcripts, and similar operations |
 
 Use a **connector** when you need retrieval over indexed data; use the **Microsoft Teams action** when the agent should **act** in Teams or Graph on behalf of the signed-in user (within granted permissions).
@@ -309,8 +316,10 @@ Use a **connector** when you need retrieval over indexed data; use the **Microso
 ---
 
 <Info>
-  Channel message search scans recent messages per channel (bounded by the tool’s parameters). Ask for a specific team or channel when possible so results stay focused.
+  Channel message search scans recent messages per channel (bounded by the tool’s parameters). Ask for a specific team or channel when possible so results stay focused. If no channel can be read, the tool reports the error instead of saying there were no matches.
 </Info>
+
+If Microsoft Graph refuses directory access, people-lookup tools report that permission error rather than saying the person does not exist. User lists read all available pages up to the requested limit.
 
 ---
 
@@ -320,13 +329,13 @@ Use a **connector** when you need retrieval over indexed data; use the **Microso
 Ask the agent to send a message to the right team and channel. It can use `get_teams` and `get_channels` to resolve IDs, then `send_channel_message`.
 
 **How do I direct-message someone?**  
-Ask to “DM” or “chat with” a person by display name, email, or UPN. The Microsoft Teams action uses `send_user_message` and resolves the user when possible.
+Ask to “DM” or “chat with” a person by display name, email, or UPN. The Microsoft Teams action uses `send_user_message` and sends only when it finds an exact display-name, email, UPN, or ID match across the directory. For a partial match it returns possible people and asks for an email or ID; it does not send. Reading a chat uses the same matching.
 
 **How do I reply in a thread?**  
 Ask to reply to a specific message or thread in a channel. The agent uses `reply_to_message` with the parent message ID when it is known, or reads the thread with `get_channel_messages` / `get_thread_replies` first.
 
 **How do I find or schedule a meeting?**  
-Use natural language with a time range. The agent can call `get_meetings`, `search_calendar_events_in_range`, `create_event`, or `create_channel_meeting` depending on whether the meeting is personal or tied to a channel.
+Use natural language with a time range. The agent can call `get_meetings`, `search_calendar_events_in_range`, `create_event`, or `create_channel_meeting` depending on whether the meeting is personal or tied to a channel. For recurring meetings, specify a valid daily, weekly, monthly, or yearly pattern. An unsupported pattern is refused instead of becoming a daily meeting.
 
 **How do I get a meeting transcript or who attended?**  
 Ask for the transcript or attendance for a specific online meeting. The agent uses `get_my_meeting_transcripts`, `get_people_attended`, or `get_people_invited` as appropriate, often after resolving the meeting from calendar or join information.

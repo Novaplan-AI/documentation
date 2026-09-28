@@ -1,0 +1,152 @@
+---
+title: "GitHub"
+description: "GitHub-Repositories, Issues, Pull Requests und Quellcode mit Novaplan AI durchsuchen."
+icon: "/logo/github.png"
+---
+
+Der GitHub-Konnektor synchronisiert Organisationen, Repositories, Issues, Pull Requests und Dateien des Standardbranches mit Novaplan AI. Inhalte werden entsprechend den GitHub-Zugriffsrechten in der Suche verfügbar.
+
+Novaplan richtet Ihren Workspace weitgehend für Sie ein. Die OAuth-App, die Auswahl der Repositories und die Berechtigungszuordnung stimmen Sie mit Ihrer GitHub-Administration und Novaplan ab.
+
+## Welche Inhalte werden übernommen?
+
+Jedes Repository wird in **Issues**, **Pull Requests** und **Code repository** gegliedert. Dazu gehören Beschreibungen, Kommentare, Anhänge und bei Pull Requests auch Commits, geänderte Dateien, Diffs und Reviews. Der Codebereich umfasst Dateien und Ordner auf dem **Standardbranch**. Andere Branches werden nicht als eigenständiger Codebereich synchronisiert; Änderungen aus ihnen können aber über Pull-Request-Diffs auffindbar sein.
+
+Die Verbindung erfasst Organisationsmitglieder und externe Mitarbeitende, damit Repository-Rechte Personen zugeordnet werden können. Issues und Pull Requests bleiben jeweils zusammen mit ihren Kommentaren und Anhängen organisiert.
+
+## Vor dem Start: E-Mail-Zuordnung
+
+Novaplan AI ordnet GitHub-Konten anhand der E-Mail-Adresse zu. Wenn die Adresse einer Person für den Konnektor nicht lesbar ist oder nicht zu ihrem Novaplan-AI-Konto passt, erhält sie keine Berechtigungen für synchronisierte Datensätze.
+
+Es gibt zwei Wege, eine passende Adresse lesbar zu machen:
+
+| Möglichkeit | Zuständigkeit | Verwendung |
+| --- | --- | --- |
+| **Organisationsdomain verifizieren** | GitHub-Organisationsinhaber, einmalig | Für Teams, ohne dass jede Person ihre Profiladresse öffentlich machen muss |
+| **Öffentliche Profil-E-Mail festlegen** | Jede Person selbst | Wenn die Domainverifizierung nicht genutzt werden kann |
+
+### Organisationsdomain verifizieren
+
+Öffnen Sie in Ihrer GitHub-Organisation **Settings → Verified and approved domains → Add a domain**. GitHub zeigt einen TXT-DNS-Eintrag an. Hinterlegen Sie ihn bei Ihrem DNS-Anbieter und klicken Sie danach auf **Verify**. Nach der Verifizierung können passende Unternehmensadressen auch bei privaten Profiladressen für die Organisationszuordnung genutzt werden. DNS-Änderungen können Zeit benötigen. Weitere Informationen bietet die [GitHub-Dokumentation zur Domainverifizierung](https://docs.github.com/en/organizations/managing-organization-settings/verifying-or-approving-a-domain-for-your-organization).
+
+### Öffentliche Profil-E-Mail festlegen
+
+Wenn Ihre Organisation keine Domain verifiziert, kann jede Person unter [GitHub Email Settings](https://github.com/settings/emails) ihre zum Novaplan-AI-Konto passende Adresse hinzufügen und bestätigen. Danach muss **Keep my email addresses private** deaktiviert werden. Unter [GitHub Profile Settings](https://github.com/settings/profile) wählen Sie die bestätigte Adresse bei **Public email** aus und speichern mit **Update profile**.
+
+Eine Adresse mit `@users.noreply.github.com` ist ein Datenschutz-Platzhalter und eignet sich nicht zur Zuordnung. Besprechen Sie die öffentliche Sichtbarkeit persönlicher E-Mail-Adressen mit Ihrer Organisation; die Domainverifizierung ist eine Alternative.
+
+## GitHub-OAuth-App erstellen
+
+1. Öffnen Sie die [GitHub Developer Settings](https://github.com/settings/developers) und wählen Sie **OAuth Apps → New OAuth App**.
+2. Vergeben Sie einen **Application Name**, beispielsweise `Novaplan AI GitHub Connector`. Tragen Sie als **Homepage URL** die tatsächliche Adresse Ihres Novaplan-Workspaces ein.
+3. Öffnen Sie in einem zweiten Tab **Workspace Settings → Connectors → GitHub → Setup** in Novaplan AI und kopieren Sie die dort angezeigte **Redirect URL**.
+4. Fügen Sie diese Adresse in GitHub als **Authorization callback URL** ein und klicken Sie auf **Register Application**. GitHub erlaubt für diese OAuth-App nur eine Callback-Adresse; sie muss exakt zur angezeigten Adresse passen.
+5. Kopieren Sie die **Client ID** und erzeugen Sie mit **Generate a new client secret** ein Secret. Bewahren Sie beide Werte geschützt auf.
+
+## Verbindung in Novaplan AI autorisieren
+
+1. Öffnen Sie die GitHub-Konfiguration unter **Workspace Settings → Connectors → GitHub → Setup**.
+2. Vergleichen Sie die **Redirect URI** mit der Callback-Adresse der GitHub-OAuth-App.
+3. Tragen Sie **Application (Client) ID** und **Client Secret** ein und klicken Sie auf **Next**.
+4. Wählen Sie **Authenticate GitHub to Proceed**, melden Sie sich bei GitHub an und prüfen Sie die angeforderten Berechtigungen.
+
+| Scope | Zweck |
+| --- | --- |
+| `read:org` | Organisationsmitgliedschaften und Teams lesen |
+| `repo` | Repository-Inhalte einschließlich privater Repositories, Issues und Pull Requests lesen |
+| `user:email` | E-Mail-Adressen für die Konto- und Berechtigungszuordnung lesen |
+
+Autorisieren Sie nach Möglichkeit mit einem **Organisationsinhaber-Konto**. Ein einfaches Mitglied kann nur Repositories sehen, bei denen es mitarbeitet, und möglicherweise nicht die verifizierten Domainadressen anderer Mitglieder auflösen. Falls Ihre Organisation OAuth-Apps genehmigen muss, lassen Sie die App durch einen Inhaber freigeben.
+
+<Warning>
+  GitHubs `repo`-Scope umfasst mehr als reinen Lesezugriff und lässt sich für private Repository-Inhalte nicht weiter aufteilen. Der Konnektor verwendet ihn laut technischer Referenz nur zum Lesen. Prüfen Sie die Freigabe mit Ihrer GitHub-Administration.
+</Warning>
+
+5. Bestätigen Sie in GitHub mit **Authorize**. Nach der Rückkehr zu Novaplan AI sollte **Connected — you can continue to Configure records** angezeigt werden.
+6. Wählen Sie **Continue to configuration**.
+
+## Synchronisierung und Filter
+
+Unter **Configure Records** bestimmen Sie den Umfang der Verbindung:
+
+- **Sync Strategy:** **Scheduled** für automatische Läufe oder **Manual** für einen Start auf Anforderung.
+- **Sync Interval:** Intervall geplanter Läufe; die Voreinstellung beträgt 60 Minuten.
+- **Github Organizations:** Organisationen mit **In** einbeziehen oder mit **Not In** ausschließen. Verwenden Sie den Organisations-Login, etwa `my-org`.
+- **Repositories:** Bestimmte Repositories mit **In** einbeziehen oder mit **Not In** ausschließen. Verwenden Sie den vollständigen Namen, etwa `my-org/my-repo`.
+
+Die Organisations- und Repository-Felder suchen während der Eingabe bei GitHub. Inhalte außerhalb der Synchronisierungsfilter werden nicht abgerufen.
+
+**Indexierungsfilter** bestimmen, welche abgerufenen Inhalte durchsuchbar werden:
+
+| Einstellung | Voreinstellung | Wirkung |
+| --- | --- | --- |
+| **Index Issues** | An | Issues, Kommentare und Anhänge indexieren |
+| **Index Pull Requests** | An | Pull Requests, Diffs, Reviews und Commits indexieren |
+| **Index Code Files** | An | Dateiinhalt des Standardbranches indexieren |
+| **Enable Manual Indexing** | Aus | Datensätze zunächst ohne automatische Indexierung übernehmen |
+
+Wenn **Index Code Files** ausgeschaltet ist, werden Dateien weiterhin synchronisiert und bleiben über Name und Pfad auffindbar; ihr Inhalt wird nicht indexiert. Um ein Repository vollständig auszuschließen, verwenden Sie den **Repositories**-Synchronisierungsfilter.
+
+Klicken Sie auf **Save Configuration** und starten Sie die Synchronisierung. Unter **Indexing Progress** sehen Sie den Fortschritt.
+
+## Technischer Ablauf und Grenzen
+
+Ein Lauf ordnet zuerst Organisationsmitglieder und externe Mitarbeitende zu, ermittelt dann Repositories und synchronisiert je Repository Issues, Pull Requests und Code. Externe Mitarbeitende werden gesondert erfasst, weil sie nicht in der normalen Mitgliederliste der Organisation stehen. Berechtigungen und Sichtbarkeit werden je Repository übernommen.
+
+### Code auf dem Standardbranch
+
+Beim ersten Lauf wird der Repository-Baum vollständig erfasst. Spätere Läufe vergleichen den gespeicherten Commit-SHA mit dem aktuellen Stand des Standardbranches und behandeln Ergänzungen, Änderungen, Löschungen und Umbenennungen. Bei sehr großen Repositories wechselt die Verbindung auf ein Verzeichnis-für-Verzeichnis-Verfahren, wenn GitHubs rekursive Antwort unvollständig ist.
+
+Dateien über **5 MB** erhalten weiterhin Datensätze und bleiben nach Name und Pfad auffindbar, ihr Inhalt wird jedoch nicht indexiert. Ein Force-Push, Branch-Reset oder eine unvollständige GitHub-Änderungsliste führt zu einem vollständigen Neuabgleich statt zu unsicheren Löschungen. Die technische Referenz nennt GitHubs Grenzen von 300 Dateien beziehungsweise 250 Commits für eine Vergleichsantwort und verhindert zudem einen Lauf, der mehr als die Hälfte der Codedatensätze auf einmal löschen würde.
+
+### Issues und Pull Requests
+
+Beschreibungen, Kommentare und zugehörige Anhänge bleiben im jeweiligen Vorgang organisiert. Pull Requests enthalten darüber hinaus Commit-SHAs, geänderte Dateien und Diffs, zeilenbezogene Review-Kommentare sowie Review-Entscheidungen. Kommentare werden als Teil des übergeordneten Issues oder Pull Requests gespeichert, damit die Diskussion zusammenhängend auffindbar bleibt.
+
+### Berechtigungen
+
+GitHub-Rollen werden laut technischer Referenz so zugeordnet:
+
+| GitHub-Rolle | Novaplan-AI-Recht |
+| --- | --- |
+| **Admin** | Owner |
+| **Maintain**, **Write (push)** | Write |
+| **Triage**, **Read (pull)** | Read |
+
+Öffentliche Repositories sind für Mitglieder Ihrer Novaplan-AI-Organisation lesbar; interne Repositories für aufgelöste Organisationsmitglieder; private Repositories für berechtigte Mitarbeitende. Die GitHub-E-Mail-Adresse muss zur Novaplan-AI-Adresse passen.
+
+Fortschrittspunkte werden je Repository und Datentyp gespeichert: Issues und Pull Requests nach Änderungszeitpunkt, Code nach Commit-SHA des Standardbranches. Sie werden erst nach einem erfolgreichen Verarbeitungsschritt aktualisiert. Ein fehlgeschlagener Schritt wird beim nächsten Lauf erneut versucht.
+
+## Fehlerbehebung
+
+- **Zugangsdaten oder Callback-Adresse ungültig:** Prüfen Sie Client ID, Secret und die exakte Redirect URI. Nach Änderungen an OAuth-App oder Secret müssen Sie in Novaplan AI erneut autorisieren.
+- **Keine Repository-Daten:** Prüfen Sie den Status **Active**, den Zugriff des autorisierenden GitHub-Kontos und die Organisations- und Repository-Filter.
+- **Eine Person sieht keine Datensätze:** Prüfen Sie, ob ihre GitHub-E-Mail-Adresse lesbar ist, keine `@users.noreply.github.com`-Adresse verwendet und mit ihrem Novaplan-AI-Konto übereinstimmt.
+- **Organisations-Repositories fehlen:** Autorisieren Sie mit einem Organisationsinhaber und lassen Sie die OAuth-App gegebenenfalls genehmigen.
+- **Code-Dateien fehlen:** Nur der Standardbranch wird synchronisiert. Prüfen Sie **Index Code Files** für die Inhaltssuche; Dateien über 5 MB werden nicht inhaltlich indexiert.
+- **Große Organisation synchronisiert langsam:** GitHubs API-Limits können Läufe begrenzen. Ein unterbrochener Lauf setzt beim nächsten Intervall fort. Engere Filter verringern den Aufwand.
+- **Repository-Auswahl zeigt wenig:** GitHubs Such-API kann die Anzahl der Anfragen und Ergebnisse begrenzen. Geben Sie einen genaueren Namen ein.
+
+Die Dauer des ersten Laufs hängt von der Anzahl und Größe der Repositories ab. Prüfen Sie unter **Workspace Settings → Connectors** den aktuellen Status, bevor Sie einen fehlenden Suchtreffer als Fehler behandeln.
+
+## Häufige Fragen
+
+<AccordionGroup>
+  <Accordion title="Warum liefert die Suche keine Ergebnisse?">
+    Prüfen Sie die lesbare GitHub-E-Mail und Repository-Rolle der betroffenen Person sowie deren Zuordnung zum Novaplan-AI-Konto. Das Konto, das die gemeinsame Verbindung autorisiert, muss das Repository lesen können, braucht aber nicht dieselbe E-Mail-Adresse wie jeder spätere Nutzer. Prüfen Sie außerdem unter **Workspace Settings → Connectors**, ob Synchronisierung und Indexierung abgeschlossen sind.
+  </Accordion>
+  <Accordion title="Wie lange dauert die erste Synchronisierung?">
+    Das hängt von Umfang und Größe der Repositories, Issues, Pull Requests, Quelldateien und Anhänge, den GitHub-API-Grenzen, Filtern und der Indexierungskapazität Ihres Workspaces ab. Verfolgen Sie den tatsächlichen Lauf unter **Indexing Progress**. Eine feste Verarbeitungsrate für Ihren Enterprise Workspace ist nicht bestätigt.
+  </Accordion>
+  <Accordion title="Warum erscheinen nach der Autorisierung keine Issues?">
+    Prüfen Sie, ob das autorisierende GitHub-Konto die gewünschten Repositories lesen kann und die OAuth-App die benötigten Scopes besitzt. Kontrollieren Sie dann die E-Mail-Zuordnung und Repository-Rolle der betroffenen Person. Ein erfolgreicher OAuth-Ablauf bedeutet noch nicht, dass die erste Indexierung abgeschlossen ist.
+  </Accordion>
+  <Accordion title="Kann ich nur bestimmte Organisationen oder Repositories synchronisieren?">
+    Ja. Unter **Configure Records** begrenzen **Github Organizations** und **Repositories** mit `In` die Auswahl; `Not In` schließt ausgewählte Einträge aus. Die Auswahllisten suchen während der Eingabe bei GitHub. Ein enger Umfang reduziert den Abruf von Issues, Pull Requests und Code aus nicht ausgewählten Repositories.
+  </Accordion>
+  <Accordion title="Von welchem Branch wird der Quellcode synchronisiert?">
+    Dateidatensätze stammen vom **Standardbranch**. Änderungen anderer Branches können über Pull-Request-Diffs auffindbar sein. Wenn **Index Code Files** deaktiviert ist, bleiben synchronisierte Dateien über Namen und Pfade auffindbar, ihre Inhalte werden aber nicht indexiert. Um ein Repository ganz auszuschließen, verwenden Sie den Synchronisierungsfilter **Repositories**.
+  </Accordion>
+</AccordionGroup>
+
+Wenn Sie Hilfe benötigen, schreiben Sie an [support@novaplan.ai](mailto:support@novaplan.ai). Weitere technische Informationen bieten die [GitHub-Dokumentation zu OAuth-Apps](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app) und die [GitHub REST API](https://docs.github.com/en/rest).

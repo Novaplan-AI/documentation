@@ -48,7 +48,7 @@ This connector uses the **Nextcloud WebDAV API** for file operations. WebDAV (We
 A **cursor** (activity ID) is used to track changes between syncs.
 
 1. When you first sync, the connector fetches all files and folders using WebDAV PROPFIND.
-2. After the sync completes, the connector saves the latest activity ID as a cursor.
+2. After a successful full sync, the connector saves the latest activity ID as a cursor. If it cannot list the drive or read and save an item, it does not save a cursor and the next run repeats the full sync. Items already synchronized remain available.
 3. Instead of re-downloading the entire file list to check for changes, the connector queries the Activity API with this cursor.
 4. The API returns only the files and folders that have been added, modified, or deleted since the last sync.
 
@@ -58,7 +58,7 @@ This makes syncing highly efficient as you only process the differences.
 
 <Accordion title="Generate App Password" icon="key">
 
-This guide will walk you through generating an App Password to connect your Nextcloud account to PipesHub.
+This guide will walk you through generating an App Password to connect your Nextcloud account to Novaplan AI.
 
 ### Step 1: Access Your Nextcloud Account
 
@@ -76,7 +76,7 @@ This guide will walk you through generating an App Password to connect your Next
 ### Step 3: Create App Password
 
 1. Scroll down to the **Devices & sessions** section.
-2. In the **App name** field, enter a descriptive name for this connection (e.g., "PipesHub Connector").
+2. In the **App name** field, enter a descriptive name for this connection (e.g., "Novaplan AI Connector").
 3. Click the **Create new app password** button.
 
 <img src="/images/connectors/nextcloud/n2.png" alt="Personal Settings" style={{ display: 'block', margin: '0 auto' }} width="90%" />
@@ -100,13 +100,13 @@ Keep the following information ready for the next step:
 
 </Accordion>
 
-<Accordion title="Connect Nextcloud to PipesHub" icon="plug">
+<Accordion title="Connect Nextcloud to Novaplan AI" icon="plug">
 
 Nextcloud is a **personal** connector — each user connects their own Nextcloud account.
 
 ### Step 1: Open the Connector Catalog
 
-1. In PipesHub, navigate to **Workspace Settings** > **Connectors** > **Personal**.
+1. In Novaplan AI, open **Workspace Settings → Your Connectors** under **Personal**.
 2. Find the **Nextcloud** card and click **Setup**.
 
 ### Step 2: Authenticate
@@ -126,10 +126,10 @@ On the **Authenticate** tab, enter:
 />
 
 <Warning>
-  **Email must match.** Use a Nextcloud account whose email matches the email on your PipesHub account. A mismatch breaks permission resolution and you will not see your synced records in search.
+  **Email must match.** Use a Nextcloud account whose email matches the email on your Novaplan AI account. A mismatch breaks permission resolution and you will not see your synced records in search.
 </Warning>
 
-Click **Save** to store the credentials. PipesHub validates the connection against Nextcloud before persisting.
+Click **Save** to store the credentials. In the current upstream connector, saving does **not** contact Nextcloud. The app password is checked when you turn the connector on. If Nextcloud rejects it, create a new app password, turn the connector off, replace the password in its settings, save, and turn it on again. Confirm this sequence in the deployed Enterprise workspace.
 
 </Accordion>
 
@@ -147,7 +147,7 @@ Sync settings control how the connector pulls data from Nextcloud.
 
 **Sync Interval:** For scheduled syncs, the cadence in minutes (default: 60).
 
-**Batch Size:** Number of items processed per batch when committing to PipesHub (default: 100). Lower this if you hit memory pressure on very large libraries.
+**Batch Size:** Number of items processed per batch when committing to Novaplan AI (default: 100). Lower this if you hit memory pressure on very large libraries.
 
 <img
   src="/images/connectors/nextcloud/nc3.png"
@@ -178,7 +178,7 @@ Filters split into two categories:
   width="90%"
 />
 
-Once your settings are configured, click **Save Configuration**. PipesHub confirms the instance is ready with a final dialog — *"Instance is configured and ready to sync"* — offering two choices: **I'll do it later** or **Start syncing now**.
+Once your settings are configured, click **Save Configuration**. Novaplan AI confirms the instance is ready with a final dialog — *"Instance is configured and ready to sync"* — offering two choices: **I'll do it later** or **Start syncing now**.
 
 </Accordion>
 
@@ -231,6 +231,8 @@ The sync begins by authenticating with the provided username and app password. T
 1. Validates the connection with a test WebDAV request
 2. Retrieves user email from Nextcloud (if available)
 3. Uses username as the primary identifier
+
+If the profile cannot be read, the current upstream connector saves nothing and retries the sync later. A readable profile without an email is different: it uses `{username}@nextcloud.local` as a fallback owner address.
 
 ### Drive Creation
 
@@ -303,7 +305,7 @@ Nextcloud uses the **Activity API** to track changes:
    - Re-processes permissions
    - Updates database records
 
-4. **Deletion Handling:** Processes deletion events by marking records as deleted in the database.
+4. **Deletion Handling:** Removes deleted or trashed files and the contents of deleted folders; restored items can return on a later sync. A failed deletion may remain searchable until it is successfully applied. The current upstream connector retries a held change for up to five syncs, then advances the cursor and keeps failed deletions in a separate retry list. Check sensitive removals in Novaplan AI instead of assuming that deleting the source immediately removes its search result.
 
 5. **Activity Cursor Update:** After processing all events, saves the latest activity ID for the next incremental sync cycle.
 
@@ -313,17 +315,7 @@ Nextcloud uses the **Activity API** to track changes:
 
 ### Simplified Personal Model
 
-Since this is a personal connector:
-
-1. **Default Ownership:** The authenticated user is assigned **OWNER** permissions for all files and folders
-2. **Share Information:** The connector can detect shares via Nextcloud's OCS Share API
-3. **Permission Types:** Maps Nextcloud permissions (READ, UPDATE, DELETE, SHARE) to PipesHub permission types
-
-### Nextcloud Permission Mapping
-
-* **Permission 31 (ALL):** Maps to OWNER
-* **Permissions with DELETE or UPDATE:** Maps to WRITE
-* **Permission with READ only:** Maps to READ
+The accessible Personal connector assigns the authenticated user **OWNER** permission on the drive, files, and folders it syncs. Its source contains helpers for reading Nextcloud OCS shares and mapping their permission bits, but the reviewed sync path does not call those helpers. This guide therefore does not promise that external share recipients or Nextcloud's per-item permissions are copied into Novaplan AI. Verify visibility with separate test accounts before relying on shared content in a customer workspace.
 
 ---
 
@@ -349,6 +341,7 @@ The incremental sync uses Nextcloud's Activity API to efficiently detect changes
 * **Path Cache:** Maintains in-memory map of paths to record IDs
 * **Batch Processing:** Groups updates into configurable batch sizes
 * **Rate Limiting:** Respects API rate limits (50 requests/second default)
+* **Transient errors:** The current upstream connector retries HTTP 429, temporary server errors, and connection failures up to three times. It honors a numeric `Retry-After` of up to 60 seconds; otherwise it waits with increasing jitter, up to one, two, then four seconds.
 * **Concurrent Batches:** Processes up to 5 batches simultaneously
 
 </Accordion>
@@ -397,13 +390,14 @@ The connector provides authenticated file downloads:
 
 ### Invalid Credentials
 
-**Symptom:** Authentication fails with 401 error
+**Symptom:** Turning the connector on fails because Nextcloud rejects the app password, or a later sync stops after the password is revoked. Previously synced files and the saved position remain as they were.
 
 **Solutions:**
 1. Verify your username is correct
 2. Ensure you're using an **App Password**, not your main password
 3. Check that the app password hasn't been revoked in Nextcloud Security settings
 4. Verify the Base URL is correct (should not end with `/`)
+5. To replace a revoked or expired password, create a new one under **Personal settings → Security → Devices & sessions**, turn the connector off, enter and save the new password, then turn it back on. Saving alone does not validate it. Confirm the exact notification and recovery flow in the deployed Enterprise workspace.
 
 ### Base URL Incorrect
 
@@ -458,14 +452,14 @@ The connector provides authenticated file downloads:
 ### Monitoring
 
 - **Monitor First Sync:** The initial full sync may take time depending on your file count
-- **Test Connection:** Always test the connection after configuration changes
+- **Verify Connection:** After changing credentials or the Base URL, turn on the connector and confirm that authentication and a sync succeed; saving alone does not validate the app password
 - **Check Logs:** Regularly review sync logs for errors or warnings
 
 ### Security
 
 - **Use App Passwords:** Always use generated app passwords rather than your main Nextcloud password
 - **Revoke Unused Tokens:** Regularly review and revoke unused app passwords in Nextcloud Security settings
-- **Secure Transmission:** All API calls use HTTPS for encrypted communication
+- **Secure Transmission:** Use an `https://` Base URL with a valid certificate. The connector uses the URL you provide; an `http://` address does not encrypt traffic in transit
 
 </Accordion>
 
@@ -473,14 +467,14 @@ The connector provides authenticated file downloads:
 
 There are three common causes:
 
-1. **Email mismatch** - The email used during connector authentication doesn't match your PipesHub account email. This causes permission issues preventing you from accessing synced data.
-   - **Fix:** Reconfigure the connector and authenticate using the same email as your PipesHub account.
+1. **Email mismatch** - The email used during connector authentication doesn't match your Novaplan AI account email. This causes permission issues preventing you from accessing synced data.
+   - **Fix:** Reconfigure the connector and authenticate using the same email as your Novaplan AI account.
 
 2. **Records show in "All Records" but not in search** - Documents display in the All Records section but don't appear in search query results.
    - **Fix:** Verify sync filters in the connector settings and ensure indexing has completed. Check that the data matches your search query criteria.
 
 3. **Data not yet indexed** - The connector is still syncing or hasn't completed the initial indexing process.
-   - **Fix:** Go to **Settings > Connectors**, check the sync status, and wait for indexing to complete.
+   - **Fix:** Go to **Workspace Settings → Your Connectors**, check the sync status, and wait for indexing to complete.
 
 </Accordion>
 

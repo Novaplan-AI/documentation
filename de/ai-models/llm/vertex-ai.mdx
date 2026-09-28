@@ -1,0 +1,38 @@
+---
+title: "Vertex AI"
+description: "Gemini-Modelle über Google Cloud Vertex AI in Novaplan AI konfigurieren."
+---
+
+# Vertex AI konfigurieren
+
+Vertex AI ist die verwaltete Google-Cloud-Plattform für Gemini und weitere Modelle. Wählen Sie diesen Anbieter statt der [direkten Gemini-Verbindung](/de/ai-models/llm/gemini), wenn Aufrufe über ein Google-Cloud-Projekt abgerechnet, in einer bestimmten Region ausgeführt oder durch dessen IAM-Regeln gesteuert werden sollen.
+
+Novaplan AI benötigt für Vertex AI eine **Service-Account-JSON-Schlüsseldatei**. Ein Google-AI-Studio-API-Schlüssel reicht hierfür nicht aus; die Verbindung liest ihre Zugangsdaten auch nicht aus Umgebungsvariablen.
+
+## Vorbereitungen in Google Cloud
+
+1. Wählen oder erstellen Sie ein Projekt in der [Google Cloud Console](https://console.cloud.google.com/).
+2. Aktivieren Sie für das Projekt die **Vertex AI API**.
+3. Erstellen Sie unter **IAM & Admin → Service Accounts** ein Dienstkonto und weisen Sie ihm die Rolle **Vertex AI User** oder eine Rolle mit den benötigten Berechtigungen zu.
+4. Öffnen Sie beim Dienstkonto den Tab **Keys** und erstellen Sie einen JSON-Schlüssel. Die Datei wird nur bei der Erstellung heruntergeladen; bewahren Sie sie geschützt auf.
+
+## Erforderliche Angaben in Novaplan AI
+
+| Feld | Bedeutung |
+| --- | --- |
+| **GCP Project ID** | ID des Google-Cloud-Projekts. Sie muss zum `project_id` in der JSON-Datei passen. |
+| **Service Account JSON** | Laden Sie die JSON-Schlüsseldatei des Dienstkontos hoch. |
+| **Model Name** | Genaue Vertex-AI-Modell-ID, beispielsweise `gemini-2.5-flash` oder `gemini-2.5-pro`. |
+
+Novaplan AI weist eine Datei zurück, die kein gültiges JSON ist, der `type`, `project_id` oder `private_key` fehlen oder deren `type` nicht `service_account` ist. Ein OAuth-Client-Secret ist kein Ersatz für einen Dienstkontoschlüssel. Prüfen Sie die [aktuelle Vertex-AI-Modellreferenz](https://cloud.google.com/vertex-ai/generative-ai/docs/learn/models) und die Verfügbarkeit des Modells in Ihrer Region.
+
+Behandeln Sie die JSON-Datei als langlebigen privaten Schlüssel: Laden Sie sie nur über das vorgesehene Zugangsdatenfeld hoch, begrenzen Sie die Rechte des Dienstkontos und rotieren Sie den Schlüssel bei Offenlegung. Lassen Sie sich von Novaplan die Speicherung und Zugriffskontrollen des bereitgestellten Workspaces bestätigen, bevor Sie sensible Workloads anbinden.
+
+## Optionale Einstellungen
+
+- **Region:** Zielregion für die Modellaufrufe, beispielsweise `europe-west4`; Standard ist `us-central1`. Nicht jedes Modell ist in jeder Region verfügbar.
+- **Model Friendly Name:** Anzeigename für die Konfiguration. Ohne Wert wird der Modellname verwendet.
+- **Context Length:** Maximale Kontextlänge in Token. Verwenden Sie das dokumentierte Limit des gewählten Modells; ohne Wert nutzt Novaplan AI einen konservativen Standard.
+- **Is Multimodal** und **Is Reasoning:** Beide Optionen sind laut Konfiguration standardmäßig aktiviert. Passen Sie sie an die tatsächlichen Fähigkeiten des Modells an.
+
+Bei **Permission denied** prüfen Sie IAM-Rolle und aktivierte Vertex AI API. Bei **Model not found** prüfen Sie Modell-ID und Region. Wird der Upload abgewiesen, kontrollieren Sie insbesondere `"type": "service_account"` und die Projekt-ID in der Datei. Für Embeddings gibt es eine eigene [Vertex-AI-Anleitung](/de/ai-models/embedding/vertex-ai). [Novaplan Support](/de/contact-us) hilft bei der Einrichtung.

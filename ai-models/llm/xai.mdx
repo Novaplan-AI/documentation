@@ -1,15 +1,15 @@
 ---
 title: x.ai Grok
-description: "Configure PipesHub Workplace AI to use different x.ai Grok models"
+description: "Configure Novaplan AI to use different x.ai Grok models"
 ---
 
 # x.ai Grok Configuration
 
 ![x.ai Grok Configuration Interface](/images/ai-models/llm/xAI_LLMConfig.png)
 
-*The x.ai Grok configuration screen in PipesHub where you'll enter your API Key and Model Name*
+*The x.ai Grok configuration screen in Novaplan AI where you'll enter your API Key and Model Name*
 
-PipesHub allows you to integrate with x.ai to enable sophisticated AI features in your workspace, accessing Grok's powerful large language models optimized for high-performance agentic tool calling.
+Novaplan AI allows you to integrate with x.ai to enable sophisticated AI features in your workspace, accessing Grok's powerful large language models optimized for high-performance agentic tool calling.
 
 ## Required Fields
 
@@ -23,20 +23,18 @@ The API Key is required to authenticate your requests to x.ai services.
 3. Click on "Create new key" or use an existing key
 4. Copy the generated API key
 
-**Security Note:** Your API key should be kept secure and never shared publicly. PipesHub securely stores your API key and uses it only for authenticating requests to x.ai services.
+**Security note:** Treat this API key as a secret. Use the approved workspace setup flow, and coordinate access and rotation with Novaplan and your provider administrator.
 
 ### Model Name *
 
-The Model Name field defines which x.ai Grok model you want to use with PipesHub.
+The Model Name field defines which x.ai Grok model you want to use with Novaplan AI.
 
-**Available x.ai Grok models:**
-- `grok-3-latest` - Grok 3: x.ai's flagship multimodal model optimized for high-performance agentic tool calling
-- `grok-3-mini-latest` - Grok 3 Mini: A lighter, faster option for cost-effective use cases
+**Choose a current model:** xAI's [model catalog](https://docs.x.ai/developers/models) currently lists `grok-4.7` for text and image input. Copy the exact ID available to your API key from the xAI Console or `GET /v1/models`. Older Grok 3 IDs in previous versions of this guide may redirect to a newer model with different behavior or pricing.
 
 **How to choose a model:**
-- For tasks requiring complex reasoning and maximum capability, select `grok-3-latest`
-- For faster, more cost-effective responses, select `grok-3-mini-latest`
-- Check x.ai's [model documentation](https://docs.x.ai/docs) for the most up-to-date options
+- Check the current model page for supported input, reasoning behavior, context length, availability, and pricing
+- Confirm the model is enabled for the API key and endpoint used by your managed Novaplan workspace
+- Test the selected model in Novaplan AI before assigning it to customer workflows
 
 ## Optional Fields
 
@@ -49,11 +47,11 @@ Specify the maximum context window for your model. x.ai Grok models typically su
 
 ### Multimodal Support
 
-x.ai Grok models support multimodal capabilities, enabling both text and image processing. Enable this option if you want to use image understanding features in your application.
+Enable this only if the selected model accepts image input and the deployed Novaplan integration has been tested with it. Model capabilities vary; do not infer image support from the Grok name alone.
 
 ### Reasoning
 
-Enable this option if your selected model supports advanced reasoning capabilities. This allows for deeper chain-of-thought analysis and complex problem-solving.
+Enable this option only if the selected model supports reasoning and Novaplan has verified how the checkbox maps to that model's API settings. xAI model variants can expose different reasoning controls.
 
 ## Configuration Steps
 
@@ -91,4 +89,4 @@ As shown in the image above:
 - For multimodal features, ensure your model supports image inputs
 - If using reasoning features, verify that your selected model supports reasoning mode
 
-For additional support, refer to the [x.ai documentation](https://docs.x.ai/) or contact PipesHub support.
+For additional support, refer to the [x.ai documentation](https://docs.x.ai/) or contact Novaplan AI support.

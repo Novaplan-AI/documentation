@@ -1,0 +1,25 @@
+---
+title: "Anmeldung mit Google"
+description: "Google als Anmeldemethode für einen verwalteten Novaplan AI Workspace einrichten."
+icon: "google"
+---
+
+Mit der Google-Anmeldung können eingeladene Personen ihr Google-Konto zur Authentifizierung verwenden. Novaplan AI bereitet den Workspace normalerweise vor und stimmt Änderungen am Identitätsanbieter mit Ihrer Administration ab.
+
+## Google-OAuth-Client einrichten
+
+1. Wählen oder erstellen Sie in der [Google Cloud Console](https://console.cloud.google.com/) das freigegebene Projekt und konfigurieren Sie den OAuth-Zustimmungsbildschirm.
+2. Erstellen Sie einen OAuth-Client vom Typ **Web application**. Die [Google-Anleitung zur Client ID](https://developers.google.com/identity/gsi/web/guides/get-google-api-clientid) beschreibt diesen Client-Typ.
+3. Öffnen Sie als berechtigte Administration in Novaplan AI **Workspace Settings → Authentication → Google**. Kopieren Sie die dort angezeigten Werte **Redirect URI** und **Authorized Origin**.
+4. Tragen Sie die Redirect URI in Google unter **Authorized redirect URIs** ein. Tragen Sie den Origin ohne Callback-Pfad unter **Authorized JavaScript origins** ein. Verwenden Sie die HTTPS-Adresse des bereitgestellten Workspace, keine Adresse aus einem Screenshot oder lokalen Test.
+5. Kopieren Sie die Google **Client ID** in die Novaplan AI Einstellungen und speichern Sie. Das aktuelle Workspace-Formular verlangt eine Client ID; ein Google Client Secret gehört nicht in dieses Feld.
+
+<Warning>
+  Die zugängliche Konfiguration unterstützt die automatische Benutzeranlage beim ersten Anmelden (JIT) und aktiviert sie standardmäßig. Wenn Novaplan die Konten erstellt und Personen einlädt, prüfen Sie vor der Aktivierung der Google-Anmeldung, dass JIT ausgeschaltet ist. Testen Sie mit einem eingeladenen und einem nicht eingeladenen Testkonto. Prüfen Sie den Schalter und das Verhalten im tatsächlich bereitgestellten Enterprise Workspace.
+</Warning>
+
+## Anmeldung prüfen
+
+Bitten Sie eine eingeladene Testperson, **Sign in with Google** auszuwählen und die Anmeldung abzuschließen. Wenn der Zugriff scheitert, prüfen Sie die genaue Redirect URI, den Authorized Origin, die Client ID, Freigaben und Zustimmung in Google sowie die E-Mail-Adresse der Einladung. Erhalten Sie während der Änderung eine funktionierende Administrations-Anmeldung aufrecht.
+
+Bei Zugangsproblemen helfen Ihre Workspace-Administration oder der [Novaplan AI Support](mailto:support@novaplan.ai).

@@ -62,6 +62,8 @@ The Salesforce toolset enables AI agents to interact with your Salesforce CRM �
 | `update_record` | Update fields on an existing record by ID |
 | `describe_object` | Get field metadata, picklist values, and relationships for an object |
 | `list_recent_records` | List the most recently viewed records of a given object type |
+| `upload_file_to_salesforce` | Upload a workspace file record to Salesforce Files; optionally link it to a record |
+| `attach_file_to_record` | Link an existing Salesforce file to a specific record |
 
 ### Account Tools
 
@@ -105,6 +107,7 @@ The Salesforce toolset enables AI agents to interact with your Salesforce CRM �
 | `search_products` | Search the product catalog by name, code, or family |
 | `create_product` | Add a new product to the Salesforce product catalog |
 | `list_pricebooks` | List available price books (Pricebook2) |
+| `create_pricebook_entry` | Set a product's unit price in a selected price book |
 | `add_product_to_opportunity` | Add a product line item to an opportunity |
 
 ### Task Tools
@@ -168,7 +171,7 @@ The Salesforce toolset enables AI agents to interact with your Salesforce CRM �
 
 Fill in the **External Client App Manager** form:
 
-1. **External Client App Name** — Enter a name, for example `PipesHub Salesforce Toolset`.
+1. **External Client App Name** — Enter a name, for example `Novaplan AI Salesforce Toolset`.
 2. **API Name** — Auto-filled from the app name; leave as-is.
 3. **Contact Email** — Enter your admin email address.
 
@@ -186,7 +189,7 @@ Fill in the **External Client App Manager** form:
 Scroll down to the **API (Enable OAuth Settings)** section:
 
 1. Check **Enable OAuth**.
-2. **Callback URL** — Paste the **Redirect URI** shown in the PipesHub **Action configuration** dialog (go to **Workspace → Actions → Salesforce → + Setup**). It will look like `https://your-pipeshub-domain/toolsets/oauth/callback/salesforce`.
+2. **Callback URL** — Paste the **Redirect URI** shown in the Novaplan AI **Action configuration** dialog (go to **Workspace Settings → Actions → Salesforce → + Setup**). It will look like `https://your-workspace.example.com/toolsets/oauth/callback/salesforce`.
 3. Under **OAuth Scopes**, move the following from **Available** to **Selected**:
 
 | Scope | Description |
@@ -228,8 +231,8 @@ Scroll down to the **Flow Enablement** and **Security** sections:
 
 1. After saving, click the **Consumer Key and Secret** button in the **OAuth Settings** panel.
 2. On the **Consumer Details** page, copy:
-   - **Consumer Key** → this is your **Client ID** in PipesHub.
-   - **Consumer Secret** → this is your **Client Secret** in PipesHub.
+   - **Consumer Key** → this is your **Client ID** in Novaplan AI.
+   - **Consumer Secret** → this is your **Client Secret** in Novaplan AI.
 
 <div style={{ textAlign: "center" }}>
   <img
@@ -266,9 +269,11 @@ Your **Instance URL** is the base domain shown in your browser's address bar whe
   />
 </div>
 
-### Step 8: Configure the Salesforce toolset in PipesHub
+<div id="step-8-configure-the-salesforce-toolset-in-novaplan-ai" />
 
-1. In PipesHub, go to **Workspace → Actions**.
+### Step 8: Configure the Salesforce toolset in Novaplan AI
+
+1. In Novaplan AI, go to **Workspace Settings → Actions**.
 2. Find **Salesforce** and click **+ Setup**.
 3. In the **Action configuration** dialog, fill in:
    - **Instance name** — A label for this connection (e.g., `Salesforce`).
@@ -281,7 +286,7 @@ Your **Instance URL** is the base domain shown in your browser's address bar whe
 <div style={{ textAlign: "center" }}>
   <img
     src="/images/toolsets/salesforce/salesforce_toolsetconfig.png"
-    alt="PipesHub Action configuration dialog for Salesforce"
+    alt="Novaplan AI Action configuration dialog for Salesforce"
     style={{ display: 'block', margin: '0 auto' }}
     width="90%"
   />
@@ -334,7 +339,7 @@ Your **Instance URL** is the base domain shown in your browser's address bar whe
 | Aspect | Salesforce Connector | Salesforce Toolset |
 |--------|----------------------|--------------------|
 | **Purpose** | Sync and index Salesforce records for search | Enable agents to perform CRM actions |
-| **Data Flow** | One-way (import data into PipesHub) | Two-way (read and write via API) |
+| **Data Flow** | One-way (import data into Novaplan AI) | Two-way (read and write via API) |
 | **Auth Type** | OAuth with read permissions | OAuth with full API access |
 | **When to Use** | Query/search Salesforce records and history | Create records, update deals, post to Chatter |
 
