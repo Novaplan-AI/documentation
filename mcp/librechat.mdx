@@ -7,7 +7,7 @@ icon: "/logo/librechat.svg"
 LibreChat supports remote MCP servers with OAuth authentication through its MCP Settings panel. This lets you use Novaplan AI tools with supported models in your LibreChat instance.
 
 <Note>
-  Before you start, create an OAuth app in Novaplan AI and note your **Client ID** and **Client Secret**. See [MCP Server Overview](/mcp/overview#step-1-create-an-oauth-app).
+  Before you start, ask [Novaplan Support](/contact-us) to confirm the approved OAuth app, **Client ID**, and **Client Secret** for your workspace.
 </Note>
 
 <Frame caption="LibreChat MCP configuration">
@@ -43,7 +43,7 @@ LibreChat supports remote MCP servers with OAuth authentication through its MCP 
     ```
     http://localhost:3080/api/mcp/<server-name>/oauth/callback
     ```
-    Copy the Redirect URI and register it as an allowed redirect URI in your Novaplan AI OAuth app (see [Step 1](/mcp/overview#step-1-create-an-oauth-app)).
+    Copy the Redirect URI and ask [Novaplan Support](/contact-us) to register it in the approved Novaplan AI OAuth app.
   </Step>
   <Step title="Authenticate">
     Return to LibreChat and use the server's **Authenticate/Connect** control in MCP Settings or the chat server menu. Complete the Novaplan AI login and consent flow. Each LibreChat user authenticates individually.
@@ -79,5 +79,5 @@ openid profile email offline_access semantic:write conversation:write conversati
 ```
 
 <Note>
-  Every requested scope must be allowed for your Novaplan AI OAuth app; the app may allow additional scopes that LibreChat does not request. See [Customizing Default Scopes](/mcp/overview#customizing-default-scopes) for details.
+  Every requested scope must be allowed for your Novaplan AI OAuth app; the app may allow additional scopes that LibreChat does not request. Confirm the allowed scopes with [Novaplan Support](/contact-us).
 </Note>
