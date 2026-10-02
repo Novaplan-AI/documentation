@@ -7,11 +7,11 @@ icon: "/logo/cursor.svg"
 Cursor supports static OAuth for remote MCP servers via the `auth` object in `mcp.json`.
 
 <Note>
-  Before you start, create an OAuth app in Novaplan AI and note your **Client ID** and **Client Secret**. See [MCP Server Overview](/mcp/overview#step-1-create-an-oauth-app).
+  Before you start, ask [Novaplan Support](/contact-us) to confirm the approved OAuth app, **Client ID**, and **Client Secret** for your workspace.
 </Note>
 
 <Tip>
-  Coding agents: read [For coding agents](/for-agents) first. If they do not have workspace access yet, contact [Novaplan AI support](/contact-us). MCP configuration and repository instructions are separate setup steps.
+  For coding-agent access and the approved MCP setup, contact [Novaplan Support](/contact-us).
 </Tip>
 
 ## Configuration
@@ -41,7 +41,7 @@ Open **Cursor Settings > Tools and Integrations > New MCP Server**, or edit your
 Cursor discovers the OAuth endpoints from Novaplan AI's metadata.
 
 <Note>
-  If `scopes` is omitted, Cursor's current documentation says it reads `scopes_supported` from `/.well-known/oauth-authorization-server`. To limit access, list only the scopes approved for the tools you need. See [Customizing Default Scopes](/mcp/overview#customizing-default-scopes) if Novaplan's server-side defaults need review.
+  If `scopes` is omitted, Cursor's current documentation says it reads `scopes_supported` from `/.well-known/oauth-authorization-server`. To limit access, list only the scopes approved for the tools you need. Ask [Novaplan Support](/contact-us) to confirm the server-side defaults for your workspace.
 </Note>
 
 ## Using Environment Variables

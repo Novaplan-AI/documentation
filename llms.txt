@@ -34,7 +34,6 @@ Novaplan manages most setup and administration. Both German and English pages ex
 - [Anmeldung mit Google](https://docs.novaplan.ai/de/auth/google.md)
 - [Anmeldung mit Microsoft](https://docs.novaplan.ai/de/auth/microsoft-azureAd.md)
 - [SAML Single Sign-on](https://docs.novaplan.ai/de/auth/saml.md)
-- [MCP-Server im Überblick](https://docs.novaplan.ai/de/mcp/overview.md)
 - [Slack Bot einrichten](https://docs.novaplan.ai/de/integrations/slackBot.md)
 - [E-Mail-Versand (SMTP)](https://docs.novaplan.ai/de/smtp.md)
 - [KI-Modelle im Überblick](https://docs.novaplan.ai/de/ai-models/overview.md)
@@ -63,8 +62,7 @@ Novaplan manages most setup and administration. Both German and English pages ex
 
 - [Onboarding](https://docs.novaplan.ai/onboarding.md): Settings for the administrator responsible for the agreed setup.
 - [Developer access](https://docs.novaplan.ai/developer/getting-started.md): Integration reference and access requirements.
-- [MCP overview](https://docs.novaplan.ai/mcp/overview.md): Connecting compatible clients to an existing workspace.
-- [Personal access tokens](https://docs.novaplan.ai/developer/personal-access-tokens.md): User-scoped authentication.
+- [Support](https://docs.novaplan.ai/contact-us.md): Ask Novaplan to configure MCP clients, personal access tokens, or coding-agent integrations.
 - [OAuth 2.0](https://docs.novaplan.ai/developer/oauth2.md): Application authorization.
 
-Technical package names, API paths, scopes, and environment variables can retain upstream identifiers. Do not rename them merely for branding. Never expose credentials or tokens in chat or logs.
+Novaplan Support arranges approved technical integrations. Never expose credentials or tokens in chat or logs.
